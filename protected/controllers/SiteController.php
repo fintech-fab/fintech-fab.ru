@@ -100,11 +100,14 @@ class SiteController extends Controller
                 }
                 else //убрать в модель либо выпилить при прикручивании авторизации
                 {
-                    $client=ClientData::model()->find('phone=:phone',array(':phone'=>$model->phone));
-                    Yii::app()->session['client_id'] = $client->client_id;
-                }
 
-                $this->redirect("?r=site/form1");
+//                    $client=ClientData::model()->find('phone=:phone',array(':phone'=>$model->phone));
+                    echo $client->getClientIdByPhone($model->phone);
+                   // Yii::app()->session['client_id'] = $client_id;
+
+                }
+                //echo $client_id."<br>0000";
+                //$this->redirect("?r=site/form1");
                 return;
             }
         }

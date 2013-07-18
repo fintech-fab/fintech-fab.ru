@@ -92,9 +92,15 @@ class ClientData extends CActiveRecord
         $this->save();
     }
 
-    public function getClientId()
+    public function getClientIdByPhone($phone)
     {
-
+        if($this->find('phone=:phone',array(':phone'=>$phone)))
+        {
+            echo $phone;
+            echo $this->client_id;
+            return $this->client_id;
+        }
+        return false;
     }
 
     public function updateData()
