@@ -91,23 +91,19 @@ class SiteController extends Controller
             if($model->validate())
             {
                // form inputs are valid, do something here
-
+				Yii::app()->session['client_id'] = '';
                 $client=new ClientData;
                 if(!$client->checkPhone($model->phone))
                 {
                     $client->addClient($model);
                     Yii::app()->session['client_id'] = $client->client_id;
                 }
-                else //убрать в модель либо выпилить при прикручивании авторизации
+                else
                 {
-
-//                    $client=ClientData::model()->find('phone=:phone',array(':phone'=>$model->phone));
-                    echo $client->getClientIdByPhone($model->phone);
-                   // Yii::app()->session['client_id'] = $client_id;
-
+               		$client_id=$client->getClientIdByPhone($model->phone);
+                	Yii::app()->session['client_id'] = $client_id;
                 }
-                //echo $client_id."<br>0000";
-                //$this->redirect("?r=site/form1");
+                $this->redirect("?r=site/form1");
                 return;
             }
         }

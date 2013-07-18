@@ -3389,3 +3389,25 @@ Stack trace:
 REQUEST_URI=/kreddy.ru/index.php?r=site/join
 in /var/www/kreddy.ru/protected/controllers/SiteController.php (109)
 in /var/www/kreddy.ru/index.php (13)
+2013/07/18 18:03:22 [error] [php] Undefined variable: client_id (/var/www/kreddy.ru/protected/controllers/SiteController.php:106)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/18 18:03:51 [error] [php] Undefined variable: client_id (/var/www/kreddy.ru/protected/controllers/SiteController.php:106)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+in /var/www/kreddy.ru/index.php (13)
