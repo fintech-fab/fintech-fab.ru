@@ -103,7 +103,16 @@ class ClientData extends CActiveRecord
     }
 
 
-	public function saveClientData($clientData,$client_id)
+	public function getClientDataById($client_id)
+	{
+		if($client=$this->find('client_id=:client_id',array(':client_id'=>$client_id)))
+		{
+			return $client->getAttributes();
+		}
+		return false;
+	}
+
+	public function saveClientDataById($clientData,$client_id)
 	{
 		if($client=$this->find('client_id=:client_id',array(':client_id'=>$client_id)))
 		{

@@ -112,6 +112,9 @@ class SiteController extends Controller
     {
         $model=new ClientForm1;
 
+		$client=new ClientData();
+		$client_id=Yii::app()->session['client_id'];
+
         // uncomment the following code to enable ajax-based validation
 
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form1')
@@ -120,18 +123,16 @@ class SiteController extends Controller
             Yii::app()->end();
         }
 
-
         if(isset($_POST['ClientForm1']))
         {
             $model->attributes=$_POST['ClientForm1'];
+
             if($model->validate())
             {
             // form inputs are valid, do something here
-                $client_id=Yii::app()->session['client_id'];
-				$client=new ClientData();
-				if(!$client->saveClientData($model->getAttributes(),$client_id))
-				{
 
+				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
+				{
 					$this->redirect("?r=site/join");
 				}
 
@@ -139,6 +140,8 @@ class SiteController extends Controller
                 return;
             }
         }
+
+		$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form1',array('model'=>$model));
     }
 
@@ -161,17 +164,13 @@ class SiteController extends Controller
             if($model->validate())
             {
                 // form inputs are valid, do something here
-                //перенести все это в модель!!!!!!!!!!
-                $client_id=Yii::app()->session['client_id'];
-                if($client=ClientData::model()->find('client_id=:client_id',array(':client_id'=>$client_id)))
-                {
-                    $client->setAttributes($model->getAttributes());
-                    $client->save();
-                }
-                else
-                {
-                    $this->redirect("?r=site/join");
-                }
+				$client_id=Yii::app()->session['client_id'];
+				$client=new ClientData();
+				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
+				{
+
+					$this->redirect("?r=site/join");
+				}
                 $this->redirect("?r=site/index");
                 return;
             }
