@@ -120,6 +120,7 @@ class SiteController extends Controller
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form1')
         {
             echo CActiveForm::validate($model);
+			$client->saveClientDataById($model->getAttributes(),$client_id);
             Yii::app()->end();
         }
 
@@ -130,7 +131,6 @@ class SiteController extends Controller
             if($model->validate())
             {
             // form inputs are valid, do something here
-
 				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
 				{
 					$this->redirect("?r=site/join");
@@ -149,11 +149,15 @@ class SiteController extends Controller
     {
         $model=new ClientForm2;
 
+		$client_id=Yii::app()->session['client_id'];
+		$client=new ClientData();
+
         // uncomment the following code to enable ajax-based validation
 
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form2')
         {
             echo CActiveForm::validate($model);
+			$client->saveClientDataById($model->getAttributes(),$client_id);
             Yii::app()->end();
         }
 
@@ -164,17 +168,15 @@ class SiteController extends Controller
             if($model->validate())
             {
                 // form inputs are valid, do something here
-				$client_id=Yii::app()->session['client_id'];
-				$client=new ClientData();
 				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
 				{
-
 					$this->redirect("?r=site/join");
 				}
                 $this->redirect("?r=site/index");
                 return;
             }
         }
+		$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form2',array('model'=>$model));
     }
 

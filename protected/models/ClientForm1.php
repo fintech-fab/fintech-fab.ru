@@ -44,7 +44,6 @@ class ClientForm1 extends CFormModel {
 
     }
 
-
     protected function getCommonRequires()
     {
         $aRequires =  array(

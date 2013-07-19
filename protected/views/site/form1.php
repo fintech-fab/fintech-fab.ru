@@ -52,14 +52,6 @@ $this->endWidget();
 <div class="grid_12">
     <div class="form">
     <p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
-        <!--?php
-		// TODO: вот этот колхоз убрать нафиг отсюда, данные передавать из контроллера
-        $client_id=Yii::app()->session['client_id'];
-        if($client=ClientData::model()->find('client_id=:client_id',array(':client_id'=>$client_id)))
-        {
-            $model->setAttributes($client->getAttributes(),false);
-        }
-        ?-->
 
     <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'client-form1',

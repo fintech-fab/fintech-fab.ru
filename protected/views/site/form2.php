@@ -53,19 +53,6 @@ $this->endWidget();
     <div class="form">
     <p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
 
-     <?php
-     $client_id=Yii::app()->session['client_id'];
-     if($client=ClientData::model()->find('client_id=:client_id',array(':client_id'=>$client_id)))
-     {
-         $model->setAttributes($client->getAttributes(),false);
-         /*$model->phone=substr_replace($model->phone,'+7',0,0);
-         $model->phone=substr_replace($model->phone,'(',2,0);
-         $model->phone=substr_replace($model->phone,')',6,0);
-         $model->phone=substr_replace($model->phone,'-',10,0);
-         $model->phone=substr_replace($model->phone,'-',13,0);*/
-     }
-     ?>
-
     <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'client-form2',
 	'enableAjaxValidation'=>true,
