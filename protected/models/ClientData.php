@@ -26,6 +26,7 @@
  * @property string $options
  * @property string $dt_add
  * @property string $dt_update
+ * @var $model ClientForm1
  */
 class ClientData extends CActiveRecord
 {
@@ -101,10 +102,16 @@ class ClientData extends CActiveRecord
         return false;
     }
 
-    public function updateData()
-    {
 
-    }
+	public function saveClientData($clientData,$client_id)
+	{
+		if($client=$this->find('client_id=:client_id',array(':client_id'=>$client_id)))
+		{
+			$client->setAttributes($clientData);
+			$client->save();
+			return true;
+		} return false;
+	}
 
     public function beforeSave()
     {

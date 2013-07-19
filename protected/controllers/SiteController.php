@@ -75,9 +75,7 @@ class SiteController extends Controller
     public function actionJoin()
     {
         $model=new ClientJoinForm;
-
         // uncomment the following code to enable ajax-based validation
-
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-join')
         {
             echo CActiveForm::validate($model);
@@ -129,17 +127,13 @@ class SiteController extends Controller
             if($model->validate())
             {
             // form inputs are valid, do something here
-            //перенести все это в модель!!!!!!!!!!
                 $client_id=Yii::app()->session['client_id'];
-                if($client=ClientData::model()->find('client_id=:client_id',array(':client_id'=>$client_id)))
-                {
-                    $client->setAttributes($model->getAttributes(),false);
-                    $client->save();
-                }
-                else
-                {
-                    $this->redirect("?r=site/join");
-                }
+				$client=new ClientData();
+				if(!$client->saveClientData($model->getAttributes(),$client_id))
+				{
+
+					$this->redirect("?r=site/join");
+				}
 
                 $this->redirect("?r=site/form2");
                 return;
@@ -171,7 +165,7 @@ class SiteController extends Controller
                 $client_id=Yii::app()->session['client_id'];
                 if($client=ClientData::model()->find('client_id=:client_id',array(':client_id'=>$client_id)))
                 {
-                    $client->setAttributes($model->getAttributes(),false);
+                    $client->setAttributes($model->getAttributes());
                     $client->save();
                 }
                 else

@@ -5,10 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="language" content="en" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="КРЕДДИ - ты всегда при деньгах. Как просто получить и вернуть заём? Простая и удобная услуга займов. Сколько взял – столько вернул!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="КРЕДДИ - ты всегда при деньгах. Как просто получить и вернуть заём? Простая и удобная услуга займов. Сколько взял – столько вернул!" />
     <meta name="keywords" content="" />
-    <meta name="author" content="деньги, наличные, электронные деньги, срочно нужны, где взять, взаймы, займу, быстрые, в займы, займ, заём, займы, микрофинансовая организация, кредит, долг, вдолг, потребительские, денежный, частный, беспроцентный, ссуда, за час, кредитование, без справок, доход, срочный, экспресс, проценты, до зарплаты, неотложные, по паспорту, под расписку, выгодный, кредитные карты, кредитные системы, кредитные организации, кредитные истории, занять, краткосрочные, физическим лицам">
+    <meta name="author" content="деньги, наличные, электронные деньги, срочно нужны, где взять, взаймы, займу, быстрые, в займы, займ, заём, займы, микрофинансовая организация, кредит, долг, вдолг, потребительские, денежный, частный, беспроцентный, ссуда, за час, кредитование, без справок, доход, срочный, экспресс, проценты, до зарплаты, неотложные, по паспорту, под расписку, выгодный, кредитные карты, кредитные системы, кредитные организации, кредитные истории, занять, краткосрочные, физическим лицам"/>
 
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
@@ -19,41 +19,27 @@
 
 
 
-    <link rel="shortcut icon" href="./static/img/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" href="./static/img/apple-touch-icon-precomposed.png">
+    <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 
-    <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="./static/css/style.css" type="text/css">
-    <link rel="stylesheet" href="./static/css/reset.css" type="text/css">
-    <link rel="stylesheet" href="./static/css/payment.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/reset.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
     <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 
-    <!--script type="text/javascript" src="./static/js/collapse.js" charset="utf-8">
-    </script-->
-    <!--script type="text/javascript" src="./static/js/modal.js" charset="utf-8">
-    </script-->
-    <script type="text/javascript" src="./static/js/tab.js" charset="utf-8">
-    </script>
-    <!--script type="text/javascript" src="./static/js/tooltip.js" charset="utf-8">
-    </script-->
-    <!--script type="text/javascript" src="./static/js/mask.js" charset="utf-8">
-    </script-->
-    <!--script type="text/javascript" src="./static/js/alerts.js" charset="utf-8">
-    </script-->
-    <!--script type="text/javascript" src="./static/js/script.js?v=2" charset="utf-8">
-    </script-->
-    <link rel="shortcut icon" href="./static/img/favicon.ico">
+    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/tab.js" charset="utf-8"></script>
+    <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 </head>
 <!-- ClickTale Bottom part -->
-<!--div id="ClickTaleDiv" style="display: none;"></div>
-<script type="text/javascript">
+<!--div id="ClickTaleDiv" style="display: none;"></div-->
+<!--script type="text/javascript">
     if(document.location.protocol!='https:')
         document.write(unescape("%3Cscript%20src='http://s.clicktale.net/WRe0.js'%20type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
+</script-->
+<!--script type="text/javascript">
     if(typeof ClickTale=='function') ClickTale(7143,1,"www08");
-</script>
+</script-->
 <!-- ClickTale end of Bottom part -->
 
 <body class="home" data-spy="scroll">
@@ -69,10 +55,10 @@
         <div class="container1">
 
             <!-- Special image
-            <div class="new-year-left" style="margin: 5px 0px -145px -120px; float: left; background: url('./static/img/lenta9may.png') no-repeat; height: 140px; width: 112px"></div>
+            <div class="new-year-left" style="margin: 5px 0px -145px -120px; float: left; background: url('<php echo Yii::app()->request->baseUrl; ?>/static/img/lenta9may.png') no-repeat; height: 140px; width: 112px"></div>
             -->
 
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a> <a href="/" class="brand"><img src="./static/img/logo-slogan.png" alt="Kreddy"></a>
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a> <a href="/" class="brand"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy"></a>
 
             <span class="hotline pull-right"><small>Горячая линия</small> 8 (800) 555-75-78 <small>(бесплатно по России)</small></span>
         </div>
@@ -110,30 +96,30 @@
             <div class="tab-content">
                 <div id="zero" class="tab-pane active">
                     <a href="#" id="case"></a>
-                    <img src="./static/img/case-a.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-a.jpg" alt="asd" width="100%" />
                 </div>
 
                 <div id="first" class="tab-pane">
-                    <img src="./static/img/case-b.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-b.jpg" alt="asd" width="100%" />
                 </div>
 
                 <div id="second" class="tab-pane">
                     <a href="?page=payments">
-                        <img src="./static/img/case-j.jpg" alt="asd" width="100%" class="pay_list_href" />
+                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-j.jpg" alt="asd" width="100%" class="pay_list_href" />
                     </a>
                 </div>
 
                 <div id="third" class="tab-pane">
-                    <img src="./static/img/case-f.jpg" alt="asd" width="100%" />
-                    <img src="./static/img/case-g.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-f.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-g.jpg" alt="asd" width="100%" />
                 </div>
 
                 <div id="fourth" class="tab-pane">
-                    <img src="./static/img/case-h.png" alt="asd" width="800" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-h.png" alt="asd" width="800" />
                 </div>
 
                 <div id="fifth" class="tab-pane">
-                    <img src="./static/img/case-k.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-k.jpg" alt="asd" width="100%" />
                 </div>
             </div>
         </div>
@@ -177,8 +163,7 @@
         <h3>Свидетельство о внесении сведений в реестр микрофинансовых организаций</h3>
     </div>
     <div class="modal-body">
-        <p><img src="./static/docs/svid.jpg" alt="Свидетельство"/></p>
-        </p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/docs/svid.jpg" alt="Свидетельство"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -194,7 +179,6 @@
         <p>Заполняя и отправляя в адрес ООО «Финансовые Решения» (далее – Общество) данную форму анкеты и/или форму анкеты, заполненную мною дистанционным способом, я подтверждаю правильность указанных мною персональные данных, принадлежащих лично мне, а так же выражаю свое согласие на обработку (в том числе сбор, систематизацию, проверку, уточнение, изменение, обновление, использование, распространение (в том числе передачу третьим лицам), обезличивание, блокирование, уничтожение персональных данных) ООО «Финансовые Решения», место нахождения: Москва, Гончарная наб. д.1 стр.4, своих  персональных данных, содержащихся в настоящей Анкете или переданных мною Обществу дистанционным способом. Персональные данные подлежат обработке (в том числе с использованием средств автоматизации) в целях принятия решения о предоставлении микрозайма, заключения, изменения, расторжения, дополнения, а также исполнения договоров микрозайма, дополнительных соглашений, заключенных или заключаемых впоследствии мною с ООО «Финансовые Решения». Настоящее согласие действует до момента достижения цели обработки персональных данных. Отзыв согласия на обработку персональных данных производится путем направления соответствующего письменного заявления  Обществу по почте. Так же выражаю свое согласие на информирование меня Обществом о размерах микрозайма, полной сумме, подлежащей выплате, информации по продуктам или рекламной информации Общества по телефону, электронной почте, SMS – сообщениями.</p>
         <p>Направляя в ООО «Финансовые Решения» данную Анкету/или форму анкеты, заполненную мною дистанционным способом выражаю свое согласие на получение и передачу ООО «Финансовые Решения» (Общество) информации, предусмотренной Федеральным законом № 218 от 30.12.2004  "О кредитных историях", о своей кредитной истории в соответствующее бюро кредитных историй (Бюро кредитных историй определяет Общество по своему усмотрению). Список бюро указан на сайте Общества <a href="http://kreddy.ru/" target="_blank">www.kreddy.ru</a>, а также с тем, что в случае неисполнения, ненадлежащего исполнения и/или задержки исполнения мною своих обязательств по договорам микрозайма, заключенных с Обществом, Общество вправе раскрыть информацию об этом любым лицам (в т.ч. неопределенному кругу лиц) и любым способом (в т.ч. путем опубликования в средствах массовой информации).</p>
         <p>Направляя/подписывая в ООО «Финансовые Решения» данную форму Анкеты или анкету, заполненную мною дистанционным способом, подтверждаю, что ознакомлен с правилами предоставления микрозайма, со всеми условиями предоставления микрозайма. Также подтверждаю, что номер мобильного телефона, указанный в анкете, принадлежит лично мне. Ответственность за неправомерное использование номера мобильного телефона лежит на мне.</p>
-        </p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -208,10 +192,9 @@
     </div>
     <div class="modal-body">
         <p>Торговый Комплекс «Город»</p>
-        <p><img src="./static/img/transport_scheme_1_2.jpg" alt="Карта"/></p>
-        <p><img src="./static/img/transport_scheme_2_1.jpg" alt="Карта"/></p>
-        <p><img src="./static/img/transport_scheme_3_1.jpg" alt="Карта"/></p>
-        </p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/transport_scheme_1_2.jpg" alt="Карта"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/transport_scheme_2_1.jpg" alt="Карта"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/transport_scheme_3_1.jpg" alt="Карта"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -228,7 +211,7 @@
         <p>Москва, Рязанский проспект, дом 2, корпус 2. (рядом со входом в АШАН)</p>
         <p>Инструкция по оплате счёта - <a href="http://ishopnew.qiwi.ru/files/qiwi_instruction.html">http://ishopnew.qiwi.ru/files/qiwi_instruction.html</a></p>
         <p>Схема расположения ближайшего терминала QIWI</p>
-        <p><img src="./static/img/map.png" alt="Карта"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/map.png" alt="Карта"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -245,10 +228,9 @@
         </h3>
     </div>
     <div class="modal-body">
-        <p><img src="./static/img/last_terms_1.jpg?v=1" alt="1"/></p>
-        <p><img src="./static/img/last_terms_2.jpg?v=1" alt="2"/></p>
-        <p><img src="./static/img/last_terms_3.jpg?v=1" alt="3"/></p>
-        </p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/last_terms_1.jpg?v=1" alt="1"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/last_terms_2.jpg?v=1" alt="2"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/last_terms_3.jpg?v=1" alt="3"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -402,9 +384,9 @@
             </li>
         </ol>
         <p><h3>от 21.02.2013</h3></p>
-        <p><img src="./static/img/arch_terms_1.jpg?v=1" alt="1"/></p>
-        <p><img src="./static/img/arch_terms_2.jpg?v=1" alt="2"/></p>
-        <p><img src="./static/img/arch_terms_3.jpg?v=1" alt="3"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/arch_terms_1.jpg?v=1" alt="1"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/arch_terms_2.jpg?v=1" alt="2"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/arch_terms_3.jpg?v=1" alt="3"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -419,10 +401,10 @@
         </h3>
     </div>
     <div class="modal-body">
-        <p><img src="./static/img/offer/001.jpg" alt="1"/></p>
-        <p><img src="./static/img/offer/002.jpg" alt="2"/></p>
-        <p><img src="./static/img/offer/003.jpg" alt="3"/></p>
-        <p><img src="./static/img/offer/004.jpg" alt="4"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer/001.jpg" alt="1"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer/002.jpg" alt="2"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer/003.jpg" alt="3"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer/004.jpg" alt="4"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -437,10 +419,10 @@
         </h3>
     </div>
     <div class="modal-body">
-        <p><img src="./static/img/offer_mobile_1.jpg?v=1" alt="1"/></p>
-        <p><img src="./static/img/offer_mobile_2.jpg?v=1" alt="2"/></p>
-        <p><img src="./static/img/offer_mobile_3.jpg?v=1" alt="3"/></p>
-        <p><img src="./static/img/offer_mobile_4.jpg?v=1" alt="4"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer_mobile_1.jpg?v=1" alt="1"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer_mobile_2.jpg?v=1" alt="2"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer_mobile_3.jpg?v=1" alt="3"/></p>
+        <p><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/offer_mobile_4.jpg?v=1" alt="4"/></p>
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Закрыть</a>
@@ -479,7 +461,7 @@
 <!--noscript><div><img src="//mc.yandex.ru/watch/21390544" style="position:absolute; left:-9999px;" alt="" /></div></noscript-->
 
 <!-- BEGIN JIVOSITE CODE {literal} -->
-<script type='text/javascript'>
+<!--script type='text/javascript'>
     (function(){ var widget_id = '65726';
         var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();</script>
 <!-- {/literal} END JIVOSITE CODE -->

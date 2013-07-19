@@ -54,7 +54,6 @@ class ClientForm1 extends CFormModel {
        );
 
         return $aRequires;
-
     }
 
 

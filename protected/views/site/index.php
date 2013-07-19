@@ -1,5 +1,8 @@
 <?php
 /* @var $this SiteController */
+/* @var $model ClientJoinForm */
+/* @var $form CActiveForm */
+
 
 $this->pageTitle=Yii::app()->name;
 ?>
@@ -42,7 +45,7 @@ the <a href="http://www.yiiframework.com/doc/">documentation</a>.
 Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
 should you have any questions.</p>
 
-   <p><a href="index.php?r=site/form1">Перейти к форме 1</a></p>
+   <p><a href='index.php?r=site/form1'>Перейти к форме 1</a></p>
 
     <div class="form">
         <?php $model=new ClientJoinForm;

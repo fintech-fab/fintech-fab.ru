@@ -1,5 +1,5 @@
 <?php
-/* @var $this ClientFormFormController */
+/* @var $this SiteController */
 /* @var $model ClientJoinForm */
 /* @var $form CActiveForm */
 ?>
