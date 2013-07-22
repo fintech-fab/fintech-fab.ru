@@ -77,7 +77,7 @@ class ClientForm2 extends CFormModel {
         );
     }
 
-	protected function beforeValidate()
+	protected function afterValidate()
 	{
 		$p = new CHtmlPurifier;
 		$p->options = array(
@@ -90,6 +90,8 @@ class ClientForm2 extends CFormModel {
 		}
 		unset($a);
 		$this->setAttributes($attr);
+
+		return parent::afterValidate();
 	}
 
 }
