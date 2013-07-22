@@ -80,7 +80,7 @@
 </nav>
 
 <div class="page-divider1"></div>
-
+<br/>
 <?php echo $content; ?>
 
 
@@ -110,22 +110,22 @@
             <div class="tab-content">
                 <div id="zero" class="tab-pane active">
                     <a href="#" id="case"></a>
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-a.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-a.jpg" alt="asd" width="960" />
                 </div>
 
                 <div id="first" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-b.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-b.jpg" alt="asd" width="960" />
                 </div>
 
                 <div id="second" class="tab-pane">
-                    <a href="?page=payments">
-                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-j.jpg" alt="asd" width="100%" class="pay_list_href" />
+                    <a href="?r=site/page&view=payments">
+                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-j.jpg" alt="asd" width="960" class="pay_list_href" />
                     </a>
                 </div>
 
                 <div id="third" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-f.jpg" alt="asd" width="100%" />
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-g.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-f.jpg" alt="asd" width="960" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-g.jpg" alt="asd" width="960" />
                 </div>
 
                 <div id="fourth" class="tab-pane">
@@ -133,7 +133,7 @@
                 </div>
 
                 <div id="fifth" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-k.jpg" alt="asd" width="100%" />
+                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-k.jpg" alt="asd" width="960" />
                 </div>
             </div>
         </div>

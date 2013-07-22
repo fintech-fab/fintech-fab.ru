@@ -113,7 +113,7 @@ $this->endWidget();
 
     <div class="row main_row">
         <?php echo $form->labelEx($model,'email'); ?>
-        <?php echo $form->dateField($model,'email'); ?>
+        <?php echo $form->textField($model,'email'); ?>
         <?php echo $form->error($model,'email'); ?>
     </div>
 	<div class="row buttons">

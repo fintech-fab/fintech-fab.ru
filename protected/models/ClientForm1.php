@@ -55,7 +55,6 @@ class ClientForm1 extends CFormModel {
         return $aRequires;
     }
 
-
     /**
      * названия атрибутов
      * @return array
@@ -79,5 +78,19 @@ class ClientForm1 extends CFormModel {
         );
     }
 
+	protected function beforeValidate()
+	{
+		$p = new CHtmlPurifier;
+		$p->options = array(
+			'HTML.SafeObject'=>true,
+		);
+		$attr=$this->getAttributes();
+		foreach($attr as &$a)
+		{
+			$a=$p->purify($a);
+		}
+		unset($a);
+		$this->setAttributes($attr);
+	}
 
 }

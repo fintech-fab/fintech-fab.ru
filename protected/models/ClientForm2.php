@@ -34,8 +34,8 @@ class ClientForm2 extends CFormModel {
                 array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
                 array('document', 'in', 'range' => array_keys($aDocuments),'message' => 'Выберите документ из списка'),
 				array('document_number', 'length', 'max'=>30,'message'=>'Максимальная длина поля {attribute} 30 символов.'),
-				array('document, address_reg_region, address_reg_city', 'length', 'max'=>100,'message'=>'Максимальная длина поля {attribute} 100 символов.'),
-				array('email', 'length', 'max'=>255,'message'=>'Максимальная длина поля {attribute} 255 символов.'),
+				array('address_reg_region, address_reg_city', 'length', 'max'=>100,'message'=>'Максимальная длина поля {attribute} 100 символов.'),
+				array('email', 'length', 'max'=>254,'message'=>'Максимальная длина поля {attribute} 254 символов.'),
                 array('email', 'email', 'message' => 'Введите email в правильном формате'),
                 array('phone', 'match', 'pattern' => '/^\d{10}$/', 'message' => 'Неверный формат телефона, пример верного номера: +71234567890'),
                 //array('phone', 'match', 'pattern' => '/^(\+7)\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/', 'message' => 'Неверный формат телефона, пример верного номера: +7(123)456-78-90'),
@@ -43,22 +43,6 @@ class ClientForm2 extends CFormModel {
 
     }
 
-    public function afterValidate(){
-        /*$this->phone=str_replace('+7','',$this->phone);
-        $this->phone=str_replace('+7','',$this->phone);
-        $this->phone=str_replace('(','',$this->phone);
-        $this->phone=str_replace(')','',$this->phone);
-        $this->phone=str_replace('-','',$this->phone);
-
-        /*$model->phone=substr_replace($model->phone,'+7',0,0);
-        $model->phone=substr_replace($model->phone,'(',2,0);
-        $model->phone=substr_replace($model->phone,')',6,0);
-        $model->phone=substr_replace($model->phone,'-',10,0);
-        $model->phone=substr_replace($model->phone,'-',13,0);
-        echo $model->phone;
-        */
-        return parent::afterValidate();
-    }
 
     protected function getCommonRequires()
     {
@@ -73,7 +57,7 @@ class ClientForm2 extends CFormModel {
     }
 
 
-    /**
+	/**
      * названия атрибутов
      * @return array
      */
@@ -93,5 +77,19 @@ class ClientForm2 extends CFormModel {
         );
     }
 
+	protected function beforeValidate()
+	{
+		$p = new CHtmlPurifier;
+		$p->options = array(
+			'HTML.SafeObject'=>true,
+		);
+		$attr=$this->getAttributes();
+		foreach($attr as &$a)
+		{
+			$a=$p->purify($a);
+		}
+		unset($a);
+		$this->setAttributes($attr);
+	}
 
 }

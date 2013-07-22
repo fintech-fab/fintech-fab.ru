@@ -27,7 +27,6 @@ $this->pageTitle=Yii::app()->name;
 
 </style>
 
-<br/>
 <div class="container container_12">
 <div class="grid_12">
 <h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
