@@ -34,7 +34,6 @@ $this->endWidget();
         float:none;
     }
 
-
     .gender input
     {
         margin-right: 5pt;
@@ -47,6 +46,19 @@ $this->endWidget();
     }
 
 </style>
+<?php
+
+Yii::app()->clientScript->registerScript('yiiactiveform', "
+   function myAfterValidateFunction(form, data, hasError)
+   {
+   		var value = 100/16 * $('.success').size();
+		jQuery('#progressBar').progressbar({'value':value});
+        return false;
+   }
+
+", CClientScript::POS_HEAD);
+
+?>
 
 <div class="container container_12" style="margin-top: 20px;">
 <div class="grid_12">
@@ -56,7 +68,11 @@ $this->endWidget();
     <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'client-form1',
 	'enableAjaxValidation'=>true,
-)); ?>
+	'clientOptions'=>array(
+		'validateOnChange'=>true,
+		'afterValidateAttribute'=>'js:myAfterValidateFunction',
+		),
+	)); ?>
 	<!--?php echo $form->errorSummary($model); ?-->
 
     <h3>Личные данные</h3>
@@ -65,7 +81,6 @@ $this->endWidget();
         <?php echo $form->labelEx($model,'first_name'); ?>
         <?php echo $form->textField($model,'first_name'); ?>
         <?php echo $form->error($model,'first_name'); ?>
-
     </div>
 
     <div class="row main_row">
@@ -91,7 +106,7 @@ $this->endWidget();
             'options' => array(
                 'showAnim' => 'fold',
                 'dateFormat'=>'yy-mm-dd',
-                'onStart'=>'js:  $("#birthday").change(function(){$("#ClientForm1_birthday").val($("#birthday").val());$("#ClientForm1_birthday").change()})',
+                'onLoad'=>'js:  $("#birthday").change(function(){$("#ClientForm1_birthday").val($("#birthday").val());$("#ClientForm1_birthday").change();})',
                 ),
             'htmlOptions' => array(
                 'style' => 'height:20px;',
@@ -138,7 +153,7 @@ $this->endWidget();
             'options' => array(
                 'showAnim' => 'fold',
                 'dateFormat'=>'yy-mm-dd',
-                'onStart'=>'js:  $("#passport_date").change(function(){$("#ClientForm1_passport_date").val($("#passport_date").val());$("#ClientForm1_passport_date").change()})',
+                'onLoad'=>'js:  $("#passport_date").change(function(){$("#ClientForm1_passport_date").val($("#passport_date").val());$("#ClientForm1_passport_date").change()})',
             ),
             'htmlOptions' => array(
                 'style' => 'height:20px;',
@@ -150,7 +165,31 @@ $this->endWidget();
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Далее'); ?>
 	</div>
+	<?php
+	$this->widget('zii.widgets.jui.CJuiProgressBar',array(
+		'id'=>'progressBar',
+		'value'=>0,
+		// additional javascript options for the progress bar plugin
+		'options'=>array(
+			//'change'=>new CJavaScriptExpression('function(event, ui) {...}'),
+		),
+		'htmlOptions'=>array(
+			'style'=>'height:20px;',
+		),
+	));
+	?>
 </div>
 <?php $this->endWidget(); ?>
+	<script type="text/javascript">
+
+		onload = function()
+		{
+			//$("#<?php echo get_class($model);?>_ *").blur();
+//			$("#<?php echo get_class($model);?>_sex").blur();
+			$('input').blur();
+
+		}
+
+	</script>
 </div>
 </div>
