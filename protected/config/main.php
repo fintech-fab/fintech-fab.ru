@@ -79,6 +79,13 @@ return array(
 				*/
 			),
 		),
+		'session'=>array(
+			'timeout'=>600,
+		),
+		'request'=>array(
+			'enableCsrfValidation'=>true,
+			'enableCookieValidation'=>true,
+		),
 	),
 
 	// application-level parameters that can be accessed

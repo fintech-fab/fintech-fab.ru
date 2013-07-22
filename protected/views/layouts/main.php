@@ -29,6 +29,20 @@
     <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/tab.js" charset="utf-8"></script>
+
+	<!--script type="text/javascript" src="./static/js/collapse.js" charset="utf-8">
+	</script-->
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/modal.js" charset="utf-8">
+	</script>
+	<!--script type="text/javascript" src="./static/js/tooltip.js" charset="utf-8">
+	</script-->
+	<!--script type="text/javascript" src="./static/js/mask.js" charset="utf-8">
+	</script-->
+	<!--script type="text/javascript" src="./static/js/alerts.js" charset="utf-8">
+	</script>
+	<!--script type="text/javascript" src="./static/js/script.js?v=2" charset="utf-8">
+	</script-->
+
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 </head>
 <!-- ClickTale Bottom part -->
@@ -58,7 +72,7 @@
             <div class="new-year-left" style="margin: 5px 0px -145px -120px; float: left; background: url('<php echo Yii::app()->request->baseUrl; ?>/static/img/lenta9may.png') no-repeat; height: 140px; width: 112px"></div>
             -->
 
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a> <a href="/" class="brand"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy"></a>
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a> <a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy"></a>
 
             <span class="hotline pull-right"><small>Горячая линия</small> 8 (800) 555-75-78 <small>(бесплатно по России)</small></span>
         </div>

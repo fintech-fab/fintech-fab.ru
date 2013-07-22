@@ -27,7 +27,7 @@ class ClientForm1 extends CFormModel {
         $aSexes=array("0"=>"Мужской","1"=>"Женский");
         return array(
             // username and password are required
-
+			// TODO: допилить валидацию, добавив проверку длины введенных данных и прочее
             array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
             array('first_name', 'match','pattern'=>'/^[а-яё]+$/ui', 'message' => 'Имя может содержать только русские буквы'),
             array('last_name', 'match','pattern'=>'/^[а-яё]+$/ui', 'message' => 'Фамилия может содержать только русские буквы'),
@@ -39,7 +39,7 @@ class ClientForm1 extends CFormModel {
             array('sex', 'required','message' => 'Укажите пол'),
             array('birthday', 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'yyyy-mm-dd'),
             array('passport_date', 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'yyyy-mm-dd'),
-
+			array('first_name, last_name, third_name', 'length', 'max'=>255),
         );
 
     }

@@ -29,9 +29,13 @@ class ClientForm2 extends CFormModel {
                                 "Свидетельство ИНН"=>"Свидетельство ИНН",
                                 "Страховое свидетельство государственного пенсионного страхования"=>"Страховое свидетельство государственного пенсионного страхования"
                             );
+			// TODO: допилить валидацию, добавив проверку длины введенных данных и прочее
             return array(
                 array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
                 array('document', 'in', 'range' => array_keys($aDocuments),'message' => 'Выберите документ из списка'),
+				array('document_number', 'length', 'max'=>30,'message'=>'Максимальная длина поля {attribute} 30 символов.'),
+				array('document, address_reg_region, address_reg_city', 'length', 'max'=>100,'message'=>'Максимальная длина поля {attribute} 100 символов.'),
+				array('email', 'length', 'max'=>255,'message'=>'Максимальная длина поля {attribute} 255 символов.'),
                 array('email', 'email', 'message' => 'Введите email в правильном формате'),
                 array('phone', 'match', 'pattern' => '/^\d{10}$/', 'message' => 'Неверный формат телефона, пример верного номера: +71234567890'),
                 //array('phone', 'match', 'pattern' => '/^(\+7)\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/', 'message' => 'Неверный формат телефона, пример верного номера: +7(123)456-78-90'),

@@ -33,23 +33,6 @@ class ClientJoinForm extends CFormModel {
 
     }
 
-    public function afterValidate(){
-        /*$this->phone=str_replace('+7','',$this->phone);
-        $this->phone=str_replace('+7','',$this->phone);
-        $this->phone=str_replace('(','',$this->phone);
-        $this->phone=str_replace(')','',$this->phone);
-        $this->phone=str_replace('-','',$this->phone);
-
-        /*$model->phone=substr_replace($model->phone,'+7',0,0);
-        $model->phone=substr_replace($model->phone,'(',2,0);
-        $model->phone=substr_replace($model->phone,')',6,0);
-        $model->phone=substr_replace($model->phone,'-',10,0);
-        $model->phone=substr_replace($model->phone,'-',13,0);
-        echo $model->phone;
-        */
-        return parent::afterValidate();
-    }
-
 
     /**
      * названия атрибутов
