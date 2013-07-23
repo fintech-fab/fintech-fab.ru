@@ -303,6 +303,9 @@ class SiteController extends Controller
 	{
 		$sEncrypt = serialize($data);
 		$cookieData = CryptArray::encryptVal($sEncrypt);
-		Yii::app()->request->cookies[$cookieName] = new CHttpCookie($cookieName, $cookieData);
+
+		$cookie = new CHttpCookie($cookieName, $cookieData);
+		$cookie->expire = time()+60*60*2;
+		Yii::app()->request->cookies[$cookieName] = $cookie;
 	}
 }

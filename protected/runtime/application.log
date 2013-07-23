@@ -3555,3 +3555,40 @@ Stack trace:
 #18 {main}
 REQUEST_URI=/kreddy.ru/index.php?r=site/form2
 ---
+2013/07/23 17:36:36 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/23 17:37:22 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/23 17:37:22 [error] [php] Creating default object from empty value (/var/www/kreddy.ru/protected/controllers/SiteController.php:308)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#4 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#5 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#6 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (308)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (107)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 17:38:06 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/23 17:38:36 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/23 17:38:48 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/23 17:39:27 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
