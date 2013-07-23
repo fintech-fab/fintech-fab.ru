@@ -46,11 +46,6 @@ $this->endWidget();
         width:100px;
     }
 
-
-	.ui-progressbar {
-		margin: 15px 0px;
-	}
-
 </style>
 
 <div class="container container_12" style="margin-top: 20px;">
@@ -130,7 +125,7 @@ $this->endWidget();
 	</div>
 
 		<?php
-		$this->widget('ProgressBarWidget',array(
+		$this->widget('FormProgressBar',array(
 			'startFilledFields'=>9,
 			// additional javascript options for the progress bar plugin
 			'options'=>array(

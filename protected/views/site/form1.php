@@ -45,10 +45,6 @@ $this->endWidget();
         width:100px;
     }
 
-	.ui-progressbar {
-		margin: 15px 0px;
-	}
-
 </style>
 
 <div class="container container_12" style="margin-top: 20px;">
@@ -64,7 +60,7 @@ $this->endWidget();
 					'afterValidateAttribute'=>'js:progressBarUpdate',//функция обновления прогресс-бара после валидации полей
 					),
 			)); ?>
-	<!--?php echo $form->errorSummary($model); ?-->
+			<!--?php echo $form->errorSummary($model); ?-->
 
     		<h3>Личные данные</h3>
 
@@ -159,7 +155,7 @@ $this->endWidget();
 			<?php $this->endWidget(); ?>
 
 			<?php
-				$this->widget('ProgressBarWidget',array(
+				$this->widget('FormProgressBar',array(
 					'startFilledFields'=>0,
 					// additional javascript options for the progress bar plugin
 					'options'=>array(
