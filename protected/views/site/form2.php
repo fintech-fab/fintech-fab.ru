@@ -110,9 +110,9 @@ $this->endWidget();
     <h3>Контактные данные</h3>
 
     <div class="row main_row">
-        <?php echo $form->labelEx($model,'phone'); ?>+7
-        <?php echo $form->textField($model,'phone'); ?>
-        <?php echo $form->error($model,'phone'); ?>
+        <?php echo $form->labelEx($model,'job_phone'); ?>+7
+        <?php echo $form->textField($model,'job_phone'); ?>
+        <?php echo $form->error($model,'job_phone'); ?>
     </div>
 
     <div class="row main_row">
