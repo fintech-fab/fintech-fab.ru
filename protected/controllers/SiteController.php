@@ -94,7 +94,7 @@ class SiteController extends Controller
                 if(!$client->checkClientByPhone($model->phone))
                 {
 					//array('client_id'=>'','phone'=>'')
-					if(($this->checkPhoneInCookie($model->phone))&&($cookieData = $this->getDataFromCookie('client')))
+					if(($this->checkDataInCookie('client','phone',$model->phone))&&($cookieData = $this->getDataFromCookie('client')))
 					{
 						Yii::app()->session['client_id'] = $cookieData['client_id'];
 					}
@@ -264,12 +264,12 @@ class SiteController extends Controller
 
  */
 
-	private function checkPhoneInCookie($phone)
+	private function checkDataInCookie($cookieName,$attributeName,$checkValue)
 	{
-		$phoneInCookie = false;
-		if(isset(Yii::app()->request->cookies['client']))
+		$dataInCookie = false;
+		if(isset(Yii::app()->request->cookies[$cookieName]))
 		{
-			$cookie = Yii::app()->request->cookies['client'];
+			$cookie = Yii::app()->request->cookies[$cookieName];
 
 			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
 
@@ -278,34 +278,12 @@ class SiteController extends Controller
 				$aDecrypt= unserialize($sDecrypt);
 			}
 			catch (Exception $e) {}
-			if((isset($aDecrypt))&&($phone == $aDecrypt['phone']))
+			if((isset($aDecrypt))&&($checkValue == $aDecrypt[$attributeName]))
 			{
-				$phoneInCookie=true;
+				$dataInCookie=true;
 			}
 		}
-		return $phoneInCookie;
-	}
-
-	private function checkClientIdInCookie($client_id)
-	{
-		$clientIdInCookie = false;
-		if(isset(Yii::app()->request->cookies['client']))
-		{
-			$cookie = Yii::app()->request->cookies['client'];
-
-			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-
-			try
-			{
-				$aDecrypt= unserialize($sDecrypt);
-			}
-			catch (Exception $e) {}
-			if((isset($aDecrypt))&&($client_id == $aDecrypt['client_id']))
-			{
-				$$clientIdInCookie=true;
-			}
-		}
-		return $clientIdInCookie;
+		return $dataInCookie;
 	}
 
 	private function getDataFromCookie($cookieName)
@@ -325,7 +303,6 @@ class SiteController extends Controller
 	{
 		$sEncrypt = serialize($data);
 		$cookieData = CryptArray::encryptVal($sEncrypt);
-		Yii::app()->request->cookies['client'] = new CHttpCookie($cookieName, $cookieData);
+		Yii::app()->request->cookies[$cookieName] = new CHttpCookie($cookieName, $cookieData);
 	}
-
 }

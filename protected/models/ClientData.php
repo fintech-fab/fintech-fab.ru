@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'tbl_client':
  * @property string $client_id
  * @property string $phone
+ * @property string $job_phone
  * @property integer $telecoms_operator
  * @property string $first_name
  * @property string $last_name
@@ -70,7 +71,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.*/
-			array('client_id, phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, dt_add, dt_update', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, dt_add, dt_update', 'safe'),
 
 
          );
@@ -176,6 +177,7 @@ class ClientData extends CActiveRecord
 		return array(
 			'client_id' => 'Client',
 			'phone' => 'Phone',
+			'job_phone' => 'Job Phone',
 			'telecoms_operator' => 'Telecoms Operator',
 			'first_name' => 'First Name',
 			'last_name' => 'Last Name',
@@ -213,6 +215,7 @@ class ClientData extends CActiveRecord
 
 		$criteria->compare('client_id',$this->client_id,true);
 		$criteria->compare('phone',$this->phone,true);
+		$criteria->compare('job_phone',$this->job_phone,true);
 		$criteria->compare('telecoms_operator',$this->telecoms_operator);
 		$criteria->compare('first_name',$this->first_name,true);
 		$criteria->compare('last_name',$this->last_name,true);
