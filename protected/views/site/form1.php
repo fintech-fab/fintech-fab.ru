@@ -45,6 +45,10 @@ $this->endWidget();
         width:100px;
     }
 
+	.ui-progressbar {
+		margin: 15px 0px;
+	}
+
 </style>
 
 <div class="container container_12" style="margin-top: 20px;">
@@ -154,51 +158,19 @@ $this->endWidget();
 			</div>
 			<?php $this->endWidget(); ?>
 
-			<?php //прогресс-бар?>
 			<?php
-				$this->widget('zii.widgets.jui.CJuiProgressBar',array(
-					'id'=>'progressBar',
-					'value'=>0,
+				$this->widget('ProgressBarWidget',array(
+					'startFilledFields'=>0,
 					// additional javascript options for the progress bar plugin
 					'options'=>array(
 						//'change'=>new CJavaScriptExpression('function(event, ui) {...}'),
 					),
 					'htmlOptions'=>array(
-					'style'=>'height:20px;',
+					    'style'=>'height:20px;',
 					),
+					'model'=>$model,
 				));
 			?>
-			<br/>
-			<?php
-				//функция обновления прогресс-бара
-				Yii::app()->clientScript->registerScript('yiiactiveform', "
-   				function progressBarUpdate(form, data, hasError)
-   				{
-	   				var value = 100/16 * $('.success').size();//считаем число полей с классом success (успешная валидация) и рассчитываем прогресс
-					jQuery('#progressBar').progressbar({'value':value});//устанавливаем прогресс
-        			return false;
-	   			}
-
-				", CClientScript::POS_HEAD);
-			?>
-
-			<script type="text/javascript">
-				onload = function()
-				{
-					<?php
-						//генерируем список полей на валидацию по onload()
-						//валидация происходит через ajax по событию jQuery blur()
-						$attr=$model->attributeNames();
-						foreach($attr as &$a)
-						{
-							echo '$("#'.get_class($model).'_'.$a.'").blur();'."\n		";
-						}
-						unset($a);
-						echo "\n";
-					?>
-				}
-			</script>
-			<?php //конец прогресс-бара?>
 		</div>
 	</div>
 </div>

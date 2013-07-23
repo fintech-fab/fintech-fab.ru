@@ -46,6 +46,11 @@ $this->endWidget();
         width:100px;
     }
 
+
+	.ui-progressbar {
+		margin: 15px 0px;
+	}
+
 </style>
 
 <div class="container container_12" style="margin-top: 20px;">
@@ -53,10 +58,14 @@ $this->endWidget();
     <div class="form">
     <p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
 
-    <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'client-form2',
-	'enableAjaxValidation'=>true,
-)); ?>
+		<?php $form=$this->beginWidget('CActiveForm', array(
+			'id'=>'client-form2',
+			'enableAjaxValidation'=>true,
+			'clientOptions'=>array(
+				'validateOnChange'=>true,
+				'afterValidateAttribute'=>'js:progressBarUpdate',//функция обновления прогресс-бара после валидации полей
+			),
+		)); ?>
 	<!--?php echo $form->errorSummary($model); ?-->
 
     <h3>Второй документ</h3>
@@ -119,6 +128,21 @@ $this->endWidget();
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Далее'); ?>
 	</div>
+
+		<?php
+		$this->widget('ProgressBarWidget',array(
+			'startFilledFields'=>9,
+			// additional javascript options for the progress bar plugin
+			'options'=>array(
+				//'change'=>new CJavaScriptExpression('function(event, ui) {...}'),
+			),
+			'htmlOptions'=>array(
+				'style'=>'height:20px;',
+			),
+			'model'=>$model,
+		));
+		?>
+
 </div>
     <?php $this->endWidget(); ?>
 </div>
