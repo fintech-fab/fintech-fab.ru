@@ -91,66 +91,29 @@ class SiteController extends Controller
                // form inputs are valid, do something here
 				Yii::app()->session['client_id'] = '';
                 $client=new ClientData;
-                if(!$client->checkPhone($model->phone))
-                {//если телефона нету в базе
-
+                if(!$client->checkClientByPhone($model->phone))
+                {
 					//array('client_id'=>'','phone'=>'')
-
-					$aDecrypt=array();
-					$phoneInCookie = false;
-					if(isset(Yii::app()->request->cookies['client']))
+					if(($this->checkPhoneInCookie($model->phone))&&($cookieData = $this->getDataFromCookie('client')))
 					{
-						$cookie = Yii::app()->request->cookies['client'];
-
-						$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-
-						try
-						{
-							$aDecrypt= unserialize($sDecrypt);
-						}
-						catch (Exception $e) {}
-						if((isset($aDecrypt))&&($model->phone == $aDecrypt['phone']))
-						{
-							$phoneInCookie=true;
-						}
-					}
-					if($phoneInCookie)
-					{
-						Yii::app()->session['client_id'] = $aDecrypt['client_id'];
+						Yii::app()->session['client_id'] = $cookieData['client_id'];
 					}
 					else
 					{
 						$client=$client->addClient($model);
-
 						Yii::app()->session['client_id'] = $client->client_id;
-						$aEncrypt = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-						$sEncrypt = serialize($aEncrypt);
-						$client = CryptArray::encryptVal($sEncrypt);
-						Yii::app()->request->cookies['client'] = new CHttpCookie('client', $client);
-					}
 
-					//если в кукисе нету телефона или он не равен телефону $model->phone
-						//создаем нового клиента
-					//иначе если телефон в куке равен $model->phone
-						//читаем айди клиента с кукиса и пишем в сессию
-
-					/*
-                    if($client->getAttributes())
-					{
-						$data = serialize($client->getAttributes());
-						$aCrypt = CryptArray::encryptVal($data);
-						//Yii::app()->request->cookies['client'] = new CHttpCookie('client', $aCrypt);
+						$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
+						$this->saveDataToCookie('client',$data);
 					}
-					//echo '<script type="text/javascript"> alert("'.strlen($aCrypt).'");</script>';
-					*/
                 }
                 else
                 {
-               		//$client_id=$client->getClientIdByPhone($model->phone);
-                	//Yii::app()->session['client_id'] = $client_id;
-                	//уже наш клиент, радуем этим фактом и посылаем на главную страницу
+                	//уже наш клиент, радуем его этим фактом и посылаем на главную страницу
 					$this->redirect("?r=site/index");
                 }
+				//echo $cookieData['client_id'];
+				//echo $cookieData['phone'];
                 $this->redirect("?r=site/form1");
                 return;
             }
@@ -265,4 +228,104 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+/*
+ 					$aDecrypt=array();
+					$phoneInCookie = false;
+					if(isset(Yii::app()->request->cookies['client']))
+					{
+						$cookie = Yii::app()->request->cookies['client'];
+
+						$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
+
+						try
+						{
+							$aDecrypt= unserialize($sDecrypt);
+						}
+						catch (Exception $e) {}
+						if((isset($aDecrypt))&&($model->phone == $aDecrypt['phone']))
+						{
+							$phoneInCookie=true;
+						}
+					}
+					if($phoneInCookie)
+					{
+						Yii::app()->session['client_id'] = $aDecrypt['client_id'];
+					}
+					else
+					{
+						$client=$client->addClient($model);
+
+						Yii::app()->session['client_id'] = $client->client_id;
+						$aEncrypt = array('client_id'=>$client->client_id,'phone'=>$client->phone);
+						$sEncrypt = serialize($aEncrypt);
+						$client = CryptArray::encryptVal($sEncrypt);
+						Yii::app()->request->cookies['client'] = new CHttpCookie('client', $client);
+					}
+
+ */
+
+	private function checkPhoneInCookie($phone)
+	{
+		$phoneInCookie = false;
+		if(isset(Yii::app()->request->cookies['client']))
+		{
+			$cookie = Yii::app()->request->cookies['client'];
+
+			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
+
+			try
+			{
+				$aDecrypt= unserialize($sDecrypt);
+			}
+			catch (Exception $e) {}
+			if((isset($aDecrypt))&&($phone == $aDecrypt['phone']))
+			{
+				$phoneInCookie=true;
+			}
+		}
+		return $phoneInCookie;
+	}
+
+	private function checkClientIdInCookie($client_id)
+	{
+		$clientIdInCookie = false;
+		if(isset(Yii::app()->request->cookies['client']))
+		{
+			$cookie = Yii::app()->request->cookies['client'];
+
+			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
+
+			try
+			{
+				$aDecrypt= unserialize($sDecrypt);
+			}
+			catch (Exception $e) {}
+			if((isset($aDecrypt))&&($client_id == $aDecrypt['client_id']))
+			{
+				$$clientIdInCookie=true;
+			}
+		}
+		return $clientIdInCookie;
+	}
+
+	private function getDataFromCookie($cookieName)
+	{
+		if(isset(Yii::app()->request->cookies[$cookieName]))
+		{
+			$cookie = Yii::app()->request->cookies[$cookieName];
+
+			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
+			$aDecrypt= @unserialize($sDecrypt);
+			return $aDecrypt;
+		}
+		return false;
+	}
+
+	private function saveDataToCookie($cookieName,$data)
+	{
+		$sEncrypt = serialize($data);
+		$cookieData = CryptArray::encryptVal($sEncrypt);
+		Yii::app()->request->cookies['client'] = new CHttpCookie($cookieName, $cookieData);
+	}
+
 }

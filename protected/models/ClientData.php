@@ -76,7 +76,7 @@ class ClientData extends CActiveRecord
          );
 	}
 
-    public function checkPhone($phone)
+    public function checkClientByPhone($phone)
     {
         if(($this->find('phone=:phone',array(':phone'=>$phone)))&&($this->complete))
         {

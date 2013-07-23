@@ -3411,3 +3411,120 @@ Stack trace:
 REQUEST_URI=/kreddy.ru/index.php?r=site/join
 in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
 in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:16:47 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+2013/07/23 16:16:47 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:124)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (124)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:16:57 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+2013/07/23 16:16:57 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:124)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (124)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:18:36 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+2013/07/23 16:18:36 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:124)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (124)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:18:52 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+2013/07/23 16:18:52 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:124)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (124)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:19:21 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (106)
+2013/07/23 16:31:45 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (104)
+2013/07/23 16:31:45 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:116)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (116)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:32:06 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (104)
+2013/07/23 16:32:06 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:116)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (116)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:36:48 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (104)
+2013/07/23 16:36:48 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:116)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/join
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (116)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/23 16:39:30 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/23 16:39:51 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (100)
+in /var/www/kreddy.ru/protected/models/ClientData.php (110)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
