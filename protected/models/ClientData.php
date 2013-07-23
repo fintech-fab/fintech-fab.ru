@@ -78,7 +78,7 @@ class ClientData extends CActiveRecord
 
     public function checkPhone($phone)
     {
-        if($this->find('phone=:phone',array(':phone'=>$phone)))
+        if(($this->find('phone=:phone',array(':phone'=>$phone)))&&($this->complete))
         {
             return true;
         }
@@ -86,11 +86,40 @@ class ClientData extends CActiveRecord
 
     }
 
+	public function clearClient(CActiveRecord &$client)
+	{
+		if($client)
+		{
+			$clientData=$client->getAttributes();
+			$client_id=$client->client_id;
+			foreach($clientData as &$c)
+			{
+				$c='';
+			}
+			unset($c);
+			$client->setAttributes($clientData);
+			$client->client_id=$client_id;
+		}
+		return;
+	}
+
     public function addClient($model)
     {
-        $this->phone=$model->phone;
-        $this->dt_add=date('Y-m-d H:i:s', time());
-        $this->save();
+		if($client=$this->find('phone=:phone',array(':phone'=>$model->phone)))
+		{
+			$this->clearClient($client);
+			$client->phone=$model->phone;
+			$client->dt_add=date('Y-m-d H:i:s', time());
+			$client->save();
+			return $client;
+		}
+		else
+		{
+			$this->phone=$model->phone;
+			$this->dt_add=date('Y-m-d H:i:s', time());
+			$this->save();
+			return $this;
+		}
     }
 
     public function getClientIdByPhone($phone)

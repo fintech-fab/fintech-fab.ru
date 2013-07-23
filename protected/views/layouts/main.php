@@ -81,9 +81,10 @@
 
 <div class="page-divider1"></div>
 <br/>
+
 <?php echo $content; ?>
 
-
+<br/>
 <div class="page-divider1"></div>
 
 <article class="container1">

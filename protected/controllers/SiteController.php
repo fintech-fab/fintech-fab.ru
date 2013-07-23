@@ -92,14 +92,64 @@ class SiteController extends Controller
 				Yii::app()->session['client_id'] = '';
                 $client=new ClientData;
                 if(!$client->checkPhone($model->phone))
-                {
-                    $client->addClient($model);
-                    Yii::app()->session['client_id'] = $client->client_id;
+                {//если телефона нету в базе
+
+					//array('client_id'=>'','phone'=>'')
+
+					$aDecrypt=array();
+					$phoneInCookie = false;
+					if(isset(Yii::app()->request->cookies['client']))
+					{
+						$cookie = Yii::app()->request->cookies['client'];
+
+						$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
+
+						try
+						{
+							$aDecrypt= unserialize($sDecrypt);
+						}
+						catch (Exception $e) {}
+						if((isset($aDecrypt))&&($model->phone == $aDecrypt['phone']))
+						{
+							$phoneInCookie=true;
+						}
+					}
+					if($phoneInCookie)
+					{
+						Yii::app()->session['client_id'] = $aDecrypt['client_id'];
+					}
+					else
+					{
+						$client=$client->addClient($model);
+
+						Yii::app()->session['client_id'] = $client->client_id;
+						$aEncrypt = array('client_id'=>$client->client_id,'phone'=>$client->phone);
+						$sEncrypt = serialize($aEncrypt);
+						$client = CryptArray::encryptVal($sEncrypt);
+						Yii::app()->request->cookies['client'] = new CHttpCookie('client', $client);
+					}
+
+					//если в кукисе нету телефона или он не равен телефону $model->phone
+						//создаем нового клиента
+					//иначе если телефон в куке равен $model->phone
+						//читаем айди клиента с кукиса и пишем в сессию
+
+					/*
+                    if($client->getAttributes())
+					{
+						$data = serialize($client->getAttributes());
+						$aCrypt = CryptArray::encryptVal($data);
+						//Yii::app()->request->cookies['client'] = new CHttpCookie('client', $aCrypt);
+					}
+					//echo '<script type="text/javascript"> alert("'.strlen($aCrypt).'");</script>';
+					*/
                 }
                 else
                 {
-               		$client_id=$client->getClientIdByPhone($model->phone);
-                	Yii::app()->session['client_id'] = $client_id;
+               		//$client_id=$client->getClientIdByPhone($model->phone);
+                	//Yii::app()->session['client_id'] = $client_id;
+                	//уже наш клиент, радуем этим фактом и посылаем на главную страницу
+					$this->redirect("?r=site/index");
                 }
                 $this->redirect("?r=site/form1");
                 return;
@@ -114,6 +164,7 @@ class SiteController extends Controller
 
 		$client=new ClientData();
 		$client_id=Yii::app()->session['client_id'];
+		if($client_id=='') $this->redirect("?r=site/join");
 
         // uncomment the following code to enable ajax-based validation
 
@@ -141,7 +192,7 @@ class SiteController extends Controller
             }
         }
 
-		$model->setAttributes($client->getClientDataById($client_id));
+		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form1',array('model'=>$model));
     }
 
@@ -176,7 +227,7 @@ class SiteController extends Controller
                 return;
             }
         }
-		$model->setAttributes($client->getClientDataById($client_id));
+		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form2',array('model'=>$model));
     }
 
