@@ -192,7 +192,7 @@ class SiteController extends Controller
             }
         }
 
-		$model->setAttributes($client->getClientDataById($client_id));
+		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form1',array('model'=>$model));
     }
 
@@ -227,7 +227,7 @@ class SiteController extends Controller
                 return;
             }
         }
-		$model->setAttributes($client->getClientDataById($client_id));
+		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form2',array('model'=>$model));
     }
 
