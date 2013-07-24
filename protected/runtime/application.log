@@ -3884,3 +3884,116 @@ Stack trace:
 REQUEST_URI=/kreddy.ru/index.php?r=site/index
 HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form2
 ---
+2013/07/24 11:21:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+HTTP_REFERER=http://localhost/
+---
+2013/07/24 11:33:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+HTTP_REFERER=http://localhost/
+---
+2013/07/24 11:34:31 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+---
+2013/07/24 11:35:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+---
+2013/07/24 11:35:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+HTTP_REFERER=http://localhost/?r=site/page&view=cc
+---
+2013/07/24 11:35:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+HTTP_REFERER=http://localhost/?r=site/page&view=cc
+---
+2013/07/24 11:35:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested view "cc" was not found.' in /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php:112
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/actions/CViewAction.php(123): CViewAction->resolveView('cc')
+#1 /var/www/kreddy.ru/yii/framework/web/actions/CAction.php(76): CViewAction->run()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CAction->runWithParams(Array)
+#3 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CViewAction))
+#4 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CViewAction), Array)
+#5 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('page')
+#6 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/page')
+#7 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#8 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#9 {main}
+REQUEST_URI=/?r=site/page&view=cc
+HTTP_REFERER=http://localhost/?r=site/page&view=cc
+---
+2013/07/24 11:40:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "about".' in /var/www/kreddy.ru/yii/framework/web/CController.php:483
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(270): CController->missingAction('about')
+#1 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('about')
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/about')
+#3 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#4 /var/www/kreddy.ru/public/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/?r=site/about
+---

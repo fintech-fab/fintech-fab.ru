@@ -103,9 +103,11 @@
 
                 <li><a href="#third" data-toggle="tab">Как это работает?</a></li>
 
-                <li><a href="#fourth" data-toggle="tab">Повторный заем в период подписки</a></li>
+                <li><a href="#fourth" data-toggle="tab">Повторный займ</a></li>
 
                 <li><a href="#fifth" data-toggle="tab">SMS-инфо</a></li>
+
+				<li><a href="#pay" data-toggle="tab">Оплатить</a></li>
             </ul>
 
             <div class="tab-content">
@@ -119,9 +121,7 @@
                 </div>
 
                 <div id="second" class="tab-pane">
-                    <a href="?r=site/page&view=payments">
-                        <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-j.jpg" alt="asd" width="960" class="pay_list_href" />
-                    </a>
+                    <a href="?r=site/page&view=payments"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-j.jpg" alt="инструкция по оплате через киви или элекснет" class="pay_list_href"></a><a href="?r=site/page&view=cc"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/pay_cc/cc.png" alt="инструкция по оплате вашей банковской картой" class="pay_list_href" style="margin:20px;" width="90"></a>
                 </div>
 
                 <div id="third" class="tab-pane">
@@ -136,6 +136,11 @@
                 <div id="fifth" class="tab-pane">
                     <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-k.jpg" alt="asd" width="960" />
                 </div>
+
+				<div id="pay" class="tab-pane">
+					<a href="https://pay.kreddy.ru/" target="_blank"><img src="<?php echo Yii::app()->request->baseUrl; ?>static/img/pay_cc/cc.png" alt="Оплата банковской картой" width="100" /></a>
+					Оплата банковской картой
+				</div>
             </div>
         </div>
     </section>

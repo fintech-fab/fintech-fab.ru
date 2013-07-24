@@ -7,8 +7,7 @@ $this->breadcrumbs=array(
 );
 ?>
 <?php
-$this->beginWidget('TopPageWidget');
-$this->endWidget();
+$this->widget('TopPageWidget');
 ?>
 
 <div class="container container_12">

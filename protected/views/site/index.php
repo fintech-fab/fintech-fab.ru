@@ -5,10 +5,12 @@
 
 
 $this->pageTitle=Yii::app()->name;
+$this->breadcrumbs=array(
+	'123','456'
+);
 ?>
     <?php
-    $this->beginWidget('TopPageWidget');
-    $this->endWidget();
+    $this->widget('TopPageWidget');
     ?>
 <style type="text/css">
 
@@ -29,7 +31,15 @@ $this->pageTitle=Yii::app()->name;
 
 <div class="container container_12">
 <div class="grid_12">
-    <div class="form">
+
+	<?php if(isset($this->breadcrumbs)):?>
+		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
+			'links'=>$this->breadcrumbs,
+			'homeLink' => CHtml::link('HOME - My Way', Yii::app()->homeUrl),
+		)); ?><!-- breadcrumbs -->
+	<?php endif?>
+
+	<div class="form">
         <?php $model=new ClientJoinForm;
         ?>
         <?php $form=$this->beginWidget('CActiveForm', array(

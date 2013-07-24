@@ -30,8 +30,6 @@ class ClientForm2 extends CFormModel {
                                 "Свидетельство ИНН"=>"Свидетельство ИНН",
                                 "Страховое свидетельство государственного пенсионного страхования"=>"Страховое свидетельство государственного пенсионного страхования"
                             );
-			$complete=array(0,1);
-			// TODO: допилить валидацию, добавив проверку длины введенных данных и прочее
             return array(
                 array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
                 array('document', 'in', 'range' => array_keys($aDocuments),'message' => 'Выберите документ из списка'),
