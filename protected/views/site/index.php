@@ -5,10 +5,6 @@
 
 
 $this->pageTitle=Yii::app()->name;
-$this->breadcrumbs=array(
-	'Личные данные',
-	'Личные данные 2',
-);
 ?>
     <?php
     $this->widget('TopPageWidget');
@@ -33,18 +29,9 @@ $this->breadcrumbs=array(
 <div class="container container_12">
 <div class="grid_12">
 
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-			'homeLink' => CHtml::link('Ввод телефона', Yii::app()->homeUrl),
-			'separator'=>' <span class="divider">→</span> ',
-			'encodeLabel'=>true,
-			'htmlOptions' => array('class' => 'breadcrumb', 'id' => 'steps'),
-			'activeLinkTemplate'=>'<li class="done"><a href="{url}">{label}</a></li>',
-			'inactiveLinkTemplate'=>'<li><a href="">{label}</a></li>',
-		)); ?><!-- breadcrumbs -->
-
-	<?php endif?>
+		<?php $this->widget('StepsBreadCrumbs',array(
+			'curStep'=>1,
+		)); ?>
 
 	<div class="form">
         <?php $model=new ClientJoinForm;

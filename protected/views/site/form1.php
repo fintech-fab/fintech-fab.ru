@@ -4,10 +4,6 @@
 /* @var $form CActiveForm */
 
 $this->pageTitle=Yii::app()->name;
-$this->breadcrumbs=array(
-	'Личные данные'=>array("site/form1"),
-	'Личные данные 2',
-);
 ?>
 <?php
 $this->widget('TopPageWidget');
@@ -56,18 +52,9 @@ $this->widget('TopPageWidget');
 <div class="container container_12">
 	<div class="grid_12">
 
-		<?php if(isset($this->breadcrumbs)):?>
-			<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-			'homeLink' => CHtml::link('Ввод телефона', Yii::app()->homeUrl),
-			'separator'=>' <span class="divider">→</span> ',
-			'encodeLabel'=>true,
-			'htmlOptions' => array('class' => 'breadcrumb', 'id' => 'steps'),
-			'activeLinkTemplate'=>'<li class="done"><a href="{url}">{label}</a></li>',
-			'inactiveLinkTemplate'=>'<li><a href="">{label}</a></li>',
-		)); ?><!-- breadcrumbs -->
-
-		<?php endif?>
+		<?php $this->widget('StepsBreadCrumbs',array(
+			'curStep'=>2,
+		)); ?>
 
     	<div class="form">
     		<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
