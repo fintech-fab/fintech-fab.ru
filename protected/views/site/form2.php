@@ -57,7 +57,7 @@ $this->widget('TopPageWidget');
 
 </style>
 
-<div class="container container_12" style="margin-top: 20px;">
+<div class="container container_12">
 	<div class="grid_12">
 
 		<?php if(isset($this->breadcrumbs)):?>

@@ -7,8 +7,7 @@ $this->pageTitle=Yii::app()->name;
 );*/
 ?>
 <?php
-$this->beginWidget('TopPageWidget');
-$this->endWidget();
+$this->widget('TopPageWidget');
 ?>
 <div class="container container_12">
 	<div class="grid_12">
