@@ -10,7 +10,7 @@
 	Yii::app()->clientScript->registerScript('yiiactiveform', "
 		function progressBarUpdate(form, data, hasError)
 		{
-			var newValue = 100/16 * ( $('.success').size()+".$this->startFilledFields."); //считаем число полей с классом success (успешная валидация) и рассчитываем прогресс
+			var newValue = 100/17 * ( $('.success').size()+".$this->startFilledFields."); //считаем число полей с классом success (успешная валидация) и рассчитываем прогресс
 
 			jQuery('#progressBar').progressbar({'value': newValue});//устанавливаем прогресс
 			return false;
