@@ -37,8 +37,11 @@ $this->breadcrumbs=array(
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
 			'homeLink' => CHtml::link('Ввод телефона', Yii::app()->homeUrl),
-			'separator'=>' → ',
-			'htmlOptions' => array('class' => 'breadcrumb'),
+			'separator'=>' <span class="divider">→</span> ',
+			'encodeLabel'=>true,
+			'htmlOptions' => array('class' => 'breadcrumb', 'id' => 'steps'),
+			'activeLinkTemplate'=>'<li class="done"><a href="{url}">{label}</a></li>',
+			'inactiveLinkTemplate'=>'<li><a href="">{label}</a></li>',
 		)); ?><!-- breadcrumbs -->
 
 	<?php endif?>
