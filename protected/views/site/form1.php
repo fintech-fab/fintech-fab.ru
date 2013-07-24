@@ -4,8 +4,8 @@
 /* @var $form CActiveForm */
 ?>
 <?php
-$this->beginWidget('TopPageWidget');
-$this->endWidget();
+$this->widget('TopPageWidget');
+
 ?>
 <style type="text/css">
 
@@ -153,20 +153,21 @@ $this->endWidget();
 				<?php echo CHtml::submitButton('Далее'); ?>
 			</div>
 			<?php $this->endWidget(); ?>
-
-			<?php
-				$this->widget('FormProgressBar',array(
-					'startFilledFields'=>0,
-					// additional javascript options for the progress bar plugin
-					'options'=>array(
-						//'change'=>new CJavaScriptExpression('function(event, ui) {...}'),
-					),
-					'htmlOptions'=>array(
-					    'style'=>'height:20px;',
-					),
-					'model'=>$model,
-				));
-			?>
 		</div>
+
+		<?php
+		$this->widget('FormProgressBar',array(
+			'startFilledFields'=>0,
+			// additional javascript options for the progress bar plugin
+			'options'=>array(
+				//'change'=>new CJavaScriptExpression('function(event, ui) {...}'),
+			),
+			'htmlOptions'=>array(
+			    'style'=>'height:20px;',
+			),
+			'model'=>$model,
+		));
+		?>
+
 	</div>
 </div>

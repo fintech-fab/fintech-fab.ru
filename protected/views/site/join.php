@@ -4,8 +4,7 @@
 /* @var $form CActiveForm */
 ?>
 <?php
-$this->beginWidget('TopPageWidget');
-$this->endWidget();
+$this->widget('TopPageWidget');
 ?>
 <style type="text/css">
 

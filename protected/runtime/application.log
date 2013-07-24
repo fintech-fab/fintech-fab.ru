@@ -3592,3 +3592,295 @@ in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
 in /var/www/kreddy.ru/protected/models/ClientData.php (101)
 in /var/www/kreddy.ru/protected/models/ClientData.php (111)
 in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:45:50 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:46:00 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:46:08 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:46:48 [error] [php] Undefined variable: cookieData (/var/www/kreddy.ru/protected/controllers/SiteController.php:162)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#5 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/form1
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (162)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:47:42 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:52:01 [error] [php] Undefined index: client_id (/var/www/kreddy.ru/protected/controllers/SiteController.php:296)
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams()
+#1 /var/www/kreddy.ru/yii/framework/web/CController.php(286): SiteController->runAction()
+#2 /var/www/kreddy.ru/yii/framework/web/CController.php(265): SiteController->runActionWithFilters()
+#3 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): SiteController->run()
+#4 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#5 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#6 /var/www/kreddy.ru/index.php(13): CWebApplication->run()
+REQUEST_URI=/kreddy.ru/index.php?r=site/form1
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (296)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (163)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:52:54 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:53:06 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:53:17 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:53:28 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:53:33 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 09:55:47 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:56:17 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:56:31 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:56:33 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:58:01 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:58:08 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:58:10 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 09:58:39 [warning] [application] Failed to set unsafe attribute "complete" of "ClientData".
+in /var/www/kreddy.ru/protected/models/ClientData.php (101)
+in /var/www/kreddy.ru/protected/models/ClientData.php (111)
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (103)
+2013/07/24 10:02:24 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:02:34 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:02:39 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:04:36 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (166)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:04:44 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (166)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:04:53 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (166)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:11:25 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:11:55 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:11:59 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:12:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "pages".' in /var/www/kreddy.ru/yii/framework/web/CController.php:483
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CController.php(270): CController->missingAction('pages')
+#1 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('pages')
+#2 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/pages')
+#3 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#4 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/pages&view=already-client
+HTTP_REFERER=http://localhost/kreddy.ru/
+---
+2013/07/24 10:30:22 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm1".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (165)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:31:01 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:31:09 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:31:59 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:33:23 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:33:33 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:35:48 [error] [exception.CException] exception 'CException' with message 'Property "CCompareValidator.0" is not defined.' in /var/www/kreddy.ru/yii/framework/base/CComponent.php:173
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/validators/CValidator.php(189): CComponent->__set('0', '1')
+#1 /var/www/kreddy.ru/yii/framework/base/CModel.php(286): CValidator::createValidator('compare', Object(ClientForm2), 'complete', Array)
+#2 /var/www/kreddy.ru/yii/framework/base/CModel.php(260): CModel->createValidators()
+#3 /var/www/kreddy.ru/yii/framework/base/CModel.php(546): CModel->getValidators()
+#4 /var/www/kreddy.ru/yii/framework/base/CModel.php(467): CModel->getSafeAttributeNames()
+#5 /var/www/kreddy.ru/protected/controllers/SiteController.php(216): CModel->setAttributes(Array)
+#6 /var/www/kreddy.ru/yii/framework/web/actions/CInlineAction.php(49): SiteController->actionForm2()
+#7 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('form2')
+#11 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/form2')
+#12 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#13 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/form2
+HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form1
+---
+2013/07/24 10:35:59 [error] [exception.CException] exception 'CException' with message 'Property "CRegularExpressionValidator.0" is not defined.' in /var/www/kreddy.ru/yii/framework/base/CComponent.php:173
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/validators/CValidator.php(189): CComponent->__set('0', '1')
+#1 /var/www/kreddy.ru/yii/framework/base/CModel.php(286): CValidator::createValidator('match', Object(ClientForm2), 'complete', Array)
+#2 /var/www/kreddy.ru/yii/framework/base/CModel.php(260): CModel->createValidators()
+#3 /var/www/kreddy.ru/yii/framework/base/CModel.php(546): CModel->getValidators()
+#4 /var/www/kreddy.ru/yii/framework/base/CModel.php(467): CModel->getSafeAttributeNames()
+#5 /var/www/kreddy.ru/protected/controllers/SiteController.php(216): CModel->setAttributes(Array)
+#6 /var/www/kreddy.ru/yii/framework/web/actions/CInlineAction.php(49): SiteController->actionForm2()
+#7 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('form2')
+#11 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/form2')
+#12 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#13 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/form2
+HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form1
+---
+2013/07/24 10:37:55 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:38:08 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:38:22 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:38:33 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:38:54 [error] [exception.CException] exception 'CException' with message 'Property "CRegularExpressionValidator.value" is not defined.' in /var/www/kreddy.ru/yii/framework/base/CComponent.php:173
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/validators/CValidator.php(189): CComponent->__set('value', '11')
+#1 /var/www/kreddy.ru/yii/framework/base/CModel.php(286): CValidator::createValidator('match', Object(ClientForm2), 'complete', Array)
+#2 /var/www/kreddy.ru/yii/framework/base/CModel.php(260): CModel->createValidators()
+#3 /var/www/kreddy.ru/yii/framework/base/CModel.php(546): CModel->getValidators()
+#4 /var/www/kreddy.ru/yii/framework/base/CModel.php(467): CModel->getSafeAttributeNames()
+#5 /var/www/kreddy.ru/protected/controllers/SiteController.php(216): CModel->setAttributes(Array)
+#6 /var/www/kreddy.ru/yii/framework/web/actions/CInlineAction.php(49): SiteController->actionForm2()
+#7 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('form2')
+#11 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/form2')
+#12 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#13 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/form2
+HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form1
+---
+2013/07/24 10:43:36 [error] [exception.CException] exception 'CException' with message 'Property "CBooleanValidator.value" is not defined.' in /var/www/kreddy.ru/yii/framework/base/CComponent.php:173
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/validators/CValidator.php(189): CComponent->__set('value', 'true')
+#1 /var/www/kreddy.ru/yii/framework/base/CModel.php(286): CValidator::createValidator('boolean', Object(ClientForm2), 'complete', Array)
+#2 /var/www/kreddy.ru/yii/framework/base/CModel.php(260): CModel->createValidators()
+#3 /var/www/kreddy.ru/yii/framework/base/CModel.php(546): CModel->getValidators()
+#4 /var/www/kreddy.ru/yii/framework/base/CModel.php(467): CModel->getSafeAttributeNames()
+#5 /var/www/kreddy.ru/protected/controllers/SiteController.php(216): CModel->setAttributes(Array)
+#6 /var/www/kreddy.ru/yii/framework/web/actions/CInlineAction.php(49): SiteController->actionForm2()
+#7 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('form2')
+#11 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/form2')
+#12 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#13 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/form2
+HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form1
+---
+2013/07/24 10:43:46 [error] [exception.CException] exception 'CException' with message 'Property "CBooleanValidator.0" is not defined.' in /var/www/kreddy.ru/yii/framework/base/CComponent.php:173
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/validators/CValidator.php(189): CComponent->__set('0', 'true')
+#1 /var/www/kreddy.ru/yii/framework/base/CModel.php(286): CValidator::createValidator('boolean', Object(ClientForm2), 'complete', Array)
+#2 /var/www/kreddy.ru/yii/framework/base/CModel.php(260): CModel->createValidators()
+#3 /var/www/kreddy.ru/yii/framework/base/CModel.php(546): CModel->getValidators()
+#4 /var/www/kreddy.ru/yii/framework/base/CModel.php(467): CModel->getSafeAttributeNames()
+#5 /var/www/kreddy.ru/protected/controllers/SiteController.php(216): CModel->setAttributes(Array)
+#6 /var/www/kreddy.ru/yii/framework/web/actions/CInlineAction.php(49): SiteController->actionForm2()
+#7 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#8 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#9 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#10 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('form2')
+#11 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/form2')
+#12 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#13 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#14 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/form2
+HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form1
+---
+2013/07/24 10:45:11 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:45:49 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:46:14 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:46:45 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:47:06 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (216)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:48:38 [warning] [application] Failed to set unsafe attribute "client_id" of "ClientForm2".
+in /var/www/kreddy.ru/protected/controllers/SiteController.php (217)
+in /var/www/kreddy.ru/index.php (13)
+2013/07/24 10:51:46 [error] [exception.CException] exception 'CException' with message 'CAssetManager.basePath "/var/www/kreddy.ru/assets" is invalid. Please make sure the directory exists and is writable by the Web server process.' in /var/www/kreddy.ru/yii/framework/web/CAssetManager.php:138
+Stack trace:
+#0 /var/www/kreddy.ru/yii/framework/web/CAssetManager.php(123): CAssetManager->setBasePath('/var/www/kreddy...')
+#1 /var/www/kreddy.ru/yii/framework/web/CAssetManager.php(217): CAssetManager->getBasePath()
+#2 /var/www/kreddy.ru/yii/framework/web/CClientScript.php(462): CAssetManager->publish('/var/www/kreddy...')
+#3 /var/www/kreddy.ru/yii/framework/web/CClientScript.php(499): CClientScript->getCoreScriptUrl()
+#4 /var/www/kreddy.ru/yii/framework/web/CClientScript.php(315): CClientScript->getPackageBaseUrl('jquery')
+#5 /var/www/kreddy.ru/yii/framework/web/CClientScript.php(208): CClientScript->renderCoreScripts()
+#6 /var/www/kreddy.ru/yii/framework/web/CController.php(351): CClientScript->render('<!DOCTYPE html>...')
+#7 /var/www/kreddy.ru/yii/framework/web/CController.php(788): CController->processOutput('<!DOCTYPE html>...')
+#8 /var/www/kreddy.ru/protected/controllers/SiteController.php(32): CController->render('index')
+#9 /var/www/kreddy.ru/yii/framework/web/actions/CInlineAction.php(49): SiteController->actionIndex()
+#10 /var/www/kreddy.ru/yii/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#11 /var/www/kreddy.ru/yii/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#12 /var/www/kreddy.ru/yii/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(282): CController->run('index')
+#14 /var/www/kreddy.ru/yii/framework/web/CWebApplication.php(141): CWebApplication->runController('site/index')
+#15 /var/www/kreddy.ru/yii/framework/base/CApplication.php(169): CWebApplication->processRequest()
+#16 /var/www/kreddy.ru/index.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/kreddy.ru/index.php?r=site/index
+HTTP_REFERER=http://localhost/kreddy.ru/index.php?r=site/form2
+---

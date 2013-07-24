@@ -94,7 +94,7 @@ class SiteController extends Controller
                 if(!$client->checkClientByPhone($model->phone))
                 {
 					//array('client_id'=>'','phone'=>'')
-					if(($this->checkDataInCookie('client','phone',$model->phone))&&($cookieData = $this->getDataFromCookie('client')))
+					if(($this->compareDataInCookie('client','phone',$model->phone))&&($cookieData = $this->getDataFromCookie('client')))
 					{
 						Yii::app()->session['client_id'] = $cookieData['client_id'];
 					}
@@ -110,7 +110,7 @@ class SiteController extends Controller
                 else
                 {
                 	//уже наш клиент, радуем его этим фактом и посылаем на главную страницу
-					$this->redirect("?r=site/index");
+					$this->redirect("?r=site/page&view=already-client");
                 }
 				//echo $cookieData['client_id'];
 				//echo $cookieData['phone'];
@@ -127,14 +127,17 @@ class SiteController extends Controller
 
 		$client=new ClientData();
 		$client_id=Yii::app()->session['client_id'];
-		if($client_id=='') $this->redirect("?r=site/join");
+		if($client_id=='') $this->redirect("?r=site/index");
 
         // uncomment the following code to enable ajax-based validation
 
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form1')
         {
             echo CActiveForm::validate($model);
-			$client->saveClientDataById($model->getAttributes(),$client_id);
+			$modelData = $model->getAttributes();
+			$client->saveClientDataById($modelData,$client_id);
+			$modelData += array('client_id' => $client_id);
+			$this->saveDataToCookie('form1',$modelData);
             Yii::app()->end();
         }
 
@@ -155,6 +158,18 @@ class SiteController extends Controller
             }
         }
 
+		if($this->compareDataInCookie('client','client_id',$client_id))
+		{
+			if($this->compareDataInCookie('form1','client_id',$client_id)&&($cookieData = $this->getDataFromCookie('form1')))
+			{
+				$model->setAttributes($cookieData);
+			}
+		}
+		else
+		{
+			$this->redirect("?r=site/index");
+		}
+
 		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form1',array('model'=>$model));
     }
@@ -171,7 +186,11 @@ class SiteController extends Controller
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form2')
         {
             echo CActiveForm::validate($model);
-			$client->saveClientDataById($model->getAttributes(),$client_id);
+			$modelData = $model->getAttributes();
+			$modelData['complete']=0;
+			$client->saveClientDataById($modelData,$client_id);
+			$modelData += array('client_id' => $client_id);
+			$this->saveDataToCookie('form2',$modelData);
             Yii::app()->end();
         }
 
@@ -190,6 +209,19 @@ class SiteController extends Controller
                 return;
             }
         }
+
+		if($this->compareDataInCookie('client','client_id',$client_id))
+		{
+			if($this->compareDataInCookie('form2','client_id',$client_id)&&($cookieData = $this->getDataFromCookie('form2')))
+			{
+				$model->setAttributes($cookieData);
+			}
+		}
+		else
+		{
+			$this->redirect("?r=site/index");
+		}
+
 		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form2',array('model'=>$model));
     }
@@ -228,43 +260,8 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
-/*
- 					$aDecrypt=array();
-					$phoneInCookie = false;
-					if(isset(Yii::app()->request->cookies['client']))
-					{
-						$cookie = Yii::app()->request->cookies['client'];
 
-						$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-
-						try
-						{
-							$aDecrypt= unserialize($sDecrypt);
-						}
-						catch (Exception $e) {}
-						if((isset($aDecrypt))&&($model->phone == $aDecrypt['phone']))
-						{
-							$phoneInCookie=true;
-						}
-					}
-					if($phoneInCookie)
-					{
-						Yii::app()->session['client_id'] = $aDecrypt['client_id'];
-					}
-					else
-					{
-						$client=$client->addClient($model);
-
-						Yii::app()->session['client_id'] = $client->client_id;
-						$aEncrypt = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-						$sEncrypt = serialize($aEncrypt);
-						$client = CryptArray::encryptVal($sEncrypt);
-						Yii::app()->request->cookies['client'] = new CHttpCookie('client', $client);
-					}
-
- */
-
-	private function checkDataInCookie($cookieName,$attributeName,$checkValue)
+	private function compareDataInCookie($cookieName,$attributeName,$checkValue)
 	{
 		$dataInCookie = false;
 		if(isset(Yii::app()->request->cookies[$cookieName]))
@@ -273,12 +270,8 @@ class SiteController extends Controller
 
 			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
 
-			try
-			{
-				$aDecrypt= unserialize($sDecrypt);
-			}
-			catch (Exception $e) {}
-			if((isset($aDecrypt))&&($checkValue == $aDecrypt[$attributeName]))
+			$aDecrypt= @unserialize($sDecrypt);
+			if($aDecrypt&&($checkValue == $aDecrypt[$attributeName]))
 			{
 				$dataInCookie=true;
 			}

@@ -35,12 +35,12 @@
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/modal.js" charset="utf-8">
 	</script>
 	<!--script type="text/javascript" src="./static/js/tooltip.js" charset="utf-8">
-	</script-->
-	<!--script type="text/javascript" src="./static/js/mask.js" charset="utf-8">
-	</script-->
-	<!--script type="text/javascript" src="./static/js/alerts.js" charset="utf-8">
 	</script>
-	<!--script type="text/javascript" src="./static/js/script.js?v=2" charset="utf-8">
+	<script type="text/javascript" src="./static/js/mask.js" charset="utf-8">
+	</script>
+	<script type="text/javascript" src="./static/js/alerts.js" charset="utf-8">
+	</script>
+	<script type="text/javascript" src="./static/js/script.js?v=2" charset="utf-8">
 	</script-->
 
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />

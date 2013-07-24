@@ -71,7 +71,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.*/
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, dt_add, dt_update', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, complete, dt_add, dt_update', 'safe'),
 
 
          );
@@ -79,7 +79,7 @@ class ClientData extends CActiveRecord
 
     public function checkClientByPhone($phone)
     {
-        if(($this->find('phone=:phone',array(':phone'=>$phone)))&&($this->complete))
+        if(($client=$this->find('phone=:phone',array(':phone'=>$phone)))&&($client->complete==1))
         {
             return true;
         }
@@ -108,7 +108,7 @@ class ClientData extends CActiveRecord
     {
 		if($client=$this->find('phone=:phone',array(':phone'=>$model->phone)))
 		{
-			$this->clearClient($client);
+			//$this->clearClient($client); //бессмысленно, т.к. при открытии пустой формы сразу проходит валидация, "зачищающая" данные в таблицы через ajax-запись
 			$client->phone=$model->phone;
 			$client->dt_add=date('Y-m-d H:i:s', time());
 			$client->save();

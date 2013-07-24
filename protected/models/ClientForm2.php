@@ -19,6 +19,7 @@ class ClientForm2 extends CFormModel {
 
     public $job_phone; // телефон
     public $email; // электронная почта
+	public $complete; // электронная почта
 
     public function rules()
     {
@@ -29,6 +30,7 @@ class ClientForm2 extends CFormModel {
                                 "Свидетельство ИНН"=>"Свидетельство ИНН",
                                 "Страховое свидетельство государственного пенсионного страхования"=>"Страховое свидетельство государственного пенсионного страхования"
                             );
+			$complete=array(0,1);
 			// TODO: допилить валидацию, добавив проверку длины введенных данных и прочее
             return array(
                 array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
@@ -38,6 +40,7 @@ class ClientForm2 extends CFormModel {
 				array('email', 'length', 'max'=>254,'message'=>'Максимальная длина поля {attribute} 254 символов.'),
                 array('email', 'email', 'message' => 'Введите email в правильном формате'),
                 array('job_phone', 'match', 'pattern' => '/^\d{10}$/', 'message' => 'Неверный формат телефона, пример верного номера: +71234567890'),
+				array('complete', 'required', 'requiredValue' => 1,'message'=>'Необходимо подтвердить свое согласие на обработку данных'),
                 //array('phone', 'match', 'pattern' => '/^(\+7)\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/', 'message' => 'Неверный формат телефона, пример верного номера: +7(123)456-78-90'),
             );
 
@@ -74,6 +77,7 @@ class ClientForm2 extends CFormModel {
 
             'job_phone' => 'Рабочий телефон',
             'email' => 'Email',
+			'complete' => 'Я подтверждаю верность введенных данных и даю разрешение на их обработку и хранение',
         );
     }
 
