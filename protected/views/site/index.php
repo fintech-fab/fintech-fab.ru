@@ -6,7 +6,8 @@
 
 $this->pageTitle=Yii::app()->name;
 $this->breadcrumbs=array(
-	'123','456'
+	'Личные данные',
+	'Личные данные 2',
 );
 ?>
     <?php
@@ -35,8 +36,11 @@ $this->breadcrumbs=array(
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
-			'homeLink' => CHtml::link('HOME - My Way', Yii::app()->homeUrl),
+			'homeLink' => CHtml::link('Ввод телефона', Yii::app()->homeUrl),
+			'separator'=>' → ',
+			'htmlOptions' => array('class' => 'breadcrumb'),
 		)); ?><!-- breadcrumbs -->
+
 	<?php endif?>
 
 	<div class="form">
