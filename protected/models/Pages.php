@@ -40,6 +40,7 @@ class Pages extends CActiveRecord
 			array('page_name, page_title, page_content', 'required'),
 			array('page_name', 'length', 'max'=>20),
 			array('page_title', 'length', 'max'=>255),
+			array('page_name', 'unique', 'message'=>'Страница должна иметь уникальное имя'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('page_id, page_name, page_title, page_content', 'safe', 'on'=>'search'),

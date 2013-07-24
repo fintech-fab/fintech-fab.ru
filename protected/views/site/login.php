@@ -8,6 +8,8 @@ $this->breadcrumbs=array(
 	'Login',
 );
 ?>
+<div class="container container_12">
+	<div class="grid_12">
 
 <h1>Login</h1>
 
@@ -51,3 +53,5 @@ $this->breadcrumbs=array(
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
+</div>
+</div>
