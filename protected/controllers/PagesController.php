@@ -72,7 +72,7 @@ class PagesController extends Controller
 		{
 			$model->attributes=$_POST['Pages'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->page_id));
+				$this->redirect(array('view','name'=>$model->page_name));
 		}
 
 		$this->render('create',array(
@@ -96,7 +96,7 @@ class PagesController extends Controller
 		{
 			$model->attributes=$_POST['Pages'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->page_id));
+				$this->redirect(array('view','name'=>$model->page_name));
 		}
 
 		$this->render('update',array(
