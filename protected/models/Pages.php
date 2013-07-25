@@ -99,7 +99,7 @@ class Pages extends CActiveRecord
 		$p = new CHtmlPurifier;
 		$p->options = array(
 			'Filter.YouTube'=>true,
-			'HTML.AllowedElements'=>array("p","ul","ol","li","h3","h4","h5","h6","img","a","b","i","s","span","u","em","strong","del","blockquote","sup","sub","pre","br","hr","table","tbody","thead","tr","td","th"),
+			'HTML.AllowedElements'=>array("div","p","ul","ol","li","h3","h4","h5","h6","img","a","b","i","s","span","u","em","strong","del","blockquote","sup","sub","pre","br","hr","table","tbody","thead","tr","td","th"),
 			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","img.width","img.height","a.href","a.title","*.style","*.class"),
 		);
 		$this->page_content=$p->purify($this->page_content);

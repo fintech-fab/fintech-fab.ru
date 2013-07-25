@@ -35,7 +35,6 @@ $this->pageTitle=Yii::app()->name." - ".CHtml::encode($model->page_title);
 $this->widget('TopPageWidget');
 
 ?>
-
 <div class="container container_12">
 	<div class="grid_12">
 

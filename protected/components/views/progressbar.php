@@ -19,20 +19,18 @@
 
 ?>
 
-<script type="text/javascript">
-	onload = function()
-	{
-		<?php
-			//генерируем список полей на валидацию по onload()
-			//валидация происходит через ajax по событию jQuery blur()
-			$attr=$this->model->attributeNames();
-
-			foreach($attr as &$a)
-			{
-				echo '$("#'.get_class($this->model).'_'.$a.'").blur();'."\n					";
-			}
-			unset($a);
-			echo "\n";
-		?>
-	}
-</script>
+		<script type="text/javascript">
+			$(window).load(function () {
+				<?php
+				//генерируем список полей на валидацию по onload()
+				//валидация происходит через ajax по событию jQuery blur()
+				$attr=$this->model->attributeNames();
+				foreach($attr as &$a)
+				{
+					echo '$("#'.get_class($this->model).'_'.$a.'").blur();'."\n				";
+				}
+				unset($a);
+				echo "\n";
+				?>
+			});
+		</script>

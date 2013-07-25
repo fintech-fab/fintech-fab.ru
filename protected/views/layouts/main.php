@@ -18,7 +18,6 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 
 
-
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/bootstrap.min.css" type="text/css" />
@@ -27,8 +26,12 @@
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
     <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
+	<?php Yii::app()->getClientScript()->registerCoreScript( 'jquery.ui' );?>
+	<?php Yii::app()->clientScript->registerCssFile('/css/jquery-ui.css'); ?>
 
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/tab.js" charset="utf-8"></script>
+
+
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/tab.js" charset="utf-8"></script>
 
 	<!--script type="text/javascript" src="./static/js/collapse.js" charset="utf-8">
 	</script-->

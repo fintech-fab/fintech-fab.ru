@@ -160,6 +160,7 @@ $this->widget('TopPageWidget');
 				<?php echo CHtml::submitButton('Далее'); ?>
 			</div>
 			<?php $this->endWidget(); ?>
+
 		</div>
 
 		<?php
