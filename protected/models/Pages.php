@@ -98,13 +98,11 @@ class Pages extends CActiveRecord
 	{
 		$p = new CHtmlPurifier;
 		$p->options = array(
-			'HTML.AllowedElements'=>array("p","ul","ol","li","h4","h5","h6","img","a","b","i","s","u","em","strong","del","blockquote","sup","sub","pre","br"),
-			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","a.href","a.title"),
+			'Filter.YouTube'=>true,
+			'HTML.AllowedElements'=>array("p","ul","ol","li","h3","h4","h5","h6","img","a","b","i","s","span","u","em","strong","del","blockquote","sup","sub","pre","br","hr","table","tbody","thead","tr","td","th"),
+			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","img.width","img.height","a.href","a.title","*.style","*.class"),
 		);
-		//TODO: сделать очистку только опасных тэгов
-
 		$this->page_content=$p->purify($this->page_content);
-
 		return parent::afterValidate();
 	}
 }

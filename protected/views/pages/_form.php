@@ -26,7 +26,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'page_title'); ?>
-		<?php echo $form->textField($model,'page_title',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->textField($model,'page_title',array('size'=>60,'maxlength'=>100)); ?>
 		<?php echo $form->error($model,'page_title'); ?>
 	</div>
 
@@ -47,10 +47,16 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		'options' => array(
 		'lang' => 'ru',
 		'toolbar' => 'classic',
+
+			'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
+				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
+				'image', 'file', 'table', 'link', '|',
+				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 		'iframe' => true,
 		'imageUpload' => '/file_upload.php',
 		//'css' => 'wym.css',
 		),
+		'htmlOptions' => array('style'=>"width: 100%; height: 400px;"),
 		));
 		?>
 	</div>
