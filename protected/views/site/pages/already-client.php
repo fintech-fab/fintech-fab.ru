@@ -16,12 +16,9 @@ $this->widget('TopPageWidget');
 		<p>Если у вас есть вопросы - позвоните нам 8 (800) 555-75-78!</p>
 		<br/>
 		<?php
-		$model=new Tabs();
-		//echo $data[1]->page_title;
-		$model->unsetAttributes();
-				$this->widget('BottomTabs',array(
-				'tabs'=>$model->findAll(array('order'=>'tab_order')),
-				));
+		$this->widget('BottomTabs',array(
+			'tabs'=>Tabs::model()->findAll(array('order'=>'tab_order')),
+			));
 		?>
 
 	</div>

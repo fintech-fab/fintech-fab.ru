@@ -40,7 +40,12 @@ class Tabs extends CActiveRecord
 		return array(
 			array('tab_name, tab_title, tab_content, tab_order', 'required'),
 			array('tab_order', 'numerical', 'integerOnly'=>true),
-			array('tab_name, tab_title', 'length', 'max'=>20),
+			array('tab_name', 'length', 'max'=>20),
+			array('tab_name', 'match','pattern'=>'/^[a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы'),
+			array('tab_name', 'unique', 'message'=>'Страница должна иметь уникальное имя'),
+			array('tab_title', 'length', 'max'=>30),
+			//TODO: перепилить проверку title, добавить знаки препинания
+			array('tab_title', 'match','pattern'=>'/^[а-яa-z0-9][а-яa-z0-9 ]+[а-яa-z0-9]$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы, без пробела в начале и конце'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('tab_id, tab_name, tab_title, tab_content, tab_order', 'safe', 'on'=>'search'),
@@ -64,11 +69,11 @@ class Tabs extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'tab_id' => 'Tab',
-			'tab_name' => 'Tab Name',
-			'tab_title' => 'Tab Title',
-			'tab_content' => 'Tab Content',
-			'tab_order' => 'Tab Order',
+			'tab_id' => 'ID вкладки',
+			'tab_name' => 'Имя вкладки',
+			'tab_title' => 'Заголовок вкладки',
+			'tab_content' => 'Содержимое вкладки',
+			'tab_order' => 'Номер вкладки в последовательности',
 		);
 	}
 
@@ -92,5 +97,16 @@ class Tabs extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	protected function afterValidate()
+	{
+		$p = new CHtmlPurifier;
+		$p->options = array(
+			'HTML.AllowedElements'=>array("div","p","ul","ol","li","h3","h4","h5","h6","img","a","b","i","s","span","u","em","strong","del","blockquote","sup","sub","pre","br","hr","table","tbody","thead","tr","td","th"),
+			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","img.width","img.height","a.href","a.title","*.style","*.class"),
+		);
+		$this->tab_content=$p->purify($this->tab_content);
+		return parent::afterValidate();
 	}
 }

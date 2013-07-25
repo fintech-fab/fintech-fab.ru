@@ -8,11 +8,14 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Tabs', 'url'=>array('index')),
-	array('label'=>'Manage Tabs', 'url'=>array('admin')),
+	array('label'=>'Список страниц', 'url'=>array('pages/index')),
+	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
+	array('label'=>'Управление страницами', 'url'=>array('pages/admin')),
+	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
+	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
 );
 ?>
 
-<h1>Create Tabs</h1>
+<h1>Создание вкладки</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

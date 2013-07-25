@@ -205,7 +205,7 @@ class SiteController extends Controller
 				{
 					$this->redirect("?r=site/join");
 				}
-                $this->redirect("?r=site/index");
+                $this->redirect("?r=site/pages&view=form-sent");
                 return;
             }
         }

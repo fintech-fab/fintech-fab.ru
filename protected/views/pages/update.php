@@ -9,13 +9,15 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Pages', 'url'=>array('index')),
-	array('label'=>'Create Pages', 'url'=>array('create')),
-//	array('label'=>'View Pages', 'url'=>array('view', 'id'=>$model->page_id)),
-	array('label'=>'Manage Pages', 'url'=>array('admin')),
+	array('label'=>'Список страниц', 'url'=>array('pages/index')),
+	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
+	array('label'=>'Управление страницами', 'url'=>array('pages/admin')),
+	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
+	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
+	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
 );
 ?>
 
-<h1>Update Pages <?php echo $model->page_id; ?></h1>
+<h1>Изменение страницы <?php echo $model->page_name; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

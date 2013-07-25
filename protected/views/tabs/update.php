@@ -9,13 +9,15 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Tabs', 'url'=>array('index')),
-	array('label'=>'Create Tabs', 'url'=>array('create')),
-	array('label'=>'View Tabs', 'url'=>array('view', 'id'=>$model->tab_id)),
-	array('label'=>'Manage Tabs', 'url'=>array('admin')),
+	array('label'=>'Список страниц', 'url'=>array('pages/index')),
+	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
+	array('label'=>'Управление страницами', 'url'=>array('pages/admin')),
+	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
+	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
+	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
 );
 ?>
 
-<h1>Update Tabs <?php echo $model->tab_id; ?></h1>
+<h1>Изменение вкладки #<?php echo $model->tab_id; ?> "<?php echo $model->tab_name; ?>"</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -7,12 +7,15 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Tabs', 'url'=>array('create')),
-	array('label'=>'Manage Tabs', 'url'=>array('admin')),
+	array('label'=>'Список страниц', 'url'=>array('pages/index')),
+	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
+	array('label'=>'Управление страницами', 'url'=>array('pages/admin')),
+	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
+	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
 );
 ?>
 
-<h1>Tabs</h1>
+<h1>Вкладки</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

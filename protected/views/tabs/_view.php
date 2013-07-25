@@ -17,10 +17,6 @@
 	<?php echo CHtml::encode($data->tab_title); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('tab_content')); ?>:</b>
-	<?php echo CHtml::encode($data->tab_content); ?>
-	<br />
-
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tab_order')); ?>:</b>
 	<?php echo CHtml::encode($data->tab_order); ?>
 	<br />

@@ -31,9 +31,6 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 	</div>
 
 	<div class="row">
-		<?php //echo $form->labelEx($model,'page_content'); ?>
-		<?php //echo $form->textArea($model,'page_content',array('rows'=>6, 'cols'=>50)); ?>
-		<?php //echo $form->error($model,'page_content'); ?>
 		<?php
 		$this->widget('ImperaviRedactorWidget', array(
 		// You can either use it for model attribute
