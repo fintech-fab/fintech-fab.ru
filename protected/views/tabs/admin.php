@@ -28,7 +28,6 @@ $('.search-form form').submit(function(){
 });
 ");
 
-Yii::app()->clientScript->registerScriptFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js');
 ?>
 
 <?php
