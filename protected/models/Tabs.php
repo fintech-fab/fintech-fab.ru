@@ -45,7 +45,7 @@ class Tabs extends CActiveRecord
 			array('tab_name', 'unique', 'message'=>'Страница должна иметь уникальное имя'),
 			array('tab_title', 'length', 'max'=>30),
 			//TODO: перепилить проверку title, добавить знаки препинания
-			array('tab_title', 'match','pattern'=>'/^[а-яa-z0-9][а-яa-z0-9 ]+[а-яa-z0-9]$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы, без пробела в начале и конце'),
+			array('tab_title', 'match','pattern'=>'/^[а-яА-ЯЁёa-zA-Z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('tab_id, tab_name, tab_title, tab_content, tab_order', 'safe', 'on'=>'search'),
@@ -99,6 +99,15 @@ class Tabs extends CActiveRecord
 		));
 	}
 
+	protected function beforeValidate()
+	{
+		if(parent::beforeValidate())
+		{
+			$this->tab_title = trim($this->tab_title);
+		}
+		return true;
+	}
+
 	protected function afterValidate()
 	{
 		$p = new CHtmlPurifier;
@@ -107,6 +116,6 @@ class Tabs extends CActiveRecord
 			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","img.width","img.height","a.href","a.title","*.style","*.class"),
 		);
 		$this->tab_content=$p->purify($this->tab_content);
-		return parent::afterValidate();
+		parent::afterValidate();
 	}
 }

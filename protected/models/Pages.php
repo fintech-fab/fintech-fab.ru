@@ -41,7 +41,7 @@ class Pages extends CActiveRecord
 			array('page_name', 'length', 'max'=>20),
 			array('page_name', 'match','pattern'=>'/^[a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы'),
 			array('page_title', 'length', 'max'=>100),
-			array('page_title', 'match','pattern'=>'/^[а-яa-z0-9][а-яa-z0-9 ]+[а-яa-z0-9]$/ui', 'message' => 'Заголовок может содержать только буквы цифры и пробелы, без пробела в начале и конце'),
+			array('page_title', 'match','pattern'=>'/^[а-яА-ЯЁёa-zA-Z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('page_name', 'unique', 'message'=>'Страница должна иметь уникальное имя'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -94,6 +94,15 @@ class Pages extends CActiveRecord
 		));
 	}
 
+	protected function beforeValidate()
+	{
+		if(parent::beforeValidate())
+		{
+			$this->page_title = trim($this->page_title);
+		}
+		return true;
+	}
+
 	protected function afterValidate()
 	{
 		$p = new CHtmlPurifier;
@@ -103,6 +112,6 @@ class Pages extends CActiveRecord
 			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","img.width","img.height","a.href","a.title","*.style","*.class"),
 		);
 		$this->page_content=$p->purify($this->page_content);
-		return parent::afterValidate();
+		parent::afterValidate();
 	}
 }
