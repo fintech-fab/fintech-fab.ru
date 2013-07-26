@@ -36,7 +36,7 @@ class TabsController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','sort'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -141,6 +141,29 @@ class TabsController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionSort()
+	{
+		if( Yii::app()->request->isAjaxRequest )
+		{
+			if( isset( $_POST[ 'items' ] ) && is_array( $_POST[ 'items' ] ) )
+			{
+				foreach( $_POST[ 'items' ] as $key => $val )
+				{
+					Tabs::model()->updateByPk( $val, array (
+						'tab_order' => ( $key + 1 )
+					) );
+				}
+			}/*
+			$i = 0;
+			foreach ($_POST['items'] as $item) {
+				$project = Tabs::model()->findByPk($item);
+				$project->tab_order = $i;
+				$project->save();
+				$i++;
+			}*/
+		}
 	}
 
 	/**
