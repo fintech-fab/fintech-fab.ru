@@ -8,11 +8,22 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List FooterLinks', 'url'=>array('index')),
-	array('label'=>'Create FooterLinks', 'url'=>array('create')),
+	array('label'=>'Список страниц', 'url'=>array('pages/index')),
+	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
+	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
+	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
+	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
+	array('label'=>'Список нижних ссылок', 'url'=>array('footerLinks/index')),
+	array('label'=>'Создать нижнюю ссылку', 'url'=>array('footerLinks/create')),
+	array('label'=>'Изменить нижнюю ссылку', 'url'=>array('footerLinks/update', 'id'=>$model->link_id)),
+	array('label'=>'Удалить нижнюю ссылку', 'url'=>'#', 'linkOptions'=>array('submit'=>array('footerLinks/delete','id'=>$model->link_id),'confirm'=>'Вы уверены что хотите удалить эту ссылку?')),
+	array('label'=>'Управление нижними ссылками', 'url'=>array('footerLinks/admin')),
+
+
+
+
 	array('label'=>'Update FooterLinks', 'url'=>array('update', 'id'=>$model->link_id)),
 	array('label'=>'Delete FooterLinks', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->link_id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage FooterLinks', 'url'=>array('admin')),
 );
 ?>
 
@@ -25,6 +36,6 @@ $this->menu=array(
 		'link_name',
 		'link_title',
 		'link_url',
-		'link_content',
+		//'link_content',
 	),
 )); ?>

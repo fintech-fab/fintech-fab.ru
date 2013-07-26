@@ -8,8 +8,13 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List FooterLinks', 'url'=>array('index')),
-	array('label'=>'Manage FooterLinks', 'url'=>array('admin')),
+	array('label'=>'Список страниц', 'url'=>array('pages/index')),
+	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
+	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
+	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
+	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
+	array('label'=>'Список нижних ссылок', 'url'=>array('footerLinks/index')),
+	array('label'=>'Управление нижними ссылками', 'url'=>array('footerLinks/admin')),
 );
 ?>
 

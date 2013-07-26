@@ -15,6 +15,9 @@ $this->menu=array(
 	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
 	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
 	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
+	array('label'=>'Список нижних ссылок', 'url'=>array('footerLinks/index')),
+	array('label'=>'Создать нижнюю ссылку', 'url'=>array('footerLinks/create')),
+	array('label'=>'Управление нижними ссылками', 'url'=>array('footerLinks/admin')),
 );
 ?>
 

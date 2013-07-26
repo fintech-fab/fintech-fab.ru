@@ -15,7 +15,10 @@ $this->menu=array(
 	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
 	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
 	array('label'=>'Изменить вкладку', 'url'=>array('update', 'id'=>$model->tab_id)),
-	array('label'=>'Удалить вкладку', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->tab_id),'confirm'=>'Вы уверены что хотите удалить эту вкладку?')),
+	array('label'=>'Удалить вкладку', 'url'=>'#', 'linkOptions'=>array('submit'=>array('tabs/delete','id'=>$model->tab_id),'confirm'=>'Вы уверены что хотите удалить эту вкладку?')),
+	array('label'=>'Список нижних ссылок', 'url'=>array('footerLinks/index')),
+	array('label'=>'Создать нижнюю ссылку', 'url'=>array('footerLinks/create')),
+	array('label'=>'Управление нижними ссылками', 'url'=>array('footerLinks/admin')),
 );
 ?>
 
@@ -27,7 +30,7 @@ $this->menu=array(
 		'tab_id',
 		'tab_name',
 		'tab_title',
-		'tab_content',
+		//'tab_content',
 		'tab_order',
 	),
 )); ?>

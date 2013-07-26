@@ -17,7 +17,7 @@ Yii::app()->clientScript->registerScript('bottomtabs', '
 
 		foreach($this->tabs as &$t)
 		{
-			echo '<li><a href="#'.$t->tab_name.'">'.$t->tab_title.'</a></li>';
+			echo '<li><a href="#tab-'.$t->tab_name.'">'.$t->tab_title.'</a></li>';
 		}
 
 	?>
@@ -26,7 +26,7 @@ Yii::app()->clientScript->registerScript('bottomtabs', '
 	<?php
 	foreach($this->tabs as &$t)
 	{
-		echo '<div id="'.$t->tab_name.'">';
+		echo '<div id="tab-'.$t->tab_name.'">';
 		echo '<p>'.$t->tab_content.'</p>';
 		echo '</div>';
 	}

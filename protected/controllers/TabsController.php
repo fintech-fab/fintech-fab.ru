@@ -8,6 +8,26 @@ class TabsController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
+
+	public function actions()
+	{
+		return array(
+			'imageUpload'=>array(
+				'class' => 'ext.RedactorUploadAction',
+				'directory'=>'uploads/images',
+				'validator'=>array(
+					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
+				)
+			),
+			'fileUpload'=>array(
+				'class' => 'ext.RedactorUploadAction',
+				'directory'=>'uploads/files',
+				'validator'=>array(
+					'types' => 'txt, pdf, doc, docx',
+				)
+			),
+		);
+	}
 	/**
 	 * @return array action filters
 	 */
@@ -28,15 +48,15 @@ class TabsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array(),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array(),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','sort'),
+				'actions'=>array('admin','delete','create','update','index','imageUpload','view','sort'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -155,14 +175,7 @@ class TabsController extends Controller
 						'tab_order' => ( $key + 1 )
 					) );
 				}
-			}/*
-			$i = 0;
-			foreach ($_POST['items'] as $item) {
-				$project = Tabs::model()->findByPk($item);
-				$project->tab_order = $i;
-				$project->save();
-				$i++;
-			}*/
+			}
 		}
 	}
 

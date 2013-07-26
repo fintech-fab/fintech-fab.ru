@@ -28,15 +28,15 @@ class FooterLinksController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array(),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array(),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('admin','delete','create','update','index','imageUpload','view','sort'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -141,6 +141,22 @@ class FooterLinksController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionSort()
+	{
+		if( Yii::app()->request->isAjaxRequest )
+		{
+			if( isset( $_POST[ 'items' ] ) && is_array( $_POST[ 'items' ] ) )
+			{
+				foreach( $_POST[ 'items' ] as $key => $val )
+				{
+					Tabs::model()->updateByPk( $val, array (
+						'link_order' => ( $key + 1 )
+					) );
+				}
+			}
+		}
 	}
 
 	/**

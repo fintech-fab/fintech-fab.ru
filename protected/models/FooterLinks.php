@@ -38,7 +38,7 @@ class FooterLinks extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('link_name, link_title, link_url, link_content', 'required'),
+			array('link_name, link_title, link_content', 'required'),
 			array('link_name', 'length', 'max'=>20),
 			array('link_title', 'length', 'max'=>30),
 			array('link_url', 'length', 'max'=>255),
@@ -65,11 +65,11 @@ class FooterLinks extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'link_id' => 'Link',
-			'link_name' => 'Link Name',
-			'link_title' => 'Link Title',
-			'link_url' => 'Link Url',
-			'link_content' => 'Link Content',
+			'link_id' => 'ID ссылки',
+			'link_name' => 'Имя ссылки',
+			'link_title' => 'Заголовок ссылки',
+			'link_url' => 'URL ссылки',
+			'link_content' => 'Содержимое ссылки',
 		);
 	}
 
@@ -93,5 +93,26 @@ class FooterLinks extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	protected function beforeValidate()
+	{
+		if(parent::beforeValidate())
+		{
+			$this->link_title = trim($this->link_title);
+		}
+		return true;
+	}
+
+	protected function afterValidate()
+	{
+		$p = new CHtmlPurifier;
+		$p->options = array(
+			'Filter.YouTube'=>true,
+			'HTML.AllowedElements'=>array("div","p","ul","ol","li","h3","h4","h5","h6","img","a","b","i","s","span","u","em","strong","del","blockquote","sup","sub","pre","br","hr","table","tbody","thead","tr","td","th"),
+			'HTML.AllowedAttributes'=>array("img.src","img.alt","img.title","img.width","img.height","a.href","a.title","*.style","*.class"),
+		);
+		$this->link_content=$p->purify($this->link_content);
+		parent::afterValidate();
 	}
 }

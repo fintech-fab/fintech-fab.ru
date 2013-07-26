@@ -2,6 +2,8 @@
 /* @var $this FooterLinksController */
 /* @var $model FooterLinks */
 /* @var $form CActiveForm */
+
+Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
 
 <div class="form">
@@ -11,7 +13,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -34,13 +36,37 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'link_content'); ?>
-		<?php echo $form->textArea($model,'link_content',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'link_content'); ?>
+		<?php
+		$this->widget('ImperaviRedactorWidget', array(
+			// You can either use it for model attribute
+			'model' => $model,
+			'attribute' => 'link_content',
+
+			// or just for input field
+			'name' => 'link_content',
+
+			// Some options, see http://imperavi.com/redactor/docs/
+			'options' => array(
+				'lang' => 'ru',
+				'toolbar' => 'classic',
+				'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
+					'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
+					'image', 'table', 'link', '|',
+					'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
+				'iframe' => true,
+				'imageUpload' => Yii::app()->createUrl("pages/imageUpload"),
+				'imageUploadErrorCallback'=> 'js: function(json) { alert(json.error); }',
+				'uploadFields'=>array(
+					Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
+				),
+			),
+			'htmlOptions' => array('style'=>"width: 100%; height: 400px;"),
+		));
+		?>
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
