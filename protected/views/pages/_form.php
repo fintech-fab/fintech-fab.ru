@@ -8,10 +8,15 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
 
 <div class="form">
+	<?php
+	$img=new Image();
+	$i='file';
+	echo CHtml::resolveName($img,$i);
+	?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'pages-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -47,12 +52,15 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 			'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
 				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-				'image', 'file', 'table', 'link', '|',
+				'image', 'table', 'link', '|',
 				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 		'iframe' => true,
-		'imageUpload' => '/file_upload.php',
-		//'css' => 'wym.css',
+		'imageUpload' => Yii::app()->createUrl("pages/upload"),
+		'uploadFields'=>array(
+				Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
+			),
 		),
+
 		'htmlOptions' => array('style'=>"width: 100%; height: 400px;"),
 		));
 		?>
