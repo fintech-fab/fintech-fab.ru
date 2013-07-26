@@ -29,12 +29,6 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		<?php echo $form->error($model,'tab_title'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'tab_order'); ?>
-		<?php echo $form->textField($model,'tab_order'); ?>
-		<?php echo $form->error($model,'tab_order'); ?>
-	</div>
-
 	<?php
 	$this->widget('ImperaviRedactorWidget', array(
 		// You can either use it for model attribute

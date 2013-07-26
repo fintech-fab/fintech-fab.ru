@@ -83,7 +83,6 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 	'rowCssClassExpression'=>'"items[]_{$data->tab_id}"',
 	'columns'=>array(
 		'tab_id',
-		'tab_order',
 		'tab_name',
 		'tab_title',
 		//'tab_content',
