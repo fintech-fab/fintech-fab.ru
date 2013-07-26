@@ -26,25 +26,22 @@
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
     <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-	<?php Yii::app()->getClientScript()->registerCoreScript( 'jquery.ui' );?>
-	<?php Yii::app()->clientScript->registerCssFile('/css/jquery-ui.css'); ?>
+	<?php Yii::app()->clientScript->registerCoreScript( 'jquery.ui' );?>
+	<!--?php Yii::app()->clientScript->registerCoreScript( 'jquery.modal' );?-->
+	<!--?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/jquery-ui.css'); ?-->
+	<?php
+		Yii::app()->clientScript->registerCssFile(
+			Yii::app()->assetManager->publish(
+				Yii::getPathOfAlias('ext.myExt.assets').'/'
+				).'/jui/css/base/jquery-ui.css'
+		);
+	?>
 
 
 
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/tab.js" charset="utf-8"></script>
 
-	<!--script type="text/javascript" src="./static/js/collapse.js" charset="utf-8">
-	</script-->
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/modal.js" charset="utf-8">
 	</script>
-	<!--script type="text/javascript" src="./static/js/tooltip.js" charset="utf-8">
-	</script>
-	<script type="text/javascript" src="./static/js/mask.js" charset="utf-8">
-	</script>
-	<script type="text/javascript" src="./static/js/alerts.js" charset="utf-8">
-	</script>
-	<script type="text/javascript" src="./static/js/script.js?v=2" charset="utf-8">
-	</script-->
 
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 </head>
@@ -90,78 +87,41 @@
 <br/>
 <div class="page-divider1"></div>
 
-<article class="container1">
-    <section class="row">
+<div class="container container_12">
+	<div class="grid_12">
+    <section>
         <h2>Узнай больше о нас!</h2>
 
         <p class="intro">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
 
-        <div class="about tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#zero" data-toggle="tab">Срочно нужны деньги?</a></li>
-
-                <li><a href="#first" data-toggle="tab">Преимущества Kreddy</a></li>
-
-                <li><a href="#second" data-toggle="tab">Как оплатить?</a></li>
-
-                <li><a href="#third" data-toggle="tab">Как это работает?</a></li>
-
-                <li><a href="#fourth" data-toggle="tab">Повторный займ</a></li>
-
-                <li><a href="#fifth" data-toggle="tab">SMS-инфо</a></li>
-
-				<li><a href="#pay" data-toggle="tab">Оплатить</a></li>
-            </ul>
-
-            <div class="tab-content">
-                <div id="zero" class="tab-pane active">
-                    <a href="#" id="case"></a>
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-a.jpg" alt="asd" width="960" />
-                </div>
-
-                <div id="first" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-b.jpg" alt="asd" width="960" />
-                </div>
-
-                <div id="second" class="tab-pane">
-                    <a href="?r=site/page&view=payments"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-j.jpg" alt="инструкция по оплате через киви или элекснет" class="pay_list_href"></a><a href="?r=site/page&view=cc"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/pay_cc/cc.png" alt="инструкция по оплате вашей банковской картой" class="pay_list_href" style="margin:20px;" width="90"></a>
-                </div>
-
-                <div id="third" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-f.jpg" alt="asd" width="960" />
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-g.jpg" alt="asd" width="960" />
-                </div>
-
-                <div id="fourth" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-h.png" alt="asd" width="800" />
-                </div>
-
-                <div id="fifth" class="tab-pane">
-                    <img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/case-k.jpg" alt="asd" width="960" />
-                </div>
-
-				<div id="pay" class="tab-pane">
-					<a href="https://pay.kreddy.ru/" target="_blank"><img src="<?php echo Yii::app()->request->baseUrl; ?>static/img/pay_cc/cc.png" alt="Оплата банковской картой" width="100" /></a>
-					Оплата банковской картой
-				</div>
-            </div>
-        </div>
+		<?php
+		$this->widget('BottomTabs',array(
+			'tabs'=>Tabs::model()->findAll(array('order'=>'tab_order')),
+		));
+		?>
     </section>
-</article>
+	</div>
+</div>
 
 <div class="page-divider"></div>
 
 <article class="container1">
     <section class="row">
         <footer>
-            <p>
+			<?php
+			$this->widget('FooterLinksWidget',array(
+				'links'=>FooterLinks::model()->findAll(array('order'=>'link_order')),
+			));
+			?>
+
+            <!--p>
                 <a data-toggle="modal" href="#svid">Свидетельство</a> &middot;
                 <a data-toggle="modal" href="#rules">Правила займа</a> &middot;
                 <a data-toggle="modal" href="#arch_rules">Архив правил займа</a> &middot;
                 <a data-toggle="modal" href="#offer">Оферта</a> &middot;
                 <a data-toggle="modal" href="#offer_mobile">Оферта на мобильный займ</a> &middot;
                 <a data-toggle="modal" href="#contacts">Контакты</a>
-            </p>
+            </p-->
 
             <p>&copy; 2012  ООО "Финансовые Решения"</p>
         </footer>

@@ -1,6 +1,6 @@
 <?php
 
-class TabsController extends Controller
+class FooterLinksController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -19,26 +19,6 @@ class TabsController extends Controller
 		);
 	}
 
-	public function actions()
-	{
-		return array(
-			'imageUpload'=>array(
-				'class' => 'ext.RedactorUploadAction',
-				'directory'=>'uploads/images',
-				'validator'=>array(
-					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
-				)
-			),
-			'fileUpload'=>array(
-				'class' => 'ext.RedactorUploadAction',
-				'directory'=>'uploads/files',
-				'validator'=>array(
-					'types' => 'txt, pdf, doc, docx',
-				)
-			),
-		);
-	}
-
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -48,15 +28,15 @@ class TabsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array(),
+				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','imageUpload'),
+				'actions'=>array('admin','delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -82,16 +62,16 @@ class TabsController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Tabs;
+		$model=new FooterLinks;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tabs']))
+		if(isset($_POST['FooterLinks']))
 		{
-			$model->attributes=$_POST['Tabs'];
+			$model->attributes=$_POST['FooterLinks'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->tab_id));
+				$this->redirect(array('view','id'=>$model->link_id));
 		}
 
 		$this->render('create',array(
@@ -111,11 +91,11 @@ class TabsController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tabs']))
+		if(isset($_POST['FooterLinks']))
 		{
-			$model->attributes=$_POST['Tabs'];
+			$model->attributes=$_POST['FooterLinks'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->tab_id));
+				$this->redirect(array('view','id'=>$model->link_id));
 		}
 
 		$this->render('update',array(
@@ -142,7 +122,7 @@ class TabsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tabs');
+		$dataProvider=new CActiveDataProvider('FooterLinks');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -153,10 +133,10 @@ class TabsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Tabs('search');
+		$model=new FooterLinks('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Tabs']))
-			$model->attributes=$_GET['Tabs'];
+		if(isset($_GET['FooterLinks']))
+			$model->attributes=$_GET['FooterLinks'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -167,12 +147,12 @@ class TabsController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Tabs the loaded model
+	 * @return FooterLinks the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Tabs::model()->findByPk($id);
+		$model=FooterLinks::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -180,11 +160,11 @@ class TabsController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Tabs $model the model to be validated
+	 * @param FooterLinks $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='tabs-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='footer-links-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

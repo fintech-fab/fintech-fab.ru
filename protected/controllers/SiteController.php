@@ -49,7 +49,7 @@ class SiteController extends Controller
 	/**
 	 * Displays the contact page
 	 */
-	public function actionContact()
+	/*public function actionContact()
 	{
 		$model=new ContactForm;
 		if(isset($_POST['ContactForm']))
@@ -70,7 +70,7 @@ class SiteController extends Controller
 			}
 		}
 		$this->render('contact',array('model'=>$model));
-	}
+	}*/
 
     public function actionJoin()
     {
@@ -110,11 +110,11 @@ class SiteController extends Controller
                 else
                 {
                 	//уже наш клиент, радуем его этим фактом и посылаем на главную страницу
-					$this->redirect( Yii::app()->createUrl("site/page",array('view'=>'already-client')));
+					$this->redirect(Yii::app()->createUrl("site/page",array('view'=>'already-client')));
                 }
 				//echo $cookieData['client_id'];
 				//echo $cookieData['phone'];
-                $this->redirect( Yii::app()->createUrl("site/form1"));
+                $this->redirect(Yii::app()->createUrl("site/form1"));
                 return;
             }
         }
@@ -127,7 +127,7 @@ class SiteController extends Controller
 
 		$client=new ClientData();
 		$client_id=Yii::app()->session['client_id'];
-		if($client_id=='') $this->redirect("?r=site/index");
+		if($client_id=='') $this->redirect(Yii::app()->createUrl("site/index"));
 
         // uncomment the following code to enable ajax-based validation
 
@@ -150,10 +150,10 @@ class SiteController extends Controller
             // form inputs are valid, do something here
 				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
 				{
-					$this->redirect("?r=site/join");
+					$this->redirect(Yii::app()->createUrl("site/join"));
 				}
 
-                $this->redirect("?r=site/form2");
+                $this->redirect(Yii::app()->createUrl("site/form2"));
                 return;
             }
         }
@@ -167,7 +167,7 @@ class SiteController extends Controller
 		}
 		else
 		{
-			$this->redirect("?r=site/index");
+			$this->redirect(Yii::app()->createUrl("site/index"));
 		}
 
 		//$model->setAttributes($client->getClientDataById($client_id));
@@ -203,9 +203,10 @@ class SiteController extends Controller
                 // form inputs are valid, do something here
 				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
 				{
-					$this->redirect("?r=site/join");
+					$this->redirect(Yii::app()->createUrl("site/join"));
 				}
-                $this->redirect("?r=site/pages&view=form-sent");
+
+                $this->redirect(Yii::app()->createUrl("site/page",array('view'=>'form-sent')));
                 return;
             }
         }
@@ -219,7 +220,7 @@ class SiteController extends Controller
 		}
 		else
 		{
-			$this->redirect("?r=site/index");
+			$this->redirect(Yii::app()->createUrl("site/index"));
 		}
 
 		//$model->setAttributes($client->getClientDataById($client_id));

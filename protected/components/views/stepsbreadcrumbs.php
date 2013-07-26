@@ -1,4 +1,4 @@
-<ul<?php echo ($this->htmlOptions['class'] ? ' class="' . $this->htmlOptions['class'] . '"' : ''); ?><?php echo ($this->htmlOptions['id'] ? ' id="' . $this->htmlOptions['id'] . '"' : ''); ?>>
+<ul <?php echo ($this->htmlOptions['class'] ? ' class="' . $this->htmlOptions['class'] . '"' : ''); ?><?php echo ($this->htmlOptions['id'] ? ' id="' . $this->htmlOptions['id'] . '"' : ''); ?>>
 	<?php
 
 	$n = 1;

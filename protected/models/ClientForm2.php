@@ -31,7 +31,7 @@ class ClientForm2 extends CFormModel {
                                 "Страховое свидетельство государственного пенсионного страхования"=>"Страховое свидетельство государственного пенсионного страхования"
                             );
             return array(
-                array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
+                array($this->getCommonRequires(), 'required'),
                 array('document', 'in', 'range' => array_keys($aDocuments),'message' => 'Выберите документ из списка'),
 				array('document_number', 'length', 'max'=>30,'message'=>'Максимальная длина поля {attribute} 30 символов.'),
 				array('address_reg_region, address_reg_city', 'length', 'max'=>100,'message'=>'Максимальная длина поля {attribute} 100 символов.'),

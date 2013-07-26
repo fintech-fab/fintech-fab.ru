@@ -42,10 +42,10 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 	'columns'=>array(
 		'tab_id',
+		'tab_order',
 		'tab_name',
 		'tab_title',
-		'tab_content',
-		'tab_order',
+		//'tab_content',
 		array(
 			'class'=>'CButtonColumn',
 		),

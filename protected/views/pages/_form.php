@@ -55,7 +55,6 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 				Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
 			),
 		),
-
 		'htmlOptions' => array('style'=>"width: 100%; height: 400px;"),
 		));
 		?>

@@ -54,8 +54,11 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 				'image', 'file', 'table', 'link', '|',
 				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 			'iframe' => true,
-			'imageUpload' => '/file_upload.php',
-			//'css' => 'wym.css',
+			'imageUpload' => Yii::app()->createUrl("pages/imageUpload"),
+			'imageUploadErrorCallback'=> 'js: function(json) { alert(json.error); }',
+			'uploadFields'=>array(
+				Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
+			),
 		),
 		'htmlOptions' => array('style'=>"width: 100%; height: 400px;"),
 	));

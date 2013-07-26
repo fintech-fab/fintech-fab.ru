@@ -18,19 +18,15 @@
 	", CClientScript::POS_HEAD);
 
 ?>
+<?php
+$script = "		$(window).load(function () {\n			";
+$attr=$this->model->attributeNames();
+foreach($attr as &$a)
+{
+	$script.='$("#'.get_class($this->model).'_'.$a.'").blur();'."\n			";
+}
+unset($a);
+$script.="\n		});";
 
-		<script type="text/javascript">
-			$(window).load(function () {
-				<?php
-				//генерируем список полей на валидацию по onload()
-				//валидация происходит через ajax по событию jQuery blur()
-				$attr=$this->model->attributeNames();
-				foreach($attr as &$a)
-				{
-					echo '$("#'.get_class($this->model).'_'.$a.'").blur();'."\n				";
-				}
-				unset($a);
-				echo "\n";
-				?>
-			});
-		</script>
+Yii::app()->clientScript->registerScript('progressbar', $script, CClientScript::POS_HEAD);
+?>

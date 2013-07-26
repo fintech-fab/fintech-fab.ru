@@ -27,7 +27,7 @@ class ClientForm1 extends CFormModel {
         $aSexes=array("0"=>"Мужской","1"=>"Женский");
         return array(
             // username and password are required
-            array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
+            array($this->getCommonRequires(), 'required'),
             array('first_name', 'match','pattern'=>'/^[а-яё]+$/ui', 'message' => 'Имя может содержать только русские буквы'),
             array('last_name', 'match','pattern'=>'/^[а-яё]+$/ui', 'message' => 'Фамилия может содержать только русские буквы'),
             array('third_name', 'match','pattern'=>'/^[а-яё]+$/ui', 'message' => 'Отчество может содержать только русские буквы'),

@@ -1,8 +1,14 @@
-<script>
+
+<?php
+
+Yii::app()->clientScript->registerScript('bottomtabs', '
 	$(function() {
 		$( "#tabs" ).tabs();
 	});
-</script>
+', CClientScript::POS_HEAD);
+
+
+?>
 
 <div id="tabs">
 

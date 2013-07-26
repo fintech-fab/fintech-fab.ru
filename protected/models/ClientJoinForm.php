@@ -16,7 +16,7 @@ class ClientJoinForm extends CFormModel {
     {
 
             return array(
-                array($this->getCommonRequires(), 'required','message'=>'Поле {attribute} не может быть пустым.'),
+                array($this->getCommonRequires(), 'required'),
                 array('phone', 'match', 'pattern' => '/^\d{10}$/', 'message' => 'Неверный формат телефона, пример верного номера: +71234567890'),
                 //array('phone', 'match', 'pattern' => '/^(\+7)\(\d{3}\)\d{3}\-\d{2}\-\d{2}$/', 'message' => 'Неверный формат телефона, пример верного номера: +7(123)456-78-90'),
             );
