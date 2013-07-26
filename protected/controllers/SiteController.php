@@ -110,11 +110,11 @@ class SiteController extends Controller
                 else
                 {
                 	//уже наш клиент, радуем его этим фактом и посылаем на главную страницу
-					$this->redirect("?r=site/page&view=already-client");
+					$this->redirect( Yii::app()->createUrl("site/page",array('view'=>'already-client')));
                 }
 				//echo $cookieData['client_id'];
 				//echo $cookieData['phone'];
-                $this->redirect("?r=site/form1");
+                $this->redirect( Yii::app()->createUrl("site/form1"));
                 return;
             }
         }

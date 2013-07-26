@@ -8,18 +8,13 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
 
 <div class="form">
-	<?php
-	$img=new Image();
-	$i='file';
-	echo CHtml::resolveName($img,$i);
-	?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'pages-form',
 	'enableAjaxValidation'=>true,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -49,13 +44,13 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		'options' => array(
 		'lang' => 'ru',
 		'toolbar' => 'classic',
-
-			'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
-				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-				'image', 'table', 'link', '|',
-				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
+		'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
+			'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
+			'image', 'table', 'link', '|',
+			'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 		'iframe' => true,
-		'imageUpload' => Yii::app()->createUrl("pages/upload"),
+		'imageUpload' => Yii::app()->createUrl("pages/imageUpload"),
+		'imageUploadErrorCallback'=> 'js: function(json) { alert(json.error); }',
 		'uploadFields'=>array(
 				Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
 			),

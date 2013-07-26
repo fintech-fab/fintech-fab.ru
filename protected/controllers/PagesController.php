@@ -11,32 +11,19 @@ class PagesController extends Controller
 	public function actions()
 	{
 		return array(
-			'upload' => array(
-				'class' => 'ext.EFileUploadAction', //TODO: сделать модель для валидации!
-				'name' => 'file',
-				//'model'=>'Image',
-				//'attribute'=>'image',
-				'createDirectory' => true,
-				'createDirectoryMode' => 0775,
-				'createDirectoryRecursive' => true,
-				'filenameRule'=>'md5($file->name).".".$file->extensionName',
-				'path' => realpath(Yii::app()->basePath . '/..') . '/public/images/content/' . date('Y-m-d'),
-				'onAfterUpload' => function($event)
-				{
-					if ($event->sender->hasErrors()) {
-						$result = CJSON::encode($event->sender->getErrors());
-					} else {
-						$path = str_replace(realpath(Yii::app()->basePath . '/../public'), Yii::app()->baseUrl, $event->sender->path);
-						$file = array(
-							'filelink' => $path . '/' . $event->sender->filename,
-							'filename' => $event->sender->filename,
-						);
-						if($type = Yii::app()->request->getQuery('type', 'file') == 'image') {}
-						$result = CJSON::encode($file);
-					}
-					echo stripcslashes($result);
-					exit;
-				}
+			'imageUpload'=>array(
+				'class' => 'ext.RedactorUploadAction',
+				'directory'=>'uploads/images',
+				'validator'=>array(
+					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
+				)
+			),
+			'fileUpload'=>array(
+				'class' => 'ext.RedactorUploadAction',
+				'directory'=>'uploads/files',
+				'validator'=>array(
+					'types' => 'txt, pdf, doc, docx',
+				)
 			),
 		);
 	}
@@ -64,7 +51,7 @@ class PagesController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','index','upload'),
+				'actions'=>array('create','update','index','imageUpload'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
