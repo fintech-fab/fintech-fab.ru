@@ -48,7 +48,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
 		'page_id',
 		'page_name',
 		'page_title',
-		'page_content',
 		array(
 			'class'=>'CButtonColumn',
 			'buttons'=>array
