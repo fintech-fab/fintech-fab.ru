@@ -9,6 +9,7 @@
  * @property string $link_title
  * @property string $link_url
  * @property string $link_content
+ * @property string $link_order
  */
 class FooterLinks extends CActiveRecord
 {
@@ -39,12 +40,13 @@ class FooterLinks extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('link_name, link_title, link_content', 'required'),
+			array('link_order', 'numerical', 'integerOnly'=>true),
 			array('link_name', 'length', 'max'=>20),
 			array('link_title', 'length', 'max'=>30),
 			array('link_url', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('link_id, link_name, link_title, link_url, link_content', 'safe', 'on'=>'search'),
+			array('link_id, link_order, link_name, link_title, link_url, link_content', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class FooterLinks extends CActiveRecord
 	{
 		return array(
 			'link_id' => 'ID ссылки',
+			'link_order' => 'Порядок ссылок',
 			'link_name' => 'Имя ссылки',
 			'link_title' => 'Заголовок ссылки',
 			'link_url' => 'URL ссылки',
@@ -85,6 +88,7 @@ class FooterLinks extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('link_id',$this->link_id);
+		$criteria->compare('link_order',$this->link_order);
 		$criteria->compare('link_name',$this->link_name,true);
 		$criteria->compare('link_title',$this->link_title,true);
 		$criteria->compare('link_url',$this->link_url,true);

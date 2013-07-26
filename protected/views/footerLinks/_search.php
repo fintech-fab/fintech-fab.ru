@@ -31,11 +31,6 @@
 		<?php echo $form->textField($model,'link_url',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'link_content'); ?>
-		<?php echo $form->textArea($model,'link_content',array('rows'=>6, 'cols'=>50)); ?>
-	</div>
-
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>
 	</div>

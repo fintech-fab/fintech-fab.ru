@@ -151,7 +151,7 @@ class FooterLinksController extends Controller
 			{
 				foreach( $_POST[ 'items' ] as $key => $val )
 				{
-					Tabs::model()->updateByPk( $val, array (
+					FooterLinks::model()->updateByPk( $val, array (
 						'link_order' => ( $key + 1 )
 					) );
 				}

@@ -10,8 +10,12 @@
 
 		foreach($this->links as &$l)
 		{
-			//echo '<a rel="dialog:open" href="#'.$l->link_name.'">'.$l->link_title.'</a> &middot;';
-		   echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',));
+			if($l == end($this->links)) {
+				echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',));
+			}
+			else {
+				echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',)).' &middot; ';
+			}
 		}
 		unset($l);
 

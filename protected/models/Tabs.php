@@ -38,7 +38,7 @@ class Tabs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tab_name, tab_title, tab_content, tab_order', 'required'),
+			array('tab_name, tab_title, tab_content', 'required'),
 			array('tab_order', 'numerical', 'integerOnly'=>true),
 			array('tab_name', 'length', 'max'=>20),
 			array('tab_name', 'match','pattern'=>'/^[a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы'),

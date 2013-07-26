@@ -31,24 +31,54 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Footer Links</h1>
+<?php
+$csrf_token_name = Yii::app()->request->csrfTokenName;
+$csrf_token = Yii::app()->request->csrfToken;
+
+$str_js = "
+        var fixHelper = function(e, ui) {
+            ui.children().each(function() {
+                $(this).width($(this).width());
+            });
+            return ui;
+        };
+
+        $('#footer-links-grid table.items tbody').sortable({
+            forcePlaceholderSize: true,
+            forceHelperSize: true,
+            items: 'tr',
+            update : function () {
+                serial = $('#footer-links-grid table.items tbody').sortable('serialize', {key: 'items[]', attribute: 'class'}) + '&{$csrf_token_name}={$csrf_token}';
+                $.ajax({
+                    'url': '" . $this->createUrl('//footerLinks/sort') . "',
+                    'type': 'post',
+                    'data': serial,
+                    'success': function(data){
+                    },
+                    'error': function(request, status, error){
+                        alert('We are unable to set the sort order at this time.  Please try again in a few minutes.');
+                    }
+                });
+            },
+            helper: fixHelper
+        }).disableSelection();
+    ";
+
+Yii::app()->clientScript->registerScript('sortable-project', $str_js);
+?>
+
+<h1>Управление нижними ссылками</h1>
 
 <p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
+	or <b>=</b>) перед поисковым значением для определения правил поиска.
 </p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'footer-links-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'rowCssClassExpression'=>'"items[]_{$data->link_id}"',
 	'columns'=>array(
 		'link_id',
 		'link_name',
