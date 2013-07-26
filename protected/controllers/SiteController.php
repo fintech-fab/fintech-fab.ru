@@ -110,7 +110,7 @@ class SiteController extends Controller
                 else
                 {
                 	//уже наш клиент, радуем его этим фактом и посылаем на главную страницу
-					$this->redirect(Yii::app()->createUrl("site/page",array('view'=>'already-client')));
+					$this->redirect(Yii::app()->createUrl("pages/view",array('name'=>'alreadyclient')));
                 }
 				//echo $cookieData['client_id'];
 				//echo $cookieData['phone'];
@@ -206,7 +206,7 @@ class SiteController extends Controller
 					$this->redirect(Yii::app()->createUrl("site/join"));
 				}
 
-                $this->redirect(Yii::app()->createUrl("site/page",array('view'=>'form-sent')));
+				$this->redirect(Yii::app()->createUrl("pages/view",array('name'=>'formsent')));
                 return;
             }
         }

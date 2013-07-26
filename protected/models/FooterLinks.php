@@ -39,11 +39,13 @@ class FooterLinks extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('link_name, link_title, link_content', 'required'),
+			array('link_name, link_title', 'required'),
 			array('link_order', 'numerical', 'integerOnly'=>true),
 			array('link_name', 'length', 'max'=>20),
 			array('link_title', 'length', 'max'=>30),
 			array('link_url', 'length', 'max'=>255),
+			array('link_url', 'url'),
+			array('link_content', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('link_id, link_order, link_name, link_title, link_url, link_content', 'safe', 'on'=>'search'),

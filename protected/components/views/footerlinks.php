@@ -11,10 +11,25 @@
 		foreach($this->links as &$l)
 		{
 			if($l == end($this->links)) {
-				echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',));
+				if($l->link_url=='')
+				{
+					echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',));
+				}
+				else
+				{
+					echo CHtml::link($l->link_title, $l->link_url);
+				}
 			}
-			else {
-				echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',)).' &middot; ';
+			else
+			{
+				if($l->link_url=='')
+				{
+					echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('onclick' => '$("#fl-'.$l->link_name.'").dialog("open"); return false;',)).' &middot; ';
+				}
+				else
+				{
+					echo CHtml::link($l->link_title, $l->link_url).' &middot; ';
+				}
 			}
 		}
 		unset($l);
@@ -26,29 +41,32 @@
 
 	foreach($this->links as &$l)
 	{
-		$this->beginWidget('zii.widgets.jui.CJuiDialog',
-			array(
-				'id'=>'fl-'.$l->link_name,
-				'options'=>array(
-					'title'=>$l->link_title,
-					'autoOpen' => false,
-					'modal'=>true,
-					'resizable'=> false,
-					'width'=>760,
-					'height'=>500,
-					'buttons'=>array('Закрыть'=>'js:function(){$(this).dialog("close")}')
-				),
-				'themeUrl'=>Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets').'/').'/jui/css',
-				'theme'=>'base',
-				'cssFile'=>'jquery-ui.css',
-			)
-		);
+		if($l->link_url=='')
+		{
+			$this->beginWidget('zii.widgets.jui.CJuiDialog',
+				array(
+						'id'=>'fl-'.$l->link_name,
+					'options'=>array(
+						'title'=>$l->link_title,
+						'autoOpen' => false,
+						'modal'=>true,
+						'resizable'=> false,
+						'width'=>760,
+						'height'=>500,
+						'buttons'=>array('Закрыть'=>'js:function(){$(this).dialog("close")}')
+					),
+					'themeUrl'=>Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets').'/').'/jui/css',
+					'theme'=>'base',
+					'cssFile'=>'jquery-ui.css',
+				)
+			);
 
-		echo ''.$l->link_content.'';
+			echo ''.$l->link_content.'';
 
-		$this->endWidget('zii.widgets.jui.CJuiDialog');
-	}
-	unset($l);
+			$this->endWidget('zii.widgets.jui.CJuiDialog');
+			}
+		}
+		unset($l);
 	?>
 
 

@@ -19,6 +19,25 @@ class FooterLinksController extends Controller
 		);
 	}
 
+	public function actions()
+	{
+		return array(
+			'imageUpload'=>array(
+				'class' => 'ext.RedactorUploadAction',
+				'directory'=>'uploads/images',
+				'validator'=>array(
+					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
+				)
+			),
+			'fileUpload'=>array(
+				'class' => 'ext.RedactorUploadAction',
+				'directory'=>'uploads/files',
+				'validator'=>array(
+					'types' => 'txt, pdf, doc, docx',
+				)
+			),
+		);
+	}
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
