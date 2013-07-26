@@ -5,12 +5,12 @@
  *
  * The followings are the available columns in table 'tbl_footer_links':
  * @property integer $link_id
+ * @property string $link_order
  * @property string $link_name
  * @property string $link_title
  * @property string $link_url
  * @property string $link_content
- * @property string $link_order
- */
+  */
 class FooterLinks extends CActiveRecord
 {
 	/**
@@ -96,6 +96,9 @@ class FooterLinks extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>array(
+				'defaultOrder'=>'link_order ASC',
+			)
 		));
 	}
 

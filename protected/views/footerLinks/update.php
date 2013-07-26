@@ -21,6 +21,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update FooterLinks <?php echo $model->link_id; ?></h1>
+	<h1>Изменение нижней ссылки #<?php echo $model->link_id; ?> "<?php echo $model->link_name; ?>"</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

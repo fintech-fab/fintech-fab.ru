@@ -27,7 +27,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>View FooterLinks #<?php echo $model->link_id; ?></h1>
+<h1>Отображение нижней ссылки #<?php echo $model->link_id; ?> "<?php echo $model->link_name	; ?>"</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

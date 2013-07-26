@@ -18,6 +18,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create FooterLinks</h1>
+<h1>Создание нижней ссылки</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

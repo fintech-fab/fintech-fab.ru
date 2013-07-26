@@ -27,7 +27,7 @@ $this->menu=array(
 		'tab_id',
 		'tab_name',
 		'tab_title',
-		'tab_content',
+		//'tab_content',
 		'tab_order',
 	),
 )); ?>
