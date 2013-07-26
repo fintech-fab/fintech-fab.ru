@@ -19,26 +19,6 @@ class TabsController extends Controller
 		);
 	}
 
-	public function actions()
-	{
-		return array(
-			'imageUpload'=>array(
-				'class' => 'ext.RedactorUploadAction',
-				'directory'=>'uploads/images',
-				'validator'=>array(
-					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
-				)
-			),
-			'fileUpload'=>array(
-				'class' => 'ext.RedactorUploadAction',
-				'directory'=>'uploads/files',
-				'validator'=>array(
-					'types' => 'txt, pdf, doc, docx',
-				)
-			),
-		);
-	}
-
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -48,15 +28,15 @@ class TabsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array(),
+				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','view','imageUpload'),
+				'actions'=>array('admin','delete','sort'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -161,6 +141,29 @@ class TabsController extends Controller
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+
+	public function actionSort()
+	{
+		if( Yii::app()->request->isAjaxRequest )
+		{
+			if( isset( $_POST[ 'items' ] ) && is_array( $_POST[ 'items' ] ) )
+			{
+				foreach( $_POST[ 'items' ] as $key => $val )
+				{
+					Tabs::model()->updateByPk( $val, array (
+						'tab_order' => ( $key + 1 )
+					) );
+				}
+			}/*
+			$i = 0;
+			foreach ($_POST['items'] as $item) {
+				$project = Tabs::model()->findByPk($item);
+				$project->tab_order = $i;
+				$project->save();
+				$i++;
+			}*/
+		}
 	}
 
 	/**
