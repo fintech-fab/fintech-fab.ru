@@ -40,8 +40,8 @@
 
 
 	<!--link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/bootstrap/css/bootstrap.min.css" type="text/css" /-->
-	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/bootstrap/js/bootstrap.min.js" charset="utf-8">
-	</script>
+	<!--script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/bootstrap/js/bootstrap.min.js" charset="utf-8">
+	</script-->
 
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 </head>
