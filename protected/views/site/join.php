@@ -47,7 +47,9 @@ $this->widget('TopPageWidget');
 		            <?php echo $form->error($model,'phone'); ?>
 		        </div>
 		        <div class="row buttons">
-		            <?php echo CHtml::submitButton('Присоединиться'); ?>
+		            <?php echo CHtml::submitButton('Далее →',
+						array('class' => 'btn btn-info')
+					); ?>
 		        </div>
 				<?php $this->endWidget(); ?>
     		</div>

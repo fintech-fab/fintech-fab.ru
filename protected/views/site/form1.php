@@ -160,7 +160,9 @@ $this->widget('TopPageWidget');
 	    		</div>
 
 				<div class="row buttons">
-					<?php echo CHtml::submitButton('Далее'); ?>
+					<?php echo CHtml::submitButton('Далее →',
+						array('class' => 'btn btn-info')
+					); ?>
 				</div>
 				<?php $this->endWidget(); ?>
 			</div>

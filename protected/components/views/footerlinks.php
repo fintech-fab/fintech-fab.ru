@@ -87,7 +87,7 @@
 			echo '	<div class="modal-footer">';
 
 			$this->widget('bootstrap.widgets.TbButton', array(
-				'label'=>'Close',
+				'label'=>'Закрыть',
 				'url'=>'#',
 				'htmlOptions'=>array('data-dismiss'=>'modal'),
 			));

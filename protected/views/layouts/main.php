@@ -15,12 +15,13 @@
     <!--link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/960gs.css" /-->
 
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap-overload.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 
 
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 
-    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/bootstrap.min.css" type="text/css" />
+    <!--link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/bootstrap.min.css" type="text/css" /-->
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/style.css" type="text/css" />
 
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/reset.css" type="text/css" />
@@ -37,7 +38,9 @@
 				).'/jui/css/base/jquery-ui.css'
 		);*/
 
-	Yii::app()->bootstrap->register();
+	Yii::app()->bootstrap->registerCoreCss();
+	Yii::app()->bootstrap->registerYiiCss();
+	Yii::app()->bootstrap->registerCoreScripts();
 	?>
 
 
