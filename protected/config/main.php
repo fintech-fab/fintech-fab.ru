@@ -99,7 +99,7 @@ return array(
 			),
 		),
 		'session'=>array(
-			'timeout'=>600,
+			'timeout'=>60*15,
 		),
 		'request'=>array(
 			'enableCsrfValidation'=>true,

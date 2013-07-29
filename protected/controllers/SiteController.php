@@ -133,6 +133,7 @@ class SiteController extends Controller
 
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form1')
         {
+			Yii::app()->session['form1_complete']=false;
             echo CActiveForm::validate($model);
 			$modelData = $model->getAttributes();
 			$client->saveClientDataById($modelData,$client_id);
@@ -147,12 +148,14 @@ class SiteController extends Controller
 
             if($model->validate())
             {
+				Yii::app()->session['form1_complete']=false;
             // form inputs are valid, do something here
 				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
 				{
 					$this->redirect(Yii::app()->createUrl("site/join"));
 				}
 
+				Yii::app()->session['form1_complete']=true;
                 $this->redirect(Yii::app()->createUrl("site/form2"));
                 return;
             }
@@ -176,6 +179,12 @@ class SiteController extends Controller
 
     public function actionForm2()
     {
+
+		if(!Yii::app()->session['form1_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("site/form1"));
+		}
+
         $model=new ClientForm2;
 
 		$client_id=Yii::app()->session['client_id'];
