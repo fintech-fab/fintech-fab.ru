@@ -50,9 +50,11 @@ $this->pageTitle=Yii::app()->name;
 		            <?php echo $form->textField($model,'phone'); ?>
 					<?php echo $form->error($model,'phone'); ?>
         		</div>
-        		<div class="row buttons">
-            		<?php echo CHtml::submitButton('Присоединиться'); ?>
-        		</div>
+				<div class="row buttons">
+					<?php echo CHtml::submitButton('Далее →',
+						array('class' => 'btn btn-info')
+					); ?>
+				</div>
 				<?php $this->endWidget(); ?>
 			</div>
 		</div>

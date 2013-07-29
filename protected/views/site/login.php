@@ -3,9 +3,9 @@
 /* @var $model LoginForm */
 /* @var $form CActiveForm  */
 
-$this->pageTitle=Yii::app()->name . ' - Login';
+$this->pageTitle=Yii::app()->name . ' - Вход';
 $this->breadcrumbs=array(
-	'Login',
+	'Вход',
 );
 ?>
 <div class="container container_12">
@@ -43,7 +43,7 @@ $this->breadcrumbs=array(
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Login'); ?>
+		<?php echo CHtml::submitButton('Вход'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
