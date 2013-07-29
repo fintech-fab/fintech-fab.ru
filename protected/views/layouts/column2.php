@@ -8,8 +8,10 @@
 		<div class="span3">
 			<div id="sidebar">
 			<?php
+			$this->menu[] = array('label'=>'Выход', 'url'=>array('site/logout'));
+
 			$this->beginWidget('zii.widgets.CPortlet', array(
-				'title'=>'Operations',
+				'title'=>'Меню',
 			));
 			$this->widget('zii.widgets.CMenu', array(
 				'items'=>$this->menu,
