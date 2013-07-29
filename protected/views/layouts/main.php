@@ -26,7 +26,7 @@
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/reset.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
-    <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
+    <?php  Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 	<?php //Yii::app()->clientScript->registerCoreScript( 'jquery.ui' );?>
 	<!--?php Yii::app()->clientScript->registerCoreScript( 'jquery.modal' );?-->
 	<!--?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/jquery-ui.css'); ?-->
@@ -58,7 +58,7 @@
 </script-->
 <!-- ClickTale end of Bottom part -->
 
-<body class="home" data-spy="scroll">
+<body class="home">
 
 <!-- ClickTale Top part -->
 <script type="text/javascript">
@@ -112,7 +112,6 @@
 				'links'=>FooterLinks::model()->findAll(array('order'=>'link_order')),
 			));
 			?>
-
             <p>&copy; 2012  ООО "Финансовые Решения"</p>
         </footer>
     </section>

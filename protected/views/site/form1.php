@@ -108,7 +108,7 @@ $this->widget('TopPageWidget');
 	            		'htmlOptions' => array(
 	                		'style' => 'height:20px;',
 	            		),
-	        		));?>
+	        		)); ?>
 	        		<?php echo $form->error($model,'birthday'); ?>
 	    		</div>
 
@@ -155,7 +155,7 @@ $this->widget('TopPageWidget');
             			'htmlOptions' => array(
 	                		'style' => 'height:20px;',
 	            		),
-	        		));?>
+	        		)); ?>
 	        		<?php echo $form->error($model,'passport_date'); ?>
 	    		</div>
 
