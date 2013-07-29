@@ -11,11 +11,13 @@ $this->breadcrumbs=array(
 $this->widget('TopPageWidget');
 ?>
 
-<div class="container container_12">
-	<div class="grid_12">
-		<h2>Ошибка <?php echo $code; ?></h2>
-		<div class="error">
-			<?php echo CHtml::encode($message); ?>
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<h2>Ошибка <?php echo $code; ?></h2>
+			<div class="error">
+				<?php echo CHtml::encode($message); ?>
+			</div>
 		</div>
 	</div>
 </div>

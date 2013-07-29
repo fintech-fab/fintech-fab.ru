@@ -7,19 +7,21 @@ class BottomTabs extends CWidget
 
 	public function run()
 	{
-		$first=true;
+		$first=0;
 		foreach($this->tabs as &$t)
 		{
-			if ($first)
+			if ($first==0)
 			{
 				$this->tabsArray[]=array('label'=>$t->tab_title,'content'=>$t->tab_content,'active'=>true);
-				$first=false;
+				$first=1;
 			}
 			else
 			{
 				$this->tabsArray[]=array('label'=>$t->tab_title,'content'=>$t->tab_content);
 			}
+
 		}
+		unset($t);
 		$this->render('bottomtabs');
 	}
 }
