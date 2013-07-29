@@ -67,7 +67,7 @@ $this->widget('TopPageWidget');
 					'enableAjaxValidation'=>true,
 					'clientOptions'=>array(
 						'validateOnChange'=>true,
-						'afterValidateAttribute'=>'js:progressBarUpdate',//функция обновления прогресс-бара после валидации полей
+						//'afterValidateAttribute'=>'js:progressBarUpdate',//функция обновления прогресс-бара после валидации полей
 						),
 				)); ?>
 				<!--?php echo $form->errorSummary($model); ?-->

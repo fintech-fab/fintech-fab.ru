@@ -15,18 +15,18 @@
 	));
 
 	//функция обновления прогресс-бара
-	Yii::app()->clientScript->registerScript('yiiactiveform', "
+	/*Yii::app()->clientScript->registerScript('yiiactiveform', "
 		function progressBarUpdate(form, data, hasError)
 		{
 			var newValue = 100/".$this->allFields." * ( $('.success').size()+".$this->filledFields."); //считаем число полей с классом success (успешная валидация) и рассчитываем прогресс
 			$('.bar').width(newValue + '%');//устанавливаем прогресс
 			return false;
 		}
-	", CClientScript::POS_HEAD);
+	", CClientScript::POS_HEAD);*/
 
 ?>
 <?php
-$script = "		$(window).load(function () {\n			";
+/*$script = "		$(window).load(function () {\n			";
 $attr=$this->model->attributeNames();
 foreach($attr as &$a)
 {
@@ -35,5 +35,5 @@ foreach($attr as &$a)
 unset($a);
 $script.="\n		});";
 
-Yii::app()->clientScript->registerScript('progressbar', $script, CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScript('progressbar', $script, CClientScript::POS_HEAD);*/
 ?>
