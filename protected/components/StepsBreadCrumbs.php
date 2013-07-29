@@ -3,7 +3,7 @@
 class StepsBreadCrumbs extends CWidget
 {
 	public $crumbs = array(
-		array('Ввод телефона',array("/")),
+		array('Ввод телефона',array("site/join")),
 		array('Личные данные',array("site/form1")),
 		array('Личные данные 2',array("site/form2")),
 	);

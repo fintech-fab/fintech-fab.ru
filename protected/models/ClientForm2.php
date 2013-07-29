@@ -23,16 +23,9 @@ class ClientForm2 extends CFormModel {
 
     public function rules()
     {
-            $aDocuments=array("Заграничный паспорт"=>"Заграничный паспорт",
-                                "Водительское удостоверение"=>"Водительское удостоверение",
-                                "Пенсионное удостоверение"=>"Пенсионное удостоверение",
-                                "Военный билет"=>"Военный билет",
-                                "Свидетельство ИНН"=>"Свидетельство ИНН",
-                                "Страховое свидетельство государственного пенсионного страхования"=>"Страховое свидетельство государственного пенсионного страхования"
-                            );
             return array(
                 array($this->getCommonRequires(), 'required'),
-                array('document', 'in', 'range' => array_keys($aDocuments),'message' => 'Выберите документ из списка'),
+                array('document', 'in', 'range' => array_keys($this->getDocuments()),'message' => 'Выберите документ из списка'),
 				array('document_number', 'length', 'max'=>30,'message'=>'Максимальная длина поля {attribute} 30 символов.'),
 				array('address_reg_region, address_reg_city', 'length', 'max'=>100,'message'=>'Максимальная длина поля {attribute} 100 символов.'),
 				array('email', 'length', 'max'=>254,'message'=>'Максимальная длина поля {attribute} 254 символов.'),
@@ -44,6 +37,19 @@ class ClientForm2 extends CFormModel {
 
     }
 
+
+	public function getDocuments()
+	{
+		$aDocuments=array("Заграничный паспорт"=>"Заграничный паспорт",
+			"Водительское удостоверение"=>"Водительское удостоверение",
+			"Пенсионное удостоверение"=>"Пенсионное удостоверение",
+			"Военный билет"=>"Военный билет",
+			"Свидетельство ИНН"=>"Свидетельство ИНН",
+			"Страховое свидетельство государственного пенсионного страхования"=>"Страховое свидетельство государственного пенсионного страхования"
+			);
+
+		return $aDocuments;
+	}
 
     protected function getCommonRequires()
     {

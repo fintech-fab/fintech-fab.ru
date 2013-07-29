@@ -12,7 +12,7 @@
 
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/960gs.css" />
+    <!--link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/960gs.css" /-->
 
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
@@ -27,15 +27,17 @@
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
     <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-	<?php Yii::app()->clientScript->registerCoreScript( 'jquery.ui' );?>
+	<?php //Yii::app()->clientScript->registerCoreScript( 'jquery.ui' );?>
 	<!--?php Yii::app()->clientScript->registerCoreScript( 'jquery.modal' );?-->
 	<!--?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/jquery-ui.css'); ?-->
 	<?php
-		Yii::app()->clientScript->registerCssFile(
+		/*Yii::app()->clientScript->registerCssFile(
 			Yii::app()->assetManager->publish(
 				Yii::getPathOfAlias('ext.myExt.assets').'/'
 				).'/jui/css/base/jquery-ui.css'
-		);
+		);*/
+
+	Yii::app()->bootstrap->register();
 	?>
 
 
@@ -66,7 +68,7 @@
 
 <nav class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <div class="container1">
+        <div class="container">
 
             <!-- Special image
             <div class="new-year-left" style="margin: 5px 0px -145px -120px; float: left; background: url('<php echo Yii::app()->request->baseUrl; ?>/static/img/lenta9may.png') no-repeat; height: 140px; width: 112px"></div>
@@ -81,33 +83,29 @@
 
 <div class="page-divider1"></div>
 <br/>
-
-<?php echo $content; ?>
-
+	<?php echo $content; ?>
 <br/>
 <div class="page-divider1"></div>
 
-<div class="container container_12">
-	<div class="grid_12">
-    <section>
-        <h2>Узнай больше о нас!</h2>
-
-        <p class="intro">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
-
-		<?php
-		$this->widget('BottomTabs',array(
-			'tabs'=>Tabs::model()->findAll(array('order'=>'tab_order')),
-		));
-		?>
-    </section>
+<div class="container">
+	<div class="row">
+    	<section class="span12">
+	        <h2>Узнай больше о нас!</h2>
+	        <p class="intro">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
+			<?php
+			$this->widget('BottomTabs',array(
+				'tabs'=>Tabs::model()->findAll(array('order'=>'tab_order')),
+			));
+			?>
+   		</section>
 	</div>
 </div>
 
 <div class="page-divider"></div>
 
-<div class="container container_12">
-	<div class="grid_12">
-    <section class="row">
+<div class="container">
+	<div class="row">
+    <section class="span12">
         <footer>
 			<?php
 			$this->widget('FooterLinksWidget',array(

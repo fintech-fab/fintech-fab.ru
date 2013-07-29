@@ -1,4 +1,4 @@
-<article class="container1 toppage">
+<article class="container toppage">
     <header class="hero-unit">
         <p class="intro">Kreddy – это сервис, позволяющий не выходя из дома пройти одобрение займа и получить деньги в течение часа.</p>
 

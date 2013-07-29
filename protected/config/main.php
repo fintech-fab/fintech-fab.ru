@@ -5,6 +5,8 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
+
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Kreddy',
@@ -22,10 +24,15 @@ return array(
 		'application.components.crypt.*',
 	),
 
+	//'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
+
 	'modules'=>array(
 		// uncomment the following to enable the Gii tool
 
 		'gii'=>array(
+			'generatorPaths'=>array(
+				'bootstrap.gii',
+			),
 			'class'=>'system.gii.GiiModule',
 			'password'=>'159753',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
@@ -36,6 +43,9 @@ return array(
 
 	// application components
 	'components'=>array(
+		'bootstrap'=>array(
+			'class'=>'bootstrap.components.Bootstrap',
+		),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
@@ -46,6 +56,9 @@ return array(
 			'urlFormat'=>'path',
 			'showScriptName'=>false,
 			'rules'=>array(
+				'gii'=>'gii',
+				'gii/<controller:\w+>'=>'gii/<controller>',
+				'gii/<controller:\w+>/<action:\w+>'=>'gii/<controller>/<action>',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'=>'<controller>/<action>',

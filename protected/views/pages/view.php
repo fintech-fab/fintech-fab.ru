@@ -27,10 +27,12 @@ $this->pageTitle=Yii::app()->name." - ".CHtml::encode($model->page_title);
 $this->widget('TopPageWidget');
 
 ?>
-<div class="container container_12">
-	<div class="grid_12">
+<div class="container">
+	<div class="row">
+		<div class="span12">
 
-		<?php echo $model->page_content; ?>
+			<?php echo $model->page_content; ?>
 
+		</div>
 	</div>
 </div>
