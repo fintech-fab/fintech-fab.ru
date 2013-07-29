@@ -24,6 +24,17 @@ p
 	line-height: 27px;
 }
 
+.modal
+{
+	width: 760px;
+	margin-left: -380px;
+}
+
+.modal-body
+{
+	max-height: 500px;
+}
+
 nav div.navbar-inner {
 	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.8) !important;
 }

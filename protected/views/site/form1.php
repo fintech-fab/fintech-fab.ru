@@ -169,13 +169,10 @@ $this->widget('TopPageWidget');
 
 			<?php
 			$this->widget('FormProgressBar',array(
-				'startFilledFields'=>0,
-				// additional javascript options for the progress bar plugin
-				'options'=>array(
-					//'change'=>new CJavaScriptExpression('function(event, ui) {...}'),
-				),
+				'allFields'=>17,
+				'filledFields'=>0,
 				'htmlOptions'=>array(
-				    'style'=>'height:20px;',
+					'style'=>'height:20px;',
 				),
 				'model'=>$model,
 			));
