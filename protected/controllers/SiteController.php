@@ -133,7 +133,7 @@ class SiteController extends Controller
 
         if(isset($_POST['ajax']) && $_POST['ajax']==='client-form1')
         {
-			Yii::app()->session['form1_complete']=false;
+			Yii::app()->session['form1_complete']=false;  //снимаем флаг готовности формы 1 перед валидацией
             echo CActiveForm::validate($model);
 			$modelData = $model->getAttributes();
 			$client->saveClientDataById($modelData,$client_id);
@@ -146,16 +146,17 @@ class SiteController extends Controller
         {
             $model->attributes=$_POST['ClientForm1'];
 
+			Yii::app()->session['form1_complete']=false; //снимаем флаг готовности формы 1 перед валидацией
+
             if($model->validate())
             {
-				Yii::app()->session['form1_complete']=false;
             // form inputs are valid, do something here
 				if(!$client->saveClientDataById($model->getAttributes(),$client_id))
 				{
 					$this->redirect(Yii::app()->createUrl("site/join"));
 				}
 
-				Yii::app()->session['form1_complete']=true;
+				Yii::app()->session['form1_complete']=true; //при успешной валидации и сохранении данных ставим флаг готовности формы 1
                 $this->redirect(Yii::app()->createUrl("site/form2"));
                 return;
             }
@@ -180,7 +181,7 @@ class SiteController extends Controller
     public function actionForm2()
     {
 
-		if(!Yii::app()->session['form1_complete'])
+		if(!Yii::app()->session['form1_complete']) //проверяем заполнена ли форма 1 по флагу готовности, и если нет - возвращаемся к ней
 		{
 			$this->redirect(Yii::app()->createUrl("site/form1"));
 		}

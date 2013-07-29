@@ -42,9 +42,12 @@ class FooterLinks extends CActiveRecord
 			array('link_name, link_title', 'required'),
 			array('link_order', 'numerical', 'integerOnly'=>true),
 			array('link_name', 'length', 'max'=>20),
+			array('link_name', 'match','pattern'=>'/^[a-z][a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы, первым символом должна быть буква'),
+			array('link_name', 'unique', 'message'=>'Ссылка должна иметь уникальное имя'),
 			array('link_title', 'length', 'max'=>30),
+			array('link_title', 'match','pattern'=>'/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('link_url', 'length', 'max'=>255),
-			array('link_url', 'url'),
+			array('link_url', 'url','message'=>'Неверный формат URL, пример верного формата: http://site.ru/page'),
 			array('link_content', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

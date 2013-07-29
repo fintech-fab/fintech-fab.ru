@@ -39,7 +39,7 @@ class Pages extends CActiveRecord
 		return array(
 			array('page_name, page_title, page_content', 'required'),
 			array('page_name', 'length', 'max'=>20),
-			array('page_name', 'match','pattern'=>'/^[a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы'),
+			array('page_name', 'match','pattern'=>'/^[a-z][a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы, первым символом должна быть буква'),
 			array('page_title', 'length', 'max'=>100),
 			array('page_title', 'match','pattern'=>'/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('page_name', 'unique', 'message'=>'Страница должна иметь уникальное имя'),
