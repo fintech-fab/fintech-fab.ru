@@ -1,8 +1,16 @@
 <?php
-	$this->widget('zii.widgets.jui.CJuiProgressBar',array(
+	/*$this->widget('zii.widgets.jui.CJuiProgressBar',array(
 		'id'=>'progressBar',
 		'value'=>0,
 		'options'=>$this->options,
+		'htmlOptions'=>$this->htmlOptions,
+	));*/
+
+	$this->widget('bootstrap.widgets.TbProgress',array(
+		'type'=>'info',
+		//'id'=>'progressBar',
+		'percent'=>0,
+		//'options'=>$this->options,
 		'htmlOptions'=>$this->htmlOptions,
 	));
 
@@ -10,9 +18,8 @@
 	Yii::app()->clientScript->registerScript('yiiactiveform', "
 		function progressBarUpdate(form, data, hasError)
 		{
-			var newValue = 100/17 * ( $('.success').size()+".$this->startFilledFields."); //считаем число полей с классом success (успешная валидация) и рассчитываем прогресс
-
-			jQuery('#progressBar').progressbar({'value': newValue});//устанавливаем прогресс
+			var newValue = 100/".$this->allFields." * ( $('.success').size()+".$this->filledFields."); //считаем число полей с классом success (успешная валидация) и рассчитываем прогресс
+			$('.bar').width(newValue + '%');//устанавливаем прогресс
 			return false;
 		}
 	", CClientScript::POS_HEAD);
