@@ -239,9 +239,9 @@ class SiteController extends Controller
     }
 
 	/**
-	 * Идентификация по видео
+	 * Идентификация личности  по видео
 	 */
-	public function actionForm3() {
+	public function actionIdentification() {
 
 //		Yii::app()->session['form2_complete'] = true;
 		if(!Yii::app()->session['form2_complete'])
@@ -249,8 +249,14 @@ class SiteController extends Controller
 			$this->redirect(Yii::app()->createUrl("site/form2"));
 		}
 
+		$this->render('identification');
+	}
 
-		$this->render('form3');
+	/**
+	 * Загрузка документов
+	 */
+	public function actionDocuments() {
+		$this->render('documents');
 	}
 
     /**

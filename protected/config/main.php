@@ -20,8 +20,10 @@ return array(
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
+		'application.controllers.*',
 		'application.components.*',
 		'application.components.crypt.*',
+		'application.extensions.image.*',
 	),
 
 	//'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
@@ -45,6 +47,10 @@ return array(
 	'components'=>array(
 		'bootstrap'=>array(
 			'class'=>'bootstrap.components.Bootstrap',
+		),
+		'image' => array(
+			'class'     =>  'application.extensions.image.CImageComponent',
+			'driver'    =>  'GD',
 		),
 		'user'=>array(
 			// enable cookie-based authentication
