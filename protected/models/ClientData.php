@@ -17,6 +17,7 @@
  * @property string $description
  * @property string $passport_series
  * @property string $passport_number
+ * @property string $passport_issued
  * @property string $passport_code
  * @property string $passport_date
  * @property string $document
@@ -24,6 +25,15 @@
  * @property string $address_reg_region
  * @property string $address_reg_city
  * @property string $address_reg_address
+ * @property string $relatives_one_fio
+ * @property string $relatives_one_phone
+ * @property string $job_company
+ * @property string $job_position
+ * @property string $job_time
+ * @property string $job_monthly_income
+ * @property string $job_monthly_outcome
+ * @property integer $have_past_credit
+ * @property integer $numeric_code
  * @property string $options
  * @property integer $complete
  * @property string $dt_add
@@ -57,21 +67,23 @@ class ClientData extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			/*array('description, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options', 'required'),
-			array('telecoms_operator, sex, complete', 'numerical', 'integerOnly'=>true),
-			array('phone, job_phone', 'length', 'max'=>10),
-			array('first_name, last_name, third_name, email, address_reg_address', 'length', 'max'=>255),
+			/*array('description, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, numeric_code, options', 'required'),
+			array('telecoms_operator, sex, have_past_credit, numeric_code, complete', 'numerical', 'integerOnly'=>true),
+			array('phone, job_phone, relatives_one_phone', 'length', 'max'=>10),
+			array('first_name, last_name, third_name, email, passport_issued, address_reg_address, relatives_one_fio', 'length', 'max'=>255),
 			array('passport_series', 'length', 'max'=>4),
 			array('passport_number', 'length', 'max'=>6),
 			array('passport_code', 'length', 'max'=>7),
-			array('document, address_reg_region, address_reg_city', 'length', 'max'=>100),
-			array('document_number', 'length', 'max'=>30),
-			array('birthday, dt_add, dt_update', 'safe'),
+			array('document, address_reg_region, address_reg_city, job_company, job_position', 'length', 'max'=>100),
+			array('document_number, job_monthly_income, job_monthly_outcome', 'length', 'max'=>30),
+			array('job_time', 'length', 'max'=>20),
+			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.*/
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, complete, dt_add, dt_update', 'safe'),
+			// Please remove those attributes that should not be searched.
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, options, complete, dt_add, dt_update', 'safe'),
 		);
 	}
+
 
 	public function checkClientByPhone($phone)
 	{
@@ -167,6 +179,7 @@ class ClientData extends CActiveRecord
 			'description' => 'Description',
 			'passport_series' => 'Passport Series',
 			'passport_number' => 'Passport Number',
+			'passport_issued' => 'Passport Issued',
 			'passport_code' => 'Passport Code',
 			'passport_date' => 'Passport Date',
 			'document' => 'Document',
@@ -174,6 +187,15 @@ class ClientData extends CActiveRecord
 			'address_reg_region' => 'Address Reg Region',
 			'address_reg_city' => 'Address Reg City',
 			'address_reg_address' => 'Address Reg Address',
+			'relatives_one_fio' => 'Relatives One Fio',
+			'relatives_one_phone' => 'Relatives One Phone',
+			'job_company' => 'Job Company',
+			'job_position' => 'Job Position',
+			'job_time' => 'Job Time',
+			'job_monthly_income' => 'Job Monthly Income',
+			'job_monthly_outcome' => 'Job Monthly Outcome',
+			'have_past_credit' => 'Have Past Credit',
+			'numeric_code' => 'Numeric Code',
 			'options' => 'Options',
 			'complete' => 'Complete',
 			'dt_add' => 'Dt Add',
@@ -205,6 +227,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('passport_series',$this->passport_series,true);
 		$criteria->compare('passport_number',$this->passport_number,true);
+		$criteria->compare('passport_issued',$this->passport_issued,true);
 		$criteria->compare('passport_code',$this->passport_code,true);
 		$criteria->compare('passport_date',$this->passport_date,true);
 		$criteria->compare('document',$this->document,true);
@@ -212,6 +235,15 @@ class ClientData extends CActiveRecord
 		$criteria->compare('address_reg_region',$this->address_reg_region,true);
 		$criteria->compare('address_reg_city',$this->address_reg_city,true);
 		$criteria->compare('address_reg_address',$this->address_reg_address,true);
+		$criteria->compare('relatives_one_fio',$this->relatives_one_fio,true);
+		$criteria->compare('relatives_one_phone',$this->relatives_one_phone,true);
+		$criteria->compare('job_company',$this->job_company,true);
+		$criteria->compare('job_position',$this->job_position,true);
+		$criteria->compare('job_time',$this->job_time,true);
+		$criteria->compare('job_monthly_income',$this->job_monthly_income,true);
+		$criteria->compare('job_monthly_outcome',$this->job_monthly_outcome,true);
+		$criteria->compare('have_past_credit',$this->have_past_credit);
+		$criteria->compare('numeric_code',$this->numeric_code);
 		$criteria->compare('options',$this->options,true);
 		$criteria->compare('complete',$this->complete);
 		$criteria->compare('dt_add',$this->dt_add,true);
@@ -221,4 +253,4 @@ class ClientData extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-}
+} 
