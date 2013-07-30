@@ -14,7 +14,7 @@ class ImageController extends CController
 		),
 		self::C_TYPE_PASSPORT_FRONT        => array(
 			'title'       => 'Паспорт - лицевая сторона',
-			'description' => 'Покажите в веб-камеру первую страницу паспорта (кем выдан, дата выдачи, код подразделения) и нажмите',
+			'description' => 'Покажите в веб-камеру первую страницу паспорта (кем выдан, дата выдачи, код подразделения)',
 		),
 		self::C_TYPE_PASSPORT_NOTIFICATION => array(
 			'title'       => 'Паспорт - страница регистрации',

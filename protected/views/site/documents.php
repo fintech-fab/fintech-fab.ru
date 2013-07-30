@@ -111,9 +111,9 @@ $this->widget('TopPageWidget');
 			if (json.next_type === null) {
 				instructions.text('Все документы загружены');
 
-//				setTimeout(function () {
-<!--					window.location.href = '--><?//=$this->redirect(Yii::app()->createUrl("pages/view",array('name'=>'formsent')));?><!--';-->
-//				}, 2000);
+				setTimeout(function () {
+					window.location.href = '<?=Yii::app()->createUrl("pages/view",array('name'=>'formsent'));?>';
+				}, 2000);
 
 				shotButton.hide();
 
