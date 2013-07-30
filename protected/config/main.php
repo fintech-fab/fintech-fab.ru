@@ -46,6 +46,9 @@ return array(
 
 	// application components
 	'components'=>array(
+		'clientForm'=>array(
+			'class'=>'application.components.ClientForm',
+		),
 		'bootstrap'=>array(
 			'class'=>'bootstrap.components.Bootstrap',
 		),

@@ -9,29 +9,30 @@ class FormController extends Controller
 		 * @var array $aPost
 		 * @var string $sView
 		 */
-	/*
-		if(Yii::app()->ClientForm->ajaxValidation())
+
+		if(Yii::app()->clientForm->ajaxValidation())
 		{
 			Yii::app()->end();
 		}
 
-		$oForm=Yii::app()->ClientForm->getFormModel();
+		/*$oForm=Yii::app()->clientForm->getFormModel();
 
-		if($aPost=Yii::app()->ClientForm->getPostData())
+		/*if($aPost=Yii::app()->clientForm->getPostData())
 		{
 			$oForm->attributes=$aPost;
 			if($oForm->validate())
 			{
-				Yii::app()->ClientForm->formDataProcess($oForm);
+				Yii::app()->clientForm->formDataProcess($oForm);
+				Yii::app()->clientForm->nextStep();
 			}
 		}
 
-	*/
-		//$sView=Yii::app()->ClientForm->getView();
-		//$this->render($sView,array('model'=>$oForm));
+		$sView=Yii::app()->clientForm->getView();*/
 
+		$oForm=Yii::app()->clientForm->getFormModel();
 
-		$oForm=new ClientPersonalDataForm();
+		//$this->render($sView,array('oClientCreateForm'=>$oForm));
+
 		$this->render('clientpersonaldata',array('oClientCreateForm'=>$oForm));
 	}
 
