@@ -33,6 +33,18 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		<?php echo $form->labelEx($model,'link_url'); ?>
 		<?php echo $form->textField($model,'link_url',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'link_url'); ?>
+		<?php
+
+		Yii::app()->user->setFlash('info', 'Поддерживается 2 формата URL: абсолютный (<strong>http://site.ru</strong>) и относительный (<strong>/page/subpage</strong>).');
+
+		$this->widget('bootstrap.widgets.TbAlert', array(
+			'block'=>false, // display a larger alert block?
+			'fade'=>true, // use transitions?
+			'closeText'=>'&times;', // close link text - if set to false, no close link is displayed
+			'alerts'=>array( // configurations per alert type
+				'info'=>array('block'=>false, 'fade'=>true, 'closeText'=>'&times;'), // success, info, warning, error or danger
+			),
+		)); ?>
 	</div>
 
 	<div class="row">
