@@ -47,7 +47,7 @@ class FooterLinks extends CActiveRecord
 			array('link_title', 'length', 'max'=>30),
 			array('link_title', 'match','pattern'=>'/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('link_url', 'length', 'max'=>255),
-			array('link_url', 'url','message'=>'Неверный формат URL, пример верного формата: http://site.ru/page'),
+			array('link_url', 'match', 'pattern'=>'#^((https?|ftp)://[а-яё\w\.\-]+\.([a-zа-яё]{2,6}\.?))?/[\#&;:?=\w\.\-\/]*$#ui','message'=>'Неверный URL, примеры верных URL: абсолютный - http://site.ru, относительный - /pages/view (обязательно должен начинаться со слэша)'),
 			array('link_content', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

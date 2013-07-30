@@ -10,26 +10,22 @@
 
 		foreach($this->links as &$l)
 		{
-			if($l == end($this->links)) {
-				if($l->link_url=='')
-				{
-					echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('data-target' => '#fl-'.$l->link_name,'data-toggle'=>'modal'));
-				}
-				else
-				{
-					echo CHtml::link($l->link_title, $l->link_url);
-				}
-			}
-			else
+			if($l->link_url=='') // поле "ссылка" пусто - значит, модальное окно
 			{
-				if($l->link_url=='')
-				{
-					echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('data-target' => '#fl-'.$l->link_name,'data-toggle'=>'modal')).' &middot; ';
-				}
-				else
-				{
-					echo CHtml::link($l->link_title, $l->link_url).' &middot; ';
-				}
+				echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('data-target'=>'#fl-'.$l->link_name,'data-toggle'=>'modal'));
+			}
+			else if(strpos($l->link_url, "/") == 0) // в поле "ссылка" первый символ - "/" - значит, относительный url, открываем в этом же окне (не модальном)
+			{
+				echo CHtml::link($l->link_title, $l->link_url);
+			}
+			else // иначе открываем в новом окне
+			{
+				echo CHtml::link($l->link_title, $l->link_url, array('target'=>'_blank'));
+			}
+
+			if($l != end($this->links))
+			{
+				echo ' &middot; ';
 			}
 		}
 		unset($l);
