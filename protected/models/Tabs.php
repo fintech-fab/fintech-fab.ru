@@ -41,8 +41,8 @@ class Tabs extends CActiveRecord
 			array('tab_name, tab_title, tab_content', 'required'),
 			array('tab_order', 'numerical', 'integerOnly'=>true),
 			array('tab_name', 'length', 'max'=>20),
-			array('tab_name', 'match','pattern'=>'/^[a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы'),
-			array('tab_name', 'unique', 'message'=>'Страница должна иметь уникальное имя'),
+			array('tab_name', 'match','pattern'=>'/^[a-z][a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы, первым символом должна быть буква'),
+			array('tab_name', 'unique', 'message'=>'Вкладка должна иметь уникальное имя'),
 			array('tab_title', 'length', 'max'=>30),
 			array('tab_title', 'match','pattern'=>'/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			// The following rule is used by search().

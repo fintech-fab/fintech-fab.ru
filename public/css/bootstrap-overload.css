@@ -43,6 +43,19 @@ nav div.navbar-inner {
 	border-width: 0px;
 }
 
+.pay_legend
+{
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin-bottom: 27px;
+	font-size: 19.5px;
+	line-height: 36px;
+	color: #333;
+	border: 0;
+	border-bottom: 1px solid #eee;
+}
+
 .divider
 {
 	padding: 0 5px;

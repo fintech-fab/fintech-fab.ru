@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
     <?php  Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-	<?php //Yii::app()->clientScript->registerCoreScript( 'jquery.ui' );?>
+	<?php Yii::app()->clientScript->registerCoreScript( 'jquery.ui' );?>
 	<!--?php Yii::app()->clientScript->registerCoreScript( 'jquery.modal' );?-->
 	<!--?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/jquery-ui.css'); ?-->
 	<?php
