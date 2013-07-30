@@ -10,26 +10,22 @@
 
 		foreach($this->links as &$l)
 		{
-			if($l == end($this->links)) {
-				if($l->link_url=='')
-				{
-					echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('data-target' => '#fl-'.$l->link_name,'data-toggle'=>'modal'));
-				}
-				else
-				{
-					echo CHtml::link($l->link_title, $l->link_url);
-				}
+			if($l->link_url=='')
+			{
+				echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('data-target' => '#fl-'.$l->link_name,'data-toggle'=>'modal'));
+			}
+			else if(strpos($l->link_url, Yii::app()->request->getBaseUrl(true)) === false)
+			{
+				echo CHtml::link($l->link_title, $l->link_url, array('target' => '_blank'));
 			}
 			else
 			{
-				if($l->link_url=='')
-				{
-					echo CHtml::link($l->link_title, '#fl-'.$l->link_name, array('data-target' => '#fl-'.$l->link_name,'data-toggle'=>'modal')).' &middot; ';
-				}
-				else
-				{
-					echo CHtml::link($l->link_title, $l->link_url).' &middot; ';
-				}
+				echo CHtml::link($l->link_title, $l->link_url);
+			}
+
+			if($l != end($this->links))
+			{
+				echo ' &middot; ';
 			}
 		}
 		unset($l);
