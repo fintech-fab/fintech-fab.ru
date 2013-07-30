@@ -215,6 +215,7 @@ class SiteController extends Controller
 					$this->redirect(Yii::app()->createUrl("site/join"));
 				}
 
+	            Yii::app()->session['form2_complete']=true;
 				$this->redirect(Yii::app()->createUrl("pages/view",array('name'=>'formsent')));
                 return;
             }
@@ -235,6 +236,21 @@ class SiteController extends Controller
 		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form2',array('model'=>$model));
     }
+
+	/**
+	 * Идентификация по видео
+	 */
+	public function actionForm3() {
+
+//		Yii::app()->session['form2_complete'] = true;
+		if(!Yii::app()->session['form2_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("site/form2"));
+		}
+
+
+		$this->render('form3');
+	}
 
     /**
 	 * Displays the login page
