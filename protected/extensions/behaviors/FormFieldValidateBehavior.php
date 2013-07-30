@@ -6,7 +6,7 @@
  * Time: 16:25
  * To change this template use File | Settings | File Templates.
  *
- * @property CFormModel|ClientCreateForm $owner
+ * @property CFormModel|ClientCreateFormAbstract $owner
  */
 
 class FormFieldValidateBehavior extends CBehavior
@@ -45,12 +45,12 @@ class FormFieldValidateBehavior extends CBehavior
         }
     }
 
-	public function findClientStatusIdByExtraAttribute( $attribute )
+	/*public function findClientStatusIdByExtraAttribute( $attribute )
 	{
 		//	проверим alias на уникальность
 		$oClient = Client::model()->scopeUniqueExtra( $attribute, $this->owner->$attribute )->find();
 		return empty( $oClient )? false: $oClient;
-	}
+	}*/
 
     public function checkValidClientNumericCode($attribute, $param)
     {

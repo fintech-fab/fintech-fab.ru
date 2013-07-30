@@ -1,6 +1,6 @@
 <?php
 
-class FormComponent
+class ClientForm
 {
 	/**
 	 * Возвращает модель текущей формы.

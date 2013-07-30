@@ -30,25 +30,47 @@ $this->pageTitle=Yii::app()->name;
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 'id' => get_class($oClientCreateForm),
 'enableAjaxValidation' => true,
-'action' => '/form',
+'action' => '/form/',
 ));
 ?>
 
-<h2>Контактные данные</h2>
-
+<div class="container">
 <div class="row span12">
+	<h2>Контактные данные</h2>
 	<? require dirname(__FILE__) . '/fields/contacts.php' ?>
 </div>
 
-<h2>Личные данные</h2>
-
 <div class="row span12">
-	<? require dirname(__FILE__) . '/fields/name.php' ?>
-	<? require dirname(__FILE__) . '/fields/personal_info.php' ?>
+	<h2>Личные данные</h2>
 </div>
 
-<h2>Второй документ</h2>
+<div class="row span12">
+	<div class="span5">
+		<? require dirname(__FILE__) . '/fields/name.php' ?>
+	</div>
+	<div class="span5">
+		<? require dirname(__FILE__) . '/fields/personal_info.php' ?>
+	</div>
+</div>
 
 <div class="row span12">
+	<h2>Второй документ</h2>
+
 	<? require dirname(__FILE__) . '/fields/document.php' ?>
+</div>
+
+	<div class="clearfix"></div>
+
+	<div class="form-actions">
+		<? $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType' => 'submit',
+			'type' => 'primary',
+			'label' => 'Далее ->',
+		)); ?>
+	</div>
+
+<?
+
+$this->endWidget();
+?>
 </div>

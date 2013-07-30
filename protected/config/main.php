@@ -24,6 +24,7 @@ return array(
 		'application.components.*',
 		'application.components.crypt.*',
 		'application.components.utils.*',
+		'application.extensions.behaviors.*',
 	),
 
 	//'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
