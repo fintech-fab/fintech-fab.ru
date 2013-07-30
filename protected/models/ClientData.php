@@ -34,6 +34,8 @@
  * @property string $job_monthly_outcome
  * @property integer $have_past_credit
  * @property integer $numeric_code
+ * @property integer $product
+ * @property integer $get_way
  * @property string $options
  * @property integer $complete
  * @property string $dt_add
@@ -67,8 +69,8 @@ class ClientData extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			/*array('description, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, numeric_code, options', 'required'),
-			array('telecoms_operator, sex, have_past_credit, numeric_code, complete', 'numerical', 'integerOnly'=>true),
+			/*array('description, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, numeric_code, product, get_way, options', 'required'),
+			array('telecoms_operator, sex, have_past_credit, numeric_code, product, get_way, complete', 'numerical', 'integerOnly'=>true),
 			array('phone, job_phone, relatives_one_phone', 'length', 'max'=>10),
 			array('first_name, last_name, third_name, email, passport_issued, address_reg_address, relatives_one_fio', 'length', 'max'=>255),
 			array('passport_series', 'length', 'max'=>4),
@@ -80,14 +82,13 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, options, complete, dt_add, dt_update', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, product, get_way, options, complete, dt_add, dt_update', 'safe'),
 		);
 	}
 
-
-	public function checkClientByPhone($phone)
+	public function checkClientByPhone($phone)  //проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
 	{
-		if(($client=$this->find('phone=:phone',array(':phone'=>$phone)))&&($client->complete==1))
+		if(($client=$this->find('phone=:phone',array(':phone'=>$phone)))&&($client->complete==1)) //$client->complete - флаг заполненности анкеты
 		{
 			return true;
 		}
@@ -99,9 +100,8 @@ class ClientData extends CActiveRecord
 	{
 		if($client=$this->find('phone=:phone',array(':phone'=>$model->phone)))
 		{
-			//$this->clearClient($client); //бессмысленно, т.к. при открытии пустой формы сразу проходит валидация, "зачищающая" данные в таблицы через ajax-запись
 			$client->phone=$model->phone;
-			$client->dt_add=date('Y-m-d H:i:s', time());
+			$client->dt_add=date('Y-m-d H:i:s', time());//пишем timestamp создания записи
 			$client->save();
 			return $client;
 		}
@@ -114,7 +114,7 @@ class ClientData extends CActiveRecord
 		}
 	}
 
-	public function getClientIdByPhone($phone)
+	public function getClientIdByPhone($phone) //получаем ID клиента по номеру телефона
 	{
 		if($client=$this->find('phone=:phone',array(':phone'=>$phone)))
 		{
@@ -124,7 +124,7 @@ class ClientData extends CActiveRecord
 	}
 
 
-	public function getClientDataById($client_id)
+	public function getClientDataById($client_id) //получаем данные клиента по ID
 	{
 		if($client=$this->find('client_id=:client_id',array(':client_id'=>$client_id)))
 		{
@@ -133,7 +133,7 @@ class ClientData extends CActiveRecord
 		return false;
 	}
 
-	public function saveClientDataById($clientData,$client_id)
+	public function saveClientDataById($clientData,$client_id) //сохраняем данные в запись клиента с ID
 	{
 		if($client=$this->find('client_id=:client_id',array(':client_id'=>$client_id)))
 		{
@@ -143,7 +143,7 @@ class ClientData extends CActiveRecord
 		} return false;
 	}
 
-	public function beforeSave()
+	public function beforeSave() //перед сохранением создаем timestamp
 	{
 		$this->dt_update=date('Y-m-d H:i:s', time());
 		return parent::beforeSave();
@@ -196,6 +196,8 @@ class ClientData extends CActiveRecord
 			'job_monthly_outcome' => 'Job Monthly Outcome',
 			'have_past_credit' => 'Have Past Credit',
 			'numeric_code' => 'Numeric Code',
+			'product' => 'Product',
+			'get_way' => 'Get Way',
 			'options' => 'Options',
 			'complete' => 'Complete',
 			'dt_add' => 'Dt Add',
@@ -244,6 +246,8 @@ class ClientData extends CActiveRecord
 		$criteria->compare('job_monthly_outcome',$this->job_monthly_outcome,true);
 		$criteria->compare('have_past_credit',$this->have_past_credit);
 		$criteria->compare('numeric_code',$this->numeric_code);
+		$criteria->compare('product',$this->product);
+		$criteria->compare('get_way',$this->get_way);
 		$criteria->compare('options',$this->options,true);
 		$criteria->compare('complete',$this->complete);
 		$criteria->compare('dt_add',$this->dt_add,true);

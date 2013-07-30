@@ -34,22 +34,8 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 		// всегда обязательные поля
 		$aRequired = array_merge(
 			array(
-				'phone',
 				'email',
-
-				'first_name',
-				'last_name',
-				'third_name',
-
-				'birthday',
-				'sex',
-
-				'passport_series',
-				'passport_number',
-				'passport_date',
 				'passport_issued',
-				'passport_code',
-
 				'document',
 				'document_number',
 			),

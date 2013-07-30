@@ -12,12 +12,7 @@ class ClientSendForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRequired = array_merge(
-			array(
-				'numeric_code',
-			),
-			$this->getCommonRequires()
-		);
+		$aRequired = $this->getCommonRequires();
 
 		$aRules = $this->getRulesByFields(
 
