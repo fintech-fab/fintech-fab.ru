@@ -217,7 +217,9 @@ class SiteController extends Controller
 				}
 
 	            Yii::app()->session['form2_complete']=true;
-				$this->redirect(Yii::app()->createUrl("pages/view",array('name'=>'formsent')));
+
+	            //переадресация на шаг видео идентификации
+	            $this->redirect(Yii::app()->createUrl("site/identification"));
                 return;
             }
         }
@@ -243,7 +245,6 @@ class SiteController extends Controller
 	 */
 	public function actionIdentification() {
 
-//		Yii::app()->session['form2_complete'] = true;
 		if(!Yii::app()->session['form2_complete'])
 		{
 			$this->redirect(Yii::app()->createUrl("site/form2"));
@@ -256,6 +257,12 @@ class SiteController extends Controller
 	 * Загрузка документов
 	 */
 	public function actionDocuments() {
+
+		if(!Yii::app()->session['form2_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("site/form2"));
+		}
+
 		$this->render('documents');
 	}
 

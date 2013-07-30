@@ -6,6 +6,8 @@ class StepsBreadCrumbs extends CWidget
 		array('Ввод телефона',array("site/join")),
 		array('Личные данные',array("site/form1")),
 		array('Личные данные 2',array("site/form2")),
+		array('Видеоидентификация', array('site/identification')),
+		array('Загрузка документов', array('site/documents')),
 	);
 
 	public $divider = ' → ';
