@@ -11,7 +11,6 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 
-		$aProducts=array("1"=>"3000 рублей на неделю","2"=>"6000 рублей на неделю","3"=>"10000 рублей на 2 недели");
 		// всегда обязательные поля
 		$aRequired = array_merge(
 			array(
@@ -27,7 +26,7 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		array('product', 'in', 'range' => array_keys($aProducts),'message' => 'Выберите сумму займа');
+		array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts),'message' => 'Выберите сумму займа');
 
 		return $aRules;
 
@@ -35,10 +34,9 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 
 	public function attributeLabels()
 	{
-		$labels = $this->attributeLabels();
-		$labels[] = array(
-			'product' => 'Сумма займа',
+		return array_merge(
+			parent::attributeLabels(),
+			array('product' => 'Сумма займа',)
 		);
-		return $labels;
 	}
 }

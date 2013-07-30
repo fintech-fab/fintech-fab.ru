@@ -31,8 +31,8 @@ class FormController extends Controller
 		//$this->render($sView,array('model'=>$oForm));
 
 
-		$oForm=new ClientSendForm();
-		$this->render('clientsend',array('oClientCreateForm'=>$oForm));
+		$oForm=new ClientSelectGetWayForm();
+		$this->render('clientselectgetway',array('oClientCreateForm'=>$oForm));
 	}
 
 	// Uncomment the following methods and override them if needed
