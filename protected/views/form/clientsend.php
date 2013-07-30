@@ -21,8 +21,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <div class="container">
 <div class="row span12">
-		<? require dirname(__FILE__) . '/fields/numeric_code.php' ?>
-		<? require dirname(__FILE__) . '/fields/complete.php' ?>
+		<?php require dirname(__FILE__) . '/fields/numeric_code.php' ?>
+		<?php require dirname(__FILE__) . '/fields/complete.php' ?>
 </div>
 
 	<div class="clearfix"></div>

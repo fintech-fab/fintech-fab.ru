@@ -7,5 +7,5 @@
 ?>
 
 <span class="span8">
-	<?=$form->checkBoxRow($oClientCreateForm, 'complete')?>
+	<?php echo $form->checkBoxRow($oClientCreateForm, 'complete'); ?>
 </span>
