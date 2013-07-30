@@ -20,8 +20,10 @@ return array(
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
+		'application.models.forms.*',
 		'application.components.*',
 		'application.components.crypt.*',
+		'application.components.utils.*',
 	),
 
 	//'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
@@ -36,7 +38,7 @@ return array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'159753',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('127.0.0.1','::1'),
+			'ipFilters'=>array('127.0.0.1','::1','192.168.10.181'),
 		),
 
 	),
