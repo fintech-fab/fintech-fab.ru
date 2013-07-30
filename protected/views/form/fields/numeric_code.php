@@ -5,6 +5,6 @@
  */
 
 ?>
-<span class="span4"><?
-	echo $form->textFieldRow( $oClientCreateForm, 'numeric_code', array( 'class' => 'span4' ) );
-?></span>
+<span class="span4">
+	<?php echo $form->textFieldRow( $oClientCreateForm, 'numeric_code', array( 'class' => 'span4' ) ); ?>
+</span>
