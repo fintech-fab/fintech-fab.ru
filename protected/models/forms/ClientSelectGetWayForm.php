@@ -10,8 +10,6 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 
 	public function rules()
 	{
-
-		$aWays=array("1"=>"На карту Kreddy MasterCard","2"=>"На сотовый телефон");
 		// всегда обязательные поля
 		$aRequired = array_merge(
 			array(
@@ -27,7 +25,7 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		array('get_way', 'in', 'range' => array_keys($aWays),'message' => 'Выберите сумму займа');
+		array('get_way', 'in', 'range' => array_keys(Dictionaries::$aWays),'message' => 'Выберите сумму займа');
 
 		return $aRules;
 
@@ -35,11 +33,9 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 
 	public function attributeLabels()
 	{
-		$labels = parent::attributeLabels();
-		$labels = array_merge($labels,
-			array(
-				'get_way' => 'Способ получения',
-			));
-		return $labels;
+		return array_merge(
+			parent::attributeLabels(),
+			array('get_way' => 'Способ получения',)
+		);
 	}
 }
