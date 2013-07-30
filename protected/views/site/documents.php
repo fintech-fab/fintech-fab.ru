@@ -34,9 +34,14 @@ $this->widget('TopPageWidget');
 			<br/>
 
 			<div class="row">
-				<div class="span12">
+				<div class="span6">
 					<button id="shot-button" class="btn btn-primary" style="display: none;">сфотографировать</button>
-					<button id="confirm-shot-button" class="btn" style="display: none">продолжить</button>
+				</div>
+				<div class="span6">
+					<div id="confirm_text" class="alert alert-warning" style="display: none"></div>
+					<button id="confirm-shot-button" class="btn pull-right" style="display: none"
+					        onclick="confirmImage()">продолжить
+					</button>
 				</div>
 			</div>
 		</div>
@@ -46,12 +51,18 @@ $this->widget('TopPageWidget');
 
 
 <script type="text/javascript">
-	var currentType = '<?=ImageController::C_TYPE_PASSPORT_FRONT?>';
-	var currentTypeInstructions = '<?=ImageController::$aTypes[ImageController::C_TYPE_PASSPORT_FRONT]['description']?>';
+	var currentDocument = {
+		type: '<?=ImageController::C_TYPE_PASSPORT_FRONT_FIRST?>',
+		title: '<?=ImageController::C_TYPE_PASSPORT_FRONT_FIRST?>',
+		example: '<?=ImageController::$aTypes[ImageController::C_TYPE_PASSPORT_FRONT_FIRST]['example']?>',
+		instructions: '<?=ImageController::$aTypes[ImageController::C_TYPE_PASSPORT_FRONT_FIRST]['instructions']?>',
+		confirm_text: '<?=ImageController::$aTypes[ImageController::C_TYPE_PASSPORT_FRONT_FIRST]['confirm_text']?>'
+	};
 
 	var shotButton = $('#shot-button');
 	var confirmShotButton = $('#confirm-shot-button');
 	var instructions = $('#instructions');
+	var confirm_text = $('#confirm_text');
 
 	var video = document.querySelector('#inputVideo');
 	var canvas = document.querySelector('#inputCanvas');
@@ -71,7 +82,8 @@ $this->widget('TopPageWidget');
 		video.src = window.URL.createObjectURL(stream);
 		localMediaStream = stream;
 
-		instructions.text(currentTypeInstructions);
+		instructions.text(currentDocument.instructions);
+		resultImage.attr('src', currentDocument.example);
 
 		shotButton
 			.show()
@@ -88,7 +100,12 @@ $this->widget('TopPageWidget');
 
 			resultImage.attr('src', dataURL);
 
-			confirmShotButton.show().click(confirmImage);
+			shotButton
+				.text('Переснять');
+
+			confirm_text.text(currentDocument.confirm_text).show();
+
+			confirmShotButton.show();
 		}
 	}
 
@@ -98,10 +115,12 @@ $this->widget('TopPageWidget');
 			.text('Пожалуйста, подождите...');
 
 		confirmShotButton.hide();
+		confirm_text.hide();
 
-		$.post('/image/processPhoto', { image: resultImage.attr('src'), type: currentType, YII_CSRF_TOKEN: '<?=Yii::app()->request->csrfToken?>' }, function (json) {
+		console.log(currentDocument.type);
+		$.post('/image/processPhoto', { image: resultImage.attr('src'), type: currentDocument.type, YII_CSRF_TOKEN: '<?=Yii::app()->request->csrfToken?>' }, function (response) {
 
-			json = $.parseJSON(json);
+			var json = $.parseJSON(response);
 
 			shotButton
 				.removeAttr('disabled')
@@ -121,14 +140,16 @@ $this->widget('TopPageWidget');
 			}
 
 			//noinspection JSUnresolvedVariable
-			currentType = json.next_type.id;
-			//noinspection JSUnresolvedVariable
-			currentTypeInstructions = json.next_type.title;
+			currentDocument = {
+				type: json.next_type.type,
+				title: json.next_type.title,
+				example: json.next_type.example,
+				instructions: json.next_type.instructions,
+				confirm_text: json.next_type.confirm_text
+			};
 
-			instructions.text(currentTypeInstructions);
-
-			confirmShotButton.show();
-
+			instructions.text(currentDocument.instructions);
+			resultImage.attr('src', currentDocument.example);
 
 		});
 	}

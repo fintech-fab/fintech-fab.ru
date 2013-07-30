@@ -3,7 +3,8 @@ class ImageController extends CController
 {
 
 	const C_TYPE_PHOTO = 'photo';
-	const C_TYPE_PASSPORT_FRONT = 'passport_front';
+	const C_TYPE_PASSPORT_FRONT_FIRST = 'passport_front_first';
+	const C_TYPE_PASSPORT_FRONT_SECOND = 'passport_front_second';
 	const C_TYPE_PASSPORT_NOTIFICATION = 'passport_notification';
 	const C_TYPE_PASSPORT_LAST = 'passport_last';
 
@@ -12,17 +13,29 @@ class ImageController extends CController
 			'title'       => 'Фотография клиента',
 			'description' => '',
 		),
-		self::C_TYPE_PASSPORT_FRONT        => array(
-			'title'       => 'Паспорт - лицевая сторона',
-			'description' => 'Покажите в веб-камеру первую страницу паспорта (кем выдан, дата выдачи, код подразделения)',
+		self::C_TYPE_PASSPORT_FRONT_FIRST  => array(
+			'title'        => 'Паспорт - лицевая сторона (первая часть)',
+			'example'      => '/static/img/documents/example1.jpg',
+			'instructions' => 'Покажите в веб-камеру первую страницу паспорта (кем выдан, дата выдачи, код подразделения)',
+			'confirm_text' => 'Убедитесь в том, что данные на изображении читаемы и легко различимы',
+		),
+		self::C_TYPE_PASSPORT_FRONT_SECOND => array(
+			'title'        => 'Паспорт - лицевая сторона (первая часть)',
+			'example'      => '/static/img/documents/example1.jpg',
+			'instructions' => 'Покажите в веб-камеру вторую страницу паспорта',
+			'confirm_text' => '111',
 		),
 		self::C_TYPE_PASSPORT_NOTIFICATION => array(
-			'title'       => 'Паспорт - страница регистрации',
-			'description' => 'Покажите в веб-камеру страницу регистрации',
+			'title'        => 'Паспорт - страница регистрации',
+			'example'      => '/static/img/documents/example1.jpg',
+			'instructions' => 'Покажите в веб-камеру страницу регистрации',
+			'confirm_text' => '2222',
 		),
 		self::C_TYPE_PASSPORT_LAST         => array(
-			'title'       => 'Паспорт - последняя страница',
-			'description' => 'Покажите в веб-камеру последнюю страницу паспорта',
+			'title'        => 'Паспорт - последняя страница',
+			'example'      => '/static/img/documents/example1.jpg',
+			'instructions' => 'Покажите в веб-камеру последнюю страницу паспорта',
+			'confirm_text' => '33333',
 		),
 	);
 
@@ -31,10 +44,6 @@ class ImageController extends CController
 	 */
 	public function actionProcessPhoto()
 	{
-		//все формы заполнены
-		Yii::app()->session['form1_complete'] = true;
-		Yii::app()->session['form2_complete'] = true;
-
 		//все шаги пройдены и есть ID клиента
 		if (!Yii::app()->session['form1_complete'] OR !Yii::app()->session['form2_complete'] OR is_null($this->_getClient())) {
 			Yii::app()->end();
@@ -90,7 +99,8 @@ class ImageController extends CController
 						break;
 					}
 
-					//@todo unlink фотографии
+					//удаляем фотографию из temp директории
+					@unlink($sFilePath);
 
 					//если лицо нашлось - загружаем
 					if (count($response) == 1) {
@@ -100,30 +110,47 @@ class ImageController extends CController
 					echo count($response);
 
 					break;
-				//паспорт - лицевая сторона
-				case self::C_TYPE_PASSPORT_FRONT:
+				//паспорт - лицевая сторона - 1ая часть
+				case self::C_TYPE_PASSPORT_FRONT_FIRST:
 
 					$this->uploadToUserDir($sImage, $sType);
 
 					$aResponse = array(
-						'next_type' => array(
-							'id'    => self::C_TYPE_PASSPORT_NOTIFICATION,
-							'title' => self::$aTypes[self::C_TYPE_PASSPORT_NOTIFICATION]['description'],
+						'next_type' => array_merge(
+							array('type' => self::C_TYPE_PASSPORT_FRONT_SECOND),
+							self::$aTypes[self::C_TYPE_PASSPORT_FRONT_SECOND]
 						),
 					);
 
 					echo json_encode($aResponse);
 
 					break;
+
+				//паспорт - лицевая сторона - 2ая часть
+				case self::C_TYPE_PASSPORT_FRONT_SECOND:
+
+					$this->uploadToUserDir($sImage, $sType);
+
+					$aResponse = array(
+						'next_type' => array_merge(
+							array('type' => self::C_TYPE_PASSPORT_NOTIFICATION),
+							self::$aTypes[self::C_TYPE_PASSPORT_NOTIFICATION]
+						),
+					);
+
+					echo json_encode($aResponse);
+
+					break;
+
 				//паспорт - страница регистрации
 				case self::C_TYPE_PASSPORT_NOTIFICATION:
 
 					$this->uploadToUserDir($sImage, $sType);
 
 					$aResponse = array(
-						'next_type' => array(
-							'id'    => self::C_TYPE_PASSPORT_LAST,
-							'title' => self::$aTypes[self::C_TYPE_PASSPORT_LAST]['description'],
+						'next_type' => array_merge(
+							array('type' => self::C_TYPE_PASSPORT_LAST),
+							self::$aTypes[self::C_TYPE_PASSPORT_LAST]
 						),
 					);
 
