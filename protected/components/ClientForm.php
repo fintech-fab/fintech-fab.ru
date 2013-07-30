@@ -6,14 +6,14 @@
  * Также выполняет команды контроллера по обработке форм.
  *
  * Соответствие шага в сессии обрабатываемой форме и отображаемому представлению
- * Шаг - Модель (обработка)    - Модель (отображение) - Представление
- * 0 - _____________________   - ClientSelectProduct  - clientselectproduct
- * 1 - ClientSelectProductForm - ClientGetWay         - clientgetway
- * 2 - ClientGetWayForm        - ClientPersonalData   - clientpersonaldata
- * 3 - ClientPersonalDataForm  - ClientAddressForm    - clientaddress
- * 4 - ClientAddressForm       - ClientJobInfoForm    - clientjobinfo
- * 5 - ClientJobInfoForm       - ClientSendForm       - clientsend
- * 6 - ClientSendForm          -                      - /pages/view/formsent
+ * Шаг - Модель (отображение)     - Представление
+ * 0 - ClientSelectProductForm  - clientselectproduct
+ * 1 - ClientGetWayForm         - clientgetway
+ * 2 - ClientPersonalDataForm   - clientpersonaldata
+ * 3 - ClientAddressForm        - clientaddress
+ * 4 - ClientJobInfoForm        - clientjobinfo
+ * 5 - ClientSendForm           - clientsend
+ * 6 - ______________           - /pages/view/formsent
  */
 class ClientForm
 {
@@ -39,20 +39,6 @@ class ClientForm
 		}
 	}
 
-	public function getFormModel()
-	{
-		switch($this->current_step)
-		{
-			case 0:
-				return new ClientPersonalDataForm();
-				break;
-			default:
-				return new ClientPersonalDataForm();
-				break;
-
-		}
-	}
-
 	/**
 	 * Проверяет, отправлены ли данные с помощью ajax.
 	 * Если да, выполняет валидацию модели.
@@ -64,14 +50,137 @@ class ClientForm
 		return;
 	}
 
+	public function getFormModel()
+	{
+		switch($this->current_step)
+		{
+			case 0:
+				return new ClientSelectProductForm();
+				break;
+			case 1:
+				return new ClientSelectGetWayForm();
+				break;
+			case 2:
+				return new ClientPersonalDataForm();
+				break;
+			case 3:
+				return new ClientAddressForm();
+				break;
+			case 4:
+				return new ClientJobInfoForm();
+				break;
+			case 5:
+				return new ClientSendForm();
+				break;
+			default:
+				return new ClientSelectProductForm();
+				break;
+
+		}
+	}
+
+	/**
+	 * Возвращает название необходимого для генерации представления.
+	 *
+	 * @return string
+	 */
+	public function getView()
+	{
+		switch($this->current_step)
+		{
+			case 0:
+				return 'clientselectproduct';
+				break;
+			case 1:
+				return 'clientselectgetway';
+				break;
+			case 2:
+				return 'clientpersonaldata';
+				break;
+			case 3:
+				return 'clientaddress';
+				break;
+			case 4:
+				return 'clientjobinfo';
+				break;
+			case 5:
+				return 'clientsend';
+				break;
+			default:
+				return 'clientselectproduct';
+				break;
+		}
+	}
+
 	/**
 	 * Возвращает массив отправленных данных, если был выполнен POST-запрос, либо null.
 	 *
-	 * @return array|null
+	 * @return array|bool
 	 */
+
 	public function getPostData()
 	{
-		return;
+		switch($this->current_step)
+		{
+			case 0:
+			{
+				if(isset($_POST['ClientSelectProductForm']))
+				{
+					return $_POST['ClientSelectProductForm'];
+				}
+				return false;
+			}
+				break;
+			case 1:
+			{
+				if(isset($_POST['ClientSelectGetWayForm']))
+				{
+					return $_POST['ClientSelectGetWayForm'];
+				}
+				return false;
+			}
+				break;
+			case 2:
+			{
+				if(isset($_POST['ClientPersonalDataForm']))
+				{
+					return $_POST['ClientPersonalDataForm'];
+				}
+				return false;
+			}
+				break;
+			case 3:
+			{
+				if(isset($_POST['ClientAddressForm']))
+				{
+					return $_POST['ClientAddressForm'];
+				}
+				return false;
+			}
+				break;
+			case 4:
+			{
+				if(isset($_POST['ClientJobInfoForm']))
+				{
+					return $_POST['ClientJobInfoForm'];
+				}
+				return false;
+				break;
+			}
+			case 5:
+			{
+				if(isset($_POST['ClientSendForm']))
+				{
+					return $_POST['ClientSendForm'];
+				}
+				return false;
+			}
+				break;
+			default:
+				return false;
+				break;
+
+		}
 	}
 
 	/**
@@ -82,16 +191,6 @@ class ClientForm
 	public function formDataProcess($model)
 	{
 
-	}
-
-	/**
-	 * Возвращает название необходимого для генерации представления.
-	 *
-	 * @return string
-	 */
-	public function getView()
-	{
-		return;
 	}
 
 	private function compareDataInCookie($cookieName,$attributeName,$checkValue)

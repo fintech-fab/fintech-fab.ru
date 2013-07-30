@@ -25,15 +25,18 @@ class FormController extends Controller
 				Yii::app()->clientForm->formDataProcess($oForm);
 				Yii::app()->clientForm->nextStep();
 			}
-		}
+		}*/
 
-		$sView=Yii::app()->clientForm->getView();*/
+		$sView=Yii::app()->clientForm->getView();
 
 		$oForm=Yii::app()->clientForm->getFormModel();
 
-		//$this->render($sView,array('oClientCreateForm'=>$oForm));
+		$this->render($sView,array('oClientCreateForm'=>$oForm));
 
-		$this->render('clientpersonaldata',array('oClientCreateForm'=>$oForm));
+		//$oForm=new ClientSendForm();
+		//$this->render('clientsend',array('oClientCreateForm'=>$oForm));
+
+		//$this->render('clientpersonaldata',array('oClientCreateForm'=>$oForm));
 	}
 
 	// Uncomment the following methods and override them if needed

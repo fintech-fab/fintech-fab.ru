@@ -29,10 +29,11 @@ class ClientSendForm extends ClientCreateFormAbstract
 
 	public function attributeLabels()
 	{
-		$labels = $this->attributeLabels();
-		$labels[] = array(
-			'complete' => 'Я подтверждаю верность введенных данных и даю разрешение на их обработку и хранение',
-		);
+		$labels = parent::attributeLabels();
+		$labels = array_merge($labels,
+			array(
+				'complete' => 'Я подтверждаю верность введенных данных и даю разрешение на их обработку и хранение',
+			));
 		return $labels;
 	}
 
