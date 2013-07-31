@@ -14,8 +14,7 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 		$aRequired = array_merge(
 			array(
 				'get_way',
-			),
-			$this->getCommonRequires()
+			)
 		);
 
 		$aRules = $this->getRulesByFields(

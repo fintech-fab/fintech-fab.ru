@@ -15,8 +15,7 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 		$aRequired = array_merge(
 			array(
 				'product',
-			),
-			$this->getCommonRequires()
+			)
 		);
 
 		$aRules = $this->getRulesByFields(

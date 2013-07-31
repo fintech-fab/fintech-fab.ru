@@ -47,7 +47,7 @@ class ClientForm
 	 */
 	public function ajaxValidation()
 	{
-		return;
+		return false;
 	}
 
 	public function getFormModel()
@@ -75,7 +75,6 @@ class ClientForm
 			default:
 				return new ClientSelectProductForm();
 				break;
-
 		}
 	}
 
@@ -181,6 +180,18 @@ class ClientForm
 				break;
 
 		}
+	}
+
+	/*
+	 * Переводит обработку форм на следующий шаг
+	 *
+	 */
+	public function nextStep()
+	{
+
+		$this->current_step++;
+		Yii::app()->session['current_step']=$this->current_step;
+
 	}
 
 	/**

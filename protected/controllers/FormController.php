@@ -15,17 +15,20 @@ class FormController extends Controller
 			Yii::app()->end();
 		}
 
-		/*$oForm=Yii::app()->clientForm->getFormModel();
+		$oForm=Yii::app()->clientForm->getFormModel();
 
-		/*if($aPost=Yii::app()->clientForm->getPostData())
+		if($aPost=Yii::app()->clientForm->getPostData())
 		{
 			$oForm->attributes=$aPost;
+			//var_dump($oForm);
+			//var_dump($oForm->validate());
 			if($oForm->validate())
 			{
-				Yii::app()->clientForm->formDataProcess($oForm);
+				//Yii::app()->end();
+				//Yii::app()->clientForm->formDataProcess($oForm);
 				Yii::app()->clientForm->nextStep();
 			}
-		}*/
+		}
 
 		$sView=Yii::app()->clientForm->getView();
 
@@ -37,6 +40,28 @@ class FormController extends Controller
 		//$this->render('clientsend',array('oClientCreateForm'=>$oForm));
 
 		//$this->render('clientpersonaldata',array('oClientCreateForm'=>$oForm));
+	}
+
+	public function actionStart()
+	{
+		Yii::app()->session['current_step']='';
+
+		$sView=Yii::app()->clientForm->getView();
+
+		$oForm=Yii::app()->clientForm->getFormModel();
+
+		$this->render($sView,array('oClientCreateForm'=>$oForm));
+	}
+
+	public function actionError()
+	{
+		if($error=Yii::app()->errorHandler->error)
+		{
+			if(Yii::app()->request->isAjaxRequest)
+				echo $error['message'];
+			else
+				$this->render('error', $error);
+		}
 	}
 
 	// Uncomment the following methods and override them if needed

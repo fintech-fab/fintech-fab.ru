@@ -159,35 +159,6 @@ class ClientCreateFormAbstract extends CFormModel {
 	public $info_collector;
 	public $info;
 
-
-	/**
-	 * всегда обязательные поля
-	 * @return array
-	 */
-	protected function getCommonRequires()
-	{
-		$aRequires =  array(
-			'first_name', 'last_name', 'third_name', // фио
-			'sex', 'birthday', // пол, др
-			'passport_series', 'passport_number', 'passport_date', 'passport_code', // паспорт
-			'address_reg_region', 'address_reg_city', 'address_reg_address', // адрес регистрации
-			'phone', // мобильный телефон
-			'numeric_code', // цифровой код
-			'have_past_credit', // были кредиты?
-			'relatives_one_fio', 'relatives_one_phone', // контактные данные человека из ближнего окружения
-		);
-
-		// адрес проживания, если не совпадает с адресом регистрации
-		if( !$this->isAddressRegAsRes() ){
-			$aRequires[] = 'address_res_region';
-			$aRequires[] = 'address_res_city';
-			$aRequires[] = 'address_res_address';
-		}
-
-		return $aRequires;
-
-	}
-
 	/**
 	 * получить правила для полей
 	 * @param array $aFields

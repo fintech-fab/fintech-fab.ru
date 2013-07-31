@@ -32,8 +32,7 @@ class ClientJobInfoForm extends ClientCreateFormAbstract
 				'job_monthly_income',
 				'job_monthly_outcome',
 				'have_past_credit',
-			),
-			$this->getCommonRequires()
+			)
 		);
 
 		$aRules = $this->getRulesByFields(
