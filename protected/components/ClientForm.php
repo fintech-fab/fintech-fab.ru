@@ -88,7 +88,7 @@ class ClientForm
 				 * TODO обдумать, нужно ли вообще делать эти пляски с бубном вокруг куки, если мы не восстанавливаем данные в форму
 				 * TODO либо сделать загрузку данных в форму через AJAX при вводе телефона (либо через redirect() обновлять страницу формы)
 				*/
-				if(($cookieData = $this->getDataFromCookie('client'))&&($this->compareDataInCookie('client','phone',$oForm->phone)))
+				if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
 				{
 					Yii::app()->session['client_id'] = $cookieData['client_id'];
 					$this->client_id = Yii::app()->session['client_id'];
@@ -105,7 +105,7 @@ class ClientForm
 					$this->client_id=$client->client_id;
 
 					$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-					$this->saveDataToCookie('client',$data);
+					Cookie::saveDataToCookie('client',$data);
 				}
 			}
 			if($this->client_id)
@@ -116,7 +116,7 @@ class ClientForm
 				$clientData->saveClientDataById($formData,$this->client_id);
 
 				$formData['client_id']=$this->client_id;
-				$this->saveDataToCookie(get_class($oForm),$formData);
+				//$this->saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
 		else
@@ -127,7 +127,7 @@ class ClientForm
 				$clientData->saveClientDataById($formData,$this->client_id);
 
 				$formData['client_id']=$this->client_id;
-				$this->saveDataToCookie(get_class($oForm),$formData);
+				//$this->saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
 
@@ -335,7 +335,7 @@ class ClientForm
 			 * иначе создаем нового клиента и сохраняем информацию
 			 * о нем в сессию и куку.
 			 */
-			if(($cookieData = $this->getDataFromCookie('client'))&&($this->compareDataInCookie('client','phone',$oForm->phone)))
+			if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
 			{
 				Yii::app()->session['client_id'] = $cookieData['client_id'];
 				$this->client_id=Yii::app()->session['client_id'];
@@ -347,7 +347,7 @@ class ClientForm
 
 				$this->client_id=$client->client_id;
 				$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-				$this->saveDataToCookie('client',$data);
+				Cookie::saveDataToCookie('client',$data);
 			}
 			if($this->client_id)
 			{
@@ -357,7 +357,7 @@ class ClientForm
 				$clientData->saveClientDataById($formData,$this->client_id);
 
 				$formData['client_id']=$this->client_id;
-				Cookie::saveDataToCookie(get_class($oForm),$formData);
+				//Cookie::saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
 		else
@@ -368,51 +368,10 @@ class ClientForm
 				$clientData->saveClientDataById($formData,$this->client_id);
 
 				$formData['client_id']=$this->client_id;
-				Cookie::saveDataToCookie(get_class($oForm),$formData);
+				//Cookie::saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
 
 		return;
-	}
-
-	private function compareDataInCookie($cookieName,$attributeName,$checkValue)
-	{
-		$dataInCookie = false;
-		if(isset(Yii::app()->request->cookies[$cookieName]))
-		{
-			$cookie = Yii::app()->request->cookies[$cookieName];
-
-			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-
-			$aDecrypt= @unserialize($sDecrypt);
-			if($aDecrypt&&($checkValue == $aDecrypt[$attributeName]))
-			{
-				$dataInCookie=true;
-			}
-		}
-		return $dataInCookie;
-	}
-
-	public function getDataFromCookie($cookieName)
-	{
-		if(isset(Yii::app()->request->cookies[$cookieName]))
-		{
-			$cookie = Yii::app()->request->cookies[$cookieName];
-
-			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-			$aDecrypt= @unserialize($sDecrypt);
-			return $aDecrypt;
-		}
-		return false;
-	}
-
-	private function saveDataToCookie($cookieName,$data)
-	{
-		$sEncrypt = serialize($data);
-		$cookieData = CryptArray::encryptVal($sEncrypt);
-
-		$cookie = new CHttpCookie($cookieName, $cookieData);
-		$cookie->expire = time()+60*60*2;
-		Yii::app()->request->cookies[$cookieName] = $cookie;
 	}
 }
