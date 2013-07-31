@@ -38,8 +38,13 @@
  * @property integer $get_way
  * @property string $options
  * @property integer $complete
+ * @property int $flag_processed
  * @property string $dt_add
  * @property string $dt_update
+ * @var $model ClientForm1
+ *
+ * @method ClientData[] findAll()
+ * @method ClientData[] findAllByAttributes()
  */
 class ClientData extends CActiveRecord
 {
@@ -68,22 +73,24 @@ class ClientData extends CActiveRecord
 	{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
-		return array(
-			/*array('description, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, numeric_code, product, get_way, options', 'required'),
-			array('telecoms_operator, sex, have_past_credit, numeric_code, product, get_way, complete', 'numerical', 'integerOnly'=>true),
-			array('phone, job_phone, relatives_one_phone', 'length', 'max'=>10),
-			array('first_name, last_name, third_name, email, passport_issued, address_reg_address, relatives_one_fio', 'length', 'max'=>255),
+        return array(
+            /*
+			array('description, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options', 'required'),
+			array('telecoms_operator, sex', 'numerical', 'integerOnly'=>true),
+			array('client_id', 'length', 'max'=>11),
+			array('phone', 'length', 'max'=>10),
+			array('first_name, last_name, third_name, email, address_reg_address', 'length', 'max'=>255),
 			array('passport_series', 'length', 'max'=>4),
 			array('passport_number', 'length', 'max'=>6),
 			array('passport_code', 'length', 'max'=>7),
-			array('document, address_reg_region, address_reg_city, job_company, job_position', 'length', 'max'=>100),
-			array('document_number, job_monthly_income, job_monthly_outcome', 'length', 'max'=>30),
-			array('job_time', 'length', 'max'=>20),
+			array('document, address_reg_region, address_reg_city', 'length', 'max'=>100),
+			array('document_number', 'length', 'max'=>30),
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, product, get_way, options, complete, dt_add, dt_update', 'safe'),
-		);
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, product, get_way, options, complete, dt_add, dt_update', 'flag_processed', 'safe'),
+	
+         );
 	}
 
 	public function checkClientByPhone($phone)  //проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
@@ -93,7 +100,6 @@ class ClientData extends CActiveRecord
 			return true;
 		}
 		return false;
-
 	}
 
 	public function addClient($model)
