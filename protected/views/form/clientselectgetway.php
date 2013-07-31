@@ -20,7 +20,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <div class="container">
 	<div class="row span12">
-		<?php echo $form->radioButtonList($oClientCreateForm, 'get_way', Dictionaries::$aWays);
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::$aWays);
 		?>
 	</div>
 

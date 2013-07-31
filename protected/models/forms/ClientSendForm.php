@@ -12,14 +12,11 @@ class ClientSendForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRequired = $this->getCommonRequires();
-
 		$aRules = $this->getRulesByFields(
 
 			array(
 				'numeric_code',
-			),
-			$aRequired
+			)
 		);
 		$aRules[] = array('complete', 'required', 'requiredValue' => 1,'message'=>'Необходимо подтвердить свое согласие на обработку данных');
 

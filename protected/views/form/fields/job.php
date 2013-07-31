@@ -14,7 +14,7 @@
 </span>
 
 <span class="span8">
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', array('mask' => '8 999 999 99 99') ) ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', array('mask' => '+7 999 999 99 99') ) ?>
 </span>
 
 <span class="span8">

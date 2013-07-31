@@ -10,39 +10,34 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
-		if(Yii::app()->clientForm->ajaxValidation())
-		{
-			Yii::app()->end();
-		}
+		$clientData=new ClientData();
 
 		$oForm=Yii::app()->clientForm->getFormModel();
+
+		if(Yii::app()->clientForm->ajaxValidation())
+		{
+			echo IkTbActiveForm::validate($oForm);
+			Yii::app()->clientForm->saveAjaxData($clientData,$oForm);
+			Yii::app()->end();
+		}
 
 		if($aPost=Yii::app()->clientForm->getPostData())
 		{
 			$oForm->attributes=$aPost;
-			//var_dump($oForm);
-			//var_dump($oForm->validate());
 			if($oForm->validate())
 			{
-				//Yii::app()->end();
 				//Yii::app()->clientForm->formDataProcess($oForm);
 				Yii::app()->clientForm->nextStep();
+				$oForm=Yii::app()->clientForm->getFormModel();
 			}
 		}
 
 		$sView=Yii::app()->clientForm->getView();
 
-		$oForm=Yii::app()->clientForm->getFormModel();
-
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
-
-		//$oForm=new ClientSendForm();
-		//$this->render('clientsend',array('oClientCreateForm'=>$oForm));
-
-		//$this->render('clientpersonaldata',array('oClientCreateForm'=>$oForm));
 	}
 
-	public function actionStart()
+	public function actionStart()//функция для тестирования, сбрасывает сессию
 	{
 		Yii::app()->session['current_step']='';
 
