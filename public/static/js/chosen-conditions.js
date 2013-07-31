@@ -11,28 +11,35 @@ function getDateToPayUntil(n)
 	var dayarray=new Array("воскресенья","понедельника","вторника","среды","четверга","пятницы","субботы");
 	var montharray=new Array ("января","февраля","марта","апреля","мая","июня","июля","августа","сентября", "октября","ноября","декабря");
 
-	d = new Date();
+	var d = new Date();
 	d.setTime(d.getTime() + n * 24 * 60 * 60 * 1000);
 
 	return dayarray[d.getDay()]+", "+d.getDate()+" "+montharray[d.getMonth()]+" "+checkTime(d.getFullYear());
 }
 
+function showConditions(obj)
+{
+	$('.price_count').html(obj.attr('data-price'));
+	$('.price_month').html(obj.attr('data-price-count'));
+	$('.count_subscribe').html(obj.attr('data-count'));
+	var n = obj.attr('data-time');
+	$('.date').html(getDateToPayUntil(n));
+	$('.final_price').html(obj.attr('data-final-price'));
+}
+
 $(document).ready(function()
 {
+	//showConditions($('#ClientSelectProductForm .radio:first label > span'));
+
 	$('#ClientSelectProductForm .radio').click(function(){
-		$('.conditions').show();
-		$('.picconditions').show();
-		$('.price_count').html($(this).find("label > span").attr('data-price'));
-		$('.price_month').html($(this).find("label > span").attr('data-price-count'));
-		$('.count_subscribe').html($(this).find("label > span").attr('data-count'));
-		n = $(this).find("label > span").attr('data-time');
-		$('.date').html(getDateToPayUntil(n));
-		$('.final_price').html($(this).find("label > span").attr('data-final-price'));
+		showConditions($(this).find("label > span"));
 	});
 
-	if($('.conditions').is(":visible"))
+	$('#ClientSelectProductForm .radio:first').click();
+
+	/*if($('.conditions').is(":visible"))
 	{
 		n = $('.date').attr('data-time');
 		$('.date').html(getDateToPayUntil(n));
-	}
+	}*/
 });
