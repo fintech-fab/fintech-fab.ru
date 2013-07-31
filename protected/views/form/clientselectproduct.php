@@ -14,13 +14,13 @@ $this->pageTitle=Yii::app()->name;
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 'id' => get_class($oClientCreateForm),
 'enableAjaxValidation' => true,
-'action' => '/form',
+'action' => '/form/',
 ));
 ?>
 
 <div class="container">
 	<div class="row span12">
-	<?php echo $form->radioButtonList($oClientCreateForm, 'product', Dictionaries::$aProducts);
+	<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts);
 	?>
 </div>
 
