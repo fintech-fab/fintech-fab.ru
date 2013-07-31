@@ -1,6 +1,10 @@
 <?php /* @var $this Controller */ ?>
 <?php $this->beginContent('//layouts/main'); ?>
-<div id="content">
-	<?php echo $content; ?>
-</div><!-- content -->
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<?php echo $content; ?>
+		</div><!-- content -->
+	</div>
+</div>
 <?php $this->endContent(); ?>

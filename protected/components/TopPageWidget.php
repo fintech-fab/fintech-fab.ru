@@ -2,7 +2,12 @@
 
 class TopPageWidget extends CWidget {
 
+	public $show = false; // показывать ли на странице
+
     public function run() {
-        $this->render('toppage');
+		if($this->show)
+		{
+			$this->render('toppage');
+		}
     }
 }

@@ -4,10 +4,9 @@
 /* @var $form CActiveForm */
 
 $this->pageTitle=Yii::app()->name;
+$this->showTopPageWidget = true;
 ?>
-<?php
-$this->widget('TopPageWidget');
-?>
+
 <style type="text/css">
 
     .main_row label

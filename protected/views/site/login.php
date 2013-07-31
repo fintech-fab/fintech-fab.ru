@@ -8,10 +8,7 @@ $this->breadcrumbs=array(
 	'Вход',
 );
 ?>
-<div class="container">
-	<div class="row">
-		<div class="span12">
-			<h1>Вход в систему</h1>
+<h1>Вход в систему</h1>
 			<div class="form">
 				<?php $form=$this->beginWidget('CActiveForm', array(
 					'id'=>'login-form',
@@ -47,6 +44,3 @@ $this->breadcrumbs=array(
 
 				<?php $this->endWidget(); ?>
 			</div><!-- form -->
-		</div>
-	</div>
-</div>

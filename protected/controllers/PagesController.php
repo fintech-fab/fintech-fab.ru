@@ -70,7 +70,7 @@ class PagesController extends Controller
 	 */
 	public function actionView($name)
 	{
-		$this->layout='//layouts/main';
+		$this->layout='//layouts/column1';
 		$this->render('view',array(
 			'model'=>$this->loadModelByName($name),
 		));

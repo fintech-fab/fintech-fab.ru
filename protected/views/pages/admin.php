@@ -30,6 +30,7 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+
 ?>
 
 <h1>Управление страницами</h1>
