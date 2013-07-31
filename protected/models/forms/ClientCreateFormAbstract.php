@@ -378,7 +378,6 @@ class ClientCreateFormAbstract extends CFormModel {
 	{
 
 		return array(
-
 			'comment' => '',
 
 			'entry_point_id' => 'Источник анкеты',
