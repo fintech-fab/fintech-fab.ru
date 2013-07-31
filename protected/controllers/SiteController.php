@@ -243,20 +243,21 @@ class SiteController extends Controller
 	/**
 	 * Идентификация личности  по видео
 	 */
-	public function actionIdentification() {
+	/*public function actionIdentification() {
 
 		if(!Yii::app()->session['form2_complete'])
 		{
 			$this->redirect(Yii::app()->createUrl("site/form2"));
 		}
 
+		//if(Yii::app()->session['current_step']==6)
 		$this->render('identification');
-	}
+	}*/
 
 	/**
 	 * Загрузка документов
 	 */
-	public function actionDocuments() {
+	/*public function actionDocuments() {
 
 		if(!Yii::app()->session['form2_complete'])
 		{
@@ -264,7 +265,7 @@ class SiteController extends Controller
 		}
 
 		$this->render('documents');
-	}
+	}*/
 
     /**
 	 * Displays the login page
