@@ -84,7 +84,10 @@ class ClientForm
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
-
+				/**
+				 * TODO обдумать, нужно ли вообще делать эти пляски с бубном вокруг куки, если мы не восстанавливаем данные в форму
+				 * TODO либо сделать загрузку данных в форму через AJAX при вводе телефона (либо через redirect() обновлять страницу формы)
+				*/
 				if(($cookieData = $this->getDataFromCookie('client'))&&($this->compareDataInCookie('client','phone',$oForm->phone)))
 				{
 					Yii::app()->session['client_id'] = $cookieData['client_id'];
@@ -98,6 +101,7 @@ class ClientForm
 					 */
 					$client=$clientData->addClient($oForm);
 					Yii::app()->session['client_id'] = $client->client_id;
+
 					$this->client_id=$client->client_id;
 
 					$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
@@ -317,7 +321,6 @@ class ClientForm
 			 * иначе создаем нового клиента и сохраняем информацию
 			 * о нем в сессию и куку.
 			 */
-
 			if(($cookieData = $this->getDataFromCookie('client'))&&($this->compareDataInCookie('client','phone',$oForm->phone)))
 			{
 				Yii::app()->session['client_id'] = $cookieData['client_id'];
@@ -327,11 +330,11 @@ class ClientForm
 			{
 				$client=$clientData->addClient($oForm);
 				Yii::app()->session['client_id'] = $client->client_id;
+
 				$this->client_id=$client->client_id;
 				$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
 				$this->saveDataToCookie('client',$data);
 			}
-
 			if($this->client_id)
 			{
 				$formData=$oForm->getAttributes();

@@ -21,6 +21,9 @@ class FormController extends Controller
 		 */
 		$oForm=Yii::app()->clientForm->getFormModel();
 
+		/**
+		 * AJAX валидация
+		 */
 		if(Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
 			echo IkTbActiveForm::validate($oForm); //проводим валидацию и возвращаем результат
@@ -28,6 +31,9 @@ class FormController extends Controller
 			Yii::app()->end();
 		}
 
+		/**
+		 * Обработка POST запроса
+		 */
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oForm->attributes=$aPost; //передаем запрос в форму
@@ -39,15 +45,19 @@ class FormController extends Controller
 			}
 		}
 
-		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
+		/**
+		 * Загрузка данных из cookie в форму, если данные существуют и client_id сессии совпадает с оным в куке
+		 */
 
-		if(isset($oForm->phone)&&(Cookie::compareDataInCookie('client','phone',$oForm->phone))&&($cookieData = Cookie::getDataFromCookie('client')))
+		if(Cookie::compareDataInCookie(get_class($oForm),'client_id',$client_id)&&($cookieData = Cookie::getDataFromCookie(get_class($oForm))))
 		{
-			if(Cookie::compareDataInCookie(get_class($oForm),'client_id',$client_id)&&($cookieData = Cookie::getDataFromCookie(get_class($oForm))))
-			{
-				$oForm->setAttributes($cookieData);
-			}
+			$oForm->setAttributes($cookieData);
 		}
+
+		/**
+		 * Рендер представления
+		 */
+		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
 
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
@@ -55,6 +65,10 @@ class FormController extends Controller
 	public function actionStart()//функция для тестирования, сбрасывает сессию
 	{
 		Yii::app()->session['current_step']='';
+		Yii::app()->session['done_steps']='';
+
+		Yii::app()->session['client_id']='';
+		Yii::app()->session['phone']='';
 
 		$sView=Yii::app()->clientForm->getView();
 
@@ -66,24 +80,22 @@ class FormController extends Controller
 	/**
 	 *  Переход на шаг $step
 	 *  @param int $step
-	*/
+	 */
 	public function actionStep($step)
 	{
-		// если пользователь ещё не был на текущем шаге, то возвращаем его на последний сделанный шаг
-		if(Yii::app()->session['done_steps'] < ($step-1))
+		if($step!==0)
 		{
-			Yii::app()->session['current_step']=Yii::app()->session['done_steps'];
+			if(Yii::app()->session['done_steps'] < ($step-1))
+			{
+				Yii::app()->session['current_step']=Yii::app()->session['done_steps'];
+			}
+			else
+			{
+				Yii::app()->session['current_step']=$step-1;
+			}
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
-		else
-		{
-			Yii::app()->session['current_step']=$step-1;
-		}
 
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
 
 	public function actionError()
