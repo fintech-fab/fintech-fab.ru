@@ -2,6 +2,8 @@
 class ImageController extends CController
 {
 
+	const C_IMAGES_DIR = '/runtime/face_users/';
+
 	const C_TYPE_PHOTO = 'photo';
 	const C_TYPE_PASSPORT_FRONT_FIRST = 'passport_front_first';
 	const C_TYPE_PASSPORT_FRONT_SECOND = 'passport_front_second';
@@ -185,7 +187,7 @@ class ImageController extends CController
 
 		$iClientId = $this->_getClient();
 
-		$sFilePath = Yii::app()->basePath . '/runtime/face_users/' . $iClientId;
+		$sFilePath = Yii::app()->basePath . self::C_IMAGES_DIR . $iClientId;
 
 		@mkdir($sFilePath, 0777, true);
 

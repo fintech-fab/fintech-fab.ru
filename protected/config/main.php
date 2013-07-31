@@ -107,9 +107,14 @@ return array(
 		'session'=>array(
 			'timeout'=>60*15,
 		),
-		'request'=>array(
-			'enableCsrfValidation'=>true,
-			'enableCookieValidation'=>true,
+		'request' => array(
+			'class' => 'HttpRequest',
+			'enableCsrfValidation' => true,
+			'enableCookieValidation' => true,
+			'aIgnoreCsrfValidationRoutes' => array(
+				'api/clientsNew',
+				'api/markProcessed',
+			),
 		),
 	),
 

@@ -25,9 +25,13 @@
  * @property string $address_reg_city
  * @property string $address_reg_address
  * @property string $options
+ * @property int $flag_processed
  * @property string $dt_add
  * @property string $dt_update
  * @var $model ClientForm1
+ *
+ * @method ClientData[] findAll()
+ * @method ClientData[] findAllByAttributes()
  */
 class ClientData extends CActiveRecord
 {
@@ -71,7 +75,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.*/
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, complete, dt_add, dt_update', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options, complete, flag_processed, dt_add, dt_update', 'safe'),
 
 
          );
