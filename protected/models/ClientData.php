@@ -88,7 +88,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, product, get_way, options, complete, dt_add, dt_update', 'flag_processed', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, numeric_code, product, get_way, options, complete, dt_add, dt_update, flag_processed', 'safe'),
 	
          );
 	}
@@ -108,6 +108,7 @@ class ClientData extends CActiveRecord
 		{
 			$client->phone=$model->phone;
 			$client->dt_add=date('Y-m-d H:i:s', time());//пишем timestamp создания записи
+			$client->flag_processed = 0;
 			$client->save();
 			return $client;
 		}
@@ -115,6 +116,7 @@ class ClientData extends CActiveRecord
 		{
 			$this->phone=$model->phone;
 			$this->dt_add=date('Y-m-d H:i:s', time());
+			$this->flag_processed = 0;
 			$this->save();
 			return $this;
 		}
