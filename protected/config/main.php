@@ -21,10 +21,12 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.models.forms.*',
+		'application.controllers.*',
 		'application.components.*',
 		'application.components.crypt.*',
 		'application.components.utils.*',
 		'application.extensions.behaviors.*',
+		'application.extensions.image.*',
 	),
 
 	//'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
@@ -51,6 +53,10 @@ return array(
 		),
 		'bootstrap'=>array(
 			'class'=>'bootstrap.components.Bootstrap',
+		),
+		'image' => array(
+			'class'     =>  'application.extensions.image.CImageComponent',
+			'driver'    =>  'GD',
 		),
 		'user'=>array(
 			// enable cookie-based authentication
