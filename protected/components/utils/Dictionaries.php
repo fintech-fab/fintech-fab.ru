@@ -144,6 +144,39 @@ class Dictionaries
 	);
 
 	/**
+	 * названия дней недели для вывода в блоке "Выбранные условия"
+	 * @var array
+	 */
+	public static $aDays = array(
+		0 => "воскресенья",
+		1 => "понедельника",
+		2 => "вторника",
+		3 => "среды",
+		4 => "четверга",
+		5 => "пятницы",
+		6 => "субботы",
+	);
+
+	/**
+	 * месяца года для вывода в блоке "Выбранные условия"
+	 * @var array
+	 */
+	public static $aMonths = array(
+		1 => "января",
+		2 => "февраля",
+		3 => "марта",
+		4 => "апреля",
+		5 => "мая",
+		6 => "июня",
+		7 => "июля",
+		8 => "августа",
+		9 => "сентября",
+		10 => "октября",
+		11 => "ноября",
+		12 => "декабря",
+	);
+
+	/**
 	 * Выбор суммы займа
 	 * @var array
 	 */
@@ -154,7 +187,7 @@ class Dictionaries
 	);
 
 	/**
-	 * Выбор суммы займа
+	 * Цена за подписку
 	 * @var array
 	 */
 	public static $aDataPrices = array(
@@ -164,7 +197,7 @@ class Dictionaries
 	);
 
 	/**
-	 * Выбор суммы займа
+	 * Сумма займа (просто цифры)
 	 * @var array
 	 */
 	public static $aDataFinalPrices = array(
@@ -174,7 +207,7 @@ class Dictionaries
 	);
 
 	/**
-	 * Выбор суммы займа
+	 * Длительность подписки
 	 * @var array
 	 */
 	public static $aDataPriceCounts = array(
@@ -184,7 +217,7 @@ class Dictionaries
 	);
 
 	/**
-	 * Выбор суммы займа
+	 * Кол-во возможных займов
 	 * @var array
 	 */
 	public static $aDataCounts = array(
@@ -194,7 +227,7 @@ class Dictionaries
 	);
 
 	/**
-	 * Выбор суммы займа
+	 * Срок возврата займа
 	 * @var array
 	 */
 	public static $aDataTimes = array(
