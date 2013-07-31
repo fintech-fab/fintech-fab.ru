@@ -53,7 +53,7 @@ $this->widget('TopPageWidget');
 
 		//рисуем квадрат
 		canvasOverlay.style.position = "absolute";
-		canvasOverlay.style.top = '610px';
+		canvasOverlay.style.top = '330px';
 		canvasOverlay.style.display = 'block';
 
 		contextOverlay.beginPath();
