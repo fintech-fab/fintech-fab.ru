@@ -85,7 +85,6 @@
 </nav>
 
 <div class="page-divider1"></div>
-<br/>
 <?php
 $this->widget('TopPageWidget',array("show"=>$this->showTopPageWidget));
 ?>
