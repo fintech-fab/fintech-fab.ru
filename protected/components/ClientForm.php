@@ -167,6 +167,11 @@ class ClientForm
 			case 5:
 				return new ClientSendForm();
 				break;
+			case 6:
+			case 7:
+			case 8:
+				return false;
+				break;
 			default:
 				return new ClientSelectProductForm();
 				break;
@@ -199,6 +204,15 @@ class ClientForm
 				break;
 			case 5:
 				return 'clientsend';
+				break;
+			case 6:
+				return 'identification';
+				break;
+			case 7:
+				return 'documents';
+				break;
+			case 8:
+				return false;
 				break;
 			default:
 				return 'clientselectproduct';
