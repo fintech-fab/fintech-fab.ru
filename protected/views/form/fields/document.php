@@ -6,10 +6,10 @@
 
 ?>
 
-<span class="span4"><?
+<span class="span5"><?
 	echo $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array( 'class' => 'span4', 'empty' => '' ) );
 ?></span>
 
-<span class="span2"><?
-	echo $form->textFieldRow($oClientCreateForm, 'document_number', array( 'class' => 'span2' ) );
+<span class="span3"><?
+	echo $form->textFieldRow($oClientCreateForm, 'document_number', array( 'class' => 'span3' ) );
 ?></span>

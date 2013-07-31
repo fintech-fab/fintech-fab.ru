@@ -106,6 +106,16 @@ class ClientForm
 		return;
 	}
 
+	/**
+	 * Возвращает модель текущей формы.
+	 *
+	 * @return int
+	 */
+	public function getCurrentStep()
+	{
+		return $this->current_step;
+	}
+
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
 		switch($this->current_step)

@@ -33,9 +33,15 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 'action' => '/form/',
 ));
 ?>
+<div class="row">
+	<div class="span12">
+		<?php $this->widget('StepsBreadCrumbs',array(
+			'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
+		)); ?>
 
-<div class="container">
+
 <div class="row span12">
+	<img src="/static/img/03T.png">
 	<h2>Контактные данные</h2>
 		<? require dirname(__FILE__) . '/fields/contacts.php' ?>
 </div>
@@ -56,6 +62,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<? require dirname(__FILE__) . '/fields/document.php' ?>
 </div>
 
+</div>
 	<div class="clearfix"></div>
 
 	<div class="form-actions">
@@ -65,9 +72,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'label' => 'Далее →',
 		)); ?>
 	</div>
-
+</div>
 <?
 
 $this->endWidget();
 ?>
-</div>

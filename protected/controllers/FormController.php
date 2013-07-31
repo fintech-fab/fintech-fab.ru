@@ -2,6 +2,8 @@
 
 class FormController extends Controller
 {
+	public $showTopPageWidget=true;
+
 	public function actionIndex()
 	{
 		/**

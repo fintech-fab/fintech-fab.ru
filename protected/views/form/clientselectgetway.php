@@ -17,9 +17,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => '/form/',
 ));
 ?>
+<div class="row">
+	<div class="span12">
+		<?php $this->widget('StepsBreadCrumbs',array(
+			'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
+		)); ?>
 
-<div class="container">
 	<div class="row span12">
+		<img src="/static/img/02T.png">
 		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::$aWays);
 		?>
 	</div>
@@ -33,9 +38,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'label' => 'Далее →',
 		)); ?>
 	</div>
-
+	</div>
+</div>
 	<?
 
 	$this->endWidget();
 	?>
-</div>
