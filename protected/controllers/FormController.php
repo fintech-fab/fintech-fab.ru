@@ -63,94 +63,21 @@ class FormController extends Controller
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
 
-	public function actionStep1()//функция для тестирования, сбрасывает сессию
+	/**
+	 *  Переход на шаг $step
+	 *  @param int $step
+	*/
+	public function actionStep($step)
 	{
-		if(Yii::app()->session['done_steps'] < 0)
+		// если пользователь ещё не был на текущем шаге, то возвращаем его на последний сделанный шаг
+		if(Yii::app()->session['done_steps'] < ($step-1))
 		{
-			return;
+			Yii::app()->session['current_step']=Yii::app()->session['done_steps'];
 		}
-
-		Yii::app()->session['current_step']='0';
-
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
-	}
-
-	public function actionStep2()//функция для тестирования, сбрасывает сессию
-	{
-		if(Yii::app()->session['done_steps'] < 1)
+		else
 		{
-			return;
+			Yii::app()->session['current_step']=$step-1;
 		}
-
-		Yii::app()->session['current_step']='1';
-
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
-	}
-
-	public function actionStep3()//функция для тестирования, сбрасывает сессию
-	{
-		if(Yii::app()->session['done_steps'] < 2)
-		{
-			return;
-		}
-
-		Yii::app()->session['current_step']='2';
-
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
-	}
-
-	public function actionStep4()//функция для тестирования, сбрасывает сессию
-	{
-		if(Yii::app()->session['done_steps'] < 3)
-		{
-			return;
-		}
-
-		Yii::app()->session['current_step']='3';
-
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
-	}
-
-	public function actionStep5()//функция для тестирования, сбрасывает сессию
-	{
-		if(Yii::app()->session['done_steps'] < 4)
-		{
-			return;
-		}
-
-		Yii::app()->session['current_step']='4';
-
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
-	}
-
-	public function actionStep6()//функция для тестирования, сбрасывает сессию
-	{
-		if(Yii::app()->session['done_steps'] < 5)
-		{
-			return;
-		}
-
-		Yii::app()->session['current_step']='5';
 
 		$sView=Yii::app()->clientForm->getView();
 
