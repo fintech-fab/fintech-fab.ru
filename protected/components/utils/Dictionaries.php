@@ -148,19 +148,101 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aProducts = array(
-		"1"=>"3000 рублей на неделю",
-		"2"=>"6000 рублей на неделю",
-		"3"=>"10000 рублей на 2 недели"
+		"1"=>"<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю</span>",
+		"2"=>"<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на неделю</span>",
+		"3"=>"<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='2 займа' data-time='14'>10000 рублей на 2 недели</span>",
 	);
 
 	/**
-	 * Выбор способа получения займа
+	 * Выбор суммы займа
 	 * @var array
 	 */
-	public static $aWays = array(
-		"1"=>"На карту Kreddy MasterCard",
-		"2"=>"На сотовый телефон"
+	public static $aDataPrices = array(
+		"1"=>"350",
+		"2"=>"1500",
+		"3"=>"1500",
 	);
+
+	/**
+	 * Выбор суммы займа
+	 * @var array
+	 */
+	public static $aDataFinalPrices = array(
+		"1"=>"3000",
+		"2"=>"6000",
+		"3"=>"10000",
+	);
+
+	/**
+	 * Выбор суммы займа
+	 * @var array
+	 */
+	public static $aDataPriceCounts = array(
+		"1"=>"30 дней",
+		"2"=>"60 дней",
+		"3"=>"60 дней",
+	);
+
+	/**
+	 * Выбор суммы займа
+	 * @var array
+	 */
+	public static $aDataCounts = array(
+		"1"=>"2 займа",
+		"2"=>"4 займа",
+		"3"=>"2 займа",
+	);
+
+	/**
+	 * Выбор суммы займа
+	 * @var array
+	 */
+	public static $aDataTimes = array(
+		"1"=>"7",
+		"2"=>"7",
+		"3"=>"14",
+	);
+
+	/**
+	 * Выбор способа получения займа в зависимости от выбранной на предыдущем шаге суммы
+	 * @param int $chosen_sum_index
+	 * @var array
+	 */
+	public static function aWays($chosen_sum_index)
+	{
+		switch ($chosen_sum_index)
+		{
+			case 1:
+			{
+				return array(
+					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+					"2"=>"На сотовый телефон",
+				);
+				break;
+			}
+			case 2:
+			{
+				return array(
+					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+				);
+				break;
+			}
+			case 3:
+			{
+				return array(
+					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+				);
+				break;
+			}
+			default:
+			{
+				return array(
+					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+				);
+				break;
+			}
+		}
+	}
 
 	/**
 	 * варианты секретного вопроса

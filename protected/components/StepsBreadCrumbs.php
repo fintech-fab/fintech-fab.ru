@@ -3,9 +3,12 @@
 class StepsBreadCrumbs extends CWidget
 {
 	public $crumbs = array(
-		array('Ввод телефона',array("site/join")),
-		array('Личные данные',array("site/form1")),
-		array('Личные данные 2',array("site/form2")),
+		array('Выбор суммы',array("/form/step1")),
+		array('Выбор способа получения',array("/form/step2")),
+		array('Личные данные',array("/form/step3")),
+		array('Адрес',array("/form/step4")),
+		array('Информация о работе',array("/form/step5")),
+		array('Отправка',array("/form/step6")),
 	);
 
 	public $divider = ' → ';

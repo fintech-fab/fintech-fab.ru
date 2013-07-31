@@ -6,6 +6,8 @@ $this->breadcrumbs=array(
 	'Pages'=>array('index'),
 	$model->page_id,
 );
+
+$this->showTopPageWidget = true;
 ?>
 
 <!--h1>View Pages #<?php //echo $model->page_id; ?></h1-->
@@ -23,16 +25,5 @@ $this->breadcrumbs=array(
 <?php
 $this->pageTitle=Yii::app()->name." - ".CHtml::encode($model->page_title);
 ?>
-<?php
-$this->widget('TopPageWidget');
 
-?>
-<div class="container">
-	<div class="row">
-		<div class="span12">
-
-			<?php echo $model->page_content; ?>
-
-		</div>
-	</div>
-</div>
+<?php echo $model->page_content; ?>
