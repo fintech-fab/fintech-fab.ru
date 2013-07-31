@@ -58,7 +58,6 @@
  */
 class ClientCreateFormAbstract extends CFormModel {
 
-	public $client_id; //клиент
 	public $comment; //комментарий
 	public $entry_point_id; //источник анкеты
 
@@ -379,8 +378,6 @@ class ClientCreateFormAbstract extends CFormModel {
 	{
 
 		return array(
-
-			'client_id' => '',
 			'comment' => '',
 
 			'entry_point_id' => 'Источник анкеты',

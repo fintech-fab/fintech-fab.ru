@@ -17,10 +17,6 @@ class FormController extends Controller
 		 * текущему этапу заполнения анкеты)
 		 */
 		$oForm=Yii::app()->clientForm->getFormModel();
-		if(isset( Yii::app()->session['client_id']))
-		{
-			$oForm->client_id=Yii::app()->session['client_id'];
-		}
 
 		if(Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
@@ -34,7 +30,7 @@ class FormController extends Controller
 			$oForm->attributes=$aPost; //передаем запрос в форму
 			if($oForm->validate())
 			{
-				//Yii::app()->clientForm->formDataProcess($oForm);
+				Yii::app()->clientForm->formDataProcess($clientData,$oForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
