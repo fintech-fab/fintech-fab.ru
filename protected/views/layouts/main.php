@@ -42,7 +42,7 @@
 	Yii::app()->bootstrap->registerYiiCss();
 	Yii::app()->bootstrap->registerCoreScripts();
 	?>
-
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/chosen-conditions.js"></script>
 
 	<!--link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/bootstrap/css/bootstrap.min.css" type="text/css" /-->
 	<!--script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/bootstrap/js/bootstrap.min.js" charset="utf-8">

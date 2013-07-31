@@ -19,6 +19,7 @@ class ClientForm
 {
 	private $client_id;
 	private $current_step;
+	private $done_steps;
 
 	/**
 	 * Возвращает модель текущей формы.
@@ -36,6 +37,12 @@ class ClientForm
 		{
 			Yii::app()->session['current_step']=0;
 			$this->current_step=0;
+		}
+
+		if(!$this->done_steps = Yii::app()->session['done_steps'])
+		{
+			Yii::app()->session['done_steps']=0;
+			$this->done_steps=0;
 		}
 	}
 
@@ -128,7 +135,8 @@ class ClientForm
 	 */
 	public function getCurrentStep()
 	{
-		return $this->current_step;
+		//return $this->current_step;
+		return $this->done_steps;
 	}
 
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
@@ -272,6 +280,10 @@ class ClientForm
 
 		$this->current_step++;
 		Yii::app()->session['current_step']=$this->current_step;
+		if($this->done_steps<Yii::app()->session['current_step'])
+		{
+			Yii::app()->session['done_steps']=$this->done_steps=Yii::app()->session['current_step'];
+		}
 
 	}
 
