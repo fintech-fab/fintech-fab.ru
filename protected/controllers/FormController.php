@@ -10,29 +10,37 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
-		$clientData=new ClientData();
+		$clientData=new ClientData(); //объект CActiveRecord для записи в БД
 
+		/*
+		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
+		 * текущему этапу заполнения анкеты)
+		 */
 		$oForm=Yii::app()->clientForm->getFormModel();
-
-		if(Yii::app()->clientForm->ajaxValidation())
+		if(isset( Yii::app()->session['client_id']))
 		{
-			echo IkTbActiveForm::validate($oForm);
-			Yii::app()->clientForm->saveAjaxData($clientData,$oForm);
+			$oForm->client_id=Yii::app()->session['client_id'];
+		}
+
+		if(Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
+		{
+			echo IkTbActiveForm::validate($oForm); //проводим валидацию и возвращаем результат
+			Yii::app()->clientForm->saveAjaxData($clientData,$oForm); //сохраняем полученные при ajax-запросе данные
 			Yii::app()->end();
 		}
 
-		if($aPost=Yii::app()->clientForm->getPostData())
+		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
-			$oForm->attributes=$aPost;
+			$oForm->attributes=$aPost; //передаем запрос в форму
 			if($oForm->validate())
 			{
 				//Yii::app()->clientForm->formDataProcess($oForm);
-				Yii::app()->clientForm->nextStep();
-				$oForm=Yii::app()->clientForm->getFormModel();
+				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+				$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
 		}
 
-		$sView=Yii::app()->clientForm->getView();
+		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
 
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}

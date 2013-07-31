@@ -55,8 +55,14 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 			)
 		);
 
-		$aRules = $this->getRulesByFields(
-
+		$aRules =
+			array(
+				array('phone', 'unique', 'className'=>'ClientData', 'attributeName'=>'phone','message'=>'У нас уже есть клиент с этим номером телефона! Введите другой номер или позвоните на горячую линию.','criteria'=>array(
+						'condition'=>'complete = :complete','params' => array(':complete'=>1)
+					)
+				),
+			);
+		$aRules = array_merge($aRules, $this->getRulesByFields(
 			array(
 
 				'phone',
@@ -80,10 +86,24 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 			),
 			$aRequired
-		);
-
+		));
 		return $aRules;
 
 	}
 
+	public function beforeValidate()
+	{
+		if ($this->phone)
+		{
+			//очистка данных
+			$this->phone = ltrim( $this->phone, '+ ' );
+			$this->phone = preg_replace('/[^\d]/', '', $this->phone);
+
+			// убираем лишний знак слева (8-ка или 7-ка)
+			if(strlen($this->phone) == 11){
+				$this->phone = substr($this->phone,1,10);
+			}
+		}
+		return parent::beforeValidate();
+	}
 }
