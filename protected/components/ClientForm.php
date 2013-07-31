@@ -103,21 +103,23 @@ class ClientForm
 				$formData['product']=Yii::app()->session['product'];
 				$formData['get_way']=Yii::app()->session['get_way'];
 				$clientData->saveClientDataById($formData,$this->client_id);
+
+				$formData['client_id']=$this->client_id;
+				$this->saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
 		else
 		{
 			if($this->client_id)
 			{
-					$formData=$oForm->getAttributes();
-					$clientData->saveClientDataById($formData,$this->client_id);
+				$formData=$oForm->getAttributes();
+				$clientData->saveClientDataById($formData,$this->client_id);
+
+				$formData['client_id']=$this->client_id;
+				$this->saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
-		//Yii::app()->session[]=$oForm->getAttributes();
-		//$modelData = $oForm->getAttributes();
-		//$clientData->saveClientDataById($modelData,$this->client_id);
-		//$modelData += array('client_id' => $this->client_id);
-		//$this->saveDataToCookie('form1',$modelData);
+
 		return;
 	}
 
@@ -287,41 +289,50 @@ class ClientForm
 		}
 		elseif(get_class($oForm)==='ClientPersonalDataForm')
 		{
-			if($oForm->phone)
+			/* проверяем, есть ли в куках информация о клиенте
+			 * и сравниваем введенный телефон с телефоном в куках.
+			 * в случае успешности восстанавливаем client_id из куки.
+			 * иначе создаем нового клиента и сохраняем информацию
+			 * о нем в сессию и куку.
+			 */
+
+			if(($cookieData = $this->getDataFromCookie('client'))&&($this->compareDataInCookie('client','phone',$oForm->phone)))
 			{
-				/* проверяем, есть ли в куках информация о клиенте
-				 * и сравниваем введенный телефон с телефоном в куках.
-				 * в случае успешности восстанавливаем client_id из куки.
-				 * иначе создаем нового клиента и сохраняем информацию
-				 * о нем в сессию и куку.
-				 */
+				Yii::app()->session['client_id'] = $cookieData['client_id'];
+				$this->client_id=Yii::app()->session['client_id'];
+			}
+			else
+			{
+				$client=$clientData->addClient($oForm);
+				Yii::app()->session['client_id'] = $client->client_id;
+				$this->client_id=$client->client_id;
+				$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
+				$this->saveDataToCookie('client',$data);
+			}
 
-				if(($cookieData = $this->getDataFromCookie('client'))&&($this->compareDataInCookie('client','phone',$oForm->phone)))
-				{
-					Yii::app()->session['client_id'] = $cookieData['client_id'];
-				}
-				else
-				{
-					$client=$clientData->addClient($oForm);
-					Yii::app()->session['client_id'] = $client->client_id;
-					$this->client_id=$client->client_id;
-
-					$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-					$this->saveDataToCookie('client',$data);
-				}
-
+			if($this->client_id)
+			{
 				$formData=$oForm->getAttributes();
 				$formData['product']=Yii::app()->session['product'];
 				$formData['get_way']=Yii::app()->session['get_way'];
-
 				$clientData->saveClientDataById($formData,$this->client_id);
+
+				$formData['client_id']=$this->client_id;
+				Cookie::saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
-		//Yii::app()->session[]=$oForm->getAttributes();
-		//$modelData = $oForm->getAttributes();
-		//$clientData->saveClientDataById($modelData,$this->client_id);
-		//$modelData += array('client_id' => $this->client_id);
-		//$this->saveDataToCookie('form1',$modelData);
+		else
+		{
+			if($this->client_id)
+			{
+				$formData=$oForm->getAttributes();
+				$clientData->saveClientDataById($formData,$this->client_id);
+
+				$formData['client_id']=$this->client_id;
+				Cookie::saveDataToCookie(get_class($oForm),$formData);
+			}
+		}
+
 		return;
 	}
 
@@ -343,7 +354,7 @@ class ClientForm
 		return $dataInCookie;
 	}
 
-	private function getDataFromCookie($cookieName)
+	public function getDataFromCookie($cookieName)
 	{
 		if(isset(Yii::app()->request->cookies[$cookieName]))
 		{

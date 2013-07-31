@@ -11,6 +11,7 @@ class FormController extends Controller
 		 */
 
 		$clientData=new ClientData(); //объект CActiveRecord для записи в БД
+		$client_id = Yii::app()->session['client_id'];
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -37,6 +38,14 @@ class FormController extends Controller
 		}
 
 		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
+
+		if(isset($oForm->phone)&&(Cookie::compareDataInCookie('client','phone',$oForm->phone))&&($cookieData = Cookie::getDataFromCookie('client')))
+		{
+			if(Cookie::compareDataInCookie(get_class($oForm),'client_id',$client_id)&&($cookieData = Cookie::getDataFromCookie(get_class($oForm))))
+			{
+				$oForm->setAttributes($cookieData);
+			}
+		}
 
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
