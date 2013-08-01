@@ -32,6 +32,9 @@ class SiteController extends Controller
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 
+		Yii::app()->session['done_steps']=0;
+		Yii::app()->session['current_step']=0;
+
 		$oForm = new ClientSelectProductForm();
 		$this->render('../form/clientselectproduct',array('oClientCreateForm'=>$oForm));
 
