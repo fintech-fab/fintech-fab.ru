@@ -14,9 +14,9 @@
 $this->pageTitle=Yii::app()->name;
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id' => get_class($oClientCreateForm),
+	'id' => 'InviteToIdentification',//get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
-	'action' => Yii::app()->createUrl('/site/identification/'),
+	'action' => Yii::app()->createUrl('/form/'),
 ));
 ?>
 <div class="row">
@@ -32,7 +32,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 
 		<div class="clearfix"></div>
-
 		<div class="form-actions">
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',

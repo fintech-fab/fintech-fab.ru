@@ -244,6 +244,7 @@ class ClientForm
 			case 6:
 			case 7:
 			case 8:
+			case 9:
 				return false;
 				break;
 			default:
@@ -280,12 +281,15 @@ class ClientForm
 				return 'clientsend';
 				break;
 			case 6:
-				return 'identification';
+				return 'invitetoidentification';
 				break;
 			case 7:
-				return 'documents';
+				return 'identification';
 				break;
 			case 8:
+				return 'documents';
+				break;
+			case 9:
 				return false;
 				break;
 			default:
@@ -358,6 +362,15 @@ class ClientForm
 				return false;
 			}
 				break;
+			case 6:
+			{
+				if(isset($_POST['InviteToIdentification']))
+				{
+					return $_POST['InviteToIdentification'];
+				}
+				return false;
+				break;
+			}
 			default:
 				return false;
 				break;

@@ -8,13 +8,6 @@
  * Выбор суммы займа
  */
 
-$this->pageTitle=Yii::app()->name;
-
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-'id' => get_class($oClientCreateForm),
-'enableAjaxValidation' => true,
-'action' => Yii::app()->createUrl('/form/'),
-));
 ?>
 
 <div class="row">
@@ -23,10 +16,25 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
 		)); ?>
 
+	<?php
+
+	$this->pageTitle=Yii::app()->name;
+
+	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+		'id' => get_class($oClientCreateForm),
+		'enableAjaxValidation' => true,
+		'enableClientValidation'=>true,
+		'clientOptions'=>array(
+			'validateOnChange'=>true,
+		),
+		'action' => Yii::app()->createUrl('/form/'),
+	));
+
+	?>
 	<div class="row span6">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/01T.png"/>
 		<?php
-		$oClientCreateForm->product = "1";
+		//$oClientCreateForm->product = "1";
 		?>
 		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts, array("class"=>"all"));
 	?>

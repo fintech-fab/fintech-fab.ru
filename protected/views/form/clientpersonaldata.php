@@ -48,6 +48,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
 	)); ?>
 
+
+
 <div class="row span12">
 	<div class="span5"><h2>Личные данные</h2>
 		<? require dirname(__FILE__) . '/fields/name.php' ?>
