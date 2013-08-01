@@ -28,7 +28,6 @@ class FormController extends Controller
 		{
 			echo IkTbActiveForm::validate($oForm); //проводим валидацию и возвращаем результат
 			Yii::app()->clientForm->saveAjaxData($clientData,$oForm); //сохраняем полученные при ajax-запросе данные
-			//TODO проверять безопасность данных перед записью, даже с учетом отсутствия валидации!!!
 			Yii::app()->end();
 		}
 
