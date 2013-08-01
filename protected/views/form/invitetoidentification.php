@@ -20,11 +20,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 ?>
 <div class="row">
-	<?php $this->widget('StepsBreadCrumbs',array(
-		'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
-	)); ?>
-
-	<div class="row span5">
+	<div class="row span12">
 		<h3>Ваша заявка отправлена!</h3>
 		<p>
 			Ожидайте решения по займу. Если у вас есть вопросы - позвоните нам 8 (800) 555-75-78!
@@ -37,7 +33,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type' => 'primary',
-				'label' => 'Далее →',
+				'label' => 'Пройти видеоидентификацию →',
 			)); ?>
 		</div>
 	</div>
