@@ -7,30 +7,38 @@
 /*
  * Выбор способа получения займа
  */
-
-
-$this->pageTitle=Yii::app()->name;
-
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id' => get_class($oClientCreateForm),
-	'enableAjaxValidation' => true,
-	'action' => Yii::app()->createUrl('/form/'),
-));
 ?>
-<div class="row">
-		<?php $this->widget('StepsBreadCrumbs',array(
-			'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
-		)); ?>
 
+<div class="row">
+
+	<?php $this->widget('StepsBreadCrumbs',array(
+		'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
+	)); ?>
+
+	<?php
+
+	$this->pageTitle=Yii::app()->name;
+
+	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+		'id' => get_class($oClientCreateForm),
+		'enableAjaxValidation' => true,
+		'enableClientValidation'=>true,
+		'clientOptions'=>array(
+			'validateOnChange'=>true,
+		),
+		'action' => Yii::app()->createUrl('/form/'),
+	));
+
+	?>
 	<div class="row span6">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/02T.png">
 		<?php
-		if(!(($oClientCreateForm->get_way=Yii::app()->session['get_way'])&&(array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->session['product'])))))
+		if(!(($oClientCreateForm->get_way=Yii::app()->session['ClientSelectGetWayForm']['get_way'])&&(array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product'])))))
 		{
 			$oClientCreateForm->get_way = "1";
 		}
 		?>
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->session['product']));//TODO: вынести в контроллер
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product']));//TODO: вынести в контроллер
 		?>
 	</div>
 
