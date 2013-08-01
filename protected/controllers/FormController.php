@@ -41,8 +41,6 @@ class FormController extends Controller
 			$oForm->attributes=$aPost; //передаем запрос в форму
 			if(isset($oForm->go)&&$oForm->go=="1")
 			{
-
-				//Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				$client_id = Yii::app()->session['current_step']=0;
 				$client_id = Yii::app()->session['done_steps']=0;
 				$client_id = Yii::app()->session['form_complete']=true;
@@ -123,8 +121,6 @@ class FormController extends Controller
 		{
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
-
-		//if(Yii::app()->session['current_step']==6)
 		$this->render('identification');
 	}
 

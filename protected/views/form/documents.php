@@ -7,13 +7,12 @@ $this->pageTitle = Yii::app()->name;
 $this->widget('TopPageWidget');
 ?>
 
-<div class="container">
+
 	<div class="row">
-		<div class="span12">
-			<?php $this->widget('StepsBreadCrumbs', array(
-				'curStep' => 8,
-			)); ?>
-		</div>
+			<?php $this->widget('StepsBreadCrumbs',array(
+				'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
+			));
+			?>
 	</div>
 	<div class="row">
 		<div class="span12">
@@ -47,7 +46,7 @@ $this->widget('TopPageWidget');
 		</div>
 
 	</div>
-</div>
+
 
 
 <script type="text/javascript">

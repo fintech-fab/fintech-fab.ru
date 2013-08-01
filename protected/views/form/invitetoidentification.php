@@ -21,7 +21,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 <div class="row">
 	<?php $this->widget('StepsBreadCrumbs',array(
-		'curStep'=>6,
+		'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
 	)); ?>
 
 	<div class="row span5">
