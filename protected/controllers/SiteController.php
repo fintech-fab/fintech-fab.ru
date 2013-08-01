@@ -77,7 +77,9 @@ class SiteController extends Controller
 		$this->render('contact',array('model'=>$model));
 	}*/
 
-    public function actionJoin()
+	/*
+
+	 public function actionJoin()
     {
         $model=new ClientJoinForm;
         // uncomment the following code to enable ajax-based validation
@@ -124,9 +126,9 @@ class SiteController extends Controller
             }
         }
             $this->render('join',array('model'=>$model));
-    }
+    }*/
 
-    public function actionForm1()
+    /*public function actionForm1()
     {
         $model=new ClientForm1;
 
@@ -243,34 +245,8 @@ class SiteController extends Controller
 
 		//$model->setAttributes($client->getClientDataById($client_id));
         $this->render('form2',array('model'=>$model));
-    }
+    }*/
 
-	/**
-	 * Идентификация личности  по видео
-	 */
-	/*public function actionIdentification() {
-
-		if(!Yii::app()->session['form2_complete'])
-		{
-			$this->redirect(Yii::app()->createUrl("site/form2"));
-		}
-
-		//if(Yii::app()->session['current_step']==6)
-		$this->render('identification');
-	}*/
-
-	/**
-	 * Загрузка документов
-	 */
-	/*public function actionDocuments() {
-
-		if(!Yii::app()->session['form2_complete'])
-		{
-			$this->redirect(Yii::app()->createUrl("site/form2"));
-		}
-
-		$this->render('documents');
-	}*/
 
     /**
 	 * Displays the login page

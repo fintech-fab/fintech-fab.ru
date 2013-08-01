@@ -336,7 +336,17 @@ class TbActiveForm extends CActiveForm
 			));
 		}
 
-		return $hidden.implode('', $items);
+		/*
+		 * Изменено для исправления бага с AJAX-валидацией radioButtonList
+		 *
+		 * https://bitbucket.org/Crisu83/yii-bootstrap/issue/159/tbactiveform-doesnt-validate-properly
+		 */
+		return
+			CHtml::openTag('span', array('id'=>$baseID))
+			.$hidden.implode('', $items)
+			.CHtml::closeTag('span');
+
+		//		return $hidden.implode('', $items);
 	}
 
 	/**

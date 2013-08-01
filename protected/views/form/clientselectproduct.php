@@ -39,8 +39,8 @@
 			$oClientCreateForm->product = "1";
 		}
 		?>
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts, array("class"=>"all"));
-	?>
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts, array("class"=>"all"));?>
+
 	</div>
 
 	<?php $this->widget('ChosenConditionsWidget',array(

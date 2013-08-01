@@ -506,4 +506,21 @@ class ClientCreateFormAbstract extends CFormModel {
 		);
 	}
 
+	protected function afterValidate()
+	{
+		$p = new CHtmlPurifier;
+		$p->options = array(
+			//'HTML.SafeObject'=>true,
+			'HTML.Allowed'=>'',
+		);
+		$attr=$this->getAttributes();
+		foreach($attr as &$a)
+		{
+			$a=$p->purify($a);
+		}
+		unset($a);
+		$this->setAttributes($attr);
+
+		return parent::afterValidate();
+	}
 }
