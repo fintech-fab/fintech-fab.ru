@@ -41,13 +41,13 @@ class FormController extends Controller
 			$oForm->attributes=$aPost; //передаем запрос в форму
 			if(isset($oForm->go)&&$oForm->go=="1")
 			{
-				var_dump($oForm->getAttributes());
-				var_dump($client_id = Yii::app()->session['current_step']);
-				var_dump($client_id = Yii::app()->session['done_steps']);
-				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				var_dump($client_id = Yii::app()->session['current_step']);
-				var_dump($client_id = Yii::app()->session['done_steps']);
-				//$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+
+				//Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+				$client_id = Yii::app()->session['current_step']=0;
+				$client_id = Yii::app()->session['done_steps']=0;
+				$client_id = Yii::app()->session['form_complete']=true;
+				$this->redirect(Yii::app()->createUrl("form/identification"));
+
 			}
 			elseif($oForm->validate())
 			{
@@ -93,6 +93,7 @@ class FormController extends Controller
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
 
+
 	/**
 	 *  Переход на шаг $step
 	 *  @param int $step
@@ -114,6 +115,30 @@ class FormController extends Controller
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
+	}
+
+	public function actionIdentification() {
+
+		if(!Yii::app()->session['form_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+
+		//if(Yii::app()->session['current_step']==6)
+		$this->render('identification');
+	}
+
+	/**
+	 * Загрузка документов
+	 */
+	public function actionDocuments() {
+
+		if(!Yii::app()->session['form_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+
+		$this->render('documents');
 	}
 
 	public function actionError()
