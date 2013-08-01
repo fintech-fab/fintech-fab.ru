@@ -60,4 +60,5 @@
 <?
 
 $this->endWidget();
+
 ?>

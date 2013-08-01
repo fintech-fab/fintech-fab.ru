@@ -41,9 +41,11 @@ class FormController extends Controller
 			$oForm->attributes=$aPost; //передаем запрос в форму
 			if(isset($oForm->go)&&$oForm->go=="1")
 			{
-				$client_id = Yii::app()->session['current_step']=0;
-				$client_id = Yii::app()->session['done_steps']=0;
-				$client_id = Yii::app()->session['form_complete']=true;
+				Yii::app()->session['current_step']=0;
+				Yii::app()->session['done_steps']=0;
+				Yii::app()->session['form_complete']=true;
+
+
 				$this->redirect(Yii::app()->createUrl("form/identification"));
 
 			}
