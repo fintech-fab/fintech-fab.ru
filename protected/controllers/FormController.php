@@ -102,13 +102,13 @@ class FormController extends Controller
 	{
 		if($step!==0)
 		{
-			Yii::app()->session['done_steps']=$step-1;
 			if(Yii::app()->session['done_steps'] < ($step-1))
 			{
 				Yii::app()->session['current_step']=Yii::app()->session['done_steps'];
 			}
 			else
 			{
+				Yii::app()->session['done_steps']=$step-1;
 				Yii::app()->session['current_step']=$step-1;
 			}
 			$this->redirect(Yii::app()->createUrl("form"));
