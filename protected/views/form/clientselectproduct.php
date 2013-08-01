@@ -13,7 +13,7 @@
 <div class="row">
 
 		<?php $this->widget('StepsBreadCrumbs',array(
-			'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
+			'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
 		)); ?>
 
 	<?php
@@ -34,7 +34,10 @@
 	<div class="row span6">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/01T.png"/>
 		<?php
-		//$oClientCreateForm->product = "1";
+		if(!($oClientCreateForm->product=Yii::app()->session['product']))
+		{
+			$oClientCreateForm->product = "1";
+		}
 		?>
 		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts, array("class"=>"all"));
 	?>

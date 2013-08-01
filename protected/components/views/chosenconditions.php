@@ -18,7 +18,7 @@
 <div class="span2"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/step<? echo ( $this->curStep > 6 )? '6' : $this->curStep; ?>.png"></div>
 
 <?php
-	if($this->curStep == 1)
+	if(($this->curStep == 1))
 	{
 		Yii::app()->clientScript->registerScriptFile(
 			Yii::app()->assetManager->publish(

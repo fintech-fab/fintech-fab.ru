@@ -209,13 +209,22 @@ class ClientForm
 	}
 
 	/**
-	 * Возвращает модель текущей формы.
+	 * Возвращает номер текущего шага (нумерация с нуля)
 	 *
 	 * @return int
 	 */
 	public function getCurrentStep()
 	{
-		//return $this->current_step;
+		return $this->current_step;
+	}
+
+	/**
+	 * Возвращает число пройденных шагов (нумерация с нуля)
+	 *
+	 * @return int
+	 */
+	public function getDoneSteps()
+	{
 		return $this->done_steps;
 	}
 
