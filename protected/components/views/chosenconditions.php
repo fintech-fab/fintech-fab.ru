@@ -1,4 +1,4 @@
-<div class="row span5 conditions" >
+<div class="row span4 conditions" >
 	<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/00T.png"/>
 	<?php
 	$n = Dictionaries::$aDataTimes[$this->chosenProduct];

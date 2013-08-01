@@ -88,7 +88,7 @@
 $this->widget('TopPageWidget',array("show"=>$this->showTopPageWidget));
 ?>
 	<?php echo $content; ?>
-
+<br/>
 <div class="page-divider1"></div>
 
 <div class="container">

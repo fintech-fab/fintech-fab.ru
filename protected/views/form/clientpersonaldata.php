@@ -38,7 +38,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
 	)); ?>
 
-<div class="row span5">
+<div class="row span6">
 	<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
 	<h2>Контактные данные</h2>
 		<? require dirname(__FILE__) . '/fields/contacts.php' ?>
