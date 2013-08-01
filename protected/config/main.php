@@ -1,23 +1,16 @@
 <?php
 
-// uncomment the following to define a path alias
-// Yii::setPathOfAlias('local','path/to/local-folder');
-
-// This is the main Web application configuration. Any writable
-// CWebApplication properties can be configured here.
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 
-return array(
-	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'Kreddy',
+$a = array(
+	'basePath' => __DIR__ . '/..',
+	'name' => 'Kreddy',
 
-	'sourceLanguage'    =>'ru',
-	'language'          =>'ru',
+	'sourceLanguage'    => 'ru',
+	'language'          => 'ru',
 
-	// preloading 'log' component
 	'preload'=>array('log'),
 
-	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
 		'application.models.forms.*',
@@ -29,24 +22,10 @@ return array(
 		'application.extensions.image.*',
 	),
 
-	//'theme'=>'bootstrap', // requires you to copy the theme under your themes directory
-
-	'modules'=>array(
-		// uncomment the following to enable the Gii tool
-
-		'gii'=>array(
-			'generatorPaths'=>array(
-				'bootstrap.gii',
-			),
-			'class'=>'system.gii.GiiModule',
-			'password'=>'159753',
-			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('127.0.0.1','::1','192.168.10.181'),
-		),
+	'modules' => array(
 
 	),
 
-	// application components
 	'components'=>array(
 		'clientForm'=>array(
 			'class'=>'application.components.ClientForm',
@@ -58,11 +37,9 @@ return array(
 			'class'     =>  'application.extensions.image.CImageComponent',
 			'driver'    =>  'GD',
 		),
-		'user'=>array(
-			// enable cookie-based authentication
-			'allowAutoLogin'=>true,
+		'user' => array(
+			'allowAutoLogin' => true,
 		),
-		// uncomment the following to enable URLs in path-format
 
 		'urlManager'=>array(
 			'urlFormat'=>'path',
@@ -79,11 +56,6 @@ return array(
 			),
 		),
 
-		/*'db'=>array(
-			'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
-		),*/
-		// uncomment the following to use a MySQL database
-
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=kreddy',
 			'emulatePrepare' => true,
@@ -93,9 +65,9 @@ return array(
 		),
 
 		'errorHandler'=>array(
-			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
+
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
@@ -103,17 +75,13 @@ return array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
 			),
 		),
+
 		'session'=>array(
 			'timeout'=>60*15,
 		),
+
 		'request' => array(
 			'class' => 'HttpRequest',
 			'enableCsrfValidation' => true,
@@ -125,10 +93,9 @@ return array(
 		),
 	),
 
-	// application-level parameters that can be accessed
-	// using Yii::app()->params['paramName']
-	'params'=>array(
-		// this is used in contact page
-		'adminEmail'=>'webmaster@example.com',
-	),
 );
+
+$a['components'] = CMap::mergeArray( $a['components'], require( __DIR__ . '/custom/db.php' ));
+$a['modules'] = CMap::mergeArray( $a['modules'], require( __DIR__ . '/custom/modules.php' ));
+
+return $a;
