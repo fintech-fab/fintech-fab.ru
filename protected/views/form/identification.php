@@ -6,12 +6,6 @@ $this->pageTitle = Yii::app()->name;
 <?php
 $this->widget('TopPageWidget');
 ?>
-
-	<div class="row">
-		<?php $this->widget('StepsBreadCrumbs',array(
-			'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
-		)); ?>
-	</div>
 	<div class="row">
 		<div class="span12">
 			<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">

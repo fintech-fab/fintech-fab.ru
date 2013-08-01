@@ -98,10 +98,9 @@ class FormController extends Controller
 	 */
 	public function actionStep($step)
 	{
-		//$client_id = Yii::app()->session['current_step']=0;
-		//$client_id = Yii::app()->session['done_steps']=0;
 		if($step!==0)
 		{
+			Yii::app()->session['done_steps']=$step-1;
 			if(Yii::app()->session['done_steps'] < ($step-1))
 			{
 				Yii::app()->session['current_step']=Yii::app()->session['done_steps'];
