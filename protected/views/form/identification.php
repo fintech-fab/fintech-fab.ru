@@ -1,5 +1,5 @@
 <?php
-/* @var $this SiteController */
+/* @var $this FormController */
 
 $this->pageTitle = Yii::app()->name;
 ?>
@@ -136,7 +136,7 @@ $this->widget('TopPageWidget');
 				var faceCount = parseInt(response);
 
 				if (faceCount === 1) {
-					instructions.html('Данные успешно сохранены <a href="/site/documents" class="btn">продолжить</a>');
+					instructions.html('Данные успешно сохранены <a href="/form/documents" class="btn">продолжить</a>');
 
 					contextOverlay.clearRect(0, 0, canvas.width, canvas.height);
 					headTracker.stop();

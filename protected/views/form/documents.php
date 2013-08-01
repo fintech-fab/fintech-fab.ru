@@ -1,5 +1,5 @@
 <?php
-/* @var $this SiteController */
+/* @var $this FormController */
 
 $this->pageTitle = Yii::app()->name;
 ?>
