@@ -10,6 +10,7 @@ class ApiController extends CController
 
 		$aClients = ClientData::model()
 			->findAllByAttributes(array(
+				'complete'       => 1,
 				'flag_processed' => 0
 			));
 
