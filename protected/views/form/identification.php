@@ -11,7 +11,7 @@ $this->widget('TopPageWidget');
 	<div class="row">
 		<div class="span12">
 			<?php $this->widget('StepsBreadCrumbs', array(
-				'curStep' => 4,
+				'curStep' => 7,
 			)); ?>
 		</div>
 	</div>

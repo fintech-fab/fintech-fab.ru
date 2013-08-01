@@ -39,7 +39,13 @@ class FormController extends Controller
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oForm->attributes=$aPost; //передаем запрос в форму
-			if($oForm->validate())
+			if(isset($oForm->go)&&$oForm->go=="1")
+			{
+				var_dump($oForm);
+				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+				//$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+			}
+			elseif($oForm->validate())
 			{
 				Yii::app()->clientForm->formDataProcess($clientData,$oForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
@@ -53,9 +59,11 @@ class FormController extends Controller
 
 		if(Cookie::compareDataInCookie('client','client_id',$client_id))
 		{
-			$sessionClientData = Yii::app()->session[get_class($oForm)];
-			//var_dump($sessionClientData);
-			$oForm->setAttributes($sessionClientData);
+			if(isset($oForm)&&$oForm)
+			{
+				$sessionClientData = Yii::app()->session[get_class($oForm)];
+				$oForm->setAttributes($sessionClientData);
+			}
 		}
 
 		/**

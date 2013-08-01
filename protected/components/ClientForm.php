@@ -251,6 +251,8 @@ class ClientForm
 				return new ClientSendForm();
 				break;
 			case 6:
+				return new InviteToIdentification();
+				break;
 			case 7:
 			case 8:
 			case 9:
