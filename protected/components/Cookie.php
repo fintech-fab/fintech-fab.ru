@@ -9,6 +9,15 @@
 
 class Cookie
 {
+	/**
+	 * Сравнивает атрибут $attributeName из зашифрованной и сериализованной куки $cookieName со значением $checkValue
+	 *
+	 * @param $cookieName string
+	 * @param $attributeName string
+	 * @param $checkValue string
+	 *
+	 * @return bool
+	 */
 	public static function compareDataInCookie($cookieName,$attributeName,$checkValue)
 	{
 		$dataInCookie = false;
@@ -26,6 +35,14 @@ class Cookie
 		return $dataInCookie;
 	}
 
+	/**
+	 * Возвращает дешифрованный и десериализованный массив данных, записанный в куку $cookieName,
+	 * либо false, если десериализовать не удалось.
+	 *
+	 * @param $cookieName string
+	 *
+	 * @return array|bool
+	 */
 	public static function getDataFromCookie($cookieName)
 	{
 		if(isset(Yii::app()->request->cookies[$cookieName]))
@@ -39,6 +56,12 @@ class Cookie
 		return false;
 	}
 
+	/**
+	 * Шифрует и сериализует массив $data и записывает в куку $cookieName
+	 *
+	 * @param $cookieName string
+	 * @param $data array
+	 */
 	public static function saveDataToCookie($cookieName,$data)
 	{
 		$sEncrypt = serialize($data);

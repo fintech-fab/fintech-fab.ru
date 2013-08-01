@@ -34,7 +34,6 @@ class FormController extends Controller
 		/**
 		 * Обработка POST запроса
 		 */
-
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oForm->attributes=$aPost; //передаем запрос в форму

@@ -48,7 +48,7 @@ class ClientForm
 
 	/**
 	 * Проверяет, отправлены ли данные с помощью ajax.
-	 * Если да, выполняет валидацию модели.
+	 * НЕ выполняет валидацию модели.
 	 *
 	 * @return bool
 	 */
@@ -61,18 +61,18 @@ class ClientForm
 		return false;
 	}
 
+	/**
+	 * Функция занимается сохранением данных,
+	 * полученных при ajax-валидации,
+	 * в сессию, куки и БД
+	 *
+	 * @param ClientData $clientData
+	 * @param ClientCreateFormAbstract $oForm
+	 */
 	public function saveAjaxData($clientData, $oForm)
 	{
-		/*
-		 * Функция занимается сохранением данных,
-		 * полученных при ajax-валидации,
-		 * в сессию, куки и БД
-		 */
-
 		/**
 		 * @var ClientData $client
-		 * @var ClientData $clientData
-		 * @var ClientCreateFormAbstract $oForm
 		 */
 		if(get_class($oForm)==='ClientPersonalDataForm')
 		{
@@ -322,7 +322,6 @@ class ClientForm
 	 *
 	 * @return array|bool
 	 */
-
 	public function getPostData()
 	{
 		switch($this->current_step)
