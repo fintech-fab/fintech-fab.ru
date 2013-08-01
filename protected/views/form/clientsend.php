@@ -9,19 +9,29 @@
  * Согласие с условиями и передачей данных
  */
 
-
-$this->pageTitle=Yii::app()->name;
-
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id' => get_class($oClientCreateForm),
-	'enableAjaxValidation' => true,
-	'action' => Yii::app()->createUrl('/form/'),
-));
 ?>
+
 <div class="row">
+
 	<?php $this->widget('StepsBreadCrumbs',array(
 		'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
 	)); ?>
+
+	<?php
+
+	$this->pageTitle=Yii::app()->name;
+
+	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+		'id' => get_class($oClientCreateForm),
+		'enableAjaxValidation' => true,
+		'enableClientValidation'=>true,
+		'clientOptions'=>array(
+			'validateOnChange'=>true,
+		),
+		'action' => Yii::app()->createUrl('/form/'),
+	));
+
+	?>
 
 	<div class="row span5">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/05T.png">
