@@ -41,8 +41,12 @@ class FormController extends Controller
 			$oForm->attributes=$aPost; //передаем запрос в форму
 			if(isset($oForm->go)&&$oForm->go=="1")
 			{
-				var_dump($oForm);
+				var_dump($oForm->getAttributes());
+				var_dump($client_id = Yii::app()->session['current_step']);
+				var_dump($client_id = Yii::app()->session['done_steps']);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+				var_dump($client_id = Yii::app()->session['current_step']);
+				var_dump($client_id = Yii::app()->session['done_steps']);
 				//$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
 			elseif($oForm->validate())
@@ -95,6 +99,8 @@ class FormController extends Controller
 	 */
 	public function actionStep($step)
 	{
+		//$client_id = Yii::app()->session['current_step']=0;
+		//$client_id = Yii::app()->session['done_steps']=0;
 		if($step!==0)
 		{
 			if(Yii::app()->session['done_steps'] < ($step-1))
