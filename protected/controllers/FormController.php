@@ -43,10 +43,14 @@ class FormController extends Controller
 				Yii::app()->session['current_step']=0;
 				Yii::app()->session['done_steps']=0;
 				Yii::app()->session['form_complete']=true;
-
+				Yii::app()->session['ClientSelectProductForm']=null;
+				Yii::app()->session['ClientSelectGetWayForm']=null;
+				Yii::app()->session['ClientPersonalDataForm']=null;
+				Yii::app()->session['ClientAddressForm']=null;
+				Yii::app()->session['ClientJobInfoForm']=null;
+				Yii::app()->session['ClientSendForm']=null;
 
 				$this->redirect(Yii::app()->createUrl("form/identification"));
-
 			}
 			elseif($oForm->validate())
 			{
