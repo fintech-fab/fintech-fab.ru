@@ -34,6 +34,7 @@ class FormController extends Controller
 		/**
 		 * Обработка POST запроса
 		 */
+
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oForm->attributes=$aPost; //передаем запрос в форму
@@ -46,12 +47,14 @@ class FormController extends Controller
 		}
 
 		/**
-		 * Загрузка данных из cookie в форму, если данные существуют и client_id сессии совпадает с оным в куке
+		 * Загрузка данных из сессии в форму, если данные существуют и client_id сессии совпадает с оным в куке
 		 */
 
-		if(Cookie::compareDataInCookie(get_class($oForm),'client_id',$client_id)&&($cookieData = Cookie::getDataFromCookie(get_class($oForm))))
+		if(Cookie::compareDataInCookie('client','client_id',$client_id))
 		{
-			$oForm->setAttributes($cookieData);
+			$sessionClientData = Yii::app()->session[get_class($oForm)];
+			//var_dump($sessionClientData);
+			$oForm->setAttributes($sessionClientData);
 		}
 
 		/**

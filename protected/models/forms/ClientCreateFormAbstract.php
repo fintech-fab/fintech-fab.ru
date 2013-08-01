@@ -370,6 +370,31 @@ class ClientCreateFormAbstract extends CFormModel {
 		);
 	}
 
+
+	public function getAttributes()
+	{
+		$attrs = array();
+		$rules = $this->rules();
+		foreach($rules as &$r)
+		{
+			if(gettype($r[0])==="string")
+			{
+				$attrs[] = $r[0];
+			}
+			elseif(gettype($r[0])==="array")
+			{
+				foreach($r[0] as &$subArr)
+				{
+					if(gettype($r[0][0])==="string") $attrs[] = $r[0][0];
+				}
+				unset($subArr);
+			}
+		}
+		unset($r);
+		$attrs = array_unique($attrs);
+
+		return parent::getAttributes($attrs);
+	}
 	/**
 	 * названия атрибутов
 	 * @return array

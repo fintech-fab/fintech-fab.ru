@@ -84,10 +84,6 @@ class ClientForm
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
-				/**
-				 * TODO обдумать, нужно ли вообще делать эти пляски с бубном вокруг куки, если мы не восстанавливаем данные в форму
-				 * TODO либо сделать загрузку данных в форму через AJAX при вводе телефона (либо через redirect() обновлять страницу формы)
-				*/
 				if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
 				{
 					Yii::app()->session['client_id'] = $cookieData['client_id'];
@@ -110,12 +106,13 @@ class ClientForm
 			}
 			if($this->client_id)
 			{
+
 				$formData=$oForm->getAttributes();
-				$formData['product']=Yii::app()->session['product'];
-				$formData['get_way']=Yii::app()->session['get_way'];
+
+				$formData['product']=Yii::app()->session['ClientSelectProductForm']['product'];
+				$formData['get_way']=Yii::app()->session['ClientSelectGetWayForm']['get_way'];
 				$clientData->saveClientDataById($formData,$this->client_id);
 
-				$formData['client_id']=$this->client_id;
 				//$this->saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
@@ -124,13 +121,90 @@ class ClientForm
 			if($this->client_id)
 			{
 				$formData=$oForm->getAttributes();
+
 				$clientData->saveClientDataById($formData,$this->client_id);
 
 				$formData['client_id']=$this->client_id;
 				//$this->saveDataToCookie(get_class($oForm),$formData);
 			}
 		}
+		$formData=$oForm->getAttributes();
+		Yii::app()->session[get_class($oForm)]=$formData;
+		return;
+	}
 
+	/**
+	 * Выполняет обработку данных формы после проверки.
+	 *
+	 * @param ClientCreateFormAbstract $model
+	 */
+	public function formDataProcess($clientData, $oForm)
+	{
+		/**
+		 * @var ClientData $client
+		 * @var ClientData $clientData
+		 * @var ClientCreateFormAbstract $oForm
+		 */
+		if(get_class($oForm)==='ClientSelectProductForm')
+		{
+			Yii::app()->session['product']=$oForm->product;
+		}
+		elseif(get_class($oForm)==='ClientSelectGetWayForm')
+		{
+			Yii::app()->session['get_way']=$oForm->get_way;
+		}
+		if(get_class($oForm)==='ClientPersonalDataForm')
+		{
+			/* проверяем, есть ли в куках информация о клиенте
+			 * и сравниваем введенный телефон с телефоном в куках.
+			 * в случае успешности восстанавливаем client_id из куки.
+			 * иначе создаем нового клиента и сохраняем информацию
+			 * о нем в сессию и куку.
+			 */
+			if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
+			{
+				Yii::app()->session['client_id'] = $cookieData['client_id'];
+				$this->client_id=Yii::app()->session['client_id'];
+			}
+			else
+			{
+				/**
+				 * функция addClient()ищет клиента в базе по телефону,
+				 * и если находит - возвращает запись с указанным телефоном как результат
+				 */
+				$client=$clientData->addClient($oForm);
+				Yii::app()->session['client_id'] = $client->client_id;
+
+				$this->client_id=$client->client_id;
+
+				$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
+				Cookie::saveDataToCookie('client',$data);
+			}
+			if($this->client_id)
+			{
+				$formData=$oForm->getAttributes();
+				$formData['product']=Yii::app()->session['ClientSelectProductForm']['product'];
+				$formData['get_way']=Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				$clientData->saveClientDataById($formData,$this->client_id);
+
+
+				//Cookie::saveDataToCookie(get_class($oForm),$formData);
+			}
+		}
+		else
+		{
+			if($this->client_id)
+			{
+				$formData=$oForm->getAttributes();
+				//var_dump($oForm->);
+				//var_dump($formData);
+				$clientData->saveClientDataById($formData,$this->client_id);
+				//$formData['client_id']=$this->client_id;
+				//Cookie::saveDataToCookie(get_class($oForm),$formData);
+			}
+		}
+		$formData=$oForm->getAttributes();
+		Yii::app()->session[get_class($oForm)]=$formData;
 		return;
 	}
 
@@ -305,73 +379,5 @@ class ClientForm
 			Yii::app()->session['done_steps']=$this->done_steps=Yii::app()->session['current_step'];
 		}
 
-	}
-
-	/**
-	 * Выполняет обработку данных формы после проверки.
-	 *
-	 * @param ClientCreateFormAbstract $model
-	 */
-	public function formDataProcess($clientData, $oForm)
-	{
-		/**
-		 * @var ClientData $client
-		 * @var ClientData $clientData
-		 * @var ClientCreateFormAbstract $oForm
-		 */
-		if(get_class($oForm)==='ClientSelectProductForm')
-		{
-			Yii::app()->session['product']=$oForm->product;
-		}
-		elseif(get_class($oForm)==='ClientSelectGetWayForm')
-		{
-			Yii::app()->session['get_way']=$oForm->get_way;
-		}
-		elseif(get_class($oForm)==='ClientPersonalDataForm')
-		{
-			/* проверяем, есть ли в куках информация о клиенте
-			 * и сравниваем введенный телефон с телефоном в куках.
-			 * в случае успешности восстанавливаем client_id из куки.
-			 * иначе создаем нового клиента и сохраняем информацию
-			 * о нем в сессию и куку.
-			 */
-			if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
-			{
-				Yii::app()->session['client_id'] = $cookieData['client_id'];
-				$this->client_id=Yii::app()->session['client_id'];
-			}
-			else
-			{
-				$client=$clientData->addClient($oForm);
-				Yii::app()->session['client_id'] = $client->client_id;
-
-				$this->client_id=$client->client_id;
-				$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-				Cookie::saveDataToCookie('client',$data);
-			}
-			if($this->client_id)
-			{
-				$formData=$oForm->getAttributes();
-				$formData['product']=Yii::app()->session['product'];
-				$formData['get_way']=Yii::app()->session['get_way'];
-				$clientData->saveClientDataById($formData,$this->client_id);
-
-				$formData['client_id']=$this->client_id;
-				//Cookie::saveDataToCookie(get_class($oForm),$formData);
-			}
-		}
-		else
-		{
-			if($this->client_id)
-			{
-				$formData=$oForm->getAttributes();
-				$clientData->saveClientDataById($formData,$this->client_id);
-
-				$formData['client_id']=$this->client_id;
-				//Cookie::saveDataToCookie(get_class($oForm),$formData);
-			}
-		}
-
-		return;
 	}
 }
