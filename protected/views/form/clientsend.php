@@ -13,9 +13,7 @@
 
 <div class="row">
 
-	<?php $this->widget('StepsBreadCrumbs',array(
-		'curStep'=>Yii::app()->clientForm->getDoneSteps()+1,
-	)); ?>
+	<?php $this->widget('StepsBreadCrumbs'); ?>
 
 	<?php
 

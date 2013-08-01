@@ -18,10 +18,11 @@ class StepsBreadCrumbs extends CWidget
 		'id' => 'steps',
 	);
 
-	public $curStep = 1; // номер текущего шага
+	public $curStep; // номер текущего шага
 
 	public function run()
 	{
+		$this->curStep = Yii::app()->clientForm->getCurrentStep()+1;
 		$this->render('stepsbreadcrumbs');
 	}
 }

@@ -215,10 +215,8 @@ class ClientForm
 	 */
 	public function getCurrentStep()
 	{
-		if(Yii::app()->session['current_step']!=$this->current_step)
-		{
-			$this->current_step=Yii::app()->session['current_step'];
-		}
+		$this->current_step=Yii::app()->session['current_step'];
+
 		return $this->current_step;
 	}
 
@@ -229,10 +227,8 @@ class ClientForm
 	 */
 	public function getDoneSteps()
 	{
-		if(Yii::app()->session['done_steps']!=$this->done_steps)
-		{
-			$this->done_steps=Yii::app()->session['done_steps'];
-		}
+		$this->done_steps=Yii::app()->session['done_steps'];
+
 		return $this->done_steps;
 	}
 
