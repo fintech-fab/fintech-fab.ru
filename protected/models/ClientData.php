@@ -154,17 +154,29 @@ class ClientData extends CActiveRecord
 		return $this;
 	}
 
+	/**
+	 * @param $iClientId
+	 * @return ClientData
+	 */
+
+	public function scopeClientId($iClientId)
+	{
+		$this->getDbCriteria()->addColumnCondition(array(
+			'client_id' => $iClientId
+		));
+		return $this;
+	}
+
 
 	//проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
 	public static function checkClientByPhone($phone)
 	{
-		$oClientForm = self::model()->scopePhone($phone)->find();
+		$oClient = self::model()->scopePhone($phone)->find();
 
 		return (
-			$oClientForm &&
-			$oClientForm->complete == 1
+			$oClient &&
+			$oClient->complete == 1
 		);
-
 	}
 
 	/**
@@ -199,10 +211,9 @@ class ClientData extends CActiveRecord
 
 	public static function getClientDataById($client_id)
 	{
-		if ($client = self::model()->find('client_id=:client_id', array(':client_id' => $client_id))) {
-			return $client->getAttributes();
-		}
-		return false;
+		$oClient = self::model()->scopeClientId($client_id)->find();
+		return ($oClient) ? $oClient->getAttributes() : null;
+
 	}
 
 	/**
@@ -212,9 +223,10 @@ class ClientData extends CActiveRecord
 	 */
 	public static function saveClientDataById($aClientFormData, $client_id)
 	{
-		if ($client = self::model()->find('client_id=:client_id', array(':client_id' => $client_id))) {
-			$client->setAttributes($aClientFormData);
-			$client->save();
+		$oClient = self::model()->scopeClientId($client_id)->find();
+		if ($oClient) {
+			$oClient->setAttributes($aClientFormData);
+			$oClient->save();
 			return true;
 		}
 		return false;
