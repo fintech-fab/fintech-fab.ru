@@ -78,7 +78,6 @@ class FormController extends Controller
 		 */
 		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
 
-		echo '<pre>' . ""; CVarDumper::dump(Cookie::getDataFromCookie('client')); echo '</pre>';
 		$this->render($sView,array('oClientCreateForm'=>$oClientForm));
 	}
 
