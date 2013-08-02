@@ -208,6 +208,10 @@ class ClientData extends CActiveRecord
 		return ($oClient) ? $oClient->client_id : null;
 	}
 
+	/**
+	 * @param $client_id
+	 * @return array|null
+	 */
 
 	public static function getClientDataById($client_id)
 	{
