@@ -41,17 +41,6 @@ $this->widget('TopPageWidget');
 		var shootCountdown = null;
 		var shootCountdownValue = null;
 
-		//рисуем квадрат
-		canvasOverlay.style.position = "absolute";
-		canvasOverlay.style.top = parseInt($(inputVideo).position().top + 110) + 'px';
-		canvasOverlay.style.display = 'block';
-
-		contextOverlay.beginPath();
-		contextOverlay.rect(98, 0, 120, 120);
-		contextOverlay.lineWidth = 3;
-		contextOverlay.strokeStyle = 'white';
-		contextOverlay.stroke();
-
 		//запускаем трекер лица
 		var headTracker = new headtrackr.Tracker({
 			ui: false
@@ -63,7 +52,18 @@ $this->widget('TopPageWidget');
 		document.addEventListener('headtrackrStatus', function (event) {
 			if (event.status == 'camera found') {
 				instructions.text('Шаг 1. Разместите лицо в квадрате');
-			}
+
+				//рисуем квадрат
+				canvasOverlay.style.position = "absolute";
+				canvasOverlay.style.top = parseInt($(inputVideo).position().top + 110) + 'px';
+				canvasOverlay.style.left = parseInt($(inputVideo).position().left) + 'px';
+				canvasOverlay.style.display = 'block';
+
+				contextOverlay.beginPath();
+				contextOverlay.rect(98, 0, 120, 120);
+				contextOverlay.lineWidth = 3;
+				contextOverlay.strokeStyle = 'white';
+				contextOverlay.stroke();			}
 		});
 
 		document.addEventListener("facetrackingEvent", function (event) {
