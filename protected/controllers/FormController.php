@@ -7,7 +7,7 @@ class FormController extends Controller
 	public function actionIndex()
 	{
 		/**
-		 * @var ClientCreateFormAbstract $oForm
+		 * @var ClientCreateFormAbstract $oClientForm
 		 * @var array $aPost
 		 * @var string $sView
 		 */
@@ -18,15 +18,15 @@ class FormController extends Controller
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)
 		 */
-		$oForm=Yii::app()->clientForm->getFormModel();
+		$oClientForm=Yii::app()->clientForm->getFormModel();
 
 		/**
 		 * AJAX валидация
 		 */
 		if(Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
-			echo IkTbActiveForm::validate($oForm); //проводим валидацию и возвращаем результат
-			Yii::app()->clientForm->saveAjaxData($oForm); //сохраняем полученные при ajax-запросе данные
+			echo IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
+			Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
 			Yii::app()->end();
 		}
 
@@ -35,8 +35,8 @@ class FormController extends Controller
 		 */
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
-			$oForm->attributes=$aPost; //передаем запрос в форму
-			if(isset($oForm->go)&&$oForm->go=="1")
+			$oClientForm->attributes=$aPost; //передаем запрос в форму
+			if(isset($oClientForm->go)&&$oClientForm->go=="1")
 			{
 				Yii::app()->session['current_step']=0;
 				Yii::app()->session['done_steps']=0;
@@ -52,11 +52,11 @@ class FormController extends Controller
 
 				$this->redirect(Yii::app()->createUrl("form/identification"));
 			}
-			elseif($oForm->validate())
+			elseif($oClientForm->validate())
 			{
-				Yii::app()->clientForm->formDataProcess($oForm);
+				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+				$oClientForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
 		}
 
@@ -66,10 +66,10 @@ class FormController extends Controller
 
 		if(Cookie::compareDataInCookie('client','client_id',$client_id))
 		{
-			if(isset($oForm)&&$oForm)
+			if(isset($oClientForm)&&$oClientForm)
 			{
-				$sessionClientData = Yii::app()->session[get_class($oForm)];
-				$oForm->setAttributes($sessionClientData);
+				$sessionClientData = Yii::app()->session[get_class($oClientForm)];
+				$oClientForm->setAttributes($sessionClientData);
 			}
 		}
 
@@ -78,7 +78,7 @@ class FormController extends Controller
 		 */
 		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
 
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
+		$this->render($sView,array('oClientCreateForm'=>$oClientForm));
 	}
 
 	/**
