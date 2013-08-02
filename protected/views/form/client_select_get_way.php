@@ -20,7 +20,6 @@
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id' => get_class($oClientCreateForm),
 		'enableAjaxValidation' => true,
-		'enableClientValidation'=>true,
 		'clientOptions'=>array(
 			'validateOnChange'=>true,
 			'validateOnSubmit'=>true,
