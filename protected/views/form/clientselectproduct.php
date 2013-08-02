@@ -12,7 +12,7 @@
 
 <div class="row">
 
-		<?php $this->widget('StepsBreadCrumbs'); ?>
+		<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
 

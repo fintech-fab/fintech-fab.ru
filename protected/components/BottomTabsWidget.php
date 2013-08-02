@@ -1,6 +1,6 @@
 <?php
 
-class BottomTabs extends CWidget
+class BottomTabsWidget extends CWidget
 {
 	public $tabs;
 	public $tabsArray;
@@ -22,7 +22,7 @@ class BottomTabs extends CWidget
 
 		}
 		unset($t);
-		$this->render('bottomtabs');
+		$this->render('bottom_tabs');
 	}
 }
 ?>

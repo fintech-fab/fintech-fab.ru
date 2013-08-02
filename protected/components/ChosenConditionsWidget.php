@@ -7,6 +7,6 @@ class ChosenConditionsWidget extends CWidget {
 
     public function run() {
 		$this->chosenProduct=(isset(Yii::app()->session['ClientSelectProductForm']['product']))?Yii::app()->session['ClientSelectProductForm']['product']:1;
-		$this->render('chosenconditions');
+		$this->render('chosen_conditions');
     }
 }

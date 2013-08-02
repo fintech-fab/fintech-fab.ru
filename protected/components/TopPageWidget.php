@@ -7,7 +7,7 @@ class TopPageWidget extends CWidget {
     public function run() {
 		if($this->show)
 		{
-			$this->render('toppage');
+			$this->render('top_page');
 		}
     }
 }
