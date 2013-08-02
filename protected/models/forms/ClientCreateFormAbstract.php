@@ -377,38 +377,32 @@ class ClientCreateFormAbstract extends CFormModel {
 
 	public function getAttributes($aAttributes = null)
 	{
-		if($aAttributes) return parent::getAttributes($aAttributes);
+		if (!$aAttributes) {
 
-		$aAttributes = array();
-		$rules = $this->rules();
-		foreach($rules as &$r)
-		{
-			if(gettype($r[0])==="string")
-			{
-				$aAttributes[] = $r[0];
-			}
-			elseif(gettype($r[0])==="array")
-			{
-				foreach($r[0] as &$subArr)
-				{
-					if(gettype($r[0][0])==="string") $aAttributes[] = $r[0][0];
+			$aAttributes = array();
+			$rules = $this->rules();
+			foreach ($rules as &$r) {
+				if (gettype($r[0]) === "string") {
+					$aAttributes[] = $r[0];
+				} elseif (gettype($r[0]) === "array") {
+					foreach ($r[0] as &$subArr) {
+						if (gettype($r[0][0]) === "string") $aAttributes[] = $r[0][0];
+					}
+					unset($subArr);
 				}
-				unset($subArr);
 			}
+			unset($r);
+			$aAttributes = array_unique($aAttributes);
 		}
-		unset($r);
-		$aAttributes = array_unique($aAttributes);
-
 		return parent::getAttributes($aAttributes);
 	}
 
 	public function getValidAttributes()
 	{
 		$this->validate();
-		$aClientFormData = $this->getAttributes();
 
 		$aNoValidFields = array_keys($this->getErrors());
-		$aFormFields = array_keys($aClientFormData);
+		$aFormFields = array_keys($this->getAttributes());
 
 		$aValidFormData = $this->getAttributes(array_diff($aFormFields, $aNoValidFields));
 
