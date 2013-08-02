@@ -34,7 +34,7 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array_merge(
-			//parent::attributeLabels(),
+			parent::attributeLabels(),
 			array('product' => 'Сумма займа',)
 		);
 	}

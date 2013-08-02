@@ -31,7 +31,7 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array_merge(
-			//parent::attributeLabels(),
+			parent::attributeLabels(),
 			array('get_way' => 'Способ получения',)
 		);
 	}
