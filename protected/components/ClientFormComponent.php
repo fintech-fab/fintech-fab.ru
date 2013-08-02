@@ -257,7 +257,7 @@ class ClientFormComponent
 				return 'client_select_product';
 				break;
 			case 1:
-				return 'client_select_getway';
+				return 'client_select_get_way';
 				break;
 			case 2:
 				return 'client_personal_data';
