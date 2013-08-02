@@ -101,17 +101,17 @@ class ClientFormComponent
 
 			if ($this->client_id) {
 
-				$aClientFormData = $oClientForm->getAttributes();
 
-				$aClientFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
-				$aClientFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+
+				$aValidFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
+				$aValidFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
 				ClientData::saveClientDataById($aValidFormData, $this->client_id);
 
 			}
 		} else {
 			if ($this->client_id) {
 				ClientData::saveClientDataById($aValidFormData, $this->client_id);
-				$aClientFormData['client_id'] = $this->client_id;
+				$aValidFormData['client_id'] = $this->client_id;
 			}
 		}
 
