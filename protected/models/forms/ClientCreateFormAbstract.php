@@ -380,18 +380,18 @@ class ClientCreateFormAbstract extends CFormModel {
 		if (!$aAttributes) {
 
 			$aAttributes = array();
-			$rules = $this->rules();
-			foreach ($rules as &$r) {
-				if (gettype($r[0]) === "string") {
-					$aAttributes[] = $r[0];
-				} elseif (gettype($r[0]) === "array") {
-					foreach ($r[0] as &$subArr) {
-						if (gettype($r[0][0]) === "string") $aAttributes[] = $r[0][0];
+			$aRules = $this->rules();
+			foreach ($aRules as &$aRule) {
+				if (gettype($aRule[0]) === "string") {
+					$aAttributes[] = $aRule[0];
+				} elseif (gettype($aRule[0]) === "array") {
+					foreach ($aRule[0] as &$aSubRule) {
+						if (gettype($aRule[0][0]) === "string") $aAttributes[] = $aRule[0][0];
 					}
-					unset($subArr);
+					unset($aSubRule);
 				}
 			}
-			unset($r);
+			unset($aRule);
 			$aAttributes = array_unique($aAttributes);
 		}
 		return parent::getAttributes($aAttributes);
