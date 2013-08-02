@@ -184,14 +184,14 @@ class ClientData extends CActiveRecord
 	 * @return ClientData
 	 */
 
-	public static function addClient(ClientCreateFormAbstract $oClientForm)
+	public static function addClient($sPhone)
 	{
-		$oClientData = self::model()->scopePhone($oClientForm->phone)->find();
+		$oClientData = self::model()->scopePhone($sPhone)->find();
 		if (!$oClientData) {
 			$oClientData = new self;
 		}
 
-		$oClientData->phone = $oClientForm->phone;
+		$oClientData->phone = $sPhone;
 		$oClientData->dt_add = date('Y-m-d H:i:s', time());
 		$oClientData->flag_processed = 0;
 		$oClientData->save();

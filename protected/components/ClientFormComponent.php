@@ -63,8 +63,11 @@ class ClientFormComponent
 	public function saveAjaxData(ClientCreateFormAbstract $oClientForm)
 	{
 
+
+		$aValidFormData = $oClientForm->getValidAttributes();
+
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
-			if ($oClientForm->phone) {
+			if ($aValidFormData['phone']) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
 				 * и сравниваем введенный телефон с телефоном в куках.
@@ -76,7 +79,7 @@ class ClientFormComponent
 
 				if (
 					$aCookieData &&
-					Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
+					Cookie::compareDataInCookie('client', 'phone', $aValidFormData['phone']) &&
 					!empty($aCookieData['client_id'])
 				) {
 					Yii::app()->session['client_id'] = $aCookieData['client_id'];
@@ -86,12 +89,12 @@ class ClientFormComponent
 					 * функция addClient()ищет клиента в базе по телефону,
 					 * и если находит - возвращает запись с указанным телефоном как результат
 					 */
-					$oClientData = ClientData::addClient($oClientForm);
+					$oClientData = ClientData::addClient($aValidFormData['phone']);
 					Yii::app()->session['client_id'] = $oClientData->client_id;
 
 					$this->client_id = $oClientData->client_id;
 
-					$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $oClientData->phone);
+					$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $aValidFormData['phone']);
 					Cookie::saveDataToCookie('client', $aCookieData);
 				}
 			}
@@ -102,18 +105,17 @@ class ClientFormComponent
 
 				$aClientFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
 				$aClientFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				ClientData::saveClientDataById($aClientFormData, $this->client_id);
+				ClientData::saveClientDataById($aValidFormData, $this->client_id);
 
 			}
 		} else {
 			if ($this->client_id) {
-				$aClientFormData = $oClientForm->getAttributes();
-				ClientData::saveClientDataById($aClientFormData, $this->client_id);
+				ClientData::saveClientDataById($aValidFormData, $this->client_id);
 				$aClientFormData['client_id'] = $this->client_id;
 			}
 		}
-		$aClientFormData = $oClientForm->getAttributes();
-		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
+
+		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
 		return;
 	}
 

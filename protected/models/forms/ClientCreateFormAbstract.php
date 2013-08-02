@@ -370,31 +370,51 @@ class ClientCreateFormAbstract extends CFormModel {
 		);
 	}
 
+	/**
+	 * @param null $aAttributes
+	 * @return array
+	 */
 
-	public function getAttributes()
+	public function getAttributes($aAttributes = null)
 	{
-		$attrs = array();
+		if($aAttributes) return parent::getAttributes($aAttributes);
+
+		$aAttributes = array();
 		$rules = $this->rules();
 		foreach($rules as &$r)
 		{
 			if(gettype($r[0])==="string")
 			{
-				$attrs[] = $r[0];
+				$aAttributes[] = $r[0];
 			}
 			elseif(gettype($r[0])==="array")
 			{
 				foreach($r[0] as &$subArr)
 				{
-					if(gettype($r[0][0])==="string") $attrs[] = $r[0][0];
+					if(gettype($r[0][0])==="string") $aAttributes[] = $r[0][0];
 				}
 				unset($subArr);
 			}
 		}
 		unset($r);
-		$attrs = array_unique($attrs);
+		$aAttributes = array_unique($aAttributes);
 
-		return parent::getAttributes($attrs);
+		return parent::getAttributes($aAttributes);
 	}
+
+	public function getValidAttributes()
+	{
+		$this->validate();
+		$aClientFormData = $this->getAttributes();
+
+		$aNoValidFields = array_keys($this->getErrors());
+		$aFormFields = array_keys($aClientFormData);
+
+		$aValidFormData = $this->getAttributes(array_diff($aFormFields, $aNoValidFields));
+
+		return $aValidFormData;
+	}
+
 	/**
 	 * названия атрибутов
 	 * @return array
