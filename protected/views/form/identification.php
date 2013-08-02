@@ -125,7 +125,7 @@ $this->widget('TopPageWidget');
 		function processPhoto() {
 
 			var dataURL = canvas.toDataURL();
-			$.post('/image/processPhoto', { image: dataURL, type: '<?=ImageController::C_TYPE_PHOTO?>', YII_CSRF_TOKEN: '<?=Yii::app()->request->csrfToken?>' }, function (response) {
+			$.post('/image/processPhoto', { image: dataURL, type: '<?=ImageController::C_TYPE_PHOTO?>', <?= Yii::app()->request->csrfTokenName ?>: '<?=Yii::app()->request->csrfToken?>' }, function (response) {
 
 				var faceCount = parseInt(response);
 

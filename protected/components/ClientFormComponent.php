@@ -7,15 +7,15 @@
  *
  * Соответствие шага в сессии обрабатываемой форме и отображаемому представлению
  * Шаг - Модель (отображение)     - Представление
- * 0 - ClientSelectProductForm  - clientselectproduct
- * 1 - ClientGetWayForm         - clientgetway
- * 2 - ClientPersonalDataForm   - clientpersonaldata
- * 3 - ClientAddressForm        - clientaddress
- * 4 - ClientJobInfoForm        - clientjobinfo
- * 5 - ClientSendForm           - clientsend
- * 6 - ______________           - /pages/view/formsent
+ * 0 - ClientSelectProductForm  - client_select_product
+ * 1 - ClientGetWayForm         - client_get_way
+ * 2 - ClientPersonalDataForm   - client_personal_data
+ * 3 - ClientAddressForm        - client_address
+ * 4 - ClientJobInfoForm        - client_job_info client
+ * 5 - ClientSendForm           - client_send
+ * 6 - ______________           - /pages/view/form_sent
  */
-class ClientForm
+class ClientFormComponent
 {
 	private $client_id;
 	private $current_step;
@@ -28,21 +28,18 @@ class ClientForm
 	 */
 	public function init()
 	{
-		if(!$this->client_id = Yii::app()->session['client_id'])
-		{
-			$this->client_id=false;
+		if (!$this->client_id = Yii::app()->session['client_id']) {
+			$this->client_id = false;
 		}
 
-		if(!$this->current_step = Yii::app()->session['current_step'])
-		{
-			Yii::app()->session['current_step']=0;
-			$this->current_step=0;
+		if (!$this->current_step = Yii::app()->session['current_step']) {
+			Yii::app()->session['current_step'] = 0;
+			$this->current_step = 0;
 		}
 
-		if(!$this->done_steps = Yii::app()->session['done_steps'])
-		{
-			Yii::app()->session['done_steps']=0;
-			$this->done_steps=0;
+		if (!$this->done_steps = Yii::app()->session['done_steps']) {
+			Yii::app()->session['done_steps'] = 0;
+			$this->done_steps = 0;
 		}
 	}
 
@@ -54,11 +51,10 @@ class ClientForm
 	 */
 	public function ajaxValidation()
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']===get_class($this->getFormModel()))
-		{
-			return true;
-		}
-		return false;
+		$bIsAjax = Yii::app()->request->getIsAjaxRequest();
+		$sAjaxClass = Yii::app()->request->getParam('ajax');
+
+		return ($bIsAjax && $sAjaxClass === get_class($this->getFormModel()));
 	}
 
 	/**
@@ -66,145 +62,124 @@ class ClientForm
 	 * полученных при ajax-валидации,
 	 * в сессию, куки и БД
 	 *
-	 * @param ClientData $clientData
 	 * @param ClientCreateFormAbstract $oForm
 	 */
-	public function saveAjaxData($clientData, $oForm)
+	public function saveAjaxData($oForm)
 	{
+
+		$clientData = new ClientData;
+
 		/**
 		 * @var ClientData $client
 		 */
-		if(get_class($oForm)==='ClientPersonalDataForm')
-		{
-			if($oForm->phone)
-			{
-				/* проверяем, есть ли в куках информация о клиенте
+		if (get_class($oForm) === 'ClientPersonalDataForm') {
+			if ($oForm->phone) {
+				/**
+				 * проверяем, есть ли в куках информация о клиенте
 				 * и сравниваем введенный телефон с телефоном в куках.
 				 * в случае успешности восстанавливаем client_id из куки.
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
-				if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
-				{
+				if (($cookieData = Cookie::getDataFromCookie('client')) && (Cookie::compareDataInCookie('client', 'phone', $oForm->phone))) {
 					Yii::app()->session['client_id'] = $cookieData['client_id'];
 					$this->client_id = Yii::app()->session['client_id'];
-				}
-				else
-				{
+				} else {
 					/**
 					 * функция addClient()ищет клиента в базе по телефону,
 					 * и если находит - возвращает запись с указанным телефоном как результат
 					 */
-					$client=$clientData->addClient($oForm);
+					$client = ClientData::addClient($oForm);
 					Yii::app()->session['client_id'] = $client->client_id;
 
-					$this->client_id=$client->client_id;
+					$this->client_id = $client->client_id;
 
-					$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-					Cookie::saveDataToCookie('client',$data);
+					$data = array('client_id' => $client->client_id, 'phone' => $client->phone);
+					Cookie::saveDataToCookie('client', $data);
 				}
 			}
-			if($this->client_id)
-			{
+			if ($this->client_id) {
 
-				$formData=$oForm->getAttributes();
+				$formData = $oForm->getAttributes();
 
-				$formData['product']=Yii::app()->session['ClientSelectProductForm']['product'];
-				$formData['get_way']=Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				$clientData->saveClientDataById($formData,$this->client_id);
+				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
+				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				$clientData->saveClientDataById($formData, $this->client_id);
 
-				//$this->saveDataToCookie(get_class($oForm),$formData);
+			}
+		} else {
+			if ($this->client_id) {
+				$formData = $oForm->getAttributes();
+				$clientData->saveClientDataById($formData, $this->client_id);
+				$formData['client_id'] = $this->client_id;
 			}
 		}
-		else
-		{
-			if($this->client_id)
-			{
-				$formData=$oForm->getAttributes();
-
-				$clientData->saveClientDataById($formData,$this->client_id);
-
-				$formData['client_id']=$this->client_id;
-				//$this->saveDataToCookie(get_class($oForm),$formData);
-			}
-		}
-		$formData=$oForm->getAttributes();
-		Yii::app()->session[get_class($oForm)]=$formData;
+		$formData = $oForm->getAttributes();
+		Yii::app()->session[get_class($oForm)] = $formData;
 		return;
 	}
 
 	/**
 	 * Выполняет обработку данных формы после проверки.
 	 *
-	 * @param ClientCreateFormAbstract $model
+	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectGetWayForm|ClientPersonalDataForm $oForm
 	 */
-	public function formDataProcess($clientData, $oForm)
+	public function formDataProcess(ClientCreateFormAbstract $oForm)
 	{
-		/**
-		 * @var ClientData $client
-		 * @var ClientData $clientData
-		 * @var ClientCreateFormAbstract $oForm
-		 */
-		if(get_class($oForm)==='ClientSelectProductForm')
-		{
-			Yii::app()->session['product']=$oForm->product;
+
+		$clientData = new ClientData;
+
+		if (get_class($oForm) === 'ClientSelectProductForm') {
+			Yii::app()->session['product'] = $oForm->product;
+		} elseif (get_class($oForm) === 'ClientSelectGetWayForm') {
+			Yii::app()->session['get_way'] = $oForm->get_way;
 		}
-		elseif(get_class($oForm)==='ClientSelectGetWayForm')
-		{
-			Yii::app()->session['get_way']=$oForm->get_way;
-		}
-		if(get_class($oForm)==='ClientPersonalDataForm')
-		{
-			/* проверяем, есть ли в куках информация о клиенте
+		if (get_class($oForm) === 'ClientPersonalDataForm') {
+
+			/**
+			 * проверяем, есть ли в куках информация о клиенте
 			 * и сравниваем введенный телефон с телефоном в куках.
 			 * в случае успешности восстанавливаем client_id из куки.
 			 * иначе создаем нового клиента и сохраняем информацию
 			 * о нем в сессию и куку.
 			 */
-			if(($cookieData = Cookie::getDataFromCookie('client'))&&(Cookie::compareDataInCookie('client','phone',$oForm->phone)))
-			{
+
+			$cookieData = Cookie::getDataFromCookie('client');
+
+			if (
+				$cookieData &&
+				Cookie::compareDataInCookie('client', 'phone', $oForm->phone) &&
+				!empty($cookieData['client_id'])
+			) {
 				Yii::app()->session['client_id'] = $cookieData['client_id'];
-				$this->client_id=Yii::app()->session['client_id'];
-			}
-			else
-			{
+				$this->client_id = Yii::app()->session['client_id'];
+			} else {
 				/**
 				 * функция addClient()ищет клиента в базе по телефону,
 				 * и если находит - возвращает запись с указанным телефоном как результат
 				 */
-				$client=$clientData->addClient($oForm);
+				$client = ClientData::addClient($oForm);
 				Yii::app()->session['client_id'] = $client->client_id;
 
-				$this->client_id=$client->client_id;
+				$this->client_id = $client->client_id;
 
-				$data = array('client_id'=>$client->client_id,'phone'=>$client->phone);
-				Cookie::saveDataToCookie('client',$data);
+				$data = array('client_id' => $client->client_id, 'phone' => $client->phone);
+				Cookie::saveDataToCookie('client', $data);
 			}
-			if($this->client_id)
-			{
-				$formData=$oForm->getAttributes();
-				$formData['product']=Yii::app()->session['ClientSelectProductForm']['product'];
-				$formData['get_way']=Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				$clientData->saveClientDataById($formData,$this->client_id);
-
-
-				//Cookie::saveDataToCookie(get_class($oForm),$formData);
+			if ($this->client_id) {
+				$formData = $oForm->getAttributes();
+				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
+				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				$clientData->saveClientDataById($formData, $this->client_id);
 			}
-		}
-		else
-		{
-			if($this->client_id)
-			{
-				$formData=$oForm->getAttributes();
-				//var_dump($oForm->);
-				//var_dump($formData);
-				$clientData->saveClientDataById($formData,$this->client_id);
-				//$formData['client_id']=$this->client_id;
-				//Cookie::saveDataToCookie(get_class($oForm),$formData);
+		} else {
+			if ($this->client_id) {
+				$formData = $oForm->getAttributes();
+				$clientData->saveClientDataById($formData, $this->client_id);
 			}
 		}
-		$formData=$oForm->getAttributes();
-		Yii::app()->session[get_class($oForm)]=$formData;
+		$formData = $oForm->getAttributes();
+		Yii::app()->session[get_class($oForm)] = $formData;
 		return;
 	}
 
@@ -215,7 +190,7 @@ class ClientForm
 	 */
 	public function getCurrentStep()
 	{
-		$this->current_step=Yii::app()->session['current_step'];
+		$this->current_step = Yii::app()->session['current_step'];
 
 		return $this->current_step;
 	}
@@ -227,15 +202,17 @@ class ClientForm
 	 */
 	public function getDoneSteps()
 	{
-		$this->done_steps=Yii::app()->session['done_steps'];
+		$this->done_steps = Yii::app()->session['done_steps'];
 
 		return $this->done_steps;
 	}
 
+	/**
+	 * @return ClientCreateFormAbstract|null
+	 */
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-		switch($this->current_step)
-		{
+		switch ($this->current_step) {
 			case 0:
 				return new ClientSelectProductForm();
 				break;
@@ -260,7 +237,7 @@ class ClientForm
 			case 7:
 			case 8:
 			case 9:
-				return false;
+				return null;
 				break;
 			default:
 				return new ClientSelectProductForm();
@@ -275,8 +252,7 @@ class ClientForm
 	 */
 	public function getView()
 	{
-		switch($this->current_step)
-		{
+		switch ($this->current_step) {
 			case 0:
 				return 'clientselectproduct';
 				break;
@@ -320,12 +296,10 @@ class ClientForm
 	 */
 	public function getPostData()
 	{
-		switch($this->current_step)
-		{
+		switch ($this->current_step) {
 			case 0:
 			{
-				if(isset($_POST['ClientSelectProductForm']))
-				{
+				if (isset($_POST['ClientSelectProductForm'])) {
 					return $_POST['ClientSelectProductForm'];
 				}
 				return false;
@@ -333,8 +307,7 @@ class ClientForm
 				break;
 			case 1:
 			{
-				if(isset($_POST['ClientSelectGetWayForm']))
-				{
+				if (isset($_POST['ClientSelectGetWayForm'])) {
 					return $_POST['ClientSelectGetWayForm'];
 				}
 				return false;
@@ -342,8 +315,7 @@ class ClientForm
 				break;
 			case 2:
 			{
-				if(isset($_POST['ClientPersonalDataForm']))
-				{
+				if (isset($_POST['ClientPersonalDataForm'])) {
 					return $_POST['ClientPersonalDataForm'];
 				}
 				return false;
@@ -351,8 +323,7 @@ class ClientForm
 				break;
 			case 3:
 			{
-				if(isset($_POST['ClientAddressForm']))
-				{
+				if (isset($_POST['ClientAddressForm'])) {
 					return $_POST['ClientAddressForm'];
 				}
 				return false;
@@ -360,8 +331,7 @@ class ClientForm
 				break;
 			case 4:
 			{
-				if(isset($_POST['ClientJobInfoForm']))
-				{
+				if (isset($_POST['ClientJobInfoForm'])) {
 					return $_POST['ClientJobInfoForm'];
 				}
 				return false;
@@ -369,8 +339,7 @@ class ClientForm
 			}
 			case 5:
 			{
-				if(isset($_POST['ClientSendForm']))
-				{
+				if (isset($_POST['ClientSendForm'])) {
 					return $_POST['ClientSendForm'];
 				}
 				return false;
@@ -378,8 +347,7 @@ class ClientForm
 				break;
 			case 6:
 			{
-				if(isset($_POST['InviteToIdentification']))
-				{
+				if (isset($_POST['InviteToIdentification'])) {
 					return $_POST['InviteToIdentification'];
 				}
 				return false;
@@ -400,10 +368,9 @@ class ClientForm
 	{
 
 		$this->current_step++;
-		Yii::app()->session['current_step']=$this->current_step;
-		if($this->done_steps<Yii::app()->session['current_step'])
-		{
-			Yii::app()->session['done_steps']=$this->done_steps=Yii::app()->session['current_step'];
+		Yii::app()->session['current_step'] = $this->current_step;
+		if ($this->done_steps < Yii::app()->session['current_step']) {
+			Yii::app()->session['done_steps'] = $this->done_steps = Yii::app()->session['current_step'];
 		}
 
 	}

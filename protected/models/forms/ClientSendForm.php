@@ -6,6 +6,10 @@
  */
 class ClientSendForm extends ClientCreateFormAbstract
 {
+
+	/**
+	 * @var boolean заполненность формы
+	 */
 	public $complete;
 
 	public function rules()

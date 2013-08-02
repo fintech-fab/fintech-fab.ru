@@ -3,14 +3,7 @@
  * @property CPhpMessageSource $coreMessages
  *
  * @property CDbConnection $db
- * @property CDbConnection $db_test
- * @property CDbConnection $db_export
- * @property CDbConnection $db_export_test
- * @property CDbConnection $db_1c
- * @property CDbConnection $db_log
- * @property CDbConnection $db_clb
- * @property CDbConnection $db_clb_test
- * 
+ *
  *
  * @property CPhpMessageSource $messages
  * @property CErrorHandler $errorHandler
@@ -28,6 +21,7 @@
  * @property CWidgetFactory $widgetFactory
  *
  * @property Bootstrap $bootstrap
+ * @property ClientFormComponent $clientForm
 
  *
  * @property CDbAuthManager $authManager

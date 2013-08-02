@@ -28,7 +28,7 @@ $a = array(
 
 	'components'=>array(
 		'clientForm'=>array(
-			'class'=>'application.components.ClientForm',
+			'class'=>'application.components.ClientFormComponent',
 		),
 		'bootstrap'=>array(
 			'class'=>'bootstrap.components.Bootstrap',
@@ -81,7 +81,8 @@ $a = array(
 		),
 
 		'session'=>array(
-			'timeout'=>60*15,
+			'timeout' => 60*30,
+			'sessionName' => 'st',
 		),
 
 		'request' => array(
@@ -92,6 +93,7 @@ $a = array(
 				'api/clientsNew',
 				'api/markProcessed',
 			),
+			'csrfTokenName'=>'stcs',
 		),
 	),
 

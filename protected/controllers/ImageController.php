@@ -47,7 +47,7 @@ class ImageController extends CController
 	public function actionProcessPhoto()
 	{
 		//все шаги пройдены и есть ID клиента
-		if (!Yii::app()->session['form1_complete'] OR !Yii::app()->session['form2_complete'] OR is_null($this->_getClient())) {
+		if (!Yii::app()->session['form_complete'] OR is_null($this->_getClient())) {
 			Yii::app()->end();
 		}
 
@@ -241,10 +241,6 @@ class ImageController extends CController
 	 */
 	private function _getClient()
 	{
-
-		$iUserId = Yii::app()->session['client_id'];
-
-		return $iUserId;
-
+		return Yii::app()->session['client_id'];
 	}
 }

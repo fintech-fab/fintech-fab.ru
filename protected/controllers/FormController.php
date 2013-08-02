@@ -12,7 +12,6 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
-		$clientData=new ClientData(); //объект CActiveRecord для записи в БД
 		$client_id = Yii::app()->session['client_id'];
 
 		/*
@@ -27,7 +26,7 @@ class FormController extends Controller
 		if(Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
 			echo IkTbActiveForm::validate($oForm); //проводим валидацию и возвращаем результат
-			Yii::app()->clientForm->saveAjaxData($clientData,$oForm); //сохраняем полученные при ajax-запросе данные
+			Yii::app()->clientForm->saveAjaxData($oForm); //сохраняем полученные при ajax-запросе данные
 			Yii::app()->end();
 		}
 
@@ -42,18 +41,20 @@ class FormController extends Controller
 				Yii::app()->session['current_step']=0;
 				Yii::app()->session['done_steps']=0;
 				Yii::app()->session['form_complete']=true;
+				/*
 				Yii::app()->session['ClientSelectProductForm']=null;
 				Yii::app()->session['ClientSelectGetWayForm']=null;
 				Yii::app()->session['ClientPersonalDataForm']=null;
 				Yii::app()->session['ClientAddressForm']=null;
 				Yii::app()->session['ClientJobInfoForm']=null;
 				Yii::app()->session['ClientSendForm']=null;
+				*/
 
 				$this->redirect(Yii::app()->createUrl("form/identification"));
 			}
 			elseif($oForm->validate())
 			{
-				Yii::app()->clientForm->formDataProcess($clientData,$oForm);
+				Yii::app()->clientForm->formDataProcess($oForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				$oForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
@@ -79,22 +80,6 @@ class FormController extends Controller
 
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
-
-	public function actionStart()//функция для тестирования, сбрасывает сессию
-	{
-		Yii::app()->session['current_step']='';
-		Yii::app()->session['done_steps']='';
-
-		Yii::app()->session['client_id']='';
-		Yii::app()->session['phone']='';
-
-		$sView=Yii::app()->clientForm->getView();
-
-		$oForm=Yii::app()->clientForm->getFormModel();
-
-		$this->render($sView,array('oClientCreateForm'=>$oForm));
-	}
-
 
 	/**
 	 *  Переход на шаг $step

@@ -109,7 +109,7 @@ $this->widget('TopPageWidget');
 		confirm_text.hide();
 
 		console.log(currentDocument.type);
-		$.post('/image/processPhoto', { image: resultImage.attr('src'), type: currentDocument.type, YII_CSRF_TOKEN: '<?=Yii::app()->request->csrfToken?>' }, function (response) {
+		$.post('/image/processPhoto', { image: resultImage.attr('src'), type: currentDocument.type, <?= Yii::app()->request->csrfTokenName ?>: '<?=Yii::app()->request->csrfToken?>' }, function (response) {
 
 			var json = $.parseJSON(response);
 
