@@ -294,7 +294,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSelectGetWayForm'])) {
 					return $_POST['ClientSelectGetWayForm'];
 				}
-				return null;;
+				return null;
 			}
 				break;
 			case 2:
@@ -302,7 +302,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientPersonalDataForm'])) {
 					return $_POST['ClientPersonalDataForm'];
 				}
-				return null;;
+				return null;
 			}
 				break;
 			case 3:
@@ -310,7 +310,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientAddressForm'])) {
 					return $_POST['ClientAddressForm'];
 				}
-				return null;;
+				return null;
 			}
 				break;
 			case 4:
@@ -318,7 +318,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientJobInfoForm'])) {
 					return $_POST['ClientJobInfoForm'];
 				}
-				return null;;
+				return null;
 				break;
 			}
 			case 5:
@@ -326,7 +326,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSendForm'])) {
 					return $_POST['ClientSendForm'];
 				}
-				return null;;
+				return null;
 			}
 				break;
 			case 6:
@@ -334,7 +334,7 @@ class ClientFormComponent
 				if (isset($_POST['InviteToIdentification'])) {
 					return $_POST['InviteToIdentification'];
 				}
-				return null;;
+				return null;
 				break;
 			}
 			default:
