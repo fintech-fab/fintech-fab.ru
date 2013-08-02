@@ -67,8 +67,6 @@ class ClientFormComponent
 	public function saveAjaxData($oForm)
 	{
 
-		$clientData = new ClientData;
-
 		/**
 		 * @var ClientData $client
 		 */
@@ -104,13 +102,13 @@ class ClientFormComponent
 
 				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
 				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				$clientData->saveClientDataById($formData, $this->client_id);
+				ClientData::saveClientDataById($formData, $this->client_id);
 
 			}
 		} else {
 			if ($this->client_id) {
 				$formData = $oForm->getAttributes();
-				$clientData->saveClientDataById($formData, $this->client_id);
+				ClientData::saveClientDataById($formData, $this->client_id);
 				$formData['client_id'] = $this->client_id;
 			}
 		}
@@ -126,8 +124,6 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oForm)
 	{
-
-		$clientData = new ClientData;
 
 		if (get_class($oForm) === 'ClientSelectProductForm') {
 			Yii::app()->session['product'] = $oForm->product;
@@ -170,12 +166,12 @@ class ClientFormComponent
 				$formData = $oForm->getAttributes();
 				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
 				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				$clientData->saveClientDataById($formData, $this->client_id);
+				ClientData::saveClientDataById($formData, $this->client_id);
 			}
 		} else {
 			if ($this->client_id) {
 				$formData = $oForm->getAttributes();
-				$clientData->saveClientDataById($formData, $this->client_id);
+				ClientData::saveClientDataById($formData, $this->client_id);
 			}
 		}
 		$formData = $oForm->getAttributes();

@@ -156,13 +156,13 @@ class ClientData extends CActiveRecord
 
 
 	//проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
-	public function checkClientByPhone($phone)
+	public static function checkClientByPhone($phone)
 	{
-		$oClientFormAbstract = $this->scopePhone($phone)->find();
+		$oClientForm = self::model()->scopePhone($phone)->find();
 
 		return (
-			$oClientFormAbstract &&
-			$oClientFormAbstract->complete == 1
+			$oClientForm &&
+			$oClientForm->complete == 1
 		);
 
 	}
@@ -179,7 +179,7 @@ class ClientData extends CActiveRecord
 		}
 
 		$oClient->phone = $model->phone;
-		$oClient->dt_add = date('Y-m-d H:i:s', time()); //пишем timestamp создания записи
+		$oClient->dt_add = date('Y-m-d H:i:s', time());
 		$oClient->flag_processed = 0;
 		$oClient->save();
 		return $oClient;
@@ -197,23 +197,23 @@ class ClientData extends CActiveRecord
 	}
 
 
-	public function getClientDataById($client_id) //получаем данные клиента по ID
+	public static function getClientDataById($client_id)
 	{
-		if ($client = $this->find('client_id=:client_id', array(':client_id' => $client_id))) {
+		if ($client = self::model()->find('client_id=:client_id', array(':client_id' => $client_id))) {
 			return $client->getAttributes();
 		}
 		return false;
 	}
 
 	/**
-	 * @param $aClientData
+	 * @param $aClientFormData
 	 * @param $client_id
 	 * @return bool
 	 */
-	public function saveClientDataById($aClientData, $client_id)
+	public static function saveClientDataById($aClientFormData, $client_id)
 	{
-		if ($client = $this->find('client_id=:client_id', array(':client_id' => $client_id))) {
-			$client->setAttributes($aClientData);
+		if ($client = self::model()->find('client_id=:client_id', array(':client_id' => $client_id))) {
+			$client->setAttributes($aClientFormData);
 			$client->save();
 			return true;
 		}
