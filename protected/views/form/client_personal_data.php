@@ -40,6 +40,7 @@
 		'enableClientValidation'=>true,
 		'clientOptions'=>array(
 			'validateOnChange'=>true,
+			'validateOnSubmit'=>true,
 		),
 		'action' => Yii::app()->createUrl('/form/'),
 	));

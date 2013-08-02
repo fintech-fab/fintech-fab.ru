@@ -21,6 +21,7 @@ class ClientFormComponent
 	private $current_step;
 	private $done_steps;
 
+
 	public function init()
 	{
 		if (!$this->client_id = Yii::app()->session['client_id']) {
@@ -63,7 +64,7 @@ class ClientFormComponent
 	{
 
 		/**
-		 * @var ClientData $client
+
 		 */
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
 			if ($oClientForm->phone) {
@@ -83,11 +84,11 @@ class ClientFormComponent
 					 * и если находит - возвращает запись с указанным телефоном как результат
 					 */
 					$oClientData = ClientData::addClient($oClientForm);
-					Yii::app()->session['client_id'] = $client->client_id;
+					Yii::app()->session['client_id'] = $oClientData->client_id;
 
-					$this->client_id = $client->client_id;
+					$this->client_id = $oClientData->client_id;
 
-					$aCookieData = array('client_id' => $client->client_id, 'phone' => $oClientData->phone);
+					$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $oClientData->phone);
 					Cookie::saveDataToCookie('client', $aCookieData);
 				}
 			}
