@@ -18,10 +18,10 @@ $this->widget('TopPageWidget');
 		<div class="row">
 			<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
 			<video id="inputVideo" class="span8" width="100%" autoplay loop
-			       style="-webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
+			       style=""></video>
 
 			<div class="span4">
-				<img id="exampleImage" width="100%" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);"/><br/><br/>
+				<img id="exampleImage" width="100%"/><br/><br/>
 
 				<button data-toggle="modal" data-target="#confirm-modal" id="shot-button" class="btn btn-primary"
 				        style="display: none;">сфотографировать
@@ -39,7 +39,7 @@ $this->widget('TopPageWidget');
 </div>
 
 <div class="modal-body">
-	<img id="resultImage" width="100%" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);"/>
+	<img id="resultImage" width="100%" style=""/>
 </div>
 
 <div class="modal-footer">
@@ -132,8 +132,7 @@ $this->widget('TopPageWidget');
 		confirmShotButton.hide();
 		confirm_text.hide();
 
-		console.log(currentDocument.type);
-		$.post('/image/processPhoto', { image: exampleImage.attr('src'), type: currentDocument.type, '<?= Yii::app()->request->csrfTokenName ?>': '<?=Yii::app()->request->csrfToken?>'}, function (response) {
+		$.post('/image/processPhoto', { image: resultImage.attr('src'), type: currentDocument.type, '<?= Yii::app()->request->csrfTokenName ?>': '<?=Yii::app()->request->csrfToken?>'}, function (response) {
 
 				var json = $.parseJSON(response);
 
@@ -166,9 +165,7 @@ $this->widget('TopPageWidget');
 				instructions.text(currentDocument.instructions);
 				exampleImage.attr('src', currentDocument.example);
 
-			}
-		)
-		;
+			});
 	}
 
 </script>

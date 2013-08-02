@@ -16,7 +16,7 @@ $this->widget('TopPageWidget');
 
 	<div class="span12">
 		<div class="row">
-			<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
+			<canvas id="inputCanvas" width="640" height="480" style="display: none; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></canvas>
 			<video id="inputVideo" class="span8" width="100%" autoplay loop
 			       style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
 			<canvas id="overlay" class="span8"></canvas>
