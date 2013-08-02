@@ -57,7 +57,7 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 		$aRules =
 			array(
-				array('phone', 'unique', 'className'=>'ClientData', 'attributeName'=>'phone','message'=>'У нас уже есть клиент с этим номером телефона! Введите другой номер или позвоните на горячую линию.','criteria'=>array(
+				array('phone', 'unique', 'className'=>'ClientData', 'attributeName'=>'phone','message'=>'Ошибка! Позвоните, пожалуйста, на горячую линию.','criteria'=>array(
 						'condition'=>'complete = :complete','params' => array(':complete'=>1)
 					)
 				),
