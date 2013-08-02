@@ -82,33 +82,33 @@ class ClientFormComponent
 					 * функция addClient()ищет клиента в базе по телефону,
 					 * и если находит - возвращает запись с указанным телефоном как результат
 					 */
-					$client = ClientData::addClient($oClientForm);
+					$oClientData = ClientData::addClient($oClientForm);
 					Yii::app()->session['client_id'] = $client->client_id;
 
 					$this->client_id = $client->client_id;
 
-					$data = array('client_id' => $client->client_id, 'phone' => $client->phone);
-					Cookie::saveDataToCookie('client', $data);
+					$aCookieData = array('client_id' => $client->client_id, 'phone' => $oClientData->phone);
+					Cookie::saveDataToCookie('client', $aCookieData);
 				}
 			}
 			if ($this->client_id) {
 
-				$formData = $oClientForm->getAttributes();
+				$aClientFormData = $oClientForm->getAttributes();
 
-				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
-				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				ClientData::saveClientDataById($formData, $this->client_id);
+				$aClientFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
+				$aClientFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
 			}
 		} else {
 			if ($this->client_id) {
-				$formData = $oClientForm->getAttributes();
-				ClientData::saveClientDataById($formData, $this->client_id);
-				$formData['client_id'] = $this->client_id;
+				$aClientFormData = $oClientForm->getAttributes();
+				ClientData::saveClientDataById($aClientFormData, $this->client_id);
+				$aClientFormData['client_id'] = $this->client_id;
 			}
 		}
-		$formData = $oClientForm->getAttributes();
-		Yii::app()->session[get_class($oClientForm)] = $formData;
+		$aClientFormData = $oClientForm->getAttributes();
+		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
 		return;
 	}
 
@@ -149,28 +149,28 @@ class ClientFormComponent
 				 * функция addClient()ищет клиента в базе по телефону,
 				 * и если находит - возвращает запись с указанным телефоном как результат
 				 */
-				$client = ClientData::addClient($oClientForm);
-				Yii::app()->session['client_id'] = $client->client_id;
+				$oClientData = ClientData::addClient($oClientForm);
+				Yii::app()->session['client_id'] = $oClientData->client_id;
 
-				$this->client_id = $client->client_id;
+				$this->client_id = $oClientData->client_id;
 
-				$data = array('client_id' => $client->client_id, 'phone' => $client->phone);
-				Cookie::saveDataToCookie('client', $data);
+				$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $oClientData->phone);
+				Cookie::saveDataToCookie('client', $aCookieData);
 			}
 			if ($this->client_id) {
-				$formData = $oClientForm->getAttributes();
-				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
-				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
-				ClientData::saveClientDataById($formData, $this->client_id);
+				$aClientFormData = $oClientForm->getAttributes();
+				$aClientFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
+				$aClientFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 			}
 		} else {
 			if ($this->client_id) {
-				$formData = $oClientForm->getAttributes();
-				ClientData::saveClientDataById($formData, $this->client_id);
+				$aClientFormData = $oClientForm->getAttributes();
+				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 			}
 		}
-		$formData = $oClientForm->getAttributes();
-		Yii::app()->session[get_class($oClientForm)] = $formData;
+		$aClientFormData = $oClientForm->getAttributes();
+		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
 		return;
 	}
 
