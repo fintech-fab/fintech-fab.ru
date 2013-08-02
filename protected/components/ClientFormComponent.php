@@ -60,7 +60,7 @@ class ClientFormComponent
 	 *
 	 * @param ClientCreateFormAbstract $oClientForm
 	 */
-	public function saveAjaxData($oClientForm)
+	public function saveAjaxData(ClientCreateFormAbstract $oClientForm)
 	{
 
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {

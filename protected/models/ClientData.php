@@ -180,22 +180,22 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
-	 * @param ClientCreateFormAbstract|ClientPersonalDataForm $model
+	 * @param ClientCreateFormAbstract $oClientForm
 	 * @return ClientData
 	 */
-	public static function addClient(ClientCreateFormAbstract $model)
+
+	public static function addClient(ClientCreateFormAbstract $oClientForm)
 	{
-		$oClientData = self::model()->scopePhone($model->phone)->find();
+		$oClientData = self::model()->scopePhone($oClientForm->phone)->find();
 		if (!$oClientData) {
 			$oClientData = new self;
 		}
 
-		$oClientData->phone = $model->phone;
+		$oClientData->phone = $oClientForm->phone;
 		$oClientData->dt_add = date('Y-m-d H:i:s', time());
 		$oClientData->flag_processed = 0;
 		$oClientData->save();
 		return $oClientData;
-
 	}
 
 	/**
