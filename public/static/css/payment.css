@@ -47,6 +47,11 @@
   margin-bottom: 20px;
 }
 
+.conditions .cost {
+	font-size: 14px;
+	font-weight: bold;
+}
+
 /*.pay_list_href {
   height: 95%;
   width: 95%;

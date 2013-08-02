@@ -29,17 +29,16 @@ function showConditions(obj)
 
 $(document).ready(function()
 {
-	//showConditions($('#ClientSelectProductForm .radio:first label > span'));
-
 	$('#ClientSelectProductForm .radio').click(function(){
 		showConditions($(this).find("label > span"));
 	});
 
-	$('#ClientSelectProductForm .radio:first').click();
+	showConditions($('#ClientSelectProductForm .radio:first label > span'));
 
-	/*if($('.conditions').is(":visible"))
-	{
-		n = $('.date').attr('data-time');
-		$('.date').html(getDateToPayUntil(n));
-	}*/
+	$('#ClientSelectProductForm .radio').each(function(){
+		if(($(this).find("input:checked").attr("value"))!==undefined)
+		{
+			showConditions($(this).find("label > span"));
+		}
+	});
 });

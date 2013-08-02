@@ -12,11 +12,10 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRequired = array_merge(
-			array(
+		$aRequired =array(
 				'product',
-			)
-		);
+			);
+
 
 		$aRules = $this->getRulesByFields(
 
@@ -25,7 +24,8 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts),'message' => 'Выберите сумму займа');
+		$aRules[]=array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts),'message' => 'Выберите сумму займа');
+
 
 		return $aRules;
 
@@ -34,7 +34,7 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array_merge(
-			parent::attributeLabels(),
+			//parent::attributeLabels(),
 			array('product' => 'Сумма займа',)
 		);
 	}

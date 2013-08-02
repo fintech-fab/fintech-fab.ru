@@ -37,7 +37,21 @@ class FormController extends Controller
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oForm->attributes=$aPost; //передаем запрос в форму
-			if($oForm->validate())
+			if(isset($oForm->go)&&$oForm->go=="1")
+			{
+				Yii::app()->session['current_step']=0;
+				Yii::app()->session['done_steps']=0;
+				Yii::app()->session['form_complete']=true;
+				Yii::app()->session['ClientSelectProductForm']=null;
+				Yii::app()->session['ClientSelectGetWayForm']=null;
+				Yii::app()->session['ClientPersonalDataForm']=null;
+				Yii::app()->session['ClientAddressForm']=null;
+				Yii::app()->session['ClientJobInfoForm']=null;
+				Yii::app()->session['ClientSendForm']=null;
+
+				$this->redirect(Yii::app()->createUrl("form/identification"));
+			}
+			elseif($oForm->validate())
 			{
 				Yii::app()->clientForm->formDataProcess($clientData,$oForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
@@ -46,12 +60,16 @@ class FormController extends Controller
 		}
 
 		/**
-		 * Загрузка данных из cookie в форму, если данные существуют и client_id сессии совпадает с оным в куке
+		 * Загрузка данных из сессии в форму, если данные существуют и client_id сессии совпадает с оным в куке
 		 */
 
-		if(Cookie::compareDataInCookie(get_class($oForm),'client_id',$client_id)&&($cookieData = Cookie::getDataFromCookie(get_class($oForm))))
+		if(Cookie::compareDataInCookie('client','client_id',$client_id))
 		{
-			$oForm->setAttributes($cookieData);
+			if(isset($oForm)&&$oForm)
+			{
+				$sessionClientData = Yii::app()->session[get_class($oForm)];
+				$oForm->setAttributes($sessionClientData);
+			}
 		}
 
 		/**
@@ -77,6 +95,7 @@ class FormController extends Controller
 		$this->render($sView,array('oClientCreateForm'=>$oForm));
 	}
 
+
 	/**
 	 *  Переход на шаг $step
 	 *  @param int $step
@@ -91,11 +110,34 @@ class FormController extends Controller
 			}
 			else
 			{
+				Yii::app()->session['done_steps']=$step-1;
 				Yii::app()->session['current_step']=$step-1;
 			}
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
+	}
+
+	public function actionIdentification() {
+
+		if(!Yii::app()->session['form_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+		$this->render('identification');
+	}
+
+	/**
+	 * Загрузка документов
+	 */
+	public function actionDocuments() {
+
+		if(!Yii::app()->session['form_complete'])
+		{
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+
+		$this->render('documents');
 	}
 
 	public function actionError()

@@ -11,11 +11,9 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 		// всегда обязательные поля
-		$aRequired = array_merge(
-			array(
+		$aRequired = array(
 				'get_way',
-			)
-		);
+			);
 
 		$aRules = $this->getRulesByFields(
 
@@ -24,7 +22,7 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		array('get_way', 'in', 'range' => array_keys(Dictionaries::aWays(Yii::app()->session['product'])),'message' => 'Выберите правильный способ');
+		$aRules[]=array('get_way', 'in', 'range' => array_keys(Dictionaries::aWays(Yii::app()->session['product'])),'message' => 'Выберите правильный способ');
 
 		return $aRules;
 
@@ -33,7 +31,7 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array_merge(
-			parent::attributeLabels(),
+			//parent::attributeLabels(),
 			array('get_way' => 'Способ получения',)
 		);
 	}

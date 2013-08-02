@@ -1,20 +1,11 @@
 <?php
-/* @var $this SiteController */
+/* @var $this FormController */
 
 $this->pageTitle = Yii::app()->name;
 ?>
 <?php
 $this->widget('TopPageWidget');
 ?>
-
-<div class="container">
-	<div class="row">
-		<div class="span12">
-			<?php $this->widget('StepsBreadCrumbs', array(
-				'curStep' => 4,
-			)); ?>
-		</div>
-	</div>
 	<div class="row">
 		<div class="span12">
 			<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
@@ -33,7 +24,6 @@ $this->widget('TopPageWidget');
 		</div>
 
 	</div>
-</div>
 
 <script type="text/javascript" src="<?= Yii::app()->request->baseUrl ?>/static/js/headtrackr.js"></script>
 
@@ -140,7 +130,7 @@ $this->widget('TopPageWidget');
 				var faceCount = parseInt(response);
 
 				if (faceCount === 1) {
-					instructions.html('Данные успешно сохранены <a href="/site/documents" class="btn">продолжить</a>');
+					instructions.html('Данные успешно сохранены <a href="/form/documents" class="btn">продолжить</a>');
 
 					contextOverlay.clearRect(0, 0, canvas.width, canvas.height);
 					headTracker.stop();

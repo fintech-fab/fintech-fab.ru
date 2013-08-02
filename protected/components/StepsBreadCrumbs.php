@@ -9,8 +9,6 @@ class StepsBreadCrumbs extends CWidget
 		array('Адрес',array("/form/4")),
 		array('Информация о работе',array("/form/5")),
 		array('Отправка',array("/form/6")),
-		array('Видеоидентификация', array('site/identification')),
-		array('Загрузка документов', array('site/documents'))
 	);
 	
 	public $divider = ' → ';
@@ -20,10 +18,11 @@ class StepsBreadCrumbs extends CWidget
 		'id' => 'steps',
 	);
 
-	public $curStep = 1; // номер текущего шага
+	public $curStep; // номер текущего шага
 
 	public function run()
 	{
+		$this->curStep = Yii::app()->clientForm->getCurrentStep()+1;
 		$this->render('stepsbreadcrumbs');
 	}
 }
