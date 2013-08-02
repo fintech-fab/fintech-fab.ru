@@ -22,7 +22,7 @@ class ClientSelectGetWayForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		$aRules[]=array('get_way', 'in', 'range' => array_keys(Dictionaries::aWays(Yii::app()->session['product'])),'message' => 'Выберите правильный способ');
+		$aRules[]=array('get_way', 'in', 'range' => array_keys(Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product'])),'message' => 'Выберите правильный способ');
 
 		return $aRules;
 
