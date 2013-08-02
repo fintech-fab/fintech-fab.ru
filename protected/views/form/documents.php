@@ -28,22 +28,11 @@ $this->widget('TopPageWidget');
 				</button>
 			</div>
 		</div>
-		<br/>
-
-		<div class="row">
-			<div class="span6">
-			</div>
-			<div class="span6">
-				<!--				<button id="confirm-shot-button" class="btn pull-right" style="display: none"-->
-				<!--				        onclick="confirmImage()">продолжить-->
-				<!--				</button>-->
-			</div>
-		</div>
 	</div>
 
 </div>
 
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'confirm-modal')); ?>
+<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'confirm-modal', 'fade' => false)); ?>
 
 <div class="modal-header">
 	<a class="close" data-dismiss="modal">&times;</a>
