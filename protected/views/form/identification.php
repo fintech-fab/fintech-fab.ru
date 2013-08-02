@@ -44,6 +44,7 @@ $this->widget('TopPageWidget');
 		//рисуем квадрат
 		canvasOverlay.style.position = "absolute";
 		canvasOverlay.style.top = parseInt($(inputVideo).position().top + 110) + 'px';
+		canvasOverlay.style.left = $(inputVideo).position();
 		canvasOverlay.style.display = 'block';
 
 		contextOverlay.beginPath();
