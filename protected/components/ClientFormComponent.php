@@ -76,7 +76,7 @@ class ClientFormComponent
 
 				if (
 					$aCookieData &&
-					Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone)&&
+					Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
 					!empty($aCookieData['client_id'])
 				) {
 					Yii::app()->session['client_id'] = $aCookieData['client_id'];
@@ -95,6 +95,7 @@ class ClientFormComponent
 					Cookie::saveDataToCookie('client', $aCookieData);
 				}
 			}
+
 			if ($this->client_id) {
 
 				$aClientFormData = $oClientForm->getAttributes();
