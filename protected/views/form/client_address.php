@@ -1,17 +1,23 @@
 <?php
 /* @var FormController $this*/
-/* @var ClientSelectGetWayForm $model*/
+/* @var ClientAddressForm $model*/
 /* @var IkTbActiveForm $form*/
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
 /*
- * Выбор способа получения займа
+ * Адрес:
+ * + Регион
+ * + Город
+ * + Адрес
+ * Контактное лицо:
+ * + ФИО
+ * + Номер телефона
  */
 ?>
 
 <div class="row">
 
-	<?php $this->widget('StepsBreadCrumbs'); ?>
+	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
 
@@ -28,21 +34,21 @@
 	));
 
 	?>
-	<div class="row span6">
-		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/02T.png">
-		<?php
-		if(!(($oClientCreateForm->get_way=Yii::app()->session['ClientSelectGetWayForm']['get_way'])&&(array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product'])))))
-		{
-			$oClientCreateForm->get_way = "1";
-		}
-		?>
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product']));//TODO: вынести в контроллер
-		?>
-	</div>
+
+<div class="row span6">
+	<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
+	<h2>Адрес</h2>
+		<? require dirname(__FILE__) . '/fields/address_reg.php' ?>
+</div>
 
 	<?php $this->widget('ChosenConditionsWidget',array(
 		'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
 	)); ?>
+
+<div class="row span12">
+	<h2>Контактное лицо</h2>
+		<? require dirname(__FILE__) . '/fields/relatives_one.php' ?>
+</div>
 
 	<div class="clearfix"></div>
 
@@ -54,7 +60,6 @@
 		)); ?>
 	</div>
 </div>
-	<?
-
-	$this->endWidget();
-	?>
+<?
+$this->endWidget();
+?>

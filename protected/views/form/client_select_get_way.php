@@ -1,24 +1,17 @@
 <?php
 /* @var FormController $this*/
-/* @var ClientJobInfoForm $model*/
+/* @var ClientSelectGetWayForm $model*/
 /* @var IkTbActiveForm $form*/
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
 /*
- * Место работы
- * Должность
- * Номер телефона
- * Стаж работы
- * Среднемесячный доход
- * Среднемесячный расход
- * Наличие кредитов и займов в прошлом
+ * Выбор способа получения займа
  */
-
 ?>
 
 <div class="row">
 
-	<?php $this->widget('StepsBreadCrumbs'); ?>
+	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
 
@@ -36,9 +29,15 @@
 
 	?>
 	<div class="row span6">
-		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/04T.png">
-		<br/>
-		<? require dirname(__FILE__) . '/fields/job.php' ?>
+		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/02T.png">
+		<?php
+		if(!(($oClientCreateForm->get_way=Yii::app()->session['ClientSelectGetWayForm']['get_way'])&&(array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product'])))))
+		{
+			$oClientCreateForm->get_way = "1";
+		}
+		?>
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product']));//TODO: вынести в контроллер
+		?>
 	</div>
 
 	<?php $this->widget('ChosenConditionsWidget',array(
@@ -55,7 +54,7 @@
 		)); ?>
 	</div>
 </div>
-<?
+	<?
 
-$this->endWidget();
-?>
+	$this->endWidget();
+	?>

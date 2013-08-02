@@ -28,7 +28,7 @@ $this->showTopPageWidget = true;
 <div class="container">
 	<div class="row">
 		<div class="span12">
-			<?php $this->widget('StepsBreadCrumbs',array(
+			<?php $this->widget('StepsBreadCrumbsWidget',array(
 				'curStep'=>1,
 			)); ?>
 		</div>

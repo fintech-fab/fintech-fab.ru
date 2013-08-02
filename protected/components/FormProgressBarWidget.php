@@ -1,6 +1,6 @@
 <?php
 
-class FormProgressBar extends CWidget
+class FormProgressBarWidget extends CWidget
 {
 	public $allFields = 17; // общее число требуемых для заполнения полей
 	public $filledFields; // значение уже заполненных полей progressbar'a
@@ -10,7 +10,7 @@ class FormProgressBar extends CWidget
 
 	public function run()
 	{
-		$this->render('progressbar');
+		$this->render('progress_bar');
 	}
 }
 ?>

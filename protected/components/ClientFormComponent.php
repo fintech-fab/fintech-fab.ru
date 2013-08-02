@@ -254,25 +254,25 @@ class ClientFormComponent
 	{
 		switch ($this->current_step) {
 			case 0:
-				return 'clientselectproduct';
+				return 'client_select_product';
 				break;
 			case 1:
-				return 'clientselectgetway';
+				return 'client_select_get_way';
 				break;
 			case 2:
-				return 'clientpersonaldata';
+				return 'client_personal_data';
 				break;
 			case 3:
-				return 'clientaddress';
+				return 'client_address';
 				break;
 			case 4:
-				return 'clientjobinfo';
+				return 'client_job_info';
 				break;
 			case 5:
-				return 'clientsend';
+				return 'client_send';
 				break;
 			case 6:
-				return 'invitetoidentification';
+				return 'invite_to_identification';
 				break;
 			case 7:
 				return 'identification';
@@ -284,7 +284,7 @@ class ClientFormComponent
 				return false;
 				break;
 			default:
-				return 'clientselectproduct';
+				return 'client_select_product';
 				break;
 		}
 	}

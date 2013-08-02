@@ -15,7 +15,7 @@
 	</ul>
 </div>
 
-<div class="span2"><img src="<?= Yii::app()->request->baseUrl; ?>/static/img/step<?= ( $this->curStep > 6 )? '6' : $this->curStep; ?>.png"></div>
+<div class="span2"><img src="<?= Yii::app()->request->baseUrl ?>/static/img/step<?= ( $this->curStep > 6 )? '6' : $this->curStep; ?>.png"></div>
 
 <?php
 if($this->curStep == 1){

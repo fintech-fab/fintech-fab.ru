@@ -1,6 +1,6 @@
 <?php
 
-class StepsBreadCrumbs extends CWidget
+class StepsBreadCrumbsWidget extends CWidget
 {
 	public $crumbs = array(
 		array('Выбор суммы',array("/form/1")),
@@ -23,7 +23,7 @@ class StepsBreadCrumbs extends CWidget
 	public function run()
 	{
 		$this->curStep = Yii::app()->clientForm->getCurrentStep()+1;
-		$this->render('stepsbreadcrumbs');
+		$this->render('steps_bread_crumbs');
 	}
 }
 
