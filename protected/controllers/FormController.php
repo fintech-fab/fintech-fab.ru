@@ -109,7 +109,7 @@ class FormController extends Controller
 		{
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
-		echo '<pre>' . ""; CVarDumper::dump(Cookie::getDataFromCookie('client')); echo '</pre>';
+
 		$this->render('identification');
 	}
 

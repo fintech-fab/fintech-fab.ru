@@ -123,12 +123,6 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-
-		if (get_class($oClientForm) === 'ClientSelectProductForm') {
-			Yii::app()->session['product'] = $oClientForm->product;
-		} elseif (get_class($oClientForm) === 'ClientSelectGetWayForm') {
-			Yii::app()->session['get_way'] = $oClientForm->get_way;
-		}
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
 
 			/**
