@@ -21,11 +21,6 @@ class ClientFormComponent
 	private $current_step;
 	private $done_steps;
 
-	/**
-	 * Возвращает модель текущей формы.
-	 *
-	 * @return ClientCreateFormAbstract
-	 */
 	public function init()
 	{
 		if (!$this->client_id = Yii::app()->session['client_id']) {
@@ -62,16 +57,16 @@ class ClientFormComponent
 	 * полученных при ajax-валидации,
 	 * в сессию, куки и БД
 	 *
-	 * @param ClientCreateFormAbstract $oForm
+	 * @param ClientCreateFormAbstract $oClientForm
 	 */
-	public function saveAjaxData($oForm)
+	public function saveAjaxData($oClientForm)
 	{
 
 		/**
 		 * @var ClientData $client
 		 */
-		if (get_class($oForm) === 'ClientPersonalDataForm') {
-			if ($oForm->phone) {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
+			if ($oClientForm->phone) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
 				 * и сравниваем введенный телефон с телефоном в куках.
@@ -79,7 +74,7 @@ class ClientFormComponent
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
-				if (($cookieData = Cookie::getDataFromCookie('client')) && (Cookie::compareDataInCookie('client', 'phone', $oForm->phone))) {
+				if (($cookieData = Cookie::getDataFromCookie('client')) && (Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone))) {
 					Yii::app()->session['client_id'] = $cookieData['client_id'];
 					$this->client_id = Yii::app()->session['client_id'];
 				} else {
@@ -87,7 +82,7 @@ class ClientFormComponent
 					 * функция addClient()ищет клиента в базе по телефону,
 					 * и если находит - возвращает запись с указанным телефоном как результат
 					 */
-					$client = ClientData::addClient($oForm);
+					$client = ClientData::addClient($oClientForm);
 					Yii::app()->session['client_id'] = $client->client_id;
 
 					$this->client_id = $client->client_id;
@@ -98,7 +93,7 @@ class ClientFormComponent
 			}
 			if ($this->client_id) {
 
-				$formData = $oForm->getAttributes();
+				$formData = $oClientForm->getAttributes();
 
 				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
 				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
@@ -107,30 +102,30 @@ class ClientFormComponent
 			}
 		} else {
 			if ($this->client_id) {
-				$formData = $oForm->getAttributes();
+				$formData = $oClientForm->getAttributes();
 				ClientData::saveClientDataById($formData, $this->client_id);
 				$formData['client_id'] = $this->client_id;
 			}
 		}
-		$formData = $oForm->getAttributes();
-		Yii::app()->session[get_class($oForm)] = $formData;
+		$formData = $oClientForm->getAttributes();
+		Yii::app()->session[get_class($oClientForm)] = $formData;
 		return;
 	}
 
 	/**
 	 * Выполняет обработку данных формы после проверки.
 	 *
-	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectGetWayForm|ClientPersonalDataForm $oForm
+	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectGetWayForm|ClientPersonalDataForm $oClientForm
 	 */
-	public function formDataProcess(ClientCreateFormAbstract $oForm)
+	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
 
-		if (get_class($oForm) === 'ClientSelectProductForm') {
-			Yii::app()->session['product'] = $oForm->product;
-		} elseif (get_class($oForm) === 'ClientSelectGetWayForm') {
-			Yii::app()->session['get_way'] = $oForm->get_way;
+		if (get_class($oClientForm) === 'ClientSelectProductForm') {
+			Yii::app()->session['product'] = $oClientForm->product;
+		} elseif (get_class($oClientForm) === 'ClientSelectGetWayForm') {
+			Yii::app()->session['get_way'] = $oClientForm->get_way;
 		}
-		if (get_class($oForm) === 'ClientPersonalDataForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
@@ -144,7 +139,7 @@ class ClientFormComponent
 
 			if (
 				$cookieData &&
-				Cookie::compareDataInCookie('client', 'phone', $oForm->phone) &&
+				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
 				!empty($cookieData['client_id'])
 			) {
 				Yii::app()->session['client_id'] = $cookieData['client_id'];
@@ -154,7 +149,7 @@ class ClientFormComponent
 				 * функция addClient()ищет клиента в базе по телефону,
 				 * и если находит - возвращает запись с указанным телефоном как результат
 				 */
-				$client = ClientData::addClient($oForm);
+				$client = ClientData::addClient($oClientForm);
 				Yii::app()->session['client_id'] = $client->client_id;
 
 				$this->client_id = $client->client_id;
@@ -163,19 +158,19 @@ class ClientFormComponent
 				Cookie::saveDataToCookie('client', $data);
 			}
 			if ($this->client_id) {
-				$formData = $oForm->getAttributes();
+				$formData = $oClientForm->getAttributes();
 				$formData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
 				$formData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
 				ClientData::saveClientDataById($formData, $this->client_id);
 			}
 		} else {
 			if ($this->client_id) {
-				$formData = $oForm->getAttributes();
+				$formData = $oClientForm->getAttributes();
 				ClientData::saveClientDataById($formData, $this->client_id);
 			}
 		}
-		$formData = $oForm->getAttributes();
-		Yii::app()->session[get_class($oForm)] = $formData;
+		$formData = $oClientForm->getAttributes();
+		Yii::app()->session[get_class($oClientForm)] = $formData;
 		return;
 	}
 
@@ -204,8 +199,11 @@ class ClientFormComponent
 	}
 
 	/**
+	 * Возвращает модель текущей формы.
+	 *
 	 * @return ClientCreateFormAbstract|null
 	 */
+
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
 		switch ($this->current_step) {
@@ -229,11 +227,6 @@ class ClientFormComponent
 				break;
 			case 6:
 				return new InviteToIdentification();
-				break;
-			case 7:
-			case 8:
-			case 9:
-				return null;
 				break;
 			default:
 				return new ClientSelectProductForm();
@@ -269,15 +262,6 @@ class ClientFormComponent
 				break;
 			case 6:
 				return 'invite_to_identification';
-				break;
-			case 7:
-				return 'identification';
-				break;
-			case 8:
-				return 'documents';
-				break;
-			case 9:
-				return false;
 				break;
 			default:
 				return 'client_select_product';
@@ -350,7 +334,7 @@ class ClientFormComponent
 				break;
 			}
 			default:
-				return false;
+				return null;
 				break;
 
 		}
