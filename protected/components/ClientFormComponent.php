@@ -63,9 +63,6 @@ class ClientFormComponent
 	public function saveAjaxData($oClientForm)
 	{
 
-		/**
-
-		 */
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
 			if ($oClientForm->phone) {
 				/**
@@ -75,8 +72,14 @@ class ClientFormComponent
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
-				if (($cookieData = Cookie::getDataFromCookie('client')) && (Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone))) {
-					Yii::app()->session['client_id'] = $cookieData['client_id'];
+				$aCookieData = Cookie::getDataFromCookie('client');
+
+				if (
+					$aCookieData &&
+					Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone)&&
+					!empty($aCookieData['client_id'])
+				) {
+					Yii::app()->session['client_id'] = $aCookieData['client_id'];
 					$this->client_id = Yii::app()->session['client_id'];
 				} else {
 					/**
@@ -136,14 +139,14 @@ class ClientFormComponent
 			 * о нем в сессию и куку.
 			 */
 
-			$cookieData = Cookie::getDataFromCookie('client');
+			$aCookieData = Cookie::getDataFromCookie('client');
 
 			if (
-				$cookieData &&
+				$aCookieData &&
 				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
-				!empty($cookieData['client_id'])
+				!empty($aCookieData['client_id'])
 			) {
-				Yii::app()->session['client_id'] = $cookieData['client_id'];
+				Yii::app()->session['client_id'] = $aCookieData['client_id'];
 				$this->client_id = Yii::app()->session['client_id'];
 			} else {
 				/**
@@ -283,7 +286,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSelectProductForm'])) {
 					return $_POST['ClientSelectProductForm'];
 				}
-				return false;
+				return null;
 			}
 				break;
 			case 1:
@@ -291,7 +294,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSelectGetWayForm'])) {
 					return $_POST['ClientSelectGetWayForm'];
 				}
-				return false;
+				return null;;
 			}
 				break;
 			case 2:
@@ -299,7 +302,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientPersonalDataForm'])) {
 					return $_POST['ClientPersonalDataForm'];
 				}
-				return false;
+				return null;;
 			}
 				break;
 			case 3:
@@ -307,7 +310,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientAddressForm'])) {
 					return $_POST['ClientAddressForm'];
 				}
-				return false;
+				return null;;
 			}
 				break;
 			case 4:
@@ -315,7 +318,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientJobInfoForm'])) {
 					return $_POST['ClientJobInfoForm'];
 				}
-				return false;
+				return null;;
 				break;
 			}
 			case 5:
@@ -323,7 +326,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSendForm'])) {
 					return $_POST['ClientSendForm'];
 				}
-				return false;
+				return null;;
 			}
 				break;
 			case 6:
@@ -331,7 +334,7 @@ class ClientFormComponent
 				if (isset($_POST['InviteToIdentification'])) {
 					return $_POST['InviteToIdentification'];
 				}
-				return false;
+				return null;;
 				break;
 			}
 			default:
