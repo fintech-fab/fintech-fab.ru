@@ -19,7 +19,7 @@ $this->widget('TopPageWidget');
 			<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
 			<video id="inputVideo" class="span8" width="100%" autoplay loop
 			       style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
-			<canvas id="overlay" class="span4"></canvas>
+			<canvas id="overlay" class="span8"></canvas>
 		</div>
 	</div>
 
@@ -55,13 +55,13 @@ $this->widget('TopPageWidget');
 
 				//рисуем квадрат
 				canvasOverlay.style.position = 'absolute';
-				canvasOverlay.style.top = parseInt($(inputVideo).position().top + 110) + 'px';
+				canvasOverlay.style.top = parseInt($(inputVideo).position().top + 100) + 'px';
 				canvasOverlay.style.left = parseInt($(inputVideo).position().left) + 'px';
 				canvasOverlay.style.zIndex = '10000';
 				canvasOverlay.style.display = 'block';
 
 				contextOverlay.beginPath();
-				contextOverlay.rect(220, 0, 300, 300);
+				contextOverlay.rect(100, 0, 100, 100);
 				contextOverlay.lineWidth = 3;
 				contextOverlay.strokeStyle = 'white';
 				contextOverlay.stroke();
