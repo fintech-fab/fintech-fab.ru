@@ -173,6 +173,7 @@ class ImageController extends CController
 					break;
 			}
 
+			unset($sFilePath);
 		}
 	}
 

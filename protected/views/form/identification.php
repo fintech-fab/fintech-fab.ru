@@ -6,24 +6,24 @@ $this->pageTitle = Yii::app()->name;
 <?php
 $this->widget('TopPageWidget');
 ?>
-	<div class="row">
-		<div class="span12">
-			<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
-				Разрешите использование
-				веб-камеры
-			</div>
+<div class="row">
+	<div class="span12">
+		<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
+			Разрешите использование
+			веб-камеры
 		</div>
-
-		<div class="span12">
-			<div class="row">
-				<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
-				<video id="inputVideo" class="span6" width="100%" autoplay loop
-				       style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
-				<canvas id="overlay" class="span6"></canvas>
-			</div>
-		</div>
-
 	</div>
+
+	<div class="span12">
+		<div class="row">
+			<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
+			<video id="inputVideo" class="span8" width="100%" autoplay loop
+			       style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
+			<canvas id="overlay" class="span4"></canvas>
+		</div>
+	</div>
+
+</div>
 
 <script type="text/javascript" src="<?= Yii::app()->request->baseUrl ?>/static/js/headtrackr.js"></script>
 
@@ -54,16 +54,18 @@ $this->widget('TopPageWidget');
 				instructions.text('Шаг 1. Разместите лицо в квадрате');
 
 				//рисуем квадрат
-				canvasOverlay.style.position = "absolute";
+				canvasOverlay.style.position = 'absolute';
 				canvasOverlay.style.top = parseInt($(inputVideo).position().top + 110) + 'px';
 				canvasOverlay.style.left = parseInt($(inputVideo).position().left) + 'px';
+				canvasOverlay.style.zIndex = '10000';
 				canvasOverlay.style.display = 'block';
 
 				contextOverlay.beginPath();
-				contextOverlay.rect(98, 0, 120, 120);
+				contextOverlay.rect(220, 0, 300, 300);
 				contextOverlay.lineWidth = 3;
 				contextOverlay.strokeStyle = 'white';
-				contextOverlay.stroke();			}
+				contextOverlay.stroke();
+			}
 		});
 
 		document.addEventListener("facetrackingEvent", function (event) {
@@ -125,28 +127,31 @@ $this->widget('TopPageWidget');
 		function processPhoto() {
 
 			var dataURL = canvas.toDataURL();
-			$.post('/image/processPhoto', { image: dataURL, type: '<?=ImageController::C_TYPE_PHOTO?>', <?= Yii::app()->request->csrfTokenName ?>: '<?=Yii::app()->request->csrfToken?>' }, function (response) {
+			$.post('/image/processPhoto', { image: dataURL, type: '<?=ImageController::C_TYPE_PHOTO?>', '<?= Yii::app()->request->csrfTokenName ?>': '<?=Yii::app()->request->csrfToken?>' },
+				function (response) {
 
-				var faceCount = parseInt(response);
+					var faceCount = parseInt(response);
 
-				if (faceCount === 1) {
-					instructions.html('Данные успешно сохранены <a href="/form/documents" class="btn">продолжить</a>');
+					if (faceCount === 1) {
+						instructions.html('Данные успешно сохранены <a href="/form/documents" class="btn">продолжить</a>');
 
-					contextOverlay.clearRect(0, 0, canvas.width, canvas.height);
-					headTracker.stop();
+						contextOverlay.clearRect(0, 0, canvas.width, canvas.height);
+						headTracker.stop();
+					}
+					else {
+						instructions.text('Возникла ошибка, попробуйте снова');
+
+						setTimeout(function () {
+							headTracker.start();
+
+							inRectangle = false;
+							$(document).trigger('faceLostInRectangle');
+						}, 2000);
+
+					}
 				}
-				else {
-					instructions.text('Возникла ошибка, попробуйте снова');
 
-					setTimeout(function () {
-						headTracker.start();
-
-						inRectangle = false;
-						$(document).trigger('faceLostInRectangle');
-					}, 2000);
-
-				}
-			});
+			);
 		}
 	});
 </script>
