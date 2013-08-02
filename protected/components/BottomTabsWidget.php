@@ -8,7 +8,7 @@ class BottomTabsWidget extends CWidget
 	public function run()
 	{
 		$first=0;
-		foreach($this->tabs as &$t)
+		foreach($this->tabs as $t)
 		{
 			if ($first==0)
 			{
@@ -21,7 +21,6 @@ class BottomTabsWidget extends CWidget
 			}
 
 		}
-		unset($t);
 		$this->render('bottom_tabs');
 	}
 }

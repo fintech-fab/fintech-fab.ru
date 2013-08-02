@@ -378,20 +378,17 @@ class ClientCreateFormAbstract extends CFormModel {
 	public function getAttributes($aAttributes = null)
 	{
 		if (!$aAttributes) {
-
 			$aAttributes = array();
 			$aRules = $this->rules();
-			foreach ($aRules as &$aRule) {
+			foreach ($aRules as $aRule) {
 				if (gettype($aRule[0]) === "string") {
 					$aAttributes[] = $aRule[0];
 				} elseif (gettype($aRule[0]) === "array") {
-					foreach ($aRule[0] as &$aSubRule) {
+					foreach ($aRule[0] as $aSubRule) {
 						if (gettype($aRule[0][0]) === "string") $aAttributes[] = $aRule[0][0];
 					}
-					unset($aSubRule);
 				}
 			}
-			unset($aRule);
 			$aAttributes = array_unique($aAttributes);
 		}
 		return parent::getAttributes($aAttributes);
@@ -536,7 +533,6 @@ class ClientCreateFormAbstract extends CFormModel {
 		{
 			$sAttribute=$oPurifier->purify($sAttribute);
 		}
-		unset($sAttribute);
 		$this->setAttributes($aAttributes);
 
 		return parent::beforeValidate();
