@@ -520,21 +520,25 @@ class ClientCreateFormAbstract extends CFormModel {
 		);
 	}
 
-	protected function afterValidate()
+	/**
+	 * @return bool|void
+	 */
+
+	protected function beforeValidate()
 	{
-		$p = new CHtmlPurifier;
-		$p->options = array(
+		$oPurifier = new CHtmlPurifier;
+		$oPurifier->options = array(
 			//'HTML.SafeObject'=>true,
 			'HTML.Allowed'=>'',
 		);
-		$attr=$this->getAttributes();
-		foreach($attr as &$a)
+		$aAttributes=$this->getAttributes();
+		foreach($aAttributes as &$sAttribute)
 		{
-			$a=$p->purify($a);
+			$sAttribute=$oPurifier->purify($sAttribute);
 		}
-		unset($a);
-		$this->setAttributes($attr);
+		unset($sAttribute);
+		$this->setAttributes($aAttributes);
 
-		return parent::afterValidate();
+		return parent::beforeValidate();
 	}
 }
