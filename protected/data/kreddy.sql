@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 05 2013 г., 10:20
+-- Время создания: Авг 05 2013 г., 10:41
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -86,11 +86,12 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `flag_identified` tinyint(1) NOT NULL COMMENT 'Клиент прошел видеоидентификацию',
   `flag_sms_confirmed` tinyint(1) NOT NULL COMMENT 'Телефон подтвержден по СМС',
   `flag_processed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Обработан системой Кредди',
+  `flag_archived` tinyint(1) NOT NULL COMMENT 'Флаг архивации записи',
   PRIMARY KEY (`client_id`),
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=204 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=205 ;
 
 -- --------------------------------------------------------
 
