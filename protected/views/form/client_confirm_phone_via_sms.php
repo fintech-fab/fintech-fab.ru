@@ -49,6 +49,7 @@
                                 {
                                 $('#send_sms').hide();
                                 $('#sms_code_row').show();
+                                $('#btnNext').show();
                                 } ",
 				),
 			)); ?>
@@ -66,6 +67,7 @@
 				'buttonType' => 'submit',
 				'type' => 'primary',
 				'label' => 'Далее →',
+				'htmlOptions'=>array('id'=>'btnNext','class'=>'hide',)
 			)); ?>
 		</div>
 	</div>
