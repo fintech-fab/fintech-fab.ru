@@ -230,7 +230,7 @@ class ClientFormComponent
 		*/
 	}
 
-	private function startNewForm()
+	public function startNewForm()
 	{
 		Yii::app()->session['form_complete']=false;
 		Yii::app()->session['identification_step']=0;
@@ -251,6 +251,7 @@ class ClientFormComponent
 
 		if ($this->current_step == 0
 			&& $this->form_complete == true
+			&& !Yii::app()->request->getIsAjaxRequest()
 		) {
 			return new InviteToIdentification();
 		}
@@ -379,11 +380,6 @@ class ClientFormComponent
 			{
 
 				if (isset($_POST['ClientSelectProductForm'])) {
-					/**
-					 * Если получены данные для первой формы, то начинаем новую анкету
-					 * (сброс флагов заполненности формы)
-					 */
-					$this->startNewForm();
 					return $_POST['ClientSelectProductForm'];
 				}
 				return null;

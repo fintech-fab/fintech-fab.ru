@@ -14,8 +14,7 @@
 $this->pageTitle=Yii::app()->name;
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id' => 'InviteToIdentification',//get_class($oClientCreateForm),
-	'enableAjaxValidation' => true,
+	'id' => 'InviteToIdentification',
 	'action' => Yii::app()->createUrl('/form/'),
 ));
 ?>
