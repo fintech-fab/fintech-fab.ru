@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 01 2013 г., 17:58
+-- Время создания: Авг 05 2013 г., 10:20
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -66,12 +66,16 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `address_reg_address` varchar(255) NOT NULL COMMENT 'Адрес',
   `relatives_one_fio` varchar(255) NOT NULL COMMENT 'Контактное лицо',
   `relatives_one_phone` char(10) NOT NULL COMMENT 'Телефон контактного лица',
+  `friends_fio` varchar(255) NOT NULL COMMENT 'ФИО друга',
+  `friends_phone` char(10) NOT NULL COMMENT 'Телефон друга',
   `job_company` varchar(100) NOT NULL COMMENT 'Компания',
   `job_position` varchar(100) NOT NULL COMMENT 'Должность',
   `job_time` varchar(20) NOT NULL COMMENT 'Стаж работы',
   `job_monthly_income` varchar(30) NOT NULL COMMENT 'Месячный доход',
   `job_monthly_outcome` varchar(30) NOT NULL COMMENT 'Месячный расход',
   `have_past_credit` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Раньше были кредиты',
+  `secret_question` tinyint(1) NOT NULL COMMENT 'Секретный вопрос',
+  `secret_answer` varchar(255) NOT NULL COMMENT 'Ответ на вопрос',
   `numeric_code` int(11) NOT NULL COMMENT 'Цифровой код',
   `product` tinyint(1) NOT NULL,
   `get_way` tinyint(1) NOT NULL,
@@ -79,12 +83,14 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `complete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Флаг успешного заполнения анкеты',
   `dt_add` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата добавления',
   `dt_update` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата обновления',
+  `flag_identified` tinyint(1) NOT NULL COMMENT 'Клиент прошел видеоидентификацию',
+  `flag_sms_confirmed` tinyint(1) NOT NULL COMMENT 'Телефон подтвержден по СМС',
   `flag_processed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Обработан системой Кредди',
   PRIMARY KEY (`client_id`),
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=176 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=204 ;
 
 -- --------------------------------------------------------
 
