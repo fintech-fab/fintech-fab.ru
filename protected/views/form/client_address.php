@@ -51,13 +51,13 @@
 </div>
 <div class="row span12">
 	<h2>Дополнительный контакт (родственника/друга)</h2>
+	<? require dirname(__FILE__) . '/fields/friend.php' ?>
 	<span class="span10">
 		<?php $this->widget('bootstrap.widgets.TbLabel', array(
-			'label'=>'Указывая дополнительный номер телефона родственника или друга, Вы увеличиваете шансы получить одобрение по займу.',
-			'htmlOptions'=>array("style"=>"margin-bottom: 10px;")
+			'label'=>'* Указывая дополнительный номер телефона родственника или друга, Вы увеличиваете шансы получить одобрение по займу.',
+			'htmlOptions'=>array('class'=>'label-explanation',),
 		)); ?>
 	</span>
-	<? require dirname(__FILE__) . '/fields/friend.php' ?>
 </div>
 
 	<div class="clearfix"></div>
