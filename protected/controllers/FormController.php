@@ -156,12 +156,12 @@ class FormController extends Controller
 
 	public function actionAjaxSendSms()
 	{
-		$model=new ClientConfirmPhoneViaSMSForm();
-
 		// если ajax-данные
 		if(Yii::app()->request->isAjaxRequest){
 
-			$model->attributes=$_POST['ClientConfirmPhoneViaSMSForm'];
+			$client_id = Yii::app()->session['client_id'];
+
+			$oClientForm=new ClientConfirmPhoneViaSMSForm();
 
 			// генерация рандомного кода
 			// сеет с микросекундами
@@ -175,7 +175,7 @@ class FormController extends Controller
 			$generated_code = "111111";
 
 			// запись кода в базу
-			//
+			ClientData::saveClientDataById($oClientForm, $client_id);
 
 			// ответ пользователю... удалить потом, это для проверки
 			echo CHtml::encode($generated_code);
@@ -195,8 +195,6 @@ class FormController extends Controller
 
 			echo "ffdgdg";
 		}
-		// display the login form
-		//$this->render('login',array('model'=>$model));
 	}
 
 	// Uncomment the following methods and override them if needed
