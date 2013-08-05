@@ -239,7 +239,7 @@ class ClientFormComponent
 				return new InviteToIdentification();
 				break;
 			case 9:
-				return new InviteToIdentification();//TODO: SMS
+				return new ClientConfirmPhoneViaSMSForm();
 				break;
 			default:
 				return new ClientSelectProductForm();
@@ -284,7 +284,7 @@ class ClientFormComponent
 				return 'documents';
 				break;
 			case 9:
-				return '';//TODO: SMS
+				return 'client_confirm_phone_via_sms';
 				break;
 			default:
 				return 'client_select_product';
@@ -358,10 +358,10 @@ class ClientFormComponent
 				return null;
 			}
 				break;
-			case 9://TODO: SMS
+			case 9:
 			{
-				if (isset($_POST['InviteToIdentification'])) {
-					return $_POST['InviteToIdentification'];
+				if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
+					return $_POST['ClientConfirmPhoneViaSMSForm'];
 				}
 				return null;
 			}
