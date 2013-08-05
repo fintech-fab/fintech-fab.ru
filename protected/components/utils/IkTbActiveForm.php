@@ -148,56 +148,6 @@ class IkTbActiveForm extends TbActiveForm {
 
 	}
 
-	/**
-	 * @param CModel|CActiveForm $oForm
-	 * @param $sAttribute
-	 * @param $aHtmlOptions
-	 * @return string
-	 */
-	public function phoneMaskedRow( CModel $oForm, $sAttribute, $aHtmlOptions = array() ){
-
-		if(empty($aHtmlOptions['mask'])){
-			$aHtmlOptions['mask'] = '+7 999 999 99 99';
-		}
-
-		$sReturn  = '';
-
-		if( empty( $aHtmlOptions['hideLabel'] ) ){
-			$sReturn .= $this->label(
-				$oForm,
-				$sAttribute,
-				array(
-					'required' => $oForm->isAttributeRequired( $sAttribute )
-				)
-			);
-		}
-
-		$aDefaultOptions = array(
-			'size' => 10,
-			'maxlength' => 10
-		);
-
-		if( !empty( $aHtmlOptions ) ){
-			$aDefaultOptions = array_merge( $aHtmlOptions, $aDefaultOptions );
-		}
-
-		$sReturn .= $this->getController()->widget(
-			'CMaskedTextField',
-			array(
-				'model'			=> $oForm,
-				'attribute'		=> $sAttribute,
-				'mask'			=> $aHtmlOptions['mask'],
-				'htmlOptions'	=> $aDefaultOptions
-			),
-			true
-		);
-
-		$sReturn .= $this->error($oForm, $sAttribute);
-
-		return $sReturn;
-
-	}
-
 	public function dateFieldRow( CModel $oForm, $sAttribute, $aHtmlOptions = array() )
 	{
 		$sReturn = '';

@@ -67,7 +67,7 @@ class ClientFormComponent
 		$aValidFormData = $oClientForm->getValidAttributes();
 
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
-			if (isset($aValidFormData['phone'])) {
+			if ($aValidFormData['phone']) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
 				 * и сравниваем введенный телефон с телефоном в куках.
@@ -75,6 +75,9 @@ class ClientFormComponent
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
+
+				echo '<pre>' . ""; CVarDumper::dump($aValidFormData); echo '</pre>';
+
 				$aCookieData = Cookie::getDataFromCookie('client');
 
 				if (

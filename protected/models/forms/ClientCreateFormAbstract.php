@@ -399,10 +399,20 @@ class ClientCreateFormAbstract extends CFormModel {
 	{
 		$this->validate();
 
+
 		$aNoValidFields = array_keys($this->getErrors());
+
 		$aFormFields = array_keys($this->getAttributes());
 
-		$aValidFormData = $this->getAttributes(array_diff($aFormFields, $aNoValidFields));
+		$aDiff = array_diff($aFormFields, $aNoValidFields);
+
+		//проверка на случай, что разницы в массивах нет (т.е. не валидны все поля)
+		if($aDiff) {
+			$aValidFormData = $this->getAttributes($aDiff);
+		}
+		else{
+			$aValidFormData = null;
+		}
 
 		return $aValidFormData;
 	}
