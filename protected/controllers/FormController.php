@@ -2,7 +2,7 @@
 
 class FormController extends Controller
 {
-	public $showTopPageWidget=true;
+	public $showTopPageWidget = true;
 
 	public function actionIndex()
 	{
@@ -12,18 +12,18 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
-		$client_id = Yii::app()->session['client_id'];
+		$client_id = $this->_getClientId();
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)
 		 */
-		$oClientForm=Yii::app()->clientForm->getFormModel();
+		$oClientForm = Yii::app()->clientForm->getFormModel();
 
 		/**
 		 * AJAX валидация
 		 */
-		if(Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
+		if (Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
 			echo IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
 			Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
@@ -34,21 +34,14 @@ class FormController extends Controller
 		 * Обработка POST запроса
 		 */
 
-		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
+		if ($aPost = Yii::app()->clientForm->getPostData()) //проверяем, был ли POST запрос
 		{
-			$oClientForm->attributes=$aPost; //передаем запрос в форму
+			$oClientForm->attributes = $aPost; //передаем запрос в форму
 
-			if(isset($oClientForm->go)&&$oClientForm->go=="1")
-			{
-				Yii::app()->session['identification_step']=1;
-
-				$this->redirect(Yii::app()->createUrl("form/identification"));
-			}
-			elseif($oClientForm->validate())
-			{
+			if ($oClientForm->validate()){
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				$oClientForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+				$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
 
 		}
@@ -57,10 +50,8 @@ class FormController extends Controller
 		 * Загрузка данных из сессии в форму, если данные существуют и client_id сессии совпадает с оным в куке
 		 */
 
-		if(Cookie::compareDataInCookie('client','client_id',$client_id))
-		{
-			if(isset($oClientForm)&&$oClientForm)
-			{
+		if (Cookie::compareDataInCookie('client', 'client_id', $client_id)) {
+			if (isset($oClientForm) && $oClientForm) {
 				$sessionClientData = Yii::app()->session[get_class($oClientForm)];
 				$oClientForm->setAttributes($sessionClientData);
 			}
@@ -69,85 +60,115 @@ class FormController extends Controller
 		/**
 		 * Рендер представления
 		 */
-		$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
+		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
-		$this->render($sView,array('oClientCreateForm'=>$oClientForm));
+		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
 	/**
 	 *  Переход на шаг $step
-	 *  @param int $step
+	 * @param int $step
 	 */
 	public function actionStep($step)
 	{
-		if($step!==0)
-		{
-			if(Yii::app()->session['done_steps'] < ($step-1))
-			{
-				Yii::app()->session['current_step']=Yii::app()->session['done_steps'];
-			}
-			else
-			{
-				Yii::app()->session['done_steps']=$step-1;
-				Yii::app()->session['current_step']=$step-1;
+		if ($step !== 0) {
+			if (Yii::app()->session['done_steps'] < ($step - 1)) {
+				Yii::app()->session['current_step'] = Yii::app()->session['done_steps'];
+			} else {
+				Yii::app()->session['done_steps'] = $step - 1;
+				Yii::app()->session['current_step'] = $step - 1;
 			}
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 	}
 
-	public function actionIdentification() {
 
-		if(!Yii::app()->session['form_complete'])
-		{
-			$this->redirect(Yii::app()->createUrl("form"));
-		}
-		if(Yii::app()->session['identification_step'] != 1)
-		{
-			$this->redirect(Yii::app()->createUrl("form"));
-		}
+	/**
+	 * Загрузка фото
+	 */
 
-		$this->render('identification');
-	}
+	public function actionIdentification()
+	{
+		$client_id = $this->_getClientId();
 
-	public function actionConfirmPhoneViaSms() {
+		if (Yii::app()->session['current_step'] == 7) {
 
-		return;
+			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
+
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
+
+			if ($this->_checkFiles($aFiles)) {
+
+				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+			}
+			$this->actionIndex();
+		} else $this->actionIndex();
 	}
 
 	/**
 	 * Загрузка документов
 	 */
-	public function actionDocuments() {
+	public function actionDocuments()
+	{
 
-		if(!Yii::app()->session['form_complete'])
-		{
-			$this->redirect(Yii::app()->createUrl("form"));
-		}
+		$client_id = $this->_getClientId();
 
-		if(Yii::app()->session['identification_step'] != 1)
-		{
-			$this->redirect(Yii::app()->createUrl("form"));
-		}
+		if (Yii::app()->session['current_step'] == 8) {
 
-		Yii::app()->session['identification_step'] = 2;
+			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
 
-		$this->render('documents');
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+
+
+
+			if ($this->_checkFiles($aFiles)) {
+				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+
+			}
+			$this->actionIndex();
+		} else $this->actionIndex();
 	}
 
-	public function actionStart(){
+	public function actionConfirmPhoneViaSms()
+	{
+
+		return;
+	}
+
+	private function _checkFiles($aFiles)
+	{
+		foreach ($aFiles as $sFile) {
+			if (!file_exists($sFile) || !getimagesize($sFile)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	public function actionStart()
+	{
 		Yii::app()->clientForm->startNewForm();
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	public function actionError()
 	{
-		if($error=Yii::app()->errorHandler->error)
-		{
-			if(Yii::app()->request->isAjaxRequest)
+		if ($error = Yii::app()->errorHandler->error) {
+			if (Yii::app()->request->isAjaxRequest)
 				echo $error['message'];
 			else
 				$this->render('error', $error);
 		}
+	}
+
+	private function _getClientId()
+	{
+		return Yii::app()->session['client_id'];
 	}
 
 	// Uncomment the following methods and override them if needed

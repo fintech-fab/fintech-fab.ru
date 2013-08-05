@@ -35,14 +35,8 @@ class SiteController extends Controller
 		Yii::app()->session['done_steps']=0;
 		Yii::app()->session['current_step']=0;
 
-		if (Yii::app()->session['form_complete'])
-		{
-			$this->redirect(Yii::app()->createUrl("form"));
-		}
-		else{
-			$oClientForm = new ClientSelectProductForm();
-			$this->render('../form/client_select_product',array('oClientCreateForm'=>$oClientForm));
-		}
+		$oClientForm = new ClientSelectProductForm();
+		$this->render('../form/client_select_product',array('oClientCreateForm'=>$oClientForm));
 	}
 
 	/**

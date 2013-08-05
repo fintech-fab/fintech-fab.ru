@@ -127,13 +127,14 @@ $this->widget('TopPageWidget');
 		function processPhoto() {
 
 			var dataURL = canvas.toDataURL();
-			$.post('/image/processPhoto', { image: dataURL, type: '<?=ImageController::C_TYPE_PHOTO?>', '<?= Yii::app()->request->csrfTokenName ?>': '<?=Yii::app()->request->csrfToken?>' },
+			$.post('/image/processPhoto', { image: dataURL, type: '<?=ImageController::C_TYPE_PHOTO?>',
+					'<?= Yii::app()->request->csrfTokenName ?>': '<?= Yii::app()->request->csrfToken?>' },
 				function (response) {
 
 					var faceCount = parseInt(response);
 
 					if (faceCount === 1) {
-						instructions.html('Данные успешно сохранены <a href="/form/documents" class="btn">продолжить</a>');
+						instructions.html('Данные успешно сохранены <a href="<?=Yii::app()->createUrl("form/documents");?>" class="btn">Продолжить</a>');
 
 						contextOverlay.clearRect(0, 0, canvas.width, canvas.height);
 						headTracker.stop();

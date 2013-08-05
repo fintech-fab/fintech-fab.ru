@@ -145,7 +145,7 @@ $this->widget('TopPageWidget');
 					instructions.text('Все документы загружены');
 
 					setTimeout(function () {
-						window.location.href = '<?=Yii::app()->createUrl("pages/view",array('name'=>'formsent'));?>';
+						window.location.href = '<?=Yii::app()->createUrl("form/documents");?>';
 					}, 2000);
 
 					shotButton.hide();
