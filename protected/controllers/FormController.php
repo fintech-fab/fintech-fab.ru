@@ -110,7 +110,7 @@ class FormController extends Controller
 		$this->render('identification');
 	}
 
-	public function actionConfirmPhoneBySms() {
+	public function actionConfirmPhoneViaSms() {
 
 		return;
 	}
@@ -133,6 +133,10 @@ class FormController extends Controller
 		Yii::app()->session['identification_step'] = 2;
 
 		$this->render('documents');
+	}
+
+	public function actionStart(){
+		Yii::app()->clientForm->startNewForm();
 	}
 
 	public function actionError()

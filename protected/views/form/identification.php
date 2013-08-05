@@ -2,8 +2,6 @@
 /* @var $this FormController */
 
 $this->pageTitle = Yii::app()->name . " - Видеоидентификация лица";
-
-echo '<pre>' . ""; CVarDumper::dump(Yii::app()->session['identification_step']); echo '</pre>';
 ?>
 <?php
 $this->widget('TopPageWidget');

@@ -37,13 +37,12 @@ class SiteController extends Controller
 
 		if (Yii::app()->session['form_complete'])
 		{
-			$oClientForm = new InviteToIdentification();
-			$this->render('../form/invite_to_identification',array('oClientCreateForm'=>$oClientForm));
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
-
-		$oClientForm = new ClientSelectProductForm();
-		$this->render('../form/client_select_product',array('oClientCreateForm'=>$oClientForm));
-
+		else{
+			$oClientForm = new ClientSelectProductForm();
+			$this->render('../form/client_select_product',array('oClientCreateForm'=>$oClientForm));
+		}
 	}
 
 	/**
