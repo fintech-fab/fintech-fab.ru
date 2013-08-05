@@ -19,6 +19,8 @@ class ClientFormComponent
 {
 	private $client_id;
 	private $current_step;
+	private $identification_step;
+	private $form_complete;
 	private $done_steps;
 
 
@@ -36,6 +38,16 @@ class ClientFormComponent
 		if (!$this->done_steps = Yii::app()->session['done_steps']) {
 			Yii::app()->session['done_steps'] = 0;
 			$this->done_steps = 0;
+		}
+
+		if (!$this->form_complete = Yii::app()->session['form_complete']) {
+			Yii::app()->session['form_complete'] = false;
+			$this->form_complete = false;
+		}
+
+		if (!$this->identification_step = Yii::app()->session['identification_step']) {
+			Yii::app()->session['identification_step'] = 0;
+			$this->identification_step = 0;
 		}
 	}
 
@@ -67,7 +79,7 @@ class ClientFormComponent
 		$aValidFormData = $oClientForm->getValidAttributes();
 
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
-			if ($aValidFormData['phone']) {
+			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
 				 * и сравниваем введенный телефон с телефоном в куках.
@@ -75,8 +87,6 @@ class ClientFormComponent
 				 * иначе создаем нового клиента и сохраняем информацию
 				 * о нем в сессию и куку.
 				 */
-
-				echo '<pre>' . ""; CVarDumper::dump($aValidFormData); echo '</pre>';
 
 				$aCookieData = Cookie::getDataFromCookie('client');
 
@@ -203,6 +213,29 @@ class ClientFormComponent
 		return $this->done_steps;
 	}
 
+	private function formComplete()
+	{
+		Yii::app()->session['current_step']=0;
+		Yii::app()->session['done_steps']=0;
+		Yii::app()->session['form_complete']=true;
+		Yii::app()->session['identification_step']=0;
+
+		/*
+		Yii::app()->session['ClientSelectProductForm']=null;
+		Yii::app()->session['ClientSelectGetWayForm']=null;
+		Yii::app()->session['ClientPersonalDataForm']=null;
+		Yii::app()->session['ClientAddressForm']=null;
+		Yii::app()->session['ClientJobInfoForm']=null;
+		Yii::app()->session['ClientSendForm']=null;
+		*/
+	}
+
+	private function startNewForm()
+	{
+		Yii::app()->session['form_complete']=false;
+		Yii::app()->session['identification_step']=0;
+	}
+
 	/**
 	 * Возвращает модель текущей формы.
 	 *
@@ -211,6 +244,21 @@ class ClientFormComponent
 
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
+		/**
+		 * Выбор модели формы для уже заполненой анкеты
+		 * (по флагу в сессии form_complete)
+		 */
+
+		if ($this->current_step == 0
+			&& $this->form_complete == true
+		) {
+			return new InviteToIdentification();
+		}
+
+		/**
+		 * Выбор модели формы для основных шагов заполнения анкеты
+		 */
+
 		switch ($this->current_step) {
 			case 0:
 				return new ClientSelectProductForm();
@@ -237,6 +285,7 @@ class ClientFormComponent
 				return new ClientSelectProductForm();
 				break;
 		}
+
 	}
 
 	/**
@@ -246,6 +295,29 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
+		/**
+		 * Выбор представления для уже заполненой анкеты
+		 * (по флагу в сессии form_complete)
+		 */
+
+		if ($this->current_step == 0 && $this->form_complete==true) {
+			switch ($this->identification_step) {
+				case 1:
+					return 'identification';
+					break;
+				case 2:
+					return 'documents';
+					break;
+				default:
+					return 'invite_to_identification';
+					break;
+			}
+		}
+
+		/**
+		 * Выбор представления для основных шагов заполнения анкеты
+		 */
+
 		switch ($this->current_step) {
 			case 0:
 				return 'client_select_product';
@@ -266,7 +338,10 @@ class ClientFormComponent
 				return 'client_send';
 				break;
 			case 6:
+			{
+				$this->formComplete();
 				return 'invite_to_identification';
+			}
 				break;
 			default:
 				return 'client_select_product';
@@ -281,10 +356,34 @@ class ClientFormComponent
 	 */
 	public function getPostData()
 	{
+		/**
+		 * Выбор данных из POST-запроса для уже заполненой анкеты
+		 * (по флагу в сессии form_complete)
+		 */
+
+		if ($this->current_step == 0
+			&& $this->form_complete == true
+			&& $this->identification_step == 0
+		) {
+			if (isset($_POST['InviteToIdentification'])) {
+				return $_POST['InviteToIdentification'];
+			}
+			return null;
+		}
+
+		/**
+		 * Выбор данных из POST-запроса для основных шагов заполнения анкеты
+		 */
 		switch ($this->current_step) {
 			case 0:
 			{
+
 				if (isset($_POST['ClientSelectProductForm'])) {
+					/**
+					 * Если получены данные для первой формы, то начинаем новую анкету
+					 * (сброс флагов заполненности формы)
+					 */
+					$this->startNewForm();
 					return $_POST['ClientSelectProductForm'];
 				}
 				return null;

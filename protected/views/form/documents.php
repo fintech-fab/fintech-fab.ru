@@ -1,7 +1,7 @@
 <?php
 /* @var $this FormController */
 
-$this->pageTitle = Yii::app()->name;
+$this->pageTitle = Yii::app()->name . " - Видеоидентификация документов";
 ?>
 <?php
 $this->widget('TopPageWidget');

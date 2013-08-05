@@ -33,35 +33,15 @@ class FormController extends Controller
 		/**
 		 * Обработка POST запроса
 		 */
+
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oClientForm->attributes=$aPost; //передаем запрос в форму
-			if(isset($oClientForm->complete)&&$oClientForm->complete=="1"){
 
-				Yii::app()->clientForm->formDataProcess($oClientForm);
-				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				$oClientForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
-
-				$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
-
-				//Yii::app()->session['current_step']=0;
-				//Yii::app()->session['done_steps']=0;
-				//Yii::app()->session['form_complete']=true;
-
-
-				/*
-				Yii::app()->session['ClientSelectProductForm']=null;
-				Yii::app()->session['ClientSelectGetWayForm']=null;
-				Yii::app()->session['ClientPersonalDataForm']=null;
-				Yii::app()->session['ClientAddressForm']=null;
-				Yii::app()->session['ClientJobInfoForm']=null;
-				Yii::app()->session['ClientSendForm']=null;
-				*/
-
-				$this->render($sView,array('oClientCreateForm'=>$oClientForm));
-			}
-			elseif(isset($oClientForm->go)&&$oClientForm->go=="1")
+			if(isset($oClientForm->go)&&$oClientForm->go=="1")
 			{
+				Yii::app()->session['identification_step']=1;
+
 				$this->redirect(Yii::app()->createUrl("form/identification"));
 			}
 			elseif($oClientForm->validate())
@@ -70,6 +50,7 @@ class FormController extends Controller
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				$oClientForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 			}
+
 		}
 
 		/**
@@ -121,8 +102,17 @@ class FormController extends Controller
 		{
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
+		if(Yii::app()->session['identification_step'] != 1)
+		{
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
 
 		$this->render('identification');
+	}
+
+	public function actionConfirmPhoneBySms() {
+
+		return;
 	}
 
 	/**
@@ -134,6 +124,13 @@ class FormController extends Controller
 		{
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
+
+		if(Yii::app()->session['identification_step'] != 1)
+		{
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+
+		Yii::app()->session['identification_step'] = 2;
 
 		$this->render('documents');
 	}
