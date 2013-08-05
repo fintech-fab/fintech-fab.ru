@@ -50,6 +50,7 @@ $a = array(
 				'gii/<controller:\w+>/<action:\w+>'=>'gii/<controller>/<action>',
 				'form/identification'=>'form/identification',
 				'form/documents'=>'form/documents',
+				'form/ajaxsendsms'=>'form/ajaxsendsms',
 				'form/<step:\d+>'=>'form/step',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',

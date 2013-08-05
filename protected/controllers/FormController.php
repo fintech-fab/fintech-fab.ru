@@ -12,6 +12,10 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
+		$oClientForm = new ClientConfirmPhoneViaSMSForm();
+		$this->render('client_confirm_phone_via_sms',array('oClientCreateForm'=>$oClientForm));
+		return;
+
 		$client_id = Yii::app()->session['client_id'];
 
 		/*
@@ -148,6 +152,51 @@ class FormController extends Controller
 			else
 				$this->render('error', $error);
 		}
+	}
+
+	public function actionAjaxSendSms()
+	{
+		$model=new ClientConfirmPhoneViaSMSForm();
+
+		// если ajax-данные
+		if(Yii::app()->request->isAjaxRequest){
+
+			$model->attributes=$_POST['ClientConfirmPhoneViaSMSForm'];
+
+			// генерация рандомного кода
+			// сеет с микросекундами
+			function make_seed() {
+				list($usec, $sec) = explode(' ', microtime());
+				return (float) $sec + ((float) $usec * 100000);
+			}
+
+			mt_srand(make_seed());
+			$generated_code = substr(mt_rand(),0,6);
+			$generated_code = "111111";
+
+			// запись кода в базу
+			//
+
+			// ответ пользователю... удалить потом, это для проверки
+			echo CHtml::encode($generated_code);
+
+			Yii::app()->end();
+		}
+	}
+
+	public function actionSendCode()
+	{
+		$model=new ClientConfirmPhoneViaSMSForm();
+
+		// данные не ajax
+		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
+		{
+			$model->attributes=$_POST['ClientConfirmPhoneViaSMSForm'];
+
+			echo "ffdgdg";
+		}
+		// display the login form
+		//$this->render('login',array('model'=>$model));
 	}
 
 	// Uncomment the following methods and override them if needed
