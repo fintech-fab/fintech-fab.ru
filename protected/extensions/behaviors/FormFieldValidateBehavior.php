@@ -12,7 +12,7 @@
 class FormFieldValidateBehavior extends CBehavior
 {
     /**
-     * проверка фио клиента
+     * проверка имени клиента
      * @param string $attribute
      * @param array $param
      */
@@ -26,6 +26,22 @@ class FormFieldValidateBehavior extends CBehavior
             }
         }
     }
+
+	/**
+	 * проверка ФИО
+	 * @param string $attribute
+	 * @param array $param
+	 */
+	public function checkValidFio($attribute, $param)
+	{
+		if ($this->owner->$attribute) {
+			if (!preg_match('/^[-а-яё \s]+$/ui', $this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} else {
+				$this->formatName($this->owner->$attribute);
+			}
+		}
+	}
 
     public function checkValidClientPhone($attribute, $param)
     {

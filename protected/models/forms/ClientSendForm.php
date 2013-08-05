@@ -39,11 +39,13 @@ class ClientSendForm extends ClientCreateFormAbstract
 
 			array(
 				'numeric_code',
+				'complete',
+				'secret_question',
+				'secret_answer',
 			),
 			$aRequired
 		);
 		$aRules[] = array('complete', 'required', 'requiredValue' => 1,'message'=>'Необходимо подтвердить свое согласие на обработку данных');
-		$aRules[] = array('secret_question', 'in', 'range' => array_keys(Dictionaries::$aSecretQuestions),'message' => 'Выберите секретный вопрос');
 
 		return $aRules;
 
