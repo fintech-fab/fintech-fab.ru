@@ -192,6 +192,11 @@ class ClientCreateFormAbstract extends CFormModel {
 					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Отчество может сожержать только русские буквы');
 					break;
 
+				case 'relatives_one_fio':
+				case 'friend_fio':
+					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может сожержать только русские буквы, пробелы и дефис');
+					break;
+
 				case 'sex':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажите пол', 'range' => array_keys(Dictionaries::$aSexes));
 					break;
@@ -320,13 +325,23 @@ class ClientCreateFormAbstract extends CFormModel {
 	}
 
 	/**
-	 * проверка фио
+	 * проверка имени
 	 * @param $attribute
 	 * @param $param
 	 */
 	public function checkValidClientName($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidClientName($attribute, $param);
+	}
+
+	/**
+	 * проверка фио
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidFio($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidFio($attribute, $param);
 	}
 
 	/**
