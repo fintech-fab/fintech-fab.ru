@@ -19,10 +19,7 @@ class ClientFormComponent
 {
 	private $client_id;
 	private $current_step;
-	private $identification_step;
-	private $form_complete;
 	private $done_steps;
-
 
 	public function init()
 	{
@@ -38,16 +35,6 @@ class ClientFormComponent
 		if (!$this->done_steps = Yii::app()->session['done_steps']) {
 			Yii::app()->session['done_steps'] = 0;
 			$this->done_steps = 0;
-		}
-
-		if (!$this->form_complete = Yii::app()->session['form_complete']) {
-			Yii::app()->session['form_complete'] = false;
-			$this->form_complete = false;
-		}
-
-		if (!$this->identification_step = Yii::app()->session['identification_step']) {
-			Yii::app()->session['identification_step'] = 0;
-			$this->identification_step = 0;
 		}
 	}
 
@@ -213,27 +200,10 @@ class ClientFormComponent
 		return $this->done_steps;
 	}
 
-	private function formComplete()
+	public function startNewForm()
 	{
 		Yii::app()->session['current_step']=0;
 		Yii::app()->session['done_steps']=0;
-		Yii::app()->session['form_complete']=true;
-		Yii::app()->session['identification_step']=0;
-
-		/*
-		Yii::app()->session['ClientSelectProductForm']=null;
-		Yii::app()->session['ClientSelectGetWayForm']=null;
-		Yii::app()->session['ClientPersonalDataForm']=null;
-		Yii::app()->session['ClientAddressForm']=null;
-		Yii::app()->session['ClientJobInfoForm']=null;
-		Yii::app()->session['ClientSendForm']=null;
-		*/
-	}
-
-	public function startNewForm()
-	{
-		Yii::app()->session['form_complete']=false;
-		Yii::app()->session['identification_step']=0;
 	}
 
 	/**
@@ -244,22 +214,6 @@ class ClientFormComponent
 
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-		/**
-		 * Выбор модели формы для уже заполненой анкеты
-		 * (по флагу в сессии form_complete)
-		 */
-
-		if ($this->current_step == 0
-			&& $this->form_complete == true
-			&& !Yii::app()->request->getIsAjaxRequest()
-		) {
-			return new InviteToIdentification();
-		}
-
-		/**
-		 * Выбор модели формы для основных шагов заполнения анкеты
-		 */
-
 		switch ($this->current_step) {
 			case 0:
 				return new ClientSelectProductForm();
@@ -280,7 +234,12 @@ class ClientFormComponent
 				return new ClientSendForm();
 				break;
 			case 6:
+			case 7:
+			case 8:
 				return new InviteToIdentification();
+				break;
+			case 9:
+				return new InviteToIdentification();//TODO: SMS
 				break;
 			default:
 				return new ClientSelectProductForm();
@@ -296,29 +255,6 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
-		/**
-		 * Выбор представления для уже заполненой анкеты
-		 * (по флагу в сессии form_complete)
-		 */
-
-		if ($this->current_step == 0 && $this->form_complete==true) {
-			switch ($this->identification_step) {
-				case 1:
-					return 'identification';
-					break;
-				case 2:
-					return 'documents';
-					break;
-				default:
-					return 'invite_to_identification';
-					break;
-			}
-		}
-
-		/**
-		 * Выбор представления для основных шагов заполнения анкеты
-		 */
-
 		switch ($this->current_step) {
 			case 0:
 				return 'client_select_product';
@@ -339,10 +275,16 @@ class ClientFormComponent
 				return 'client_send';
 				break;
 			case 6:
-			{
-				$this->formComplete();
 				return 'invite_to_identification';
-			}
+				break;
+			case 7:
+				return 'identification';
+				break;
+			case 8:
+				return 'documents';
+				break;
+			case 9:
+				return '';//TODO: SMS
 				break;
 			default:
 				return 'client_select_product';
@@ -357,24 +299,7 @@ class ClientFormComponent
 	 */
 	public function getPostData()
 	{
-		/**
-		 * Выбор данных из POST-запроса для уже заполненой анкеты
-		 * (по флагу в сессии form_complete)
-		 */
 
-		if ($this->current_step == 0
-			&& $this->form_complete == true
-			&& $this->identification_step == 0
-		) {
-			if (isset($_POST['InviteToIdentification'])) {
-				return $_POST['InviteToIdentification'];
-			}
-			return null;
-		}
-
-		/**
-		 * Выбор данных из POST-запроса для основных шагов заполнения анкеты
-		 */
 		switch ($this->current_step) {
 			case 0:
 			{
@@ -415,8 +340,8 @@ class ClientFormComponent
 					return $_POST['ClientJobInfoForm'];
 				}
 				return null;
-				break;
 			}
+				break;
 			case 5:
 			{
 				if (isset($_POST['ClientSendForm'])) {
@@ -431,8 +356,16 @@ class ClientFormComponent
 					return $_POST['InviteToIdentification'];
 				}
 				return null;
-				break;
 			}
+				break;
+			case 9://TODO: SMS
+			{
+				if (isset($_POST['InviteToIdentification'])) {
+					return $_POST['InviteToIdentification'];
+				}
+				return null;
+			}
+				break;
 			default:
 				return null;
 				break;
@@ -446,12 +379,10 @@ class ClientFormComponent
 	 */
 	public function nextStep()
 	{
-
 		$this->current_step++;
 		Yii::app()->session['current_step'] = $this->current_step;
 		if ($this->done_steps < Yii::app()->session['current_step']) {
 			Yii::app()->session['done_steps'] = $this->done_steps = Yii::app()->session['current_step'];
 		}
-
 	}
 }

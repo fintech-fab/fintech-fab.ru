@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 05 2013 г., 10:41
+-- Время создания: Авг 05 2013 г., 17:23
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `secret_question` tinyint(1) NOT NULL COMMENT 'Секретный вопрос',
   `secret_answer` varchar(255) NOT NULL COMMENT 'Ответ на вопрос',
   `numeric_code` int(11) NOT NULL COMMENT 'Цифровой код',
+  `sms_code` char(6) NOT NULL COMMENT 'Код SMS-подтверждения',
   `product` tinyint(1) NOT NULL,
   `get_way` tinyint(1) NOT NULL,
   `options` text NOT NULL COMMENT 'Сериализованные дополнительные данные',
@@ -91,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=205 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=244 ;
 
 -- --------------------------------------------------------
 

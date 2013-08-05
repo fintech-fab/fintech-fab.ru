@@ -38,6 +38,7 @@
  * @property integer $secret_question;
  * @property string $secret_answer;
  * @property integer $numeric_code
+ * @property integer $sms_code
  * @property integer $product
  * @property integer $get_way
  * @property string $options
@@ -144,7 +145,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -310,6 +311,7 @@ class ClientData extends CActiveRecord
 			'secret_question' => 'Secret Question',
 			'secret_answer' => 'Secret  Answer',
 			'numeric_code' => 'Numeric Code',
+			'sms_code' => 'SMS Code',
 			'product' => 'Product',
 			'get_way' => 'Get Way',
 			'options' => 'Options',
@@ -357,27 +359,28 @@ class ClientData extends CActiveRecord
 		$criteria->compare('address_reg_address', $this->address_reg_address, true);
 		$criteria->compare('relatives_one_fio', $this->relatives_one_fio, true);
 		$criteria->compare('relatives_one_phone', $this->relatives_one_phone, true);
-		$criteria->compare('friends_fio', $this->relatives_one_fio, true);
-		$criteria->compare('friends_phone', $this->relatives_one_phone, true);
+		$criteria->compare('friends_fio', $this->friends_fio, true);
+		$criteria->compare('friends_phone', $this->friends_phone, true);
 		$criteria->compare('job_company', $this->job_company, true);
 		$criteria->compare('job_position', $this->job_position, true);
 		$criteria->compare('job_time', $this->job_time, true);
 		$criteria->compare('job_monthly_income', $this->job_monthly_income, true);
 		$criteria->compare('job_monthly_outcome', $this->job_monthly_outcome, true);
 		$criteria->compare('have_past_credit', $this->have_past_credit);
-		$criteria->compare('secret_question', $this->numeric_code);
-		$criteria->compare('secret_answer', $this->numeric_code);
+		$criteria->compare('secret_question', $this->secret_question);
+		$criteria->compare('secret_answer', $this->secret_answer);
 		$criteria->compare('numeric_code', $this->numeric_code);
+		$criteria->compare('sms_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
 		$criteria->compare('get_way', $this->get_way);
 		$criteria->compare('options', $this->options, true);
 		$criteria->compare('complete', $this->complete);
 		$criteria->compare('dt_add', $this->dt_add, true);
 		$criteria->compare('dt_update', $this->dt_update, true);
-		$criteria->compare('flag_identified', $this->dt_add, true);
-		$criteria->compare('flag_sms_confirmed', $this->dt_update, true);
-		$criteria->compare('flag_processed', $this->dt_update, true);
-		$criteria->compare('flag_archived', $this->dt_update, true);
+		$criteria->compare('flag_identified', $this->flag_identified, true);
+		$criteria->compare('flag_sms_confirmed', $this->flag_sms_confirmed, true);
+		$criteria->compare('flag_processed', $this->flag_processed, true);
+		$criteria->compare('flag_archived', $this->flag_archived, true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
