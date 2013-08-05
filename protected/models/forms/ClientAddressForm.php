@@ -30,15 +30,13 @@ class ClientAddressForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRequired = array_merge(
-			array(
+		$aRequired = array(
 				'address_reg_region',
 				'address_reg_city',
 				'address_reg_address',
 
 				'relatives_one_fio',
 				'relatives_one_phone',
-			)
 		);
 
 		$aRules = $this->getRulesByFields(
