@@ -49,6 +49,16 @@
 	<h2>Контактное лицо</h2>
 		<? require dirname(__FILE__) . '/fields/relatives_one.php' ?>
 </div>
+<div class="row span12">
+	<h2>Дополнительный контакт (родственника/друга)</h2>
+	<span class="span10">
+		<?php $this->widget('bootstrap.widgets.TbLabel', array(
+			'label'=>'Указывая дополнительный номер телефона родственника или друга, Вы увеличиваете шансы получить одобрение по займу.',
+			'htmlOptions'=>array("style"=>"margin-bottom: 10px;")
+		)); ?>
+	</span>
+	<? require dirname(__FILE__) . '/fields/friend.php' ?>
+</div>
 
 	<div class="clearfix"></div>
 

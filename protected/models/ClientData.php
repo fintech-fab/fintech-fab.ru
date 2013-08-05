@@ -254,6 +254,9 @@ class ClientData extends CActiveRecord
 	public function beforeSave()
 	{
 		$this->dt_update = date('Y-m-d H:i:s', time());
+		$sDateFormatInBase = "Y-m-d";
+		$this->birthday=date($sDateFormatInBase,strtotime($this->birthday));
+		$this->passport_date=date($sDateFormatInBase,strtotime($this->passport_date));
 		return parent::beforeSave();
 	}
 

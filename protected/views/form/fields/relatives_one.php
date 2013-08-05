@@ -10,5 +10,5 @@
 </span>
 
 <span class="span10">
-	<?= $form->fieldMaskedRow($oClientCreateForm, 'relatives_one_phone', array('class' => 'span3', 'mask' => '+7 999 999 99 99')); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', array('class' => 'span3')); ?>
 </span>
