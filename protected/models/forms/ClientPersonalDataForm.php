@@ -106,11 +106,4 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 		}
 		return parent::beforeValidate();
 	}
-
-	public function afterValidate(){
-		parent::afterValidate();
-		$sDateFormatInBase = "Y-m-d";
-		$this->birthday=date($sDateFormatInBase,strtotime($this->birthday));
-		$this->passport_date=date($sDateFormatInBase,strtotime($this->passport_date));
-	}
 }

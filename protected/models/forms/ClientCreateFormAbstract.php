@@ -235,6 +235,7 @@ class ClientCreateFormAbstract extends CFormModel {
 				case 'job_phone':
 				case 'relatives_one_phone':
 				case 'job_director_phone':
+				case 'friend_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
 					break;
 

@@ -12,6 +12,16 @@ class ClientSendForm extends ClientCreateFormAbstract
 	 */
 	public $complete;
 
+	/**
+	 * @var секретный вопрос
+	 */
+	public $secret_question;
+
+	/**
+	 * @var string ответ на секретный вопрос
+	 */
+	public $secret_answer;
+
 	public function rules()
 	{
 
@@ -20,6 +30,8 @@ class ClientSendForm extends ClientCreateFormAbstract
 			array(
 				'numeric_code',
 				'complete',
+				'secret_question',
+				'secret_answer',
 			)
 		);
 
@@ -31,6 +43,7 @@ class ClientSendForm extends ClientCreateFormAbstract
 			$aRequired
 		);
 		$aRules[] = array('complete', 'required', 'requiredValue' => 1,'message'=>'Необходимо подтвердить свое согласие на обработку данных');
+		$aRules[] = array('secret_question', 'in', 'range' => array_keys(Dictionaries::$aSecretQuestions),'message' => 'Выберите секретный вопрос');
 
 		return $aRules;
 
@@ -40,7 +53,9 @@ class ClientSendForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('complete' => 'Я подтверждаю верность введенных данных и даю разрешение на их обработку и хранение',)
+			array('complete' => 'Я подтверждаю верность введенных данных и даю разрешение на их обработку и хранение',
+			'secret_question'=>'Секретный вопрос',
+			'secret_answer'=>'Ответ на секретный вопрос',)
 		);
 	}
 

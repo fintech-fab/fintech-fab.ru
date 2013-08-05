@@ -79,8 +79,8 @@ class IkTbActiveForm extends TbActiveForm {
 		}
 
 		$aDefaultOptions = array(
-			'size' => 16,
-			'maxlength' => 16
+			'size' => 10,
+			'maxlength' => 10
 		);
 
 		if( !empty( $aHtmlOptions ) ){
@@ -129,8 +129,8 @@ class IkTbActiveForm extends TbActiveForm {
 		}
 
 		$aDefaultOptions = array(
-			'size' => 16,
-			'maxlength' => 16
+			'size' => 10,
+			'maxlength' => 10
 		);
 
 		if( !empty( $aHtmlOptions ) ){

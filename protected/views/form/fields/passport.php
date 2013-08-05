@@ -9,5 +9,5 @@ echo $form->textFieldRow($oClientCreateForm, 'passport_number', array('class' =>
 
 echo $form->dateMaskedRow($oClientCreateForm, 'passport_date');
 
-echo $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('class' => 'span2', 'mask' => '999-999'));
+echo $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('class' => 'span2', 'mask' => '999-999', 'size'=>'7', 'maxlength'=>'7',));
 echo $form->textFieldRow($oClientCreateForm, 'passport_issued', array('class' => 'span3'));
