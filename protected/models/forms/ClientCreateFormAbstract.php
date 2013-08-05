@@ -209,8 +209,8 @@ class ClientCreateFormAbstract extends CFormModel {
 					break;
 
 				case 'birthday':
-					case 'passport_date':
-					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'yyyy-MM-dd');
+				case 'passport_date':
+					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
 					break;
 
 				case 'passport_series':
