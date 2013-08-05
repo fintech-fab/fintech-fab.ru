@@ -172,7 +172,6 @@ class FormController extends Controller
 
 			mt_srand(make_seed());
 			$generated_code = substr(mt_rand(),0,6);
-			$generated_code = "111111";
 
 			// запись кода в базу
 			ClientData::saveClientDataById($oClientForm, $client_id);
@@ -191,9 +190,8 @@ class FormController extends Controller
 		// данные не ajax
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
-			$model->attributes=$_POST['ClientConfirmPhoneViaSMSForm'];
-
-			echo "ffdgdg";
+			// проверить, что данные присланные и данные из базы по этому телефону совпадают
+			// ??
 		}
 	}
 
