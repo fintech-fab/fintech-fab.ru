@@ -67,7 +67,7 @@ class ClientFormComponent
 		$aValidFormData = $oClientForm->getValidAttributes();
 
 		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
-			if ($aValidFormData['phone']) {
+			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
 				 * и сравниваем введенный телефон с телефоном в куках.
@@ -87,7 +87,8 @@ class ClientFormComponent
 				} else {
 					/**
 					 * функция addClient()ищет клиента в базе по телефону,
-					 * и если находит - возвращает запись с указанным телефоном как результат
+					 * и если находит - возвращает запись с указанным телефоном как результат,
+					 * либо создает новую запись
 					 */
 					$oClientData = ClientData::addClient($aValidFormData['phone']);
 					Yii::app()->session['client_id'] = $oClientData->client_id;
