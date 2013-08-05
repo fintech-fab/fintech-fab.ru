@@ -156,7 +156,9 @@ class ClientData extends CActiveRecord
 	public function scopePhone($sPhone)
 	{
 		$this->getDbCriteria()->addColumnCondition(array(
-			'phone' => $sPhone
+			'phone' => $sPhone,
+			'flag_processed' => 0,
+			'flag_archived' => 0,
 		));
 		return $this;
 	}
@@ -198,7 +200,7 @@ class ClientData extends CActiveRecord
 			$oClientData = new self;
 		}
 
-		if($oClientData&&$oClientData->flag_processed==0&&$oClientData->complete==1){
+		if($oClientData&&$oClientData->complete==1){
 			$oClientData->flag_archived=1;
 			$oClientData->save();
 			$oClientData = new self;

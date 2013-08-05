@@ -46,7 +46,6 @@
 
 	if($oClientCreateForm->birthday)
 	{
-		echo "hgfh".$oClientCreateForm->birthday;
 		$oClientCreateForm->birthday = date('d.m.Y',strtotime($oClientCreateForm->birthday));
 	}
 	if($oClientCreateForm->passport_date)

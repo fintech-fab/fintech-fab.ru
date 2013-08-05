@@ -36,11 +36,19 @@ class FormController extends Controller
 		if($aPost=Yii::app()->clientForm->getPostData())//проверяем, был ли POST запрос
 		{
 			$oClientForm->attributes=$aPost; //передаем запрос в форму
-			if(isset($oClientForm->go)&&$oClientForm->go=="1")
-			{
-				Yii::app()->session['current_step']=0;
-				Yii::app()->session['done_steps']=0;
-				Yii::app()->session['form_complete']=true;
+			if(isset($oClientForm->complete)&&$oClientForm->complete=="1"){
+
+				Yii::app()->clientForm->formDataProcess($oClientForm);
+				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+				$oClientForm=Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+
+				$sView=Yii::app()->clientForm->getView();//запрашиваем имя текущего представления
+
+				//Yii::app()->session['current_step']=0;
+				//Yii::app()->session['done_steps']=0;
+				//Yii::app()->session['form_complete']=true;
+
+
 				/*
 				Yii::app()->session['ClientSelectProductForm']=null;
 				Yii::app()->session['ClientSelectGetWayForm']=null;
@@ -50,6 +58,10 @@ class FormController extends Controller
 				Yii::app()->session['ClientSendForm']=null;
 				*/
 
+				$this->render($sView,array('oClientCreateForm'=>$oClientForm));
+			}
+			elseif(isset($oClientForm->go)&&$oClientForm->go=="1")
+			{
 				$this->redirect(Yii::app()->createUrl("form/identification"));
 			}
 			elseif($oClientForm->validate())
