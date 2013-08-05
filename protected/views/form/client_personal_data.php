@@ -44,6 +44,15 @@
 		'action' => Yii::app()->createUrl('/form/'),
 	));
 
+	if($oClientCreateForm->birthday)
+	{
+		echo "hgfh".$oClientCreateForm->birthday;
+		$oClientCreateForm->birthday = date('d.m.Y',strtotime($oClientCreateForm->birthday));
+	}
+	if($oClientCreateForm->passport_date)
+	{
+		$oClientCreateForm->passport_date = date('d.m.Y',strtotime($oClientCreateForm->passport_date));
+	}
 	?>
 
 <div class="row span6">

@@ -10,7 +10,7 @@ class IkTbActiveForm extends TbActiveForm {
 	 * @param $aHtmlOptions
 	 * @return string
 	 */
-	public function phoneMaskedRow( CModel $oForm, $sAttribute, $aHtmlOptions = array() ){
+	public function fieldMaskedRow( CModel $oForm, $sAttribute, $aHtmlOptions = array() ){
 
 		if(empty($aHtmlOptions['mask'])){
 			$aHtmlOptions['mask'] = '+7 999 999 99 99';
