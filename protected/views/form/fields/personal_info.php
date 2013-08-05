@@ -4,7 +4,7 @@
  * @var IkTbActiveForm $form
  */
 
-echo $form->fieldMaskedRow($oClientCreateForm, 'birthday', array('mask' => '99.99.9999'));
+echo $form->dateMaskedRow($oClientCreateForm, 'birthday');
 
 echo '<br/>';
 
