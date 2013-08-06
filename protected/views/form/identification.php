@@ -134,7 +134,7 @@ $this->widget('TopPageWidget');
 					var faceCount = parseInt(response);
 
 					if (faceCount === 1) {
-						instructions.html('Данные успешно сохранены <a href="<?=Yii::app()->createUrl("form/documents");?>" class="btn">Продолжить</a>');
+						instructions.html('Данные успешно сохранены <a href="<?=Yii::app()->createUrl("form/identification");?>" class="btn">Продолжить</a>');
 
 						contextOverlay.clearRect(0, 0, canvas.width, canvas.height);
 						headTracker.stop();

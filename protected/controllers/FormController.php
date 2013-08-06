@@ -103,8 +103,8 @@ class FormController extends Controller
 
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
-			$this->actionIndex();
-		} else $this->actionIndex();
+		}
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	/**
@@ -128,10 +128,9 @@ class FormController extends Controller
 
 			if ($this->checkFiles($aFiles)) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-
 			}
-			$this->actionIndex();
-		} else $this->actionIndex();
+		}
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	public function actionConfirmPhoneViaSms()
