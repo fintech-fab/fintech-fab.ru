@@ -40,7 +40,7 @@
 			<br/><br/>
 			<?php
 			    // если попыток ввода ещё не было, выводим форму для отправки кода на SMS
-				if($sms_sent==0)	{
+				if(!$flag_sms_sent)	{
 			?>
 			<span id="send_sms">
 			<? $this->widget('bootstrap.widgets.TbButton', array(
@@ -61,16 +61,16 @@
 			)); ?>
 			</span>
 			<?php
-				}else if($tries >= SiteParams::MAX_ENTER_SMSCODE_TRIES){
+				}else if($sms_count_tries >= SiteParams::MAX_ENTER_SMSCODE_TRIES){
 					?>
 					Число попыток ввода кода превышено! Попробуйте позже.
 			<?php
-				}else if($tries >0 ){
+				}else if($sms_count_tries >0 ){
 			?>
-			Неверно введён код! Осталось попыток: <?php echo SiteParams::MAX_ENTER_SMSCODE_TRIES-$tries; ?>
+			Неверно введён код! Осталось попыток: <?php echo SiteParams::MAX_ENTER_SMSCODE_TRIES-$sms_count_tries; ?>
 			<?php } ?>
 		</span>
-		<span class="span10<?php if($sms_sent==0)echo ' hide';?>" id="sms_code_row">
+		<span class="span10<?php if(!$flag_sms_sent)echo ' hide';?>" id="sms_code_row">
 			Введите код из SMS:
 			<?php echo $form->textField( $oClientCreateForm, 'sms_code', array( 'class' => 'span4' ) ); ?>
 			<?php echo $form->error($oClientCreateForm, 'sms_code'); ?>
@@ -81,12 +81,14 @@
 
 		<div class="form-actions">
 			<?php $aHide=array();
-			if($sms_sent==0) $aHide=array("class"=>'hide');	?>
+			if(!$flag_sms_sent) $aHide=array("class"=>'hide');	?>
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type' => 'primary',
 				'label' => 'Далее →',
-				'htmlOptions'=>array('id'=>'btnNext',)+$aHide,
+				'htmlOptions'=>array_merge(
+					array('id'=>'btnNext',),
+					$aHide),
 			)); ?>
 		</div>
 	</div>
