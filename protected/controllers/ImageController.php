@@ -101,9 +101,6 @@ class ImageController extends CController
 						break;
 					}
 
-					//удаляем фотографию из temp директории
-					@unlink($sFilePath);
-
 					//если лицо нашлось - загружаем
 					if (count($response) == 1) {
 						$this->uploadToUserDir($sImage, $sType);
@@ -173,7 +170,8 @@ class ImageController extends CController
 					break;
 			}
 
-			unset($sFilePath);
+			//удаляем фотографию из temp директории
+			@unlink($sFilePath);
 		}
 	}
 
