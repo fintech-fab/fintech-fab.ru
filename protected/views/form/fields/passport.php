@@ -1,11 +1,12 @@
-<?
+<?php
 /**
  * @var ClientCreateFormAbstract $oClientCreateForm
  * @var IkTbActiveForm $form
  */
 
-echo $form->fieldMaskedRow($oClientCreateForm, 'passport_series', array('class' => 'span1', 'mask' => '9999', 'size'=>'4', 'maxlength'=>'4',));
-echo $form->fieldMaskedRow($oClientCreateForm, 'passport_number', array('class' => 'span2', 'mask' => '999999', 'size'=>'6', 'maxlength'=>'6',));
+
+echo $form->fieldPassportRow($oClientCreateForm, array('passport_series','passport_number'), array('passport_number'=>array('class' => 'span2', 'mask' => '999999', 'size'=>'6', 'maxlength'=>'6'),'passport_series'=>array('class' => 'span1', 'mask' => '9999', 'size'=>'4', 'maxlength'=>'4')));
+
 
 echo $form->dateMaskedRow($oClientCreateForm, 'passport_date');
 

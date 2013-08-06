@@ -34,7 +34,7 @@ class IkTbActiveForm extends TbActiveForm {
 		);
 
 		if( !empty( $aHtmlOptions ) ){
-			$aDefaultOptions = array_merge( $aHtmlOptions, $aDefaultOptions );
+			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions);
 		}
 
 		$sReturn .= $this->getController()->widget(
@@ -53,6 +53,84 @@ class IkTbActiveForm extends TbActiveForm {
 		return $sReturn;
 
 	}
+
+
+	public function fieldPassportRow( CModel $oForm, $aAttributes, $aHtmlOptions = array() ){
+
+		$aReturn = array();
+
+
+		foreach ($aAttributes as $sAttribute) {
+			if(empty($aHtmlOptions[$sAttribute])){
+				$aHtmlOptions[$sAttribute]=array();
+			}
+
+			if (empty($aHtmlOptions[$sAttribute]['hideLabel'])) {
+				$aReturn[$sAttribute]['label'] = $this->label(
+					$oForm,
+					$sAttribute,
+					array(
+						'required' => $oForm->isAttributeRequired($sAttribute)
+					)
+				);
+			}
+
+			$aDefaultOptions = array(
+				'size'      => '6',
+				'maxlength' => '6',
+				'mask' => '999999',
+				'class' => 'span2'
+			);
+
+			if (!empty($aHtmlOptions[$sAttribute])) {
+				$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions[$sAttribute]);
+			} else {
+				$aHtmlOptions[$sAttribute] = $aDefaultOptions;
+			}
+
+			$aReturn[$sAttribute]['field'] = $this->getController()->widget(
+				'CMaskedTextField',
+				array(
+					'model'       => $oForm,
+					'attribute'   => $sAttribute,
+					'mask'        => $aHtmlOptions[$sAttribute]['mask'],
+					'htmlOptions' => $aDefaultOptions
+				),
+				true
+			);
+
+			$aReturn[$sAttribute]['error']= $this->error($oForm, $sAttribute);
+		}
+
+		$sReturn  = '<div style="display:table;">';
+		foreach ($aReturn as $sRet) {
+			$sReturn .= '<div style="display:table-cell;">';
+			$sReturn .= $sRet['label'];
+			$sReturn .= $sRet['field'];
+			$sReturn .= '</div>';
+		}
+		$sReturn .= '</div>';
+		$sReturn .= '<div style="display:table;">';
+		$sReturn .= '<div style="display:table-cell;">';
+		foreach ($aReturn as $sRet) {
+
+			$sReturn .= $sRet['error'];
+		}
+		$sReturn .= '</div>';
+		$sReturn .= '</div>';
+
+		return $sReturn;
+
+	}
+
+
+	/**
+	 * @param CModel $oForm
+	 * @param        $sAttribute
+	 * @param array  $aHtmlOptions
+	 *
+	 * @return string
+	 */
 
 	public function fieldMaskedRow( CModel $oForm, $sAttribute, $aHtmlOptions = array() ){
 
@@ -78,7 +156,7 @@ class IkTbActiveForm extends TbActiveForm {
 		);
 
 		if( !empty( $aHtmlOptions ) ){
-			$aDefaultOptions = array_merge( $aHtmlOptions, $aDefaultOptions );
+			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions );
 		}
 
 		$sReturn .= $this->getController()->widget(
@@ -128,7 +206,7 @@ class IkTbActiveForm extends TbActiveForm {
 		);
 
 		if( !empty( $aHtmlOptions ) ){
-			$aDefaultOptions = array_merge( $aHtmlOptions, $aDefaultOptions );
+			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions );
 		}
 
 		$sReturn .= $this->getController()->widget(
@@ -166,7 +244,7 @@ class IkTbActiveForm extends TbActiveForm {
 		);
 
 		if( !empty( $aHtmlOptions ) ){
-			$aDefaultOptions = array_merge( $aHtmlOptions, $aDefaultOptions );
+			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions);
 		}
 
 		return

@@ -101,9 +101,6 @@ class ClientFormComponent
 			}
 
 			if ($this->client_id) {
-
-
-
 				$aValidFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
 				$aValidFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
 				ClientData::saveClientDataById($aValidFormData, $this->client_id);

@@ -38,7 +38,20 @@ class FormController extends Controller
 		{
 			$oClientForm->attributes = $aPost; //передаем запрос в форму
 
-			if ($oClientForm->validate()){
+			if(isset($oClientForm->go_identification))
+			{
+				if($oClientForm->validate()){
+					if($oClientForm->go_identification==1)
+					{
+						Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+					}
+					elseif($oClientForm->go_identification==2)
+					{
+						//Yii::app()->clientForm->nextStep('sms'); TODO
+					}
+				}
+			}
+			elseif ($oClientForm->validate()){
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
@@ -72,16 +85,15 @@ class FormController extends Controller
 	 */
 	public function actionStep($step)
 	{
-		if ($step !== 0) {
+		if ($step > 0) {
 			if (Yii::app()->session['done_steps'] < ($step - 1)) {
 				Yii::app()->session['current_step'] = Yii::app()->session['done_steps'];
 			} else {
 				Yii::app()->session['done_steps'] = $step - 1;
 				Yii::app()->session['current_step'] = $step - 1;
 			}
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
-
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 
@@ -127,6 +139,10 @@ class FormController extends Controller
 
 
 			if ($this->checkFiles($aFiles)) {
+				$aClientData['flag_identified']=1;
+				if(isset($client_id)) {
+					ClientData::saveClientDataById($aClientData,$client_id);
+				}//TODO протестить
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 		}
