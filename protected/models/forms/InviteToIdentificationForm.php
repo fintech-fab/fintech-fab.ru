@@ -2,7 +2,7 @@
 /**
  *
  */
-class InviteToIdentification extends ClientCreateFormAbstract
+class InviteToIdentificationForm extends ClientCreateFormAbstract
 {
 
 	public $go;

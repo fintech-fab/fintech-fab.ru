@@ -47,7 +47,7 @@ class ImageController extends CController
 	public function actionProcessPhoto()
 	{
 		//все шаги пройдены и есть ID клиента
-		if (!Yii::app()->session['form_complete'] OR is_null($this->_getClient())) {
+		if (is_null($this->_getClient())) {
 			Yii::app()->end();
 		}
 
@@ -175,6 +175,7 @@ class ImageController extends CController
 
 			unset($sFilePath);
 		}
+
 	}
 
 	/**

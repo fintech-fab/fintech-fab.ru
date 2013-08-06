@@ -28,7 +28,7 @@
  * @property string $relatives_one_fio
  * @property string $relatives_one_phone
  * @property string $friends_fio
- * @property string $friends_one_phone
+ * @property string $friends_phone
  * @property string $job_company
  * @property string $job_position
  * @property string $job_time

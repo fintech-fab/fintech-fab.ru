@@ -12,7 +12,7 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
-		$client_id = $this->_getClientId();
+		$client_id = $this->getClientId();
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -50,7 +50,9 @@ class FormController extends Controller
 		 * Загрузка данных из сессии в форму, если данные существуют и client_id сессии совпадает с оным в куке
 		 */
 
-		if (Cookie::compareDataInCookie('client', 'client_id', $client_id)) {
+		if (Cookie::compareDataInCookie('client', 'client_id', $client_id)
+			&& Yii::app()->session[get_class($oClientForm) . '_client_id'] == $client_id
+		) {
 			if (isset($oClientForm) && $oClientForm) {
 				$sessionClientData = Yii::app()->session[get_class($oClientForm)];
 				$oClientForm->setAttributes($sessionClientData);
@@ -90,7 +92,7 @@ class FormController extends Controller
 
 	public function actionIdentification()
 	{
-		$client_id = $this->_getClientId();
+		$client_id = $this->getClientId();
 
 		if (Yii::app()->session['current_step'] == 7) {
 
@@ -112,7 +114,7 @@ class FormController extends Controller
 	public function actionDocuments()
 	{
 
-		$client_id = $this->_getClientId();
+		$client_id = $this->getClientId();
 
 		if (Yii::app()->session['current_step'] == 8) {
 
@@ -125,12 +127,11 @@ class FormController extends Controller
 
 
 
-			if ($this->_checkFiles($aFiles)) {
+			if ($this->checkFiles($aFiles)) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-
 			}
-			$this->actionIndex();
-		} else $this->actionIndex();
+		}
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	public function actionConfirmPhoneViaSms()
@@ -139,8 +140,10 @@ class FormController extends Controller
 		return;
 	}
 
-	private function _checkFiles($aFiles)
+	private function checkFiles($aFiles)
 	{
+		if(!isset($aFiles)||gettype($aFiles)!='array') return false;
+
 		foreach ($aFiles as $sFile) {
 			if (!file_exists($sFile) || !getimagesize($sFile)) {
 				return false;
@@ -229,9 +232,24 @@ class FormController extends Controller
 		}
 	}
 
-	private function _getClientId()
+	private function getClientId()
 	{
 		return Yii::app()->session['client_id'];
+	}
+
+	private function clearSession()
+	{
+		Yii::app()->session['current_step']=0;
+		Yii::app()->session['done_steps']=0;
+
+		/*
+		Yii::app()->session['ClientSelectProductForm']=null;
+		Yii::app()->session['ClientSelectGetWayForm']=null;
+		Yii::app()->session['ClientPersonalDataForm']=null;
+		Yii::app()->session['ClientAddressForm']=null;
+		Yii::app()->session['ClientJobInfoForm']=null;
+		Yii::app()->session['ClientSendForm']=null;
+		*/
 	}
 
 	/**

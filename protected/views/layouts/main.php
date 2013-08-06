@@ -68,7 +68,7 @@
 </script>
 <!-- ClickTale end of Top part -->
 
-<nav class="navbar navbar-fixed-top">
+<nav class="navbar navbar-top">
     <div class="navbar-inner">
         <div class="container">
 
@@ -83,7 +83,8 @@
     </div>
 </nav>
 
-<div class="page-divider1"></div>
+<!--div class="page-divider1"></div-->
+
 <?php
 $this->widget('TopPageWidget',array("show"=>$this->showTopPageWidget));
 ?>

@@ -19,12 +19,12 @@ class ClientAddressForm extends ClientCreateFormAbstract
 	/**
 	 * @var ФИО родственника/друга
 	 */
-	public $friend_fio;
+	public $friends_fio;
 
 	/**
 	 * @var дополнительный телефон родственника/друга
 	 */
-	public $friend_phone;
+	public $friends_phone;
 
 	public function rules()
 	{
@@ -50,8 +50,8 @@ class ClientAddressForm extends ClientCreateFormAbstract
 				'relatives_one_fio',
 				'relatives_one_phone',
 
-				'friend_fio',
-				'friend_phone',
+				'friends_fio',
+				'friends_phone',
 			),
 			$aRequired
 		);
@@ -64,8 +64,8 @@ class ClientAddressForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('friend_fio' => 'ФИО',
-				  'friend_phone'=>'Телефон',)
+			array('friends_fio' => 'ФИО',
+				  'friends_phone'=>'Телефон',)
 		);
 	}
 }
