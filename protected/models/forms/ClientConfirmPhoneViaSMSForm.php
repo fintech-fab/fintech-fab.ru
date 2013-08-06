@@ -16,6 +16,13 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 	 */
 	public $iCountTries;
 
+	public function init()
+	{
+		$this->iCountTries = (Yii::app()->session['ClientConfirmPhoneViaSMSForm']['sms_sent'])
+			? Yii::app()->session['ClientConfirmPhoneViaSMSForm']['sms_sent']
+			: 0 ;
+	}
+
 	public function rules()
 	{
 		$aRules = array();

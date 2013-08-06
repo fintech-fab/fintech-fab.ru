@@ -237,6 +237,22 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
+	 * @param $client_id
+	 * @param string $sCode
+	 * @return bool
+	 */
+	public static function compareSMSCodeByClientId($client_id, $sCode)
+	{
+		$aClientData = self::model()->getClientDataById($client_id);
+		if($aClientData['sms_code']==$sCode)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * @param $aClientFormData
 	 * @param $client_id
 	 * @return bool

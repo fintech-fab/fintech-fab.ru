@@ -171,45 +171,77 @@ class FormController extends Controller
 		// если ajax-данные
 		if(Yii::app()->request->isAjaxRequest){
 
+			$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
+			$aClientConfirmPhoneViaSMSFormSession['sms_sent'] = "1";
+			Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
+
 			$client_id = Yii::app()->session['client_id'];
+			$aClientForm=ClientData::getClientDataById($client_id);
 
-			$oClientForm=new ClientConfirmPhoneViaSMSForm();
+			ClientData::saveClientDataById($aClientForm, $client_id);
+			// проверяем - есть ли уже код в базе.
+			$bIsCodeAlreadySent = (bool)($aClientForm['sms_code']&&$aClientForm['sms_code']!='');
 
-			// генерация рандомного кода
-			// сеет с микросекундами
-			function make_seed() {
-				list($usec, $sec) = explode(' ', microtime());
-				return (float) $sec + ((float) $usec * 100000);
+			// если да - новый не генерируем и выходим
+			if($bIsCodeAlreadySent) {
+				Yii::app()->end();
 			}
 
-			mt_srand(make_seed());
-			$generated_code = substr(mt_rand(),0,6);
+			// генерация рандомного кода
+			mt_srand($this->make_seed());
+			$sGeneratedCode = mt_rand(1000000,9999999);
+			$sGeneratedCode = substr($sGeneratedCode,1,6);
+
+			$aClientForm['sms_code']=$sGeneratedCode;
 
 			// запись кода в базу
-			ClientData::saveClientDataById($oClientForm, $client_id);
-
-			// ответ пользователю... удалить потом, это для проверки
-			echo CHtml::encode($generated_code);
-
+			ClientData::saveClientDataById($aClientForm, $client_id);
 			Yii::app()->end();
 		}
 	}
 
 	public function actionSendCode()
 	{
-		$model=new ClientConfirmPhoneViaSMSForm();
+		$client_id = Yii::app()->session['client_id'];
 
 		// данные не ajax
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
-			// проверить, что данные присланные и данные из базы по этому телефону совпадают
-			// ??
+			$oClientConfirmPhoneViaSMSForm=new ClientConfirmPhoneViaSMSForm();
+
+			$oClientConfirmPhoneViaSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
+
+			if($oClientConfirmPhoneViaSMSForm->iCountTries < 10){
+
+				// проверить, что данные присланные и данные из базы по этому телефону совпадают
+				if(ClientData::compareSMSCodeByClientId($client_id,$oClientConfirmPhoneViaSMSForm->sms_code)){
+					// ставим галочку, что произошло подтверждение по SMS
+					$aData['flag_sms_confirmed']=1;
+					ClientData::saveClientDataById($aData,$client_id);
+
+					//render успешное подтверждение
+				}
+
+				$oClientConfirmPhoneViaSMSForm->iCountTries++;
+				//render неуспешное подтверждение
+			}
+			//render превышено число попыток
 		}
 	}
 
 	private function _getClientId()
 	{
 		return Yii::app()->session['client_id'];
+	}
+
+	/**
+	 * генерация рандомного кода;
+	 * сеет с микросекундами
+	 * @return float
+	 */
+	private function make_seed() {
+		list($usec, $sec) = explode(' ', microtime());
+		return (float) $sec + ((float) $usec * 100000);
 	}
 
 	// Uncomment the following methods and override them if needed
