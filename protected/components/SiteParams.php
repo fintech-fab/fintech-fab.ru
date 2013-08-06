@@ -18,6 +18,16 @@ class SiteParams
 	const EMPTY_DATETIME = '0000-00-00 00:00:00';
 	const EMPTY_TIME = '00:00:00';
 
+	/**
+	 * максимальное число попыток ввода кода из SMS
+	 */
+	const MAX_ENTER_SMSCODE_TRIES = 3;
+
+	/**
+	 * длина кода подтверждения, отправляемого по SMS
+	 */
+	const C_SMSCODE_LENGTH = 6;
+
 	public static $iTimeNow = null;
 
 	/**
