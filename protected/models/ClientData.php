@@ -158,7 +158,7 @@ class ClientData extends CActiveRecord
 	{
 		$this->getDbCriteria()->addColumnCondition(array(
 			'phone' => $sPhone,
-			'flag_processed' => 0,
+			'flag_sms_confirmed' => 0,
 			'flag_archived' => 0,
 		));
 		return $this;

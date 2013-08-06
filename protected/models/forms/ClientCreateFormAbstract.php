@@ -401,7 +401,7 @@ class ClientCreateFormAbstract extends CFormModel {
 					$aAttributes[] = $aRule[0];
 				} elseif (gettype($aRule[0]) === "array") {
 					foreach ($aRule[0] as $aSubRule) {
-						if (gettype($aRule[0][0]) === "string") $aAttributes[] = $aRule[0][0];
+						if (gettype($aSubRule[0]) === "string") $aAttributes[] = $aSubRule[0];
 					}
 				}
 			}
