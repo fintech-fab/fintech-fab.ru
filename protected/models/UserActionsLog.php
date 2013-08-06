@@ -4,20 +4,28 @@
  * This is the model class for table "tbl_user_actions_log".
  *
  * The followings are the available columns in table 'tbl_user_actions_log':
+ *
  * @property integer $id
  * @property integer $type
- * @property string $ip
+ * @property string  $ip
  * @property integer $count
- * @property string $dt_add
+ * @property string  $dt_add
+ *
+ * @method UserActionsLog[] findAll()
+ * @method UserActionsLog[] findAllByAttributes()
+ * @method UserActionsLog find()
+ *
  */
 class UserActionsLog extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
+	 *
 	 * @param string $className active record class name.
+	 *
 	 * @return UserActionsLog the static model class
 	 */
-	public static function model($className=__CLASS__)
+	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
 	}
@@ -39,37 +47,61 @@ class UserActionsLog extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('type, ip, count, dt_add', 'required'),
-			array('type, count', 'numerical', 'integerOnly'=>true),
-			array('ip', 'length', 'max'=>15),
+			array('type, count', 'numerical', 'integerOnly' => true),
+			array('ip', 'length', 'max' => 15),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type, ip, count, dt_add', 'safe', 'on'=>'search'),
+			array('id, type, ip, count, dt_add', 'safe', 'on' => 'search'),
 		);
 	}
 
-	public function scopeIpAndType($sIp,$iType)
+	/**
+	 * @param $sIp
+	 * @param $iType
+	 *
+	 * @return UserActionsLog
+	 */
+
+	public function scopeIpAndType($sIp, $iType)
 	{
 		$this->getDbCriteria()->addColumnCondition(array(
-			'ip' => $sIp,
+			'ip'   => $sIp,
 			'type' => $iType,
 		));
+
 		return $this;
 	}
 
-	public static function addAction($iType)
-	{
-		$sIp = Yii::app()->request->getUserHostAddress();
+	/**
+	 * @param $sIp
+	 * @param $iType
+	 *
+	 * Функция ищет запись с таким IP, и если находит - обновляет ее полностью,
+	 * иначе создает новую запись
+	 */
 
-		$oUserAction = self::model()->scopeIpAndType($sIp,$iType)->find();
+	public static function addNewAction($sIp, $iType)
+	{
+		$oUserAction = self::model()->scopeIpAndType($sIp, $iType)->find();
 		if (!$oUserAction) {
 			$oUserAction = new self;
 		}
 
 		$oUserAction->ip = $sIp;
 		$oUserAction->type = $iType;
+		$oUserAction->count = 1;
 		$oUserAction->dt_add = date('Y-m-d H:i:s', time());
 		$oUserAction->save();
+	}
 
+	/**
+	 * @param $sIp
+	 * @param $iType
+	 */
+
+	public static function getActionByIpAndType($sIp, $iType)
+	{
+		return $oUserAction = self::model()->scopeIpAndType($sIp, $iType)->find();
 	}
 
 	/**
@@ -79,8 +111,7 @@ class UserActionsLog extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -89,16 +120,17 @@ class UserActionsLog extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'type' => 'Type',
-			'ip' => 'Ip',
-			'count' => 'Count',
+			'id'     => 'ID',
+			'type'   => 'Type',
+			'ip'     => 'Ip',
+			'count'  => 'Count',
 			'dt_add' => 'Dt Add',
 		);
 	}
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
 	public function search()
@@ -106,16 +138,16 @@ class UserActionsLog extends CActiveRecord
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
-		$criteria=new CDbCriteria;
+		$criteria = new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('type',$this->type);
-		$criteria->compare('ip',$this->ip,true);
-		$criteria->compare('count',$this->count);
-		$criteria->compare('dt_add',$this->dt_add,true);
+		$criteria->compare('id', $this->id);
+		$criteria->compare('type', $this->type);
+		$criteria->compare('ip', $this->ip, true);
+		$criteria->compare('count', $this->count);
+		$criteria->compare('dt_add', $this->dt_add, true);
 
 		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
+			'criteria' => $criteria,
 		));
 	}
 }

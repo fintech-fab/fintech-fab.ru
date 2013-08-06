@@ -190,7 +190,8 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
-	 * @param ClientCreateFormAbstract $oClientForm
+	 * @param $sPhone
+	 *
 	 * @return ClientData
 	 */
 
