@@ -46,6 +46,10 @@ class ImageController extends CController
 	 */
 	public function actionProcessPhoto()
 	{
+		/**
+		 * @var Image $oImage
+		 */
+
 		//все шаги пройдены и есть ID клиента
 		if (is_null($this->_getClient())) {
 			Yii::app()->end();
@@ -181,9 +185,14 @@ class ImageController extends CController
 	 *
 	 * @param $sImage
 	 * @param $sType
+	 *
 	 */
+
 	private function uploadToUserDir($sImage, $sType)
 	{
+		/**
+		 * @var Image $oImage
+		 */
 
 		$iClientId = $this->_getClient();
 
