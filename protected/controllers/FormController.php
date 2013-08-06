@@ -64,7 +64,18 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
-		$this->render($sView, array('oClientCreateForm' => $oClientForm));
+		$aParams = array();
+		if($sView=='client_confirm_phone_via_sms')
+		{
+			$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
+			if(!array_key_exists('iCountTries',$aClientConfirmPhoneViaSMSFormSession)){
+				$aClientConfirmPhoneViaSMSFormSession['iCountTries'] = 0;
+				Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
+			}
+			$aParams['tries']=Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'];
+		}
+
+		$this->render($sView, array('oClientCreateForm' => $oClientForm)+$aParams);
 	}
 
 	/**
@@ -100,7 +111,7 @@ class FormController extends Controller
 
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 
-			if ($this->_checkFiles($aFiles)) {
+			if ($this->checkFiles($aFiles)) {
 
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
@@ -174,10 +185,6 @@ class FormController extends Controller
 		// если ajax-данные
 		if(Yii::app()->request->isAjaxRequest){
 
-			$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
-			$aClientConfirmPhoneViaSMSFormSession['sms_sent'] = "1";
-			Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
-
 			$client_id = Yii::app()->session['client_id'];
 			$aClientForm=ClientData::getClientDataById($client_id);
 
@@ -199,6 +206,7 @@ class FormController extends Controller
 
 			// запись кода в базу
 			ClientData::saveClientDataById($aClientForm, $client_id);
+
 			Yii::app()->end();
 		}
 	}
@@ -214,21 +222,33 @@ class FormController extends Controller
 
 			$oClientConfirmPhoneViaSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
 
-			if($oClientConfirmPhoneViaSMSForm->iCountTries < 10){
+			if(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'] < 10){
 
 				// проверить, что данные присланные и данные из базы по этому телефону совпадают
 				if(ClientData::compareSMSCodeByClientId($client_id,$oClientConfirmPhoneViaSMSForm->sms_code)){
-					// ставим галочку, что произошло подтверждение по SMS
+
+					//успешное подтверждение
 					$aData['flag_sms_confirmed']=1;
 					ClientData::saveClientDataById($aData,$client_id);
 
-					//render успешное подтверждение
+					$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
 				}
+				// неуспешное подтверждение
 
-				$oClientConfirmPhoneViaSMSForm->iCountTries++;
-				//render неуспешное подтверждение
+				$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
+				$aClientConfirmPhoneViaSMSFormSession['iCountTries']++;
+				Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
+
+				$oClientForm = Yii::app()->clientForm->getFormModel();
+
+				$this->render('client_confirm_phone_via_sms',array(
+					'oClientCreateForm' => $oClientForm,
+					'tries'=>Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'],
+				));
+
 			}
-			//render превышено число попыток
+
+			// превышено число попыток
 		}
 	}
 

@@ -39,7 +39,8 @@
 			<strong>+7<?= Yii::app()->session['ClientPersonalDataForm']['phone']; ?></strong>
 			<br/><br/>
 			<?php
-				if($oClientCreateForm->iCountTries==0)	{
+			    // если попыток ввода ещё не было, выводим форму для отправки кода на SMS
+				if(!isset($tries)||$tries==0)	{
 			?>
 			<span id="send_sms">
 			<? $this->widget('bootstrap.widgets.TbButton', array(
@@ -58,10 +59,16 @@
 			)); ?>
 			</span>
 			<?php
-				}
+				}else if($tries >= 10){
+					?>
+					Число попыток ввода кода превышено! Попробуйте позже.
+			<?php
+				}else{
 			?>
+			Неверно введён код! Осталось попыток: <?php echo 10-$tries; ?>
+			<?php } ?>
 		</span>
-		<span class="span10<?php if($oClientCreateForm->iCountTries==0)echo ' hide';?>" id="sms_code_row">
+		<span class="span10<?php if(!isset($tries)||$tries==0)echo ' hide';?>" id="sms_code_row">
 			Введите код из SMS:
 			<?php echo $form->textField( $oClientCreateForm, 'sms_code', array( 'class' => 'span4' ) ); ?>
 			<?php echo $form->error($oClientCreateForm, 'sms_code'); ?>
@@ -72,7 +79,7 @@
 
 		<div class="form-actions">
 			<?php $aHide=array();
-			if($oClientCreateForm->iCountTries==0) $aHide=array("class"=>'hide');	?>
+			if(!isset($tries)||$tries==0) $aHide=array("class"=>'hide');	?>
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type' => 'primary',
