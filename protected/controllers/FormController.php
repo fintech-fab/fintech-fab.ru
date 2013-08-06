@@ -67,12 +67,18 @@ class FormController extends Controller
 		$aParams = array();
 		if($sView=='client_confirm_phone_via_sms')
 		{
+			if(!Yii::app()->session['ClientConfirmPhoneViaSMSForm']){
+				Yii::app()->session['ClientConfirmPhoneViaSMSForm']=array();
+			}
+
 			$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
 			if(!array_key_exists('iCountTries',$aClientConfirmPhoneViaSMSFormSession)){
 				$aClientConfirmPhoneViaSMSFormSession['iCountTries'] = 0;
 				Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
 			}
+
 			$aParams['tries']=Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'];
+			$aParams['sms_sent']=(array_key_exists('sms_sent',$aClientConfirmPhoneViaSMSFormSession))?1:0;
 		}
 
 		$this->render($sView, array('oClientCreateForm' => $oClientForm)+$aParams);
@@ -186,6 +192,13 @@ class FormController extends Controller
 		if(Yii::app()->request->isAjaxRequest){
 
 			$client_id = Yii::app()->session['client_id'];
+
+			$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
+			if(!array_key_exists('sms_sent',$aClientConfirmPhoneViaSMSFormSession)){
+				$aClientConfirmPhoneViaSMSFormSession['sms_sent'] = true;
+				Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
+			}
+
 			$aClientForm=ClientData::getClientDataById($client_id);
 
 			ClientData::saveClientDataById($aClientForm, $client_id);
@@ -194,15 +207,11 @@ class FormController extends Controller
 
 			// если да - новый не генерируем и выходим
 			if($bIsCodeAlreadySent) {
+				echo CHtml::encode("Ошибка: SMS уже отправлена");
 				Yii::app()->end();
 			}
 
-			// генерация рандомного кода
-			mt_srand($this->make_seed());
-			$sGeneratedCode = mt_rand(1000000,9999999);
-			$sGeneratedCode = substr($sGeneratedCode,1,6);
-
-			$aClientForm['sms_code']=$sGeneratedCode;
+			$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
 
 			// запись кода в базу
 			ClientData::saveClientDataById($aClientForm, $client_id);
@@ -218,11 +227,23 @@ class FormController extends Controller
 		// данные не ajax
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
+			// если с данного ip уже просили SMS в течение 10 минут...
+			if(1==2)
+			{
+				// бан1
+			}
+
+			// если с данного ip уже просили SMS 3 раза в течение 1 часа...
+			if(1==2)
+			{
+				// бан2
+			}
+
 			$oClientConfirmPhoneViaSMSForm=new ClientConfirmPhoneViaSMSForm();
 
 			$oClientConfirmPhoneViaSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
 
-			if(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'] < 10){
+			if(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'] < SiteParams::MAX_ENTER_SMSCODE_TRIES){
 
 				// проверить, что данные присланные и данные из базы по этому телефону совпадают
 				if(ClientData::compareSMSCodeByClientId($client_id,$oClientConfirmPhoneViaSMSForm->sms_code)){
@@ -233,8 +254,8 @@ class FormController extends Controller
 
 					$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
 				}
-				// неуспешное подтверждение
 
+				// неуспешное подтверждение
 				$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
 				$aClientConfirmPhoneViaSMSFormSession['iCountTries']++;
 				Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
@@ -244,6 +265,7 @@ class FormController extends Controller
 				$this->render('client_confirm_phone_via_sms',array(
 					'oClientCreateForm' => $oClientForm,
 					'tries'=>Yii::app()->session['ClientConfirmPhoneViaSMSForm']['iCountTries'],
+					'sms_sent'=>((array_key_exists('sms_sent',$aClientConfirmPhoneViaSMSFormSession))?1:0),
 				));
 
 			}
@@ -273,13 +295,26 @@ class FormController extends Controller
 	}
 
 	/**
-	 * генерация рандомного кода;
-	 * сеет с микросекундами
-	 * @return float
+	 * @param $iLength
+	 * @return string
 	 */
-	private function make_seed() {
+	private function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH) {
+		// генерация рандомного кода
 		list($usec, $sec) = explode(' ', microtime());
-		return (float) $sec + ((float) $usec * 100000);
+		$fSeed = (float) $sec + ((float) $usec * 100000);
+
+		mt_srand($fSeed);
+
+		$sMin = "1"; $sMax = "9";
+		for($i=0;$i<$iLength;++$i)
+		{
+			$sMin.="0"; $sMax.="9";
+		}
+
+		$sGeneratedCode = mt_rand((int)$sMin, (int)$sMax);
+		$sGeneratedCode = substr($sGeneratedCode,1,$iLength);
+
+		return $sGeneratedCode;
 	}
 
 	// Uncomment the following methods and override them if needed

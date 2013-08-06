@@ -13,6 +13,10 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 
 	public function init()
 	{
+		if(!Yii::app()->session['ClientConfirmPhoneViaSMSForm']){
+			Yii::app()->session['ClientConfirmPhoneViaSMSForm']=array();
+		}
+
 		$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
 
 		if(!array_key_exists('iCountTries',$aClientConfirmPhoneViaSMSFormSession)){
@@ -26,8 +30,8 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 		$aRules = array();
 
 		$aRules[] = array('sms_code', 'required', 'message' => 'Поле обязательно к заполнению');
-		$aRules[] = array('sms_code', 'length','max'=>6, 'message' => 'Поле обязательно к заполнению');
-		$aRules[] = array('sms_code', 'match', 'message' => 'SMS-код состоит из 6 цифр', 'pattern' => '/^\d{6}$/');
+		$aRules[] = array('sms_code', 'match', 'message' => 'SMS-код состоит из '.SiteParams::C_SMSCODE_LENGTH.' цифр',
+			'pattern' => '/^\d{'.SiteParams::C_SMSCODE_LENGTH.'}$/');
 
 		return $aRules;
 
