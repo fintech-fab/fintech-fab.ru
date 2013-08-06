@@ -193,7 +193,7 @@ class ClientCreateFormAbstract extends CFormModel {
 					break;
 
 				case 'relatives_one_fio':
-				case 'friend_fio':
+				case 'friends_fio':
 					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может сожержать только русские буквы, пробелы и дефис');
 					break;
 
@@ -240,7 +240,7 @@ class ClientCreateFormAbstract extends CFormModel {
 				case 'job_phone':
 				case 'relatives_one_phone':
 				case 'job_director_phone':
-				case 'friend_phone':
+				case 'friends_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
 					break;
 
