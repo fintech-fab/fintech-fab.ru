@@ -14,7 +14,7 @@
 $this->pageTitle=Yii::app()->name;
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id' => 'InviteToIdentification',
+	'id' => 'InviteToIdentificationForm',
 	'action' => Yii::app()->createUrl('/form/'),
 ));
 ?>

@@ -117,6 +117,7 @@ class ClientFormComponent
 		}
 
 		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
+		Yii::app()->session[get_class($oClientForm).'_client_id'] = $this->client_id;
 		return;
 	}
 
@@ -150,6 +151,7 @@ class ClientFormComponent
 				/**
 				 * функция addClient()ищет клиента в базе по телефону,
 				 * и если находит - возвращает запись с указанным телефоном как результат
+				 * либо создает новую запись
 				 */
 				$oClientData = ClientData::addClient($oClientForm);
 				Yii::app()->session['client_id'] = $oClientData->client_id;
@@ -173,6 +175,7 @@ class ClientFormComponent
 		}
 		$aClientFormData = $oClientForm->getAttributes();
 		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
+		Yii::app()->session[get_class($oClientForm).'_client_id'] = $this->client_id;
 		return;
 	}
 
@@ -236,7 +239,7 @@ class ClientFormComponent
 			case 6:
 			case 7:
 			case 8:
-				return new InviteToIdentification();
+				return new InviteToIdentificationForm();
 				break;
 			case 9:
 				return new ClientConfirmPhoneViaSMSForm();
@@ -352,8 +355,8 @@ class ClientFormComponent
 				break;
 			case 6:
 			{
-				if (isset($_POST['InviteToIdentification'])) {
-					return $_POST['InviteToIdentification'];
+				if (isset($_POST['InviteToIdentificationForm'])) {
+					return $_POST['InviteToIdentificationForm'];
 				}
 				return null;
 			}
