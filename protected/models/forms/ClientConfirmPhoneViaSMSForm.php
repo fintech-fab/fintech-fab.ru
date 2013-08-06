@@ -11,10 +11,15 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 	 */
 	public $sms_code;
 
-	/**
-	 * @var int число попыток ввода кода
-	 */
-	public $iCountTries;
+	public function init()
+	{
+		$aClientConfirmPhoneViaSMSFormSession = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
+
+		if(!array_key_exists('iCountTries',$aClientConfirmPhoneViaSMSFormSession)){
+			$aClientConfirmPhoneViaSMSFormSession['iCountTries'] = 0;
+			Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $aClientConfirmPhoneViaSMSFormSession;
+		}
+	}
 
 	public function rules()
 	{
