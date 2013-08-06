@@ -66,10 +66,12 @@ class FormController extends Controller
 
 		if($sView=='client_confirm_phone_via_sms')
 		{
+			$flagSmsSent = (isset(Yii::app()->session['flagSmsSent'])) ? Yii::app()->session['flagSmsSent'] : false;
+
 			$this->render($sView, array(
 				'oClientCreateForm' => $oClientForm,
-				'sms_count_tries'=>Yii::app()->session['sms_count_tries'],
-				'flag_sms_sent'=>Yii::app()->session['flag_sms_sent'],
+				'phone'=>Yii::app()->session['ClientPersonalDataForm']['phone'],
+				'flagSmsSent'=>$flagSmsSent,
 			));
 		}else{
 			$this->render($sView, array('oClientCreateForm' => $oClientForm));
@@ -180,24 +182,25 @@ class FormController extends Controller
 
 	public function actionAjaxSendSms()
 	{
-		// если с данного ip уже просили SMS в течение 10 минут...
-		if(1==2){
-			// бан1
-		}
-
-		// если с данного ip уже просили SMS 3 раза в течение 1 часа...
-		if(1==2){
-			// бан2
-		}
-
 		if(Yii::app()->request->isAjaxRequest){
-			Yii::app()->session['flag_sms_sent']=true;
+			Yii::app()->session['flagSmsSent']=true;
 
-			$client_id = Yii::app()->session['client_id'];
+			// если с данного ip уже просили SMS в течение 10 минут...
+			if(1==2){
+				// бан1
+				echo CHtml::encode("Ошибка: обратитесь в горячую линию.");
+			}
+
+			// если с данного ip уже просили SMS 3 раза в течение 1 часа...
+			if(1==2){
+				// бан2
+				echo CHtml::encode("Ошибка: обратитесь в горячую линию.");
+			}
+
+			$client_id = $this->getClientId();
 			$aClientForm=ClientData::getClientDataById($client_id);
 
 			// проверяем - есть ли уже код в базе.
-			// если да - новый не генерируем и выходим
 			if(!empty($aClientForm['sms_code'])) {
 				echo CHtml::encode("Ошибка: SMS уже отправлена");
 				Yii::app()->end();
@@ -212,37 +215,56 @@ class FormController extends Controller
 
 	public function actionSendCode()
 	{
+		$flagSmsSent = (isset(Yii::app()->session['flagSmsSent'])) ? Yii::app()->session['flagSmsSent']	: false;
+
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
-			$client_id = Yii::app()->session['client_id'];
+			$client_id = $this->getClientId();
 
-			if(!isset(Yii::app()->session['sms_count_tries'])){
-				Yii::app()->session['sms_count_tries']=0;
+			$oClientSMSForm=new ClientConfirmPhoneViaSMSForm();
+			$oClientSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
+
+			if(!isset(Yii::app()->session['smsCountTries'])){
+				Yii::app()->session['smsCountTries']=0;
 			}
+			$smsCountTries = Yii::app()->session['smsCountTries'];
 
-			$oClientConfirmPhoneViaSMSForm=new ClientConfirmPhoneViaSMSForm();
-			$oClientConfirmPhoneViaSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
+			if ($smsCountTries < SiteParams::MAX_ENTER_SMSCODE_TRIES-1) {
 
-			if(Yii::app()->session['sms_count_tries'] < SiteParams::MAX_ENTER_SMSCODE_TRIES){
+				if ($oClientSMSForm->validate()) {
 
-				// проверить, что данные присланные и данные из базы по этому телефону совпадают
-				if(ClientData::compareSMSCodeByClientId($client_id,$oClientConfirmPhoneViaSMSForm->sms_code)){
-					$aData['flag_sms_confirmed']=1;
-					ClientData::saveClientDataById($aData,$client_id);
+					// проверить, что данные присланные и данные из базы по этому телефону совпадают
+					if (ClientData::compareSMSCodeByClientId($oClientSMSForm->sms_code, $client_id)) {
+						$aData['flag_sms_confirmed'] = 1;
+						ClientData::saveClientDataById($aData, $client_id);
 
-					$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
+						$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
+					}
+
+					Yii::app()->session['smsCountTries'] = ++$smsCountTries;
+					$triesLeft = SiteParams::MAX_ENTER_SMSCODE_TRIES-$smsCountTries;
+					$actionAnswer = 'Неверный код подтверждения! Осталось попыток: '.$triesLeft;
+
+					$oClientForm = Yii::app()->clientForm->getFormModel();
+					$this->render('client_confirm_phone_via_sms', array(
+						'oClientCreateForm' => $oClientForm,
+						'phone' => Yii::app()->session['ClientPersonalDataForm']['phone'],
+						'actionAnswer' => $actionAnswer,
+						'flagSmsSent' => $flagSmsSent,
+					));
 				}
-
-				$iCountTries = Yii::app()->session['sms_count_tries'];
-				Yii::app()->session['sms_count_tries'] = ++$iCountTries;
-
+			} else {
 				$oClientForm = Yii::app()->clientForm->getFormModel();
 				$this->render('client_confirm_phone_via_sms', array(
 					'oClientCreateForm' => $oClientForm,
-					'sms_count_tries'=>Yii::app()->session['sms_count_tries'],
-					'flag_sms_sent'=>Yii::app()->session['flag_sms_sent'],
+					'phone' => Yii::app()->session['ClientPersonalDataForm']['phone'],
+					'actionAnswer' => 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.',
+					'flagExceededTries'=>true,
+					'flagSmsSent' => $flagSmsSent,
 				));
 			}
+		} else {
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
 	}
 

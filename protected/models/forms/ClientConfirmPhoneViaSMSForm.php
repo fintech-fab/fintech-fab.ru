@@ -11,17 +11,6 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 	 */
 	public $sms_code;
 
-	public function init()
-	{
-		if(!isset(Yii::app()->session['sms_count_tries'])){
-			Yii::app()->session['sms_count_tries']=0;
-		}
-
-		if(!isset(Yii::app()->session['flag_sms_sent'])){
-			Yii::app()->session['flag_sms_sent']=false;
-		}
-	}
-
 	public function rules()
 	{
 		$aRules = array();

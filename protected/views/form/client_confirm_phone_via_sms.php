@@ -5,8 +5,7 @@
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
 /*
- * Цифровой код
- * Согласие с условиями и передачей данных
+ * Ввести код подтверждения из SMS
  */
 
 ?>
@@ -29,6 +28,8 @@
 		'action' => Yii::app()->createUrl('/form/sendcode'),
 	));
 
+	// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
+	$flagHideForm = !$flagSmsSent||isset($flagExceededTries)&&$flagExceededTries;
 	?>
 
 	<div class="row span5">
@@ -36,11 +37,11 @@
 			Для завершения регистрации Вам нужно подтвердить свой телефон.
 			<br/>
 			Ваш телефон:
-			<strong>+7<?= Yii::app()->session['ClientPersonalDataForm']['phone']; ?></strong>
+			<strong>+7<?php echo $phone; ?></strong>
 			<br/><br/>
 			<?php
-			    // если попыток ввода ещё не было, выводим форму для отправки кода на SMS
-				if(!$flag_sms_sent)	{
+			    // если SMS на телефон ещё не отсылалось
+				if(!$flagSmsSent)	{
 			?>
 			<span id="send_sms">
 			<? $this->widget('bootstrap.widgets.TbButton', array(
@@ -54,23 +55,24 @@
                                 {
                                 	$('#send_sms').hide();
                                 	$('#sms_code_row').show();
-                                	$('#btnNext').show();
+                                	$('.form-actions').show();
                                		$('#ClientConfirmPhoneViaSMSForm_sms_code_em_').html(data).show();
                                 } ",
 				),
 			)); ?>
 			</span>
-			<?php
-				}else if($sms_count_tries >= SiteParams::MAX_ENTER_SMSCODE_TRIES){
-					?>
-					Число попыток ввода кода превышено! Попробуйте позже.
-			<?php
-				}else if($sms_count_tries >0 ){
-			?>
-			Неверно введён код! Осталось попыток: <?php echo SiteParams::MAX_ENTER_SMSCODE_TRIES-$sms_count_tries; ?>
 			<?php } ?>
 		</span>
-		<span class="span10<?php if(!$flag_sms_sent)echo ' hide';?>" id="sms_code_row">
+		<?php
+			if(!empty($actionAnswer)){
+		?>
+		<span class="span10">
+			<?php echo $actionAnswer; ?>
+		</span>
+		<?php
+			}
+		?>
+		<span class="span10<?php if($flagHideForm)echo ' hide';?>" id="sms_code_row">
 			Введите код из SMS:
 			<?php echo $form->textField( $oClientCreateForm, 'sms_code', array( 'class' => 'span4' ) ); ?>
 			<?php echo $form->error($oClientCreateForm, 'sms_code'); ?>
@@ -79,16 +81,12 @@
 
 		<div class="clearfix"></div>
 
-		<div class="form-actions">
-			<?php $aHide=array();
-			if(!$flag_sms_sent) $aHide=array("class"=>'hide');	?>
-			<? $this->widget('bootstrap.widgets.TbButton', array(
+		<div class="form-actions<?php if($flagHideForm)echo ' hide';?>">
+			<?php
+				$this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type' => 'primary',
 				'label' => 'Далее →',
-				'htmlOptions'=>array_merge(
-					array('id'=>'btnNext',),
-					$aHide),
 			)); ?>
 		</div>
 	</div>
