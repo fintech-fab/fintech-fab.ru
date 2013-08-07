@@ -31,12 +31,12 @@
 	<div class="row span6">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/02T.png">
 		<?php
-		if(!(($oClientCreateForm->get_way=Yii::app()->session['ClientSelectGetWayForm']['get_way'])&&(array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product'])))))
+		if(!(($oClientCreateForm->get_way=Yii::app()->clientForm->getSessionGetWay())&&(array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->clientForm->getSessionProduct())))))
 		{
 			$oClientCreateForm->get_way = "1";
 		}
 		?>
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->session['ClientSelectProductForm']['product']));//TODO: вынести в контроллер
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->clientForm->getSessionProduct()));//TODO: вынести в контроллер
 		?>
 	</div>
 

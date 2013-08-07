@@ -51,7 +51,7 @@ class ImageController extends CController
 		 */
 
 		//все шаги пройдены и есть ID клиента
-		if (is_null($this->_getClient())) {
+		if (is_null($this->getClient())) {
 			Yii::app()->end();
 		}
 
@@ -194,7 +194,7 @@ class ImageController extends CController
 		 * @var Image $oImage
 		 */
 
-		$iClientId = $this->_getClient();
+		$iClientId = $this->getClient();
 
 		$sFilePath = Yii::app()->basePath . self::C_IMAGES_DIR . $iClientId;
 
@@ -248,8 +248,8 @@ class ImageController extends CController
 	 *
 	 * @return int
 	 */
-	private function _getClient()
+	private function getClient()
 	{
-		return Yii::app()->session['client_id'];
+		return Yii::app()->clientForm->getClientId();
 	}
 }

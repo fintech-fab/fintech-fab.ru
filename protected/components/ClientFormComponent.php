@@ -192,6 +192,14 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @param $iStep
+	 */
+	public function setCurrentStep($iStep)
+	{
+		Yii::app()->session['current_step']=$iStep;
+	}
+
+	/**
 	 * Возвращает число пройденных шагов (нумерация с нуля)
 	 *
 	 * @return int
@@ -203,10 +211,12 @@ class ClientFormComponent
 		return $this->done_steps;
 	}
 
-	public function startNewForm()
+	/**
+	 * @param $iSteps
+	 */
+	public function setDoneSteps($iSteps)
 	{
-		Yii::app()->session['current_step']=0;
-		Yii::app()->session['done_steps']=0;
+		Yii::app()->session['done_steps'] = $iSteps;
 	}
 
 	/**
@@ -391,4 +401,98 @@ class ClientFormComponent
 			Yii::app()->session['done_steps'] = $this->done_steps = Yii::app()->session['current_step'];
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getSessionPhone()
+	{
+		return (isset(Yii::app()->session['ClientPersonalDataForm']['phone']))?Yii::app()->session['ClientPersonalDataForm']['phone']:'';
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getClientId()
+	{
+		return Yii::app()->session['client_id'];
+	}
+
+	/**
+	 * @param ClientCreateFormAbstract $oClientForm
+	 *
+	 * @return mixed
+	 */
+	public function getSessionFormClientId(ClientCreateFormAbstract $oClientForm)
+	{
+		if(!isset($oClientForm)){
+			return null;
+		}
+		return Yii::app()->session[get_class($oClientForm) . '_client_id'];
+	}
+
+	public function getSessionFormData(ClientCreateFormAbstract $oClientForm)
+	{
+		if(!isset($oClientForm)){
+			return null;
+		}
+		return Yii::app()->session[get_class($oClientForm)];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSessionProduct()
+	{
+		return Yii::app()->session['ClientSelectProductForm']['product'];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSessionGetWay()
+	{
+		return Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSmsCountTries()
+	{
+		return (isset(Yii::app()->session['smsCountTries']))?Yii::app()->session['smsCountTries']:0;
+	}
+
+	public function setSmsCountTries($iSmsCountTries)
+	{
+		Yii::app()->session['smsCountTries'] = $iSmsCountTries;
+	}
+
+	public function getFlagSmsSent()
+	{
+		return (!empty(Yii::app()->session['flagSmsSent']));
+	}
+
+
+	public function clearClientSession()
+	{
+		Yii::app()->session['current_step']=0;
+		Yii::app()->session['done_steps']=0;
+
+		Yii::app()->session['flagSmsSent']=null;
+		Yii::app()->session['smsCountTries']=null;
+
+		//TODO: продумать очистку сессии
+		Yii::app()->session['client_id']=null;
+		Yii::app()->session['ClientSelectProductForm']=null;
+		Yii::app()->session['ClientSelectGetWayForm']=null;
+
+		/*
+		Yii::app()->session['ClientPersonalDataForm']=null;
+		Yii::app()->session['ClientAddressForm']=null;
+		Yii::app()->session['ClientJobInfoForm']=null;
+		Yii::app()->session['ClientSendForm']=null;
+		*/
+	}
+
 }

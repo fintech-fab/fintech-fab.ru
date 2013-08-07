@@ -12,7 +12,7 @@ class FormController extends Controller
 		 * @var string $sView
 		 */
 
-		$client_id = $this->getClientId();
+		$client_id = Yii::app()->clientForm->getClientId();
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -65,10 +65,12 @@ class FormController extends Controller
 		 */
 
 		if (Cookie::compareDataInCookie('client', 'client_id', $client_id)
-			&& Yii::app()->session[get_class($oClientForm) . '_client_id'] == $client_id
+			//TODO переделать обращение к сессии
+			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $client_id
 		) {
 			if (isset($oClientForm) && $oClientForm) {
-				$sessionClientData = Yii::app()->session[get_class($oClientForm)];
+				//TODO переделать обращение к сессии
+				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				$oClientForm->setAttributes($sessionClientData);
 			}
 		}
@@ -80,16 +82,14 @@ class FormController extends Controller
 
 		if($sView=='client_confirm_phone_via_sms')
 		{
-			$smsCountTries = Yii::app()->session['smsCountTries'];
-			if(!isset($smsCountTries)){
-				$smsCountTries = 0;
-			}
+			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
+
 			$flagExceededTries = ($smsCountTries >= SiteParams::MAX_SMSCODE_TRIES);
-			$flagSmsSent = (!empty(Yii::app()->session['flagSmsSent']));
+			$flagSmsSent = Yii::app()->clientForm->getFlagSmsSent();
 
 			$this->render($sView, array(
 				'oClientCreateForm' => $oClientForm,
-				'phone' => Yii::app()->session['ClientPersonalDataForm']['phone'],
+				'phone' => Yii::app()->clientForm->getSessionPhone(),
 				'actionAnswer' => ($flagExceededTries
 					?Dictionaries::C_ERR_SMS_TRIES
 					:''),
@@ -108,11 +108,13 @@ class FormController extends Controller
 	public function actionStep($step)
 	{
 		if ($step > 0) {
-			if (Yii::app()->session['done_steps'] < ($step - 1)) {
-				Yii::app()->session['current_step'] = Yii::app()->session['done_steps'];
+			$iDoneSteps = Yii::app()->clientForm->getDoneSteps();
+
+			if ($iDoneSteps < ($step - 1)) {
+				Yii::app()->clientForm->setCurrentStep($iDoneSteps);
 			} else {
-				Yii::app()->session['done_steps'] = $step - 1;
-				Yii::app()->session['current_step'] = $step - 1;
+				Yii::app()->clientForm->setDoneSteps($step - 1);
+				Yii::app()->clientForm->setCurrentStep($step - 1);
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
@@ -125,9 +127,9 @@ class FormController extends Controller
 
 	public function actionIdentification()
 	{
-		$client_id = $this->getClientId();
+		$client_id = Yii::app()->clientForm->getClientId();
 
-		if (Yii::app()->session['current_step'] == 7) {
+		if (Yii::app()->clientForm->getCurrentStep() == 7) {
 
 			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
 
@@ -146,9 +148,9 @@ class FormController extends Controller
 	public function actionDocuments()
 	{
 
-		$client_id = $this->getClientId();
+		$client_id = Yii::app()->clientForm->getClientId();
 
-		if (Yii::app()->session['current_step'] == 8) {
+		if (Yii::app()->clientForm->getCurrentStep() == 8) {
 
 			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
 
@@ -182,13 +184,6 @@ class FormController extends Controller
 		return true;
 	}
 
-
-	public function actionStart()
-	{
-		Yii::app()->clientForm->startNewForm();
-		$this->redirect(Yii::app()->createUrl("form"));
-	}
-
 	public function actionError()
 	{
 		if ($error = Yii::app()->errorHandler->error) {
@@ -202,7 +197,7 @@ class FormController extends Controller
 	public function actionAjaxSendSms()
 	{
 		if(Yii::app()->request->isAjaxRequest){
-			//Yii::app()->session['flagSmsSent']=true;
+
 
 			// если с данного ip нельзя запросить SMS, выдаём ошибку
 			if( !Yii::app()->antiBot->checkSmsRequest() ){
@@ -210,7 +205,7 @@ class FormController extends Controller
 				Yii::app()->end();
 			}
 
-			$client_id = $this->getClientId();
+			$client_id = Yii::app()->clientForm->getClientId();
 			$aClientForm=ClientData::getClientDataById($client_id);
 
 			// проверяем - есть ли уже код в базе.
@@ -237,16 +232,13 @@ class FormController extends Controller
 	{
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
-			$client_id = $this->getClientId();
+			$client_id = Yii::app()->clientForm->getClientId();
 			$oClientSMSForm=new ClientConfirmPhoneViaSMSForm();
 			$oClientSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
 
-			$flagSmsSent = (!empty(Yii::app()->session['flagSmsSent']));
+			$flagSmsSent = Yii::app()->clientForm->getFlagSmsSent();
 
-			$smsCountTries = Yii::app()->session['smsCountTries'];
-			if(!isset($smsCountTries)){
-				$smsCountTries = 0;
-			}
+			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
 
 			if ($smsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
 
@@ -258,13 +250,13 @@ class FormController extends Controller
 					$aData['flag_sms_confirmed'] = 1;
 					ClientData::saveClientDataById($aData, $client_id);
 
-					$this->clearSession();
+					Yii::app()->clientForm->clearClientSession();
 
 					$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
 				} else {
 
 					$smsCountTries += 1;
-					Yii::app()->session['smsCountTries'] = $smsCountTries;
+					Yii::app()->clientForm->setSmsCountTries($smsCountTries);
 
 					// если это была последняя попытка
 					if($smsCountTries == SiteParams::MAX_SMSCODE_TRIES)
@@ -282,7 +274,7 @@ class FormController extends Controller
 					$oClientForm = Yii::app()->clientForm->getFormModel();
 					$this->render('client_confirm_phone_via_sms', array(
 						'oClientCreateForm' => $oClientForm,
-						'phone'             => Yii::app()->session['ClientPersonalDataForm']['phone'],
+						'phone'             => Yii::app()->clientForm->getSessionPhone(),
 						'actionAnswer'      => $actionAnswer,
 						'flagExceededTries' => $flagExceededTries,
 						'flagSmsSent'       => $flagSmsSent,
@@ -294,7 +286,7 @@ class FormController extends Controller
 
 				$this->render('client_confirm_phone_via_sms', array(
 					'oClientCreateForm' => $oClientForm,
-					'phone'             => Yii::app()->session['ClientPersonalDataForm']['phone'],
+					'phone'             => Yii::app()->clientForm->getSessionPhone(),
 					'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
 					'flagExceededTries' => true,
 					'flagSmsSent'       => $flagSmsSent,
@@ -303,32 +295,6 @@ class FormController extends Controller
 		} else {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
-	}
-
-	private function getClientId()
-	{
-		return Yii::app()->session['client_id'];
-	}
-
-	private function clearSession()
-	{
-		Yii::app()->session['current_step']=0;
-		Yii::app()->session['done_steps']=0;
-
-		Yii::app()->session['flagSmsSent']=null;
-		Yii::app()->session['smsCountTries']=null;
-
-		//TODO: продумать очистку сессии
-		Yii::app()->session['client_id']=null;
-		Yii::app()->session['ClientSelectProductForm']=null;
-		Yii::app()->session['ClientSelectGetWayForm']=null;
-
-		/*
-		Yii::app()->session['ClientPersonalDataForm']=null;
-		Yii::app()->session['ClientAddressForm']=null;
-		Yii::app()->session['ClientJobInfoForm']=null;
-		Yii::app()->session['ClientSendForm']=null;
-		*/
 	}
 
 	/**

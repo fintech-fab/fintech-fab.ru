@@ -52,7 +52,7 @@
 				'buttonType' => 'ajaxSubmit',
 				'url'=> Yii::app()->createUrl('form/ajaxsendsms'),
 				'size'=>'small',
-				'label' => 'Отправить на +7'.Yii::app()->session['ClientPersonalDataForm']['phone'].' SMS с кодом подтверждения',
+				'label' => 'Отправить на +7'.Yii::app()->clientForm->getSessionPhone().' SMS с кодом подтверждения',
 				'ajaxOptions'=>array(
 					'success'=>"function(data)
                                 {

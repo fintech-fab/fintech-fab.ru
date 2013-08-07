@@ -34,7 +34,7 @@
 	<div class="row span6">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/01T.png"/>
 		<?php
-		if(!($oClientCreateForm->product=Yii::app()->session['ClientSelectProductForm']['product']))
+		if(!($oClientCreateForm->product=Yii::app()->clientForm->getSessionProduct()))
 		{
 			$oClientCreateForm->product = "1";
 		}
