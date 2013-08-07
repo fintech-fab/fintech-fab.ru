@@ -8,8 +8,8 @@ class FormController extends Controller
 	{
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
-		 * @var array $aPost
-		 * @var string $sView
+		 * @var array                    $aPost
+		 * @var string                   $sView
 		 */
 
 		$client_id = Yii::app()->clientForm->getClientId();
@@ -38,21 +38,16 @@ class FormController extends Controller
 		{
 			$oClientForm->attributes = $aPost; //передаем запрос в форму
 
-			if(isset($oClientForm->go_identification))
-			{
-				if($oClientForm->validate()){
-					if($oClientForm->go_identification==1)
-					{
+			if (isset($oClientForm->go_identification)) {
+				if ($oClientForm->validate()) {
+					if ($oClientForm->go_identification == 1) {
 						Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-					}
-					elseif($oClientForm->go_identification==2)
-					{
+					} elseif ($oClientForm->go_identification == 2) {
 						Yii::app()->clientForm->nextStep(3);
 					}
 					$oClientForm = Yii::app()->clientForm->getFormModel();
 				}
-			}
-			elseif ($oClientForm->validate()){
+			} elseif ($oClientForm->validate()) {
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
@@ -65,11 +60,9 @@ class FormController extends Controller
 		 */
 
 		if (Cookie::compareDataInCookie('client', 'client_id', $client_id)
-			//TODO переделать обращение к сессии
 			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $client_id
 		) {
 			if (isset($oClientForm) && $oClientForm) {
-				//TODO переделать обращение к сессии
 				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				$oClientForm->setAttributes($sessionClientData);
 			}
@@ -80,8 +73,7 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
-		if($sView=='client_confirm_phone_via_sms')
-		{
+		if ($sView == 'client_confirm_phone_via_sms') {
 			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
 
 			$flagExceededTries = ($smsCountTries >= SiteParams::MAX_SMSCODE_TRIES);
@@ -89,14 +81,14 @@ class FormController extends Controller
 
 			$this->render($sView, array(
 				'oClientCreateForm' => $oClientForm,
-				'phone' => Yii::app()->clientForm->getSessionPhone(),
-				'actionAnswer' => ($flagExceededTries
-					?Dictionaries::C_ERR_SMS_TRIES
-					:''),
+				'phone'             => Yii::app()->clientForm->getSessionPhone(),
+				'actionAnswer'      => ($flagExceededTries
+					? Dictionaries::C_ERR_SMS_TRIES
+					: ''),
 				'flagExceededTries' => $flagExceededTries,
-				'flagSmsSent' => $flagSmsSent,
+				'flagSmsSent'       => $flagSmsSent,
 			));
-		}else{
+		} else {
 			$this->render($sView, array('oClientCreateForm' => $oClientForm));
 		}
 	}
@@ -139,7 +131,9 @@ class FormController extends Controller
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 			$this->actionIndex();
-		} else $this->actionIndex();
+		} else {
+			$this->actionIndex();
+		}
 	}
 
 	/**
@@ -151,7 +145,9 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
-		if (Yii::app()->clientForm->getCurrentStep() == 8) {
+		if (isset($client_id)
+			&& Yii::app()->clientForm->getCurrentStep() == 8
+		) {
 
 			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
 
@@ -161,10 +157,9 @@ class FormController extends Controller
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
 
 			if ($this->checkFiles($aFiles)) {
-				$aClientData['flag_identified']=1;
-				if(isset($client_id)) {
-					ClientData::saveClientDataById($aClientData,$client_id);
-				}//TODO протестить
+				$aClientData['flag_identified'] = 1;
+
+				ClientData::saveClientDataById($aClientData, $client_id);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 		}
@@ -174,29 +169,33 @@ class FormController extends Controller
 	//TODO в компонент
 	private function checkFiles($aFiles)
 	{
-		if(!isset($aFiles)||gettype($aFiles)!='array') return false;
+		if (!isset($aFiles) || gettype($aFiles) != 'array') {
+			return false;
+		}
 
 		foreach ($aFiles as $sFile) {
 			if (!file_exists($sFile) || !getimagesize($sFile)) {
 				return false;
 			}
 		}
+
 		return true;
 	}
 
 	public function actionError()
 	{
 		if ($error = Yii::app()->errorHandler->error) {
-			if (Yii::app()->request->isAjaxRequest)
+			if (Yii::app()->request->isAjaxRequest) {
 				echo $error['message'];
-			else
+			} else {
 				$this->render('error', $error);
+			}
 		}
 	}
 
 	public function actionAjaxSendSms()
 	{
-		if(Yii::app()->request->isAjaxRequest){
+		if (Yii::app()->request->isAjaxRequest) {
 			echo Yii::app()->clientForm->ajaxSendSmsRequest();
 		}
 		Yii::app()->end();
@@ -215,6 +214,7 @@ class FormController extends Controller
 						$this->redirect($aAction['url']);
 						break;
 					default:
+						$this->redirect(Yii::app()->createUrl("form"));
 						break;
 				}
 			}
