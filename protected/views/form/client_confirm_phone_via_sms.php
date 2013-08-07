@@ -2,7 +2,10 @@
 /* @var FormController $this*/
 /* @var ClientConfirmPhoneViaSMSForm $model*/
 /* @var IkTbActiveForm $form*/
-/* @var ClientCreateFormAbstract $oClientCreateForm */
+/* @var ClientCreateFormAbstract $oClientCreateForm
+ * @var integer $phone
+ * @var bool $flagSmsSent
+ */
 
 /*
  * Ввести код подтверждения из SMS
@@ -25,11 +28,11 @@
 			'validateOnChange'=>true,
 			'validateOnSubmit'=>true,
 		),
-		'action' => Yii::app()->createUrl('/form/sendcode'),
+		'action' => Yii::app()->createUrl('/form/checksmscode'),
 	));
 
 	// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
-	$flagHideForm = !$flagSmsSent||isset($flagExceededTries)&&$flagExceededTries;
+	$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 	?>
 
 	<div class="row span5">
@@ -41,7 +44,7 @@
 			<br/><br/>
 			<?php
 			    // если SMS на телефон ещё не отсылалось
-				if(!$flagSmsSent)	{
+				if(empty($flagSmsSent))	{
 			?>
 			<span id="send_sms">
 			<? $this->widget('bootstrap.widgets.TbButton', array(
