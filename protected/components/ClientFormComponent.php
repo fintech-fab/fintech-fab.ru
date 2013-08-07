@@ -26,18 +26,16 @@ class ClientFormComponent
 
 	public function init()
 	{
-		if (!$this->client_id = Yii::app()->session['client_id']) {
+		if (!$this->client_id = $this->getClientId()) {
 			$this->client_id = false;
 		}
 
-		if (!$this->current_step = Yii::app()->session['current_step']) {
-			Yii::app()->session['current_step'] = 0;
-			$this->current_step = 0;
+		if (!$this->current_step = $this->getCurrentStep()) {
+			$this->setCurrentStep(0);
 		}
 
-		if (!$this->done_steps = Yii::app()->session['done_steps']) {
-			Yii::app()->session['done_steps'] = 0;
-			$this->done_steps = 0;
+		if (!$this->done_steps = $this->getDoneSteps()) {
+			$this->setDoneSteps(0);
 		}
 	}
 
@@ -64,7 +62,6 @@ class ClientFormComponent
 	 */
 	public function saveAjaxData(ClientCreateFormAbstract $oClientForm)
 	{
-
 
 		$aValidFormData = $oClientForm->getValidAttributes();
 
@@ -180,6 +177,135 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @return string
+	 */
+
+	public function ajaxSendSmsRequest()
+	{
+		// если с данного ip нельзя запросить SMS, выдаём ошибку
+		if( !Yii::app()->antiBot->checkSmsRequest() ){
+			return CJSON::encode(array(
+				"type"=>"2",
+				"text"=>Dictionaries::C_ERR_GENERAL,
+			));
+		}
+
+		$client_id = $this->getClientId();
+		$aClientForm=ClientData::getClientDataById($client_id);
+
+		// проверяем - есть ли уже код в базе.
+		if(!empty($aClientForm['sms_code'])) {
+			return CJSON::encode(array(
+				"type"=>"1",
+				"text"=>Dictionaries::C_ERR_SMS_SENT,
+			));
+		}
+
+		$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+
+		//TODO тут сделать функцию отправки СМС
+		//если отправлено успешно,
+		//то добавляем в лог запрос sms с этого ip
+		Yii::app()->antiBot->addSmsRequest();
+		$this->setFlagSmsSent(true);
+
+		ClientData::saveClientDataById($aClientForm, $client_id);
+
+		return CJSON::encode(array(
+			"type"=>"0",
+			"text"=>Dictionaries::C_SMS_SUCCESS,
+		));
+	}
+
+	public function checkSmsCode()
+	{
+		$client_id = Yii::app()->clientForm->getClientId();
+		$oClientSMSForm=new ClientConfirmPhoneViaSMSForm();
+		$oClientSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
+
+		$flagSmsSent = Yii::app()->clientForm->getFlagSmsSent();
+
+		$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
+
+		if ($smsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
+
+			// проверить, что присланный код валиден и совпадает с кодом из базы
+			if ($oClientSMSForm->validate()
+				&& ClientData::compareSMSCodeByClientId($oClientSMSForm->sms_code, $client_id)
+			) {
+				// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
+				$aData['flag_sms_confirmed'] = 1;
+				ClientData::saveClientDataById($aData, $client_id);
+
+				Yii::app()->clientForm->clearClientSession();
+
+				//$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
+				return array('action' => 'redirect', 'url' => Yii::app()->createUrl('pages/view/formsent'));
+			} else {
+
+				$smsCountTries += 1;
+				Yii::app()->clientForm->setSmsCountTries($smsCountTries);
+
+				// если это была последняя попытка
+				if($smsCountTries == SiteParams::MAX_SMSCODE_TRIES)
+				{
+					$actionAnswer = Dictionaries::C_ERR_SMS_TRIES;
+					$flagExceededTries=true;
+				}
+				else
+				{
+					$triesLeft = SiteParams::MAX_SMSCODE_TRIES - $smsCountTries;
+					$actionAnswer = Dictionaries::C_ERR_SMS_WRONG.' '.Dictionaries::C_ERR_TRIES_LEFT. $triesLeft;
+					$flagExceededTries=false;
+				}
+
+				$oClientForm = Yii::app()->clientForm->getFormModel();
+				/*$this->render('client_confirm_phone_via_sms', array(
+					'oClientCreateForm' => $oClientForm,
+					'phone'             => Yii::app()->clientForm->getSessionPhone(),
+					'actionAnswer'      => $actionAnswer,
+					'flagExceededTries' => $flagExceededTries,
+					'flagSmsSent'       => $flagSmsSent,
+				));*/
+
+				return array(
+					'action' => 'render', 'params' => array(
+						'view' => 'client_confirm_phone_via_sms', 'params' => array(
+							'oClientCreateForm' => $oClientForm,
+							'phone'             => Yii::app()->clientForm->getSessionPhone(),
+							'actionAnswer'      => $actionAnswer,
+							'flagExceededTries' => $flagExceededTries,
+							'flagSmsSent'       => $flagSmsSent,
+						)
+					));
+
+			}
+		} else {
+
+			$oClientForm = Yii::app()->clientForm->getFormModel();
+
+			/*$this->render('client_confirm_phone_via_sms', array(
+				'oClientCreateForm' => $oClientForm,
+				'phone'             => Yii::app()->clientForm->getSessionPhone(),
+				'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
+				'flagExceededTries' => true,
+				'flagSmsSent'       => $flagSmsSent,
+			));*/
+
+			return array(
+				'action' => 'render', 'params' => array(
+					'view' => 'client_confirm_phone_via_sms', 'params' => array(
+						'oClientCreateForm' => $oClientForm,
+						'phone'             => Yii::app()->clientForm->getSessionPhone(),
+						'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
+						'flagExceededTries' => true,
+						'flagSmsSent'       => $flagSmsSent,
+					)
+				));
+		}
+	}
+
+	/**
 	 * Возвращает номер текущего шага (нумерация с нуля)
 	 *
 	 * @return int
@@ -197,6 +323,7 @@ class ClientFormComponent
 	public function setCurrentStep($iStep)
 	{
 		Yii::app()->session['current_step']=$iStep;
+		$this->current_step = $iStep;
 	}
 
 	/**
@@ -217,6 +344,7 @@ class ClientFormComponent
 	public function setDoneSteps($iSteps)
 	{
 		Yii::app()->session['done_steps'] = $iSteps;
+		$this->done_steps=$iSteps;
 	}
 
 	/**
@@ -473,6 +601,10 @@ class ClientFormComponent
 		return (!empty(Yii::app()->session['flagSmsSent']));
 	}
 
+	public function setFlagSmsSent($bFlagSmsSent)
+	{
+		Yii::app()->session['flagSmsSent']=$bFlagSmsSent;
+	}
 
 	public function clearClientSession()
 	{
@@ -494,5 +626,26 @@ class ClientFormComponent
 		Yii::app()->session['ClientSendForm']=null;
 		*/
 	}
+	/**
+	 * @param $iLength
+	 * @return string
+	 */
+	private function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH) {
+		// генерация рандомного кода
+		list($usec, $sec) = explode(' ', microtime());
+		$fSeed = (float) $sec + ((float) $usec * 100000);
 
+		mt_srand($fSeed);
+
+		$sMin = "1"; $sMax = "9";
+		for($i=0;$i<$iLength;++$i)
+		{
+			$sMin.="0"; $sMax.="9";
+		}
+
+		$sGeneratedCode = mt_rand((int)$sMin, (int)$sMax);
+		$sGeneratedCode = substr($sGeneratedCode,1,$iLength);
+
+		return $sGeneratedCode;
+	}
 }

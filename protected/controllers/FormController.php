@@ -124,7 +124,7 @@ class FormController extends Controller
 	/**
 	 * Загрузка фото
 	 */
-
+	//TODO в компонент
 	public function actionIdentification()
 	{
 		$client_id = Yii::app()->clientForm->getClientId();
@@ -145,6 +145,7 @@ class FormController extends Controller
 	/**
 	 * Загрузка документов
 	 */
+	//TODO в компонент
 	public function actionDocuments()
 	{
 
@@ -172,6 +173,7 @@ class FormController extends Controller
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
+	//TODO в компонент
 	private function checkFiles($aFiles)
 	{
 		if(!isset($aFiles)||gettype($aFiles)!='array') return false;
@@ -197,138 +199,28 @@ class FormController extends Controller
 	public function actionAjaxSendSms()
 	{
 		if(Yii::app()->request->isAjaxRequest){
-			Yii::app()->session['flagSmsSent']=true;
-
-
-			// если с данного ip нельзя запросить SMS, выдаём ошибку
-			if( !Yii::app()->antiBot->checkSmsRequest() ){
-				echo CJSON::encode(array(
-					"type"=>"2",
-					"text"=>Dictionaries::C_ERR_GENERAL,
-				));
-
-				Yii::app()->end();
-			}
-
-			$client_id = Yii::app()->clientForm->getClientId();
-			$aClientForm=ClientData::getClientDataById($client_id);
-
-			// проверяем - есть ли уже код в базе.
-			if(!empty($aClientForm['sms_code'])) {
-				echo CJSON::encode(array(
-					"type"=>"1",
-					"text"=>Dictionaries::C_ERR_SMS_SENT,
-				));
-				Yii::app()->end();
-			}
-
-			$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
-
-			// добавляем в лог запрос sms с этого ip
-			Yii::app()->antiBot->addSmsRequest();
-
-			//TODO: добавить отправку SMS на номер
-
-			ClientData::saveClientDataById($aClientForm, $client_id);
-
-			echo CJSON::encode(array(
-				"type"=>"0",
-				"text"=>Dictionaries::C_SMS_SUCCESS,
-			));
-			Yii::app()->end();
+			echo Yii::app()->clientForm->ajaxSendSmsRequest();
 		}
+		Yii::app()->end();
 	}
 
 	public function actionCheckSMSCode()
 	{
+		Yii::app()->clientForm->setFlagSmsSent(false);
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
-			$client_id = Yii::app()->clientForm->getClientId();
-			$oClientSMSForm=new ClientConfirmPhoneViaSMSForm();
-			$oClientSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
+			$aAction=Yii::app()->clientForm->checkSmsCode();
 
-			$flagSmsSent = Yii::app()->clientForm->getFlagSmsSent();
-
-			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
-
-			if ($smsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
-
-				// проверить, что присланный код валиден и совпадает с кодом из базы
-				if ($oClientSMSForm->validate()
-					&& ClientData::compareSMSCodeByClientId($oClientSMSForm->sms_code, $client_id)
-				) {
-					// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
-					$aData['flag_sms_confirmed'] = 1;
-					ClientData::saveClientDataById($aData, $client_id);
-
-					Yii::app()->clientForm->clearClientSession();
-
-					$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
-				} else {
-
-					$smsCountTries += 1;
-					Yii::app()->clientForm->setSmsCountTries($smsCountTries);
-
-					// если это была последняя попытка
-					if($smsCountTries == SiteParams::MAX_SMSCODE_TRIES)
-					{
-						$actionAnswer = Dictionaries::C_ERR_SMS_TRIES;
-						$flagExceededTries=true;
-					}
-					else
-					{
-						$triesLeft = SiteParams::MAX_SMSCODE_TRIES - $smsCountTries;
-						$actionAnswer = Dictionaries::C_ERR_SMS_WRONG.' '.Dictionaries::C_ERR_TRIES_LEFT. $triesLeft;
-						$flagExceededTries=false;
-					}
-
-					$oClientForm = Yii::app()->clientForm->getFormModel();
-					$this->render('client_confirm_phone_via_sms', array(
-						'oClientCreateForm' => $oClientForm,
-						'phone'             => Yii::app()->clientForm->getSessionPhone(),
-						'actionAnswer'      => $actionAnswer,
-						'flagExceededTries' => $flagExceededTries,
-						'flagSmsSent'       => $flagSmsSent,
-					));
+			if (isset($aAction['action'])) {
+				if ($aAction['action'] === 'render') {
+					$this->render($aAction['params']['view'], $aAction['params']['params']);
+				} elseif ($aAction['action'] === 'redirect') {
+					$this->redirect($aAction['url']);
 				}
-			} else {
-
-				$oClientForm = Yii::app()->clientForm->getFormModel();
-
-				$this->render('client_confirm_phone_via_sms', array(
-					'oClientCreateForm' => $oClientForm,
-					'phone'             => Yii::app()->clientForm->getSessionPhone(),
-					'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
-					'flagExceededTries' => true,
-					'flagSmsSent'       => $flagSmsSent,
-				));
 			}
 		} else {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
-	}
-
-	/**
-	 * @param $iLength
-	 * @return string
-	 */
-	private function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH) {
-		// генерация рандомного кода
-		list($usec, $sec) = explode(' ', microtime());
-		$fSeed = (float) $sec + ((float) $usec * 100000);
-
-		mt_srand($fSeed);
-
-		$sMin = "1"; $sMax = "9";
-		for($i=0;$i<$iLength;++$i)
-		{
-			$sMin.="0"; $sMax.="9";
-		}
-
-		$sGeneratedCode = mt_rand((int)$sMin, (int)$sMax);
-		$sGeneratedCode = substr($sGeneratedCode,1,$iLength);
-
-		return $sGeneratedCode;
 	}
 
 	// Uncomment the following methods and override them if needed
