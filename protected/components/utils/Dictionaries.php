@@ -12,7 +12,7 @@ class Dictionaries
 	const C_ERR_GENERAL = 'Ошибка: обратитесь в горячую линию.';
 	const C_ERR_SMS_SENT = 'Ошибка: SMS уже отправлена';
 	const C_ERR_SMS_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.';
-	const C_ERR_SMS_WRONG = 'Неверный код подтверждения! Осталось попыток:';
+	const C_ERR_SMS_WRONG = 'Неверный код подтверждения!';
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
 
 	const C_SMS_SUCCESS = 'SMS успешно отправлена!';

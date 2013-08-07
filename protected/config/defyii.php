@@ -22,7 +22,8 @@
  *
  * @property Bootstrap $bootstrap
  * @property ClientFormComponent $clientForm
-
+ * @property AntiBotComponent $antiBot
+ *
  *
  * @property CDbAuthManager $authManager
  * @property CDummyCache $cache

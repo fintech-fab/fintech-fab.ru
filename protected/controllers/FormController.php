@@ -202,7 +202,7 @@ class FormController extends Controller
 	public function actionAjaxSendSms()
 	{
 		if(Yii::app()->request->isAjaxRequest){
-			Yii::app()->session['flagSmsSent']=true;
+			//Yii::app()->session['flagSmsSent']=true;
 
 			// если с данного ip нельзя запросить SMS, выдаём ошибку
 			if( !Yii::app()->antiBot->checkSmsRequest() ){
@@ -224,11 +224,11 @@ class FormController extends Controller
 			$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
 
 			// добавляем в лог запрос sms с этого ip
-			Yii::app()->antiBot->addSmsRequest();
+			//Yii::app()->antiBot->addSmsRequest();
 
 			//TODO: добавить отправку SMS на номер
 
-			ClientData::saveClientDataById($aClientForm, $client_id);
+			//ClientData::saveClientDataById($aClientForm, $client_id);
 			Yii::app()->end();
 		}
 	}

@@ -13,13 +13,9 @@ class AntiBotComponent
 	 */
 
 
-	public static function checkSmsRequest()
+	public function checkSmsRequest()
 	{
-		//echo '<pre>' . ""; CVarDumper::dump(strtotime($t)); echo '</pre>';
-		//echo '<pre>' . ""; CVarDumper::dump(date('Y-m-d H:i:s', strtotime($t))); echo '</pre>';
-
-
-		$sIp = self::getUserIp();
+	/*	$sIp = $this->getUserIp();
 		$iTypeSms = SiteParams::U_ACTION_TYPE_SMS;
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK;
 
@@ -43,7 +39,7 @@ class AntiBotComponent
 		if($iActionCount>=2)
 		{
 			return false;
-		}
+		}*/
 
 		return true;
 	}
@@ -52,10 +48,10 @@ class AntiBotComponent
 	 * Добавление в лог еще 1 запроса кода по SMS
 	 */
 
-	public static function addSmsRequest()
+	public function addSmsRequest()
 	{
-		$sIp = self::getUserIp();
-		if (self::checkSmsRequest()) {
+		$sIp = $this->getUserIp();
+		if ($this->checkSmsRequest()) {
 			UserActionsLog::addNewAction($sIp, SiteParams::U_ACTION_TYPE_SMS);
 		}
 	}
@@ -65,7 +61,7 @@ class AntiBotComponent
 	 * Проверка, может ли пользователь заполнить анкету
 	 */
 
-	public static function checkFormRequest()
+	public function checkFormRequest()
 	{
 
 	}
@@ -74,13 +70,13 @@ class AntiBotComponent
 	 * Добавление в лог еще 1 запроса на заполнение анкеты
 	 */
 
-	public static function addFormRequest()
+	public function addFormRequest()
 	{
 
 	}
 
 
-	private static function getUserIp()
+	private function getUserIp()
 	{
 		return Yii::app()->request->getUserHostAddress();
 	}
