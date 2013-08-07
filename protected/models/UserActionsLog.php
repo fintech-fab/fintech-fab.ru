@@ -73,7 +73,11 @@ class UserActionsLog extends CActiveRecord
 
 		$criteria->addCondition('dt_add >= DATE_SUB( NOW( ) , INTERVAL '.$iTimeMinutes.' MINUTE )');
 
-		return self::count($criteria);
+		$oUserAction = new self;
+
+		$iCount =$oUserAction->count($criteria);
+
+		return $iCount;
 
 	}
 

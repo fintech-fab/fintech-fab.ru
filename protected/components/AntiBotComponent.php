@@ -1,6 +1,6 @@
 <?php
 /**
- * Компонент AntiBotComponent занимается сохранением информации о запросах пользователя
+ * Компонент AntiBot занимается сохранением информации о запросах пользователя
  * и принятием решений о блокировке операций
  */
 
@@ -12,10 +12,15 @@ class AntiBotComponent
 	 * Проверка, можно ли сделать еще 1 запрос кода по SMS
 	 */
 
-
-	public function checkSmsRequest()
+	public function init()
 	{
-	/*	$sIp = $this->getUserIp();
+
+	}
+
+	public static function checkSmsRequest()
+	{
+
+		$sIp = self::getUserIp();
 		$iTypeSms = SiteParams::U_ACTION_TYPE_SMS;
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK;
 
@@ -25,7 +30,7 @@ class AntiBotComponent
 
 		//запрашиваем наличие блокировки за сутки
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeBlock, $iTimeBlock);
-		if($iActionCount>0){ //TODO: числовые константы тоже вынести в SiteParams?
+		if($iActionCount>0){
 			return false;
 		}
 
@@ -39,7 +44,7 @@ class AntiBotComponent
 		if($iActionCount>=2)
 		{
 			return false;
-		}*/
+		}
 
 		return true;
 	}
@@ -48,10 +53,10 @@ class AntiBotComponent
 	 * Добавление в лог еще 1 запроса кода по SMS
 	 */
 
-	public function addSmsRequest()
+	public static function addSmsRequest()
 	{
-		$sIp = $this->getUserIp();
-		if ($this->checkSmsRequest()) {
+		$sIp = self::getUserIp();
+		if (self::checkSmsRequest()) {
 			UserActionsLog::addNewAction($sIp, SiteParams::U_ACTION_TYPE_SMS);
 		}
 	}
@@ -61,7 +66,7 @@ class AntiBotComponent
 	 * Проверка, может ли пользователь заполнить анкету
 	 */
 
-	public function checkFormRequest()
+	public static function checkFormRequest()
 	{
 
 	}
@@ -70,13 +75,13 @@ class AntiBotComponent
 	 * Добавление в лог еще 1 запроса на заполнение анкеты
 	 */
 
-	public function addFormRequest()
+	public static function addFormRequest()
 	{
 
 	}
 
 
-	private function getUserIp()
+	private static function getUserIp()
 	{
 		return Yii::app()->request->getUserHostAddress();
 	}

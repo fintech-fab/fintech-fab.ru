@@ -15,6 +15,9 @@
  * 5 - ClientSendForm           - client_send
  * 6 - ______________           - /pages/view/form_sent
  */
+/**
+ * Class ClientFormComponent
+ */
 class ClientFormComponent
 {
 	private $client_id;
