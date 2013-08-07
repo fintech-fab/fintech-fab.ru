@@ -202,11 +202,15 @@ class FormController extends Controller
 	public function actionAjaxSendSms()
 	{
 		if(Yii::app()->request->isAjaxRequest){
-			//Yii::app()->session['flagSmsSent']=true;
+			Yii::app()->session['flagSmsSent']=true;
 
 			// если с данного ip нельзя запросить SMS, выдаём ошибку
 			if( !Yii::app()->antiBot->checkSmsRequest() ){
-				echo CHtml::encode(Dictionaries::C_ERR_GENERAL);
+				echo CJSON::encode(array(
+					"type"=>"2",
+					"text"=>Dictionaries::C_ERR_GENERAL,
+				));
+
 				Yii::app()->end();
 			}
 
@@ -215,20 +219,26 @@ class FormController extends Controller
 
 			// проверяем - есть ли уже код в базе.
 			if(!empty($aClientForm['sms_code'])) {
-
-				// если есть - выдаём ошибку, что SMS уже отправлена
-				echo CHtml::encode(Dictionaries::C_ERR_SMS_SENT);
+				echo CJSON::encode(array(
+					"type"=>"1",
+					"text"=>Dictionaries::C_ERR_SMS_SENT,
+				));
 				Yii::app()->end();
 			}
 
 			$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
 
 			// добавляем в лог запрос sms с этого ip
-			//Yii::app()->antiBot->addSmsRequest();
+			Yii::app()->antiBot->addSmsRequest();
 
 			//TODO: добавить отправку SMS на номер
 
-			//ClientData::saveClientDataById($aClientForm, $client_id);
+			ClientData::saveClientDataById($aClientForm, $client_id);
+
+			echo CJSON::encode(array(
+				"type"=>"0",
+				"text"=>Dictionaries::C_SMS_SUCCESS,
+			));
 			Yii::app()->end();
 		}
 	}

@@ -54,14 +54,26 @@
 				'size'=>'small',
 				'label' => 'Отправить на +7'.Yii::app()->session['ClientPersonalDataForm']['phone'].' SMS с кодом подтверждения',
 				'ajaxOptions'=>array(
+					'dataType'=>"json",
+					'type'  => "POST",
 					'success'=>"function(data)
                                 {
                                 	$('#send_sms').hide();
-                                	$('#sms_code_row').show();
-                                	$('.form-actions').show();
-                               		$('#actionAnswer').html(data).show();
-                               		if(data==''){
-                               			$('#actionAnswer').html('".Dictionaries::C_SMS_SUCCESS."').show();
+                                	if(data.type==0)
+                                	{
+                                		$('#sms_code_row').show();
+                                		$('.form-actions').show();
+                               			$('#ClientConfirmPhoneViaSMSForm_sms_code_em_').html(data.text).show();
+                                	}
+                                	else if(data.type==1)
+                                	{
+                                		$('#sms_code_row').show();
+                                		$('.form-actions').show();
+                               			$('#actionAnswer').html(data.text).show();
+                                	}
+                                	else if(data.type==2)
+                                	{
+                                		$('#actionAnswer').html(data.text).show();
                                		}
                                 } ",
 				),
