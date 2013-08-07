@@ -160,8 +160,6 @@ class FormController extends Controller
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
 
-
-
 			if ($this->checkFiles($aFiles)) {
 				$aClientData['flag_identified']=1;
 				if(isset($client_id)) {
