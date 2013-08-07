@@ -1,6 +1,6 @@
 <?php
 /* @var FormController $this*/
-/* @var InviteToIdentification $model*/
+/* @var InviteToIdentificationForm $model*/
 /* @var IkTbActiveForm $form*/
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
@@ -31,10 +31,13 @@ $this->pageTitle=Yii::app()->name;
 			<div class="clearfix"></div>
 			<div class="form-actions">
 				<? $this->widget('bootstrap.widgets.TbButton', array(
-					'buttonType' => 'submit',
+					'buttonType' => 'button',
 					'type'       => 'primary',
 					'label'      => 'Пройти видеоидентификацию на сайте →',
-					'htmlOptions' => array('onclick' => 'js:  $("#'.get_class($oClientCreateForm).'_go_identification").val("1");')
+					'htmlOptions' => array('onclick' => 'js:{
+					    $("#'.get_class($oClientCreateForm).'_go_identification").val("1");
+					    $("#' . get_class($oClientCreateForm) . '").submit();
+					  }')
 				)); ?>
 			</div>
 			<br/>
@@ -44,10 +47,18 @@ $this->pageTitle=Yii::app()->name;
 			<div class="clearfix"></div>
 			<div class="form-actions">
 				<? $this->widget('bootstrap.widgets.TbButton', array(
-					'buttonType' => 'submit',
-					'type'       => 'primary',
-					'label'      => 'Пройти видеоидентификацию в отделении →',
-					'htmlOptions' => array('onclick' => 'js: $("#'.get_class($oClientCreateForm).'_go_identification").val("2");')
+					'buttonType' => 'button',
+					'type'        => 'primary',
+					'label'       => 'Пройти видеоидентификацию в отделении →',
+					'htmlOptions' => array(
+						'onclick' => 'js: {
+							$("#' . get_class($oClientCreateForm) . '_go_identification").val("2");
+							$("#fl-contacts").modal("show");
+							$("#fl-contacts").on("hide", function() {
+                                $("#' . get_class($oClientCreateForm) . '").submit();
+                            });
+					}'
+					)
 				)); ?>
 			</div>
 			<br/>

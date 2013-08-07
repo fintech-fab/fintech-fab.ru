@@ -377,9 +377,12 @@ class ClientFormComponent
 	 * Переводит обработку форм на следующий шаг
 	 *
 	 */
-	public function nextStep()
+	public function nextStep($iSteps = 1)
 	{
-		$this->current_step++;
+		if(!($iSteps<=3)) {
+			$iSteps = 1;
+		}
+		$this->current_step+=$iSteps;
 		Yii::app()->session['current_step'] = $this->current_step;
 		if ($this->done_steps < Yii::app()->session['current_step']) {
 			Yii::app()->session['done_steps'] = $this->done_steps = Yii::app()->session['current_step'];
