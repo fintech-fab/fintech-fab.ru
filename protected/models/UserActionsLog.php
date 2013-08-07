@@ -8,8 +8,7 @@
  * @property integer $id
  * @property integer $type
  * @property string  $ip
- * @property integer $count
- * @property string  $dt_add
+  * @property string  $dt_add
  *
  * @method UserActionsLog[] findAll()
  * @method UserActionsLog[] findAllByAttributes()
@@ -46,12 +45,11 @@ class UserActionsLog extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type, ip, count, dt_add', 'required'),
-			array('type, count', 'numerical', 'integerOnly' => true),
+			array('type, ip, dt_add', 'required'),
 			array('ip', 'length', 'max' => 15),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, type, ip, count, dt_add', 'safe', 'on' => 'search'),
+			array('id, type, ip, dt_add', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -59,37 +57,38 @@ class UserActionsLog extends CActiveRecord
 	 * @param $sIp
 	 * @param $iType
 	 *
+	 * @param $iTimeMinutes
+	 *
 	 * @return UserActionsLog
 	 */
 
-	public function scopeIpAndType($sIp, $iType)
+	public static function countRecordsByIpTypeTime($sIp, $iType, $iTimeMinutes)
 	{
-		$this->getDbCriteria()->addColumnCondition(array(
+
+		$criteria = new CDbCriteria;
+		$criteria->addColumnCondition(array(
 			'ip'   => $sIp,
 			'type' => $iType,
 		));
 
-		return $this;
+		$criteria->addCondition('dt_add >= DATE_SUB( NOW( ) , INTERVAL '.$iTimeMinutes.' MINUTE )');
+
+		return self::count($criteria);
+
 	}
 
 	/**
 	 * @param $sIp
 	 * @param $iType
 	 *
-	 * Функция ищет запись с таким IP, и если находит - обновляет ее полностью,
-	 * иначе создает новую запись
 	 */
 
 	public static function addNewAction($sIp, $iType)
 	{
-		$oUserAction = self::model()->scopeIpAndType($sIp, $iType)->find();
-		if (!$oUserAction) {
-			$oUserAction = new self;
-		}
+		$oUserAction = new self;
 
 		$oUserAction->ip = $sIp;
 		$oUserAction->type = $iType;
-		$oUserAction->count = 1;
 		$oUserAction->dt_add = date('Y-m-d H:i:s', time());
 		$oUserAction->save();
 	}
@@ -98,11 +97,6 @@ class UserActionsLog extends CActiveRecord
 	 * @param $sIp
 	 * @param $iType
 	 */
-
-	public static function getActionByIpAndType($sIp, $iType)
-	{
-		return $oUserAction = self::model()->scopeIpAndType($sIp, $iType)->find();
-	}
 
 	/**
 	 * @return array relational rules.
@@ -123,7 +117,6 @@ class UserActionsLog extends CActiveRecord
 			'id'     => 'ID',
 			'type'   => 'Type',
 			'ip'     => 'Ip',
-			'count'  => 'Count',
 			'dt_add' => 'Dt Add',
 		);
 	}
@@ -143,7 +136,6 @@ class UserActionsLog extends CActiveRecord
 		$criteria->compare('id', $this->id);
 		$criteria->compare('type', $this->type);
 		$criteria->compare('ip', $this->ip, true);
-		$criteria->compare('count', $this->count);
 		$criteria->compare('dt_add', $this->dt_add, true);
 
 		return new CActiveDataProvider($this, array(

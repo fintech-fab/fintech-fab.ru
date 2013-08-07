@@ -30,6 +30,9 @@ $a = array(
 		'clientForm'=>array(
 			'class'=>'application.components.ClientFormComponent',
 		),
+		'antiBot'=>array(
+			'class'=>'application.components.AntiBotComponent',
+		),
 		'bootstrap'=>array(
 			'class'=>'bootstrap.components.Bootstrap',
 		),

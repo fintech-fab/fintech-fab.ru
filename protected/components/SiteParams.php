@@ -18,6 +18,17 @@ class SiteParams
 	const EMPTY_DATETIME = '0000-00-00 00:00:00';
 	const EMPTY_TIME = '00:00:00';
 
+	const U_ACTION_TYPE_FORM = 1;
+	const U_ACTION_TYPE_SMS = 2;
+	const U_ACTION_TYPE_BLOCK = 9;
+
+	/**
+	 * Время проверки для антибота, в минутах
+	 */
+	const ANTIBOT_TIME_SHORT = 10; //время проверки для короткого периода, разрешено 2 СМС за время
+	const ANTIBOT_TIME_LONG = 60; //время проверки длинного периода, разрешено 3 СМС, иначе блок
+	const ANTIBOT_TIME_BLOCK = 1440; //время блока
+
 	/**
 	 * максимальное число попыток ввода кода из SMS
 	 */

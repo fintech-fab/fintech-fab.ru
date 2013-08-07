@@ -7,47 +7,44 @@
 class AntiBot
 {
 	/**
+	 * @return bool
+	 *
 	 * Проверка, можно ли сделать еще 1 запрос кода по SMS
 	 */
+
 
 	public static function checkSmsRequest()
 	{
 		//echo '<pre>' . ""; CVarDumper::dump(strtotime($t)); echo '</pre>';
 		//echo '<pre>' . ""; CVarDumper::dump(date('Y-m-d H:i:s', strtotime($t))); echo '</pre>';
 
-		$sIp = $sIp = Yii::app()->request->getUserHostAddress();
-		$oUserAction = UserActionsLog::getActionByIpAndType($sIp, 2); //type 2 - SMS code, TODO: вынести в константы
-		if ($oUserAction) {
-			$iCount = $oUserAction->count;
-			$sTimestamp = $oUserAction->dt_add;
-			$iTimestamp = strtotime($sTimestamp);
-			$iDiffTime = time() - $iTimestamp;
 
+		$sIp = self::getUserIp();
+		$iTypeSms = SiteParams::U_ACTION_TYPE_SMS;
+		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK;
 
-			//TODO: вынести время и число в константы
-			//если уже есть 2 запроса за 10 минут - ругаемся
-			if ($iDiffTime < 600 && $iCount >= 2) {
-				return false;
-			//если уже есть 3 или более запросов за час - умножаем счетчик и ругаемся
-			} elseif ($iDiffTime < SiteParams::CTIME_HOUR && $iCount >= 3) {
-				$oUserAction->count++;
-				$oUserAction->save();
-				return false;
-			}
-			//если в течение часа запросов не было, и счетчик менее 4, то обнуляем счетчик и радуемся
-			elseif ($iDiffTime > SiteParams::CTIME_HOUR && $iCount < 4)
-			{
-				$oUserAction->count=0;
-				$oUserAction->save();
-				return true;
-			}
-			//если в течение суток не было запросов, и количество запросов более 0, то обнуляем счетчик
-			elseif ($iDiffTime > SiteParams::CTIME_DAY && $iCount > 0)
-			{
-				$oUserAction->count=0;
-				$oUserAction->save();
-			}
+		$iTimeShort = SiteParams::ANTIBOT_TIME_SHORT;
+		$iTimeLong = SiteParams::ANTIBOT_TIME_LONG;
+		$iTimeBlock = SiteParams::ANTIBOT_TIME_BLOCK;
+
+		//запрашиваем наличие блокировки за сутки
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeBlock, $iTimeBlock);
+		if($iActionCount>0){
+			return false;
 		}
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeSms, $iTimeLong);
+		if($iActionCount>=3){
+			UserActionsLog::addNewAction($sIp, $iTypeBlock);
+			return false;
+		}
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeSms, $iTimeShort);
+		if($iActionCount>=2)
+		{
+			return false;
+		}
+
 		return true;
 	}
 
@@ -57,9 +54,9 @@ class AntiBot
 
 	public static function addSmsRequest()
 	{
-		$sIp = $sIp = Yii::app()->request->getUserHostAddress(); //TODO: вынести в getUserIp
+		$sIp = self::getUserIp();
 		if (self::checkSmsRequest()) {
-			UserActionsLog::addNewAction($sIp, 2); //type 2 - SMS code
+			UserActionsLog::addNewAction($sIp, SiteParams::U_ACTION_TYPE_SMS);
 		}
 	}
 
@@ -82,4 +79,9 @@ class AntiBot
 
 	}
 
+
+	private static function getUserIp()
+	{
+		return Yii::app()->request->getUserHostAddress();
+	}
 }
