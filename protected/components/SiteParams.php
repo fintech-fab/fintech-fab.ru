@@ -21,7 +21,7 @@ class SiteParams
 	/**
 	 * максимальное число попыток ввода кода из SMS
 	 */
-	const MAX_ENTER_SMSCODE_TRIES = 3;
+	const MAX_SMSCODE_TRIES = 3;
 
 	/**
 	 * длина кода подтверждения, отправляемого по SMS
@@ -147,7 +147,7 @@ class SiteParams
 	}
 
 
-	public function getGravatarHtml($size, SiteAdminUser $oUser = null)
+	/*public function getGravatarHtml($size, SiteAdminUser $oUser = null)
 	{
 
 		$src = '/i/gravatar.jpg';
@@ -167,7 +167,7 @@ class SiteParams
 			'class' => 'img-polaroid gravatar-icon',
 		));
 
-	}
+	}*/
 
 
 	public function isCurrentUrl($url, $bStrong = false)
@@ -255,31 +255,7 @@ class SiteParams
 
 	}
 
-	/**
-	 * Текущий админ
-	 *
-	 * @return SiteAdminUser
-	 */
-	public static function getAdmin() {
-
-		$oAdmin = null;
-
-		if(!empty(Yii::app()->user)){
-			$oAdmin = Yii::app()->user->getModel();
-		}
-
-		if(!$oAdmin){
-			$oAdmin = new SiteAdminUser;
-
-			$oAdmin->id = 0;
-			$oAdmin->name = 'unknown';
-
-		}
-
-		return $oAdmin;
-	}
-
-	/**
+		/**
 	 * strtotime
 	 *
 	 * @param string|null $sTime
@@ -418,50 +394,6 @@ class SiteParams
 		return ob_get_clean();
 	}
 
-	/**
-	 * вывести информацию в консоль
-	 *
-	 * @param CConsoleCommand|PaymentCommand $oCommand
-	 * @param $mMessage массив или строка
-	 * @param $sTitle подзаголовок
-	 */
-	public function print2Console(CConsoleCommand $oCommand, $mMessage, $sTitle = 'trace')
-	{
-
-		static $bIsFirst = false;
-		if (false === $bIsFirst) {
-			$bIsFirst = true;
-			echo "\n\n>> begin >> " . $oCommand->getName() . " >> " . $oCommand->sActionName . " >>\n";
-		}
-
-		if ($mMessage === 'fin') {
-			echo "\t" . date('Y-m-d H:i:s') . "\n<< fin <<\n\n";
-			return;
-		}
-
-		echo "\t" . date('Y-m-d H:i:s') . " " . $sTitle . ': ';
-		print_r($mMessage);
-		echo "\n";
-
-	}
-
-	/**
-	 * Опции выгрузки в буфер 1С
-	 * @param bool $bIgnore игнорировать выгрузку
-	 */
-	public function doManage1cBuffer($bIgnore = false)
-	{
-		$this->_bIgnore1cBuffer = (bool)$bIgnore;
-	}
-
-	/**
-	 * Игнорируем выгрузку в буфер 1С ?
-	 * @return boolean
-	 */
-	public function isIgnore1cBuffer()
-	{
-		return $this->_bIgnore1cBuffer;
-	}
 
 
 	/**
