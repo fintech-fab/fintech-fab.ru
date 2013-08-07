@@ -47,8 +47,9 @@ class FormController extends Controller
 					}
 					elseif($oClientForm->go_identification==2)
 					{
-						//Yii::app()->clientForm->nextStep('sms'); TODO
+						Yii::app()->clientForm->nextStep(3);
 					}
+					$oClientForm = Yii::app()->clientForm->getFormModel();
 				}
 			}
 			elseif ($oClientForm->validate()){

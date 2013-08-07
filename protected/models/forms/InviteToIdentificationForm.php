@@ -22,7 +22,7 @@ class InviteToIdentificationForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		$aRules[] = array('go_identification', 'required', 'requiredValue' => 1, 'message' => 'Ошибка!');
+		$aRules[] = array('go_identification', 'in', 'range'=>array(1,2), 'message' => 'Ошибка!');
 
 		return $aRules;
 
