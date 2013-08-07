@@ -206,16 +206,18 @@ class FormController extends Controller
 
 	public function actionCheckSMSCode()
 	{
-		Yii::app()->clientForm->setFlagSmsSent(false);
-		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
-		{
-			$aAction=Yii::app()->clientForm->checkSmsCode();
-
+		if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
+			$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
 			if (isset($aAction['action'])) {
-				if ($aAction['action'] === 'render') {
-					$this->render($aAction['params']['view'], $aAction['params']['params']);
-				} elseif ($aAction['action'] === 'redirect') {
-					$this->redirect($aAction['url']);
+				switch ($aAction['action']) {
+					case 'render':
+						$this->render($aAction['params']['view'], $aAction['params']['params']);
+						break;
+					case 'redirect':
+						$this->redirect($aAction['url']);
+						break;
+					default:
+						break;
 				}
 			}
 		} else {
