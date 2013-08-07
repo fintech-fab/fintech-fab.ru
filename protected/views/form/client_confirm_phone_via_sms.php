@@ -60,6 +60,9 @@
                                 	$('#sms_code_row').show();
                                 	$('.form-actions').show();
                                		$('#ClientConfirmPhoneViaSMSForm_sms_code_em_').html(data).show();
+                               		if(data===null){
+                               			$('#actionAnswer').html('".Dictionaries::C_SMS_SUCCESS."').show();
+                               		}
                                 } ",
 				),
 			)); ?>
@@ -67,16 +70,15 @@
 			<?php } ?>
 		</span>
 		<?php
-			if(!empty($actionAnswer)){
-		?>
-		<span class="span10">
-			<?php echo $actionAnswer; ?>
-		</span>
-		<?php
+		    if(!isset($actionAnswer)){
+				$actionAnswer='';
 			}
 		?>
+		<span class="span10 help-block error<?php if(empty($actionAnswer)){echo " hide";}?>" id="actionAnswer">
+			<?php echo $actionAnswer; ?>
+		</span>
 		<span class="span10<?php if($flagHideForm)echo ' hide';?>" id="sms_code_row">
-			Введите код из SMS:
+			<label>Введите код из SMS:</label>
 			<?php echo $form->textField( $oClientCreateForm, 'sms_code', array( 'class' => 'span4' ) ); ?>
 			<?php echo $form->error($oClientCreateForm, 'sms_code'); ?>
 		</span>

@@ -1,10 +1,10 @@
 <?php
 /**
- * Компонент AntiBot занимается сохранением информации о запросах пользователя
+ * Компонент AntiBotComponent занимается сохранением информации о запросах пользователя
  * и принятием решений о блокировке операций
  */
 
-class AntiBot
+class AntiBotComponent
 {
 	/**
 	 * @return bool
@@ -29,7 +29,7 @@ class AntiBot
 
 		//запрашиваем наличие блокировки за сутки
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeBlock, $iTimeBlock);
-		if($iActionCount>0){
+		if($iActionCount>0){ //TODO: числовые константы тоже вынести в SiteParams?
 			return false;
 		}
 
