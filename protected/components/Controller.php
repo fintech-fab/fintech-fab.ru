@@ -24,4 +24,13 @@ class Controller extends CController
 	 * @var bool показывать ли верхний виджет на странице.
 	 */
 	public $showTopPageWidget=false;
+
+	protected function beforeAction($action)
+	{
+		if(Yii::app()->antiBot->checkIsBanned()){
+			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+			Yii::app()->end();
+		}
+		return parent::beforeAction($action);
+	}
 }

@@ -54,7 +54,7 @@ class UserActionsLog extends CActiveRecord
 	}
 
 	/**
-	 * @param $sIp
+	 * @param $sIP
 	 * @param $iType
 	 *
 	 * @param $iTimeMinutes
@@ -62,12 +62,12 @@ class UserActionsLog extends CActiveRecord
 	 * @return UserActionsLog
 	 */
 
-	public static function countRecordsByIpTypeTime($sIp, $iType, $iTimeMinutes)
+	public static function countRecordsByIpTypeTime($sIP, $iType, $iTimeMinutes)
 	{
 
 		$criteria = new CDbCriteria;
 		$criteria->addColumnCondition(array(
-			'ip'   => $sIp,
+			'ip'   => $sIP,
 			'type' => $iType,
 		));
 
@@ -82,23 +82,23 @@ class UserActionsLog extends CActiveRecord
 	}
 
 	/**
-	 * @param $sIp
+	 * @param $sIP
 	 * @param $iType
 	 *
 	 */
 
-	public static function addNewAction($sIp, $iType)
+	public static function addNewAction($sIP, $iType)
 	{
 		$oUserAction = new self;
 
-		$oUserAction->ip = $sIp;
+		$oUserAction->ip = $sIP;
 		$oUserAction->type = $iType;
 		$oUserAction->dt_add = date('Y-m-d H:i:s', time());
 		$oUserAction->save();
 	}
 
 	/**
-	 * @param $sIp
+	 * @param $sIP
 	 * @param $iType
 	 */
 

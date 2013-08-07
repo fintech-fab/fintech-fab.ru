@@ -206,7 +206,6 @@ class FormController extends Controller
 
 	public function actionCheckSMSCode()
 	{
-		Yii::app()->clientForm->setFlagSmsSent(false);
 		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
 		{
 			$aAction=Yii::app()->clientForm->checkSmsCode();

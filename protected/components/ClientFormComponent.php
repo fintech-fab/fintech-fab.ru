@@ -91,6 +91,7 @@ class ClientFormComponent
 					 * либо создает новую запись
 					 */
 					$oClientData = ClientData::addClient($aValidFormData['phone']);
+					Yii::app()->antiBot->addFormRequest();
 					Yii::app()->session['client_id'] = $oClientData->client_id;
 
 					$this->client_id = $oClientData->client_id;
@@ -151,6 +152,7 @@ class ClientFormComponent
 				 * либо создает новую запись
 				 */
 				$oClientData = ClientData::addClient($oClientForm);
+				Yii::app()->antiBot->addFormRequest();
 				Yii::app()->session['client_id'] = $oClientData->client_id;
 
 				$this->client_id = $oClientData->client_id;

@@ -19,30 +19,32 @@ class AntiBotComponent
 
 	public static function checkSmsRequest()
 	{
-
-		$sIp = self::getUserIp();
+		$sIP = self::getUserIP();
 		$iTypeSms = SiteParams::U_ACTION_TYPE_SMS;
-		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK;
+		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_SMS;
 
-		$iTimeShort = SiteParams::ANTIBOT_TIME_SHORT;
-		$iTimeLong = SiteParams::ANTIBOT_TIME_LONG;
-		$iTimeBlock = SiteParams::ANTIBOT_TIME_BLOCK;
+		$iTimeShort = SiteParams::ANTIBOT_SMS_TIME_SHORT;
+		$iTimeLong = SiteParams::ANTIBOT_SMS_TIME_LONG;
+		$iTimeBlock = SiteParams::ANTIBOT_SMS_TIME_BLOCK;
+
+		$iSmsInShort = SiteParams::ANTIBOT_SMS_IN_SHORT;
+		$iSmsInLong = SiteParams::ANTIBOT_SMS_IN_LONG;
 
 		//запрашиваем наличие блокировки за сутки
-		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeBlock, $iTimeBlock);
-		if($iActionCount>0){
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
+		if ($iActionCount > 0) {
 			return false;
 		}
 
-		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeSms, $iTimeLong);
-		if($iActionCount>=3){
-			UserActionsLog::addNewAction($sIp, $iTypeBlock);
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeSms, $iTimeLong);
+		if ($iActionCount >= $iSmsInLong) {
+			UserActionsLog::addNewAction($sIP, $iTypeBlock);
+
 			return false;
 		}
 
-		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIp, $iTypeSms, $iTimeShort);
-		if($iActionCount>=2)
-		{
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeSms, $iTimeShort);
+		if ($iActionCount >= $iSmsInShort) {
 			return false;
 		}
 
@@ -55,9 +57,9 @@ class AntiBotComponent
 
 	public static function addSmsRequest()
 	{
-		$sIp = self::getUserIp();
+		$sIP = self::getUserIP();
 		if (self::checkSmsRequest()) {
-			UserActionsLog::addNewAction($sIp, SiteParams::U_ACTION_TYPE_SMS);
+			UserActionsLog::addNewAction($sIP, SiteParams::U_ACTION_TYPE_SMS);
 		}
 	}
 
@@ -68,8 +70,52 @@ class AntiBotComponent
 
 	public static function checkFormRequest()
 	{
+		$sIP = self::getUserIP();
+		$iTypeForm = SiteParams::U_ACTION_TYPE_FORM;
+		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_FORM;
 
+		$iTimeShort = SiteParams::ANTIBOT_FORM_TIME_SHORT;
+		$iTimeLong = SiteParams::ANTIBOT_FORM_TIME_LONG;
+		$iTimeBlock = SiteParams::ANTIBOT_FORM_TIME_BLOCK;
+
+		$iFormsInShort = SiteParams::ANTIBOT_FORM_IN_SHORT;
+		$iFormsInLong = SiteParams::ANTIBOT_FORM_IN_LONG;
+
+		//запрашиваем наличие блокировки за сутки
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
+		if ($iActionCount > 0) {
+			return false;
+		}
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeForm, $iTimeLong);
+		if ($iActionCount >= $iFormsInLong) {
+			UserActionsLog::addNewAction($sIP, $iTypeBlock);
+
+			return false;
+		}
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeForm, $iTimeShort);
+		if ($iActionCount >= $iFormsInShort) {
+			return false;
+		}
+
+		return true;
 	}
+
+	public static function checkIsBanned()
+	{
+		$sIP = self::getUserIP();
+
+		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_FORM;
+		$iTimeBlock = SiteParams::ANTIBOT_FORM_TIME_BLOCK;
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
+		if ($iActionCount > 0) {
+			return true;
+		}
+		return false;
+	}
+
 
 	/**
 	 * Добавление в лог еще 1 запроса на заполнение анкеты
@@ -77,11 +123,16 @@ class AntiBotComponent
 
 	public static function addFormRequest()
 	{
-
+		$sIP = self::getUserIP();
+		if (self::checkFormRequest()) {
+			UserActionsLog::addNewAction($sIP, SiteParams::U_ACTION_TYPE_FORM);
+		}
 	}
 
-
-	private static function getUserIp()
+	/**
+	 * @return string
+	 */
+	private function getUserIP()
 	{
 		return Yii::app()->request->getUserHostAddress();
 	}

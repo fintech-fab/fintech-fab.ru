@@ -20,15 +20,31 @@ class SiteParams
 
 	const U_ACTION_TYPE_FORM = 1;
 	const U_ACTION_TYPE_SMS = 2;
-	const U_ACTION_TYPE_BLOCK = 9;
+	const U_ACTION_TYPE_BLOCK_FORM = 8;
+	const U_ACTION_TYPE_BLOCK_SMS = 9;
 
 	/**
 	 * Время проверки для антибота, в минутах
 	 */
-	const ANTIBOT_TIME_SHORT = 10; //время проверки для короткого периода, разрешено 2 СМС за время
-	const ANTIBOT_TIME_LONG = 60; //время проверки длинного периода, разрешено 3 СМС, иначе блок
-	const ANTIBOT_TIME_BLOCK = 1440; //время блока
+	const ANTIBOT_SMS_TIME_SHORT = 10; //время проверки для короткого периода
+	const ANTIBOT_SMS_TIME_LONG = 60; //время проверки длинного периода
+	const ANTIBOT_SMS_TIME_BLOCK = 1440; //время блока
 
+	const ANTIBOT_FORM_TIME_SHORT = 10; //время проверки для короткого периода
+	const ANTIBOT_FORM_TIME_LONG = 60; //время проверки длинного периода
+	const ANTIBOT_FORM_TIME_BLOCK = 1440; //время блока
+	/**
+	 * Количество СМС за период
+	 */
+	const ANTIBOT_SMS_IN_SHORT = 2; //количество за короткий период
+	const ANTIBOT_SMS_IN_LONG = 3; //количество за длинный период
+
+	/**
+	 * Количество анкет за период
+	 */
+
+	const ANTIBOT_FORM_IN_SHORT = 3; //количество за короткий период
+	const ANTIBOT_FORM_IN_LONG = 5; //количество за длинный период
 	/**
 	 * максимальное число попыток ввода кода из SMS
 	 */
