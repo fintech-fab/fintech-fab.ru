@@ -91,7 +91,7 @@ class FormController extends Controller
 				'oClientCreateForm' => $oClientForm,
 				'phone' => Yii::app()->session['ClientPersonalDataForm']['phone'],
 				'actionAnswer' => ($flagExceededTries
-					?'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.'
+					?Dictionaries::C_ERR_SMS_TRIES
 					:''),
 				'flagExceededTries' => $flagExceededTries,
 				'flagSmsSent' => $flagSmsSent,
@@ -202,18 +202,12 @@ class FormController extends Controller
 	public function actionAjaxSendSms()
 	{
 		if(Yii::app()->request->isAjaxRequest){
-			Yii::app()->session['flagSmsSent']=true;
+			//Yii::app()->session['flagSmsSent']=true;
 
-			// если с данного ip уже просили SMS в течение 10 минут...
-			if(1==2){
-				// TODO: бан1
-				echo CHtml::encode("Ошибка: обратитесь в горячую линию.");
-			}
-
-			// если с данного ip уже просили SMS 3 раза в течение 1 часа...
-			if(1==2){
-				// TODO: бан2
-				echo CHtml::encode("Ошибка: обратитесь в горячую линию.");
+			// если с данного ip нельзя запросить SMS, выдаём ошибку
+			if( !Yii::app()->antiBot->checkSmsRequest() ){
+				echo CHtml::encode(Dictionaries::C_ERR_GENERAL);
+				Yii::app()->end();
 			}
 
 			$client_id = $this->getClientId();
@@ -221,15 +215,20 @@ class FormController extends Controller
 
 			// проверяем - есть ли уже код в базе.
 			if(!empty($aClientForm['sms_code'])) {
-				// если есть - выдаём ошибку
-				echo CHtml::encode("Ошибка: SMS уже отправлена");
+
+				// если есть - выдаём ошибку, что SMS уже отправлена
+				echo CHtml::encode(Dictionaries::C_ERR_SMS_SENT);
 				Yii::app()->end();
 			}
 
 			$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
-			//TODO: добавить отправку SMS на номер
-			ClientData::saveClientDataById($aClientForm, $client_id);
 
+			// добавляем в лог запрос sms с этого ip
+			//Yii::app()->antiBot->addSmsRequest();
+
+			//TODO: добавить отправку SMS на номер
+
+			//ClientData::saveClientDataById($aClientForm, $client_id);
 			Yii::app()->end();
 		}
 	}
@@ -255,6 +254,7 @@ class FormController extends Controller
 				if ($oClientSMSForm->validate()
 					&& ClientData::compareSMSCodeByClientId($oClientSMSForm->sms_code, $client_id)
 				) {
+					// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
 					$aData['flag_sms_confirmed'] = 1;
 					ClientData::saveClientDataById($aData, $client_id);
 
@@ -269,13 +269,13 @@ class FormController extends Controller
 					// если это была последняя попытка
 					if($smsCountTries == SiteParams::MAX_SMSCODE_TRIES)
 					{
-						$actionAnswer = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.';
+						$actionAnswer = Dictionaries::C_ERR_SMS_TRIES;
 						$flagExceededTries=true;
 					}
 					else
 					{
 						$triesLeft = SiteParams::MAX_SMSCODE_TRIES - $smsCountTries;
-						$actionAnswer = 'Неверный код подтверждения! Осталось попыток: ' . $triesLeft;
+						$actionAnswer = Dictionaries::C_ERR_SMS_WRONG.' '.Dictionaries::C_ERR_TRIES_LEFT. $triesLeft;
 						$flagExceededTries=false;
 					}
 
@@ -295,7 +295,7 @@ class FormController extends Controller
 				$this->render('client_confirm_phone_via_sms', array(
 					'oClientCreateForm' => $oClientForm,
 					'phone'             => Yii::app()->session['ClientPersonalDataForm']['phone'],
-					'actionAnswer'      => 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.',
+					'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
 					'flagExceededTries' => true,
 					'flagSmsSent'       => $flagSmsSent,
 				));
