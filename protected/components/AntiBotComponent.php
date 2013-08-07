@@ -6,17 +6,16 @@
 
 class AntiBotComponent
 {
-	/**
-	 * @return bool
-	 *
-	 * Проверка, можно ли сделать еще 1 запрос кода по SMS
-	 */
-
 	public function init()
 	{
 
 	}
 
+	/**
+	 * Проверка, можно ли сделать еще 1 запрос кода по SMS
+	 *
+	 * @return bool
+	 */
 	public static function checkSmsRequest()
 	{
 		$sIP = self::getUserIP();

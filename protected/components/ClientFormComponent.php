@@ -102,8 +102,8 @@ class ClientFormComponent
 			}
 
 			if ($this->client_id) {
-				$aValidFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
-				$aValidFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				$aValidFormData['product'] = $this->getSessionProduct();
+				$aValidFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aValidFormData, $this->client_id);
 
 			}
@@ -162,8 +162,8 @@ class ClientFormComponent
 			}
 			if ($this->client_id) {
 				$aClientFormData = $oClientForm->getAttributes();
-				$aClientFormData['product'] = Yii::app()->session['ClientSelectProductForm']['product'];
-				$aClientFormData['get_way'] = Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+				$aClientFormData['product'] = $this->getSessionProduct();
+				$aClientFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 			}
 		} else {
@@ -179,33 +179,35 @@ class ClientFormComponent
 	}
 
 	/**
+	 * Делает запрос на отправку SMS и возвращает ответ в json
+	 *
 	 * @return string
 	 */
-
 	public function ajaxSendSmsRequest()
 	{
 		// если с данного ip нельзя запросить SMS, выдаём ошибку
-		if( !Yii::app()->antiBot->checkSmsRequest() ){
+		if (!Yii::app()->antiBot->checkSmsRequest()) {
 			return CJSON::encode(array(
-				"type"=>"2",
-				"text"=>Dictionaries::C_ERR_GENERAL,
+				"type" => "2",
+				"text" => Dictionaries::C_ERR_GENERAL,
 			));
 		}
 
 		$client_id = $this->getClientId();
-		$aClientForm=ClientData::getClientDataById($client_id);
+		$aClientForm = ClientData::getClientDataById($client_id);
 
 		// проверяем - есть ли уже код в базе.
-		if(!empty($aClientForm['sms_code'])) {
+		if (!empty($aClientForm['sms_code'])) {
 			return CJSON::encode(array(
-				"type"=>"1",
-				"text"=>Dictionaries::C_ERR_SMS_SENT,
+				"type" => "1",
+				"text" => Dictionaries::C_ERR_SMS_SENT,
 			));
 		}
 
-		$aClientForm['sms_code']=$this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+		$aClientForm['sms_code'] = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
 
 		//TODO тут сделать функцию отправки СМС
+
 		//если отправлено успешно,
 		//то добавляем в лог запрос sms с этого ip
 		Yii::app()->antiBot->addSmsRequest();
@@ -214,24 +216,28 @@ class ClientFormComponent
 		ClientData::saveClientDataById($aClientForm, $client_id);
 
 		return CJSON::encode(array(
-			"type"=>"0",
-			"text"=>Dictionaries::C_SMS_SUCCESS,
+			"type" => "0",
+			"text" => Dictionaries::C_SMS_SUCCESS,
 		));
 	}
 
-	public function checkSmsCode()
+	/**
+	 * Сверяет код из $aPostData с кодом из базы
+	 *
+	 * @param array $aPostData
+	 * @return array
+	 */
+	public function checkSmsCode($aPostData)
 	{
 		$client_id = Yii::app()->clientForm->getClientId();
 		$oClientSMSForm=new ClientConfirmPhoneViaSMSForm();
-		$oClientSMSForm->setAttributes($_POST['ClientConfirmPhoneViaSMSForm']);
+		$oClientSMSForm->setAttributes($aPostData);
 
 		$flagSmsSent = Yii::app()->clientForm->getFlagSmsSent();
 
 		$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
 
 		if ($smsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
-
-			// проверить, что присланный код валиден и совпадает с кодом из базы
 			if ($oClientSMSForm->validate()
 				&& ClientData::compareSMSCodeByClientId($oClientSMSForm->sms_code, $client_id)
 			) {
@@ -242,23 +248,22 @@ class ClientFormComponent
 				Yii::app()->clientForm->clearClientSession();
 
 				//$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
-				return array('action' => 'redirect', 'url' => Yii::app()->createUrl('pages/view/formsent'));
+				return array(
+					'action' => 'redirect',
+					'url' => Yii::app()->createUrl('pages/view/formsent'),
+				);
 			} else {
-
 				$smsCountTries += 1;
 				Yii::app()->clientForm->setSmsCountTries($smsCountTries);
 
 				// если это была последняя попытка
-				if($smsCountTries == SiteParams::MAX_SMSCODE_TRIES)
-				{
+				if ($smsCountTries == SiteParams::MAX_SMSCODE_TRIES) {
 					$actionAnswer = Dictionaries::C_ERR_SMS_TRIES;
-					$flagExceededTries=true;
-				}
-				else
-				{
+					$flagExceededTries = true;
+				} else {
 					$triesLeft = SiteParams::MAX_SMSCODE_TRIES - $smsCountTries;
-					$actionAnswer = Dictionaries::C_ERR_SMS_WRONG.' '.Dictionaries::C_ERR_TRIES_LEFT. $triesLeft;
-					$flagExceededTries=false;
+					$actionAnswer = Dictionaries::C_ERR_SMS_WRONG . ' ' . Dictionaries::C_ERR_TRIES_LEFT . $triesLeft;
+					$flagExceededTries = false;
 				}
 
 				$oClientForm = Yii::app()->clientForm->getFormModel();
@@ -271,13 +276,15 @@ class ClientFormComponent
 				));*/
 
 				return array(
-					'action' => 'render', 'params' => array(
-						'view' => 'client_confirm_phone_via_sms', 'params' => array(
+					'action' => 'render',
+					'params' => array(
+						'view' => 'client_confirm_phone_via_sms',
+						'params' => array(
 							'oClientCreateForm' => $oClientForm,
-							'phone'             => Yii::app()->clientForm->getSessionPhone(),
-							'actionAnswer'      => $actionAnswer,
+							'phone' => Yii::app()->clientForm->getSessionPhone(),
+							'actionAnswer' => $actionAnswer,
 							'flagExceededTries' => $flagExceededTries,
-							'flagSmsSent'       => $flagSmsSent,
+							'flagSmsSent' => $flagSmsSent,
 						)
 					));
 
@@ -295,13 +302,15 @@ class ClientFormComponent
 			));*/
 
 			return array(
-				'action' => 'render', 'params' => array(
-					'view' => 'client_confirm_phone_via_sms', 'params' => array(
+				'action' => 'render',
+				'params' => array(
+					'view' => 'client_confirm_phone_via_sms',
+					'params' => array(
 						'oClientCreateForm' => $oClientForm,
-						'phone'             => Yii::app()->clientForm->getSessionPhone(),
-						'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
+						'phone' => Yii::app()->clientForm->getSessionPhone(),
+						'actionAnswer' => Dictionaries::C_ERR_SMS_TRIES,
 						'flagExceededTries' => true,
-						'flagSmsSent'       => $flagSmsSent,
+						'flagSmsSent' => $flagSmsSent,
 					)
 				));
 		}
@@ -341,7 +350,7 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @param $iSteps
+	 * @param int $iSteps
 	 */
 	public function setDoneSteps($iSteps)
 	{
@@ -352,7 +361,7 @@ class ClientFormComponent
 	/**
 	 * Возвращает модель текущей формы.
 	 *
-	 * @return ClientCreateFormAbstract|null
+	 * @return ClientCreateFormAbstract
 	 */
 
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
@@ -438,7 +447,7 @@ class ClientFormComponent
 	/**
 	 * Возвращает массив отправленных данных, если был выполнен POST-запрос, либо null.
 	 *
-	 * @return array|bool
+	 * @return array|null
 	 */
 	public function getPostData()
 	{
@@ -516,9 +525,10 @@ class ClientFormComponent
 		}
 	}
 
-	/*
+	/**
 	 * Переводит обработку форм на следующий шаг
 	 *
+	 * @param int $iSteps
 	 */
 	public function nextStep($iSteps = 1)
 	{
@@ -541,7 +551,7 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return mixed
+	 * @return int
 	 */
 	public function getClientId()
 	{
@@ -551,7 +561,7 @@ class ClientFormComponent
 	/**
 	 * @param ClientCreateFormAbstract $oClientForm
 	 *
-	 * @return mixed
+	 * @return int|null
 	 */
 	public function getSessionFormClientId(ClientCreateFormAbstract $oClientForm)
 	{
@@ -561,6 +571,11 @@ class ClientFormComponent
 		return Yii::app()->session[get_class($oClientForm) . '_client_id'];
 	}
 
+	/**
+	 * @param ClientCreateFormAbstract $oClientForm
+	 *
+	 * @return null|array
+	 */
 	public function getSessionFormData(ClientCreateFormAbstract $oClientForm)
 	{
 		if(!isset($oClientForm)){
@@ -570,7 +585,7 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return mixed
+	 * @return int номер выбранного продукта
 	 */
 	public function getSessionProduct()
 	{
@@ -578,7 +593,7 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return mixed
+	 * @return int номер выбранного спссоба
 	 */
 	public function getSessionGetWay()
 	{
@@ -586,23 +601,32 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return mixed
+	 * @return int
 	 */
 	public function getSmsCountTries()
 	{
 		return (isset(Yii::app()->session['smsCountTries']))?Yii::app()->session['smsCountTries']:0;
 	}
 
+	/**
+	 * @param int $iSmsCountTries
+	 */
 	public function setSmsCountTries($iSmsCountTries)
 	{
 		Yii::app()->session['smsCountTries'] = $iSmsCountTries;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getFlagSmsSent()
 	{
 		return (!empty(Yii::app()->session['flagSmsSent']));
 	}
 
+	/**
+	 * @param bool $bFlagSmsSent
+	 */
 	public function setFlagSmsSent($bFlagSmsSent)
 	{
 		Yii::app()->session['flagSmsSent']=$bFlagSmsSent;

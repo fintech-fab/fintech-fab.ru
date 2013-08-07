@@ -160,8 +160,6 @@ class FormController extends Controller
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
 
-
-
 			if ($this->checkFiles($aFiles)) {
 				$aClientData['flag_identified']=1;
 				if(isset($client_id)) {
@@ -206,15 +204,18 @@ class FormController extends Controller
 
 	public function actionCheckSMSCode()
 	{
-		if(isset($_POST['ClientConfirmPhoneViaSMSForm']))
-		{
-			$aAction=Yii::app()->clientForm->checkSmsCode();
-
+		if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
+			$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
 			if (isset($aAction['action'])) {
-				if ($aAction['action'] === 'render') {
-					$this->render($aAction['params']['view'], $aAction['params']['params']);
-				} elseif ($aAction['action'] === 'redirect') {
-					$this->redirect($aAction['url']);
+				switch ($aAction['action']) {
+					case 'render':
+						$this->render($aAction['params']['view'], $aAction['params']['params']);
+						break;
+					case 'redirect':
+						$this->redirect($aAction['url']);
+						break;
+					default:
+						break;
 				}
 			}
 		} else {
