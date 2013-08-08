@@ -9,12 +9,12 @@
 
 class ExampleTest extends CTestCase {
 
-	public function testExample()
+
+	public function testCheckBirthdayValid()
 	{
 
 		$aPostData = array(
-			'phone' => '9104775209',
-			'email' => '9104775209@@example.com',
+			'birthday' => '22.12.2009',
 		);
 
 
@@ -23,12 +23,62 @@ class ExampleTest extends CTestCase {
 
 		$oForm->validate();
 
-		//$this->assertEmpty($oForm->getErrors(), print_r($oForm->getErrors(),true));
-		$this->assertNotEmpty($oForm->getErrors()['email']);
+		$this->assertEmpty($oForm->getError('birthday'), print_r($oForm->getError('birthday'),true));
+		//$this->assertNotEmpty($oForm->getErrors()['email']);
+
+	}
+
+	public function testCheckBirthdayNonValid()
+	{
+
+		$aPostData = array(
+			'birthday' => '31.11.2009',
+		);
 
 
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
 
-		$this->assertEquals(1,1);
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('birthday'));
+
+	}
+
+	public function testCheckPassportValid()
+	{
+
+		$aPostData = array(
+			'passport_date' => '29.02.2008',
+		);
+
+
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('passport_date'), print_r($oForm->getError('passport_date'),true));
+		//$this->assertNotEmpty($oForm->getErrors()['email']);
+
+	}
+
+	public function testCheckPassportNonValid()
+	{
+
+		$aPostData = array(
+			'passport_date' => '29.02.2005',
+		);
+
+
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('passport_date'));
+		//$this->assertNotEmpty($oForm->getErrors()['email']);
+
 	}
 
 }
