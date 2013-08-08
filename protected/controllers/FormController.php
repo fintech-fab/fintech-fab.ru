@@ -119,15 +119,17 @@ class FormController extends Controller
 	//TODO в компонент
 	public function actionIdentification()
 	{
-		$client_id = Yii::app()->clientForm->getClientId();
+		$sTmpClientId = Yii::app()->clientForm->getTmpClientId();
 
-		if (Yii::app()->clientForm->getCurrentStep() == 3) {
+		if (isset($sTmpClientId)
+			&& Yii::app()->clientForm->getCurrentStep() == 3
+		) {
 
-			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
+			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
 
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 
-			if ($this->checkFiles($aFiles)) {
+			if (Yii::app()->clientForm->checkFiles($aFiles)) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 			$this->actionIndex();
@@ -143,44 +145,28 @@ class FormController extends Controller
 	public function actionDocuments()
 	{
 
-		$client_id = Yii::app()->clientForm->getClientId();
+		$sTmpClientId = Yii::app()->clientForm->getTmpClientId();
 
-		if (isset($client_id)
+		if (isset($sTmpClientId)
 			&& Yii::app()->clientForm->getCurrentStep() == 4
 		) {
 
-			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
+			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
 
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
 
-			if ($this->checkFiles($aFiles)) {
-				$aClientData['flag_identified'] = 1;
+			if (Yii::app()->clientForm->checkFiles($aFiles)) {
 
-				ClientData::saveClientDataById($aClientData, $client_id);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
-	//TODO в компонент
-	private function checkFiles($aFiles)
-	{
-		if (!isset($aFiles) || gettype($aFiles) != 'array') {
-			return false;
-		}
 
-		foreach ($aFiles as $sFile) {
-			if (!file_exists($sFile) || !getimagesize($sFile)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
 
 	public function actionError()
 	{

@@ -15,6 +15,7 @@
  * 5 - ClientSendForm           - client_send
  * 6 - ______________           - /pages/view/form_sent
  */
+
 /**
  * Class ClientFormComponent
  */
@@ -123,6 +124,7 @@ class ClientFormComponent
 	 * Выполняет обработку данных формы после проверки.
 	 *
 	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectGetWayForm|ClientPersonalDataForm $oClientForm
+	 *
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
@@ -151,6 +153,7 @@ class ClientFormComponent
 				 * и если находит - возвращает запись с указанным телефоном как результат
 				 * либо создает новую запись
 				 */
+
 				$oClientData = ClientData::addClient($oClientForm);
 				Yii::app()->antiBot->addFormRequest();
 				Yii::app()->session['client_id'] = $oClientData->client_id;
@@ -165,6 +168,15 @@ class ClientFormComponent
 				$aClientFormData['product'] = $this->getSessionProduct();
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
+
+				//TODO moveFiles
+				if($this->moveIdentificationFiles())
+				{
+					$aClientData['flag_identified'] = 1;
+					ClientData::saveClientDataById($aClientData, $this->client_id);
+				}
+
+
 			}
 		} else {
 			if ($this->client_id) {
@@ -172,6 +184,9 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 			}
 		}
+		/**
+		 * Сохраняем данные формы в сессию
+		 */
 		$aClientFormData = $oClientForm->getAttributes();
 		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
 		Yii::app()->session[get_class($oClientForm).'_client_id'] = $this->client_id;
@@ -559,6 +574,22 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getTmpClientId()
+	{
+		if(empty(Yii::app()->session['tmp_client_id']))
+		{
+			$tmp_client_id = 'tmp'.rand(0,999999);
+			Yii::app()->session['tmp_client_id']=$tmp_client_id;
+		} else {
+			$tmp_client_id = Yii::app()->session['tmp_client_id'];
+		}
+
+		return $tmp_client_id;
+	}
+
+	/**
 	 * @param ClientCreateFormAbstract $oClientForm
 	 *
 	 * @return int|null
@@ -642,6 +673,7 @@ class ClientFormComponent
 
 		//TODO: продумать очистку сессии
 		Yii::app()->session['client_id']=null;
+		Yii::app()->session['tmp_client_id']=null;
 		Yii::app()->session['ClientSelectProductForm']=null;
 		Yii::app()->session['ClientSelectGetWayForm']=null;
 
@@ -673,5 +705,50 @@ class ClientFormComponent
 		$sGeneratedCode = substr($sGeneratedCode,1,$iLength);
 
 		return $sGeneratedCode;
+	}
+
+	public function checkFiles($aFiles)
+	{
+		if (!isset($aFiles) || gettype($aFiles) != 'array') {
+			return false;
+		}
+
+		foreach ($aFiles as $sFile) {
+			if (!file_exists($sFile) || !getimagesize($sFile)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function moveIdentificationFiles()
+	{
+		$sTmpClientId = $this->getTmpClientId();
+		$iClientId = $this->getClientId();
+
+		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
+
+		$aFiles[] = ImageController::C_TYPE_PHOTO . '.png';
+		$aFiles[] = ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
+		$aFiles[] = ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
+		$aFiles[] = ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
+		$aFiles[] = ImageController::C_TYPE_PASSPORT_LAST . '.png';
+
+		return $this->moveFiles($aFiles, $sFilesPath, Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/');
+	}
+
+	public function moveFiles($aFiles, $sOldPath, $sNewPath){
+		if (!file_exists($sNewPath)) {
+			@mkdir($sNewPath);
+		}
+		foreach($aFiles as $sFile)
+		{
+			if(!rename($sOldPath.$sFile,$sNewPath.$sFile)){
+				return false;
+			}
+		}
+		@rmdir($sOldPath);
+		return true;
 	}
 }

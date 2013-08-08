@@ -51,7 +51,7 @@ class ImageController extends CController
 		 */
 
 		//все шаги пройдены и есть ID клиента
-		if (is_null($this->getClient())) {
+		if (is_null($this->getTmpClient())) {
 			Yii::app()->end();
 		}
 
@@ -76,6 +76,7 @@ class ImageController extends CController
 			$sFilePath .= time() . '.png';
 
 			file_put_contents($sFilePath, $sImage);
+
 
 			switch ($sType) {
 				//фотография
@@ -194,9 +195,9 @@ class ImageController extends CController
 		 * @var Image $oImage
 		 */
 
-		$iClientId = $this->getClient();
+		$sClientId = $this->getTmpClient();
 
-		$sFilePath = Yii::app()->basePath . self::C_IMAGES_DIR . $iClientId;
+		$sFilePath = Yii::app()->basePath . self::C_IMAGES_DIR . $sClientId;
 
 		@mkdir($sFilePath, 0777, true);
 
@@ -248,8 +249,8 @@ class ImageController extends CController
 	 *
 	 * @return int
 	 */
-	private function getClient()
+	private function getTmpClient()
 	{
-		return Yii::app()->clientForm->getClientId();
+		return Yii::app()->clientForm->getTmpClientId();
 	}
 }
