@@ -95,7 +95,7 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	public function checkValidAge($attribute, $param)
 	{
-		$iAge = $this->countYearsBetween2Dates($this->owner->$attribute);
+		$iAge = $this->countYearsBetween2Dates($this->owner->$attribute, date('d.m.Y', time()));
 		if ($iAge < SiteParams::C_MIN_AGE || $iAge > SiteParams::C_MAX_AGE) {
 			$this->owner->addError($attribute, $param['message']);
 		}
@@ -125,16 +125,28 @@ class FormFieldValidateBehavior extends CBehavior
 			return;
 		}
 
-		// текущий возраст клиента + месяц
-		$iAge = $this->countYearsBetween2Dates($birthDate);
+		// текущий возраст клиента
+		$iAge = $this->countYearsBetween2Dates($birthDate, date('d.m.Y', time()));
 		// возраст на момент получения паспорта
-		$iAgePassport = $this->countYearsBetween2Dates($birthDate, $passportDate);
+		$iAgeChangePassport = $this->countYearsBetween2Dates($birthDate, $passportDate);
 
-		foreach (SiteParams::$aAgesChangePassport as $key => $iAgeChangePassport) {
-			if ($iAge >= $iAgeChangePassport && $iAgePassport < $iAgeChangePassport ||
-				$key == 1 && $iAge < $iAgeChangePassport
-			) {
-				$this->owner->addError($attribute, $param['message']);
+		// возраст должен быть в заданном диапазоне
+		if ($iAge < SiteParams::C_MIN_AGE || $iAge > SiteParams::C_MAX_AGE) {
+			$this->owner->addError($attribute, $param['messageEmptyBirthday']);
+
+			return;
+		}
+
+		// возраст смены паспорта должен быть не меньше первого заданного возраста
+		if ($iAgeChangePassport < SiteParams::$aChangePassportAges[0]) {
+			$this->owner->addError($attribute, $param['message']);
+
+			return;
+		}
+
+		foreach (SiteParams::$aChangePassportAges as $iChangePassportAge) {
+			if ($iAge >= $iChangePassportAge && $iAgeChangePassport < $iChangePassportAge) {
+				$this->owner->addError($attribute, $param['messageExpiredDate']);
 
 				return;
 			}
@@ -253,18 +265,16 @@ class FormFieldValidateBehavior extends CBehavior
 	/**
 	 * Считает, сколько полных лет прошло с даты $sDate
 	 *
-	 * @param string      $sDate1
-	 * @param string|null $sDate2
+	 * @param string $sDate1
+	 * @param string $sDate2
 	 *
 	 * @internal param string $sDate
 	 *
 	 * @return int
 	 */
-	private function countYearsBetween2Dates($sDate1, $sDate2 = '')
+	private function countYearsBetween2Dates($sDate1, $sDate2)
 	{
-		$iTimestamp2 = empty($sDate2) ? time() : strtotime($sDate2);
-
-		return (int)((date('Ymd', $iTimestamp2) - date('Ymd', strtotime($sDate1))) / 10000);
+		return (int)((date('Ymd', strtotime($sDate2)) - date('Ymd', strtotime($sDate1))) / 10000);
 	}
 
 

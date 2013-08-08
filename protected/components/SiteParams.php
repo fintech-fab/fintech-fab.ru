@@ -127,10 +127,10 @@ class SiteParams
 	 * массив возрастов, в которые меняют паспорт
 	 * @var array
 	 */
-	public static $aAgesChangePassport = array(
-		1 => 14,
-		2 => 20,
-		3 => 45,
+	public static $aChangePassportAges = array(
+		14,
+		20,
+		45,
 	);
 
 
