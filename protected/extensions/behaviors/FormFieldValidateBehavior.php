@@ -154,6 +154,129 @@ class FormFieldValidateBehavior extends CBehavior
 	}
 
 	/**
+	 * проверка номера второго документа на валидность
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidDocumentNumber($attribute, $param)
+	{
+		if (empty($this->owner->$param['chosenDocument'])) {
+			$this->owner->addError($attribute, $param['messageEmptyDocument']);
+
+			return;
+		}
+
+		$sNumber = $this->owner->$param['chosenDocument'];
+		$sError = Dictionaries::$aDocumentsErrors[$sNumber];
+		switch ($sNumber) {
+			case 1:
+				$sError = $this->checkValidInternationalPassport($this->owner->$attribute) ? "" : $sError;
+				break;
+			case 2:
+				$sError = $this->checkValidDriverLicense($this->owner->$attribute) ? "" : $sError;
+				break;
+			case 3:
+				$sError = $this->checkValidPensionCertificate($this->owner->$attribute) ? "" : $sError;
+				break;
+			case 4:
+				$sError = $this->checkValidMilitaryCard($this->owner->$attribute) ? "" : $sError;
+				break;
+			case 5:
+				$sError = $this->checkValidInn($this->owner->$attribute) ? "" : $sError;
+				break;
+			case 6:
+				$sError = $this->checkValidInsuranceCertificate($this->owner->$attribute) ? "" : $sError;
+				break;
+			default:
+				break;
+		}
+
+		if (!empty($sError)) {
+			$this->owner->addError($attribute, $sError);
+		}
+	}
+
+
+	/**
+	 * Проверка на валидность номера загранпаспорта
+	 * 9 цифр без пробелов и дефисов
+	 *
+	 * @param $sNumber
+	 *
+	 * @return bool
+	 */
+	private function checkValidInternationalPassport($sNumber)
+	{
+		return (preg_match('/^\d{9}$/', $sNumber) > 0);
+	}
+
+	/**
+	 * Проверка на валидность номера водительского удостоверения
+	 * 2 цифры, 2 русских буквы, 6 цифр
+	 *
+	 * @param $sNumber
+	 *
+	 * @return bool
+	 */
+	private function checkValidDriverLicense($sNumber)
+	{
+		return (preg_match('/^\d{2}[а-яё]{2}\d{6}$/ui', $sNumber) > 0);
+	}
+
+	/**
+	 * Проверка на валидность номера пенсионного удостоверения
+	 * 6 цифр
+	 *
+	 * @param $sNumber
+	 *
+	 * @return bool
+	 */
+	private function checkValidPensionCertificate($sNumber)
+	{
+		return (preg_match('/^\d{6}$/', $sNumber) > 0);
+	}
+
+	/**
+	 * Проверка на валидность номера военного билета
+	 * 2 русских буквы, 7 цифр
+	 *
+	 * @param $sNumber
+	 *
+	 * @return bool
+	 */
+	private function checkValidMilitaryCard($sNumber)
+	{
+		return (preg_match('/^[а-яё]{2}\d{7}$/ui', $sNumber) > 0);
+	}
+
+	/**
+	 * Проверка на валидность номера ИНН
+	 * 12 цифр
+	 *
+	 * @param $sNumber
+	 *
+	 * @return bool
+	 */
+	private function checkValidInn($sNumber)
+	{
+		return (preg_match('/^\d{12}$/', $sNumber) > 0);
+	}
+
+	/**
+	 * Проверка на валидность номера Страховое свидетельство государственного пенсионного страхования
+	 * 11 цифр
+	 *
+	 * @param $sNumber
+	 *
+	 * @return bool
+	 */
+	private function checkValidInsuranceCertificate($sNumber)
+	{
+		return (preg_match('/^\d{11}$/', $sNumber) > 0);
+	}
+
+	/**
 	 * форматирование фамилий и имен
 	 * @param $strName
 	 */

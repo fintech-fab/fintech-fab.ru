@@ -211,6 +211,10 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите документ из списка', 'range' => array_keys(Dictionaries::$aDocuments));
 					break;
 
+				case 'document_number':
+					$aRules[] = array($sFieldName, 'checkValidDocumentNumber', 'chosenDocument' => 'document', 'messageEmptyDocument' => 'Сначала выберите тип документа');
+					break;
+
 				case 'education':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите образование из списка', 'range' => array_keys(Dictionaries::$aEducations));
 					break;
@@ -375,6 +379,16 @@ class ClientCreateFormAbstract extends CFormModel
 	public function checkValidPassportDate($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidPassportDate($attribute, $param);
+	}
+
+	/**
+	 * проверка номера второго документа на валидность
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidDocumentNumber($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidDocumentNumber($attribute, $param);
 	}
 
 	/**

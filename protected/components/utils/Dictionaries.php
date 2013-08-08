@@ -26,18 +26,18 @@ class Dictionaries
 	 */
 	public static $aSexes = array(
 		self::C_SEX_FEMALE => 'Женский',
-		self::C_SEX_MALE => 'Мужской'
+		self::C_SEX_MALE   => 'Мужской'
 	);
 
-	const C_MARITAL_MARRIED		= 1;
-	const C_MARITAL_NOT_MARRIED	= 2;
+	const C_MARITAL_MARRIED = 1;
+	const C_MARITAL_NOT_MARRIED = 2;
 
 	/**
 	 * названия для семейного положения
 	 * @var array
 	 */
 	public static $aMaritalStatuses = array(
-		self::C_MARITAL_MARRIED => 'женат/замужем',
+		self::C_MARITAL_MARRIED     => 'женат/замужем',
 		self::C_MARITAL_NOT_MARRIED => 'холост/не замужем'
 	);
 
@@ -50,7 +50,7 @@ class Dictionaries
 
 	public static $aYesNo = array(
 		self::C_YES => 'Да',
-		self::C_NO => 'Нет',
+		self::C_NO  => 'Нет',
 	);
 
 	/**
@@ -77,7 +77,7 @@ class Dictionaries
 	);
 
 	public static $aJobTimes = array(
-		1 =>'Менее года',
+		1 => 'Менее года',
 		2 => '1 год',
 		3 => '2 года',
 		4 => '3 года',
@@ -111,15 +111,15 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aLiabilities = array(
-		1 => 'нет',
-		2 => 1000,
-		3 => 2000,
-		4 => 3000,
-		5 => 4000,
-		6 => 5000,
-		7 => 6000,
-		8 => 7000,
-		9 => 8000,
+		1  => 'нет',
+		2  => 1000,
+		3  => 2000,
+		4  => 3000,
+		5  => 4000,
+		6  => 5000,
+		7  => 6000,
+		8  => 7000,
+		9  => 8000,
 		10 => 9000,
 		11 => 10000,
 		12 => 'более 10000',
@@ -152,6 +152,19 @@ class Dictionaries
 	);
 
 	/**
+	 * правила заполнения второго документа
+	 * @var array
+	 */
+	public static $aDocumentsErrors = array(
+		1 => 'Введите 9 цифр (серия и номер) без пробелов',
+		2 => 'Неверный формат, пример правильного номера: 12АБ123456',
+		3 => 'Введите 6 цифр без пробелов',
+		4 => 'Неверный формат, пример правильного номера: АБ1234567',
+		5 => 'Введите 12 цифр без пробелов',
+		6 => 'Введите 11 цифр без пробелов и дефисов',
+	);
+
+	/**
 	 * названия дней недели для вывода в блоке "Выбранные условия"
 	 * @var array
 	 */
@@ -170,15 +183,15 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aMonths = array(
-		1 => "января",
-		2 => "февраля",
-		3 => "марта",
-		4 => "апреля",
-		5 => "мая",
-		6 => "июня",
-		7 => "июля",
-		8 => "августа",
-		9 => "сентября",
+		1  => "января",
+		2  => "февраля",
+		3  => "марта",
+		4  => "апреля",
+		5  => "мая",
+		6  => "июня",
+		7  => "июля",
+		8  => "августа",
+		9  => "сентября",
 		10 => "октября",
 		11 => "ноября",
 		12 => "декабря",
@@ -189,9 +202,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aProducts = array(
-		"1"=>"<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю</span>",
-		"2"=>"<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на неделю</span>",
-		"3"=>"<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='2 займа' data-time='14'>10000 рублей на 2 недели</span>",
+		"1" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю</span>",
+		"2" => "<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на неделю</span>",
+		"3" => "<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='2 займа' data-time='14'>10000 рублей на 2 недели</span>",
 	);
 
 	/**
@@ -199,9 +212,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataPrices = array(
-		"1"=>"350",
-		"2"=>"1500",
-		"3"=>"1500",
+		"1" => "350",
+		"2" => "1500",
+		"3" => "1500",
 	);
 
 	/**
@@ -209,9 +222,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataFinalPrices = array(
-		"1"=>"3000",
-		"2"=>"6000",
-		"3"=>"10000",
+		"1" => "3000",
+		"2" => "6000",
+		"3" => "10000",
 	);
 
 	/**
@@ -219,9 +232,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataPriceCounts = array(
-		"1"=>"30 дней",
-		"2"=>"60 дней",
-		"3"=>"60 дней",
+		"1" => "30 дней",
+		"2" => "60 дней",
+		"3" => "60 дней",
 	);
 
 	/**
@@ -229,9 +242,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataCounts = array(
-		"1"=>"2 займа",
-		"2"=>"4 займа",
-		"3"=>"2 займа",
+		"1" => "2 займа",
+		"2" => "4 займа",
+		"3" => "2 займа",
 	);
 
 	/**
@@ -239,49 +252,49 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataTimes = array(
-		"1"=>"7",
-		"2"=>"7",
-		"3"=>"14",
+		"1" => "7",
+		"2" => "7",
+		"3" => "14",
 	);
 
 	/**
 	 * Выбор способа получения займа в зависимости от выбранной на предыдущем шаге суммы
 	 * @param int $chosen_sum_index
+	 *
 	 * @var array
 	 */
 	public static function aWays($chosen_sum_index)
 	{
-		switch ($chosen_sum_index)
-		{
+		switch ($chosen_sum_index) {
 			case 1:
 			{
 				return array(
-					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
-					"2"=>"На сотовый телефон",
+					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+					"2" => "На сотовый телефон",
 				);
 				break;
 			}
 			case 2:
 			{
 				return array(
-					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
 				);
 				break;
 			}
 			case 3:
 			{
 				return array(
-					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
 				);
 				break;
 			}
 			default:
-			{
+				{
 				return array(
-					"1"=>"На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
+					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
 				);
 				break;
-			}
+				}
 		}
 	}
 
@@ -301,68 +314,71 @@ class Dictionaries
 	/**
 	 * выбранный секретный вопрос
 	 * @param $id
+	 *
 	 * @return string
 	 */
 	public static function getSecretQuestionName($id)
 	{
-		return empty( self::$aSecretQuestions[$id] )
+		return empty(self::$aSecretQuestions[$id])
 			? ''
-			: self::$aSecretQuestions[$id]
-			;
+			: self::$aSecretQuestions[$id];
 	}
 
 	/**
 	 * название второго документа
 	 *
 	 * @param $id
+	 *
 	 * @return string
 	 */
 	public static function getDocumentName($id)
 	{
-		return empty( self::$aDocuments[$id] )
+		return empty(self::$aDocuments[$id])
 			? ''
-			: self::$aDocuments[$id]
-		;
+			: self::$aDocuments[$id];
 	}
 
 
 	/**
 	 * Название пола по id
+	 *
 	 * @param $id
+	 *
 	 * @return string
 	 */
 	public static function getSexName($id)
 	{
-		return empty( self::$aSexes[$id] )
+		return empty(self::$aSexes[$id])
 			? ''
-			: self::$aSexes[$id]
-		;
+			: self::$aSexes[$id];
 	}
 
 	/**
 	 * гражданство по id
+	 *
 	 * @param $id
+	 *
 	 * @return string
 	 */
 	public static function getCitizenshipName($id)
 	{
-		return empty( self::$aCitizenship[$id] )
+		return empty(self::$aCitizenship[$id])
 			? ''
-			: self::$aCitizenship[$id]
-		;
+			: self::$aCitizenship[$id];
 	}
 
 	/**
 	 * Название образования по id
+	 *
 	 * @param $id
+	 *
 	 * @return string
 	 */
 	public static function getEducationName($id)
 	{
-		return empty( self::$aEducations[$id] )
+		return empty(self::$aEducations[$id])
 			? ''
-			: self::$aEducations[$id]
-		;
+			: self::$aEducations[$id];
 	}
 
 	/**
@@ -371,7 +387,7 @@ class Dictionaries
 	 */
 	public static function getRegions()
 	{
-		if( empty( self::$aRegions ) ){
+		if (empty(self::$aRegions)) {
 			self::$aRegions = CHtml::listData(
 				Yii::app()->db->createCommand()
 					->select('id,name')
@@ -389,33 +405,31 @@ class Dictionaries
 
 	public static function getRegionName($id)
 	{
-		return empty( self::$aRegions[$id] )
+		return empty(self::$aRegions[$id])
 			? ''
-			: self::$aRegions[$id]
-		;
+			: self::$aRegions[$id];
 	}
 
 	public static function getMaritalName($id)
 	{
-		return empty( self::$aMaritalStatuses[$id] )
+		return empty(self::$aMaritalStatuses[$id])
 			? ''
-			: self::$aMaritalStatuses[$id]
-		;
+			: self::$aMaritalStatuses[$id];
 	}
 
 	public static function getLiabilitiesName($id)
 	{
-		return empty( self::$aLiabilities[$id] )
+		return empty(self::$aLiabilities[$id])
 			? ''
-			: self::$aLiabilities[$id]
-		;
+			: self::$aLiabilities[$id];
 	}
 
 	public static function getYesNo($id)
 	{
-		if($id === null){
+		if ($id === null) {
 			return 'Не указано';
 		}
+
 		return self::$aYesNo[$id];
 	}
 }
