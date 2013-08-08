@@ -175,7 +175,7 @@ class ExampleTest extends CTestCase {
 	}
 
 
-	public function ntestCheckPassportValidRand()
+	public function testCheckPassportValidRand()
 	{
 
 		$randomTimestamp = mktime(0,0,0,rand(1,12),rand(1,31), rand(1900,2050));
