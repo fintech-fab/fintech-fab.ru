@@ -118,8 +118,8 @@ class FormFieldValidateBehavior extends CBehavior
 		$passportDate = $this->owner->$attribute;
 		$birthDate = $this->owner->$param['birthDate'];
 
-		// дата паспорта - больше либо равна текущей дате
-		if (date('Ymd', strtotime($passportDate)) >= date('Ymd')) {
+		// дата паспорта - больше текущей даты
+		if (date('Ymd', strtotime($passportDate)) > date('Ymd')) {
 			$this->owner->addError($attribute, $param['message']);
 
 			return;
