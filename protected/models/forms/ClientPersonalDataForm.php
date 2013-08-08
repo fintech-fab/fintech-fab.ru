@@ -32,8 +32,7 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRequired = array_merge(
-			array(
+		$aRequired = array(
 				'phone',
 				'email',
 
@@ -52,7 +51,6 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 				'document',
 				'document_number',
-			)
 		);
 
 		$aRules =

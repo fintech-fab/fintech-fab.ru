@@ -45,15 +45,6 @@ class SiteParams
 
 	const ANTIBOT_FORM_IN_SHORT = 3; //количество за короткий период
 	const ANTIBOT_FORM_IN_LONG = 5; //количество за длинный период
-	/**
-	 * максимальное число попыток ввода кода из SMS
-	 */
-	const MAX_SMSCODE_TRIES = 3;
-
-	/**
-	 * длина кода подтверждения, отправляемого по SMS
-	 */
-	const C_SMSCODE_LENGTH = 6;
 
 	public static $iTimeNow = null;
 
@@ -72,6 +63,16 @@ class SiteParams
 	const C_NUMERIC_CODE_MIN_LENGTH = 4;
 
 	/**
+	 * максимальное число попыток ввода кода из SMS
+	 */
+	const MAX_SMSCODE_TRIES = 3;
+
+	/**
+	 * длина кода подтверждения, отправляемого по SMS
+	 */
+	const C_SMSCODE_LENGTH = 6;
+
+	/**
 	 * длины серии и номера паспорта
 	 */
 	const C_PASSPORT_S_LENGTH = 4;
@@ -81,6 +82,12 @@ class SiteParams
 	 * почтовый индекс - длина
 	 */
 	const C_POST_INDEX_LENGTH = 6;
+
+	/**
+	 * минимальное и максимальное значение допустимого возраста
+	 */
+	const C_MIN_AGE = 14;
+	const C_MAX_AGE = 120;
 
 	/**
 	 * допустимая длина для ИНН
@@ -114,6 +121,17 @@ class SiteParams
 			? time()
 			: self::$iTimeNow;
 
+	}
+
+	/**
+	 * Считает, сколько полных лет прошло с даты $sDate
+	 * @param string $sDate
+	 *
+	 * @return int
+	 */
+	public static function countYearsAfterDate($sDate)
+	{
+		return (int)((date('Ymd') - date('Ymd', strtotime($sDate))) / 10000);
 	}
 
 

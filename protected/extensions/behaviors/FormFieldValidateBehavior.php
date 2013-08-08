@@ -43,7 +43,12 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
-    public function checkValidClientPhone($attribute, $param)
+	/**
+	 * проверка телефона
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidClientPhone($attribute, $param)
     {
 		if ( $this->owner->$attribute ) {
 			//очистка данных
@@ -68,7 +73,12 @@ class FormFieldValidateBehavior extends CBehavior
 		return empty( $oClient )? false: $oClient;
 	}*/
 
-    public function checkValidClientNumericCode($attribute, $param)
+	/**
+	 * проверка цифрового кода
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidClientNumericCode($attribute, $param)
     {
         //очистка данных
         $this->owner->$attribute = trim($this->owner->$attribute);
@@ -77,6 +87,19 @@ class FormFieldValidateBehavior extends CBehavior
             $this->owner->addError($attribute, $param['message']);
         }
     }
+
+	/**
+	 * проверка, что возраст в заданном диапазоне
+	 * @param string $attribute дата
+	 * @param $param
+	 */
+	public function checkValidAge($attribute, $param)
+	{
+		$iAge = SiteParams::countYearsAfterDate($this->owner->$attribute);
+		if ($iAge < SiteParams::C_MIN_AGE || $iAge > SiteParams::C_MAX_AGE) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+	}
 
     /**
      * форматирование фамилий и имен

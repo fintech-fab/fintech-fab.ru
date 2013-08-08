@@ -214,6 +214,10 @@ class ClientCreateFormAbstract extends CFormModel {
 					break;
 
 				case 'birthday':
+					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
+					$aRules[] = array($sFieldName, 'checkValidAge', 'message' => 'Введите корректное значение даты рождения');
+					break;
+
 				case 'passport_date':
 					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
 					break;
@@ -342,6 +346,17 @@ class ClientCreateFormAbstract extends CFormModel {
 	public function checkValidFio($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidFio($attribute, $param);
+	}
+
+
+	/**
+	 * проверка, что возраст в заданном диапазоне
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidAge($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidAge($attribute, $param);
 	}
 
 	/**
