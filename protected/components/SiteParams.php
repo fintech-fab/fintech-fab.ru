@@ -406,18 +406,6 @@ class SiteParams
 		return $mReturn;
 	}
 
-
-	/**
-	 * Считает, сколько полных лет прошло с даты $sDate
-	 * @param string $sDate
-	 *
-	 * @return int
-	 */
-	public static function countYearsAfterDate($sDate)
-	{
-		return (int)((date('Ymd') - date('Ymd', strtotime($sDate))) / 10000);
-	}
-
 	/**
 	 * @param $sCommand
 	 *
