@@ -255,6 +255,13 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'checkValidPassportIssued', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
 					break;
 
+				// TODO: при необходимости добавить для каждого из полей свою функцию проверки
+				case 'address_reg_region':
+				case 'address_reg_city':
+				case 'address_reg_address':
+					$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+					break;
+
 				case 'phone':
 				case 'phone_home':
 				case 'job_phone':
@@ -372,6 +379,16 @@ class ClientCreateFormAbstract extends CFormModel
 	public function checkValidFio($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidFio($attribute, $param);
+	}
+
+	/**
+	 * проверка составляющих адреса
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidAddressRegion($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidAddressRegion($attribute, $param);
 	}
 
 
