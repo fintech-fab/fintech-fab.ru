@@ -108,6 +108,7 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	public function checkValidPassportDate($attribute, $param)
 	{
+		//TODO: учесть, что если с моменты наступления возраста смены паспорта не прошёл месяц, то ещё действителен старый
 		if (empty($this->owner->$param['birthDate'])) {
 			$this->owner->addError($attribute, $param['messageEmptyBirthday']);
 
