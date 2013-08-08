@@ -211,6 +211,10 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите документ из списка', 'range' => array_keys(Dictionaries::$aDocuments));
 					break;
 
+				case 'document_number':
+					$aRules[] = array($sFieldName, 'checkValidDocumentNumber', 'chosenDocument' => 'document', 'messageEmptyDocument' => 'Сначала выберите тип документа');
+					break;
+
 				case 'education':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите образование из списка', 'range' => array_keys(Dictionaries::$aEducations));
 					break;
@@ -245,6 +249,17 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'address_reg_post_index':
 				case 'address_res_post_index':
 					$aRules[] = array($sFieldName, 'match', 'message' => 'Почтовый индекс должен состоять из шести цифр', 'pattern' => '/^\d{' . SiteParams::C_POST_INDEX_LENGTH . '}$/');
+					break;
+
+				case 'passport_issued':
+					$aRules[] = array($sFieldName, 'checkValidPassportIssued', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+					break;
+
+				// TODO: при необходимости добавить для каждого из полей свою функцию проверки
+				case 'address_reg_region':
+				case 'address_reg_city':
+				case 'address_reg_address':
+					$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
 					break;
 
 				case 'phone':
@@ -347,6 +362,16 @@ class ClientCreateFormAbstract extends CFormModel
 	}
 
 	/**
+	 * проверка учреждения, выдавшего паспорт
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidPassportIssued($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidPassportIssued($attribute, $param);
+	}
+
+	/**
 	 * проверка фио
 	 * @param $attribute
 	 * @param $param
@@ -354,6 +379,16 @@ class ClientCreateFormAbstract extends CFormModel
 	public function checkValidFio($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidFio($attribute, $param);
+	}
+
+	/**
+	 * проверка составляющих адреса
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidAddressRegion($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidAddressRegion($attribute, $param);
 	}
 
 
@@ -375,6 +410,16 @@ class ClientCreateFormAbstract extends CFormModel
 	public function checkValidPassportDate($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidPassportDate($attribute, $param);
+	}
+
+	/**
+	 * проверка номера второго документа на валидность
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidDocumentNumber($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidDocumentNumber($attribute, $param);
 	}
 
 	/**
