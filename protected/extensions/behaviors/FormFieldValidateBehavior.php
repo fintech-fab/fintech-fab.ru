@@ -11,26 +11,26 @@
 
 class FormFieldValidateBehavior extends CBehavior
 {
-    /**
-     * проверка имени клиента
-     * @param string $attribute
-     * @param array $param
-     */
-    public function checkValidClientName($attribute, $param)
-    {
-        if ($this->owner->$attribute) {
-            if (!preg_match('/^[-а-яё\s]+$/ui', $this->owner->$attribute)) {
-                $this->owner->addError($attribute, $param['message']);
-            } else {
-                $this->formatName($this->owner->$attribute);
-            }
-        }
-    }
+	/**
+	 * проверка имени клиента
+	 * @param string $attribute
+	 * @param array  $param
+	 */
+	public function checkValidClientName($attribute, $param)
+	{
+		if ($this->owner->$attribute) {
+			if (!preg_match('/^[-а-яё\s]+$/ui', $this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} else {
+				$this->formatName($this->owner->$attribute);
+			}
+		}
+	}
 
 	/**
 	 * проверка ФИО
 	 * @param string $attribute
-	 * @param array $param
+	 * @param array  $param
 	 */
 	public function checkValidFio($attribute, $param)
 	{
@@ -43,23 +43,28 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
-    public function checkValidClientPhone($attribute, $param)
-    {
-		if ( $this->owner->$attribute ) {
+	/**
+	 * проверка телефона
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidClientPhone($attribute, $param)
+	{
+		if ($this->owner->$attribute) {
 			//очистка данных
-			$this->owner->$attribute = ltrim( $this->owner->$attribute, '+ ' );
+			$this->owner->$attribute = ltrim($this->owner->$attribute, '+ ');
 			$this->owner->$attribute = preg_replace('/[^\d]/', '', $this->owner->$attribute);
 
 			// убираем лишний знак слева (8-ка или 7-ка)
-			if(strlen($this->owner->$attribute) == 11){
-				$this->owner->$attribute = substr($this->owner->$attribute,1,10);
+			if (strlen($this->owner->$attribute) == 11) {
+				$this->owner->$attribute = substr($this->owner->$attribute, 1, 10);
 			}
 
 			if (strlen($this->owner->$attribute) !== SiteParams::C_PHONE_LENGTH) {
 				$this->owner->addError($attribute, $param['message']);
 			}
-        }
-    }
+		}
+	}
 
 	/*public function findClientStatusIdByExtraAttribute( $attribute )
 	{
@@ -68,105 +73,167 @@ class FormFieldValidateBehavior extends CBehavior
 		return empty( $oClient )? false: $oClient;
 	}*/
 
-    public function checkValidClientNumericCode($attribute, $param)
-    {
-        //очистка данных
-        $this->owner->$attribute = trim($this->owner->$attribute);
-        $this->owner->$attribute = preg_replace('/\s+/', '', $this->owner->$attribute);
-        if (strlen($this->owner->$attribute) < SiteParams::C_NUMERIC_CODE_MIN_LENGTH || !preg_match('/^\d+$/', $this->owner->$attribute)) {
-            $this->owner->addError($attribute, $param['message']);
-        }
-    }
+	/**
+	 * проверка цифрового кода
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidClientNumericCode($attribute, $param)
+	{
+		//очистка данных
+		$this->owner->$attribute = trim($this->owner->$attribute);
+		$this->owner->$attribute = preg_replace('/\s+/', '', $this->owner->$attribute);
+		if (strlen($this->owner->$attribute) < SiteParams::C_NUMERIC_CODE_MIN_LENGTH || !preg_match('/^\d+$/', $this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+	}
 
-    /**
-     * форматирование фамилий и имен
-     * @param $strName
-     */
-    private function formatName(&$strName)
-    {
-        $strName = trim($strName);
+	/**
+	 * проверка, что возраст в заданном диапазоне
+	 * @param string $attribute дата
+	 * @param array  $param
+	 */
+	public function checkValidAge($attribute, $param)
+	{
+		$iAge = $this->countYearsBetween2Dates($this->owner->$attribute);
+		if ($iAge < SiteParams::C_MIN_AGE || $iAge > SiteParams::C_MAX_AGE) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+	}
 
-        if (!preg_match('/[-\s]+/', $strName)) {
-            $strName = $this->convertRegistrRussionWord($strName);
-            return;
-        }
+	/**
+	 * проверка даты выдачи паспорта на валидность
+	 * @param string $attribute дата
+	 * @param array  $param
+	 */
+	public function checkValidPassportDate($attribute, $param)
+	{
+		//TODO: учесть, что если с моменты наступления возраста смены паспорта не прошёл месяц, то ещё действителен старый
+		if (empty($this->owner->$param['birthDate'])) {
+			$this->owner->addError($attribute, $param['messageEmptyBirthday']);
 
-        $contains_defis = false;
-        $contains_white = false;
+			return;
+		}
 
-        // убираем обрамляющие дефис пробелы
-        if (preg_match('/-/', $strName)) {
-            $strName = preg_replace('/\s*-+\s*/', '-', $strName);
-            $contains_defis = true;
-        }
+		$passportDate = $this->owner->$attribute;
+		$birthDate = $this->owner->$param['birthDate'];
 
-        // удаляем ненужные пробелы
-        if (preg_match('/\s+/', $strName)) {
-            $strName = preg_replace('/\s+/', ' ', $strName);
-            $contains_white = true;
-        }
+		// дата паспорта - больше либо равна текущей дате
+		if (date('Ymd', strtotime($passportDate)) >= date('Ymd')) {
+			$this->owner->addError($attribute, $param['message']);
 
-        // фамилия содержит только пробел
-        if (!$contains_defis) {
-            $this->rebuildName($strName, ' ');
-            return;
-        }
+			return;
+		}
 
-        // фамилия содержит только дефис
-        if (!$contains_white) {
-            $this->rebuildName($strName, '-');
-            return;
-        }
+		// текущий возраст клиента + месяц
+		$iAge = $this->countYearsBetween2Dates($birthDate);
+		// возраст на момент получения паспорта
+		$iAgePassport = $this->countYearsBetween2Dates($birthDate, $passportDate);
 
-        // если мы здесь - то слово содержит и дефис и пробел
-        $this->rebuildName($strName, '-');
-        $this->rebuildName($strName, ' ');
-    }
+		foreach (SiteParams::$aAgesChangePassport as $key => $iAgeChangePassport) {
+			if ($iAge >= $iAgeChangePassport && $iAgePassport < $iAgeChangePassport) {
+				$this->owner->addError($attribute, $param['message']);
 
-    /**
-     * вспомогательная функция для нормализации фамилий и имен
-     * @param string $strName
-     * @param string $delimiter
-     */
-    private function rebuildName(&$strName, $delimiter)
-    {
-        $aNames = explode($delimiter, $strName);
+				return;
+			}
+		}
+	}
 
-        foreach ($aNames as &$name) {
-            $name = $this->convertRegistrRussionWord($name);
-        }
+	/**
+	 * форматирование фамилий и имен
+	 * @param $strName
+	 */
+	private function formatName(&$strName)
+	{
+		$strName = trim($strName);
 
-        $strName = implode($delimiter, $aNames);
-    }
+		if (!preg_match('/[-\s]+/', $strName)) {
+			$strName = $this->convertRegistrRussionWord($strName);
 
-    /**
-     * изменение регистра для русских букв
-     * @param $strWord
-     * @return string
-     */
-    private function convertRegistrRussionWord($strWord)
-    {
-        $strWord = mb_strtolower($strWord, 'UTF-8');
-        $strWord = mb_convert_case($strWord, MB_CASE_TITLE, "UTF-8");
+			return;
+		}
 
-        return $strWord;
-    }
+		$contains_defis = false;
+		$contains_white = false;
+
+		// убираем обрамляющие дефис пробелы
+		if (preg_match('/-/', $strName)) {
+			$strName = preg_replace('/\s*-+\s*/', '-', $strName);
+			$contains_defis = true;
+		}
+
+		// удаляем ненужные пробелы
+		if (preg_match('/\s+/', $strName)) {
+			$strName = preg_replace('/\s+/', ' ', $strName);
+			$contains_white = true;
+		}
+
+		// фамилия содержит только пробел
+		if (!$contains_defis) {
+			$this->rebuildName($strName, ' ');
+
+			return;
+		}
+
+		// фамилия содержит только дефис
+		if (!$contains_white) {
+			$this->rebuildName($strName, '-');
+
+			return;
+		}
+
+		// если мы здесь - то слово содержит и дефис и пробел
+		$this->rebuildName($strName, '-');
+		$this->rebuildName($strName, ' ');
+	}
+
+	/**
+	 * вспомогательная функция для нормализации фамилий и имен
+	 * @param string $strName
+	 * @param string $delimiter
+	 */
+	private function rebuildName(&$strName, $delimiter)
+	{
+		$aNames = explode($delimiter, $strName);
+
+		foreach ($aNames as &$name) {
+			$name = $this->convertRegistrRussionWord($name);
+		}
+
+		$strName = implode($delimiter, $aNames);
+	}
+
+	/**
+	 * изменение регистра для русских букв
+	 * @param $strWord
+	 *
+	 * @return string
+	 */
+	private function convertRegistrRussionWord($strWord)
+	{
+		$strWord = mb_strtolower($strWord, 'UTF-8');
+		$strWord = mb_convert_case($strWord, MB_CASE_TITLE, "UTF-8");
+
+		return $strWord;
+	}
 
 
 	/**
 	 * добавляет к дате пустое значение чч:мм:сс
 	 * если дата пустая, то в атрибуте будет гггг:мм:дд чч:мм:сс
 	 * @param $attribute
+	 *
 	 * @example ContactForm::afterValidate
 	 */
-	public function addEmptyTime2Date( $attribute ){
+	public function addEmptyTime2Date($attribute)
+	{
 
-		if( strlen( $this->owner->$attribute ) <= 11 ){
-			$this->owner->$attribute = trim( $this->owner->$attribute );
-			if( empty( $this->owner->$attribute ) ){
+		if (strlen($this->owner->$attribute) <= 11) {
+			$this->owner->$attribute = trim($this->owner->$attribute);
+			if (empty($this->owner->$attribute)) {
 				$this->owner->$attribute = SiteParams::EMPTY_DATE;
 			}
-			$this->owner->$attribute = trim( $this->owner->$attribute ) . ' ' . SiteParams::EMPTY_TIME;
+			$this->owner->$attribute = trim($this->owner->$attribute) . ' ' . SiteParams::EMPTY_TIME;
 		}
 
 	}
@@ -176,11 +243,27 @@ class FormFieldValidateBehavior extends CBehavior
 	 * остается только гггг:мм:дд
 	 * @param $attribute
 	 */
-	public function initDateFromDatetime( $attribute )
+	public function initDateFromDatetime($attribute)
 	{
-		$this->owner->$attribute = current(explode(' ', $this->owner->$attribute ));
+		$this->owner->$attribute = current(explode(' ', $this->owner->$attribute));
 	}
 
+	/**
+	 * Считает, сколько полных лет прошло с даты $sDate
+	 *
+	 * @param string      $sDate1
+	 * @param string|null $sDate2
+	 *
+	 * @internal param string $sDate
+	 *
+	 * @return int
+	 */
+	private function countYearsBetween2Dates($sDate1, $sDate2 = '')
+	{
+		$iTimestamp2 = empty($sDate2) ? time() : strtotime($sDate2);
+
+		return (int)((date('Ymd', $iTimestamp2) - date('Ymd', strtotime($sDate1))) / 10000);
+	}
 
 
 	/**
@@ -205,18 +288,20 @@ class FormFieldValidateBehavior extends CBehavior
 	/**
 	 * превращает timestamp в дни и часы,
 	 * сохраняя их в спец-полях *_days и *_hours
+	 *
 	 * @param $attribute
 	 */
-	public function initDaysHoursFromTime( $attribute ){
+	public function initDaysHoursFromTime($attribute)
+	{
 
 		$iTime = $this->getOwner()->$attribute;
 
-		$iDays = floor( $iTime / 60 / 60 / 24 ) ;
-		$iHours = $iTime - $iDays * 60 * 60 * 24 ;
+		$iDays = floor($iTime / 60 / 60 / 24);
+		$iHours = $iTime - $iDays * 60 * 60 * 24;
 		$iHours = $iHours / 60 / 60;
 
-		$sAttrHours = $attribute .'_hours';
-		$sAttrDays = $attribute .'_days';
+		$sAttrHours = $attribute . '_hours';
+		$sAttrDays = $attribute . '_days';
 
 		$this->getOwner()->$sAttrHours = (int)$iHours;
 		$this->getOwner()->$sAttrDays = (int)$iDays;
@@ -250,9 +335,11 @@ class FormFieldValidateBehavior extends CBehavior
 
 		if ($iDate1 > 0 && $iDate2 == 0) {
 			return;
-		} else if ($iDate1 > $iDate2) {
-			$this->owner->addError($dateAttribute1, $sDate1Label . ' не может быть позже или в тот же день с ' . $sDate2Label);
+		} else {
+			if ($iDate1 > $iDate2) {
+				$this->owner->addError($dateAttribute1, $sDate1Label . ' не может быть позже или в тот же день с ' . $sDate2Label);
+			}
 		}
 	}
-	
+
 }

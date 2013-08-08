@@ -2,7 +2,7 @@
 
 /**
  * @property SiteParamValue $param
- * @property array $params
+ * @property array          $params
  */
 class SiteParams
 {
@@ -45,15 +45,6 @@ class SiteParams
 
 	const ANTIBOT_FORM_IN_SHORT = 3; //количество за короткий период
 	const ANTIBOT_FORM_IN_LONG = 5; //количество за длинный период
-	/**
-	 * максимальное число попыток ввода кода из SMS
-	 */
-	const MAX_SMSCODE_TRIES = 3;
-
-	/**
-	 * длина кода подтверждения, отправляемого по SMS
-	 */
-	const C_SMSCODE_LENGTH = 6;
 
 	public static $iTimeNow = null;
 
@@ -72,6 +63,16 @@ class SiteParams
 	const C_NUMERIC_CODE_MIN_LENGTH = 4;
 
 	/**
+	 * максимальное число попыток ввода кода из SMS
+	 */
+	const MAX_SMSCODE_TRIES = 3;
+
+	/**
+	 * длина кода подтверждения, отправляемого по SMS
+	 */
+	const C_SMSCODE_LENGTH = 6;
+
+	/**
 	 * длины серии и номера паспорта
 	 */
 	const C_PASSPORT_S_LENGTH = 4;
@@ -81,6 +82,12 @@ class SiteParams
 	 * почтовый индекс - длина
 	 */
 	const C_POST_INDEX_LENGTH = 6;
+
+	/**
+	 * минимальное и максимальное значение допустимого возраста
+	 */
+	const C_MIN_AGE = 14;
+	const C_MAX_AGE = 120;
 
 	/**
 	 * допустимая длина для ИНН
@@ -115,6 +122,16 @@ class SiteParams
 			: self::$iTimeNow;
 
 	}
+
+	/**
+	 * массив возрастов, в которые меняют паспорт
+	 * @var array
+	 */
+	public static $aAgesChangePassport = array(
+		1 => 14,
+		2 => 20,
+		3 => 45,
+	);
 
 
 	public function getAbsLink($sLocalLink = null)
@@ -238,11 +255,11 @@ class SiteParams
 
 		return (
 			!empty($_SERVER['REMOTE_ADDR']) &&
-				(
-					strpos($_SERVER['REMOTE_ADDR'], '192.') === 0 ||
-					strpos($_SERVER['REMOTE_ADDR'], '10.') === 0 ||
-					strpos($_SERVER['REMOTE_ADDR'], '127.') === 0
-				)
+			(
+				strpos($_SERVER['REMOTE_ADDR'], '192.') === 0 ||
+				strpos($_SERVER['REMOTE_ADDR'], '10.') === 0 ||
+				strpos($_SERVER['REMOTE_ADDR'], '127.') === 0
+			)
 		);
 
 	}
@@ -278,14 +295,16 @@ class SiteParams
 		}
 
 		umask($umask);
+
 		return $bReturn;
 
 	}
 
-		/**
+	/**
 	 * strtotime
 	 *
 	 * @param string|null $sTime
+	 *
 	 * @return int
 	 */
 	public static function strtotime($sTime = null)
@@ -305,6 +324,7 @@ class SiteParams
 
 	/**
 	 * @param int $iTime
+	 *
 	 * @return string
 	 */
 	public static function timetostr($iTime = null)
@@ -320,6 +340,7 @@ class SiteParams
 	 * Возвращает дату в формате Y-m-d из строки datetime
 	 *
 	 * @param string $sDateTime
+	 *
 	 * @return mixed
 	 */
 	public static function getDateFromDateTime($sDateTime)
@@ -337,6 +358,7 @@ class SiteParams
 	public static function getTimeFromDateTime($sDateTime)
 	{
 		$aDateTime = explode(' ', $sDateTime);
+
 		return end($aDateTime);
 	}
 
@@ -347,6 +369,7 @@ class SiteParams
 	 * Может принимать такие аргументы strtotime() как "-1 day"
 	 *
 	 * @param mixed $mDatetime
+	 *
 	 * @return bool|int|null|string
 	 */
 	public static function getDayEndFromDatetime($mDatetime)
@@ -357,6 +380,7 @@ class SiteParams
 		} elseif (is_int($mDatetime)) {
 			$mReturn = strtotime(date('Y-m-d 23:59:59', $mDatetime));
 		}
+
 		return $mReturn;
 	}
 
@@ -367,6 +391,7 @@ class SiteParams
 	 * Может принимать такие аргументы strtotime() как "-1 day"
 	 *
 	 * @param mixed $mDatetime
+	 *
 	 * @return bool|int|null|string
 	 */
 	public static function getDayBeginningFromDatetime($mDatetime)
@@ -377,55 +402,62 @@ class SiteParams
 		} elseif (is_int($mDatetime)) {
 			$mReturn = strtotime(date('Y-m-d 00:00:00', $mDatetime));
 		}
+
 		return $mReturn;
 	}
 
-
 	/**
 	 * @param $sCommand
+	 *
 	 * @return string команда для консоли
 	 */
-	public function getShellCommand( $sCommand )
+	public function getShellCommand($sCommand)
 	{
 		return 'php ' . Yii::app()->getBasePath() . '/../cron/cron.php ' . $sCommand;
 	}
 
 	/**
 	 * @param $sCommand
+	 *
 	 * @return string результат выполнения команды system
 	 */
-	public function execShellCommand( $sCommand )
+	public function execShellCommand($sCommand)
 	{
 		ob_start();
-		system( $this->getShellCommand( $sCommand ) );
+		system($this->getShellCommand($sCommand));
+
 		return ob_get_clean();
 	}
 
 	/**
 	 * @param $sCommand
+	 *
 	 * @return string команда для консоли по тестовому крон-конфигу
 	 */
-	public function getTestShellCommand( $sCommand )
+	public function getTestShellCommand($sCommand)
 	{
 		return 'php ' . Yii::app()->getBasePath() . '/../cron/cron.test.php ' . $sCommand;
 	}
 
 	/**
 	 * @param $sCommand
+	 *
 	 * @return string результат выполнения команды system по тестовому крон-конфигу
 	 */
-	public function execTestShellCommand( $sCommand )
+	public function execTestShellCommand($sCommand)
 	{
 		ob_start();
-		system( $this->getTestShellCommand( $sCommand ) );
+		system($this->getTestShellCommand($sCommand));
+
 		return ob_get_clean();
 	}
 
 
-
 	/**
 	 * содержимое страницы по url
+	 *
 	 * @param $sUrl
+	 *
 	 * @return string
 	 */
 	public function getUrlContents($sUrl)
@@ -434,6 +466,7 @@ class SiteParams
 		curl_setopt($ch, CURLOPT_URL, $sUrl);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
 		return curl_exec($ch);
 	}
 
@@ -470,6 +503,7 @@ class SiteParamValue
 				$aParams[$a['var']] = $a['value'];
 			}
 		}
+
 		return !empty($aParams[$var])
 			? $aParams[$var]
 			: null;
