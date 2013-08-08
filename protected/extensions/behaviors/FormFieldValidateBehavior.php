@@ -131,7 +131,9 @@ class FormFieldValidateBehavior extends CBehavior
 		$iAgePassport = $this->countYearsBetween2Dates($birthDate, $passportDate);
 
 		foreach (SiteParams::$aAgesChangePassport as $key => $iAgeChangePassport) {
-			if ($iAge >= $iAgeChangePassport && $iAgePassport < $iAgeChangePassport) {
+			if ($iAge >= $iAgeChangePassport && $iAgePassport < $iAgeChangePassport ||
+				$key == 1 && $iAge < $iAgeChangePassport
+			) {
 				$this->owner->addError($attribute, $param['message']);
 
 				return;
