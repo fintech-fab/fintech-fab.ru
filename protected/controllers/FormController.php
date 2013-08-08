@@ -121,7 +121,7 @@ class FormController extends Controller
 	{
 		$client_id = Yii::app()->clientForm->getClientId();
 
-		if (Yii::app()->clientForm->getCurrentStep() == 7) {
+		if (Yii::app()->clientForm->getCurrentStep() == 3) {
 
 			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';
 
@@ -146,7 +146,7 @@ class FormController extends Controller
 		$client_id = Yii::app()->clientForm->getClientId();
 
 		if (isset($client_id)
-			&& Yii::app()->clientForm->getCurrentStep() == 8
+			&& Yii::app()->clientForm->getCurrentStep() == 4
 		) {
 
 			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $client_id . '/';

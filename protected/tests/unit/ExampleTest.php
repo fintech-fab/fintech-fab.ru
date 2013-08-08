@@ -178,9 +178,9 @@ class ExampleTest extends CTestCase {
 	public function testCheckPassportValidRand()
 	{
 
-		$randomTimestamp = mktime(0,0,0,rand(1,12),rand(1,31), rand(1900,2050));
+		$randomTimestamp = mktime(0,0,0,rand(1,12),rand(1,31), rand(1850,2050));
 		$sBirthday = date('d.m.Y', $randomTimestamp);
-		$randomTimestamp = mktime(0,0,0,rand(1,12),rand(1,31), rand(1900,2050));
+		$randomTimestamp = mktime(0,0,0,rand(1,12),rand(1,31), rand(1850,2050));
 		$sPassportDate = date('d.m.Y', $randomTimestamp);
 
 		$aPostData = array(
