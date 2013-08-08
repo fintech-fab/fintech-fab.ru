@@ -56,7 +56,8 @@
  *
  * @method FormFieldValidateBehavior asa()
  */
-class ClientCreateFormAbstract extends CFormModel {
+class ClientCreateFormAbstract extends CFormModel
+{
 
 	public $comment; //комментарий
 	public $entry_point_id; //источник анкеты
@@ -117,8 +118,8 @@ class ClientCreateFormAbstract extends CFormModel {
 	public $job_position; // должность
 	public $job_phone; // рабочий телефон
 	public $job_time; // стаж работы
-    public $job_monthly_income; //месячный доход
-    public $job_monthly_outcome; //месячный расход
+	public $job_monthly_income; //месячный доход
+	public $job_monthly_outcome; //месячный расход
 
 	//>--- Наличие кредитной истории ---<//
 
@@ -163,20 +164,21 @@ class ClientCreateFormAbstract extends CFormModel {
 	 * получить правила для полей
 	 * @param array $aFields
 	 * @param array $aRequires
+	 *
 	 * @return array
 	 */
-	protected function getRulesByFields( $aFields, $aRequires = array() )
+	protected function getRulesByFields($aFields, $aRequires = array())
 	{
 
 		$aRules = array();
 
-		if( $aRequires ){
-			$aRules[] = array( $aRequires, 'required' );
+		if ($aRequires) {
+			$aRules[] = array($aRequires, 'required');
 		}
 
-		foreach( $aFields as $sFieldName ){
+		foreach ($aFields as $sFieldName) {
 
-			switch( $sFieldName ){
+			switch ($sFieldName) {
 				case 'first_name':
 				case 'prev_first_name':
 					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Имя может сожержать только русские буквы');
@@ -220,6 +222,11 @@ class ClientCreateFormAbstract extends CFormModel {
 
 				case 'passport_date':
 					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
+					$aRules[] = array(
+						$sFieldName, 'checkValidPassportDate', 'birthDate'            => 'birthday',
+						                                       'message'              => 'Введите корректное значение даты выдачи паспорта',
+						                                       'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения'
+					);
 					break;
 
 				case 'passport_series':
@@ -282,7 +289,7 @@ class ClientCreateFormAbstract extends CFormModel {
 					break;
 
 				case 'citizenship':
-					$aRules[] = array($sFieldName,'in','message'=>'Выберите гражданство из списка.', 'range'=>array_keys(Dictionaries::$aCitizenship));
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите гражданство из списка.', 'range' => array_keys(Dictionaries::$aCitizenship));
 					break;
 
 				case 'inn':
@@ -312,19 +319,19 @@ class ClientCreateFormAbstract extends CFormModel {
 	/**
 	 * передать в форму содержимое оригинального post-запроса
 	 * для предварительной подготовки формы к валидации
+	 *
 	 * @param $aPostParams
 	 */
-	public function setOriginalPost( $aPostParams )
+	public function setOriginalPost($aPostParams)
 	{
 
-		if( !$aPostParams ){
+		if (!$aPostParams) {
 			return;
 		}
 
-		$this->address_reg_as_res = ( empty( $aPostParams['address_reg_as_res'] ) )
+		$this->address_reg_as_res = (empty($aPostParams['address_reg_as_res']))
 			? 0
-			: 1
-		;
+			: 1;
 
 	}
 
@@ -357,6 +364,16 @@ class ClientCreateFormAbstract extends CFormModel {
 	public function checkValidAge($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidAge($attribute, $param);
+	}
+
+	/**
+	 * проверка даты выдачи паспорта на валидность
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidPassportDate($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidPassportDate($attribute, $param);
 	}
 
 	/**
@@ -403,6 +420,7 @@ class ClientCreateFormAbstract extends CFormModel {
 
 	/**
 	 * @param null $aAttributes
+	 *
 	 * @return array
 	 */
 
@@ -416,12 +434,15 @@ class ClientCreateFormAbstract extends CFormModel {
 					$aAttributes[] = $aRule[0];
 				} elseif (gettype($aRule[0]) === "array") {
 					foreach ($aRule[0] as $aSubRule) {
-						if (gettype($aSubRule[0]) === "string") $aAttributes[] = $aSubRule[0];
+						if (gettype($aSubRule[0]) === "string") {
+							$aAttributes[] = $aSubRule[0];
+						}
 					}
 				}
 			}
 			$aAttributes = array_unique($aAttributes);
 		}
+
 		return parent::getAttributes($aAttributes);
 	}
 
@@ -437,10 +458,9 @@ class ClientCreateFormAbstract extends CFormModel {
 		$aDiff = array_diff($aFormFields, $aNoValidFields);
 
 		//проверка на случай, что разницы в массивах нет (т.е. не валидны все поля)
-		if($aDiff) {
+		if ($aDiff) {
 			$aValidFormData = $this->getAttributes($aDiff);
-		}
-		else{
+		} else {
 			$aValidFormData = null;
 		}
 
@@ -455,105 +475,105 @@ class ClientCreateFormAbstract extends CFormModel {
 	{
 
 		return array(
-			'comment' => '',
+			'comment'                => '',
 
-			'entry_point_id' => 'Источник анкеты',
+			'entry_point_id'         => 'Источник анкеты',
 
-			'phone' => 'Мобильный телефон',
-			'phone_home' => 'Домашний телефон',
+			'phone'                  => 'Мобильный телефон',
+			'phone_home'             => 'Домашний телефон',
 
-			'first_name' => 'Имя',
-			'last_name' => 'Фамилия',
-			'third_name' => 'Отчество',
+			'first_name'             => 'Имя',
+			'last_name'              => 'Фамилия',
+			'third_name'             => 'Отчество',
 
-			'prev_last_name' => 'Прежняя фамилия',
+			'prev_last_name'         => 'Прежняя фамилия',
 
-			'sex' => 'Пол',
-			'birthday' => 'День рождения',
-			'numeric_code' => 'Цифровой код (для подтверждения повторных займов)',
-			'email' => 'Email',
-			'marital_status' => 'Семейное положение',
+			'sex'                    => 'Пол',
+			'birthday'               => 'День рождения',
+			'numeric_code'           => 'Цифровой код (для подтверждения повторных займов)',
+			'email'                  => 'Email',
+			'marital_status'         => 'Семейное положение',
 
-			'document' => 'Тип документа',
-			'document_number' => 'Номер документа',
+			'document'               => 'Тип документа',
+			'document_number'        => 'Номер документа',
 
-			'address_reg_region' => 'Регион (республика/край/область)',
+			'address_reg_region'     => 'Регион (республика/край/область)',
 			'address_reg_post_index' => 'Индекс',
-			'address_reg_city' => 'Населенный пункт (город, поселок, деревня)',
-			'address_reg_address' => 'Адрес (улица, дом, корпус/строение, квартира',
+			'address_reg_city'       => 'Населенный пункт (город, поселок, деревня)',
+			'address_reg_address'    => 'Адрес (улица, дом, корпус/строение, квартира',
 
-			'address_reg_as_res' => 'Совпадает с адресом проживания',
+			'address_reg_as_res'     => 'Совпадает с адресом проживания',
 
-			'address_res_region' => 'Регион (республика/край/область)',
+			'address_res_region'     => 'Регион (республика/край/область)',
 			'address_res_post_index' => 'Индекс',
-			'address_res_city' => 'Населенный пункт (город, поселок, деревня и т.д.)',
-			'address_res_address' => 'Адрес (улица, дом, корпус/строение, квартира',
+			'address_res_city'       => 'Населенный пункт (город, поселок, деревня и т.д.)',
+			'address_res_address'    => 'Адрес (улица, дом, корпус/строение, квартира',
 
-			'passport_series' => 'Серия',
-			'passport_number' => 'Номер',
-			'passport_issued' => 'Кем выдан',
-			'passport_date' => 'Дата выдачи',
-			'passport_code' => 'Код подразделения',
+			'passport_series'        => 'Серия',
+			'passport_number'        => 'Номер',
+			'passport_issued'        => 'Кем выдан',
+			'passport_date'          => 'Дата выдачи',
+			'passport_code'          => 'Код подразделения',
 
-			'job_phone' => 'Рабочий телефон',
-			'job_less' => 'Безработный',
-			'job_company' => 'Место работы',
-			'job_position' => 'Должность',
-			'job_time' => 'Стаж работы',
-			'job_salary_date' => 'Дни выдачи зарплаты',
-			'job_prepay_date' => 'Дни выдачи аванса',
-			'job_income_add' => 'Дополнительный доход',
+			'job_phone'              => 'Рабочий телефон',
+			'job_less'               => 'Безработный',
+			'job_company'            => 'Место работы',
+			'job_position'           => 'Должность',
+			'job_time'               => 'Стаж работы',
+			'job_salary_date'        => 'Дни выдачи зарплаты',
+			'job_prepay_date'        => 'Дни выдачи аванса',
+			'job_income_add'         => 'Дополнительный доход',
 
-			'job_contact_name' => 'ФИО руководителя/директора',
-			'job_contact_phone' => 'Телефон руководителя/директора',
+			'job_contact_name'       => 'ФИО руководителя/директора',
+			'job_contact_phone'      => 'Телефон руководителя/директора',
 
-			'have_past_credit' => 'Были кредиты в прошлом?',
-			'have_dependents' => 'Есть иждивенцы',
+			'have_past_credit'       => 'Были кредиты в прошлом?',
+			'have_dependents'        => 'Есть иждивенцы',
 
-			'relatives_degree' => 'Степень родства',
-			'relatives_fio' => 'ФИО',
-			'relatives_phone' => 'Телефон',
+			'relatives_degree'       => 'Степень родства',
+			'relatives_fio'          => 'ФИО',
+			'relatives_phone'        => 'Телефон',
 
-			'relatives_one_fio' => 'ФИО знакомого/родственника',
-			'relatives_one_phone' => 'Телефон знакомого/родственника',
+			'relatives_one_fio'      => 'ФИО знакомого/родственника',
+			'relatives_one_phone'    => 'Телефон знакомого/родственника',
 
-			'friends_fio' => 'ФИО',
-			'friends_phone' => 'Телефон',
+			'friends_fio'            => 'ФИО',
+			'friends_phone'          => 'Телефон',
 
 
 			// старые поля
 
-			'job_monthly_income' => 'Средний месячный доход',
-			'job_monthly_outcome' => 'Средний месячный расход',
+			'job_monthly_income'     => 'Средний месячный доход',
+			'job_monthly_outcome'    => 'Средний месячный расход',
 
-			'prev_first_name' => 'Имя',
-			'prev_third_name' => 'Отчество',
+			'prev_first_name'        => 'Имя',
+			'prev_third_name'        => 'Отчество',
 
-			'education' => 'Образование',
-			'inn' => 'ИНН',
-			'citizenship' => 'Гражданство',
+			'education'              => 'Образование',
+			'inn'                    => 'ИНН',
+			'citizenship'            => 'Гражданство',
 
-			'job_director_name' => 'ФИО директора',
-			'job_director_phone' => 'Телефон директора',
+			'job_director_name'      => 'ФИО директора',
+			'job_director_phone'     => 'Телефон директора',
 
-			'liabilities' => 'Есть другие финансовые обязательства',
+			'liabilities'            => 'Есть другие финансовые обязательства',
 
-			'birthplace_country' => 'Страна рождения',
-			'birthplace_city' => 'Город рождения',
+			'birthplace_country'     => 'Страна рождения',
+			'birthplace_city'        => 'Город рождения',
 
-			'have_car' => 'Есть автомобиль',
-			'have_estate' => 'Есть недвижимость',
-			'have_credit' => 'Есть кредит',
+			'have_car'               => 'Есть автомобиль',
+			'have_estate'            => 'Есть недвижимость',
+			'have_credit'            => 'Есть кредит',
 
-			'address_reg_street' => 'Улица',
-			'address_reg_house' => 'Дом',
-			'address_reg_build' => 'Корпус',
-			'address_reg_apart' => 'Квартира',
+			'address_reg_street'     => 'Улица',
+			'address_reg_house'      => 'Дом',
+			'address_reg_build'      => 'Корпус',
+			'address_reg_apart'      => 'Квартира',
 
-			'address_res_street' => 'Улица',
-			'address_res_house' => 'Дом',
-			'address_res_build' => 'Корпус',
-			'address_res_apart' => 'Квартира',
+			'address_res_street'     => 'Улица',
+			'address_res_house'      => 'Дом',
+			'address_res_build'      => 'Корпус',
+			'address_res_apart'      => 'Квартира',
 
 		);
 	}
@@ -567,12 +587,11 @@ class ClientCreateFormAbstract extends CFormModel {
 		$oPurifier = new CHtmlPurifier;
 		$oPurifier->options = array(
 			//'HTML.SafeObject'=>true,
-			'HTML.Allowed'=>'',
+			'HTML.Allowed' => '',
 		);
-		$aAttributes=$this->getAttributes();
-		foreach($aAttributes as &$sAttribute)
-		{
-			$sAttribute=$oPurifier->purify($sAttribute);
+		$aAttributes = $this->getAttributes();
+		foreach ($aAttributes as &$sAttribute) {
+			$sAttribute = $oPurifier->purify($sAttribute);
 		}
 		$this->setAttributes($aAttributes);
 
