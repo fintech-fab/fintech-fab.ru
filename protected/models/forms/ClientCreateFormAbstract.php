@@ -251,6 +251,10 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'match', 'message' => 'Почтовый индекс должен состоять из шести цифр', 'pattern' => '/^\d{' . SiteParams::C_POST_INDEX_LENGTH . '}$/');
 					break;
 
+				case 'passport_issued':
+					$aRules[] = array($sFieldName, 'checkValidPassportIssued', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+					break;
+
 				case 'phone':
 				case 'phone_home':
 				case 'job_phone':
@@ -348,6 +352,16 @@ class ClientCreateFormAbstract extends CFormModel
 	public function checkValidClientName($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidClientName($attribute, $param);
+	}
+
+	/**
+	 * проверка учреждения, выдавшего паспорт
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidPassportIssued($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidPassportIssued($attribute, $param);
 	}
 
 	/**

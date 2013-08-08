@@ -154,6 +154,17 @@ class FormFieldValidateBehavior extends CBehavior
 	}
 
 	/**
+	 * проверка учреждения, выдавшего паспорт
+	 */
+	public function checkValidPassportIssued($attribute, $param)
+	{
+		$this->owner->$attribute = trim($this->owner->$attribute);
+		if (!preg_match('#^[а-яё0-9,\-. ]+$#ui', $this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+	}
+
+	/**
 	 * проверка номера второго документа на валидность
 	 *
 	 * @param $attribute

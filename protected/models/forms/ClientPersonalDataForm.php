@@ -33,31 +33,32 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 		// всегда обязательные поля
 		$aRequired = array(
-				'phone',
-				'email',
+			'phone',
+			'email',
 
-				'first_name',
-				'last_name',
-				'third_name',
+			'first_name',
+			'last_name',
+			'third_name',
 
-				'birthday',
-				'sex',
+			'birthday',
+			'sex',
 
-				'passport_series',
-				'passport_number',
-				'passport_date',
-				'passport_issued',
-				'passport_code',
+			'passport_series',
+			'passport_number',
+			'passport_date',
+			'passport_issued',
+			'passport_code',
 
-				'document',
-				'document_number',
+			'document',
+			'document_number',
 		);
 
 		$aRules =
 			array(
-				array('phone', 'unique', 'className'=>'ClientData', 'attributeName'=>'phone','message'=>'Ошибка! Позвоните, пожалуйста, на горячую линию.','criteria'=>array(
-						'condition'=>'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed','params' => array(':complete'=>1,':flag_sms_confirmed'=>1)
-					)
+				array(
+					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Позвоните, пожалуйста, на горячую линию.', 'criteria' => array(
+					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
+				)
 				),
 			);
 		$aRules = array_merge($aRules, $this->getRulesByFields(
@@ -85,6 +86,7 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		));
+
 		return $aRules;
 
 	}
@@ -97,17 +99,20 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 	public function beforeValidate()
 	{
-		if ($this->phone)
-		{
+		if ($this->phone) {
 			//очистка данных
-			$this->phone = ltrim( $this->phone, '+ ' );
+			$this->phone = ltrim($this->phone, '+ ');
 			$this->phone = preg_replace('/[^\d]/', '', $this->phone);
 
 			// убираем лишний знак слева (8-ка или 7-ка)
-			if(strlen($this->phone) == 11){
-				$this->phone = substr($this->phone,1,10);
+			if (strlen($this->phone) == 11) {
+				$this->phone = substr($this->phone, 1, 10);
 			}
 		}
+		if ($this->document_number) {
+			$this->document_number = mb_strtoupper($this->document_number, 'UTF-8');
+		}
+
 		return parent::beforeValidate();
 	}
 }
