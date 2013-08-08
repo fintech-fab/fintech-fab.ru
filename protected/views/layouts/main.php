@@ -140,7 +140,7 @@ $this->widget('TopPageWidget',array("show"=>$this->showTopPageWidget));
     var yaParams = {/*Здесь параметры визита*/};
 </script>
 
-<!--script type="text/javascript">
+<script type="text/javascript">
     (function (d, w, c) {
         (w[c] = w[c] || []).push(function() {
             try {
@@ -164,8 +164,8 @@ $this->widget('TopPageWidget',array("show"=>$this->showTopPageWidget));
             d.addEventListener("DOMContentLoaded", f, false);
         } else { f(); }
     })(document, window, "yandex_metrika_callbacks");
-</script-->
-<!--noscript><div><img src="//mc.yandex.ru/watch/21390544" style="position:absolute; left:-9999px;" alt="" /></div></noscript-->
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/21390544" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
 <!-- BEGIN JIVOSITE CODE {literal} -->
 <!--script type='text/javascript'>

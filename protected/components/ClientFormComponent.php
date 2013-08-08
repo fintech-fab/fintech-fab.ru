@@ -374,21 +374,21 @@ class ClientFormComponent
 				return new ClientSelectGetWayForm();
 				break;
 			case 2:
-				return new ClientPersonalDataForm();
-				break;
 			case 3:
-				return new ClientAddressForm();
-				break;
 			case 4:
-				return new ClientJobInfoForm();
+				return new InviteToIdentificationForm();
 				break;
 			case 5:
-				return new ClientSendForm();
+				return new ClientPersonalDataForm();
 				break;
 			case 6:
+				return new ClientAddressForm();
+				break;
 			case 7:
+				return new ClientJobInfoForm();
+				break;
 			case 8:
-				return new InviteToIdentificationForm();
+				return new ClientSendForm();
 				break;
 			case 9:
 				return new ClientConfirmPhoneViaSMSForm();
@@ -415,25 +415,25 @@ class ClientFormComponent
 				return 'client_select_get_way';
 				break;
 			case 2:
-				return 'client_personal_data';
-				break;
-			case 3:
-				return 'client_address';
-				break;
-			case 4:
-				return 'client_job_info';
-				break;
-			case 5:
-				return 'client_send';
-				break;
-			case 6:
 				return 'invite_to_identification';
 				break;
-			case 7:
+			case 3:
 				return 'identification';
 				break;
-			case 8:
+			case 4:
 				return 'documents';
+				break;
+			case 5:
+				return 'client_personal_data';
+				break;
+			case 6:
+				return 'client_address';
+				break;
+			case 7:
+				return 'client_job_info';
+				break;
+			case 8:
+				return 'client_send';
 				break;
 			case 9:
 				return 'client_confirm_phone_via_sms';
@@ -472,13 +472,21 @@ class ClientFormComponent
 				break;
 			case 2:
 			{
+				if (isset($_POST['InviteToIdentificationForm'])) {
+					return $_POST['InviteToIdentificationForm'];
+				}
+				return null;
+			}
+				break;
+			case 5:
+			{
 				if (isset($_POST['ClientPersonalDataForm'])) {
 					return $_POST['ClientPersonalDataForm'];
 				}
 				return null;
 			}
 				break;
-			case 3:
+			case 6:
 			{
 				if (isset($_POST['ClientAddressForm'])) {
 					return $_POST['ClientAddressForm'];
@@ -486,7 +494,7 @@ class ClientFormComponent
 				return null;
 			}
 				break;
-			case 4:
+			case 7:
 			{
 				if (isset($_POST['ClientJobInfoForm'])) {
 					return $_POST['ClientJobInfoForm'];
@@ -494,18 +502,10 @@ class ClientFormComponent
 				return null;
 			}
 				break;
-			case 5:
+			case 8:
 			{
 				if (isset($_POST['ClientSendForm'])) {
 					return $_POST['ClientSendForm'];
-				}
-				return null;
-			}
-				break;
-			case 6:
-			{
-				if (isset($_POST['InviteToIdentificationForm'])) {
-					return $_POST['InviteToIdentificationForm'];
 				}
 				return null;
 			}

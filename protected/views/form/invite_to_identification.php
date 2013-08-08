@@ -37,6 +37,7 @@ $this->pageTitle=Yii::app()->name;
 					'htmlOptions' => array('onclick' => 'js:{
 					    $("#'.get_class($oClientCreateForm).'_go_identification").val("1");
 					    $("#' . get_class($oClientCreateForm) . '").submit();
+					    yaCounter21390544.reachGoal("identification_video");
 					  }')
 				)); ?>
 			</div>
@@ -56,6 +57,7 @@ $this->pageTitle=Yii::app()->name;
 							$("#fl-contacts").modal("show");
 							$("#fl-contacts").on("hide", function() {
                                 $("#' . get_class($oClientCreateForm) . '").submit();
+                                yaCounter21390544.reachGoal("identification_offline");
                             });
 					}'
 					)
