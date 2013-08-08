@@ -14,7 +14,7 @@ class ExampleTest extends CTestCase {
 	{
 
 		$aPostData = array(
-			'birthday' => '22.12.2009',
+			'birthday' => '22.12.1991',
 		);
 
 
@@ -32,7 +32,7 @@ class ExampleTest extends CTestCase {
 	{
 
 		$aPostData = array(
-			'birthday' => '31.11.2009',
+			'birthday' => '30.11.2000',
 		);
 
 
@@ -49,7 +49,8 @@ class ExampleTest extends CTestCase {
 	{
 
 		$aPostData = array(
-			'passport_date' => '29.02.2008',
+			'birthday' => '29.02.1994',
+			'passport_date' => '01.03.2008',
 		);
 
 
@@ -63,10 +64,31 @@ class ExampleTest extends CTestCase {
 
 	}
 
+	public function testCheckPassportValid2()
+	{
+
+		$aPostData = array(
+			'birthday' => '10.10.1945',
+			'passport_date' => '29.02.2000',
+		);
+
+
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('passport_date'), print_r($oForm->getError('passport_date'),true));
+		//$this->assertNotEmpty($oForm->getErrors()['email']);
+
+	}
+
+
 	public function testCheckPassportNonValid()
 	{
 
 		$aPostData = array(
+			'birthday' => '10.10.1945',
 			'passport_date' => '29.02.2005',
 		);
 
@@ -80,5 +102,25 @@ class ExampleTest extends CTestCase {
 		//$this->assertNotEmpty($oForm->getErrors()['email']);
 
 	}
+
+	public function testCheckPassportNonValid2()
+	{
+
+		$aPostData = array(
+			'birthday' => '10.10.1945',
+			'passport_date' => '22.02.1990',
+		);
+
+
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('passport_date'));
+		//$this->assertNotEmpty($oForm->getErrors()['email']);
+
+	}
+
 
 }
