@@ -33,6 +33,9 @@ $a = array(
 		'antiBot'=>array(
 			'class'=>'application.components.AntiBotComponent',
 		),
+		'siteParams'=>array(
+			'class'=>'application.components.SiteParams',
+		),
 		'bootstrap'=>array(
 			'class'=>'bootstrap.components.Bootstrap',
 		),

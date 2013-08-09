@@ -235,12 +235,6 @@ class SiteParams
 	public function init()
 	{
 
-		$this->param = new SiteParamValue($this->params);
-
-		if (Yii::app()->request->getParam('ckey')) {
-			$this->ckey = trim(Yii::app()->request->getParam('ckey'));
-		}
-
 	}
 
 	public function isConsole()
@@ -250,7 +244,7 @@ class SiteParams
 
 	}
 
-	public static function isLocalServer()
+	public function isLocalServer()
 	{
 
 		return (
