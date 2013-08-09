@@ -54,10 +54,10 @@ $this->pageTitle = Yii::app()->name;
 				выходя из дома получаете решение по займу.</p>
 		</div>
 		<div class="span5 offset1"><h4 class="center">Идентификация в офисе Кредди</h4>
-			<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/transport_scheme_1_2.jpg" alt="Карта" />
-			<br /><br />Город Москва, шоссе Энтузиастов 12, корп. 2 <br />ТЦ Город, главный вход, первый этаж <br />Стойка
-			идентификации сервиса Кредди <br /><a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">Узнать
-				подробное местоположение</a>
+			<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" /> <br /><br />Город
+			Москва, шоссе Энтузиастов 12, корп. 2 <br />ТЦ Город, главный вход, первый этаж <br />Стойка идентификации
+			сервиса Кредди <br /><a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">Узнать подробное
+				местоположение</a>
 
 			<div class="clearfix"></div>
 			<div class="form-actions">
