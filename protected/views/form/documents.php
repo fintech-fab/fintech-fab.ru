@@ -24,9 +24,11 @@ $this->showTopPageWidget = false;
 			<div class="span4">
 				<img id="exampleImage" width="100%" /><br /><br />
 
-				<button data-toggle="modal" data-target="#confirm-modal" id="shot-button" class="btn btn-primary" style="display: none;">
-					сфотографировать
-				</button>
+				<div class="center">
+					<button data-toggle="modal" data-target="#confirm-modal" id="shot-button" class="btn btn-primary" style="display: none;">
+						Сфотографировать
+					</button>
+				</div>
 
 			</div>
 			<div class="span4 offset8">
@@ -49,10 +51,10 @@ $this->showTopPageWidget = false;
 </div>
 
 <div class="modal-footer">
-	<div id="confirm_text" class="alert alert-warning" style="text-align: left"></div>
+	<div id="confirm_text" class="alert alert-info" style="text-align: left; font-size: 14px;"></div>
 
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
-		'label'       => 'Закрыть',
+		'label'       => 'Переснять',
 		'url'         => '#',
 		'htmlOptions' => array('data-dismiss' => 'modal'),
 	)); ?>
@@ -148,7 +150,7 @@ $this->showTopPageWidget = false;
 
 			//noinspection JSUnresolvedVariable
 			if (json.next_type === null) {
-				instructions.text('Все документы загружены');
+				instructions.text('Все документы загружены, пожалуйста, подождите, идёт обработка');
 
 				setTimeout(function () {
 					window.location.href = '<?=Yii::app()->createUrl("form/documents");?>';

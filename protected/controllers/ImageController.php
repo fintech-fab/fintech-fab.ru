@@ -10,6 +10,8 @@ class ImageController extends CController
 	const C_TYPE_PASSPORT_NOTIFICATION = 'passport_notification';
 	const C_TYPE_PASSPORT_LAST = 'passport_last';
 
+	const C_CONFIRM_TEXT = 'Если данные хорошо читаемы, нажмите "Продолжить", или закройте окно, нажав на кнопку "Переснять"';
+
 	public static $aTypes = array(
 		self::C_TYPE_PHOTO                 => array(
 			'title'       => 'Фотография клиента',
@@ -19,25 +21,25 @@ class ImageController extends CController
 			'title'        => 'Паспорт - лицевая сторона (первая часть)',
 			'example'      => '/static/img/documents/example1.jpg',
 			'instructions' => 'Покажите в веб-камеру первую страницу паспорта (кем выдан, дата выдачи, код подразделения) и нажмите "сфотографировать"',
-			'confirm_text' => 'Если данные хорошо читаемы, нажмите "продолжить" или закройте окно и нажмите "переснять"',
+			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
 		self::C_TYPE_PASSPORT_FRONT_SECOND => array(
 			'title'        => 'Паспорт - лицевая сторона (первая часть)',
 			'example'      => '/static/img/documents/example2.jpg',
 			'instructions' => 'Покажите в веб-камеру вторую страницу паспорта (ФИО, пол, дата рождения, место рождения) и нажмите "сфотографировать"',
-			'confirm_text' => 'Если данные хорошо читаемы, нажмите "продолжить" или закройте окно и нажмите "переснять"',
+			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
 		self::C_TYPE_PASSPORT_NOTIFICATION => array(
 			'title'        => 'Паспорт - страница регистрации',
 			'example'      => '/static/img/documents/example3.jpg',
 			'instructions' => 'Покажите в веб-камеру страницу регистрации и нажмите "сфотографировать"',
-			'confirm_text' => 'Если данные хорошо читаемы, нажмите "продолжить" или закройте окно и нажмите "переснять"',
+			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
 		self::C_TYPE_PASSPORT_LAST         => array(
 			'title'        => 'Паспорт - последняя страница',
 			'example'      => '/static/img/documents/example4.jpg',
 			'instructions' => 'Покажите в веб-камеру последнюю страницу паспорта (даже если она пуста) и нажмите "сфотографировать"',
-			'confirm_text' => 'Если данные хорошо читаемы, нажмите "продолжить" или закройте окно и нажмите "переснять"',
+			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
 	);
 
