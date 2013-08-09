@@ -13,9 +13,9 @@
 	?>
 </head>
 <body>
-<div class="span12">
-	<div id="instructions">Разрешите использование веб-камеры, если она есть</div>
-	<canvas id="inputCanvas" width="640" height="480" style="display: none; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></canvas>
+<div style="width:400px">
+	<div id="instructions">Разрешите использование веб-камеры, если она есть, чтобы пройти видеоидентификацию</div>
+	<canvas id="inputCanvas" width="400" height="300" style="display: none; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></canvas>
 	<video id="inputVideo" class="span8" width="100%" autoplay loop style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
 	<canvas id="overlay" class="span8"></canvas>
 </div>
