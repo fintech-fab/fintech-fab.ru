@@ -759,7 +759,7 @@ class ClientFormComponent
 		}
 		foreach($aFiles as $sFile)
 		{
-			if(!rename($sOldPath.$sFile,$sNewPath.$sFile)){
+			if(!@rename($sOldPath.$sFile,$sNewPath.$sFile)){
 				return false;
 			}
 		}
