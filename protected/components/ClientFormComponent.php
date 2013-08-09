@@ -83,8 +83,9 @@ class ClientFormComponent
 					Cookie::compareDataInCookie('client', 'phone', $aValidFormData['phone']) &&
 					!empty($aCookieData['client_id'])
 				) {
-					Yii::app()->session['client_id'] = $aCookieData['client_id'];
-					$this->client_id = Yii::app()->session['client_id'];
+					$this->client_id = $aCookieData['client_id'];
+					$this->setClientId($this->client_id);
+
 				} else {
 					/**
 					 * функция addClient()ищет клиента в базе по телефону,
@@ -93,8 +94,7 @@ class ClientFormComponent
 					 */
 					$oClientData = ClientData::addClient($aValidFormData['phone']);
 					Yii::app()->antiBot->addFormRequest();
-					Yii::app()->session['client_id'] = $oClientData->client_id;
-
+					$this->setClientId($oClientData->client_id);
 					$this->client_id = $oClientData->client_id;
 
 					$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $aValidFormData['phone']);
@@ -146,8 +146,9 @@ class ClientFormComponent
 				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
 				!empty($aCookieData['client_id'])
 			) {
-				Yii::app()->session['client_id'] = $aCookieData['client_id'];
-				$this->client_id = Yii::app()->session['client_id'];
+				$this->client_id = $aCookieData['client_id'];
+				$this->setClientId($this->client_id);
+
 			} else {
 				/**
 				 * функция addClient()ищет клиента в базе по телефону,
@@ -157,7 +158,7 @@ class ClientFormComponent
 
 				$oClientData = ClientData::addClient($oClientForm);
 				Yii::app()->antiBot->addFormRequest();
-				Yii::app()->session['client_id'] = $oClientData->client_id;
+				$this->setClientId($oClientData->client_id);
 
 				$this->client_id = $oClientData->client_id;
 
@@ -576,6 +577,14 @@ class ClientFormComponent
 	public function getClientId()
 	{
 		return Yii::app()->session['client_id'];
+	}
+
+	/**
+	 * @param $iClientId
+	 */
+	public function setClientId($iClientId)
+	{
+		Yii::app()->session['client_id']=$iClientId;
 	}
 
 	/**
