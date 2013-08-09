@@ -706,24 +706,25 @@ class ClientFormComponent
 
 	public function clearClientSession()
 	{
+		//сбрасываем шаги заполнения анкеты в 0
 		Yii::app()->session['current_step'] = 0;
 		Yii::app()->session['done_steps'] = 0;
 
+		//удаляем флаги
 		Yii::app()->session['flagSmsSent'] = null;
 		Yii::app()->session['smsCountTries'] = null;
 
-		//TODO: продумать очистку сессии
+		//удаляем идентификаторы
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['tmp_client_id'] = null;
+
+		//чистим данные форм
 		Yii::app()->session['ClientSelectProductForm'] = null;
 		Yii::app()->session['ClientSelectGetWayForm'] = null;
-
-		/*
 		Yii::app()->session['ClientPersonalDataForm']=null;
 		Yii::app()->session['ClientAddressForm']=null;
 		Yii::app()->session['ClientJobInfoForm']=null;
 		Yii::app()->session['ClientSendForm']=null;
-		*/
 	}
 
 
