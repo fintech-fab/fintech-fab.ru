@@ -30,7 +30,7 @@ $this->pageTitle = Yii::app()->name;
 		<div class="span5"><h4 class="center">Видеоидентификация</h4>
 
 			<iframe src="<?php echo Yii::app()
-				->createUrl('/form/checkwebcam'); ?>" width="400px" height="330px" frameborder="no" scrolling="no"></iframe>
+				->createUrl('/form/checkwebcam'); ?>" width="400px" height="313px" frameborder="no" scrolling="no"></iframe>
 
 			<?php echo $form->hiddenField($oClientCreateForm, 'go_identification'); ?>
 			<div class="clearfix"></div>
