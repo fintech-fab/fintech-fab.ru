@@ -167,6 +167,11 @@ class FormController extends Controller
 	}
 
 
+	public function actionCheckWebCam()
+	{
+		$this->renderPartial('check_webcam', array(), false, true);
+	}
+
 
 	public function actionError()
 	{
