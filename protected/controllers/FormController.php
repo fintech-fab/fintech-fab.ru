@@ -119,7 +119,7 @@ class FormController extends Controller
 	public function actionIdentification()
 	{
 		if (Yii::app()->clientForm->getCurrentStep() == 3) {
-			if (Yii::app()->clientForm->checkIdentificationFiles("photo")) {
+			if (Yii::app()->clientForm->checkTmpIdentificationFiles("photo")) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 		}
@@ -133,7 +133,7 @@ class FormController extends Controller
 	{
 		if (Yii::app()->clientForm->getCurrentStep() == 4) {
 
-			if (Yii::app()->clientForm->checkIdentificationFiles("documents")) {
+			if (Yii::app()->clientForm->checkTmpIdentificationFiles("documents")) {
 
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}

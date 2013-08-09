@@ -171,9 +171,11 @@ class ClientFormComponent
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				if ($this->moveIdentificationFiles()) {
-					$aClientData['flag_identified'] = 1;
-					ClientData::saveClientDataById($aClientData, $this->client_id);
+				if (!$this->checkIdentificationFiles()) {
+					if ($this->moveIdentificationFiles()) {
+						$aClientData['flag_identified'] = 1;
+						ClientData::saveClientDataById($aClientData, $this->client_id);
+					}
 				}
 
 
@@ -752,9 +754,28 @@ class ClientFormComponent
 		return true;
 	}
 
-	public function checkIdentificationFiles($sIdentType)
+	public function checkIdentificationFiles()
 	{
-		$sTmpClientId = Yii::app()->clientForm->getTmpClientId();
+		$iClientId = $this->getClientId();
+
+		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/';
+
+		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
+		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
+		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
+		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
+
+		if ($this->checkFiles($aFiles)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function checkTmpIdentificationFiles($sIdentType)
+	{
+		$sTmpClientId = $this->getTmpClientId();
 
 		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
 
@@ -763,20 +784,17 @@ class ClientFormComponent
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
-		}
-		elseif($sIdentType === "photo")
-		{
+		} elseif ($sIdentType === "photo") {
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 		} else {
 			$aFiles = array();
 		}
 
-		if (Yii::app()->clientForm->checkFiles($aFiles)) {
+		if ($this->checkFiles($aFiles)) {
 			return true;
 		}
 
 		return false;
-
 	}
 
 
@@ -814,8 +832,9 @@ class ClientFormComponent
 		return true;
 	}
 
-	public static function deleteDir($dirPath) {
-		if (! is_dir($dirPath)) {
+	public static function deleteDir($dirPath)
+	{
+		if (!is_dir($dirPath)) {
 			return;
 		}
 		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
