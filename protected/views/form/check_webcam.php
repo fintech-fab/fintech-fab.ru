@@ -43,8 +43,8 @@
 			if (event.status == 'camera found') {
 				//рисуем квадрат
 				canvasOverlay.style.position = 'absolute';
-				canvasOverlay.style.top = parseInt($(inputVideo).position().top + 100) + 'px';
-				canvasOverlay.style.left = parseInt($(inputVideo).position().left) + 'px';
+				canvasOverlay.style.top = parseInt($(inputVideo).position().top + 20) + 'px';
+				canvasOverlay.style.left = parseInt($(inputVideo).position().left - 80) + 'px';
 				canvasOverlay.style.zIndex = '10000';
 				canvasOverlay.style.display = 'block';
 
