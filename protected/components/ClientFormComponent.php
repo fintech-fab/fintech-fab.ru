@@ -172,8 +172,7 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
 				//TODO moveFiles
-				if($this->moveIdentificationFiles())
-				{
+				if ($this->moveIdentificationFiles()) {
 					$aClientData['flag_identified'] = 1;
 					ClientData::saveClientDataById($aClientData, $this->client_id);
 				}
@@ -243,6 +242,7 @@ class ClientFormComponent
 	 * Сверяет код из $aPostData с кодом из базы
 	 *
 	 * @param array $aPostData
+	 *
 	 * @return array
 	 */
 	public function checkSmsCode($aPostData)
@@ -480,6 +480,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSelectProductForm'])) {
 					return $_POST['ClientSelectProductForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -488,6 +489,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSelectGetWayForm'])) {
 					return $_POST['ClientSelectGetWayForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -496,6 +498,7 @@ class ClientFormComponent
 				if (isset($_POST['InviteToIdentificationForm'])) {
 					return $_POST['InviteToIdentificationForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -504,6 +507,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientPersonalDataForm'])) {
 					return $_POST['ClientPersonalDataForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -512,6 +516,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientAddressForm'])) {
 					return $_POST['ClientAddressForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -520,6 +525,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientJobInfoForm'])) {
 					return $_POST['ClientJobInfoForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -528,6 +534,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientSendForm'])) {
 					return $_POST['ClientSendForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -536,6 +543,7 @@ class ClientFormComponent
 				if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
 					return $_POST['ClientConfirmPhoneViaSMSForm'];
 				}
+
 				return null;
 			}
 				break;
@@ -584,7 +592,7 @@ class ClientFormComponent
 	 */
 	public function setClientId($iClientId)
 	{
-		Yii::app()->session['client_id']=$iClientId;
+		Yii::app()->session['client_id'] = $iClientId;
 	}
 
 	/**
@@ -592,10 +600,9 @@ class ClientFormComponent
 	 */
 	public function getTmpClientId()
 	{
-		if(empty(Yii::app()->session['tmp_client_id']))
-		{
-			$tmp_client_id = 'tmp'.rand(0,999999);
-			Yii::app()->session['tmp_client_id']=$tmp_client_id;
+		if (empty(Yii::app()->session['tmp_client_id'])) {
+			$tmp_client_id = 'tmp' . rand(0, 999999);
+			Yii::app()->session['tmp_client_id'] = $tmp_client_id;
 		} else {
 			$tmp_client_id = Yii::app()->session['tmp_client_id'];
 		}
@@ -691,10 +698,10 @@ class ClientFormComponent
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['ClientSelectProductForm'] = null;
 		Yii::app()->session['ClientSelectGetWayForm'] = null;
-		Yii::app()->session['client_id']=null;
-		Yii::app()->session['tmp_client_id']=null;
-		Yii::app()->session['ClientSelectProductForm']=null;
-		Yii::app()->session['ClientSelectGetWayForm']=null;
+		Yii::app()->session['client_id'] = null;
+		Yii::app()->session['tmp_client_id'] = null;
+		Yii::app()->session['ClientSelectProductForm'] = null;
+		Yii::app()->session['ClientSelectGetWayForm'] = null;
 
 		/*
 		Yii::app()->session['ClientPersonalDataForm']=null;
@@ -746,6 +753,34 @@ class ClientFormComponent
 		return true;
 	}
 
+	public function checkIdentificationFiles($sIdentType)
+	{
+		$sTmpClientId = Yii::app()->clientForm->getTmpClientId();
+
+		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
+
+		if ($sIdentType === "documents") {
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+		}
+		elseif($sIdentType === "photo")
+		{
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
+		} else {
+			$aFiles = array();
+		}
+
+		if (Yii::app()->clientForm->checkFiles($aFiles)) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+
 	public function moveIdentificationFiles()
 	{
 		$sTmpClientId = $this->getTmpClientId();
@@ -762,17 +797,18 @@ class ClientFormComponent
 		return $this->moveFiles($aFiles, $sFilesPath, Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/');
 	}
 
-	public function moveFiles($aFiles, $sOldPath, $sNewPath){
+	public function moveFiles($aFiles, $sOldPath, $sNewPath)
+	{
 		if (!file_exists($sNewPath)) {
 			@mkdir($sNewPath);
 		}
-		foreach($aFiles as $sFile)
-		{
-			if(!@rename($sOldPath.$sFile,$sNewPath.$sFile)){
+		foreach ($aFiles as $sFile) {
+			if (!@rename($sOldPath . $sFile, $sNewPath . $sFile)) {
 				return false;
 			}
 		}
 		@rmdir($sOldPath);
+
 		return true;
 	}
 }

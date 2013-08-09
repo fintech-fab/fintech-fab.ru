@@ -116,49 +116,26 @@ class FormController extends Controller
 	/**
 	 * Загрузка фото
 	 */
-	//TODO в компонент
+	//TODO перенести в компонент
 	public function actionIdentification()
 	{
-		$sTmpClientId = Yii::app()->clientForm->getTmpClientId();
-
-		if (isset($sTmpClientId)
-			&& Yii::app()->clientForm->getCurrentStep() == 3
-		) {
-
-			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
-
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
-
-			if (Yii::app()->clientForm->checkFiles($aFiles)) {
+		if (Yii::app()->clientForm->getCurrentStep() == 3) {
+			if (Yii::app()->clientForm->checkIdentificationFiles("photo")) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
-			$this->actionIndex();
-		} else {
-			$this->actionIndex();
 		}
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	/**
 	 * Загрузка документов
 	 */
-	//TODO в компонент
+	//TODO перенести в компонент
 	public function actionDocuments()
 	{
+		if (Yii::app()->clientForm->getCurrentStep() == 4) {
 
-		$sTmpClientId = Yii::app()->clientForm->getTmpClientId();
-
-		if (isset($sTmpClientId)
-			&& Yii::app()->clientForm->getCurrentStep() == 4
-		) {
-
-			$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
-
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
-
-			if (Yii::app()->clientForm->checkFiles($aFiles)) {
+			if (Yii::app()->clientForm->checkIdentificationFiles("documents")) {
 
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
