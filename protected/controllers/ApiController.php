@@ -73,5 +73,13 @@ class ApiController extends CController
 		Yii::app()->end();
 	}
 
+	public function beforeAction($oAction)
+	{
+		if(!SiteParams::isLocalServer()){
+			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+			Yii::app()->end();
+		}
+		return parent::beforeAction($oAction);
+	}
 
 }

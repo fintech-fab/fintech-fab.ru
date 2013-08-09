@@ -25,12 +25,12 @@ class Controller extends CController
 	 */
 	public $showTopPageWidget=false;
 
-	protected function beforeAction($action)
+	protected function beforeAction($aAction)
 	{
 		if(Yii::app()->antiBot->checkIsBanned()){
 			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 			Yii::app()->end();
 		}
-		return parent::beforeAction($action);
+		return parent::beforeAction($aAction);
 	}
 }

@@ -250,7 +250,7 @@ class SiteParams
 
 	}
 
-	public function isLocalServer()
+	public static function isLocalServer()
 	{
 
 		return (
