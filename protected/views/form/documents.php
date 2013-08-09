@@ -16,7 +16,7 @@ $this->showTopPageWidget = false;
 
 	<div class="span12">
 		<div class="row">
-			<div class="span4">
+			<div class="span8">
 				<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
 				<video id="inputVideo" class="span8" width="100%" autoplay loop style=""></video>
 
