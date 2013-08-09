@@ -50,14 +50,14 @@
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 </head>
 <!-- ClickTale Bottom part -->
-<!--div id="ClickTaleDiv" style="display: none;"></div-->
-<!--script type="text/javascript">
+<div id="ClickTaleDiv" style="display: none;"></div>
+<script type="text/javascript">
     if(document.location.protocol!='https:')
         document.write(unescape("%3Cscript%20src='http://s.clicktale.net/WRe0.js'%20type='text/javascript'%3E%3C/script%3E"));
-</script-->
-<!--script type="text/javascript">
+</script>
+<script type="text/javascript">
     if(typeof ClickTale=='function') ClickTale(7143,1,"www08");
-</script-->
+</script>
 <!-- ClickTale end of Bottom part -->
 
 <body class="home">
@@ -168,9 +168,10 @@ $this->widget('TopPageWidget',array("show"=>$this->showTopPageWidget));
 <noscript><div><img src="//mc.yandex.ru/watch/21390544" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
 <!-- BEGIN JIVOSITE CODE {literal} -->
-<!--script type='text/javascript'>
+<script type='text/javascript'>
     (function(){ var widget_id = '65726';
-        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();</script>
+        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();
+</script>
 <!-- {/literal} END JIVOSITE CODE -->
 
 </body>
