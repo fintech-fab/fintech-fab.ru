@@ -40,11 +40,7 @@ class FormController extends Controller
 
 			if (isset($oClientForm->go_identification)) {
 				if ($oClientForm->validate()) {
-					if ($oClientForm->go_identification == 1) {
-						Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-					} elseif ($oClientForm->go_identification == 2) {
-						Yii::app()->clientForm->nextStep(3);
-					}
+					Yii::app()->clientForm->goIdentification($oClientForm->go_identification);
 					$oClientForm = Yii::app()->clientForm->getFormModel();
 				}
 			} elseif ($oClientForm->validate()) {

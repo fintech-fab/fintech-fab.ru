@@ -171,7 +171,7 @@ class ClientFormComponent
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				if (!$this->checkIdentificationFiles()) {
+				if (!$this->checkIdentificationFiles()||$this->checkTmpIdentificationFiles()) {
 					if ($this->moveIdentificationFiles()) {
 						$aClientData['flag_identified'] = 1;
 						ClientData::saveClientDataById($aClientData, $this->client_id);
@@ -555,6 +555,19 @@ class ClientFormComponent
 		}
 	}
 
+	public function goIdentification($iIdentCode)
+	{
+		if ($iIdentCode == 1) {
+			$aClientData['identification_type'] = 1;
+			ClientData::saveClientDataById($aClientData, $this->client_id);
+			Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+		} elseif ($iIdentCode == 2) {
+			$aClientData['identification_type'] = 2;
+			ClientData::saveClientDataById($aClientData, $this->client_id);
+			Yii::app()->clientForm->nextStep(3);
+		}
+	}
+
 	/**
 	 * Переводит обработку форм на следующий шаг
 	 *
@@ -773,7 +786,7 @@ class ClientFormComponent
 		return false;
 	}
 
-	public function checkTmpIdentificationFiles($sIdentType)
+	public function checkTmpIdentificationFiles($sIdentType = null)
 	{
 		$sTmpClientId = $this->getTmpClientId();
 
@@ -787,7 +800,11 @@ class ClientFormComponent
 		} elseif ($sIdentType === "photo") {
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 		} else {
-			$aFiles = array();
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 		}
 
 		if ($this->checkFiles($aFiles)) {

@@ -93,6 +93,7 @@
  * @property int $flag_processed
  * @property string $dt_add
  * @property string $dt_update
+ * @property int $identification_type
  * @property int $flag_identified
  * @property int $flag_sms_confirmed
  * @property int $flag_archived
@@ -146,7 +147,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -331,6 +332,7 @@ class ClientData extends CActiveRecord
 			'complete' => 'Complete',
 			'dt_add' => 'Dt Add',
 			'dt_update' => 'Dt Update',
+			'identification_type'=>'Identification Type',
 			'flag_identified' => 'Flag Identified',
 			'flag_sms_confirmed' => 'Flag SMS Confirmed',
 			'flag_processed' => 'Flag Processed',
@@ -390,6 +392,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('complete', $this->complete);
 		$criteria->compare('dt_add', $this->dt_add, true);
 		$criteria->compare('dt_update', $this->dt_update, true);
+		$criteria->compare('identification_type', $this->identification_type, true);
 		$criteria->compare('flag_identified', $this->flag_identified, true);
 		$criteria->compare('flag_sms_confirmed', $this->flag_sms_confirmed, true);
 		$criteria->compare('flag_processed', $this->flag_processed, true);
