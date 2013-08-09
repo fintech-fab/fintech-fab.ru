@@ -8,25 +8,30 @@ $this->widget('TopPageWidget');
 ?>
 <div class="row">
 	<div class="span12">
+
+		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()->createUrl('/form/3')); ?>
+		<br /> <br />
+
 		<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
-			Разрешите использование
-			веб-камеры
+			Разрешите использование веб-камеры
 		</div>
 	</div>
 
 	<div class="span12">
 		<div class="row">
 			<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
-			<video id="inputVideo" class="span8" width="100%" autoplay loop
-			       style=""></video>
+			<video id="inputVideo" class="span8" width="100%" autoplay loop style=""></video>
 
 			<div class="span4">
-				<img id="exampleImage" width="100%"/><br/><br/>
+				<img id="exampleImage" width="100%" /><br /><br />
 
-				<button data-toggle="modal" data-target="#confirm-modal" id="shot-button" class="btn btn-primary"
-				        style="display: none;">сфотографировать
+				<button data-toggle="modal" data-target="#confirm-modal" id="shot-button" class="btn btn-primary" style="display: none;">
+					сфотографировать
 				</button>
+
+				<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
 			</div>
+
 		</div>
 	</div>
 
@@ -39,7 +44,7 @@ $this->widget('TopPageWidget');
 </div>
 
 <div class="modal-body">
-	<img id="resultImage" width="100%" style=""/>
+	<img id="resultImage" width="100%" style="" />
 </div>
 
 <div class="modal-footer">
@@ -134,38 +139,38 @@ $this->widget('TopPageWidget');
 
 		$.post('/image/processPhoto', { image: resultImage.attr('src'), type: currentDocument.type, '<?= Yii::app()->request->csrfTokenName ?>': '<?=Yii::app()->request->csrfToken?>'}, function (response) {
 
-				var json = $.parseJSON(response);
+			var json = $.parseJSON(response);
 
-				shotButton
-					.removeAttr('disabled')
-					.text('Сфотографировать');
+			shotButton
+				.removeAttr('disabled')
+				.text('Сфотографировать');
 
-				//noinspection JSUnresolvedVariable
-				if (json.next_type === null) {
-					instructions.text('Все документы загружены');
+			//noinspection JSUnresolvedVariable
+			if (json.next_type === null) {
+				instructions.text('Все документы загружены');
 
-					setTimeout(function () {
-						window.location.href = '<?=Yii::app()->createUrl("form/documents");?>';
-					}, 2000);
+				setTimeout(function () {
+					window.location.href = '<?=Yii::app()->createUrl("form/documents");?>';
+				}, 2000);
 
-					shotButton.hide();
+				shotButton.hide();
 
-					return;
-				}
+				return;
+			}
 
-				//noinspection JSUnresolvedVariable
-				currentDocument = {
-					type: json.next_type.type,
-					title: json.next_type.title,
-					example: json.next_type.example,
-					instructions: json.next_type.instructions,
-					confirm_text: json.next_type.confirm_text
-				};
+			//noinspection JSUnresolvedVariable
+			currentDocument = {
+				type: json.next_type.type,
+				title: json.next_type.title,
+				example: json.next_type.example,
+				instructions: json.next_type.instructions,
+				confirm_text: json.next_type.confirm_text
+			};
 
-				instructions.text(currentDocument.instructions);
-				exampleImage.attr('src', currentDocument.example);
+			instructions.text(currentDocument.instructions);
+			exampleImage.attr('src', currentDocument.example);
 
-			});
+		});
 	}
 
 </script>

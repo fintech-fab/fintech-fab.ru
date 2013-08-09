@@ -15,12 +15,18 @@
 	?></span>
 
 <?php
-//TODO: при изменении типа документа заново валидировать поле с номером документа
-/*
-Yii::app()->clientScript->registerScript('validate', "
-	jQuery('#".get_class($oClientCreateForm)."_document').change(function(){
-		jQuery('input#".get_class($oClientCreateForm)."_document_number').focus().blur().change();
+//TODO: при изменении типа документа заново валидировать поле с номером документа.
+
+/*$tmp = jQuery("#'.get_class($oClientCreateForm).'_document_number").val();
+		jQuery("#'.get_class($oClientCreateForm).'_document_number").val("1");
+		jQuery("#'.get_class($oClientCreateForm).'_document_number").blur();
+		jQuery("#'.get_class($oClientCreateForm).'_document_number").val($tmp);
+		jQuery("#'.get_class($oClientCreateForm).'_document_number").blur();
+*/
+Yii::app()->clientScript->registerScript('validate_document_number', '
+	jQuery("#' . get_class($oClientCreateForm) . '_document").change(function(){
+		jQuery("#' . get_class($oClientCreateForm) . '_document_number").val("");
 	});
-");*/
+');
 
 ?>

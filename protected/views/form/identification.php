@@ -1,5 +1,6 @@
 <?php
-/* @var $this FormController */
+/* @var FormController $this */
+/* @var ClientCreateFormAbstract $oClientCreateForm */
 
 $this->pageTitle = Yii::app()->name . " - Видеоидентификация лица";
 ?>
@@ -8,18 +9,21 @@ $this->widget('TopPageWidget');
 ?>
 <div class="row">
 	<div class="span12">
+
+		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()->createUrl('/form/3')); ?>
+		<br /> <br />
+
 		<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
-			Разрешите использование
-			веб-камеры
+			Разрешите использование веб-камеры
 		</div>
 	</div>
 
 	<div class="span12">
 		<div class="row">
 			<canvas id="inputCanvas" width="640" height="480" style="display: none; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></canvas>
-			<video id="inputVideo" class="span8" width="100%" autoplay loop
-			       style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
+			<video id="inputVideo" class="span8" width="100%" autoplay loop style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
 			<canvas id="overlay" class="span8"></canvas>
+			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
 		</div>
 	</div>
 
