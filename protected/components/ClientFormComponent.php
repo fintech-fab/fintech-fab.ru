@@ -171,7 +171,7 @@ class ClientFormComponent
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				if (!$this->checkIdentificationFiles()||$this->checkTmpIdentificationFiles()) {
+				if (!$this->checkIdentificationFiles() || $this->checkTmpIdentificationFiles()) {
 					if ($this->moveIdentificationFiles()) {
 						$aClientData['flag_identified'] = 1;
 						ClientData::saveClientDataById($aClientData, $this->client_id);
@@ -557,14 +557,18 @@ class ClientFormComponent
 
 	public function goIdentification($iIdentCode)
 	{
-		if ($iIdentCode == 1) {
-			$aClientData['identification_type'] = 1;
-			ClientData::saveClientDataById($aClientData, $this->client_id);
-			Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-		} elseif ($iIdentCode == 2) {
-			$aClientData['identification_type'] = 2;
-			ClientData::saveClientDataById($aClientData, $this->client_id);
-			Yii::app()->clientForm->nextStep(3);
+		if (!empty($iIdentCode)) {
+			if ($iIdentCode == 1) {
+				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+			} elseif ($iIdentCode == 2) {
+				Yii::app()->clientForm->nextStep(3);
+			}
+
+			if($iIdentCode==1||$iIdentCode==2)
+			{
+				$aClientData['identification_type'] = $iIdentCode;
+				ClientData::saveClientDataById($aClientData, $this->client_id);
+			}
 		}
 	}
 
@@ -709,9 +713,6 @@ class ClientFormComponent
 		Yii::app()->session['smsCountTries'] = null;
 
 		//TODO: продумать очистку сессии
-		Yii::app()->session['client_id'] = null;
-		Yii::app()->session['ClientSelectProductForm'] = null;
-		Yii::app()->session['ClientSelectGetWayForm'] = null;
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['tmp_client_id'] = null;
 		Yii::app()->session['ClientSelectProductForm'] = null;
