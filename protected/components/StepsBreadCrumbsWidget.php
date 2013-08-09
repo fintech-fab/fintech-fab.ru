@@ -3,13 +3,14 @@
 class StepsBreadCrumbsWidget extends CWidget
 {
 	public $crumbs = array(
-		array('Выбор суммы', array("/form/1"), 1),
-		array('Выбор способа получения', array("/form/2"), 2),
-		array('Идентификация', array("/form/identification"), 3),
-		array('Личные данные', array("/form/3"), 4),
-		array('Адрес', array("/form/4"), 4),
-		array('Информация о работе', array("/form/5"), 5),
-		array('Отправка', array("/form/6"), 6),
+		// 2 параметр - номер шага для ссылки form/N и для нумерации, если есть 3 параметр - то он ставится в нумерации
+		array('Выбор суммы', 1),
+		array('Выбор способа получения', 2),
+		array('Идентификация', 3),
+		array('Личные данные', 6, 4),
+		array('Адрес', 7, 4),
+		array('Информация о работе', 8, 5),
+		array('Отправка', 9, 6),
 	);
 
 	public $divider = '→';

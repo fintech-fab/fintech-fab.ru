@@ -4,11 +4,11 @@
 	$number = 1;
 
 	foreach ($this->crumbs as $k => $crumb) {
-		echo $crumb[2] . '. ';
-		if ($number < $this->curStep) {
-			echo '<li class="done">' . CHtml::link($crumb[0], $crumb[1]) . '</li>';
-		} elseif ($number == $this->curStep) {
-			echo '<li class="active">' . CHtml::link($crumb[0], $crumb[1]) . '</li>';
+		echo ((!empty($crumb[2])) ? $crumb[2] : $crumb[1]) . '. ';
+		if ($crumb[1] < $this->curStep) {
+			echo '<li class="done">' . CHtml::link($crumb[0], array("form/$crumb[1]")) . '</li>';
+		} elseif ($crumb[1] == $this->curStep) {
+			echo '<li class="active">' . CHtml::link($crumb[0], array("form/$crumb[1]")) . '</li>';
 		} else {
 			echo '<li><a href="">' . $crumb[0] . '</a></li>';
 		}
