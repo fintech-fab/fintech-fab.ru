@@ -802,6 +802,7 @@ class ClientFormComponent
 			@mkdir($sNewPath);
 		} else {
 			self::deleteDir($sNewPath);
+			@mkdir($sNewPath);
 		}
 		foreach ($aFiles as $sFile) {
 			if (!@rename($sOldPath . $sFile, $sNewPath . $sFile)) {
