@@ -108,10 +108,22 @@ class AntiBotComponent
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_FORM;
 		$iTimeBlock = SiteParams::ANTIBOT_FORM_TIME_BLOCK;
 
+
+		$iTypeForm = SiteParams::U_ACTION_TYPE_FORM;
+		$iTimeShort = SiteParams::ANTIBOT_FORM_TIME_SHORT;
+		$iFormsInShort = SiteParams::ANTIBOT_FORM_IN_SHORT;
+
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
 		if ($iActionCount > 0) {
 			return true;
 		}
+
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeForm, $iTimeShort);
+		if ($iActionCount >= $iFormsInShort) {
+			return true;
+		}
+
 		return false;
 	}
 
