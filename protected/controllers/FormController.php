@@ -116,7 +116,6 @@ class FormController extends Controller
 	/**
 	 * Загрузка фото
 	 */
-	//TODO перенести в компонент
 	public function actionIdentification()
 	{
 		if (Yii::app()->clientForm->getCurrentStep() == 3) {
@@ -130,7 +129,6 @@ class FormController extends Controller
 	/**
 	 * Загрузка документов
 	 */
-	//TODO перенести в компонент
 	public function actionDocuments()
 	{
 		if (Yii::app()->clientForm->getCurrentStep() == 4) {
