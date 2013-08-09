@@ -36,7 +36,7 @@
 			$oClientCreateForm->get_way = "1";
 		}
 		?>
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->clientForm->getSessionProduct()));//TODO: вынести в контроллер
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->clientForm->getSessionProduct()));
 		?>
 	</div>
 

@@ -171,7 +171,6 @@ class ClientFormComponent
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				//TODO moveFiles
 				if ($this->moveIdentificationFiles()) {
 					$aClientData['flag_identified'] = 1;
 					ClientData::saveClientDataById($aClientData, $this->client_id);

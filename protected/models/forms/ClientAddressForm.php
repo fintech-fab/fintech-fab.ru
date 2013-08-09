@@ -18,7 +18,6 @@ class ClientAddressForm extends ClientCreateFormAbstract
 {
 	public function rules()
 	{
-		//TODO подумать, насколько это фэншуйно
 		$phone = Yii::app()->clientForm->getSessionPhone();
 
 		// всегда обязательные поля
