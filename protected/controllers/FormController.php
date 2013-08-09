@@ -127,7 +127,7 @@ class FormController extends Controller
 
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 
-			if ($this->checkFiles($aFiles)) {
+			if (Yii::app()->clientForm->checkFiles($aFiles)) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
 			$this->actionIndex();
@@ -156,7 +156,7 @@ class FormController extends Controller
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
 
-			if ($this->checkFiles($aFiles)) {
+			if (Yii::app()->clientForm->checkFiles($aFiles)) {
 				$aClientData['flag_identified'] = 1;
 
 				ClientData::saveClientDataById($aClientData, $client_id);
@@ -166,21 +166,11 @@ class FormController extends Controller
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
-	//TODO в компонент
-	private function checkFiles($aFiles)
+	public function actionCheckWebCam()
 	{
-		if (!isset($aFiles) || gettype($aFiles) != 'array') {
-			return false;
-		}
-
-		foreach ($aFiles as $sFile) {
-			if (!file_exists($sFile) || !getimagesize($sFile)) {
-				return false;
-			}
-		}
-
-		return true;
+		$this->renderPartial('check_webcam', array(), false, true);
 	}
+
 
 	public function actionError()
 	{

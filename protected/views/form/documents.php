@@ -2,13 +2,10 @@
 /* @var $this FormController */
 
 $this->pageTitle = Yii::app()->name . " - Видеоидентификация документов";
-?>
-<?php
-$this->widget('TopPageWidget');
+$this->showTopPageWidget = false;
 ?>
 <div class="row">
 	<div class="span12">
-
 		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()->createUrl('/form/3')); ?>
 		<br /> <br />
 
@@ -19,9 +16,11 @@ $this->widget('TopPageWidget');
 
 	<div class="span12">
 		<div class="row">
-			<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
-			<video id="inputVideo" class="span8" width="100%" autoplay loop style=""></video>
+			<div class="span4">
+				<canvas id="inputCanvas" width="640" height="480" style="display: none"></canvas>
+				<video id="inputVideo" class="span8" width="100%" autoplay loop style=""></video>
 
+			</div>
 			<div class="span4">
 				<img id="exampleImage" width="100%" /><br /><br />
 
@@ -29,6 +28,8 @@ $this->widget('TopPageWidget');
 					сфотографировать
 				</button>
 
+			</div>
+			<div class="span4 offset8">
 				<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
 			</div>
 
