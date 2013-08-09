@@ -64,7 +64,7 @@ $this->pageTitle = Yii::app()->name;
 				<? $this->widget('bootstrap.widgets.TbButton', array(
 					'buttonType'  => 'button',
 					'type'        => 'primary',
-					'label'       => 'Пройти видеоидентификацию в отделении →',
+					'label'       => 'Пройти идентификацию в отделении →',
 					'htmlOptions' => array(
 						'onclick' => 'js: {
 							$("#' . get_class($oClientCreateForm) . '_go_identification").val("2");
