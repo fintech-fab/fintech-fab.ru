@@ -106,6 +106,10 @@ nav div.navbar-inner {
 	margin-top: 5px !important;
 }
 
+#steps li {
+	color: gray;
+}
+
 .breadcrumb li.active a {
 	color: #ff9731 !important;
 }
