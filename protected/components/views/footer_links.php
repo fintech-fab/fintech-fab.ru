@@ -21,7 +21,7 @@
 
 	<?php
 
-	foreach ($this->links as &$l) {
+	foreach ($this->links as $l) {
 		if ($l->link_url == '') {
 			$this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'fl-' . $l->link_name));
 			echo '	<div class="modal-header">';
@@ -44,7 +44,6 @@
 			$this->endWidget();
 		}
 	}
-	unset($l);
 	?>
 
 
