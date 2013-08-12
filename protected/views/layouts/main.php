@@ -24,10 +24,11 @@
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/reset.css" type="text/css" />
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
 
+	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
+
 	<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 	<?php Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
 	<?php
-
 	Yii::app()->bootstrap->registerCoreCss();
 	Yii::app()->bootstrap->registerYiiCss();
 	Yii::app()->bootstrap->registerCoreScripts();
