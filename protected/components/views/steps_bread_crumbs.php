@@ -10,7 +10,7 @@
 		} elseif ($crumb[1] == $this->curStep) {
 			echo '<li class="active">' . CHtml::link($crumb[0], array("form/$crumb[1]")) . '</li>';
 		} else {
-			echo '<li><a href="">' . $crumb[0] . '</a></li>';
+			echo '<li>' . $crumb[0] . '</li>';
 		}
 
 		if (sizeof($this->crumbs) > ($number)) {
