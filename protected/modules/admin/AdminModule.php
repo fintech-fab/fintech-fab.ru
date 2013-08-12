@@ -16,15 +16,30 @@ class AdminModule extends CWebModule
 		));
 	}
 
+	protected function allowIp($ip)
+	{
+		if(empty($this->ipFilters))
+			return true;
+		foreach($this->ipFilters as $filter)
+		{
+			if($filter==='*' || $filter===$ip || (($pos=strpos($filter,'*'))!==false && !strncmp($ip,$filter,$pos)))
+				return true;
+		}
+		return false;
+	}
+
 	public function beforeControllerAction($controller, $action)
 	{
+		Yii::app()->errorHandler->errorAction='admin/default/error';
+
 		if(parent::beforeControllerAction($controller, $action))
 		{
-			// this method is called before any module controller action is performed
-			// you may place customized code here
+			if(!$this->allowIp(Yii::app()->request->userHostAddress))
+			{
+				Yii::app()->request->redirect(Yii::app()->homeUrl);
+			}
 			return true;
 		}
-		else
-			return false;
+		return false;
 	}
 }

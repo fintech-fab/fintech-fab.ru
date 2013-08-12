@@ -14,6 +14,8 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
+		//echo '<pre>' . ""; echo Yii::app()->request->cookies['TrackingID']; echo '</pre>';
+
 		//TODO убрать в боевой версии
 		if(Yii::app()->request->getIsAjaxRequest())
 		{

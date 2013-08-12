@@ -49,7 +49,7 @@ body
 
 #mainmenu
 {
-	background:white url(bg.gif) repeat-x left top;
+	background-color: rgb(239, 253, 255);
 }
 
 #mainmenu ul
@@ -65,9 +65,9 @@ body
 
 #mainmenu ul li a
 {
-	color:#ffffff;
+	font: bold 12px Arial;
+	color: #0066A4;
 	background-color:transparent;
-	font-size:12px;
 	font-weight:bold;
 	text-decoration:none;
 	padding:5px 8px;
@@ -75,9 +75,14 @@ body
 
 #mainmenu ul li a:hover, #mainmenu ul li.active a
 {
-	color: #6399cd;
-	background-color:#EFF4FA;
+	color: rgb(0, 102, 164);
+	background-color: #80CFFF;
 	text-decoration:none;
+}
+
+#mainmenu ul li a:visited
+{
+	color: rgb(0, 102, 164);
 }
 
 div.flash-error, div.flash-notice, div.flash-success

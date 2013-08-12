@@ -105,6 +105,8 @@ class ClientFormComponent
 			if ($this->client_id) {
 				$aValidFormData['product'] = $this->getSessionProduct();
 				$aValidFormData['get_way'] = $this->getSessionGetWay();
+				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
 				ClientData::saveClientDataById($aValidFormData, $this->client_id);
 
 			}
@@ -169,6 +171,8 @@ class ClientFormComponent
 				$aClientFormData = $oClientForm->getAttributes();
 				$aClientFormData['product'] = $this->getSessionProduct();
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
+				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
 				if (!$this->checkIdentificationFiles() || $this->checkTmpIdentificationFiles()) {
