@@ -2,6 +2,7 @@
 <?php $this->beginContent('//layouts/main'); ?>
 <div class="container">
 	<div class="row">
+		<div class="span9">
 			<?php echo $content; ?>
 		</div><!-- content -->
 		<div class="span3">

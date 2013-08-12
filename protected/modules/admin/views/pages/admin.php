@@ -59,7 +59,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 			(
 				'view' => array
 				(
-					'url'=>'Yii::app()->createUrl("pages/view", array("name"=>"$data->page_name"))',
+					'url'=>'Yii::app()->createUrl("admin/pages/view", array("name"=>"$data->page_name"))',
 				),
 			),
 		),
