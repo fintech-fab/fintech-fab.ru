@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 05 2013 г., 17:23
+-- Время создания: Авг 12 2013 г., 17:46
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS `tbl_bottom_tabs` (
 
 CREATE TABLE IF NOT EXISTS `tbl_client` (
   `client_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(15) NOT NULL COMMENT 'IP клиента',
+  `tracking_id` varchar(20) NOT NULL COMMENT 'Трекинг',
   `phone` char(10) DEFAULT NULL COMMENT 'Телефон',
   `job_phone` char(10) DEFAULT NULL COMMENT 'Рабочий телефон',
   `telecoms_operator` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Мобильный оператор',
@@ -84,6 +86,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `complete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Флаг успешного заполнения анкеты',
   `dt_add` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата добавления',
   `dt_update` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата обновления',
+  `identification_type` tinyint(1) NOT NULL COMMENT 'Тип идентификации (1 - видео, 2 - на стойке)',
   `flag_identified` tinyint(1) NOT NULL COMMENT 'Клиент прошел видеоидентификацию',
   `flag_sms_confirmed` tinyint(1) NOT NULL COMMENT 'Телефон подтвержден по СМС',
   `flag_processed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Обработан системой Кредди',
@@ -92,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=244 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=312 ;
 
 -- --------------------------------------------------------
 
@@ -109,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `tbl_footer_links` (
   `link_content` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`link_id`),
   UNIQUE KEY `link_name` (`link_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=23 ;
 
 -- --------------------------------------------------------
 
@@ -124,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `tbl_pages` (
   `page_content` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Контент страницы',
   PRIMARY KEY (`page_id`),
   UNIQUE KEY `page_name` (`page_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=33 ;
 
 -- --------------------------------------------------------
 
@@ -139,6 +142,20 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
   `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=22 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `tbl_user_actions_log`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_user_actions_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Действие',
+  `type` tinyint(1) NOT NULL COMMENT 'Тип действия',
+  `ip` varchar(15) NOT NULL COMMENT 'IP пользователя',
+  `dt_add` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время создания записи',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
