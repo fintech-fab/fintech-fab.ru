@@ -127,3 +127,7 @@ nav div.navbar-inner {
 	text-shadow: none;
 	color: #333333;
 }
+
+#tabs {
+	margin-bottom: 10px;
+}
