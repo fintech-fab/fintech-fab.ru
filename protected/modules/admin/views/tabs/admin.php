@@ -2,20 +2,20 @@
 /* @var $this TabsController */
 /* @var $model Tabs */
 
-$this->breadcrumbs=array(
-	'Tabs'=>array('index'),
+$this->breadcrumbs = array(
+	'Tabs' => array('index'),
 	'Manage',
 );
 
-$this->menu=array(
-	array('label'=>'Список страниц', 'url'=>array('pages/index')),
-	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
-	array('label'=>'Управление страницами', 'url'=>array('pages/admin')),
-	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
-	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
-	array('label'=>'Список нижних ссылок', 'url'=>array('footerLinks/index')),
-	array('label'=>'Создать нижнюю ссылку', 'url'=>array('footerLinks/create')),
-	array('label'=>'Управление нижними ссылками', 'url'=>array('footerLinks/admin')),
+$this->menu = array(
+	array('label' => 'Список страниц', 'url' => array('pages/index')),
+	array('label' => 'Создать страницу', 'url' => array('pages/create')),
+	array('label' => 'Управление страницами', 'url' => array('pages/admin')),
+	array('label' => 'Список вкладок', 'url' => array('tabs/index')),
+	array('label' => 'Создать вкладку', 'url' => array('tabs/create')),
+	array('label' => 'Список нижних ссылок', 'url' => array('footerLinks/index')),
+	array('label' => 'Создать нижнюю ссылку', 'url' => array('footerLinks/create')),
+	array('label' => 'Управление нижними ссылками', 'url' => array('footerLinks/admin')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -52,7 +52,7 @@ $str_js = "
             update : function () {
                 serial = $('#tabs-grid table.items tbody').sortable('serialize', {key: 'items[]', attribute: 'class'}) + '&{$csrf_token_name}={$csrf_token}';
                 $.ajax({
-                    'url': '" . $this->createUrl('//tabs/sort') . "',
+                    'url': '" . $this->createUrl('sort') . "',
                     'type': 'post',
                     'data': serial,
                     'success': function(data){
@@ -72,22 +72,21 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 <h1>Управление вкладками</h1>
 
 <p>
-	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-	or <b>=</b>) перед поисковым значением для определения правил поиска.
-</p>
+	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
+		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'tabs-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'rowCssClassExpression'=>'"items[]_{$data->tab_id}"',
-	'columns'=>array(
+	'id'                    => 'tabs-grid',
+	'dataProvider'          => $model->search(),
+	'filter'                => $model,
+	'rowCssClassExpression' => '"items[]_{$data->tab_id}"',
+	'columns'               => array(
 		'tab_id',
 		'tab_name',
 		'tab_title',
 		//'tab_content',
 		array(
-			'class'=>'CButtonColumn',
+			'class' => 'CButtonColumn',
 		),
 	),
 )); ?>

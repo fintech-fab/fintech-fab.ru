@@ -2,19 +2,19 @@
 /* @var $this FooterLinksController */
 /* @var $model FooterLinks */
 
-$this->breadcrumbs=array(
-	'Footer Links'=>array('index'),
+$this->breadcrumbs = array(
+	'Footer Links' => array('index'),
 	'Manage',
 );
 
-$this->menu=array(
-	array('label'=>'Список страниц', 'url'=>array('pages/index')),
-	array('label'=>'Создать страницу', 'url'=>array('pages/create')),
-	array('label'=>'Список вкладок', 'url'=>array('tabs/index')),
-	array('label'=>'Создать вкладку', 'url'=>array('tabs/create')),
-	array('label'=>'Управление вкладками', 'url'=>array('tabs/admin')),
-	array('label'=>'Список нижних ссылок', 'url'=>array('footerLinks/index')),
-	array('label'=>'Создать нижнюю ссылку', 'url'=>array('footerLinks/create')),
+$this->menu = array(
+	array('label' => 'Список страниц', 'url' => array('pages/index')),
+	array('label' => 'Создать страницу', 'url' => array('pages/create')),
+	array('label' => 'Список вкладок', 'url' => array('tabs/index')),
+	array('label' => 'Создать вкладку', 'url' => array('tabs/create')),
+	array('label' => 'Управление вкладками', 'url' => array('tabs/admin')),
+	array('label' => 'Список нижних ссылок', 'url' => array('footerLinks/index')),
+	array('label' => 'Создать нижнюю ссылку', 'url' => array('footerLinks/create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -50,7 +50,7 @@ $str_js = "
             update : function () {
                 serial = $('#footer-links-grid table.items tbody').sortable('serialize', {key: 'items[]', attribute: 'class'}) + '&{$csrf_token_name}={$csrf_token}';
                 $.ajax({
-                    'url': '" . $this->createUrl('//footerLinks/sort') . "',
+                    'url': '" . $this->createUrl('sort') . "',
                     'type': 'post',
                     'data': serial,
                     'success': function(data){
@@ -70,23 +70,22 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 <h1>Управление нижними ссылками</h1>
 
 <p>
-	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-	or <b>=</b>) перед поисковым значением для определения правил поиска.
-</p>
+	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
+		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'footer-links-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'rowCssClassExpression'=>'"items[]_{$data->link_id}"',
-	'columns'=>array(
+	'id'                    => 'footer-links-grid',
+	'dataProvider'          => $model->search(),
+	'filter'                => $model,
+	'rowCssClassExpression' => '"items[]_{$data->link_id}"',
+	'columns'               => array(
 		'link_id',
 		'link_name',
 		'link_title',
 		'link_url',
 		//'link_content',
 		array(
-			'class'=>'CButtonColumn',
+			'class' => 'CButtonColumn',
 		),
 	),
 )); ?>
