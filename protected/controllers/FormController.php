@@ -17,9 +17,9 @@ class FormController extends Controller
 		//TODO убрать в боевой версии
 		if(Yii::app()->request->getIsAjaxRequest())
 		{
-		header("HTTP/1.0 500 Internal Server Error");
+		//header("HTTP/1.0 500 Internal Server Error");
 		//header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-		Yii::app()->end();
+		//Yii::app()->end();
 		}
 
 		/*
