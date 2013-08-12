@@ -27,6 +27,21 @@ class Controller extends CController
 
 	protected function beforeAction($aAction)
 	{
+		if($sTrackingID = Yii::app()->request->getParam('TrackingID')){
+			//очистка данных из GET-запроса
+			$oPurifier = new CHtmlPurifier;
+			$oPurifier->options = array(
+				'HTML.Allowed' => '',
+			);
+			$sTrackingID = $oPurifier->purify($sTrackingID);
+			$sTrackingID = preg_replace('/\s+/', '', $sTrackingID);
+			$sTrackingID = preg_replace('/[^\d]/', '', $sTrackingID);
+
+			$cookie = new CHttpCookie('TrackingID', $sTrackingID);
+			$cookie->expire = time()+60*60*24;
+			Yii::app()->request->cookies['TrackingID'] = $cookie;
+		}
+
 		if(Yii::app()->antiBot->checkIsBanned()){
 			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 			Yii::app()->end();

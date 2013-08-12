@@ -52,6 +52,8 @@
  *
  * The followings are the available columns in table 'tbl_client':
  * @property string $client_id
+ * @property string $ip;
+ * @property string $tracking_id
  * @property string $phone
  * @property string $job_phone
  * @property integer $telecoms_operator
@@ -147,7 +149,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, tracking_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -292,6 +294,8 @@ class ClientData extends CActiveRecord
 	{
 		return array(
 			'client_id' => 'Client',
+			'ip' => 'IP',
+			'tracking_id' => 'Tracking ID',
 			'phone' => 'Phone',
 			'job_phone' => 'Job Phone',
 			'telecoms_operator' => 'Telecoms Operator',
@@ -352,6 +356,8 @@ class ClientData extends CActiveRecord
 		$criteria = new CDbCriteria;
 
 		$criteria->compare('client_id', $this->client_id, true);
+		$criteria->compare('ip', $this->client_id, true);
+		$criteria->compare('tracking_id', $this->client_id, true);
 		$criteria->compare('phone', $this->phone, true);
 		$criteria->compare('job_phone', $this->job_phone, true);
 		$criteria->compare('telecoms_operator', $this->telecoms_operator);

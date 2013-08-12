@@ -8,4 +8,7 @@ return array(
 		'password' => '111',
 		'ipFilters' => array('127.0.0.1', '::1'),
 	),
+	'admin' => array(
+		'ipFilters' => array('127.0.0.1', '::1'),
+	),
 );
