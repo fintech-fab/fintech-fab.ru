@@ -50,6 +50,7 @@ body
 #mainmenu
 {
 	background-color: rgb(239, 253, 255);
+	border-left: 5px solid rgb(111, 172, 207);
 }
 
 #mainmenu ul
