@@ -1,8 +1,3 @@
-<?php
-
-
-?>
-
 <div id="footerlinks">
 
 	<p>
@@ -24,12 +19,7 @@
 		?>
 	</p>
 
-
-
-
 	<?php
-
-
 
 	foreach ($this->links as &$l) {
 		if ($l->link_url == '') {
