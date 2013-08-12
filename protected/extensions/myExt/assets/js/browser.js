@@ -2,15 +2,16 @@ function BrowserCompatForVideo() {
 	var
 		rMobile = /(iphone|ipad|android|blackberry|phone)/i,
 		oBrowser = $.browser,
-		iMajorVersion = parseInt($.browser.version.slice(0, 3)),
 		iChromeVersion,
+		iFirefoxVersion,
 		bMsie = false,
 		bMozilla = false,
 		bOpera = false,
-		bWebkit = false,
 		bWebkitChrome = false,
 		bWebkitSafari = false
 		;
+
+	var sUserAgent = navigator.userAgent.toLowerCase();
 
 	if (oBrowser.msie) {
 		bMsie = true;
@@ -18,14 +19,22 @@ function BrowserCompatForVideo() {
 		bOpera = true;
 	} else if (oBrowser.mozilla) {
 		bMozilla = true;
+
+		sUserAgent = sUserAgent.substring(sUserAgent.indexOf('firefox/') + 8);
+		iFirefoxVersion = parseInt(sUserAgent);
+
 	} else if (oBrowser.webkit) {
-		bWebkit = true;
 		bWebkitSafari = !window.chrome;
 		bWebkitChrome = !bWebkitSafari;
 		if (bWebkitChrome) {
-			var sUserAgent = navigator.userAgent.toLowerCase();
+
+			if (sUserAgent.indexOf('opr/') !== -1) {
+				bWebkitChrome = false;
+				bOpera = !bWebkitChrome;
+			}
+
 			sUserAgent = sUserAgent.substring(sUserAgent.indexOf('chrome/') + 7);
-			iChromeVersion = parseInt(sUserAgent.substring(0, sUserAgent.indexOf('.')));
+			iChromeVersion = parseInt(sUserAgent);
 		}
 	}
 
@@ -41,7 +50,7 @@ function BrowserCompatForVideo() {
 		} else if (bWebkitSafari) {
 			return 'Safari';
 		} else if (bMozilla) {
-			return 'Firefox ' + iMajorVersion;
+			return 'Firefox ' + ( iFirefoxVersion ? ' ' + iFirefoxVersion : '' );
 		} else if (bWebkitChrome) {
 			return 'Chrome' + ( iChromeVersion ? ' ' + iChromeVersion : '' );
 		} else {
@@ -59,9 +68,9 @@ function BrowserCompatForVideo() {
 				||
 				( bWebkitSafari )
 				||
-				( bMozilla && iMajorVersion < 4 )
+				( bMozilla && iFirefoxVersion <= 22 )
 				||
-				( bWebkitChrome && iChromeVersion > 0 && iChromeVersion < 25 )
+				( bWebkitChrome && iChromeVersion > 0 && iChromeVersion <= 26 )
 			);
 	}
 }
@@ -73,10 +82,6 @@ $(function () {
 		if (oBrowserCompatForVideo.getBrowser()) {
 			$("#your_browser").html(" Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong>");
 		}
-		$("#browserFormat").slideDown('slow');
+		$("#browserFormat").show();
 	}
-
-	$("#browserFormat a.close").click(function () {
-		$("#browserFormat").slideUp('slow');
-	});
 });

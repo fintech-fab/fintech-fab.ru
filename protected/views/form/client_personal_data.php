@@ -1,7 +1,7 @@
 <?php
-/* @var FormController $this*/
-/* @var ClientPersonalDataForm $model*/
-/* @var IkTbActiveForm $form*/
+/* @var FormController $this */
+/* @var ClientPersonalDataForm $model */
+/* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
 /*
@@ -27,59 +27,61 @@
 ?>
 
 <div class="row">
+	<?php $this->widget('CheckBrowserWidget'); ?>
 
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
 
-	$this->pageTitle=Yii::app()->name;
+	$this->pageTitle = Yii::app()->name;
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id' => get_class($oClientCreateForm),
+		'id'                   => get_class($oClientCreateForm),
 		'enableAjaxValidation' => true,
-		'clientOptions'=>array(
-			'validateOnChange'=>true,
-			'validateOnSubmit'=>true,
+		'clientOptions'        => array(
+			'validateOnChange' => true,
+			'validateOnSubmit' => true,
 		),
-		'action' => Yii::app()->createUrl('/form/'),
+		'action'               => Yii::app()->createUrl('/form/'),
 	));
 	?>
 
-<div class="row span6">
-	<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
-	<h2>Контактные данные</h2>
-		<? require dirname(__FILE__) . '/fields/contacts.php' ?>
-</div>
+	<div class="row span6">
+		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
 
-	<?php $this->widget('ChosenConditionsWidget',array(
-		'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
+		<h2>Контактные данные</h2>
+		<? require dirname(__FILE__) . '/fields/contacts.php' ?>
+	</div>
+
+	<?php $this->widget('ChosenConditionsWidget', array(
+		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
 	)); ?>
 
 
 
-<div class="row span12">
-	<div class="span5"><h2>Личные данные</h2>
-		<? require dirname(__FILE__) . '/fields/name.php' ?>
-		<? require dirname(__FILE__) . '/fields/personal_info.php' ?>
+	<div class="row span12">
+		<div class="span5"><h2>Личные данные</h2>
+			<? require dirname(__FILE__) . '/fields/name.php' ?>
+			<? require dirname(__FILE__) . '/fields/personal_info.php' ?>
+		</div>
+		<div class="span5"><h2>Паспортные данные</h2>
+			<? require dirname(__FILE__) . '/fields/passport.php' ?>
+		</div>
 	</div>
-	<div class="span5"><h2>Паспортные данные</h2>
-		<? require dirname(__FILE__) . '/fields/passport.php' ?>
+
+	<div class="row span12">
+		<h2>Второй документ</h2>
+
+		<? require dirname(__FILE__) . '/fields/document.php' ?>
 	</div>
-</div>
-
-<div class="row span12">
-	<h2>Второй документ</h2>
-
-	<? require dirname(__FILE__) . '/fields/document.php' ?>
-</div>
 
 	<div class="clearfix"></div>
 
 	<div class="form-actions">
 		<? $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
-			'type' => 'primary',
-			'label' => 'Далее →',
+			'type'       => 'primary',
+			'label'      => 'Далее →',
 		)); ?>
 	</div>
 </div>

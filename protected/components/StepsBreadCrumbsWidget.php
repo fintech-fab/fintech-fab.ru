@@ -2,7 +2,7 @@
 
 class StepsBreadCrumbsWidget extends CWidget
 {
-	public $crumbs = array(
+	public $aCrumbs = array(
 		// 2 параметр - номер шага для ссылки form/N и для нумерации, если есть 3 параметр - то он ставится в нумерации
 		array('Выбор суммы', 1),
 		array('Выбор способа получения', 2),
@@ -13,18 +13,18 @@ class StepsBreadCrumbsWidget extends CWidget
 		array('Отправка', 9, 6),
 	);
 
-	public $divider = '→';
+	public $sDivider = '→';
 
-	public $htmlOptions = array(
+	public $aHtmlOptions = array(
 		'class' => 'breadcrumb',
 		'id'    => 'steps',
 	);
 
-	public $curStep; // номер текущего шага
+	public $iCurStep; // номер текущего шага
 
 	public function run()
 	{
-		$this->curStep = Yii::app()->clientForm->getCurrentStep() + 1;
+		$this->iCurStep = Yii::app()->clientForm->getCurrentStep() + 1;
 		$this->render('steps_bread_crumbs');
 	}
 }

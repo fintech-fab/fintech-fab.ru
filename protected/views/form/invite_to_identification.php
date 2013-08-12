@@ -16,6 +16,15 @@ $this->pageTitle = Yii::app()->name;
 ?>
 <div class="row">
 
+	<?php $this->widget('CheckBrowserWidget', array(
+		'sMessage'     => "<strong>Внимание!</strong> Для того чтобы пройти
+видеоидентификацию, Вам нужен браузер <strong>Chrome</strong> или <strong>Firefox</strong>
+последних версий.",
+		'aHtmlOptions' => array(
+			'style' => 'font-size: 15px;',
+		)
+	)); ?>
+
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<div class="row span12">
@@ -54,9 +63,11 @@ $this->pageTitle = Yii::app()->name;
 				выходя из дома получаете решение по займу.</p>
 		</div>
 		<div class="span5 offset1"><h4 class="center">Идентификация в офисе Кредди</h4>
-			<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" /> <br /><br />Город
-			Москва, шоссе Энтузиастов 12, корп. 2 <br />ТЦ Город, главный вход, первый этаж <br />Стойка идентификации
-			сервиса Кредди <br /><a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">Узнать подробное
+			<a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" title="Карта" />
+			</a> <br /><br />Город Москва, шоссе Энтузиастов 12, корп. 2 <br />ТЦ Город, главный вход, первый этаж
+			<br />Стойка идентификации сервиса Кредди
+			<br /><a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">Узнать подробное
 				местоположение</a>
 
 			<div class="clearfix"></div>
