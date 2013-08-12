@@ -14,6 +14,14 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
+
+		if(Yii::app()->request->getIsAjaxRequest())
+		{
+		//header("HTTP/1.0 500 Internal Server Error");
+		//header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+		//Yii::app()->end();
+		}
+
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)

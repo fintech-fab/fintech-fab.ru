@@ -181,7 +181,7 @@ class ClientCreateFormAbstract extends CFormModel
 			switch ($sFieldName) {
 				case 'first_name':
 				case 'prev_first_name':
-					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Имя может сожержать только русские буквы');
+					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Имя может содержать только русские буквы');
 					break;
 
 				case 'last_name':
@@ -191,12 +191,12 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'third_name':
 				case 'prev_third_name':
-					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Отчество может сожержать только русские буквы');
+					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Отчество может содержать только русские буквы');
 					break;
 
 				case 'relatives_one_fio':
 				case 'friends_fio':
-					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может сожержать только русские буквы, пробелы и дефис');
+					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может содержать только русские буквы, пробелы и дефис');
 					break;
 
 				case 'sex':
