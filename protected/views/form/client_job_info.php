@@ -1,7 +1,7 @@
 <?php
-/* @var FormController $this*/
-/* @var ClientJobInfoForm $model*/
-/* @var IkTbActiveForm $form*/
+/* @var FormController $this */
+/* @var ClientJobInfoForm $model */
+/* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
 /*
@@ -18,31 +18,32 @@
 
 <div class="row">
 
+	<?php $this->widget('CheckBrowserWidget'); ?>
+
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
 
-	$this->pageTitle=Yii::app()->name;
+	$this->pageTitle = Yii::app()->name;
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id' => get_class($oClientCreateForm),
+		'id'                   => get_class($oClientCreateForm),
 		'enableAjaxValidation' => true,
-		'clientOptions'=>array(
-			'validateOnChange'=>true,
-			'validateOnSubmit'=>true,
+		'clientOptions'        => array(
+			'validateOnChange' => true,
+			'validateOnSubmit' => true,
 		),
-		'action' => Yii::app()->createUrl('/form/'),
+		'action'               => Yii::app()->createUrl('/form/'),
 	));
 
 	?>
 	<div class="row span6">
-		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/04T.png">
-		<br/>
+		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/04T.png"> <br />
 		<? require dirname(__FILE__) . '/fields/job.php' ?>
 	</div>
 
-	<?php $this->widget('ChosenConditionsWidget',array(
-		'curStep'=>Yii::app()->clientForm->getCurrentStep()+1,
+	<?php $this->widget('ChosenConditionsWidget', array(
+		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
 	)); ?>
 
 	<div class="clearfix"></div>
@@ -50,8 +51,8 @@
 	<div class="form-actions">
 		<? $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
-			'type' => 'primary',
-			'label' => 'Далее →',
+			'type'       => 'primary',
+			'label'      => 'Далее →',
 		)); ?>
 	</div>
 </div>

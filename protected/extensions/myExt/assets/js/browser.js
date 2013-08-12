@@ -7,7 +7,6 @@ function BrowserCompatForVideo() {
 		bMsie = false,
 		bMozilla = false,
 		bOpera = false,
-		bWebkit = false,
 		bWebkitChrome = false,
 		bWebkitSafari = false
 		;
@@ -25,7 +24,6 @@ function BrowserCompatForVideo() {
 		iFirefoxVersion = parseInt(sUserAgent);
 
 	} else if (oBrowser.webkit) {
-		bWebkit = true;
 		bWebkitSafari = !window.chrome;
 		bWebkitChrome = !bWebkitSafari;
 		if (bWebkitChrome) {
@@ -84,10 +82,6 @@ $(function () {
 		if (oBrowserCompatForVideo.getBrowser()) {
 			$("#your_browser").html(" Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong>");
 		}
-		$("#browserFormat").slideDown('slow');
+		$("#browserFormat").show();
 	}
-
-	$("#browserFormat a.close").click(function () {
-		$("#browserFormat").slideUp('slow');
-	});
 });
