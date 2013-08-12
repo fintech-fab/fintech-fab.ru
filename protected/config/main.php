@@ -54,11 +54,18 @@ $a = array(
 				'gii'=>'gii',
 				'gii/<controller:\w+>'=>'gii/<controller>',
 				'gii/<controller:\w+>/<action:\w+>'=>'gii/<controller>/<action>',
+
+				'admin'=>'admin',
+				'admin/<controller:\w+>'=>'admin/<controller>',
+				'admin/<controller:\w+>/<action:\w+>/<id:\d+>'=>'admin/<controller>/<action>',
+				'admin/<controller:\w+>/<action:\w+>/<name:\w+>'=>'admin/<controller>/<action>',
+				'admin/<controller:\w+>/<action:\w+>'=>'admin/<controller>/<action>',
+
 				'form/identification'=>'form/identification',
 				'form/documents'=>'form/documents',
 				'form/ajaxsendsms'=>'form/ajaxsendsms',
 				'form/<step:\d+>'=>'form/step',
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',

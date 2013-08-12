@@ -1,6 +1,6 @@
 <?php
 
-class TabsController extends Controller
+class PagesController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -8,26 +8,6 @@ class TabsController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
-
-	public function actions()
-	{
-		return array(
-			'imageUpload'=>array(
-				'class' => 'ext.RedactorUploadAction',
-				'directory'=>'uploads/images',
-				'validator'=>array(
-					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
-				)
-			),
-			'fileUpload'=>array(
-				'class' => 'ext.RedactorUploadAction',
-				'directory'=>'uploads/files',
-				'validator'=>array(
-					'types' => 'txt, pdf, doc, docx',
-				)
-			),
-		);
-	}
 	/**
 	 * @return array action filters
 	 */
@@ -48,7 +28,7 @@ class TabsController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array(''),
+				'actions'=>array('view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -56,7 +36,7 @@ class TabsController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index','imageUpload','view','sort'),
+				'actions'=>array('admin','delete','create','update','index'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -69,10 +49,11 @@ class TabsController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+	public function actionView($name)
 	{
+		$this->layout='//layouts/column1';
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$this->loadModelByName($name),
 		));
 	}
 
@@ -82,16 +63,16 @@ class TabsController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Tabs;
+		$model=new Pages;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tabs']))
+		if(isset($_POST['Pages']))
 		{
-			$model->attributes=$_POST['Tabs'];
+			$model->attributes=$_POST['Pages'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->tab_id));
+				$this->redirect(array('view','name'=>$model->page_name));
 		}
 
 		$this->render('create',array(
@@ -111,11 +92,11 @@ class TabsController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Tabs']))
+		if(isset($_POST['Pages']))
 		{
-			$model->attributes=$_POST['Tabs'];
+			$model->attributes=$_POST['Pages'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->tab_id));
+				$this->redirect(array('view','name'=>$model->page_name));
 		}
 
 		$this->render('update',array(
@@ -142,7 +123,7 @@ class TabsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Tabs');
+		$dataProvider=new CActiveDataProvider('Pages');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -153,42 +134,35 @@ class TabsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Tabs('search');
+		$model=new Pages('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Tabs']))
-			$model->attributes=$_GET['Tabs'];
+		if(isset($_GET['Pages']))
+			$model->attributes=$_GET['Pages'];
 
 		$this->render('admin',array(
 			'model'=>$model,
 		));
 	}
 
-	public function actionSort()
-	{
-		if( Yii::app()->request->isAjaxRequest )
-		{
-			if( isset( $_POST[ 'items' ] ) && is_array( $_POST[ 'items' ] ) )
-			{
-				foreach( $_POST[ 'items' ] as $key => $val )
-				{
-					Tabs::model()->updateByPk( $val, array (
-						'tab_order' => ( $key + 1 )
-					) );
-				}
-			}
-		}
-	}
-
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Tabs the loaded model
+	 * @return Pages the loaded model
 	 * @throws CHttpException
 	 */
+	public function loadModelByName($name)
+	{
+		//$model=Pages::model()->findByPk($id);
+		$model=Pages::model()->findByAttributes(array('page_name'=>$name));
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
+
 	public function loadModel($id)
 	{
-		$model=Tabs::model()->findByPk($id);
+		$model=Pages::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -196,11 +170,11 @@ class TabsController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Tabs $model the model to be validated
+	 * @param Pages $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='tabs-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='pages-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

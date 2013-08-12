@@ -66,7 +66,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 					'image', 'table', 'link', '|',
 					'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 				'iframe' => true,
-				'imageUpload' => Yii::app()->createUrl("footerLinks/imageUpload"),
+				'imageUpload' => Yii::app()->createUrl("admin/files/imageUpload"),
 				'imageUploadErrorCallback'=> 'js: function(json) { alert(json.error); }',
 				'uploadFields'=>array(
 					Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
