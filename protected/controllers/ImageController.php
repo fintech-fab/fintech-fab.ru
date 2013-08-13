@@ -41,6 +41,12 @@ class ImageController extends CController
 			'instructions' => 'Покажите в веб-камеру страницу паспорта с отметками о ранее выданных паспортах (даже если она пуста) и нажмите "сфотографировать"',
 			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
+		self::C_TYPE_DOCUMENT         => array(
+			'title'        => 'Второй документ',
+			//'example'      => '/static/img/documents/example4.jpg',
+			'instructions' => 'Покажите в веб-камеру второй документ (страницу с личными данными и номером) и нажмите "сфотографировать"',
+			'confirm_text' => self::C_CONFIRM_TEXT,
+		),
 	);
 
 	/**
@@ -163,8 +169,22 @@ class ImageController extends CController
 					echo json_encode($aResponse);
 
 					break;
-				//паспорт - последняя страница
 				case self::C_TYPE_PASSPORT_LAST:
+
+					$this->uploadToUserDir($sImage, $sType);
+
+					$aResponse = array(
+						'next_type' => array_merge(
+							array('type' => self::C_TYPE_DOCUMENT),
+							self::$aTypes[self::C_TYPE_DOCUMENT]
+						),
+					);
+
+					echo json_encode($aResponse);
+
+					break;
+				//второй документ
+				case self::C_TYPE_DOCUMENT:
 
 					$this->uploadToUserDir($sImage, $sType);
 
