@@ -255,7 +255,6 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'checkValidPassportIssued', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
 					break;
 
-				case 'address_reg_region':
 				case 'address_reg_city':
 				case 'address_reg_address':
 					$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
