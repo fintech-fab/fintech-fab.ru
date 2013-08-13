@@ -43,10 +43,11 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		// Some options, see http://imperavi.com/redactor/docs/
 		'options' => array(
 		'lang' => 'ru',
+		'paragraphy' => 'false',
 		'toolbar' => 'classic',
 		'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
 			'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-			'image', 'table', 'link', '|',
+			'image', 'table', 'link','|',
 			'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 		'iframe' => true,
 		'imageUpload' => Yii::app()->createUrl("admin/files/imageUpload"),

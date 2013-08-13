@@ -37,7 +37,7 @@ class TabsController extends Controller
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete','create','update','index','view','sort'),
-				'users'=>array('admin'),
+				'users'=>array(Yii::app()->params['adminName']),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
