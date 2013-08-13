@@ -56,7 +56,6 @@
  * @property string $tracking_id
  * @property string $phone
  * @property string $job_phone
- * @property integer $telecoms_operator
  * @property string $first_name
  * @property string $last_name
  * @property string $third_name
@@ -137,7 +136,7 @@ class ClientData extends CActiveRecord
 		return array(
 			/*
 			array('description, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options', 'required'),
-			array('telecoms_operator, sex', 'numerical', 'integerOnly'=>true),
+			array('sex', 'numerical', 'integerOnly'=>true),
 			array('client_id', 'length', 'max'=>11),
 			array('phone', 'length', 'max'=>10),
 			array('first_name, last_name, third_name, email, address_reg_address', 'length', 'max'=>255),
@@ -149,7 +148,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, ip, tracking_id, phone, job_phone, telecoms_operator, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, tracking_id, phone, job_phone, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -298,7 +297,6 @@ class ClientData extends CActiveRecord
 			'tracking_id' => 'Tracking ID',
 			'phone' => 'Phone',
 			'job_phone' => 'Job Phone',
-			'telecoms_operator' => 'Telecoms Operator',
 			'first_name' => 'First Name',
 			'last_name' => 'Last Name',
 			'third_name' => 'Third Name',
@@ -360,7 +358,6 @@ class ClientData extends CActiveRecord
 		$criteria->compare('tracking_id', $this->client_id, true);
 		$criteria->compare('phone', $this->phone, true);
 		$criteria->compare('job_phone', $this->job_phone, true);
-		$criteria->compare('telecoms_operator', $this->telecoms_operator);
 		$criteria->compare('first_name', $this->first_name, true);
 		$criteria->compare('last_name', $this->last_name, true);
 		$criteria->compare('third_name', $this->third_name, true);
