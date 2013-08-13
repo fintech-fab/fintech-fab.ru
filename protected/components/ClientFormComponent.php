@@ -215,8 +215,9 @@ class ClientFormComponent
 			));
 		}
 
-		$client_id = $this->getClientId();
-		$aClientForm = ClientData::getClientDataById($client_id);
+		$iClientId = $this->getClientId();
+
+		$aClientForm = ClientData::getClientDataById($iClientId);
 
 		// проверяем - есть ли уже код в базе.
 		if (!empty($aClientForm['sms_code'])) {
@@ -230,9 +231,9 @@ class ClientFormComponent
 		if(empty($sSmsCode))
 		{
 			$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
-			$aClientForm['sms_code'] = $sSmsCode;
 			$this->setSmsCode($sSmsCode);
 		}
+		$aClientForm['sms_code'] = $sSmsCode;
 
 		$sPhone = $this->getSessionPhone();
 
@@ -247,7 +248,7 @@ class ClientFormComponent
 			$this->setFlagSmsSent(true);
 
 
-			ClientData::saveClientDataById($aClientForm, $client_id);
+			ClientData::saveClientDataById($aClientForm, $iClientId);
 
 			return CJSON::encode(array(
 				"type" => "0",

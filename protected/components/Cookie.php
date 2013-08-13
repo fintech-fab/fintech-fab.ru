@@ -68,7 +68,7 @@ class Cookie
 		$cookieData = CryptArray::encryptVal($sEncrypt);
 
 		$cookie = new CHttpCookie($cookieName, $cookieData);
-		$cookie->expire = time()+60*60*2;
+		$cookie->expire = time()+60*60*24;
 		Yii::app()->request->cookies[$cookieName] = $cookie;
 	}
 }
