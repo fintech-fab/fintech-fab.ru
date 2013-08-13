@@ -31,9 +31,9 @@ $this->showTopPageWidget = false;
 				<video id="inputVideo" class="span8" width="100%" autoplay loop style="height: 400px; -webkit-transform: scaleX(-1); transform: scaleX(-1);"></video>
 				<canvas id="overlay" class="span8"></canvas>
 			</div>
-			<div class="span4 offset8">
-				<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
-			</div>
+		</div>
+		<div class="row pull-right">
+			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
 		</div>
 	</div>
 

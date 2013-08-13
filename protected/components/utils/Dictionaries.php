@@ -262,6 +262,7 @@ class Dictionaries
 	 * @param int $chosen_sum_index
 	 *
 	 * @var array
+	 * @return array
 	 */
 	public static function aWays($chosen_sum_index)
 	{
@@ -270,7 +271,7 @@ class Dictionaries
 			{
 				return array(
 					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
-					"2" => "На сотовый телефон",
+					"2" => "На сотовый телефон (МТС, Билайн, Мегафон)",
 				);
 				break;
 			}
@@ -289,12 +290,12 @@ class Dictionaries
 				break;
 			}
 			default:
-				{
+			{
 				return array(
 					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
 				);
 				break;
-				}
+			}
 		}
 	}
 
