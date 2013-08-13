@@ -229,7 +229,7 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array(
 						$sFieldName, 'checkValidPassportDate', 'birthDate'            => 'birthday',
 						                                       'message'              => 'Введите корректное значение даты выдачи паспорта',
-						                                       'messageExpiredDate'   => 'Паспорт просрочен',
+						                                       'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
 						                                       'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
 					);
 					break;
