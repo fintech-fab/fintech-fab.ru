@@ -393,12 +393,12 @@ class Dictionaries
 			self::$aRegions = CHtml::listData(
 				Yii::app()->db->createCommand()
 					->select('id,name')
-					->from('regions')
+					->from('tbl_regions')
 					->where('`flag_active`=1')
 					->order('sort ASC')
 					->queryAll()
 				,
-				'id', 'name'
+				'name', 'name'
 			);
 		}
 
