@@ -14,11 +14,6 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
-		//echo '<pre>' . ""; echo Yii::app()->request->cookies['TrackingID']; echo '</pre>';
-
-		Yii::app()->clientForm->setSmsCountTries(0);
-		Yii::app()->clientForm->setFlagSmsSent(false);
-
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)
