@@ -38,7 +38,7 @@ class ImageController extends CController
 		self::C_TYPE_PASSPORT_LAST         => array(
 			'title'        => 'Паспорт - последняя страница',
 			'example'      => '/static/img/documents/example4.jpg',
-			'instructions' => 'Покажите в веб-камеру последнюю страницу паспорта (даже если она пуста) и нажмите "сфотографировать"',
+			'instructions' => 'Покажите в веб-камеру страницу паспорта с отметками о ранее выданных паспортах (даже если она пуста) и нажмите "сфотографировать"',
 			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
 	);
