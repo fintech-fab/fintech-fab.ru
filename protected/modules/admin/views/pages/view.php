@@ -7,7 +7,7 @@ $this->breadcrumbs = array(
 	$model->page_id,
 );
 
-$sUrl = Yii::app()->createAbsoluteUrl('/pages/view/' . $model->page_name);
+$sUrl = Yii::app()->createUrl('/pages/view/' . $model->page_name);
 
 $this->showTopPageWidget = false;
 ?>
@@ -22,7 +22,7 @@ $this->showTopPageWidget = false;
 				'label' => 'Получить ссылку на страницу', 'url' => '#', 'linkOptions' => array(
 				'data-toggle' => 'modal',
 				'data-target' => '#getLink',
-				'onclick'     => 'js: $("#link").val("' . $sUrl . '"); '
+				'onclick'     => "js: $('#link').val('$sUrl');"
 			),
 			),
 			array('label' => 'Редактировать страницу', 'url' => array('/admin/pages/update/' . $model->page_id,),),
