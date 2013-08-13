@@ -848,6 +848,7 @@ class ClientFormComponent
 		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
 		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+		$aFiles[] = $sFilesPath . ImageController::C_TYPE_DOCUMENT . '.png';
 		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 
 		if ($this->checkFiles($aFiles)) {
@@ -869,6 +870,7 @@ class ClientFormComponent
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_DOCUMENT . '.png';
 		} elseif ($sIdentType === "photo") {
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 		} else {
@@ -876,6 +878,7 @@ class ClientFormComponent
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
+			$aFiles[] = $sFilesPath . ImageController::C_TYPE_DOCUMENT . '.png';
 			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
 		}
 
@@ -900,6 +903,7 @@ class ClientFormComponent
 		$aFiles[] = ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
 		$aFiles[] = ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
 		$aFiles[] = ImageController::C_TYPE_PASSPORT_LAST . '.png';
+		$aFiles[] = ImageController::C_TYPE_DOCUMENT . '.png';
 
 		return $this->moveFiles($aFiles, $sFilesPath, Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/');
 	}
