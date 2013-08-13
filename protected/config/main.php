@@ -20,6 +20,7 @@ $a = array(
 		'application.components.utils.*',
 		'application.extensions.behaviors.*',
 		'application.extensions.image.*',
+		'application.extensions.sms.*',
 	),
 
 	'modules' => array(

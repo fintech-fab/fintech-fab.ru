@@ -60,23 +60,30 @@
 					'type'     => "POST",
 					'success'  => "function(data)
                                 {
-                                	$('#send_sms').hide();
+									$('#actionAnswer').html(data.text).hide();
                                 	if(data.type==0)
                                 	{
+                                	    $('#send_sms').hide();
                                 		$('#sms_code_row').show();
                                 		$('.form-actions').show();
                                			$('#alertsmssent').fadeIn();
                                 	}
                                 	else if(data.type==1)
                                 	{
+                                	    $('#send_sms').hide();
                                 		$('#sms_code_row').show();
                                 		$('.form-actions').show();
                                			$('#actionAnswer').html(data.text).show();
                                 	}
                                 	else if(data.type==2)
                                 	{
+                                	    $('#send_sms').hide();
                                 		$('#actionAnswer').html(data.text).show();
                                		}
+                               		else if(data.type==3)
+                                	{
+                                        $('#actionAnswer').html(data.text).show();
+                                	}
                                 } ",
 				),
 			)); ?>

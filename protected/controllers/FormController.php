@@ -16,13 +16,8 @@ class FormController extends Controller
 
 		//echo '<pre>' . ""; echo Yii::app()->request->cookies['TrackingID']; echo '</pre>';
 
-		//TODO убрать в боевой версии
-		if(Yii::app()->request->getIsAjaxRequest())
-		{
-		//header("HTTP/1.0 500 Internal Server Error");
-		//header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-		//Yii::app()->end();
-		}
+		Yii::app()->clientForm->setSmsCountTries(0);
+		Yii::app()->clientForm->setFlagSmsSent(false);
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует

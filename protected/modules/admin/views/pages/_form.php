@@ -44,9 +44,9 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 			'options'     => array(
 				'lang'                     => 'ru',
-				'paragraphy' => false,
 				'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
 				'removeEmptyTags'=>false,
+				'convertDivs' => false,
 				'toolbar'                  => 'classic',
 				'buttons'                  => array(
 					'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',
