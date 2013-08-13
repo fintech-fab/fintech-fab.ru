@@ -66,7 +66,7 @@ class RedactorUploadAction extends CAction
         if (strlen($ext)) $name = substr($name, 0, -1 - strlen($ext));
 
         for ($i = 1, $filePath = $dstDir . $name . '.' . $ext; file_exists($webroot . $filePath); $i++) {
-            $filePath = $dstDir . $name . " ($i)." . $ext;
+            $filePath = $dstDir . $name . "_$i." . $ext;
         }
 
         $file->saveAs($webroot . $filePath);
