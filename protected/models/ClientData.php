@@ -62,7 +62,6 @@
  * @property integer $sex
  * @property string $birthday
  * @property string $email
- * @property string $description
  * @property string $passport_series
  * @property string $passport_number
  * @property string $passport_issued
@@ -89,7 +88,6 @@
  * @property integer $sms_code
  * @property integer $product
  * @property integer $get_way
- * @property string $options
  * @property integer $complete
  * @property int $flag_processed
  * @property string $dt_add
@@ -135,7 +133,7 @@ class ClientData extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			/*
-			array('description, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, options', 'required'),
+			array('passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address', 'required'),
 			array('sex', 'numerical', 'integerOnly'=>true),
 			array('client_id', 'length', 'max'=>11),
 			array('phone', 'length', 'max'=>10),
@@ -148,7 +146,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, ip, tracking_id, phone, job_phone, first_name, last_name, third_name, sex, birthday, email, description, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, options, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, tracking_id, phone, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -303,7 +301,6 @@ class ClientData extends CActiveRecord
 			'sex' => 'Sex',
 			'birthday' => 'Birthday',
 			'email' => 'Email',
-			'description' => 'Description',
 			'passport_series' => 'Passport Series',
 			'passport_number' => 'Passport Number',
 			'passport_issued' => 'Passport Issued',
@@ -330,7 +327,6 @@ class ClientData extends CActiveRecord
 			'sms_code' => 'SMS Code',
 			'product' => 'Product',
 			'get_way' => 'Get Way',
-			'options' => 'Options',
 			'complete' => 'Complete',
 			'dt_add' => 'Dt Add',
 			'dt_update' => 'Dt Update',
@@ -364,7 +360,6 @@ class ClientData extends CActiveRecord
 		$criteria->compare('sex', $this->sex);
 		$criteria->compare('birthday', $this->birthday, true);
 		$criteria->compare('email', $this->email, true);
-		$criteria->compare('description', $this->description, true);
 		$criteria->compare('passport_series', $this->passport_series, true);
 		$criteria->compare('passport_number', $this->passport_number, true);
 		$criteria->compare('passport_issued', $this->passport_issued, true);
@@ -391,7 +386,6 @@ class ClientData extends CActiveRecord
 		$criteria->compare('sms_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
 		$criteria->compare('get_way', $this->get_way);
-		$criteria->compare('options', $this->options, true);
 		$criteria->compare('complete', $this->complete);
 		$criteria->compare('dt_add', $this->dt_add, true);
 		$criteria->compare('dt_update', $this->dt_update, true);
