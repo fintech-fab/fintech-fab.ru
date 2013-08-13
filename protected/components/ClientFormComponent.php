@@ -4,16 +4,6 @@
  * занимается обработкой данных сессии и cookies
  * и передачей результата по запросу контроллера форм.
  * Также выполняет команды контроллера по обработке форм.
- *
- * Соответствие шага в сессии обрабатываемой форме и отображаемому представлению
- * Шаг - Модель (отображение)     - Представление
- * 0 - ClientSelectProductForm  - client_select_product
- * 1 - ClientGetWayForm         - client_get_way
- * 2 - ClientPersonalDataForm   - client_personal_data
- * 3 - ClientAddressForm        - client_address
- * 4 - ClientJobInfoForm        - client_job_info client
- * 5 - ClientSendForm           - client_send
- * 6 - ______________           - /pages/view/form_sent
  */
 
 /**
