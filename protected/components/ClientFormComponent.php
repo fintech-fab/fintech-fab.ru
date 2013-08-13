@@ -226,19 +226,20 @@ class ClientFormComponent
 			));
 		}
 
-		//TODO писать код в сессию и проверять
-		$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
-		$aClientForm['sms_code'] = $sSmsCode;
-
+		$sSmsCode = $this->getSmsCode();
+		if(empty($sSmsCode))
+		{
+			$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+			$aClientForm['sms_code'] = $sSmsCode;
+			$this->setSmsCode($sSmsCode);
+		}
 
 		$sPhone = $this->getSessionPhone();
-
-		//$sPhone = '9154701913';
 
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		if (!empty($sPhone) && !empty($sSmsCode)) {
 			//отправляем СМС
-			//SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+			SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 			//если отправлено успешно,
 			//то добавляем в лог запрос sms с этого ip
@@ -731,6 +732,24 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @return string
+	 */
+
+	public function getSmsCode()
+	{
+		return (isset(Yii::app()->session['smsCode'])) ? Yii::app()->session['smsCode'] : '';
+	}
+
+	/**
+	 * @param $sSmsCode
+	 */
+	public
+	function setSmsCode($sSmsCode)
+	{
+		Yii::app()->session['smsCode'] = $sSmsCode;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public
@@ -758,6 +777,7 @@ class ClientFormComponent
 		//удаляем флаги
 		Yii::app()->session['flagSmsSent'] = null;
 		Yii::app()->session['smsCountTries'] = null;
+		Yii::app()->session['smsCode'] = null;
 
 		//удаляем идентификаторы
 		Yii::app()->session['client_id'] = null;

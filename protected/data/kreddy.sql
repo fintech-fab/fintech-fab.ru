@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 12 2013 г., 17:46
+-- Время создания: Авг 13 2013 г., 12:58
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -26,6 +26,7 @@ SET time_zone = "+00:00";
 -- Структура таблицы `tbl_bottom_tabs`
 --
 
+DROP TABLE IF EXISTS `tbl_bottom_tabs`;
 CREATE TABLE IF NOT EXISTS `tbl_bottom_tabs` (
   `tab_id` int(11) NOT NULL AUTO_INCREMENT,
   `tab_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
@@ -42,13 +43,13 @@ CREATE TABLE IF NOT EXISTS `tbl_bottom_tabs` (
 -- Структура таблицы `tbl_client`
 --
 
+DROP TABLE IF EXISTS `tbl_client`;
 CREATE TABLE IF NOT EXISTS `tbl_client` (
   `client_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `ip` varchar(15) NOT NULL COMMENT 'IP клиента',
   `tracking_id` varchar(20) NOT NULL COMMENT 'Трекинг',
   `phone` char(10) DEFAULT NULL COMMENT 'Телефон',
   `job_phone` char(10) DEFAULT NULL COMMENT 'Рабочий телефон',
-  `telecoms_operator` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'Мобильный оператор',
   `first_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Имя',
   `last_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Фамилия',
   `third_name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Отчество',
@@ -63,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `passport_date` date NOT NULL COMMENT 'Дата выдачи паспорта',
   `document` varchar(100) NOT NULL COMMENT 'Второй документ',
   `document_number` varchar(30) NOT NULL COMMENT 'Номер второго документа',
-  `address_reg_region` varchar(100) NOT NULL COMMENT 'Регион',
+  `address_reg_region` tinyint(3) NOT NULL COMMENT 'Регион',
   `address_reg_city` varchar(100) NOT NULL COMMENT 'Населенный пункт',
   `address_reg_address` varchar(255) NOT NULL COMMENT 'Адрес',
   `relatives_one_fio` varchar(255) NOT NULL COMMENT 'Контактное лицо',
@@ -80,8 +81,8 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `secret_answer` varchar(255) NOT NULL COMMENT 'Ответ на вопрос',
   `numeric_code` int(11) NOT NULL COMMENT 'Цифровой код',
   `sms_code` char(6) NOT NULL COMMENT 'Код SMS-подтверждения',
-  `product` tinyint(1) NOT NULL,
-  `get_way` tinyint(1) NOT NULL,
+  `product` tinyint(1) NOT NULL COMMENT 'Продукт',
+  `get_way` tinyint(1) NOT NULL COMMENT 'Способ получения',
   `options` text NOT NULL COMMENT 'Сериализованные дополнительные данные',
   `complete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Флаг успешного заполнения анкеты',
   `dt_add` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата добавления',
@@ -95,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=312 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=315 ;
 
 -- --------------------------------------------------------
 
@@ -103,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
 -- Структура таблицы `tbl_footer_links`
 --
 
+DROP TABLE IF EXISTS `tbl_footer_links`;
 CREATE TABLE IF NOT EXISTS `tbl_footer_links` (
   `link_id` int(11) NOT NULL AUTO_INCREMENT,
   `link_order` int(11) NOT NULL,
@@ -120,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `tbl_footer_links` (
 -- Структура таблицы `tbl_pages`
 --
 
+DROP TABLE IF EXISTS `tbl_pages`;
 CREATE TABLE IF NOT EXISTS `tbl_pages` (
   `page_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID страницы',
   `page_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Имя страницы для вызова по имени',
@@ -132,9 +135,26 @@ CREATE TABLE IF NOT EXISTS `tbl_pages` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `tbl_regions`
+--
+
+DROP TABLE IF EXISTS `tbl_regions`;
+CREATE TABLE IF NOT EXISTS `tbl_regions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(100) CHARACTER SET utf32 NOT NULL DEFAULT '' COMMENT 'Название региона',
+  `sort` int(3) unsigned NOT NULL DEFAULT '999' COMMENT 'Порядок в списке',
+  `flag_active` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Активен',
+  PRIMARY KEY (`id`),
+  KEY `order` (`sort`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=176 ;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `tbl_user`
 --
 
+DROP TABLE IF EXISTS `tbl_user`;
 CREATE TABLE IF NOT EXISTS `tbl_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
@@ -149,13 +169,14 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
 -- Структура таблицы `tbl_user_actions_log`
 --
 
+DROP TABLE IF EXISTS `tbl_user_actions_log`;
 CREATE TABLE IF NOT EXISTS `tbl_user_actions_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Действие',
   `type` tinyint(1) NOT NULL COMMENT 'Тип действия',
   `ip` varchar(15) NOT NULL COMMENT 'IP пользователя',
   `dt_add` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время создания записи',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
