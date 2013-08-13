@@ -44,7 +44,7 @@ class ImageController extends CController
 		),
 		self::C_TYPE_DOCUMENT         => array(
 			'title'        => 'Второй документ',
-			//'example'      => '/static/img/documents/example4.jpg',
+			'example'      => '',
 			'instructions' => 'Покажите в веб-камеру второй документ (страницу с личными данными и номером) и нажмите "сфотографировать"',
 			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
