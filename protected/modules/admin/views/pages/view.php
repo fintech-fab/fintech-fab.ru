@@ -7,6 +7,8 @@ $this->breadcrumbs = array(
 	$model->page_id,
 );
 
+$sUrl = Yii::app()->createAbsoluteUrl('/pages/view/' . $model->page_name);
+
 $this->showTopPageWidget = false;
 ?>
 
@@ -14,29 +16,47 @@ $this->showTopPageWidget = false;
 <div id="mainmenu">
 	<?php $this->widget('zii.widgets.CMenu', array(
 		'items' => array(
-			array('label' => 'Вернуться к списку страниц', 'url' => array('/admin/pages'),),
-			array('label' => 'Управлять страницами', 'url' => array('/admin/pages/admin'),),
-			array('label' => 'Редактировать данную страницу', 'url' => array('/admin/pages/update/' . $model->page_id,),),
+			array('label' => 'Список страниц', 'url' => array('/admin/pages'),),
+			array('label' => 'Управление страницами', 'url' => array('/admin/pages/admin'),),
+			array(
+				'label' => 'Получить ссылку на страницу', 'url' => '#', 'linkOptions' => array(
+				'data-toggle' => 'modal',
+				'data-target' => '#getLink',
+				'onclick'     => 'js: $("#link").val("' . $sUrl . '"); '
+			),
+			),
+			array('label' => 'Редактировать страницу', 'url' => array('/admin/pages/update/' . $model->page_id,),),
 		),
 	)); ?>
 </div>
-
-
-<!--h1>View Pages #<?php //echo $model->page_id; ?></h1-->
-
-<?php /*$this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'page_id',
-		'page_name',
-		'page_title',
-		'page_content',
-	),
-));*/
-?>
 
 <?php
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
 ?>
 
 <?php echo $model->page_content; ?>
+
+<?php $this->beginWidget('bootstrap.widgets.TbModal', array(
+	'id' => 'getLink',
+)); ?>
+
+<div class="modal-header">
+	<a class="close" data-dismiss="modal">&times;</a>
+	<h4>Ссылка на страницу</h4>
+</div>
+
+<div class="modal-body">
+	<p>
+		<input value="<?php echo $sUrl; ?>" id="link" class="span8">
+	</p>
+</div>
+
+<div class="modal-footer">
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+		'label'       => 'Закрыть',
+		'url'         => '#',
+		'htmlOptions' => array('data-dismiss' => 'modal'),
+	)); ?>
+</div>
+
+<?php $this->endWidget(); ?>
