@@ -7,7 +7,7 @@ $this->breadcrumbs = array(
 	$model->page_id,
 );
 
-$sUrl = Yii::app()->createUrl('/pages/view/' . $model->page_name);
+$sUrl = Yii::app()->createAbsoluteUrl('/pages/view/' . $model->page_name);
 
 $this->showTopPageWidget = false;
 ?>
