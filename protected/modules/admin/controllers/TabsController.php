@@ -65,7 +65,7 @@ class TabsController extends Controller
 		$model=new Tabs;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Tabs']))
 		{

@@ -36,7 +36,7 @@ function alertModal(heading, question, okButtonTxt) {
 
 	confirmModal.find('#okButton').click(function (event) {
 		confirmModal.modal('hide');
-		$(document).delay(200).queue(function(){errorHappened = false; $(document).clearQueue();});
+		$(document).delay(400).queue(function(){errorHappened = false; $(document).clearQueue();});
 	});
 
 	confirmModal.modal('show');
