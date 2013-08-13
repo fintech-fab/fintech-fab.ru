@@ -11,6 +11,8 @@
  * Ввести код подтверждения из SMS
  */
 
+$this->pageTitle = Yii::app()->name;
+
 ?>
 
 <div class="row">
@@ -22,16 +24,6 @@
 	<?php
 
 	$this->pageTitle = Yii::app()->name;
-
-	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'                     => get_class($oClientCreateForm),
-		'enableClientValidation' => true,
-		'clientOptions'          => array(
-			'validateOnChange' => true,
-			'validateOnSubmit' => true,
-		),
-		'action'                 => Yii::app()->createUrl('/form/checksmscode'),
-	));
 
 	// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
 	$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
@@ -49,6 +41,21 @@
 			if (empty($flagSmsSent)) {
 				?>
 				<span id="send_sms">
+			<?php
+
+			$form2 = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+				'id'                     => get_class($oClientCreateForm) . '_sms',
+				'enableClientValidation' => true,
+				'clientOptions'          => array(
+					'validateOnChange' => true,
+					'validateOnSubmit' => true,
+				),
+				'action'                 => Yii::app()->createUrl('/form/ajaxsendsms'),
+			));
+
+			// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
+			$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
+			?>
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'sendSms',
 				'buttonType'  => 'ajaxSubmit',
@@ -87,9 +94,29 @@
                                 } ",
 				),
 			)); ?>
+			<?
+
+			$this->endWidget();
+			?>
 			</span>
 			<?php } ?>
 		</span>
+
+		<?php
+
+		$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+			'id'                     => get_class($oClientCreateForm),
+			'enableClientValidation' => true,
+			'clientOptions'          => array(
+				'validateOnChange' => true,
+				'validateOnSubmit' => true,
+			),
+			'action'                 => Yii::app()->createUrl('/form/checksmscode'),
+		));
+
+		// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
+		$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
+		?>
 
 		<span class="span10<?php if ($flagHideForm) {
 			echo ' hide';
