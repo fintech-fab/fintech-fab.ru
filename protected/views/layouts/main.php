@@ -66,7 +66,7 @@
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy"></a>
 
-			<span class="hotline pull-right"><small>Горячая линия</small> 8-800-555-75-78 <small>(бесплатно по России)
+			<span class="hotline pull-right"><small>Горячая линия</small> 8 800 555-75-78 <small>(бесплатно по России)
 				</small></span>
 		</div>
 	</div>
@@ -89,13 +89,14 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 
 			<p class="intro">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
 		</section>
-	</div>
-	<div class="row" style="margin-left: 0;">
-		<?php
-		$this->widget('BottomTabsWidget', array(
-			'tabs' => Tabs::model()->findAll(array('order' => 'tab_order')),
-		));
-		?>
+
+		<div class="row" style="margin-left: 0;">
+			<?php
+			$this->widget('BottomTabsWidget', array(
+				'tabs' => Tabs::model()->findAll(array('order' => 'tab_order')),
+			));
+			?>
+		</div>
 	</div>
 </div>
 

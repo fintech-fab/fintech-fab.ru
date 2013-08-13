@@ -10,7 +10,7 @@ class ImageController extends CController
 	const C_TYPE_PASSPORT_NOTIFICATION = 'passport_notification';
 	const C_TYPE_PASSPORT_LAST = 'passport_last';
 
-	const C_CONFIRM_TEXT = 'Если данные хорошо читаемы, нажмите "Продолжить", или закройте окно, нажав на кнопку "Переснять"';
+	const C_CONFIRM_TEXT = 'Если данные хорошо читаемы, нажмите "Продолжить". Или закройте окно, нажав на кнопку "Переснять"';
 
 	public static $aTypes = array(
 		self::C_TYPE_PHOTO                 => array(

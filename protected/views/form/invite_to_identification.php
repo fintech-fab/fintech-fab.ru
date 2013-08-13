@@ -59,16 +59,21 @@ $this->pageTitle = Yii::app()->name;
 			</div>
 			<br />
 
-			<p>Необходим компьютер с веб-камерой. Вы последовательно предъявляете оригиналы документов камере и не
-				выходя из дома получаете решение по займу.</p>
+			<p>Необходим компьютер с веб-камерой. Вы последовательно отправляете нам оригиналы документов через веб-камеру, и, не
+				выходя из дома, получаете решение по займу.</p>
 		</div>
-		<div class="span5 offset1"><h4 class="center">Идентификация в офисе Кредди</h4>
+		<div class="span5 offset1">
+
+			<h4 class="center">Идентификация в офисе Кредди</h4>
 			<a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" title="Карта" />
-			</a> <br /><br />Город Москва, шоссе Энтузиастов 12, корп. 2 <br />ТЦ Город, главный вход, первый этаж
-			<br />Стойка идентификации сервиса Кредди
-			<br /><a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">Узнать подробное
-				местоположение</a>
+				<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" title="Карта" />
+			</a>
+
+			<p>Город Москва, шоссе Энтузиастов 12, корп. 2 <br />ТЦ Город, главный вход, первый этаж</p>
+
+			<p>Отделение идентификации сервиса
+				Кредди:<br /><a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">узнать подробное
+					местоположение</a></p>
 
 			<div class="clearfix"></div>
 			<div class="form-actions">

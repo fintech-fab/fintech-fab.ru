@@ -226,21 +226,40 @@ class ClientFormComponent
 			));
 		}
 
-		$aClientForm['sms_code'] = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+		//TODO писать код в сессию и проверять
+		$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+		$aClientForm['sms_code'] = $sSmsCode;
 
-		//TODO тут сделать функцию отправки СМС
 
-		//если отправлено успешно,
-		//то добавляем в лог запрос sms с этого ip
-		Yii::app()->antiBot->addSmsRequest();
-		$this->setFlagSmsSent(true);
+		$sPhone = $this->getSessionPhone();
 
-		ClientData::saveClientDataById($aClientForm, $client_id);
+		//$sPhone = '9154701913';
 
-		return CJSON::encode(array(
-			"type" => "0",
-			"text" => Dictionaries::C_SMS_SUCCESS,
-		));
+		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+		if (!empty($sPhone) && !empty($sSmsCode)) {
+			//отправляем СМС
+			//SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+
+			//если отправлено успешно,
+			//то добавляем в лог запрос sms с этого ip
+			Yii::app()->antiBot->addSmsRequest();
+			$this->setFlagSmsSent(true);
+
+
+			ClientData::saveClientDataById($aClientForm, $client_id);
+
+			return CJSON::encode(array(
+				"type" => "0",
+				"text" => Dictionaries::C_SMS_SUCCESS,
+
+			));
+		} else {
+			return CJSON::encode(array(
+				"type" => "3",
+				"text" => Dictionaries::C_ERR_SMS_CANT_SEND,
+			));
+		}
+
 	}
 
 	/**
@@ -250,7 +269,8 @@ class ClientFormComponent
 	 *
 	 * @return array
 	 */
-	public function checkSmsCode($aPostData)
+	public
+	function checkSmsCode($aPostData)
 	{
 		$client_id = Yii::app()->clientForm->getClientId();
 		$oClientSMSForm = new ClientConfirmPhoneViaSMSForm();
@@ -347,7 +367,8 @@ class ClientFormComponent
 	 *
 	 * @return int
 	 */
-	public function getCurrentStep()
+	public
+	function getCurrentStep()
 	{
 		$this->current_step = Yii::app()->session['current_step'];
 
@@ -357,7 +378,8 @@ class ClientFormComponent
 	/**
 	 * @param $iStep
 	 */
-	public function setCurrentStep($iStep)
+	public
+	function setCurrentStep($iStep)
 	{
 		Yii::app()->session['current_step'] = $iStep;
 		$this->current_step = $iStep;
@@ -368,7 +390,8 @@ class ClientFormComponent
 	 *
 	 * @return int
 	 */
-	public function getDoneSteps()
+	public
+	function getDoneSteps()
 	{
 		$this->done_steps = Yii::app()->session['done_steps'];
 
@@ -378,7 +401,8 @@ class ClientFormComponent
 	/**
 	 * @param int $iSteps
 	 */
-	public function setDoneSteps($iSteps)
+	public
+	function setDoneSteps($iSteps)
 	{
 		Yii::app()->session['done_steps'] = $iSteps;
 		$this->done_steps = $iSteps;
@@ -390,7 +414,8 @@ class ClientFormComponent
 	 * @return ClientCreateFormAbstract
 	 */
 
-	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
+	public
+	function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
 		switch ($this->current_step) {
 			case 0:
@@ -431,7 +456,8 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	public function getView()
+	public
+	function getView()
 	{
 		switch ($this->current_step) {
 			case 0:
@@ -475,7 +501,8 @@ class ClientFormComponent
 	 *
 	 * @return array|null
 	 */
-	public function getPostData()
+	public
+	function getPostData()
 	{
 
 		switch ($this->current_step) {
@@ -559,7 +586,8 @@ class ClientFormComponent
 		}
 	}
 
-	public function goIdentification($iIdentCode)
+	public
+	function goIdentification($iIdentCode)
 	{
 		if (!empty($iIdentCode)) {
 			if ($iIdentCode == 1) {
@@ -568,8 +596,7 @@ class ClientFormComponent
 				Yii::app()->clientForm->nextStep(3);
 			}
 
-			if($iIdentCode==1||$iIdentCode==2)
-			{
+			if ($iIdentCode == 1 || $iIdentCode == 2) {
 				$aClientData['identification_type'] = $iIdentCode;
 				ClientData::saveClientDataById($aClientData, $this->client_id);
 			}
@@ -581,7 +608,8 @@ class ClientFormComponent
 	 *
 	 * @param int $iSteps
 	 */
-	public function nextStep($iSteps = 1)
+	public
+	function nextStep($iSteps = 1)
 	{
 		if (!($iSteps <= 3)) {
 			$iSteps = 1;
@@ -596,7 +624,8 @@ class ClientFormComponent
 	/**
 	 * @return string
 	 */
-	public function getSessionPhone()
+	public
+	function getSessionPhone()
 	{
 		return (isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) ? Yii::app()->session['ClientPersonalDataForm']['phone'] : '';
 	}
@@ -604,7 +633,8 @@ class ClientFormComponent
 	/**
 	 * @return int
 	 */
-	public function getClientId()
+	public
+	function getClientId()
 	{
 		return Yii::app()->session['client_id'];
 	}
@@ -612,7 +642,8 @@ class ClientFormComponent
 	/**
 	 * @param $iClientId
 	 */
-	public function setClientId($iClientId)
+	public
+	function setClientId($iClientId)
 	{
 		Yii::app()->session['client_id'] = $iClientId;
 	}
@@ -620,7 +651,8 @@ class ClientFormComponent
 	/**
 	 * @return int
 	 */
-	public function getTmpClientId()
+	public
+	function getTmpClientId()
 	{
 		if (empty(Yii::app()->session['tmp_client_id'])) {
 			$tmp_client_id = 'tmp' . rand(0, 999999);
@@ -637,7 +669,8 @@ class ClientFormComponent
 	 *
 	 * @return int|null
 	 */
-	public function getSessionFormClientId(ClientCreateFormAbstract $oClientForm)
+	public
+	function getSessionFormClientId(ClientCreateFormAbstract $oClientForm)
 	{
 		if (!isset($oClientForm)) {
 			return null;
@@ -651,7 +684,8 @@ class ClientFormComponent
 	 *
 	 * @return null|array
 	 */
-	public function getSessionFormData(ClientCreateFormAbstract $oClientForm)
+	public
+	function getSessionFormData(ClientCreateFormAbstract $oClientForm)
 	{
 		if (!isset($oClientForm)) {
 			return null;
@@ -663,7 +697,8 @@ class ClientFormComponent
 	/**
 	 * @return int номер выбранного продукта
 	 */
-	public function getSessionProduct()
+	public
+	function getSessionProduct()
 	{
 		return Yii::app()->session['ClientSelectProductForm']['product'];
 	}
@@ -671,7 +706,8 @@ class ClientFormComponent
 	/**
 	 * @return int номер выбранного спссоба
 	 */
-	public function getSessionGetWay()
+	public
+	function getSessionGetWay()
 	{
 		return Yii::app()->session['ClientSelectGetWayForm']['get_way'];
 	}
@@ -679,7 +715,8 @@ class ClientFormComponent
 	/**
 	 * @return int
 	 */
-	public function getSmsCountTries()
+	public
+	function getSmsCountTries()
 	{
 		return (isset(Yii::app()->session['smsCountTries'])) ? Yii::app()->session['smsCountTries'] : 0;
 	}
@@ -687,7 +724,8 @@ class ClientFormComponent
 	/**
 	 * @param int $iSmsCountTries
 	 */
-	public function setSmsCountTries($iSmsCountTries)
+	public
+	function setSmsCountTries($iSmsCountTries)
 	{
 		Yii::app()->session['smsCountTries'] = $iSmsCountTries;
 	}
@@ -695,7 +733,8 @@ class ClientFormComponent
 	/**
 	 * @return bool
 	 */
-	public function getFlagSmsSent()
+	public
+	function getFlagSmsSent()
 	{
 		return (!empty(Yii::app()->session['flagSmsSent']));
 	}
@@ -703,12 +742,14 @@ class ClientFormComponent
 	/**
 	 * @param bool $bFlagSmsSent
 	 */
-	public function setFlagSmsSent($bFlagSmsSent)
+	public
+	function setFlagSmsSent($bFlagSmsSent)
 	{
 		Yii::app()->session['flagSmsSent'] = $bFlagSmsSent;
 	}
 
-	public function clearClientSession()
+	public
+	function clearClientSession()
 	{
 		//сбрасываем шаги заполнения анкеты в 0
 		Yii::app()->session['current_step'] = 0;
@@ -725,10 +766,10 @@ class ClientFormComponent
 		//чистим данные форм
 		Yii::app()->session['ClientSelectProductForm'] = null;
 		Yii::app()->session['ClientSelectGetWayForm'] = null;
-		Yii::app()->session['ClientPersonalDataForm']=null;
-		Yii::app()->session['ClientAddressForm']=null;
-		Yii::app()->session['ClientJobInfoForm']=null;
-		Yii::app()->session['ClientSendForm']=null;
+		Yii::app()->session['ClientPersonalDataForm'] = null;
+		Yii::app()->session['ClientAddressForm'] = null;
+		Yii::app()->session['ClientJobInfoForm'] = null;
+		Yii::app()->session['ClientSendForm'] = null;
 	}
 
 
@@ -737,7 +778,8 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	private function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH)
+	private
+	function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH)
 	{
 		// генерация рандомного кода
 		list($usec, $sec) = explode(' ', microtime());
@@ -758,7 +800,8 @@ class ClientFormComponent
 		return $sGeneratedCode;
 	}
 
-	public function checkFiles($aFiles)
+	public
+	function checkFiles($aFiles)
 	{
 		if (!isset($aFiles) || gettype($aFiles) != 'array') {
 			return false;
@@ -773,7 +816,8 @@ class ClientFormComponent
 		return true;
 	}
 
-	public function checkIdentificationFiles()
+	public
+	function checkIdentificationFiles()
 	{
 		$iClientId = $this->getClientId();
 
@@ -792,7 +836,8 @@ class ClientFormComponent
 		return false;
 	}
 
-	public function checkTmpIdentificationFiles($sIdentType = null)
+	public
+	function checkTmpIdentificationFiles($sIdentType = null)
 	{
 		$sTmpClientId = $this->getTmpClientId();
 
@@ -821,7 +866,8 @@ class ClientFormComponent
 	}
 
 
-	public function moveIdentificationFiles()
+	public
+	function moveIdentificationFiles()
 	{
 		$sTmpClientId = $this->getTmpClientId();
 		$iClientId = $this->getClientId();
@@ -837,7 +883,8 @@ class ClientFormComponent
 		return $this->moveFiles($aFiles, $sFilesPath, Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/');
 	}
 
-	public function moveFiles($aFiles, $sOldPath, $sNewPath)
+	public
+	function moveFiles($aFiles, $sOldPath, $sNewPath)
 	{
 		if (!file_exists($sNewPath)) {
 			@mkdir($sNewPath);
@@ -855,7 +902,8 @@ class ClientFormComponent
 		return true;
 	}
 
-	public static function deleteDir($dirPath)
+	public
+	static function deleteDir($dirPath)
 	{
 		if (!is_dir($dirPath)) {
 			return;

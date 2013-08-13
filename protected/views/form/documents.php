@@ -31,36 +31,39 @@ $this->showTopPageWidget = false;
 
 			</div>
 			<div class="span4">
-				<img id="exampleImage" width="100%" /><br /><br />
 
-				<div class="center">
+				<div class="thumbnail" style="padding: 4px; margin:4px;">
+					Пример: <img id="exampleImage" width="100%" />
+				</div>
+
+				<div style="padding: 4px; margin:10px 0;">
 					<button data-toggle="modal" data-target="#confirm-modal" id="shot-button" class="btn btn-primary" style="display: none;">
-						Сфотографировать
+						&laquo; сфотографировать
 					</button>
 				</div>
 
 			</div>
-			<div class="span4 offset8">
-				<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
-			</div>
 
+		</div>
+		<div class="row pull-right">
+			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
 		</div>
 	</div>
 
 </div>
 
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'confirm-modal', 'fade' => false)); ?>
+<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'confirm-modal', 'fade' => false, 'htmlOptions' => array( 'style' => 'height: 430px;'))); ?>
 
 <div class="modal-header">
 	<a class="close" data-dismiss="modal">&times;</a>
 </div>
 
 <div class="modal-body">
-	<img id="resultImage" width="100%" style="" />
+	<img id="resultImage" style="max-height: 350px;" />
 </div>
 
 <div class="modal-footer">
-	<div id="confirm_text" class="alert alert-info" style="text-align: left; font-size: 14px;"></div>
+	<div id="confirm_text" class="alert alert-info" style="text-align: left; font-size: 14px; color: black;"></div>
 
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'label'       => 'Переснять',
@@ -132,8 +135,7 @@ $this->showTopPageWidget = false;
 
 			resultImage.attr('src', dataURL);
 
-			shotButton
-				.text('Переснять');
+			shotButton.html('&laquo; переснять');
 
 			confirm_text.text(currentDocument.confirm_text).show();
 
@@ -155,7 +157,7 @@ $this->showTopPageWidget = false;
 
 			shotButton
 				.removeAttr('disabled')
-				.text('Сфотографировать');
+				.html('&laquo; сфотографировать');
 
 			//noinspection JSUnresolvedVariable
 			if (json.next_type === null) {

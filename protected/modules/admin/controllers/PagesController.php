@@ -66,7 +66,7 @@ class PagesController extends Controller
 		$model=new Pages;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Pages']))
 		{

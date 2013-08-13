@@ -11,6 +11,7 @@ class Dictionaries
 
 	const C_ERR_GENERAL = 'Ошибка: обратитесь в горячую линию.';
 	const C_ERR_SMS_SENT = 'Ошибка: SMS уже отправлено';
+	const C_ERR_SMS_CANT_SEND = "Ошибка при отправке SMS";
 	const C_ERR_SMS_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.';
 	const C_ERR_SMS_WRONG = 'Неверный код подтверждения!';
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
@@ -262,6 +263,7 @@ class Dictionaries
 	 * @param int $chosen_sum_index
 	 *
 	 * @var array
+	 * @return array
 	 */
 	public static function aWays($chosen_sum_index)
 	{
@@ -270,7 +272,7 @@ class Dictionaries
 			{
 				return array(
 					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
-					"2" => "На сотовый телефон",
+					"2" => "На сотовый телефон (МТС, Билайн, Мегафон)",
 				);
 				break;
 			}
@@ -289,12 +291,12 @@ class Dictionaries
 				break;
 			}
 			default:
-				{
+			{
 				return array(
 					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
 				);
 				break;
-				}
+			}
 		}
 	}
 
