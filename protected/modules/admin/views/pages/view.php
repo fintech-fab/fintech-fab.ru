@@ -22,7 +22,7 @@ $this->showTopPageWidget = false;
 				'label' => 'Получить ссылку на страницу', 'url' => '#', 'linkOptions' => array(
 				'data-toggle' => 'modal',
 				'data-target' => '#getLink',
-				'onclick'     => 'js: $("#link").val("' . $sUrl . '"); '
+				'onclick'     => "js: $('#link').val('$sUrl');"
 			),
 			),
 			array('label' => 'Редактировать страницу', 'url' => array('/admin/pages/update/' . $model->page_id,),),
