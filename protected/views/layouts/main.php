@@ -88,12 +88,14 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 			<h2>Узнай больше о нас!</h2>
 
 			<p class="intro">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
-			<?php
-			$this->widget('BottomTabsWidget', array(
-				'tabs' => Tabs::model()->findAll(array('order' => 'tab_order')),
-			));
-			?>
 		</section>
+	</div>
+	<div class="row" style="margin-left: 0;">
+		<?php
+		$this->widget('BottomTabsWidget', array(
+			'tabs' => Tabs::model()->findAll(array('order' => 'tab_order')),
+		));
+		?>
 	</div>
 </div>
 

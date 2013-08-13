@@ -117,8 +117,8 @@ nav div.navbar-inner {
 	color: gray;
 }
 
-.breadcrumb li.active a {
-	color: #ff9731 !important;
+#steps li.active {
+	color: #ff9731;
 }
 
 .form-actions {

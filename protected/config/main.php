@@ -115,5 +115,6 @@ $a = array(
 
 $a['components'] = CMap::mergeArray( $a['components'], require( __DIR__ . '/custom/db.php' ));
 $a['modules'] = CMap::mergeArray( $a['modules'], require( __DIR__ . '/custom/modules.php' ));
+$a['params'] = CMap::mergeArray( $a['params'], require( __DIR__ . '/custom/params.php' ));
 
 return $a;

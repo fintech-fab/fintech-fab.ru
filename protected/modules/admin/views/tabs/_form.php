@@ -34,7 +34,6 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		// You can either use it for model attribute
 		'model' => $model,
 		'attribute' => 'tab_content',
-
 		// or just for input field
 		'name' => 'tab_content',
 
@@ -45,7 +44,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 			'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
 				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-				'image', 'file', 'table', 'link', '|',
+				'image', 'file', 'table', 'link','|',
 				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
 			'iframe' => true,
 			'imageUpload' => Yii::app()->createUrl("admin/files/imageUpload"),

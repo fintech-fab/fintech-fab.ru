@@ -19,8 +19,7 @@ class UserIdentity extends CUserIdentity
 	{
 		$users=array(
 			// username => password
-			'demo'=>'demo',
-			'admin'=>'admin',
+			Yii::app()->params['adminName']=>Yii::app()->params['adminPassword'],
 		);
 		if(!isset($users[$this->username]))
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
