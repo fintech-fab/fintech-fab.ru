@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 13 2013 г., 17:05
+-- Время создания: Авг 13 2013 г., 17:28
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=326 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=330 ;
 
 -- --------------------------------------------------------
 
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `tbl_user_actions_log` (
   `ip` varchar(15) NOT NULL COMMENT 'IP пользователя',
   `dt_add` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время создания записи',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=99 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=105 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
