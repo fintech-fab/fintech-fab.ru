@@ -41,6 +41,21 @@ $this->pageTitle = Yii::app()->name;
 			if (empty($flagSmsSent)) {
 				?>
 				<span id="send_sms">
+			<?php
+
+			$form2 = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+				'id'                     => get_class($oClientCreateForm) . '_sms',
+				'enableClientValidation' => true,
+				'clientOptions'          => array(
+					'validateOnChange' => true,
+					'validateOnSubmit' => true,
+				),
+				'action'                 => Yii::app()->createUrl('/form/ajaxsendsms'),
+			));
+
+			// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
+			$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
+			?>
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'sendSms',
 				'buttonType'  => 'ajaxSubmit',
@@ -79,6 +94,10 @@ $this->pageTitle = Yii::app()->name;
                                 } ",
 				),
 			)); ?>
+			<?
+
+			$this->endWidget();
+			?>
 			</span>
 			<?php } ?>
 		</span>
