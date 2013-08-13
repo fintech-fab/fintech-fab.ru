@@ -29,6 +29,7 @@ $this->showTopPageWidget = false;
 		),
 	)); ?>
 </div>
+<div class="spacer"></div>
 
 <?php
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);

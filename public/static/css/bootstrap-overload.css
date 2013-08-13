@@ -138,3 +138,7 @@ nav div.navbar-inner {
 #tabs {
 	margin-bottom: 10px;
 }
+
+.spacer {
+	margin-top: 20px; /* define margin as you see fit */
+}
