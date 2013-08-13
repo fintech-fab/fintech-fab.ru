@@ -14,7 +14,7 @@
 		if ($crumb[1] < $this->iCurStep) {
 			echo '<li class="done">' . CHtml::link($crumb[0], array("form/$crumb[1]")) . '</li>';
 		} elseif ($crumb[1] == $this->iCurStep) {
-			echo '<li class="active">' . CHtml::link($crumb[0], array("form/$crumb[1]")) . '</li>';
+			echo '<li class="active">' . $crumb[0] . '</li>';
 		} else {
 			echo '<li>' . $crumb[0] . '</li>';
 		}
