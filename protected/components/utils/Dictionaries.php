@@ -398,7 +398,7 @@ class Dictionaries
 					->order('sort ASC')
 					->queryAll()
 				,
-				'name', 'name'
+				'id', 'name'
 			);
 		}
 
