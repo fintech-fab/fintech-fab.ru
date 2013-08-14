@@ -22,21 +22,21 @@ class ClientAddressForm extends ClientCreateFormAbstract
 
 		// всегда обязательные поля
 		$aRequired = array(
-				'address_reg_region',
-				'address_reg_city',
-				'address_reg_address',
+			'address_reg_region',
+			'address_reg_city',
+			'address_reg_address',
 
-				'relatives_one_fio',
-				'relatives_one_phone',
+			'relatives_one_fio',
+			'relatives_one_phone',
 		);
 
 		$aRules =
 			array(
-				array('relatives_one_phone', 'compare', 'operator'=>'!=','compareValue'=>$phone,'message'=>'Номер не должен совпадать с вашим номером телефона!'),
-				array('friends_phone', 'compare', 'operator'=>'!=','compareValue'=>$phone,'message'=>'Номер не должен совпадать с вашим номером телефона!'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareValue' => $phone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareValue' => $phone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
-				array('friends_phone', 'compare', 'operator'=>'!=','compareAttribute'=>'relatives_one_phone','message'=>'Номер не должен совпадать с телефоном контактного лица.'),
-				array('relatives_one_phone', 'compare', 'operator'=>'!=','compareAttribute'=>'friends_phone','message'=>'Номер не должен совпадать телефоном дополнительного контакта.'),
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица.'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
 			);
 
 		$aRules = array_merge($aRules, $this->getRulesByFields(
@@ -64,8 +64,10 @@ class ClientAddressForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('friends_fio' => 'ФИО',
-				  'friends_phone'=>'Телефон',)
+			array(
+				'friends_fio'   => 'ФИО',
+				'friends_phone' => 'Телефон',
+			)
 		);
 	}
 
@@ -77,27 +79,25 @@ class ClientAddressForm extends ClientCreateFormAbstract
 	 */
 	public function beforeValidate()
 	{
-		if ($this->relatives_one_phone)
-		{
+		if ($this->relatives_one_phone) {
 			//очистка данных
-			$this->relatives_one_phone = ltrim( $this->relatives_one_phone, '+ ' );
+			$this->relatives_one_phone = ltrim($this->relatives_one_phone, '+ ');
 			$this->relatives_one_phone = preg_replace('/[^\d]/', '', $this->relatives_one_phone);
 
 			// убираем лишний знак слева (8-ка или 7-ка)
-			if(strlen($this->relatives_one_phone) == 11){
-				$this->relatives_one_phone = substr($this->relatives_one_phone,1,10);
+			if (strlen($this->relatives_one_phone) == 11) {
+				$this->relatives_one_phone = substr($this->relatives_one_phone, 1, 10);
 			}
 		}
 
-		if ($this->friends_phone)
-		{
+		if ($this->friends_phone) {
 			//очистка данных
-			$this->friends_phone = ltrim( $this->friends_phone, '+ ' );
+			$this->friends_phone = ltrim($this->friends_phone, '+ ');
 			$this->friends_phone = preg_replace('/[^\d]/', '', $this->friends_phone);
 
 			// убираем лишний знак слева (8-ка или 7-ка)
-			if(strlen($this->friends_phone) == 11){
-				$this->friends_phone = substr($this->friends_phone,1,10);
+			if (strlen($this->friends_phone) == 11) {
+				$this->friends_phone = substr($this->friends_phone, 1, 10);
 			}
 		}
 
