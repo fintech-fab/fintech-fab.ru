@@ -10,8 +10,10 @@ class ApiController extends CController
 
 		$aClients = ClientData::model()
 			->findAllByAttributes(array(
-				'complete'       => 1,
-				'flag_processed' => 0
+				'complete'            => 1,
+				'flag_sms_confirmed'  => 1,
+				'identification_type' => 1,
+				'flag_processed'      => 0,
 			));
 
 		$aOutput = array();
@@ -29,7 +31,11 @@ class ApiController extends CController
 
 			}
 
-			$aOutput[] = array_merge($oClient->getAttributes(), $aImages);
+			$aOutput[] = array_merge(
+				$oClient->getAttributes(),
+				array(
+					'images' => $aImages,
+				));
 
 		}
 
@@ -75,10 +81,11 @@ class ApiController extends CController
 
 	public function beforeAction($oAction)
 	{
-		if(!Yii::app()->siteParams->isLocalServer()){
+		if (!Yii::app()->siteParams->isLocalServer()) {
 			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 			Yii::app()->end();
 		}
+
 		return parent::beforeAction($oAction);
 	}
 
