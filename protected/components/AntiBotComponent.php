@@ -7,7 +7,7 @@
 class AntiBotComponent
 {
 
-	public $aIpExceptions = array('','');
+	public $aIpExceptions = array('46.38.98.106','46.38.98.107','46.38.98.108');
 
 	public function init()
 	{
