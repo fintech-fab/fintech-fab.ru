@@ -52,7 +52,7 @@ class FilesController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('imagesList'),
+				'actions'=>array(''),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -60,7 +60,7 @@ class FilesController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('imageUpload'),
+				'actions'=>array('imageUpload','imagesList'),
 				'users'=>array(Yii::app()->params['adminName']),
 			),
 			array('deny',  // deny all users
@@ -77,7 +77,7 @@ class FilesController extends Controller
 
 			if(!is_dir($filename)){
 				$filename = str_replace('/var/www/ru.dev.kreddy/protected/../public', Yii::app()->getBaseUrl(), $filename);
-				$array_items[]	= array('thumb'=>$filename,'image' =>$filename, 'title' => $filename,'folder'=>'Folder' );
+				$array_items[]	= array('thumb'=>$filename,'image' =>$filename);
 			}
 		}
 		if(!isset($array_items)){
