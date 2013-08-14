@@ -2,10 +2,10 @@
 	padding-top:0px;
 }
 .toppage{
-  	background: url('../img/bg-title.jpg') center 0px no-repeat white;
+  	background: url('../static/img/bg-title.jpg') center 0px no-repeat white;
 }
 nav div.navbar-inner{
-	background: url('../img/kreddy_bg.png');
+	background: url('../static/img/kreddy_bg.png');
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
 }
 .navbar .brand{
@@ -74,7 +74,7 @@ section .intro{
 	font-weight: 400;
 }
 .page-divider{
-	background: url(../img/kreddy_bg.png);
+	background: url(../static/img/kreddy_bg.png);
 	height:20px;
 }
 .page-divider1{
