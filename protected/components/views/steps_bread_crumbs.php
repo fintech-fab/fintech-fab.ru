@@ -10,18 +10,20 @@
 	$number = 1;
 
 	foreach ($this->aCrumbs as $k => $crumb) {
-		echo ((!empty($crumb[2])) ? $crumb[2] : $crumb[1]) . '. ';
+		$sShownNumber = '<span class="steps_number">' . ((!empty($crumb[2])) ? $crumb[2] : $crumb[1]) . '.</span> ';
 		if ($crumb[1] < $this->iCurStep) {
-			echo '<li class="done">' . CHtml::link($crumb[0], array("form/$crumb[1]")) . '</li>';
+			echo '<li class="done">' . $sShownNumber . CHtml::link($crumb[0], array("form/$crumb[1]"));
 		} elseif ($crumb[1] == $this->iCurStep) {
-			echo '<li class="active">' . $crumb[0] . '</li>';
+			echo '<li class="active">' . $sShownNumber . $crumb[0];
 		} else {
-			echo '<li>' . $crumb[0] . '</li>';
+			echo '<li>' . $sShownNumber . $crumb[0];
 		}
 
 		if (sizeof($this->aCrumbs) > ($number)) {
 			echo '<span class="divider">' . $this->sDivider . '</span>';
 		}
+
+		echo '</li>';
 
 		$number++;
 	}

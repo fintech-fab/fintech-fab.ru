@@ -118,11 +118,15 @@ nav div.navbar-inner {
 }
 
 #steps li {
-	color: gray;
+	color: #808080;
 }
 
 #steps li.active {
 	color: #ff9731;
+}
+
+#steps .steps_number {
+	color: #000000;
 }
 
 .form-actions {

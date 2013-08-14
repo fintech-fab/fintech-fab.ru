@@ -220,8 +220,7 @@ class ClientFormComponent
 		}
 
 		$sSmsCode = $this->getSmsCode();
-		if(empty($sSmsCode))
-		{
+		if (empty($sSmsCode)) {
 			$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
 			$this->setSmsCode($sSmsCode);
 		}
@@ -232,7 +231,7 @@ class ClientFormComponent
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		if (!empty($sPhone) && !empty($sSmsCode)) {
 			//отправляем СМС
-			SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+			//SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 			//если отправлено успешно,
 			//то добавляем в лог запрос sms с этого ip
@@ -591,7 +590,7 @@ class ClientFormComponent
 			}
 
 			if ($iIdentCode == 1 || $iIdentCode == 2) {
-				Yii::app()->session['InviteToIdentificationForm']= array('go_identification' => $iIdentCode);
+				Yii::app()->session['InviteToIdentificationForm'] = array('go_identification' => $iIdentCode);
 			}
 		}
 	}
@@ -662,7 +661,7 @@ class ClientFormComponent
 	 */
 	public function getIdentType()
 	{
-		return (isset(Yii::app()->session['InviteToIdentificationForm']['go_identification']))?Yii::app()->session['InviteToIdentificationForm']['go_identification']:null;
+		return (isset(Yii::app()->session['InviteToIdentificationForm']['go_identification'])) ? Yii::app()->session['InviteToIdentificationForm']['go_identification'] : null;
 	}
 
 	/**

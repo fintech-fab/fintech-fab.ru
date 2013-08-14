@@ -9,6 +9,8 @@
  * Согласие с условиями и передачей данных
  */
 
+$this->pageTitle = Yii::app()->name;
+
 ?>
 
 <div class="row">
@@ -18,8 +20,6 @@
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
-
-	$this->pageTitle = Yii::app()->name;
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                     => get_class($oClientCreateForm),
@@ -53,11 +53,11 @@
 			'label'      => 'Далее →',
 		)); ?>
 	</div>
-</div>
-<?
+	<?
 
-$this->endWidget();
-?>
+	$this->endWidget();
+	?>
+</div>
 
 
 <?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'privacy')); ?>
@@ -95,7 +95,7 @@ $this->endWidget();
 	<p>Направляя/подписывая в ООО «Финансовые Решения» данную форму Анкеты или анкету, заполненную мною дистанционным
 		способом, подтверждаю, что ознакомлен с правилами предоставления микрозайма, со всеми условиями предоставления
 		микрозайма. Также подтверждаю, что номер мобильного телефона, указанный в анкете, принадлежит лично мне.
-		Ответственность за неправомерное использование номера мобильного телефона лежит на мне.</p>		</p>
+		Ответственность за неправомерное использование номера мобильного телефона лежит на мне.</p>
 </div>
 
 <div class="modal-footer">
