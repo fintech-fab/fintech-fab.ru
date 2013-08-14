@@ -231,7 +231,7 @@ class ClientFormComponent
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		if (!empty($sPhone) && !empty($sSmsCode)) {
 			//отправляем СМС
-			//SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+			SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 			//если отправлено успешно,
 			//то добавляем в лог запрос sms с этого ip
