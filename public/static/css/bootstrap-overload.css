@@ -24,6 +24,10 @@ p {
 	margin-left: -380px;
 }
 
+.modal {
+	z-index: 100000;
+}
+
 .modal-error {
 	width: 300px;
 	margin-left: -150px;
@@ -137,4 +141,8 @@ nav div.navbar-inner {
 
 #tabs {
 	margin-bottom: 10px;
+}
+
+.spacer {
+	margin-top: 20px; /* define margin as you see fit */
 }

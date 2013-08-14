@@ -12,24 +12,17 @@
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap-overload.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
-
-
-	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
-
-	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/style.css" type="text/css" />
-
-	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/reset.css" type="text/css" />
-	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/bootstrap-overload.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/form.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/payment.css" />
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
 
 	<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 	<?php Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
-	<?php
-	Yii::app()->bootstrap->registerCoreCss();
+	<?php Yii::app()->bootstrap->registerCoreCss();
 	Yii::app()->bootstrap->registerYiiCss();
 	Yii::app()->bootstrap->registerCoreScripts();
 	?>
@@ -66,13 +59,18 @@
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy"></a>
 
-			<span class="hotline pull-right"><small>Горячая линия</small> 8 800 555-75-78 <small>(бесплатно по России)
-				</small></span>
+			<span class="hotline pull-right">
+				<small>
+					Горячая линия
+				</small>
+				8 800 555-75-78
+				<small>
+					(бесплатно по России)
+				</small>
+			</span>
 		</div>
 	</div>
 </nav>
-
-<!--div class="page-divider1"></div-->
 
 <?php
 $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));

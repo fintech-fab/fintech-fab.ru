@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 13 2013 г., 12:58
+-- Время создания: Авг 13 2013 г., 17:39
 -- Версия сервера: 5.5.32
 -- Версия PHP: 5.4.17-1~precise+1
 
@@ -56,7 +56,6 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `sex` tinyint(1) unsigned DEFAULT NULL COMMENT 'Пол',
   `birthday` date NOT NULL DEFAULT '0000-00-00' COMMENT 'День рождения',
   `email` varchar(255) NOT NULL DEFAULT '' COMMENT 'Email',
-  `description` text NOT NULL COMMENT 'Комментарии',
   `passport_series` char(4) NOT NULL DEFAULT '' COMMENT 'Серия паспорта',
   `passport_number` char(6) NOT NULL DEFAULT '' COMMENT 'Номер паспорта',
   `passport_issued` varchar(255) NOT NULL COMMENT 'Кем выдан паспорт',
@@ -83,7 +82,6 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   `sms_code` char(6) NOT NULL COMMENT 'Код SMS-подтверждения',
   `product` tinyint(1) NOT NULL COMMENT 'Продукт',
   `get_way` tinyint(1) NOT NULL COMMENT 'Способ получения',
-  `options` text NOT NULL COMMENT 'Сериализованные дополнительные данные',
   `complete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Флаг успешного заполнения анкеты',
   `dt_add` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата добавления',
   `dt_update` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'Дата обновления',
@@ -96,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `tbl_client` (
   KEY `phone` (`phone`),
   KEY `passport` (`passport_series`,`passport_number`),
   KEY `sex` (`sex`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=315 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Анкетные данные клиента' AUTO_INCREMENT=330 ;
 
 -- --------------------------------------------------------
 
@@ -176,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `tbl_user_actions_log` (
   `ip` varchar(15) NOT NULL COMMENT 'IP пользователя',
   `dt_add` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Время создания записи',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=105 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

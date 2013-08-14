@@ -97,6 +97,7 @@ class ClientFormComponent
 				$aValidFormData['get_way'] = $this->getSessionGetWay();
 				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
+				$aValidFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aValidFormData, $this->client_id);
 
 			}
@@ -161,8 +162,9 @@ class ClientFormComponent
 				$aClientFormData = $oClientForm->getAttributes();
 				$aClientFormData['product'] = $this->getSessionProduct();
 				$aClientFormData['get_way'] = $this->getSessionGetWay();
-				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
-				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
+				$aClientFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aClientFormData['ip'] = Yii::app()->request->getUserHostAddress();
+				$aClientFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
 				if (!$this->checkIdentificationFiles() || $this->checkTmpIdentificationFiles()) {
@@ -589,8 +591,7 @@ class ClientFormComponent
 			}
 
 			if ($iIdentCode == 1 || $iIdentCode == 2) {
-				$aClientData['identification_type'] = $iIdentCode;
-				ClientData::saveClientDataById($aClientData, $this->client_id);
+				Yii::app()->session['InviteToIdentificationForm']= array('go_identification' => $iIdentCode);
 			}
 		}
 	}
@@ -654,6 +655,14 @@ class ClientFormComponent
 		}
 
 		return $tmp_client_id;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getIdentType()
+	{
+		return (isset(Yii::app()->session['InviteToIdentificationForm']['go_identification']))?Yii::app()->session['InviteToIdentificationForm']['go_identification']:null;
 	}
 
 	/**
