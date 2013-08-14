@@ -96,7 +96,7 @@ $a = array(
 		),
 
 		'session'      => array(
-			'timeout'     => 60 * 30,
+			'timeout'     => 60 * 60 * 2,
 			'sessionName' => 'st',
 		),
 

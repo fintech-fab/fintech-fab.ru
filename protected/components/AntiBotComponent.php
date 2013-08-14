@@ -6,6 +6,9 @@
 
 class AntiBotComponent
 {
+
+	public $aIpExceptions = array('','');
+
 	public function init()
 	{
 
@@ -18,6 +21,10 @@ class AntiBotComponent
 	 */
 	public static function checkSmsRequest()
 	{
+		if(self::ipInExceptions()){
+			return true;
+		}
+
 		$sIP = self::getUserIP();
 		$iTypeSms = SiteParams::U_ACTION_TYPE_SMS;
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_SMS;
@@ -69,6 +76,11 @@ class AntiBotComponent
 
 	public static function checkFormRequest()
 	{
+		if(self::ipInExceptions())
+		{
+			return true;
+		}
+
 		$sIP = self::getUserIP();
 		$iTypeForm = SiteParams::U_ACTION_TYPE_FORM;
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_FORM;
@@ -103,6 +115,12 @@ class AntiBotComponent
 
 	public static function checkIsBanned()
 	{
+
+		if(self::ipInExceptions())
+		{
+			return false;
+		}
+
 		$sIP = self::getUserIP();
 
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_FORM;
@@ -135,7 +153,7 @@ class AntiBotComponent
 	public static function addFormRequest()
 	{
 		$sIP = self::getUserIP();
-		if (self::checkFormRequest()) {
+		if (self::checkFormRequest()&&!self::ipInExceptions()) {
 			UserActionsLog::addNewAction($sIP, SiteParams::U_ACTION_TYPE_FORM);
 		}
 	}
@@ -146,5 +164,13 @@ class AntiBotComponent
 	private function getUserIP()
 	{
 		return Yii::app()->request->getUserHostAddress();
+	}
+
+	private function ipInExceptions()
+	{
+		if(in_array($this->getUserIP(),$this->aIpExceptions )){
+			return true;
+		}
+		return false;
 	}
 }
