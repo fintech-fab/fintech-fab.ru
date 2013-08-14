@@ -2,11 +2,13 @@
 	padding-top:0px;
 }
 .toppage{
-  	background: url('../static/img/bg-title.jpg') center 0px no-repeat white;
+  	background: url('../img/bg-title.jpg') center 0px no-repeat white;
 }
-nav div.navbar-inner{
-	background: url('../static/img/kreddy_bg.png');
+
+.navbar-top div.navbar-inner{
+	background: url('../img/kreddy_bg.png');
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+	filter: 0;
 }
 .navbar .brand{
 	padding-bottom:5px;
@@ -34,11 +36,15 @@ nav div.nav-collapse{
 section h2, section .intro{
 	text-align:center;
 }
-section h2{
+.learn-more{
+	text-align:center;
+}
+
+section h2, div h2{
 	margin-top:20px;
 	font-weight:400;
 }
-section .intro{
+section .intro, div .intro{
 	margin-bottom:10px;
 }
 .span6.counter{
@@ -74,7 +80,7 @@ section .intro{
 	font-weight: 400;
 }
 .page-divider{
-	background: url(../static/img/kreddy_bg.png);
+	background: url('../img/kreddy_bg.png');
 	height:20px;
 }
 .page-divider1{
@@ -161,7 +167,7 @@ z-index: 4000;
 margin-top: 159px;
 margin-left: 356px;
 }
-footer{
+footer, div .footer{
 	margin-top:20px;
 	text-align:center;
 }

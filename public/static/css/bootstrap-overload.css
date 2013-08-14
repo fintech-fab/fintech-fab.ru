@@ -146,3 +146,9 @@ nav div.navbar-inner {
 .spacer {
 	margin-top: 20px; /* define margin as you see fit */
 }
+
+label, input, button, select, textarea {
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 18px;
+}

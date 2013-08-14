@@ -82,11 +82,11 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 
 <div class="container">
 	<div class="row">
-		<section class="span12">
-			<h2>Узнай больше о нас!</h2>
+		<div class="span12">
+				<h2 class="learn-more">Узнай больше о нас!</h2>
 
-			<p class="intro">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
-		</section>
+			<p class="intro learn-more">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
+		</div>
 
 		<div class="row" style="margin-left: 0;">
 			<?php
@@ -102,16 +102,16 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 
 <div class="container">
 	<div class="row">
-		<section class="span12">
-			<footer>
+		<div class="span12 footer">
+			<div class="footer">
 				<?php
 				$this->widget('FooterLinksWidget', array(
 					'links' => FooterLinks::model()->findAll(array('order' => 'link_order')),
 				));
 				?>
 				<p>&copy; 2012 ООО "Финансовые Решения"</p>
-			</footer>
-		</section>
+			</div>
+		</div>
 	</div>
 </div>
 <script type="text/javascript">

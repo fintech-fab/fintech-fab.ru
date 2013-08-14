@@ -16,23 +16,23 @@
 }
 
 .pay_button_acquiropay {
-  background: url("../static/img/pay_logo_bank_card.jpg") no-repeat center;
+  background: url("../img/pay_logo_bank_card.jpg") no-repeat center;
 }
 
 .pay_button_yandex {
-  background: url("../static/img/pay_logo_yandex_money.jpg") no-repeat center;
+  background: url("../img/pay_logo_yandex_money.jpg") no-repeat center;
 }
 
 .pay_button_elecsnet {
-  background: url("../static/img/pay_logo_elecsnet.gif") no-repeat center;
+  background: url("../img/pay_logo_elecsnet.gif") no-repeat center;
 }
 
 .pay_button_qiwi {
-  background: url("../static/img/pay_logo_qiwi.jpg") no-repeat center;
+  background: url("../img/pay_logo_qiwi.jpg") no-repeat center;
 }
 
 .button_elecsnet_add_logo {
-  background: url("../static/img/pay_elecsnet_logo_pay.png") no-repeat;
+  background: url("../img/pay_elecsnet_logo_pay.png") no-repeat;
   height: 60px;
   width: 60px;
   position: absolute;
