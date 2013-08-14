@@ -168,9 +168,9 @@ class AntiBotComponent
 
 	private function ipInExceptions()
 	{
-		if(in_array($this->getUserIP(),$this->aIpExceptions )){
-			return true;
-		}
+		//if(in_array($this->getUserIP(),$this->aIpExceptions )){
+	//			return true;
+	//	}
 		return false;
 	}
 }
