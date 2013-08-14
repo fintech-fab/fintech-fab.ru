@@ -265,6 +265,9 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 
 				case 'phone':
+					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
+					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern'=>'/^9\d{'.(SiteParams::C_PHONE_LENGTH - 1).'}$/');
+					break;
 				case 'phone_home':
 				case 'job_phone':
 				case 'relatives_one_phone':

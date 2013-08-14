@@ -175,6 +175,41 @@ class ExampleTest extends CTestCase {
 	}
 
 
+	public function testCheckPhoneValid()
+	{
+
+		$aPostData = array(
+			'phone' => '9'.substr((rand(1000000000,1999999999)),1),
+		);
+
+
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('phone'), print_r($oForm->getError('phone'),true));
+	}
+
+	public function testCheckPhoneNoValid()
+	{
+
+		$aPostData = array(
+			'phone' => rand(0,8).substr((rand(1000000000,1999999999)),1),
+		);
+
+
+		$oForm = new ClientPersonalDataForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('phone'), print_r($oForm->getError('phone'),true));
+	}
+
+	/**
+	 *
+	 *TODO сделать генератор валидных дат
 	public function testCheckPassportValidRand()
 	{
 
@@ -201,5 +236,5 @@ class ExampleTest extends CTestCase {
 		$this->assertEmpty($sError, print_r($sMessage,true));
 
 		$this->assertNotEmpty($sError, print_r($sMessage,true));
-	}
+	}*/
 }
