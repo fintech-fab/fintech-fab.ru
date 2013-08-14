@@ -47,13 +47,14 @@ $this->pageTitle = Yii::app()->name;
 	)); ?>
 
 	<div class="clearfix"></div>
-
-	<div class="form-actions">
-		<? $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType' => 'submit',
-			'type'       => 'primary',
-			'label'      => 'Далее →',
-		)); ?>
+	<div class="row span11">
+		<div class="form-actions">
+			<? $this->widget('bootstrap.widgets.TbButton', array(
+				'buttonType' => 'submit',
+				'type'       => 'primary',
+				'label'      => 'Далее →',
+			)); ?>
+		</div>
 	</div>
 	<?
 
