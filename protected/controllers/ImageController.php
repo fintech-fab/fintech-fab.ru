@@ -42,9 +42,9 @@ class ImageController extends CController
 			'instructions' => 'Покажите в веб-камеру страницу паспорта с отметками о ранее выданных паспортах (даже если она пуста) и нажмите "сфотографировать"',
 			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
-		self::C_TYPE_DOCUMENT         => array(
+		self::C_TYPE_DOCUMENT              => array(
 			'title'        => 'Второй документ',
-			'example'      => '',
+			'example'      => '/static/img/empty.jpg',
 			'instructions' => 'Покажите в веб-камеру второй документ (страницу с личными данными и номером) и нажмите "сфотографировать"',
 			'confirm_text' => self::C_CONFIRM_TEXT,
 		),
