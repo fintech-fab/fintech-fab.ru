@@ -28,7 +28,7 @@ class PagesController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('view'),
+				'actions'=>array(''),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -36,7 +36,7 @@ class PagesController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','create','update','index'),
+				'actions'=>array('admin','delete','create','update','index','view'),
 				'users'=>array(Yii::app()->params['adminName']),
 			),
 			array('deny',  // deny all users
