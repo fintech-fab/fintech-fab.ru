@@ -57,7 +57,9 @@
 			-->
 
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
-			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand"><img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy"></a>
+			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand">
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" />
+			</a>
 
 			<span class="hotline pull-right">
 				<small>

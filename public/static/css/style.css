@@ -12,10 +12,10 @@
 }
 .navbar .brand{
 	padding-bottom:5px;
-}
-.navbar .brand img{
 	width:200px;
+	display:block;
 }
+
 nav .hotline{
 	color:white;
 	margin-top:23px;
