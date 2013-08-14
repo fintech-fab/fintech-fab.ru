@@ -151,7 +151,7 @@ class AntiBotComponent
 	public static function addFormRequest()
 	{
 		$sIP = self::getUserIP();
-		if (self::checkFormRequest()&&!self::ipInExceptions()) {
+		if (self::checkFormRequest()) {
 			UserActionsLog::addNewAction($sIP, SiteParams::U_ACTION_TYPE_FORM);
 		}
 	}
