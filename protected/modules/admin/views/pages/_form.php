@@ -47,6 +47,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 				'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
 				'removeEmptyTags'=>false,
 				'convertDivs' => false,
+				'imageGetJson' => Yii::app()->getBaseUrl().'/admin/files/imagesList',
 				'toolbar'                  => 'classic',
 				'buttons'                  => array(
 					'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',

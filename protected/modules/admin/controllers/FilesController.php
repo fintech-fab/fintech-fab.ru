@@ -52,7 +52,7 @@ class FilesController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array(''),
+				'actions'=>array('imagesList'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -67,6 +67,48 @@ class FilesController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionImagesList()
+	{
+		$a = Yii::app()->getBasePath().'/../public/uploads/images';
+		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($a)) as $filename)
+		{
+
+			if(!is_dir($filename)){
+				$filename = str_replace('/var/www/ru.dev.kreddy/protected/../public', Yii::app()->getBaseUrl(), $filename);
+				$array_items[]	= array('thumb'=>$filename,'image' =>$filename, 'title' => $filename,'folder'=>'Folder' );
+			}
+		}
+		if(!isset($array_items)){
+			$array_items = array();
+		}
+
+		echo CJSON::encode($array_items);
+
+
+	}
+
+	private function directoryToArray($directory, $recursive) {
+		$array_items = array();
+		if ($handle = opendir($directory)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != "..") {
+					if (is_dir($directory. "/" . $file)) {
+						if($recursive) {
+							$array_items = array_merge($array_items, $this->directoryToArray($directory. "/" . $file, $recursive));
+						}
+						$file = $directory . "/" . $file;
+						//$array_items[] = preg_replace("/\/\//si", "/", $file);
+					} else {
+						$file = $directory . "/" . $file;
+						$array_items[] = preg_replace("/\/\//si", "/", $file);
+					}
+				}
+			}
+			closedir($handle);
+		}
+		return $array_items;
 	}
 
 	// Uncomment the following methods and override them if needed

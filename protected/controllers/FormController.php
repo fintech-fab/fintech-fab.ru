@@ -4,6 +4,13 @@ class FormController extends Controller
 {
 	public $showTopPageWidget = true;
 
+	/**
+	 * @param $directory
+	 * @param $recursive
+	 *
+	 * @return array
+	 */
+
 	public function actionIndex()
 	{
 		/**
@@ -13,6 +20,7 @@ class FormController extends Controller
 		 */
 
 		$client_id = Yii::app()->clientForm->getClientId();
+
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -150,7 +158,8 @@ class FormController extends Controller
 			if (Yii::app()->request->isAjaxRequest) {
 				echo $error['message'];
 			} else {
-				$this->redirect(Yii::app()->homeUrl);
+				//$this->redirect(Yii::app()->homeUrl);
+				$this->render('error',$error);
 			}
 		}
 	}
