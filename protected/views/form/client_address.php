@@ -13,6 +13,9 @@
  * + ФИО
  * + Номер телефона
  */
+
+$this->pageTitle = Yii::app()->name;
+
 ?>
 
 <div class="row">
@@ -22,8 +25,6 @@
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
-
-	$this->pageTitle = Yii::app()->name;
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                   => get_class($oClientCreateForm),
@@ -72,7 +73,8 @@
 			'label'      => 'Далее →',
 		)); ?>
 	</div>
+	<?
+	$this->endWidget();
+	?>
 </div>
-<?
-$this->endWidget();
-?>
+

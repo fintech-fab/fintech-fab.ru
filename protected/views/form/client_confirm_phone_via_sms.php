@@ -23,12 +23,9 @@ $this->pageTitle = Yii::app()->name;
 
 	<?php
 
-	$this->pageTitle = Yii::app()->name;
-
 	// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
 	$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 	?>
-
 
 	<div class="span10">
 		Для завершения регистрации Вам нужно подтвердить свой телефон. <br /> Ваш телефон:

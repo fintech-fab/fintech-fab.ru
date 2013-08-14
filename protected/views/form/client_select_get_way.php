@@ -7,6 +7,9 @@
 /*
  * Выбор способа получения займа
  */
+
+$this->pageTitle = Yii::app()->name;
+
 ?>
 
 <div class="row">
@@ -16,8 +19,6 @@
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
-
-	$this->pageTitle = Yii::app()->name;
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                   => get_class($oClientCreateForm),
@@ -54,8 +55,8 @@
 			'label'      => 'Далее →',
 		)); ?>
 	</div>
-</div>
-<?
+	<?
+	$this->endWidget();
+	?>
 
-$this->endWidget();
-?>
+</div>

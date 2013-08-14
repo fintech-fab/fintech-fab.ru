@@ -24,6 +24,8 @@
  * + Номер
  */
 
+$this->pageTitle = Yii::app()->name;
+
 ?>
 
 <div class="row">
@@ -32,8 +34,6 @@
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
-
-	$this->pageTitle = Yii::app()->name;
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                   => get_class($oClientCreateForm),
@@ -56,8 +56,6 @@
 	<?php $this->widget('ChosenConditionsWidget', array(
 		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
 	)); ?>
-
-
 
 	<div class="row span12">
 		<div class="span5"><h2>Личные данные</h2>
@@ -84,8 +82,9 @@
 			'label'      => 'Далее →',
 		)); ?>
 	</div>
-</div>
-<?
+	<?
 
-$this->endWidget();
-?>
+	$this->endWidget();
+	?>
+
+</div>
