@@ -7,8 +7,6 @@
 class AntiBotComponent
 {
 
-	public $aIpExceptions = array('46.38.98.106','46.38.98.107','46.38.98.108');
-
 	public function init()
 	{
 
@@ -161,16 +159,17 @@ class AntiBotComponent
 	/**
 	 * @return string
 	 */
-	private function getUserIP()
+	private static function getUserIP()
 	{
 		return Yii::app()->request->getUserHostAddress();
 	}
 
-	private function ipInExceptions()
+	private static function ipInExceptions()
 	{
-		//if(in_array($this->getUserIP(),$this->aIpExceptions )){
-	//			return true;
-	//	}
+		$aIpExceptions = array('46.38.98.106','46.38.98.107','46.38.98.108');
+		if(in_array(self::getUserIP(),$aIpExceptions )){
+				return true;
+		}
 		return false;
 	}
 }
