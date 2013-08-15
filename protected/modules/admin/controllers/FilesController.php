@@ -135,7 +135,10 @@ class FilesController extends Controller
 
 			$item['count_footer_links'] = $iCount;
 		}
-		$itemsProvider = new CArrayDataProvider($array_items);
+		$sort = new CSort;
+		$sort->defaultOrder = 'id ASC';
+		$sort->attributes = array('id','count_pages','count_tabs','count_footer_links');
+		$itemsProvider = new CArrayDataProvider($array_items, array('sort'=>$sort));
 		$this->render('admin', compact('itemsProvider'));
 	}
 

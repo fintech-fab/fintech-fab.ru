@@ -24,21 +24,25 @@ $this->menu = array(
 	'dataProvider'=>$itemsProvider,
 	'columns'=>array(
 		array(
-			'name'=>'Изображение',
+			'name'=>'thumb',
+			'header'=>'Изображение',
 			'type'=>'html',
 			'value'=> '(!empty($data["thumb"]))?Chtml::link(CHtml::image($data["thumb"],"image_thumbnail"),$data["image"]):"no image"',
 
 		),
 		array(
-			'name'=>'Использовано на страницах',
+			'name'=>'count_pages',
+			'header'=>'Использовано на страницах',
 			'value'=> '$data["count_pages"]',
 		),
 		array(
-			'name'=>'Использовано на вкладках',
+			'name'=>'count_tabs',
+			'header'=>'Использовано на вкладках',
 			'value'=> '$data["count_pages"]',
 		),
 		array(
-			'name'=>'Использовано в ссылках',
+			'name'=>'count_footer_links',
+			'header'=>'Использовано в ссылках',
 			'value'=> '$data["count_footer_links"]',
 		),
 	),
