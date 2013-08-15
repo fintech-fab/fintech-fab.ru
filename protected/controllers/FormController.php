@@ -21,30 +21,6 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
-		//функция обновления прогресс-бара
-		Yii::app()->clientScript->registerScript('test', "
-		$(document).ready(function(){
-
-			try {
-				navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-				window.URL = window.URL || window.webkitURL;
-
-				navigator.getUserMedia({video: true}, function(stream) {
-					alert('WEbRTC OK!');
-
-				}, function(err) {
-
-					alert('WEbRTC doesn\'t work :(');
-
-				});
-			} catch(e) {
-			alert('WEbRTC doesn\'t work 2 :(');
-		}
-
-
-		});
-		", CClientScript::POS_HEAD);
-
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)

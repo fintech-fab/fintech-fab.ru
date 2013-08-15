@@ -44,25 +44,28 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 			'options'     => array(
 				'lang'                     => 'ru',
-				'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
+				//'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
 				'removeEmptyTags'=>false,
 				'convertDivs' => false,
+				'paragraphy' => false,
+				'convertVideoLinks' => true,
+				'autoresize' => false,
 				'imageGetJson' => Yii::app()->getBaseUrl().'/admin/files/imagesList',
 				'toolbar'                  => 'classic',
 				'buttons'                  => array(
 					'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',
 					'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-					'image', 'table', 'link', '|',
+					'image', 'video','table', 'link', '|',
 					'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'
 				),
-				'iframe'                   => true,
+				'iframe'                   => false,
 				'imageUpload'              => Yii::app()->createUrl("admin/files/imageUpload"),
 				'imageUploadErrorCallback' => 'js: function(json) { alert(json.error); }',
 				'uploadFields'             => array(
 					Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
 				),
 			),
-			'htmlOptions' => array('style' => "width: 100%; height: 400px;"),
+			'htmlOptions' => array('style' => "width: 100%; height: 600px;"),
 		));
 		?>
 	</div>

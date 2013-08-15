@@ -48,7 +48,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
 				'image', 'file', 'table', 'link','|',
 				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
-			'iframe' => true,
+			'iframe' => false,
 			'imageUpload' => Yii::app()->createUrl("admin/files/imageUpload"),
 			'imageUploadErrorCallback'=> 'js: function(json) { alert(json.error); }',
 			'uploadFields'=>array(
