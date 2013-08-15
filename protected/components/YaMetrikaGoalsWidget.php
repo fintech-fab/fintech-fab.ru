@@ -2,15 +2,20 @@
 
 class YaMetrikaGoalsWidget extends CWidget
 {
+	/**
+	 * @var integer сделано шагов на данный момент
+	 */
 	public $iDoneSteps;
+
+	/**
+	 * @var integer вычесть из числа шагов (засчёт видеоидентификации)
+	 */
+	public $iSkippedSteps;
 
 	public function run()
 	{
-		if ($this->iDoneSteps == 0) {
-			return;
-		}
-
-		$this->iDoneSteps = ($this->iDoneSteps >= 3) ? ($this->iDoneSteps - 2) : $this->iDoneSteps;
+		$this->iDoneSteps = (int)$this->iDoneSteps;
+		$this->iDoneSteps = (!empty($this->iSkippedSteps)) ? ($this->iDoneSteps - (int)$this->iSkippedSteps) : $this->iDoneSteps;
 		$this->render('ya_metrika_goals');
 	}
 }
