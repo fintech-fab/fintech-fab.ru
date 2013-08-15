@@ -99,6 +99,7 @@ nav div.navbar-inner {
 }
 
 .breadcrumb {
+	font-size: 9pt;
 	background-image: -moz-linear-gradient(top, #fff, #f5f5f5);
 	background-image: -ms-linear-gradient(top, #fff, #f5f5f5);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#f5f5f5));
