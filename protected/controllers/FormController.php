@@ -42,8 +42,6 @@ class FormController extends Controller
 		}
 
 
-
-
 		});
 		", CClientScript::POS_HEAD);
 
