@@ -7,8 +7,8 @@ function BrowserCompatForVideo() {
 		bMsie = false,
 		bMozilla = false,
 		bOpera = false,
-		bWebkitChrome = false,
-		bWebkitSafari = false
+		bChrome = false,
+		bSafari = false
 		;
 
 	var sUserAgent = navigator.userAgent.toLowerCase();
@@ -24,13 +24,13 @@ function BrowserCompatForVideo() {
 		iFirefoxVersion = parseInt(sUserAgent);
 
 	} else if (oBrowser.webkit) {
-		bWebkitSafari = !window.chrome;
-		bWebkitChrome = !bWebkitSafari;
-		if (bWebkitChrome) {
+		bSafari = !window.chrome;
+		bChrome = !bSafari;
+		if (bChrome) {
 
 			if (sUserAgent.indexOf('opr/') !== -1) {
-				bWebkitChrome = false;
-				bOpera = !bWebkitChrome;
+				bChrome = false;
+				bOpera = !bChrome;
 			}
 
 			sUserAgent = sUserAgent.substring(sUserAgent.indexOf('chrome/') + 7);
@@ -47,11 +47,11 @@ function BrowserCompatForVideo() {
 			return 'Internet Explorer';
 		} else if (bOpera) {
 			return 'Opera';
-		} else if (bWebkitSafari) {
+		} else if (bSafari) {
 			return 'Safari';
 		} else if (bMozilla) {
 			return 'Firefox ' + ( iFirefoxVersion ? ' ' + iFirefoxVersion : '' );
-		} else if (bWebkitChrome) {
+		} else if (bChrome) {
 			return 'Chrome' + ( iChromeVersion ? ' ' + iChromeVersion : '' );
 		} else {
 			return null;
@@ -60,17 +60,15 @@ function BrowserCompatForVideo() {
 
 	this.isNotCompatible = function () {
 		return (
-			( this.isMobile() )
-				||
-				( bMsie )
+			( bMsie )
 				||
 				( bOpera  )
 				||
-				( bWebkitSafari )
+				( bSafari )
 				||
 				( bMozilla && iFirefoxVersion <= 22 )
 				||
-				( bWebkitChrome && iChromeVersion > 0 && iChromeVersion <= 23 )
+				( bChrome && iChromeVersion > 0 && iChromeVersion <= 23 )
 			);
 	}
 }
@@ -78,7 +76,17 @@ function BrowserCompatForVideo() {
 $(function () {
 	var oBrowserCompatForVideo = new BrowserCompatForVideo();
 
-	if (oBrowserCompatForVideo.isNotCompatible()) {
+	if (oBrowserCompatForVideo.isMobile()) {
+		$("#attention_message").html(" <strong>Внимание!</strong> Во время заполнения анкеты Вы можете пройти видеоидентификацию. Видеоидентификация работает только <strong>на компьютере</strong>, в браузерах Chrome и Firefox последних версий.");
+		if (oBrowserCompatForVideo.getBrowser()) {
+			$("#your_browser").html(" Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong> (мобильная версия). ");
+		} else {
+			$("#your_browser").html(" Вы зашли на сайт с мобильного устройства. ");
+		}
+		$("#your_browser").html($("#your_browser").html() + "Пожалуйста, зайдите на сайт с компьютера, если хотите пройти видеоидентификацию.");
+		$("#get_browser").hide();
+		$("#browserFormat").show();
+	} else if (oBrowserCompatForVideo.isNotCompatible()) {
 		if (oBrowserCompatForVideo.getBrowser()) {
 			$("#your_browser").html(" Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong>");
 		}

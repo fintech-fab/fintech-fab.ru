@@ -4,9 +4,9 @@
  * @var $this CheckBrowserWidget
  */
 
-Yii::app()->user->setFlash('error', $this->sMessage . '
+Yii::app()->user->setFlash('error', '<span id="attention_message">' . $this->sMessage . '</span>
 <br/><br/><span id="your_browser"></span>
-<br/><br/><a href="/pages/view/browser">Перейти на страницу загрузки поддерживаемого браузера &raquo;</a>');
+<div id="get_browser" style="margin-top:10px;"><a href="/pages/view/browser">Перейти на страницу загрузки поддерживаемого браузера &raquo;</a></div>');
 
 $this->widget('bootstrap.widgets.TbAlert', array(
 	'block'       => true, // display a larger alert block?
