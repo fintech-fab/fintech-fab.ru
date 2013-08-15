@@ -8,54 +8,67 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 <div class="form">
 
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'tabs-form',
-	'enableAjaxValidation'=>false,
-)); ?>
+	<?php $form = $this->beginWidget('CActiveForm', array(
+		'id'                   => 'tabs-form',
+		'enableAjaxValidation' => false,
+	)); ?>
 
 	<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'tab_name'); ?>
-		<?php echo $form->textField($model,'tab_name',array('size'=>20,'maxlength'=>20)); ?>
-		<?php echo $form->error($model,'tab_name'); ?>
+		<?php echo $form->labelEx($model, 'tab_name'); ?>
+		<?php echo $form->textField($model, 'tab_name', array('size' => 20, 'maxlength' => 20)); ?>
+		<?php echo $form->error($model, 'tab_name'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'tab_title'); ?>
-		<?php echo $form->textField($model,'tab_title',array('size'=>20,'maxlength'=>30)); ?>
-		<?php echo $form->error($model,'tab_title'); ?>
+		<?php echo $form->labelEx($model, 'tab_title'); ?>
+		<?php echo $form->textField($model, 'tab_title', array('size' => 20, 'maxlength' => 30)); ?>
+		<?php echo $form->error($model, 'tab_title'); ?>
 	</div>
 
 	<?php
 	$this->widget('ImperaviRedactorWidget', array(
 		// You can either use it for model attribute
-		'model' => $model,
-		'attribute' => 'tab_content',
+		'model'       => $model,
+		'attribute'   => 'tab_content',
 		// or just for input field
-		'name' => 'tab_content',
+		'name'        => 'tab_content',
 
 		// Some options, see http://imperavi.com/redactor/docs/
-		'options' => array(
-			'lang' => 'ru',
-			'toolbar' => 'classic',
-			'convertDivs' => false,
-			'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
-			'removeEmptyTags'=>false,
-			'buttons'=>array('html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline','|','alignleft', 'aligncenter', 'alignright', 'justify','|',
+		'options'     => array(
+			'lang'                     => 'ru',
+			'toolbar'                  => 'classic',
+			'convertDivs'              => false,
+			'paragraphy'               => false,
+			'autoresize'               => false,
+			'removeEmptyTags'          => false,
+			'imageGetJson'             => Yii::app()->getBaseUrl() . '/admin/files/imagesList',
+			'buttons'                  => array(
+				'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',
 				'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-				'image', 'file', 'table', 'link','|',
-				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'),
-			'iframe' => false,
-			'imageUpload' => Yii::app()->createUrl("admin/files/imageUpload"),
-			'imageUploadErrorCallback'=> 'js: function(json) { alert(json.error); }',
-			'uploadFields'=>array(
+				'image', 'file', 'table', 'link', '|',
+				'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'
+			),
+			'iframe'                   => true,
+			'css'                      => array(
+				'/static/css/bootstrap4redactor.min.css',
+				'/static/css/main.css',
+				'/static/css/bootstrap-overload.css',
+				'/static/css/form.css',
+				'/static/css/style.css',
+				'/static/css/payment.css',
+				'/static/css/redactor-table.css'
+			),
+			'imageUpload'              => Yii::app()->createUrl("admin/files/imageUpload"),
+			'imageUploadErrorCallback' => 'js: function(json) { alert(json.error); }',
+			'uploadFields'             => array(
 				Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
 			),
 		),
-		'htmlOptions' => array('style'=>"width: 100%; height: 400px;"),
+		'htmlOptions' => array('style' => "width: 100%; height: 400px;"),
 	));
 	?>
 
@@ -64,6 +77,6 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить'); ?>
 	</div>
 
-<?php $this->endWidget(); ?>
+	<?php $this->endWidget(); ?>
 
 </div><!-- form -->

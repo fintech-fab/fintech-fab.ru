@@ -41,13 +41,10 @@ or <b>=</b>) перед поисковым значением для опред�
 </p>
 
 <?php
-//echo var_dump($model->search());
 $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'pages-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
-	//'sourceLanguage'    =>'ru',
-	//'language' => 'ru',
 	'columns'=>array(
 		'page_id',
 		'page_name',

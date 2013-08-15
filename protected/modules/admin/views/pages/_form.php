@@ -44,21 +44,28 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 			'options'     => array(
 				'lang'                     => 'ru',
-				//'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
-				'removeEmptyTags'=>false,
-				'convertDivs' => false,
-				'paragraphy' => false,
-				'autoresize' => false,
-				'imageGetJson' => Yii::app()->getBaseUrl().'/admin/files/imagesList',
 				'toolbar'                  => 'classic',
+				'convertDivs'              => false,
+				'paragraphy'               => false,
+				'autoresize'               => false,
+				'removeEmptyTags'          => false,
+				'imageGetJson'             => Yii::app()->getBaseUrl() . '/admin/files/imagesList',
 				'buttons'                  => array(
 					'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',
 					'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-					'image', 'video','table', 'link', '|',
+					'image', 'video', 'table', 'link', '|',
 					'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'
 				),
 				'iframe'                   => true,
-				'css' => array('/static/css/bootstrap4redactor.min.css','/static/css/main.css','/static/css/style.css','/static/css/payment.css','/static/css/form.css','/static/css/bootstrap-overload.css'),
+				'css'                      => array(
+					'/static/css/bootstrap4redactor.min.css',
+					'/static/css/main.css',
+					'/static/css/bootstrap-overload.css',
+					'/static/css/form.css',
+					'/static/css/style.css',
+					'/static/css/payment.css',
+					'/static/css/redactor-table.css'
+				),
 				'imageUpload'              => Yii::app()->createUrl("admin/files/imageUpload"),
 				'imageUploadErrorCallback' => 'js: function(json) { alert(json.error); }',
 				'uploadFields'             => array(
