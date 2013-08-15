@@ -48,7 +48,6 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 				'removeEmptyTags'=>false,
 				'convertDivs' => false,
 				'paragraphy' => false,
-				'convertVideoLinks' => true,
 				'autoresize' => false,
 				'imageGetJson' => Yii::app()->getBaseUrl().'/admin/files/imagesList',
 				'toolbar'                  => 'classic',
@@ -58,14 +57,15 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 					'image', 'video','table', 'link', '|',
 					'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'
 				),
-				'iframe'                   => false,
+				'iframe'                   => true,
+				'css' => array('/static/css/bootstrap4redactor.min.css','/static/css/main.css','/static/css/style.css','/static/css/payment.css','/static/css/form.css','/static/css/bootstrap-overload.css'),
 				'imageUpload'              => Yii::app()->createUrl("admin/files/imageUpload"),
 				'imageUploadErrorCallback' => 'js: function(json) { alert(json.error); }',
 				'uploadFields'             => array(
 					Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
 				),
 			),
-			'htmlOptions' => array('style' => "width: 100%; height: 600px;"),
+			'htmlOptions' => array('style' => "width: 100%; height: 500px;"),
 		));
 		?>
 	</div>
