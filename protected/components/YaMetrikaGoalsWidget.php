@@ -10,7 +10,7 @@ class YaMetrikaGoalsWidget extends CWidget
 	/**
 	 * @var integer вычесть из числа шагов (засчёт видеоидентификации)
 	 */
-	public $iSkippedSteps;
+	public $iSkippedSteps = 0;
 
 	public function run()
 	{
