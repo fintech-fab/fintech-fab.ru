@@ -70,7 +70,7 @@ function BrowserCompatForVideo() {
 				||
 				( bMozilla && iFirefoxVersion <= 22 )
 				||
-				( bWebkitChrome && iChromeVersion > 0 && iChromeVersion <= 26 )
+				( bWebkitChrome && iChromeVersion > 0 && iChromeVersion <= 23 )
 			);
 	}
 }

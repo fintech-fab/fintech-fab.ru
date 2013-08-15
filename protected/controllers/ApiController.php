@@ -12,7 +12,6 @@ class ApiController extends CController
 			->findAllByAttributes(array(
 				'complete'            => 1,
 				'flag_sms_confirmed'  => 1,
-				'identification_type' => 1,
 				'flag_processed'      => 0,
 			));
 
