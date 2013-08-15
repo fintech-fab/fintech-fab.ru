@@ -8,28 +8,7 @@ $this->breadcrumbs = array(
 );
 
 $sUrl = Yii::app()->createAbsoluteUrl('/pages/view/' . $model->page_name);
-
-$this->showTopPageWidget = false;
 ?>
-
-
-<div id="mainmenu">
-	<?php $this->widget('zii.widgets.CMenu', array(
-		'items' => array(
-			array('label' => 'Список страниц', 'url' => array('/admin/pages'),),
-			array('label' => 'Управление страницами', 'url' => array('/admin/pages/admin'),),
-			array(
-				'label' => 'Получить ссылку на страницу', 'url' => '#', 'linkOptions' => array(
-				'data-toggle' => 'modal',
-				'data-target' => '#getLink',
-				'onclick'     => "js: $('#link').val('$sUrl');"
-			),
-			),
-			array('label' => 'Редактировать страницу', 'url' => array('/admin/pages/update/' . $model->page_id,),),
-		),
-	)); ?>
-</div>
-<div class="spacer"></div>
 
 <?php
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
