@@ -61,4 +61,8 @@ $this->pageTitle = Yii::app()->name;
 	$this->endWidget();
 	?>
 
+	<?php $this->widget('YaMetrikaGoalsWidget', array(
+		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
+	)); ?>
+
 </div>
