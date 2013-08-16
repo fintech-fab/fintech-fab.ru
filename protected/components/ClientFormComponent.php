@@ -282,12 +282,8 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aData, $client_id);
 
 				Yii::app()->clientForm->clearClientSession();
-
-				//$this->redirect(Yii::app()->createUrl('pages/view/formsent'));
-				return array(
-					'action' => 'redirect',
-					'url'    => Yii::app()->createUrl('pages/view/formsent'),
-				);
+				$this->setFormSent(true);
+				return null;
 			} else {
 				$smsCountTries += 1;
 				Yii::app()->clientForm->setSmsCountTries($smsCountTries);
@@ -303,14 +299,6 @@ class ClientFormComponent
 				}
 
 				$oClientForm = Yii::app()->clientForm->getFormModel();
-
-				/*$this->render('client_confirm_phone_via_sms', array(
-					'oClientCreateForm' => $oClientForm,
-					'phone'             => Yii::app()->clientForm->getSessionPhone(),
-					'actionAnswer'      => $actionAnswer,
-					'flagExceededTries' => $flagExceededTries,
-					'flagSmsSent'       => $flagSmsSent,
-				));*/
 
 				return array(
 					'action' => 'render',
@@ -452,6 +440,11 @@ class ClientFormComponent
 	public
 	function getView()
 	{
+		if($this->isFormSent())
+		{
+			return 'form_sent';
+		}
+
 		switch ($this->current_step) {
 			case 0:
 				return 'client_select_product';
@@ -943,5 +936,24 @@ class ClientFormComponent
 			}
 		}
 		@rmdir($dirPath);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public
+	function isFormSent()
+	{
+		return (!empty(Yii::app()->session['isFormSent']));
+	}
+
+	/**
+	 * @param $bFormSent
+	 *
+	 */
+	public
+	function setFormSent($bFormSent)
+	{
+		Yii::app()->session['isFormSent'] = $bFormSent;
 	}
 }

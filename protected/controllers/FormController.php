@@ -69,6 +69,11 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
+		if($sView==='form_sent')
+		{
+			Yii::app()->clientForm->setFormSent(false);
+		}
+
 		if ($sView == 'client_confirm_phone_via_sms') {
 			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
 
@@ -143,18 +148,6 @@ class FormController extends Controller
 		$this->renderPartial('check_webcam', array(), false, true);
 	}
 
-
-	public function actionError()
-	{
-		if ($error = Yii::app()->errorHandler->error) {
-			if (Yii::app()->request->isAjaxRequest) {
-				echo $error['message'];
-			} else {
-				$this->redirect(Yii::app()->homeUrl);
-			}
-		}
-	}
-
 	public function actionAjaxSendSms()
 	{
 		if (Yii::app()->request->isAjaxRequest) {
@@ -179,6 +172,8 @@ class FormController extends Controller
 						$this->redirect(Yii::app()->createUrl("form"));
 						break;
 				}
+			} else {
+				$this->redirect(Yii::app()->createUrl("form"));
 			}
 		} else {
 			$this->redirect(Yii::app()->createUrl("form"));
