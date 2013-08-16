@@ -102,7 +102,7 @@ class FormController extends Controller
 		// Just before rendering the view that
 		// has our activeform
 		Yii::app()->clientScript->corePackages = array();
-		$this->render($sView, array('oClientCreateForm' => $oClientForm));
+		$this->renderPartial($sView, array('oClientCreateForm' => $oClientForm),false,true);
 	}
 
 	public function actionFullForm()
