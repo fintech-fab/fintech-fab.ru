@@ -5,7 +5,7 @@
   	background: url('../img/bg-title.jpg') center 0px no-repeat white;
 }
 
-.navbar-top div.navbar-inner{
+.navbar-top div.navbar-inner-main{
 	background: url('../img/kreddy_bg.png');
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
 	filter: 0;
@@ -89,6 +89,13 @@ section .intro, div .intro{
 	width:960px;
 	margin:0 auto;
 }
+.page-divider-admin{
+	background-image: linear-gradient(to bottom, #a4c3ff, #08c);
+	height:7px;
+	width:100%;
+	margin-top: 40px;
+}
+
 #steps {
 	margin-top:20px;
 }

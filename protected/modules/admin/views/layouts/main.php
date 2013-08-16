@@ -11,10 +11,10 @@
 	<meta name="author" content="деньги, наличные, электронные деньги, срочно нужны, где взять, взаймы, займу, быстрые, в займы, займ, заём, займы, микрофинансовая организация, кредит, долг, вдолг, потребительские, денежный, частный, беспроцентный, ссуда, за час, кредитование, без справок, доход, срочный, экспресс, проценты, до зарплаты, неотложные, по паспорту, под расписку, выгодный, кредитные карты, кредитные системы, кредитные организации, кредитные истории, занять, краткосрочные, физическим лицам" />
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/bootstrap-overload.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/form.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/static/css/style.css" />
 
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
 
@@ -35,12 +35,25 @@
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand">
 				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
 
-
+			<span class="hotline pull-right">
+				Панель администрирования
+			</span>
 		</div>
 	</div>
 </nav>
 
 <?php echo $content; ?>
 
+<div class="page-divider-admin"></div>
+
+<div class="container">
+	<div class="row">
+		<div class="span12 footer">
+			<div class="footer">
+				<p>&copy; 2013 ООО "Финансовые Решения"</p>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>
