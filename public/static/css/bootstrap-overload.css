@@ -81,6 +81,10 @@ nav div.navbar-inner {
 	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
 
+.navbar-inner-admin {
+	background-image: linear-gradient(to bottom, #a4c3ff, #08c);
+}
+
 .pay_legend {
 	display: block;
 	width: 100%;
@@ -156,4 +160,15 @@ label, input, button, select, textarea {
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 18px;
+}
+
+#tabsMenu {
+	/*border-bottom: 1px solid #ddd;*/
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .brand {
+	padding-bottom: 5px;
+	width: 200px;
+	display: block;
 }
