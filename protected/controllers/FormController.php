@@ -94,6 +94,18 @@ class FormController extends Controller
 		}
 	}
 
+	public function actionAjaxForm($form = null)
+	{
+		echo "<form ><input type='text'/>";
+		echo "<input type='submit'/>";
+		echo "</form>";
+	}
+
+	public function actionFullForm()
+	{
+		$this->render("full_form");
+	}
+
 	/**
 	 *  Переход на шаг $step
 	 * @param int $step
