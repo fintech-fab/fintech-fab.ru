@@ -14,6 +14,9 @@ class AdminModule extends CWebModule
 			'admin.models.*',
 			'admin.components.*',
 		));
+		//TODO доделать тему и переключить админку на неё
+		//Yii::app()->themeManager->basePath = Yii::app()->basePath."/themes";
+		//Yii::app()->theme = 'bootstrap';
 	}
 
 	protected function allowIp($ip)
