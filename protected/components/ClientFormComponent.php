@@ -944,7 +944,7 @@ class ClientFormComponent
 	public
 	function isFormSent()
 	{
-		return (!empty(Yii::app()->session['isFormSent']));
+		return (!empty(Yii::app()->session['isFormSent']))?Yii::app()->session['isFormSent']:false;
 	}
 
 	/**
