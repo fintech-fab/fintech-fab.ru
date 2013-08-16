@@ -16,9 +16,19 @@ $this->pageTitle = Yii::app()->name;
 
 	<?php $this->widget('CheckBrowserWidget'); ?>
 
-	<?php /*$this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps'    => 8,
-	)); */
+	<?php
+	Yii::app()->clientScript->registerScript('fullFormOnload', '
+				$(function($){
+					var active = $("#accordion1").find(".in");
+					var href= active.attr("data-href");
+					if(!active.find(".accordion-inner").html().trim())
+						active.find(".accordion-inner").load(href);
+			}
+         );
+		', CClientScript::POS_END);
+
+	Yii::app()->clientScript->registerCoreScript('yiiactiveform');
+	Yii::app()->clientScript->registerCoreScript('maskedinput');
 	?>
 
 
@@ -26,24 +36,17 @@ $this->pageTitle = Yii::app()->name;
 	<div class="span12">
 		<?php $collapse = $this->beginWidget('bootstrap.widgets.TbCollapse', array(
 			'id'          => 'accordion1',
-			'toggle' => false,
+			'toggle'      => false,
 			'htmlOptions' => array(
-				'class' => 'accordion',
-				'onLoad' => "js: function(){
-					alert();
-					var active = $(this).find('.in').parents('.accordion-group').find('.accordion-body');
-					var href= clicked.attr('data-href');
-					if(!active.find('.accordion-inner').html().trim())
-						active.find('.accordion-inner').load(href);
-					}",
+				'class'  => 'accordion',
 			),
 			'events'      => array(
-				'show' => "js: function(){
-					var clicked = $(this).find(':focus').parents('.accordion-group').find('.accordion-body');
-					var href= clicked.attr('data-href');
-					if(!clicked.find('.accordion-inner').html().trim())
-						clicked.find('.accordion-inner').load(href);
-                    }"
+				'show' => 'js: function(){
+					var clicked = $(this).find(":focus").parents(".accordion-group").find(".accordion-body");
+					var href= clicked.attr("data-href");
+					if(!clicked.find(".accordion-inner").html().trim())
+						clicked.find(".accordion-inner").load(href);
+                    }'
 			),
 			'options'     => array(
 				''

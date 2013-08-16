@@ -96,9 +96,13 @@ class FormController extends Controller
 
 	public function actionAjaxForm($form = null)
 	{
-		echo "<form ><input type='text'/>";
-		echo "<input type='submit'/>";
-		echo "</form>";
+		$this->layout = "//layouts/ajax";
+		$oClientForm = new ClientPersonalDataForm();
+		$sView = 'client_personal_data';
+		// Just before rendering the view that
+		// has our activeform
+		Yii::app()->clientScript->corePackages = array();
+		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
 	public function actionFullForm()
