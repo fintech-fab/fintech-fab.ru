@@ -148,7 +148,6 @@ class PagesController extends Controller
 		if (isset($_GET['Pages'])) {
 			$model->attributes = $_GET['Pages'];
 		}
-
 		$this->render('admin', array(
 			'model' => $model,
 		));

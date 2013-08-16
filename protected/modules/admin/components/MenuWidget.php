@@ -81,14 +81,6 @@ class MenuWidget extends CWidget
 				),
 			),
 			),
-			array(
-				'name' => 'site', 'label' => 'Сайт', 'content' => array(
-				array(
-					'label' => 'Выход',
-					'name'  => 'logout',
-				),
-			)
-			),
 		);
 
 		foreach ($this->aMenu as &$aTab) {

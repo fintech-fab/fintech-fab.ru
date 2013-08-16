@@ -35,9 +35,21 @@
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand">
 				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
 
-			<span class="hotline pull-right">
-				Панель администрирования
-			</span>
+			<div class="hotline pull-right">
+				<span>Панель администрирования</span>&nbsp;
+				<span>
+				<?php if (!Yii::app()->user->isGuest) {
+					$this->widget('bootstrap.widgets.TbButton', array(
+						'label' => 'Выход',
+						'type'  => 'danger', // null, 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+						'size'  => 'small', // null, 'large', 'small' or 'mini'
+						'url'   => array('/admin/logout'),
+						'icon'  => 'icon-white icon-remove',
+					));
+				}
+				?>
+				</span>
+			</div>
 		</div>
 	</div>
 </nav>

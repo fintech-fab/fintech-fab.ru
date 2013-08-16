@@ -2,6 +2,8 @@
 
 class FilesController extends Controller
 {
+	public $layout = '/layouts/row2';
+
 	public function actions()
 	{
 		return array(

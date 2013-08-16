@@ -7,7 +7,10 @@
 <div class="container">
 	<div class="row">
 		<div class="span12">
-			<?php $this->widget('admin.components.MenuWidget');
+			<?php
+			if(!Yii::app()->user->isGuest){
+				$this->widget('admin.components.MenuWidget');
+			}
 			?>
 		</div>
 	</div>
