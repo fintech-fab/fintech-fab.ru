@@ -74,12 +74,16 @@ $this->pageTitle = Yii::app()->name;
 		<div class="row">
 			<div class="span5">
 				<?php echo $form->checkBoxRow($oClientCreateForm, 'agree', array(
-					//'disabled' => true,
-					'onchange' => 'js: function(){
-						$("#ident1").attr("disabled",false);
-					}'
+					'id'=>'agreeCheckBox',
+					'onchange' => 'js: if($("#agreeCheckBox").prop("checked")){ $("#ident1").attr("disabled",false).removeClass("disabled");}else{$("#ident1").attr("disabled","disabled").addClass("disabled");}'
 				));
 				?>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+		<div class="row">
+			<div class="span5">
 				<div class="form-actions">
 					<? $this->widget('bootstrap.widgets.TbButton', array(
 						'id'=>'ident1',

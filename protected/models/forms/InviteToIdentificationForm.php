@@ -31,4 +31,15 @@ class InviteToIdentificationForm extends ClientCreateFormAbstract
 
 	}
 
+	/**
+	 * Declares attribute labels.
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'agree'=>'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+		);
+	}
+
+
 }
