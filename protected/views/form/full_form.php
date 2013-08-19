@@ -14,49 +14,99 @@ $this->pageTitle = Yii::app()->name;
 
 <?php $this->widget('CheckBrowserWidget'); ?>
 
-<?php
-Yii::app()->clientScript->registerScript('fullFormOnload', '
-				$(function($){
-					/*var active = $("#accordion1").find(".in");
-					var href= active.attr("data-href");
-					if(!active.find(".accordion-inner").html().trim())
-						active.find(".accordion-inner").load(href);*/
-			}
-         );
-		', CClientScript::POS_END);
-?>
-
 <?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 <?php
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
-	//'enableAjaxValidation' => true,
+	'enableAjaxValidation' => true,
 	'type'=>'horizontal',
 	'clientOptions'        => array(
-	//	'validateOnChange' => true,
+		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action'               => Yii::app()->createUrl('/form/fullForm'),
+	'action'               => Yii::app()->createUrl('/form/'),
 ));
 ?>
 
-	<div class="row">
-		<? require dirname(__FILE__) . '/fields2/personal_data.php' ?>
+<?php $collapse = $this->beginWidget('bootstrap.widgets.TbCollapse', array(
+	'id'          => 'accordion1',
+	//'toggle'      => false,
+	'htmlOptions' => array(
+		'class' => 'accordion',
+	),
+));?>
+
+
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<h4 style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#personalData">
+			Личные данные</h4>
 	</div>
-	<div class="row">
-		<? require dirname(__FILE__) . '/fields2/passport_data.php' ?>
+	<div id="personalData" class="accordion-body collapse in">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/personal_data.php' ?>
+			</div>
+		</div>
 	</div>
-	<div class="row">
-		<? require dirname(__FILE__) . '/fields2/address_reg.php' ?>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<h4 style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#passportData">
+			Паспортные данные</h4>
 	</div>
-	<div class="row">
-		<? require dirname(__FILE__) . '/fields2/job_info.php' ?>
+	<div id="passportData" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/passport_data.php' ?>
+			</div>
+		</div>
 	</div>
-	<div class="row">
-		<? require dirname(__FILE__) . '/fields2/send.php' ?>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<h4 style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#address">
+			Постоянная регистрация</h4>
 	</div>
+	<div id="address" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/address_reg.php' ?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<h4 style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#jobInfo">
+			Место работы</h4>
+	</div>
+	<div id="jobInfo" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/job_info.php' ?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<h4 style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#send">
+			Отправка</h4>
+	</div>
+	<div id="send" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/send.php' ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $this->endWidget(); ?>
+
+
 	<div class="clearfix"></div>
 	<div class="row span11">
 		<div class="form-actions">
@@ -67,64 +117,5 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			)); ?>
 		</div>
 	</div>
-	<?php $this->endWidget(); ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	<br /><br /><br /><br /><br /><br />
-
-	<?php /*$collapse = $this->beginWidget('bootstrap.widgets.TbCollapse', array(
-		'id'          => 'accordion1',
-		'toggle'      => false,
-		'parent'      => false,
-		'htmlOptions' => array(
-			'class' => 'accordion',
-		),
-	));?>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-				Collapsible Group Item #1 </a>
-		</div>
-		<div id="collapseOne" class="accordion-body collapse in">
-			<div class="accordion-inner">
-
-			</div>
-		</div>
-	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo" data-href="/form/ajaxForm">
-				Collapsible Group Item #2 </a>
-		</div>
-		<div id="collapseTwo" class="accordion-body collapse">
-			<div class="accordion-inner">
-
-			</div>
-		</div>
-	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThree" data-href="/form/ajaxForm">
-				Collapsible Group Item #3 </a>
-		</div>
-		<div id="collapseThree" class="accordion-body collapse">
-			<div class="accordion-inner">
-
-			</div>
-		</div>
-	</div>
-	<?php $this->endWidget(); ?>
+<?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>

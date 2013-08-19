@@ -38,6 +38,7 @@ $this->pageTitle = Yii::app()->name;
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                   => get_class($oClientCreateForm),
 		'enableAjaxValidation' => true,
+		'type'=>'vertical',
 		'clientOptions'        => array(
 			'validateOnChange' => true,
 			'validateOnSubmit' => true,

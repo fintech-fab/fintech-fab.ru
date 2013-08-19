@@ -199,14 +199,22 @@ class ClientFullForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'friends_fio'     => 'ФИО',
-				'friends_phone'   => 'Телефон',
+				'relatives_one_fio'      => 'Контактное лицо',
+				'relatives_one_phone'    => 'Телефон',
+
+				'friends_fio'            => 'Дополнительный контакт (повышает вероятность одобрения)',
+				'friends_phone'          => 'Телефон',
 
 				'complete'        => 'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 				'secret_question' => 'Секретный вопрос',
 				'secret_answer'   => 'Ответ на секретный вопрос',
 
 				'product'         => 'Сумма займа',
+
+				'job_monthly_income'     => 'Среднемесячный доход',
+				'job_monthly_outcome'    => 'Среднемесячный расход',
+
+				'have_past_credit'       => 'Наличие кредитов и займов в прошлом',
 
 			)
 		);

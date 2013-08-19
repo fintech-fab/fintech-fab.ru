@@ -65,16 +65,6 @@ class IkTbActiveForm extends TbActiveForm {
 				$aHtmlOptions[$sAttribute] = $aDefaultOptions;
 			}
 
-			/*$aReturn[$sAttribute]['field'] = $this->getController()->widget(
-				'CMaskedTextField',
-				array(
-					'model'       => $oForm,
-					'attribute'   => $sAttribute,
-					'mask'        => $aHtmlOptions[$sAttribute]['mask'],
-					'htmlOptions' => $aDefaultOptions
-				),
-				true
-			);*/
 			$aReturn[$sAttribute]['field'] = $this->maskedTextField($oForm,$sAttribute,$aHtmlOptions[$sAttribute]['mask'],$aDefaultOptions);
 
 			$aReturn[$sAttribute]['error']= $this->error($oForm, $sAttribute);
@@ -100,7 +90,6 @@ class IkTbActiveForm extends TbActiveForm {
 		return $sReturn;
 
 	}
-
 
 	/**
 	 * @param CModel $oForm

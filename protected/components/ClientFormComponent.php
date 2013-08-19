@@ -398,6 +398,8 @@ class ClientFormComponent
 	public
 	function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
+		return new ClientFullForm;
+
 		switch ($this->current_step) {
 			case 0:
 				return new ClientSelectProductForm();
@@ -440,6 +442,8 @@ class ClientFormComponent
 	public
 	function getView()
 	{
+		return 'full_form';
+
 		if($this->isFormSent())
 		{
 			return 'form_sent';
@@ -490,6 +494,9 @@ class ClientFormComponent
 	public
 	function getPostData()
 	{
+		if (isset($_POST['ClientFullForm'])) {
+			return $_POST['ClientFullForm'];
+		}
 
 		switch ($this->current_step) {
 			case 0:
