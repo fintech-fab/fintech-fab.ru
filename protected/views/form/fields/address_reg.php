@@ -8,14 +8,14 @@
 
 ?>
 
-<span class="span10"><?
-	echo $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('class' => 'span4', 'empty' => ''));
-	?></span>
+<span class="span10">
+	<?= $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('class' => 'span4', 'empty' => ''));	?>
+</span>
 
-<span class="span10"><?
-	echo $form->textFieldRow($oClientCreateForm, 'address_reg_city', array('class' => 'span3'));
-	?></span>
+<span class="span10">
+	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', array('class' => 'span3'));	?>
+</span>
 
-<span class="span10"><?
-	echo $form->textFieldRow($oClientCreateForm, 'address_reg_address', array('class' => 'span8'));
-	?></span>
+<span class="span10">
+	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', array('class' => 'span8'));?>
+</span>

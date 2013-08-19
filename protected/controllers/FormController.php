@@ -107,7 +107,8 @@ class FormController extends Controller
 
 	public function actionFullForm()
 	{
-		$this->render("full_form");
+		$oClientForm = new ClientFullForm();
+		$this->render("full_form", array('oClientCreateForm'=>$oClientForm));
 	}
 
 	/**
