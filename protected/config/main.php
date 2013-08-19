@@ -9,7 +9,10 @@ $a = array(
 	'sourceLanguage' => 'ru',
 	'language'       => 'ru',
 
-	'preload'        => array('log'),
+	'preload'        => array(
+		'log',
+		'bootstrap'
+	),
 
 	'import'         => array(
 		'application.models.*',

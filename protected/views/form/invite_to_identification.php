@@ -73,11 +73,19 @@ $this->pageTitle = Yii::app()->name;
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="span5">
-
+				<?php echo $form->checkBoxRow($oClientCreateForm, 'agree', array(
+					//'disabled' => true,
+					'onchange' => 'js: function(){
+						$("#ident1").attr("disabled",false);
+					}'
+				));
+				?>
 				<div class="form-actions">
 					<? $this->widget('bootstrap.widgets.TbButton', array(
+						'id'=>'ident1',
 						'buttonType'  => 'button',
 						'type'        => 'primary',
+						'disabled' =>true,
 						'label'       => 'Пройти видеоидентификацию на сайте →',
 						'htmlOptions' => array(
 							'onclick' => 'js:{
