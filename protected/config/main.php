@@ -43,7 +43,7 @@ $a = array(
 			'class' => 'application.components.SiteParams',
 		),
 		'bootstrap'    => array(
-			'class' => 'bootstrap.components.Bootstrap',
+			'class' => 'ext.bootstrap.components.Bootstrap',
 		),
 		'image'        => array(
 			'class'  => 'application.extensions.image.CImageComponent',
