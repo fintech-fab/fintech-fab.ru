@@ -81,7 +81,7 @@ $this->pageTitle = Yii::app()->name;
 			</div>
 		</div>
 
-		<div class="clearfix"></div>
+
 		<div class="row">
 			<div class="span5">
 				<div class="form-actions">

@@ -25,7 +25,7 @@ class InviteToIdentificationForm extends ClientCreateFormAbstract
 			$aRequired
 		);
 		$aRules[] = array('go_identification', 'in', 'range'=>array(1,2), 'message' => 'Ошибка!');
-		$aRules[] = array('agree', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных');
+		//$aRules[] = array('agree', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных');
 
 		return $aRules;
 
@@ -37,7 +37,7 @@ class InviteToIdentificationForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array(
-			'agree'=>'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+			'agree'=>'Я согласен с обработкой моих персональных данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 		);
 	}
 
