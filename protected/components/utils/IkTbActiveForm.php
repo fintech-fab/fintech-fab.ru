@@ -16,18 +16,6 @@ class IkTbActiveForm extends TbActiveForm {
 			$aHtmlOptions['mask'] = '+7 999 999 99 99';
 		}
 
-		$sReturn  = '';
-
-		if( empty( $aHtmlOptions['hideLabel'] ) ){
-			$sReturn .= $this->label(
-				$oForm,
-				$sAttribute,
-				array(
-					'required' => $oForm->isAttributeRequired( $sAttribute )
-				)
-			);
-		}
-
 		$aDefaultOptions = array(
 			'size' => 10,
 			'maxlength' => 10
@@ -37,18 +25,7 @@ class IkTbActiveForm extends TbActiveForm {
 			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions);
 		}
 
-		$sReturn .= $this->getController()->widget(
-			'CMaskedTextField',
-			array(
-				'model'			=> $oForm,
-				'attribute'		=> $sAttribute,
-				'mask'			=> $aHtmlOptions['mask'],
-				'htmlOptions'	=> $aDefaultOptions
-			),
-			true
-		);
-
-		$sReturn .= $this->error($oForm, $sAttribute);
+		$sReturn = $this->maskedTextFieldRow($oForm,$sAttribute,$aHtmlOptions['mask'],$aDefaultOptions);
 
 		return $sReturn;
 
@@ -88,7 +65,7 @@ class IkTbActiveForm extends TbActiveForm {
 				$aHtmlOptions[$sAttribute] = $aDefaultOptions;
 			}
 
-			$aReturn[$sAttribute]['field'] = $this->getController()->widget(
+			/*$aReturn[$sAttribute]['field'] = $this->getController()->widget(
 				'CMaskedTextField',
 				array(
 					'model'       => $oForm,
@@ -97,7 +74,8 @@ class IkTbActiveForm extends TbActiveForm {
 					'htmlOptions' => $aDefaultOptions
 				),
 				true
-			);
+			);*/
+			$aReturn[$sAttribute]['field'] = $this->maskedTextField($oForm,$sAttribute,$aHtmlOptions[$sAttribute]['mask'],$aDefaultOptions);
 
 			$aReturn[$sAttribute]['error']= $this->error($oForm, $sAttribute);
 		}
@@ -138,17 +116,6 @@ class IkTbActiveForm extends TbActiveForm {
 			$aHtmlOptions['mask'] = '+7 999 999 99 99';
 		}
 
-		$sReturn  = '';
-
-		if( empty( $aHtmlOptions['hideLabel'] ) ){
-			$sReturn .= $this->label(
-				$oForm,
-				$sAttribute,
-				array(
-					'required' => $oForm->isAttributeRequired( $sAttribute )
-				)
-			);
-		}
 
 		$aDefaultOptions = array(
 			'size' => 16,
@@ -159,18 +126,7 @@ class IkTbActiveForm extends TbActiveForm {
 			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions );
 		}
 
-		$sReturn .= $this->getController()->widget(
-			'CMaskedTextField',
-			array(
-				'model'			=> $oForm,
-				'attribute'		=> $sAttribute,
-				'mask'			=> $aHtmlOptions['mask'],
-				'htmlOptions'	=> $aDefaultOptions
-			),
-			true
-		);
-
-		$sReturn .= $this->error($oForm, $sAttribute);
+		$sReturn = $this->maskedTextFieldRow($oForm,$sAttribute,$aHtmlOptions['mask'],$aDefaultOptions);
 
 		return $sReturn;
 
@@ -188,39 +144,16 @@ class IkTbActiveForm extends TbActiveForm {
 			$aHtmlOptions['mask'] = '99.99.9999';
 		}
 
-		$sReturn  = '';
-
-		if( empty( $aHtmlOptions['hideLabel'] ) ){
-			$sReturn .= $this->label(
-				$oForm,
-				$sAttribute,
-				array(
-					'required' => $oForm->isAttributeRequired( $sAttribute )
-				)
-			);
-		}
-
 		$aDefaultOptions = array(
 			'size' => 10,
-			'maxlength' => 10
+			'maxlength' => 10,
 		);
 
 		if( !empty( $aHtmlOptions ) ){
 			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions );
 		}
 
-		$sReturn .= $this->getController()->widget(
-			'CMaskedTextField',
-			array(
-				'model'			=> $oForm,
-				'attribute'		=> $sAttribute,
-				'mask'			=> $aHtmlOptions['mask'],
-				'htmlOptions'	=> $aDefaultOptions
-			),
-			true
-		);
-
-		$sReturn .= $this->error($oForm, $sAttribute);
+		$sReturn = $this->maskedTextFieldRow($oForm,$sAttribute,$aHtmlOptions['mask'],$aDefaultOptions);
 
 		return $sReturn;
 

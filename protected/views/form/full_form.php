@@ -17,10 +17,10 @@ $this->pageTitle = Yii::app()->name;
 <?php
 Yii::app()->clientScript->registerScript('fullFormOnload', '
 				$(function($){
-					var active = $("#accordion1").find(".in");
+					/*var active = $("#accordion1").find(".in");
 					var href= active.attr("data-href");
 					if(!active.find(".accordion-inner").html().trim())
-						active.find(".accordion-inner").load(href);
+						active.find(".accordion-inner").load(href);*/
 			}
          );
 		', CClientScript::POS_END);
@@ -33,6 +33,7 @@ Yii::app()->clientScript->registerScript('fullFormOnload', '
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	//'enableAjaxValidation' => true,
+	'type'=>'horizontal',
 	'clientOptions'        => array(
 	//	'validateOnChange' => true,
 		'validateOnSubmit' => true,

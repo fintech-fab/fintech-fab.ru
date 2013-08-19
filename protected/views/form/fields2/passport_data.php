@@ -4,7 +4,7 @@
  * @var IkTbActiveForm $form
  */
 ?>
-<span class="span6">
+<div class="span6">
 <?= $form->fieldPassportRow($oClientCreateForm, array('passport_series','passport_number'), array('passport_number'=>array('class' => 'span2', 'mask' => '999999', 'size'=>'6', 'maxlength'=>'6'),'passport_series'=>array('class' => 'span1', 'mask' => '9999', 'size'=>'4', 'maxlength'=>'4')));?>
 
 
@@ -12,15 +12,15 @@
 
 <?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size'=>'7', 'maxlength'=>'7',));?>
 <?= $form->textFieldRow($oClientCreateForm, 'passport_issued');?>
-</span>
+</div>
 
-<span class="span5">
+<div class="span5">
 	<?=	$form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span4', 'empty' => '')); ?>
-</span>
+</div>
 
-<span class="span3">
+<div class="span3">
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3')); ?>
-</span>
+</div>
 
 <?php
 //при изменении типа документа заново валидировать поле с номером документа.
