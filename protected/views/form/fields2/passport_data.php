@@ -4,6 +4,41 @@
  * @var IkTbActiveForm           $form
  */
 ?>
+<?php
+$htmlOptions = array(
+	'errorOptions' => array(
+		'afterValidateAttribute' => 'js: function(html){
+			passportDataOk = false;
+			$("#personalData").collapse("hide");
+			var formName="' . get_class($oClientCreateForm) . '";
+			var aAttrs = Array(
+				"passport_series",
+				"passport_number",
+				"passport_date",
+				"passport_code",
+				"passport_issued",
+				"document",
+				"document_number"
+			);
+			var bFlag = true;
+			var sAttrName;
+			for(i=0;i<aAttrs.length;i++)
+			{
+				t = formName +"_"+aAttrs[i];
+				if(!$("#"+sAttrName).parents(".control-group").hasClass("success")){
+					bFlag = false;
+				}
+			}
+			if(bFlag){
+				$("#addressHeading").attr("href","#address");
+				$("#address").collapse("show");
+				$("#address").find(":input").prop("disabled",false);
+				passportDataOk = true;
+			}
+		}'
+	)
+);
+?>
 <div class="span5">
 	<?php // echo $form->fieldPassportOneFieldRow($oClientCreateForm, array('passport_series','passport_number'), array('passport_number'=>array('class' => 'span2', 'mask' => '999999', 'size'=>'6', 'maxlength'=>'6'),'passport_series'=>array('class' => 'span1', 'mask' => '9999', 'size'=>'4', 'maxlength'=>'4')));?>
 	<div class="control-group">
@@ -19,26 +54,24 @@
 		</div>
 		<div class="row">
 			<div class="span5">
-				<div style="margin-left: 180px;"><?= $form->error($oClientCreateForm, 'passport_series'); ?>
-					<?= $form->error($oClientCreateForm, 'passport_number'); ?></div>
+				<div style="margin-left: 180px;">
+					<?= $form->error($oClientCreateForm, 'passport_series', $htmlOptions['errorOptions']); ?>
+					<?= $form->error($oClientCreateForm, 'passport_number', $htmlOptions['errorOptions']); ?></div>
 			</div>
 		</div>
 	</div>
 
 
 
-	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date'); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', $htmlOptions); ?>
 
-	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued'); ?>
+	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',) + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', $htmlOptions); ?>
 </div>
 
 <div class="span5">
-	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '')); ?>
-</div>
-
-<div class="span3">
-	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3')); ?>
+	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3') + $htmlOptions); ?>
 </div>
 
 <?php

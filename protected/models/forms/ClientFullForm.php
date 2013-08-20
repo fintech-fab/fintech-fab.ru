@@ -73,17 +73,18 @@ class ClientFullForm extends ClientCreateFormAbstract
 		$aRules =
 			array(
 				array(
-					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в горячую линию.', 'criteria' => array(
+					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь на горячую линию.', 'criteria' => array(
 					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
-				)),
+				)
+				),
 
-					array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareValue' => $sPhone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
-					array('friends_phone', 'compare', 'operator' => '!=', 'compareValue' => $sPhone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareValue' => $sPhone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareValue' => $sPhone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
-					array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица.'),
-					array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
-					array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
-					array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts), 'message' => 'Выберите сумму займа'),
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица.'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
+				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
+				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts), 'message' => 'Выберите сумму займа'),
 
 
 			);
@@ -199,22 +200,22 @@ class ClientFullForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'relatives_one_fio'      => 'Контактное лицо',
-				'relatives_one_phone'    => 'Телефон',
+				'relatives_one_fio'   => 'Контактное лицо',
+				'relatives_one_phone' => 'Телефон',
 
-				'friends_fio'            => 'Дополнительный контакт (повышает вероятность одобрения)',
-				'friends_phone'          => 'Телефон',
+				'friends_fio'         => 'Дополнительный контакт (повышает вероятность одобрения)',
+				'friends_phone'       => 'Телефон',
 
-				'complete'        => 'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
-				'secret_question' => 'Секретный вопрос',
-				'secret_answer'   => 'Ответ на секретный вопрос',
+				'complete'            => 'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+				'secret_question'     => 'Секретный вопрос',
+				'secret_answer'       => 'Ответ на секретный вопрос',
 
-				'product'         => 'Сумма займа',
+				'product'             => 'Сумма займа',
 
-				'job_monthly_income'     => 'Среднемесячный доход',
-				'job_monthly_outcome'    => 'Среднемесячный расход',
+				'job_monthly_income'  => 'Среднемесячный доход',
+				'job_monthly_outcome' => 'Среднемесячный расход',
 
-				'have_past_credit'       => 'Наличие кредитов и займов в прошлом',
+				'have_past_credit'    => 'Наличие кредитов и займов в прошлом',
 
 			)
 		);
