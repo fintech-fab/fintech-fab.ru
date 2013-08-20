@@ -15,7 +15,6 @@ class ClientSendForm extends ClientCreateFormAbstract
 	{
 		$aRequired = array(
 			'numeric_code',
-			'complete',
 			'secret_question',
 			'secret_answer',
 		);
