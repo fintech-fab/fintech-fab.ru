@@ -21,10 +21,12 @@ $this->pageTitle = Yii::app()->name;
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
+	'enableClientValidation' => false,
 	'type'=>'horizontal',
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
+		'success'=>'js: function(data){alert(1);}'
 	),
 	'action'               => Yii::app()->createUrl('/form/'),
 ));
