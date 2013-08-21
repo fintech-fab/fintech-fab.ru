@@ -25,8 +25,9 @@ class FormController extends Controller
 		 */
 		if (Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
-			echo IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
+			$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
 			Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
+			echo $sEcho;
 			Yii::app()->end();
 		}
 
@@ -69,8 +70,7 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
-		if($sView==='form_sent')
-		{
+		if ($sView === 'form_sent') {
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
