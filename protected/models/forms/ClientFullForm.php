@@ -14,8 +14,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 
 	public function rules()
 	{
-		$sPhone = Yii::app()->clientForm->getSessionPhone();
-
 		// всегда обязательные поля
 		$aRequired = array(
 			'first_name',
@@ -42,17 +40,12 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'address_reg_city',
 			'address_reg_address',
 
-			'address_reg_as_res',
-
 			'address_res_region',
 			'address_res_city',
 			'address_res_address',
 
 			'relatives_one_fio',
 			'relatives_one_phone',
-
-			'friends_fio',
-			'friends_phone',
 
 			'job_company',
 			'job_position',
@@ -78,13 +71,13 @@ class ClientFullForm extends ClientCreateFormAbstract
 				)
 				),
 
-				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareValue' => $sPhone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
-				array('friends_phone', 'compare', 'operator' => '!=', 'compareValue' => $sPhone, 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица.'),
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
-				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts), 'message' => 'Выберите сумму займа'),
+				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts2), 'message' => 'Выберите сумму займа'),
 
 
 			);
@@ -135,7 +128,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'have_past_credit',
 
 				'numeric_code',
-				//'complete',
 				'secret_question',
 				'secret_answer',
 

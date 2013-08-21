@@ -9,7 +9,7 @@ $htmlOptions = array(
 	'errorOptions' => array(
 		'afterValidateAttribute' => 'js: function(html){
 			passportDataOk = false;
-			$("#personalData").collapse("hide");
+			if($("#personalData").hasClass("in")) $("#personalData").collapse("hide");
 			var formName="' . get_class($oClientCreateForm) . '";
 			var aAttrs = Array(
 				"passport_series",

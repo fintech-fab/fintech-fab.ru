@@ -21,10 +21,34 @@ $this->pageTitle = Yii::app()->name;
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
+	//'enableClientValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
+		//'validateOnType' => true,
+		'afterValidate'    => 'js: function(){
+			if($("#personalData").find("div").hasClass("error"))
+			{
+				if(!$("#personalData").hasClass("in")) $("#personalData").collapse("show");
+			}
+			else if($("#passportData").find("div").hasClass("error"))
+			{
+				if(!$("#passportData").hasClass("in")) $("#passportData").collapse("show");
+			}
+			else if($("#address").find("div").hasClass("error"))
+			{
+				if(!$("#address").hasClass("in")) $("#address").collapse("show");
+			}
+			else if($("#jobInfo").find("div").hasClass("error"))
+			{
+				if(!$("#jobInfo").hasClass("in")) $("#jobInfo").collapse("show");
+			}
+			else if($("#sendForm").find("div").hasClass("error"))
+			{
+				if(!$("#sendForm").hasClass("in")) $("#sendForm").collapse("show");
+			}
+		}'
 	),
 	'action'               => Yii::app()->createUrl('/form/'),
 ));
@@ -121,6 +145,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>
 
 <?php
+//TODO допилить RegExp
 Yii::app()->clientScript->registerScript('checkData', '
 	function in_array(what, where) {
 	    for(var i=0, length_array=where.length; i<length_array; i++)
@@ -133,6 +158,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	var passportDataOk = false;
 	var addressOk = false;
 	var jobInfoOk = false;
+	var sendFormOk = false;
 
 	var formName="' . get_class($oClientCreateForm) . '";
 
@@ -145,12 +171,12 @@ Yii::app()->clientScript->registerScript('checkData', '
 	* вешаем на радиобаттоны "Пол" обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
 	* валидации radioButtonListRow без подобных плясок с бубном)
 	*/
-	jQuery("#' . get_class($oClientCreateForm) . '_sex_0, #' . get_class($oClientCreateForm) . '_sex_1").change(function()
+	jQuery("#sex").find(":input").change(function()
 	{
 		var form=$("#"+formName);
 		var settings = form.data("settings");
 		$.each(settings.attributes, function () {
-	        if(this.id == formName+"_sex_1"){
+	        if(this.id == this.id == formName+"_sex_0"||this.id == formName+"_sex_1"){
 	            this.status = 2; // force ajax validation
 	        }
 	    });
@@ -167,14 +193,39 @@ Yii::app()->clientScript->registerScript('checkData', '
 	    });
 	});
 
-	jQuery("#' . get_class($oClientCreateForm) . '_sex_0").focus(function()
+	jQuery("#product").find(":input").change(function()
+	{
+		var form=$("#"+formName);
+		var settings = form.data("settings");
+		var regExp = new RegExp("^"+formName+"_product");
+		$.each(settings.attributes, function () {
+			var sID = this.id;
+	        if(sID.match(regExp)){
+	            this.status = 2; // force ajax validation
+	        }
+	    });
+	    form.data("settings", settings);
+
+		// trigger ajax validation
+	    $.fn.yiiactiveform.validate(form, function (data) {
+	        $.each(settings.attributes, function () {
+	            var sID = this.id;
+				if(sID.match(regExp)){
+	                $.fn.yiiactiveform.updateInput(this, data, form);
+	                this.afterValidateAttribute();
+	            }
+	        });
+	    });
+	});
+
+	jQuery("#sex").find(":input").focus(function()
 	{
 		jQuery("#' . get_class($oClientCreateForm) . '_sex_0").attr("checked",true).change();
 	});
 
-	jQuery("#' . get_class($oClientCreateForm) . '_sex_1").focus(function()
+	jQuery("#product").find(":input").focus(function()
 	{
-		jQuery("#' . get_class($oClientCreateForm) . '_sex_1").attr("checked",true).change();
+		jQuery("#product").find(":input").first().next().find(":input").attr("checked","checked").change();
 	});
 
 	//по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
@@ -183,7 +234,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		var form=$("#"+formName);
         var settings = form.data("settings");
 
-        var attrs = Array(
+        var aAttrs = Array(
 			formName+"_first_name",
 			formName+"_last_name",
 			formName+"_third_name",
@@ -196,7 +247,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		);
 
         $.each(settings.attributes, function () {
-	        if(in_array(this.id,attrs)){
+	        if(in_array(this.id,aAttrs)){
 	            this.status = 2; // force ajax validation
 	        }
 	    });
@@ -205,7 +256,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		// trigger ajax validation
 	    $.fn.yiiactiveform.validate(form, function (data) {
 	        $.each(settings.attributes, function () {
-				if(in_array(this.id,attrs)){
+				if(in_array(this.id,aAttrs)){
 	                $.fn.yiiactiveform.updateInput(this, data, form);
 	                if(this.id!=formName+"_sex")
 	                    this.afterValidateAttribute();
@@ -221,7 +272,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		var form=$("#"+formName);
         var settings = form.data("settings");
 
-        var attrs = Array(
+        var aAttrs = Array(
 			formName+"_passport_series",
 			formName+"_passport_number",
 			formName+"_passport_date",
@@ -232,7 +283,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		);
 
         $.each(settings.attributes, function () {
-	        if(in_array(this.id,attrs)){
+	        if(in_array(this.id,aAttrs)){
 	            this.status = 2; // force ajax validation
 	        }
 	    });
@@ -241,7 +292,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		// trigger ajax validation
 	    $.fn.yiiactiveform.validate(form, function (data) {
 	        $.each(settings.attributes, function () {
-				if(in_array(this.id,attrs)){
+				if(in_array(this.id,aAttrs)){
 	                $.fn.yiiactiveform.updateInput(this, data, form);
                     this.afterValidateAttribute();
 	            }
@@ -256,7 +307,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		var form=$("#"+formName);
         var settings = form.data("settings");
 
-        var attrs = Array(
+        var aAttrs = Array(
 			formName+"_address_reg_region",
 			formName+"_address_reg_city",
 			formName+"_address_reg_address",
@@ -270,7 +321,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		);
 
         $.each(settings.attributes, function () {
-	        if(in_array(this.id,attrs)){
+	        if(in_array(this.id,aAttrs)){
 	            this.status = 2; // force ajax validation
 	        }
 	    });
@@ -279,7 +330,40 @@ Yii::app()->clientScript->registerScript('checkData', '
 		// trigger ajax validation
 	    $.fn.yiiactiveform.validate(form, function (data) {
 	        $.each(settings.attributes, function () {
-				if(in_array(this.id,attrs)){
+				if(in_array(this.id,aAttrs)){
+	                $.fn.yiiactiveform.updateInput(this, data, form);
+                    this.afterValidateAttribute();
+	            }
+	        });
+	    });
+	}});
+
+	jQuery("#sendHeading").click(function()
+	{
+	if(personalDataOk&&passportDataOk&&addressOk){
+		var form=$("#"+formName);
+        var settings = form.data("settings");
+
+        var aAttrs = Array(
+			formName+"_job_company",
+			formName+"_job_position",
+			formName+"_job_phone",
+			formName+"_job_time",
+			formName+"_job_monthly_income",
+			formName+"_job_monthly_outcome",
+			formName+"_have_past_credit"		);
+
+        $.each(settings.attributes, function () {
+	        if(in_array(this.id,aAttrs)){
+	            this.status = 2; // force ajax validation
+	        }
+	    });
+	    form.data("settings", settings);
+
+		// trigger ajax validation
+	    $.fn.yiiactiveform.validate(form, function (data) {
+	        $.each(settings.attributes, function () {
+				if(in_array(this.id,aAttrs)){
 	                $.fn.yiiactiveform.updateInput(this, data, form);
                     this.afterValidateAttribute();
 	            }

@@ -10,7 +10,8 @@ $htmlOptions = array(
 	'errorOptions' => array(
 		'afterValidateAttribute' => 'js: function(html){
 			addressOk = false;
-			$("#passportData").collapse("hide");
+			if($("#personalData").hasClass("in")) $("#personalData").collapse("hide");
+			if($("#passportData").hasClass("in")) $("#passportData").collapse("hide");
 			var formName="' . get_class($oClientCreateForm) . '";
 			var aAttrs = Array(
 				"address_reg_region",

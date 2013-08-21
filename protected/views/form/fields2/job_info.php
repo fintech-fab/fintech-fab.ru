@@ -9,7 +9,9 @@ $htmlOptions = array(
 	'errorOptions' => array(
 		'afterValidateAttribute' => 'js: function(html){
 			jobInfoOk = false;
-			$("#passportData").collapse("hide");
+			if($("#personalData").hasClass("in")) $("#personalData").collapse("hide");
+			if($("#passportData").hasClass("in")) $("#passportData").collapse("hide");
+			if($("#address").hasClass("in")) $("#address").collapse("hide");
 			var formName="' . get_class($oClientCreateForm) . '";
 			var aAttrs = Array(
 				"job_company",

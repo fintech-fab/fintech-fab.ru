@@ -56,7 +56,7 @@ class ClientFormComponent
 
 		$aValidFormData = $oClientForm->getValidAttributes();
 
-		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm') {
 			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
@@ -67,6 +67,7 @@ class ClientFormComponent
 				 */
 
 				$aCookieData = Cookie::getDataFromCookie('client');
+
 
 				if (
 					$aCookieData &&
@@ -122,7 +123,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm') {
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
@@ -283,6 +284,7 @@ class ClientFormComponent
 
 				Yii::app()->clientForm->clearClientSession();
 				$this->setFormSent(true);
+
 				return null;
 			} else {
 				$smsCountTries += 1;
@@ -398,40 +400,62 @@ class ClientFormComponent
 	public
 	function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-		return new ClientFullForm;
+		$bFullForm = true;
+		if ($bFullForm) {
+			switch ($this->current_step) {
+				case 0:
+					return new ClientSelectProductForm();
+					break;
+				case 1:
+				case 2:
+				case 3:
+					return new InviteToIdentificationForm();
+					break;
+				case 4:
+					return new ClientFullForm();
+					break;
+				case 5:
+					return new ClientConfirmPhoneViaSMSForm();
+					break;
+				default:
+					return new ClientSelectProductForm();
+					break;
+			}
+		} else {
 
-		switch ($this->current_step) {
-			case 0:
-				return new ClientSelectProductForm();
-				break;
-			case 1:
-				return new ClientSelectGetWayForm();
-				break;
-			case 2:
-			case 3:
-			case 4:
-				return new InviteToIdentificationForm();
-				break;
-			case 5:
-				return new ClientPersonalDataForm();
-				break;
-			case 6:
-				return new ClientAddressForm();
-				break;
-			case 7:
-				return new ClientJobInfoForm();
-				break;
-			case 8:
-				return new ClientSendForm();
-				break;
-			case 9:
-				return new ClientConfirmPhoneViaSMSForm();
-				break;
-			default:
-				return new ClientSelectProductForm();
-				break;
+			switch ($this->current_step) {
+				case 0:
+					return new ClientSelectProductForm();
+					break;
+				case 1:
+					return new ClientSelectGetWayForm();
+					break;
+				case 2:
+				case 3:
+				case 4:
+					return new InviteToIdentificationForm();
+					break;
+				case 5:
+					return new ClientPersonalDataForm();
+					break;
+				case 6:
+					return new ClientAddressForm();
+					break;
+				case 7:
+					return new ClientJobInfoForm();
+					break;
+				case 8:
+					return new ClientSendForm();
+					break;
+				case 9:
+					return new ClientConfirmPhoneViaSMSForm();
+					break;
+				default:
+					return new ClientSelectProductForm();
+					break;
+			}
+
 		}
-
 	}
 
 	/**
@@ -442,47 +466,75 @@ class ClientFormComponent
 	public
 	function getView()
 	{
-		return 'full_form';
-
-		if($this->isFormSent())
-		{
+		if ($this->isFormSent()) {
 			return 'form_sent';
 		}
 
-		switch ($this->current_step) {
-			case 0:
-				return 'client_select_product';
-				break;
-			case 1:
-				return 'client_select_get_way';
-				break;
-			case 2:
-				return 'invite_to_identification';
-				break;
-			case 3:
-				return 'identification';
-				break;
-			case 4:
-				return 'documents';
-				break;
-			case 5:
-				return 'client_personal_data';
-				break;
-			case 6:
-				return 'client_address';
-				break;
-			case 7:
-				return 'client_job_info';
-				break;
-			case 8:
-				return 'client_send';
-				break;
-			case 9:
-				return 'client_confirm_phone_via_sms';
-				break;
-			default:
-				return 'client_select_product';
-				break;
+		$bFullForm = true;
+
+		if ($bFullForm) {
+
+			switch ($this->current_step) {
+				case 0:
+					return 'client_select_product';
+					break;
+				case 1:
+					return 'invite_to_identification';
+					break;
+				case 2:
+					return 'identification';
+					break;
+				case 3:
+					return 'documents';
+					break;
+				case 4:
+					return 'full_form';
+					break;
+				case 5:
+					return 'client_confirm_phone_via_sms';
+					break;
+				default:
+					return 'client_select_product';
+					break;
+			}
+		} else {
+
+
+			switch ($this->current_step) {
+				case 0:
+					return 'client_select_product';
+					break;
+				case 1:
+					return 'client_select_get_way';
+					break;
+				case 2:
+					return 'invite_to_identification';
+					break;
+				case 3:
+					return 'identification';
+					break;
+				case 4:
+					return 'documents';
+					break;
+				case 5:
+					return 'client_personal_data';
+					break;
+				case 6:
+					return 'client_address';
+					break;
+				case 7:
+					return 'client_job_info';
+					break;
+				case 8:
+					return 'client_send';
+					break;
+				case 9:
+					return 'client_confirm_phone_via_sms';
+					break;
+				default:
+					return 'client_select_product';
+					break;
+			}
 		}
 	}
 
@@ -498,84 +550,132 @@ class ClientFormComponent
 			return $_POST['ClientFullForm'];
 		}
 
-		switch ($this->current_step) {
-			case 0:
-			{
+		$bFullForm = true;
 
-				if (isset($_POST['ClientSelectProductForm'])) {
-					return $_POST['ClientSelectProductForm'];
+		if ($bFullForm) {
+			switch ($this->current_step) {
+				case 0:
+				{
+
+					if (isset($_POST['ClientSelectProductForm'])) {
+						return $_POST['ClientSelectProductForm'];
+					}
+
+					return null;
 				}
+					break;
+				case 1:
+				{
+					if (isset($_POST['InviteToIdentificationForm'])) {
+						return $_POST['InviteToIdentificationForm'];
+					}
 
-				return null;
-			}
-				break;
-			case 1:
-			{
-				if (isset($_POST['ClientSelectGetWayForm'])) {
-					return $_POST['ClientSelectGetWayForm'];
+					return null;
 				}
+					break;
+				case 4:
+				{
+					if (isset($_POST['ClientFullForm'])) {
+						return $_POST['ClientFullForm'];
+					}
 
-				return null;
-			}
-				break;
-			case 2:
-			{
-				if (isset($_POST['InviteToIdentificationForm'])) {
-					return $_POST['InviteToIdentificationForm'];
+					return null;
 				}
+					break;
+				case 5:
+				{
+					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
+						return $_POST['ClientConfirmPhoneViaSMSForm'];
+					}
 
-				return null;
-			}
-				break;
-			case 5:
-			{
-				if (isset($_POST['ClientPersonalDataForm'])) {
-					return $_POST['ClientPersonalDataForm'];
+					return null;
 				}
+					break;
+				default:
+					return null;
+					break;
 
-				return null;
 			}
-				break;
-			case 6:
-			{
-				if (isset($_POST['ClientAddressForm'])) {
-					return $_POST['ClientAddressForm'];
+		} else {
+			switch ($this->current_step) {
+				case 0:
+				{
+
+					if (isset($_POST['ClientSelectProductForm'])) {
+						return $_POST['ClientSelectProductForm'];
+					}
+
+					return null;
 				}
+					break;
+				case 1:
+				{
+					if (isset($_POST['ClientSelectGetWayForm'])) {
+						return $_POST['ClientSelectGetWayForm'];
+					}
 
-				return null;
-			}
-				break;
-			case 7:
-			{
-				if (isset($_POST['ClientJobInfoForm'])) {
-					return $_POST['ClientJobInfoForm'];
+					return null;
 				}
+					break;
+				case 2:
+				{
+					if (isset($_POST['InviteToIdentificationForm'])) {
+						return $_POST['InviteToIdentificationForm'];
+					}
 
-				return null;
-			}
-				break;
-			case 8:
-			{
-				if (isset($_POST['ClientSendForm'])) {
-					return $_POST['ClientSendForm'];
+					return null;
 				}
+					break;
+				case 5:
+				{
+					if (isset($_POST['ClientPersonalDataForm'])) {
+						return $_POST['ClientPersonalDataForm'];
+					}
 
-				return null;
-			}
-				break;
-			case 9:
-			{
-				if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
-					return $_POST['ClientConfirmPhoneViaSMSForm'];
+					return null;
 				}
+					break;
+				case 6:
+				{
+					if (isset($_POST['ClientAddressForm'])) {
+						return $_POST['ClientAddressForm'];
+					}
 
-				return null;
+					return null;
+				}
+					break;
+				case 7:
+				{
+					if (isset($_POST['ClientJobInfoForm'])) {
+						return $_POST['ClientJobInfoForm'];
+					}
+
+					return null;
+				}
+					break;
+				case 8:
+				{
+					if (isset($_POST['ClientSendForm'])) {
+						return $_POST['ClientSendForm'];
+					}
+
+					return null;
+				}
+					break;
+				case 9:
+				{
+					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
+						return $_POST['ClientConfirmPhoneViaSMSForm'];
+					}
+
+					return null;
+				}
+					break;
+				default:
+					return null;
+					break;
+
 			}
-				break;
-			default:
-				return null;
-				break;
-
 		}
 	}
 
@@ -951,7 +1051,7 @@ class ClientFormComponent
 	public
 	function isFormSent()
 	{
-		return (!empty(Yii::app()->session['isFormSent']))?Yii::app()->session['isFormSent']:false;
+		return (!empty(Yii::app()->session['isFormSent'])) ? Yii::app()->session['isFormSent'] : false;
 	}
 
 	/**

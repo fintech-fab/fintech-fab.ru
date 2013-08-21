@@ -39,7 +39,7 @@ $htmlOptions = array(
 	)
 );
 
-$sexErrorOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_sex', 'uncheckValue' => '999'));
+$sexErrorOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_sex'), 'uncheckValue' => '999');
 ?>
 <div class="span5">
 	<?= $form->textFieldRow($oClientCreateForm, 'last_name', $htmlOptions); ?>
@@ -50,5 +50,7 @@ $sexErrorOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array(
 <div class="span5">
 	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'email', $htmlOptions); ?>
-	<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, $sexErrorOptions); ?>
+	<div id="sex">
+		<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, $sexErrorOptions); ?>
+	</div>
 </div>

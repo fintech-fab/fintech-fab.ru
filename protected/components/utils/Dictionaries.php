@@ -209,6 +209,17 @@ class Dictionaries
 	);
 
 	/**
+	 * Выбор суммы займа
+	 * @var array
+	 */
+	public static $aProducts2 = array(
+		"4" => "3000 рублей на неделю на карту Кредди",
+		"5" => "6000 рублей на неделю на карту Кредди",
+		"6" => "3000 рублей на неделю на мобильный",
+		"7" => "Только регистрация, пока не брать займ",
+	);
+
+	/**
 	 * Цена за подписку
 	 * @var array
 	 */
@@ -291,12 +302,12 @@ class Dictionaries
 				break;
 			}
 			default:
-			{
+				{
 				return array(
 					"1" => "На карту <a data-toggle='modal' href='#fl-contacts'>Kreddy MasterCard</a>",
 				);
 				break;
-			}
+				}
 		}
 	}
 

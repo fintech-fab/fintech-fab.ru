@@ -14,6 +14,16 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
+		if (empty($client_id)) {
+			Yii::app()->session['tmp_client_id'] = Yii::app()->clientForm->getTmpClientId();
+		}
+
+		/*
+		$cookie = new CHttpCookie('test', 'test');
+		$cookie->expire = time()+60*60*24;
+		Yii::app()->request->cookies['test'] = $cookie;
+		*/
+
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)
@@ -25,8 +35,8 @@ class FormController extends Controller
 		 */
 		if (Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
-			echo IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
 			Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
+			echo IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
 			Yii::app()->end();
 		}
 
@@ -69,8 +79,7 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
-		if($sView==='form_sent')
-		{
+		if ($sView === 'form_sent') {
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
@@ -102,13 +111,13 @@ class FormController extends Controller
 		// Just before rendering the view that
 		// has our activeform
 		Yii::app()->clientScript->corePackages = array();
-		$this->renderPartial($sView, array('oClientCreateForm' => $oClientForm),false,true);
+		$this->renderPartial($sView, array('oClientCreateForm' => $oClientForm), false, true);
 	}
 
 	public function actionFullForm()
 	{
 		$oClientForm = new ClientFullForm();
-		$this->render("full_form", array('oClientCreateForm'=>$oClientForm));
+		$this->render("full_form", array('oClientCreateForm' => $oClientForm));
 	}
 
 	/**

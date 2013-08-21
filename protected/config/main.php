@@ -28,7 +28,7 @@ $a = array(
 
 	'modules'        => array(),
 
-	'params'        => array(),
+	'params'         => array(),
 
 	'theme'          => 'classic',
 
