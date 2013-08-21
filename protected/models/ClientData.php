@@ -294,6 +294,27 @@ class ClientData extends CActiveRecord
 		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
 		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
 
+		if ($this->product >= 104 && $this->product <= 106) {
+
+			switch ($this->product) {
+				case 104:
+					$this->product = 1;
+					$this->get_way = 1;
+					break;
+				case 105:
+					$this->product = 2;
+					$this->get_way = 1;
+					break;
+				case 106:
+					$this->product = 1;
+					$this->get_way = 2;
+					break;
+			}
+		}
+		if ($this->product == 0) {
+			$this->get_way = 0;
+		}
+
 		return parent::beforeSave();
 	}
 
@@ -433,4 +454,4 @@ class ClientData extends CActiveRecord
 			'criteria' => $criteria,
 		));
 	}
-} 
+}

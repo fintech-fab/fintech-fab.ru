@@ -60,7 +60,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'secret_question',
 			'secret_answer',
 
-			'product',
+			'product'
 		);
 
 		$aRules =
@@ -70,7 +70,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
 				)
 				),
-
+				//TODO сделать сравнение с рабочим телефоном!
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
@@ -78,8 +78,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
 				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts2), 'message' => 'Выберите сумму займа'),
-
-
 			);
 		$aRules = array_merge($aRules, $this->getRulesByFields(
 			array(
@@ -130,8 +128,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'numeric_code',
 				'secret_question',
 				'secret_answer',
-
-				'product',
 			),
 			$aRequired
 		));
@@ -148,6 +144,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 
 	public function beforeValidate()
 	{
+
 		if ($this->phone) {
 			//очистка данных
 			$this->phone = ltrim($this->phone, '+ ');

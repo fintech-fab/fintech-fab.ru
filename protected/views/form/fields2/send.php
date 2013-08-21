@@ -36,7 +36,8 @@ $htmlOptions = array(
 		}'
 	)
 );
-$productErrorOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_product'), 'uncheckValue' => '999');
+//отдельно задаем свойства для радиокнопок, для корректной отработки валидации и сопутствующих JS
+$productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_product'), 'uncheckValue' => '999');
 ?>
 <div class="span5">
 	<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', array('class' => 'span3') + $htmlOptions); ?>
@@ -44,7 +45,7 @@ $productErrorOptions = array('errorOptions' => $htmlOptions['errorOptions'] + ar
 	<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', array('class' => 'span3') + $htmlOptions); ?>
 	<?= $form->checkBoxRow($oClientCreateForm, 'complete', $htmlOptions); ?>
 </div>
-
-<div class="span5" id="product">
-	<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts2, array("class" => "all") + $productErrorOptions); ?>
+<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
+<div class="span6" id="product">
+	<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts2, array("class" => "all") + $productHtmlOptions); ?>
 </div>

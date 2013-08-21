@@ -55,7 +55,6 @@ class ClientFormComponent
 	{
 
 		$aValidFormData = $oClientForm->getValidAttributes();
-
 		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm') {
 			if (isset($aValidFormData['phone'])) {
 				/**
@@ -94,8 +93,12 @@ class ClientFormComponent
 			}
 
 			if ($this->client_id) {
-				$aValidFormData['product'] = $this->getSessionProduct();
-				$aValidFormData['get_way'] = $this->getSessionGetWay();
+				if (empty($aValidFormData['product'])) {
+					$aValidFormData['product'] = $this->getSessionProduct();
+				}
+				if (empty($aValidFormData['get_way'])) {
+					$aValidFormData['get_way'] = $this->getSessionGetWay();
+				}
 				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
 				$aValidFormData['identification_type'] = $this->getIdentType();
@@ -161,8 +164,14 @@ class ClientFormComponent
 			}
 			if ($this->client_id) {
 				$aClientFormData = $oClientForm->getAttributes();
-				$aClientFormData['product'] = $this->getSessionProduct();
-				$aClientFormData['get_way'] = $this->getSessionGetWay();
+
+				if (empty($aClientFormData['product'])) {
+					$aClientFormData['product'] = $this->getSessionProduct();
+				}
+				if (empty($aClientFormData['get_way'])) {
+					$aClientFormData['get_way'] = $this->getSessionGetWay();
+				}
+
 				$aClientFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aClientFormData['ip'] = Yii::app()->request->getUserHostAddress();
 				$aClientFormData['identification_type'] = $this->getIdentType();
@@ -232,7 +241,7 @@ class ClientFormComponent
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		if (!empty($sPhone) && !empty($sSmsCode)) {
 			//отправляем СМС
-			SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+			//SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 			//если отправлено успешно,
 			//то добавляем в лог запрос sms с этого ip
@@ -719,7 +728,15 @@ class ClientFormComponent
 	public
 	function getSessionPhone()
 	{
-		return (isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) ? Yii::app()->session['ClientPersonalDataForm']['phone'] : '';
+		if (isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) {
+			$sPhone = Yii::app()->session['ClientPersonalDataForm']['phone'];
+		} elseif (isset(Yii::app()->session['ClientFullForm']['phone'])) {
+			$sPhone = Yii::app()->session['ClientFullForm']['phone'];
+		} else {
+			$sPhone = '';
+		}
+
+		return $sPhone;
 	}
 
 	/**

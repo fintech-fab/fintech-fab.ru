@@ -266,7 +266,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
-					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern'=>'/^9\d{'.(SiteParams::C_PHONE_LENGTH - 1).'}$/');
+					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/');
 					break;
 				case 'phone_home':
 				case 'job_phone':
@@ -477,6 +477,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	public function getAttributes($aAttributes = null)
 	{
+
 		if (!$aAttributes) {
 			$aAttributes = array();
 			$aRules = $this->rules();
@@ -486,7 +487,9 @@ class ClientCreateFormAbstract extends CFormModel
 				} elseif (gettype($aRule[0]) === "array") {
 					foreach ($aRule[0] as $aSubRule) {
 						if (gettype($aSubRule[0]) === "string") {
-							$aAttributes[] = $aSubRule[0];
+							if (strlen($aSubRule[0]) > 1) {
+								$aAttributes[] = $aSubRule[0];
+							}
 						}
 					}
 				}

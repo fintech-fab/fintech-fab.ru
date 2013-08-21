@@ -33,13 +33,15 @@ $htmlOptions = array(
 			}
 			if(bFlag){
 				$("#sendHeading").attr("href","#sendForm");
-				$("#sendForm").collapse("show");
+				if(!$("#sendForm").hasClass("in")) $("#sendForm").collapse("show");
 				$("#sendForm").find(":input").prop("disabled",false);
 				jobInfoOk = true;
 			}
 		}'
 	)
 );
+//отдельно задаем свойства для радиокнопок, для корректной отработки валидации и сопутствующих JS
+$pastCreditHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_have_past_credit'));
 ?>
 <div class="span5">
 	<?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3') + $htmlOptions); ?>
@@ -50,5 +52,8 @@ $htmlOptions = array(
 	<?= $form->dropDownListRow($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, array('class' => 'span2') + $htmlOptions); ?>
 	<?= $form->dropDownListRow($oClientCreateForm, 'job_monthly_income', Dictionaries::$aMonthlyMoney, array('empty' => '', 'class' => 'span2') + $htmlOptions); ?>
 	<?= $form->dropDownListRow($oClientCreateForm, 'job_monthly_outcome', Dictionaries::$aMonthlyMoney, array('empty' => '', 'class' => 'span2') + $htmlOptions); ?>
-	<?= $form->radioButtonListInlineRow($oClientCreateForm, 'have_past_credit', Dictionaries::$aYesNo, $htmlOptions); ?>
+	<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
+	<div id="have_past_credit">
+		<?= $form->radioButtonListInlineRow($oClientCreateForm, 'have_past_credit', Dictionaries::$aYesNo, $pastCreditHtmlOptions); ?>
+	</div>
 </div>

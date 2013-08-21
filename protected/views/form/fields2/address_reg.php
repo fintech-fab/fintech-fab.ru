@@ -21,9 +21,7 @@ $htmlOptions = array(
 				"address_res_city",
 				"address_res_address",
 				"relatives_one_fio",
-				"relatives_one_phone",
-				"friends_fio",
-				"friends_phone"
+				"relatives_one_phone"
 			);
 			var bFlag = true;
 			var sAttrName;
@@ -36,7 +34,7 @@ $htmlOptions = array(
 			}
 			if(bFlag){
 				$("#jobInfoHeading").attr("href","#jobInfo");
-				$("#jobInfo").collapse("show");
+				if(!$("#jobInfo").hasClass("in")) $("#jobInfo").collapse("show");
 				$("#jobInfo").find(":input").prop("disabled",false);
 				addressOk = true;
 			}

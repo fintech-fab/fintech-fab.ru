@@ -10,11 +10,17 @@
 
 $this->pageTitle = Yii::app()->name;
 
-?>
 
-<?php $this->widget('CheckBrowserWidget'); ?>
+$aCrumbs = array(
+	array('Выбор пакета', 1),
+	array('Знакомство', 2),
+	array('Заявка на займ', 5, 3)
+);
 
-<?php $this->widget('StepsBreadCrumbsWidget'); ?>
+$this->widget('CheckBrowserWidget');
+
+
+$this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 <?php
 
@@ -30,24 +36,30 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'afterValidate'    => 'js: function(){
 			if($("#personalData").find("div").hasClass("error"))
 			{
+				$("#personalData").find(":input").prop("disabled",false);
 				if(!$("#personalData").hasClass("in")) $("#personalData").collapse("show");
 			}
 			else if($("#passportData").find("div").hasClass("error"))
 			{
+				$("#passportData").find(":input").prop("disabled",false);
 				if(!$("#passportData").hasClass("in")) $("#passportData").collapse("show");
 			}
 			else if($("#address").find("div").hasClass("error"))
 			{
+				$("#address").find(":input").prop("disabled",false);
 				if(!$("#address").hasClass("in")) $("#address").collapse("show");
 			}
 			else if($("#jobInfo").find("div").hasClass("error"))
 			{
+				$("#jobInfo").find(":input").prop("disabled",false);
 				if(!$("#jobInfo").hasClass("in")) $("#jobInfo").collapse("show");
 			}
 			else if($("#sendForm").find("div").hasClass("error"))
 			{
+				$("#sendForm").find(":input").prop("disabled",false);
 				if(!$("#sendForm").hasClass("in")) $("#sendForm").collapse("show");
 			}
+			return true;
 		}'
 	),
 	'action'               => Yii::app()->createUrl('/form/'),
@@ -145,7 +157,16 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>
 
 <?php
-//TODO допилить RegExp
+/**
+ * TODO разобраться почему нельзя дизейблить инпуты, происходит стирание данных в форме
+ * $("#passportData").find(":input").prop("disabled",true);
+ * $("#address").find(":input").prop("disabled",true);
+ * $("#jobInfo").find(":input").prop("disabled",true);
+ * $("#sendForm").find(":input").prop("disabled",true);
+ *
+ */
+
+
 Yii::app()->clientScript->registerScript('checkData', '
 	function in_array(what, where) {
 	    for(var i=0, length_array=where.length; i<length_array; i++)
@@ -162,10 +183,10 @@ Yii::app()->clientScript->registerScript('checkData', '
 
 	var formName="' . get_class($oClientCreateForm) . '";
 
-	$("#passportData").find(":input").prop("disabled",true);
-	$("#address").find(":input").prop("disabled",true);
-	$("#jobInfo").find(":input").prop("disabled",true);
-	$("#sendForm").find(":input").prop("disabled",true);
+	//$("#passportData").find(":input").prop("disabled",true);
+	//$("#address").find(":input").prop("disabled",true);
+	//$("#jobInfo").find(":input").prop("disabled",true);
+	//$("#sendForm").find(":input").prop("disabled",true);
 
 	/**
 	* вешаем на радиобаттоны "Пол" обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
@@ -218,19 +239,83 @@ Yii::app()->clientScript->registerScript('checkData', '
 	    });
 	});
 
+	jQuery("#have_past_credit").find(":input").change(function()
+	{
+		var form=$("#"+formName);
+		var settings = form.data("settings");
+		var regExp = new RegExp("^"+formName+"_have_past_credit");
+		$.each(settings.attributes, function () {
+			var sID = this.id;
+	        if(sID.match(regExp)){
+	            this.status = 2; // force ajax validation
+	        }
+	    });
+	    form.data("settings", settings);
+
+		// trigger ajax validation
+	    $.fn.yiiactiveform.validate(form, function (data) {
+	        $.each(settings.attributes, function () {
+	            var sID = this.id;
+				if(sID.match(regExp)){
+	                $.fn.yiiactiveform.updateInput(this, data, form);
+	                this.afterValidateAttribute();
+	            }
+	        });
+	    });
+
+	});
+	//по получению фокуса чекбоксами (через клавишу TAB например)
+	//сразу ставим значение по-умолчанию
 	jQuery("#sex").find(":input").focus(function()
 	{
-		jQuery("#' . get_class($oClientCreateForm) . '_sex_0").attr("checked",true).change();
+		var bChecked = false;
+		a = $("#sex").find(":input");
+		$.each(a, function(){
+			if($(this).attr("checked")=="checked"){
+				bChecked = true;
+			}
+		});
+		if(!bChecked){
+			jQuery("#' . get_class($oClientCreateForm) . '_sex_0").attr("checked",true).change();
+		}
 	});
 
 	jQuery("#product").find(":input").focus(function()
 	{
-		jQuery("#product").find(":input").first().next().find(":input").attr("checked","checked").change();
+		var bChecked = false;
+		a = $("#product").find(":input");
+		$.each(a, function(){
+			if($(this).attr("checked")=="checked"){
+				bChecked = true;
+			}
+		});
+
+		if(!bChecked){
+			jQuery("#product").find(":input").first().next().find(":input").attr("checked","checked").change();
+		}
+	});
+
+	jQuery("#have_past_credit").find(":input").focus(function()
+	{
+		var bChecked = false;
+		a = $("#have_past_credit").find(":input");
+		$.each(a, function(){
+			if($(this).attr("checked")=="checked"){
+				bChecked = true;
+			}
+		});
+		if(!bChecked){
+			jQuery("#have_past_credit").find(":input").first().next().find(":input").attr("checked","checked").change();
+		}
 	});
 
 	//по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
 	jQuery("#passportDataHeading").click(function()
 	{
+		if($("#passportDataHeading").attr("href")=="#passportData"){
+			return;
+		}
+
 		var form=$("#"+formName);
         var settings = form.data("settings");
 
@@ -258,7 +343,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	        $.each(settings.attributes, function () {
 				if(in_array(this.id,aAttrs)){
 	                $.fn.yiiactiveform.updateInput(this, data, form);
-	                if(this.id!=formName+"_sex")
+	                if(this.id!=formName+"_phone")
 	                    this.afterValidateAttribute();
 	            }
 	        });
@@ -268,7 +353,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Постоянную регистрацию" делаем force валидацию предыдущей части формы
 	jQuery("#addressHeading").click(function()
 	{
-	if(personalDataOk){
+	if(personalDataOk&&$("#addressHeading").attr("href")!="#address"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
 
@@ -303,7 +388,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Место работы" делаем force валидацию предыдущей части формы
 	jQuery("#jobInfoHeading").click(function()
 	{
-	if(personalDataOk&&passportDataOk){
+	if(personalDataOk&&passportDataOk&&$("#jobInfoHeading").attr("href")!="#jobInfo"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
 
@@ -340,7 +425,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 
 	jQuery("#sendHeading").click(function()
 	{
-	if(personalDataOk&&passportDataOk&&addressOk){
+	if(personalDataOk&&passportDataOk&&addressOk&&$("#sendHeading").attr("href")!="#sendForm"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
 

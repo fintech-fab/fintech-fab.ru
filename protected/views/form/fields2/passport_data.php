@@ -24,14 +24,14 @@ $htmlOptions = array(
 			var sAttrName;
 			for(i=0;i<aAttrs.length;i++)
 			{
-				t = formName +"_"+aAttrs[i];
+				sAttrName = formName +"_"+aAttrs[i];
 				if(!$("#"+sAttrName).parents(".control-group").hasClass("success")){
 					bFlag = false;
 				}
 			}
 			if(bFlag){
 				$("#addressHeading").attr("href","#address");
-				$("#address").collapse("show");
+				if(!$("#address").hasClass("in")) $("#address").collapse("show");
 				$("#address").find(":input").prop("disabled",false);
 				passportDataOk = true;
 			}
@@ -69,7 +69,7 @@ $htmlOptions = array(
 	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', $htmlOptions); ?>
 </div>
 
-<div class="span5">
+<div class="span5 offset1">
 	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3') + $htmlOptions); ?>
 </div>
