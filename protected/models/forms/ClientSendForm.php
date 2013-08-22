@@ -15,7 +15,6 @@ class ClientSendForm extends ClientCreateFormAbstract
 	{
 		$aRequired = array(
 			'numeric_code',
-			'complete',
 			'secret_question',
 			'secret_answer',
 		);
@@ -40,7 +39,7 @@ class ClientSendForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'complete'        => 'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+				'complete'        => 'Я подтверждаю достоверность данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 				'secret_question' => 'Секретный вопрос',
 				'secret_answer'   => 'Ответ на секретный вопрос',
 			)
