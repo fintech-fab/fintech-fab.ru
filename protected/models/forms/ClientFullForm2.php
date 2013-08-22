@@ -6,11 +6,13 @@
  *
  */
 
-class ClientFullForm extends ClientCreateFormAbstract
+class ClientFullForm2 extends ClientCreateFormAbstract
 {
 
 	public $complete;
 	public $product;
+	public $password;
+	public $password_repeat;
 
 	public function rules()
 	{
@@ -78,6 +80,12 @@ class ClientFullForm extends ClientCreateFormAbstract
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
 				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts2), 'message' => 'Выберите сумму займа'),
+
+				array('password, password_repeat', 'required'),
+				//TODO сделать проверку пароля через match
+				//array('password','match','pattern'=>'/^[a-zA-Z~!@#$%^&*,.-_+=\s]+$/u'),
+				array('password', 'length', 'min' => '8'),
+				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),
 			);
 		$aRules = array_merge($aRules, $this->getRulesByFields(
 			array(
@@ -200,7 +208,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'friends_fio'         => 'Дополнительный контакт (повышает вероятность одобрения)',
 				'friends_phone'       => 'Телефон',
 
-				'complete'            => 'Согласен с условиями и передачей данных (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+				'complete'            => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+
 				'secret_question'     => 'Секретный вопрос',
 				'secret_answer'       => 'Ответ на секретный вопрос',
 
@@ -211,6 +220,9 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'job_monthly_outcome' => 'Среднемесячный расход',
 
 				'have_past_credit'    => 'Наличие кредитов и займов в прошлом',
+
+				'password'            => 'Пароль для входа в личный кабинет',
+				'password_repeat'     => 'Подтверждение пароля',
 
 			)
 		);

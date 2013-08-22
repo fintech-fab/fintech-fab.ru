@@ -14,6 +14,8 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
+		//Yii::app()->clientForm->nextStep();
+
 		if (empty($client_id)) {
 			Yii::app()->session['tmp_client_id'] = Yii::app()->clientForm->getTmpClientId();
 		}
@@ -84,7 +86,7 @@ class FormController extends Controller
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
-		if ($sView == 'client_confirm_phone_via_sms') {
+		if ($sView == 'client_confirm_phone_via_sms' || $sView == 'client_confirm_phone_via_sms2') {
 			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
 
 			$flagExceededTries = ($smsCountTries >= SiteParams::MAX_SMSCODE_TRIES);
@@ -115,11 +117,6 @@ class FormController extends Controller
 		$this->renderPartial($sView, array('oClientCreateForm' => $oClientForm), false, true);
 	}
 
-	public function actionFullForm()
-	{
-		$oClientForm = new ClientFullForm();
-		$this->render("full_form", array('oClientCreateForm' => $oClientForm));
-	}
 
 	/**
 	 *  Переход на шаг $step

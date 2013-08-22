@@ -14,6 +14,7 @@ class ClientFormComponent
 	private $client_id;
 	private $current_step;
 	private $done_steps;
+	const B_FULL_FORM = true;
 
 	public function init()
 	{
@@ -55,7 +56,7 @@ class ClientFormComponent
 	{
 
 		$aValidFormData = $oClientForm->getValidAttributes();
-		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm2') {
 			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
@@ -126,7 +127,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm2') {
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
@@ -409,11 +410,12 @@ class ClientFormComponent
 	public
 	function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-		$bFullForm = true;
+		$bFullForm = self::B_FULL_FORM;
+
 		if ($bFullForm) {
 			switch ($this->current_step) {
 				case 0:
-					return new ClientSelectProductForm();
+					return new ClientSelectProductForm2();
 					break;
 				case 1:
 				case 2:
@@ -421,13 +423,13 @@ class ClientFormComponent
 					return new InviteToIdentificationForm();
 					break;
 				case 4:
-					return new ClientFullForm();
+					return new ClientFullForm2();
 					break;
 				case 5:
 					return new ClientConfirmPhoneViaSMSForm();
 					break;
 				default:
-					return new ClientSelectProductForm();
+					return new ClientSelectProductForm2();
 					break;
 			}
 		} else {
@@ -479,16 +481,16 @@ class ClientFormComponent
 			return 'form_sent';
 		}
 
-		$bFullForm = true;
+		$bFullForm = self::B_FULL_FORM;
 
 		if ($bFullForm) {
 
 			switch ($this->current_step) {
 				case 0:
-					return 'client_select_product';
+					return 'client_select_product2';
 					break;
 				case 1:
-					return 'invite_to_identification';
+					return 'invite_to_identification2';
 					break;
 				case 2:
 					return 'identification';
@@ -497,13 +499,13 @@ class ClientFormComponent
 					return 'documents';
 					break;
 				case 4:
-					return 'full_form';
+					return 'client_full_form2';
 					break;
 				case 5:
-					return 'client_confirm_phone_via_sms';
+					return 'client_confirm_phone_via_sms2';
 					break;
 				default:
-					return 'client_select_product';
+					return 'client_select_product2';
 					break;
 			}
 		} else {
@@ -555,19 +557,16 @@ class ClientFormComponent
 	public
 	function getPostData()
 	{
-		if (isset($_POST['ClientFullForm'])) {
-			return $_POST['ClientFullForm'];
-		}
 
-		$bFullForm = true;
+		$bFullForm = self::B_FULL_FORM;
 
 		if ($bFullForm) {
 			switch ($this->current_step) {
 				case 0:
 				{
 
-					if (isset($_POST['ClientSelectProductForm'])) {
-						return $_POST['ClientSelectProductForm'];
+					if (isset($_POST['ClientSelectProductForm2'])) {
+						return $_POST['ClientSelectProductForm2'];
 					}
 
 					return null;
@@ -584,8 +583,8 @@ class ClientFormComponent
 					break;
 				case 4:
 				{
-					if (isset($_POST['ClientFullForm'])) {
-						return $_POST['ClientFullForm'];
+					if (isset($_POST['ClientFullForm2'])) {
+						return $_POST['ClientFullForm2'];
 					}
 
 					return null;
@@ -730,8 +729,8 @@ class ClientFormComponent
 	{
 		if (isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) {
 			$sPhone = Yii::app()->session['ClientPersonalDataForm']['phone'];
-		} elseif (isset(Yii::app()->session['ClientFullForm']['phone'])) {
-			$sPhone = Yii::app()->session['ClientFullForm']['phone'];
+		} elseif (isset(Yii::app()->session['ClientFullForm2']['phone'])) {
+			$sPhone = Yii::app()->session['ClientFullForm2']['phone'];
 		} else {
 			$sPhone = '';
 		}

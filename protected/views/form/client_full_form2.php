@@ -3,11 +3,6 @@
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
-/*
- * Цифровой код
- * Согласие с условиями и передачей данных
- */
-
 $this->pageTitle = Yii::app()->name;
 
 
@@ -32,7 +27,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
-		//'validateOnType' => true,
 		'afterValidate'    => 'js: function(){
 			var hasError = false;
 			if($("#personalData").find("div").hasClass("error"))
@@ -130,7 +124,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="passportDataHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Паспортные данные</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -147,7 +141,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="addressHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Постоянная регистрация</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -164,7 +158,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="jobInfoHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Место работы</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -181,7 +175,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="sendHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Отправка</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -385,9 +379,10 @@ Yii::app()->clientScript->registerScript('checkData', '
 	jQuery("#passportDataHeading").click(function()
 	{
 
-		if(!personalDataOk){
-	        $("#passportDataHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+		if(!personalDataOk&&$("#personalData").find("div").hasClass("error")){
+			$("#passportDataHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
 		}
+
 		if($("#passportDataHeading").attr("href")=="#passportData"){
 			return;
 		}
@@ -429,7 +424,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Постоянную регистрацию" делаем force валидацию предыдущей части формы
 	jQuery("#addressHeading").click(function()
 	{
-		if(!passportDataOk){
+		if(!passportDataOk&&$("#passportData").find("div").hasClass("error")){
 		        $("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
 		}
 
@@ -472,7 +467,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Место работы" делаем force валидацию предыдущей части формы
 	jQuery("#jobInfoHeading").click(function()
 	{
-	if(!addressOk){
+	if(!addressOk&&$("#address").find("div").hasClass("error")){
 	        $("#jobInfoHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
 	}
 
@@ -517,7 +512,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 	jQuery("#sendHeading").click(function()
 	{
 
-	if(!jobInfoOk){
+	if(!jobInfoOk&&$("#jobInfo").find("div").hasClass("error")){
 	        $("#sendHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
 	}
 

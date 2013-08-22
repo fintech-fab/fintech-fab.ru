@@ -46,7 +46,7 @@ $checkBoxHtmlOptions = array_merge($htmlOptions, array(
 	'onchange' => 'js: if(!$("#regAsResCheckBox").prop("checked")){
 			$("#address_res").find(":input").attr("disabled",false).removeClass("disabled");
 		} else {
-			$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled");
+			$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled").parents(".control-group").removeClass("error success").find(".help-inline").hide();
 		}',
 ));
 ?>
