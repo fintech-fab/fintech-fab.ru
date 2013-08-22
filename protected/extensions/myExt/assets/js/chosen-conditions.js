@@ -45,12 +45,14 @@ $(document).ready(function () {
 		$('#ClientSelectProductForm .radio').each(function () {
 			if (($(this).find("input:checked").attr("value")) !== undefined) {
 				showConditions($(this).find("label > span"));
+				if ($(this).find("input:checked").attr("value") == 0) $(".conditions").hide();
 			}
 		});
 	} else {
 		$('#ClientSelectProductForm2 .radio').each(function () {
 			if (($(this).find("input:checked").attr("value")) !== undefined) {
 				showConditions($(this).find("label > span"));
+				if ($(this).find("input:checked").attr("value") == 0) $(".conditions").hide();
 			}
 		});
 	}
