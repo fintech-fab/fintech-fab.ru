@@ -31,7 +31,6 @@ $htmlOptions = array(
 			if(bFlag){
 				$("#passportDataHeading").attr("href","#passportData");
 				$("#passportData").collapse("show");
-				$("#passportData").find(":input").prop("disabled",false);
 				personalDataOk = true;
 			}
 		}'

@@ -32,7 +32,6 @@ $htmlOptions = array(
 			if(bFlag){
 				$("#addressHeading").attr("href","#address");
 				if(!$("#address").hasClass("in")) $("#address").collapse("show");
-				$("#address").find(":input").prop("disabled",false);
 				passportDataOk = true;
 			}
 		}'

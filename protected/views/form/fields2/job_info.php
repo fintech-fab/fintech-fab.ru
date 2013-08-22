@@ -34,7 +34,6 @@ $htmlOptions = array(
 			if(bFlag){
 				$("#sendHeading").attr("href","#sendForm");
 				if(!$("#sendForm").hasClass("in")) $("#sendForm").collapse("show");
-				$("#sendForm").find(":input").prop("disabled",false);
 				jobInfoOk = true;
 			}
 		}'

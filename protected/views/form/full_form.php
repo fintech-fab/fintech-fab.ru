@@ -34,31 +34,68 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnSubmit' => true,
 		//'validateOnType' => true,
 		'afterValidate'    => 'js: function(){
+			var hasError = false;
 			if($("#personalData").find("div").hasClass("error"))
 			{
-				$("#personalData").find(":input").prop("disabled",false);
-				if(!$("#personalData").hasClass("in")) $("#personalData").collapse("show");
+				if(!$("#personalData").hasClass("in")){
+					$("#personalData").collapse("show");
+				}
+				hasError = true;
 			}
 			else if($("#passportData").find("div").hasClass("error"))
 			{
-				$("#passportData").find(":input").prop("disabled",false);
-				if(!$("#passportData").hasClass("in")) $("#passportData").collapse("show");
+				personalDataOk = true;
+				hasError = true;
+				$("#passportDataHeading").attr("href","#passportData");
+				if(!$("#passportData").hasClass("in")){
+					$("#passportData").collapse("show");
+				}
 			}
 			else if($("#address").find("div").hasClass("error"))
 			{
-				$("#address").find(":input").prop("disabled",false);
-				if(!$("#address").hasClass("in")) $("#address").collapse("show");
+				personalDataOk = true;
+				passportDataOk = true;
+				hasError = true;
+				$("#passportDataHeading").attr("href","#passportData");
+				$("#addressHeading").attr("href","#address");
+				if(!$("#address").hasClass("in")){
+					$("#address").collapse("show");
+				}
+
 			}
 			else if($("#jobInfo").find("div").hasClass("error"))
 			{
-				$("#jobInfo").find(":input").prop("disabled",false);
-				if(!$("#jobInfo").hasClass("in")) $("#jobInfo").collapse("show");
+				personalDataOk = true;
+				passportDataOk = true;
+				addressOk = true;
+				hasError = true;
+				$("#passportDataHeading").attr("href","#passportData");
+				$("#addressHeading").attr("href","#address");
+				$("#jobInfoHeading").attr("href","#jobInfo");
+				if(!$("#jobInfo").hasClass("in")){
+					$("#jobInfo").collapse("show");
+				}
 			}
 			else if($("#sendForm").find("div").hasClass("error"))
 			{
-				$("#sendForm").find(":input").prop("disabled",false);
-				if(!$("#sendForm").hasClass("in")) $("#sendForm").collapse("show");
+			    personalDataOk = true;
+				passportDataOk = true;
+				addressOk = true;
+				jobInfoOk = true;
+				hasError = true;
+				$("#passportDataHeading").attr("href","#passportData");
+				$("#addressHeading").attr("href","#address");
+				$("#jobInfoHeading").attr("href","#jobInfo");
+				$("#sendFormHeading").attr("href","#sendForm");
+				if(!$("#sendForm").hasClass("in")){
+					$("#sendForm").collapse("show");
+				}
 			}
+
+			if(hasError){
+				$("#submitError").fadeIn(400).delay(4000).fadeOut( 800 );
+			}
+
 			return true;
 		}'
 	),
@@ -89,9 +126,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		</div>
 	</div>
 	<div class="accordion-group">
-		<div class="accordion-heading">
-			<h4 id="passportDataHeading" style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1">
+		<div class="accordion-heading row">
+			<h4 id="passportDataHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Паспортные данные</h4>
+			<?php $this->widget('AlertWidget', array(
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'htmlOptions' => array('class' => 'errorAlert hide span7')
+			));?>
 		</div>
 		<div id="passportData" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -102,9 +143,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		</div>
 	</div>
 	<div class="accordion-group">
-		<div class="accordion-heading">
-			<h4 id="addressHeading" style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1">
+		<div class="accordion-heading row">
+			<h4 id="addressHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Постоянная регистрация</h4>
+			<?php $this->widget('AlertWidget', array(
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'htmlOptions' => array('class' => 'errorAlert hide span7')
+			));?>
 		</div>
 		<div id="address" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -115,9 +160,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		</div>
 	</div>
 	<div class="accordion-group">
-		<div class="accordion-heading">
-			<h4 id="jobInfoHeading" style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1">
+		<div class="accordion-heading row">
+			<h4 id="jobInfoHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Место работы</h4>
+			<?php $this->widget('AlertWidget', array(
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'htmlOptions' => array('class' => 'errorAlert hide span7')
+			));?>
 		</div>
 		<div id="jobInfo" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -128,9 +177,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		</div>
 	</div>
 	<div class="accordion-group">
-		<div class="accordion-heading">
-			<h4 id="sendHeading" style="font-weight: 400;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1">
+		<div class="accordion-heading row">
+			<h4 id="sendHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Отправка</h4>
+			<?php $this->widget('AlertWidget', array(
+				'message'     => 'Ошибка!!! Необходимо сначала заполнить предыдущие части анкеты.',
+				'htmlOptions' => array('class' => 'errorAlert hide span7')
+			));?>
 		</div>
 		<div id="sendForm" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -144,13 +197,22 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 
 	<div class="clearfix"></div>
-	<div class="row span11">
+	<div class="row span10">
 		<div class="form-actions">
-			<? $this->widget('bootstrap.widgets.TbButton', array(
-				'buttonType' => 'submit',
-				'type'       => 'primary',
-				'label'      => 'Отправить →',
-			)); ?>
+			<div class="row">
+				<?php $this->widget('AlertWidget', array(
+					'message'     => 'Ошибка!!! Необходимо сначала правильно заполнить все обязательные поля анкеты!',
+					'htmlOptions' => array('id' => 'submitError', 'class' => 'hide')
+				));?>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row">
+				<? $this->widget('bootstrap.widgets.TbButton', array(
+					'buttonType' => 'submit',
+					'type'       => 'primary',
+					'label'      => 'Отправить →',
+				)); ?>
+			</div>
 		</div>
 	</div>
 
@@ -164,6 +226,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
  * $("#jobInfo").find(":input").prop("disabled",true);
  * $("#sendForm").find(":input").prop("disabled",true);
  *
+ * TODO сделать более правильно работающую цепочку вызовов, с обратным проходом
+ *
+ * if(!personalDataOk){
+ * jQuery("#passportDataHeading").click();
+ * }
+ *
  */
 
 
@@ -175,6 +243,15 @@ Yii::app()->clientScript->registerScript('checkData', '
 	    return false;
 	}
 
+
+	$(".errorAlert").find(".alert-block").addClass("alert-block-fullform");
+
+	if(!$("#regAsResCheckBox").prop("checked")){
+		$("#address_res").find(":input").attr("disabled",false).removeClass("disabled");
+	} else {
+		$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled");
+	}
+
 	var personalDataOk = false;
 	var passportDataOk = false;
 	var addressOk = false;
@@ -182,11 +259,6 @@ Yii::app()->clientScript->registerScript('checkData', '
 	var sendFormOk = false;
 
 	var formName="' . get_class($oClientCreateForm) . '";
-
-	//$("#passportData").find(":input").prop("disabled",true);
-	//$("#address").find(":input").prop("disabled",true);
-	//$("#jobInfo").find(":input").prop("disabled",true);
-	//$("#sendForm").find(":input").prop("disabled",true);
 
 	/**
 	* вешаем на радиобаттоны "Пол" обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
@@ -312,6 +384,10 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
 	jQuery("#passportDataHeading").click(function()
 	{
+
+		if(!personalDataOk){
+	        $("#passportDataHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+		}
 		if($("#passportDataHeading").attr("href")=="#passportData"){
 			return;
 		}
@@ -353,6 +429,14 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Постоянную регистрацию" делаем force валидацию предыдущей части формы
 	jQuery("#addressHeading").click(function()
 	{
+		if(!passportDataOk){
+		        $("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+		}
+
+		if(!personalDataOk){
+			jQuery("#passportDataHeading").click();
+		}
+
 	if(personalDataOk&&$("#addressHeading").attr("href")!="#address"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
@@ -388,6 +472,13 @@ Yii::app()->clientScript->registerScript('checkData', '
 	//по нажатии на "Место работы" делаем force валидацию предыдущей части формы
 	jQuery("#jobInfoHeading").click(function()
 	{
+	if(!addressOk){
+	        $("#jobInfoHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+	}
+
+	if(!passportDataOk){
+		jQuery("#addressHeading").click();
+	}
 	if(personalDataOk&&passportDataOk&&$("#jobInfoHeading").attr("href")!="#jobInfo"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
@@ -425,6 +516,15 @@ Yii::app()->clientScript->registerScript('checkData', '
 
 	jQuery("#sendHeading").click(function()
 	{
+
+	if(!jobInfoOk){
+	        $("#sendHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+	}
+
+	if(!addressOk){
+		jQuery("#jobInfoHeading").click();
+	}
+
 	if(personalDataOk&&passportDataOk&&addressOk&&$("#sendHeading").attr("href")!="#sendForm"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
@@ -454,6 +554,9 @@ Yii::app()->clientScript->registerScript('checkData', '
 	            }
 	        });
 	    });
+
 	}});
+
+
 ');
 ?>

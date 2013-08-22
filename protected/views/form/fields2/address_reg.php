@@ -35,23 +35,32 @@ $htmlOptions = array(
 			if(bFlag){
 				$("#jobInfoHeading").attr("href","#jobInfo");
 				if(!$("#jobInfo").hasClass("in")) $("#jobInfo").collapse("show");
-				$("#jobInfo").find(":input").prop("disabled",false);
 				addressOk = true;
 			}
 		}'
 	)
 );
+
+$checkBoxHtmlOptions = array_merge($htmlOptions, array(
+	'id'       => 'regAsResCheckBox',
+	'onchange' => 'js: if(!$("#regAsResCheckBox").prop("checked")){
+			$("#address_res").find(":input").attr("disabled",false).removeClass("disabled");
+		} else {
+			$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled");
+		}',
+));
 ?>
 <div class="span5">
 	<?= $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', $htmlOptions); ?>
 
-	<?= $form->checkBoxRow($oClientCreateForm, 'address_reg_as_res', $htmlOptions); ?>
-
-	<?= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', array('class' => 'span3') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->checkBoxRow($oClientCreateForm, 'address_reg_as_res', $checkBoxHtmlOptions); ?>
+	<div id="address_res">
+		<?= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
+		<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', array('class' => 'span3') + $htmlOptions); ?>
+		<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', array('class' => 'span3') + $htmlOptions); ?>
+	</div>
 </div>
 
 <div class="span5 offset1">
