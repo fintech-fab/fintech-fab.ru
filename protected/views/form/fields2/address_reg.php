@@ -47,6 +47,8 @@ $htmlOptions = array(
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', $htmlOptions); ?>
 
+	<?= $form->checkBoxRow($oClientCreateForm, 'address_reg_as_res', $htmlOptions); ?>
+
 	<?= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', array('class' => 'span3') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', array('class' => 'span3') + $htmlOptions); ?>

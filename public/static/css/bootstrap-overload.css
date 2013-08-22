@@ -157,3 +157,12 @@ label, input, button, select, textarea {
 	font-weight: normal;
 	line-height: 18px;
 }
+
+.accordion-group {
+	margin-bottom: 2px;
+	border-top: 2px dashed rgb(229, 229, 229);
+	border-left: 0;
+	border-bottom: 0;
+	border-right: 0;
+
+}

@@ -144,6 +144,11 @@ class ClientFullForm extends ClientCreateFormAbstract
 
 	public function beforeValidate()
 	{
+		if ($this->address_reg_as_res) {
+			$this->address_res_region = $this->address_reg_region;
+			$this->address_res_city = $this->address_reg_city;
+			$this->address_res_address = $this->address_reg_address;
+		}
 
 		if ($this->phone) {
 			//очистка данных
@@ -200,6 +205,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'secret_answer'       => 'Ответ на секретный вопрос',
 
 				'product'             => 'Сумма займа',
+				'address_reg_as_res'  => 'фактический адрес совпадает с пропиской',
 
 				'job_monthly_income'  => 'Среднемесячный доход',
 				'job_monthly_outcome' => 'Среднемесячный расход',
