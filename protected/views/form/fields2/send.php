@@ -48,6 +48,12 @@ $productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + arr
 </div>
 <?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
 <div class="span6" id="product">
+	<?php
+	$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+	if (!isset($oClientCreateForm->product)) {
+		$oClientCreateForm->product = "101";
+	}
+	?>
 	<div id="product">
 		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts2, array("class" => "all") + $productHtmlOptions); ?>
 	</div>

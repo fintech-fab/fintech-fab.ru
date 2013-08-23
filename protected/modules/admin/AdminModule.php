@@ -2,7 +2,7 @@
 
 class AdminModule extends CWebModule
 {
-	public $ipFilters=array('127.0.0.1','::1');
+	public $ipFilters = array('127.0.0.1', '::1');
 
 	public function init()
 	{
@@ -21,28 +21,30 @@ class AdminModule extends CWebModule
 
 	protected function allowIp($ip)
 	{
-		if(empty($this->ipFilters))
+		if (empty($this->ipFilters)) {
 			return true;
-		foreach($this->ipFilters as $filter)
-		{
-			if($filter==='*' || $filter===$ip || (($pos=strpos($filter,'*'))!==false && !strncmp($ip,$filter,$pos)))
-				return true;
 		}
+		foreach ($this->ipFilters as $filter) {
+			if ($filter === '*' || $filter === $ip || (($pos = strpos($filter, '*')) !== false && !strncmp($ip, $filter, $pos))) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
 	public function beforeControllerAction($controller, $action)
 	{
-		Yii::app()->errorHandler->errorAction='admin/default/error';
+		Yii::app()->errorHandler->errorAction = 'admin/default/error';
 
-		if(parent::beforeControllerAction($controller, $action))
-		{
-			if(!$this->allowIp(Yii::app()->request->userHostAddress))
-			{
+		if (parent::beforeControllerAction($controller, $action)) {
+			if (!$this->allowIp(Yii::app()->request->userHostAddress)) {
 				Yii::app()->request->redirect(Yii::app()->homeUrl);
 			}
+
 			return true;
 		}
+
 		return false;
 	}
 }

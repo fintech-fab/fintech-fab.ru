@@ -75,18 +75,19 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
 		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'                    => 'tabs-grid',
+	'type'                  => 'striped bordered condensed',
 	'dataProvider'          => $model->search(),
 	'filter'                => $model,
 	'rowCssClassExpression' => '"items[]_{$data->tab_id}"',
 	'columns'               => array(
-		'tab_id',
+		array('name' => 'tab_id', 'header' => 'ID', 'htmlOptions' => array('style' => 'width: 50px;')),
 		'tab_name',
 		'tab_title',
 		//'tab_content',
 		array(
-			'class' => 'CButtonColumn',
+			'class' => 'bootstrap.widgets.TbButtonColumn',
 		),
 	),
 )); ?>

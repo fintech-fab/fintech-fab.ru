@@ -35,8 +35,14 @@ class SiteController extends Controller
 		Yii::app()->clientForm->setDoneSteps(0);
 		Yii::app()->clientForm->setCurrentStep(0);
 
-		$oClientForm = new ClientSelectProductForm();
-		$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
+
+		if ($bFullForm = SiteParams::B_FULL_FORM) {
+			$oClientForm = new ClientSelectProductForm2();
+			$this->render('../form/client_select_product2', array('oClientCreateForm' => $oClientForm));
+		} else {
+			$oClientForm = new ClientSelectProductForm();
+			$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
+		}
 	}
 
 	/**

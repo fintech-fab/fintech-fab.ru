@@ -60,8 +60,7 @@ $this->pageTitle = Yii::app()->name;
 			</div>
 			<div class="span5 offset1">
 				<a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">
-					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" title="Карта" />
-				</a>
+					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" /> </a>
 
 				<p>
 					Отделение идентификации
@@ -74,7 +73,7 @@ $this->pageTitle = Yii::app()->name;
 		<div class="row">
 			<div class="span5">
 				<?php echo $form->checkBoxRow($oClientCreateForm, 'agree', array(
-					'id'=>'agreeCheckBox',
+					'id'       => 'agreeCheckBox',
 					'onchange' => 'js: if($("#agreeCheckBox").prop("checked")){ $("#ident1").attr("disabled",false).removeClass("disabled");}else{$("#ident1").attr("disabled","disabled").addClass("disabled");}'
 				));
 				?>
@@ -86,10 +85,10 @@ $this->pageTitle = Yii::app()->name;
 			<div class="span5">
 				<div class="form-actions ident-actions">
 					<? $this->widget('bootstrap.widgets.TbButton', array(
-						'id'=>'ident1',
+						'id'          => 'ident1',
 						'buttonType'  => 'button',
 						'type'        => 'primary',
-						'disabled' =>true,
+						'disabled'    => true,
 						'label'       => 'Пройти видеоидентификацию на сайте →',
 						'htmlOptions' => array(
 							'onclick' => 'js:{

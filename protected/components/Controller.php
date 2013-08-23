@@ -38,7 +38,6 @@ class Controller extends CController
 			$sTrackingID = preg_replace('/\s+/', '', $sTrackingID);
 			$sTrackingID = preg_replace('/[^\d]/', '', $sTrackingID);
 
-			//TODO протестировать!
 			if (Yii::app()->request->cookies['TrackingID'] != $sTrackingID) {
 				$cookie = new CHttpCookie('TrackingID', $sTrackingID);
 				$cookie->expire = time() + 60 * 60 * 24;

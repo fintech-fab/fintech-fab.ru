@@ -104,8 +104,8 @@ class FilesController extends Controller
 				$sFileName = str_replace('/var/www/ru.dev.kreddy/protected/../public', Yii::app()
 					->getBaseUrl(), $sFileName);
 				$sThumbName = str_replace('uploads/images', 'uploads/thumbnails', $sFileName);
-				$array_items[] = array('id'=>$iIndex,'thumb' => $sThumbName, 'image' => $sFileName);
-				$iIndex+=1;
+				$array_items[] = array('id' => $iIndex, 'thumb' => $sThumbName, 'image' => $sFileName);
+				$iIndex += 1;
 			}
 		}
 		if (!isset($array_items)) {
@@ -139,8 +139,8 @@ class FilesController extends Controller
 		}
 		$sort = new CSort;
 		$sort->defaultOrder = 'id ASC';
-		$sort->attributes = array('id','count_pages','count_tabs','count_footer_links');
-		$itemsProvider = new CArrayDataProvider($array_items, array('sort'=>$sort));
+		$sort->attributes = array('id', 'count_pages', 'count_tabs', 'count_footer_links');
+		$itemsProvider = new CArrayDataProvider($array_items, array('sort' => $sort));
 		$this->render('admin', compact('itemsProvider'));
 	}
 

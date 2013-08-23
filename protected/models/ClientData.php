@@ -294,20 +294,24 @@ class ClientData extends CActiveRecord
 		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
 		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
 
-		if ($this->product >= 104 && $this->product <= 106) {
+		if ($this->product >= 100) {
 
 			switch ($this->product) {
-				case 104:
+				case 101:
 					$this->product = 1;
 					$this->get_way = 1;
 					break;
-				case 105:
+				case 102:
 					$this->product = 2;
 					$this->get_way = 1;
 					break;
-				case 106:
+				case 103:
 					$this->product = 1;
 					$this->get_way = 2;
+					break;
+				default:
+					$this->product = 0;
+					$this->get_way = 0;
 					break;
 			}
 		}

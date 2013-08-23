@@ -28,10 +28,27 @@ $(document).ready(function () {
 	if ($('#ClientSelectProductForm').is("form")) {
 		$('#ClientSelectProductForm .radio').click(function () {
 			showConditions($(this).find("label > span"));
+			$(".conditions").show();
+			$("#conditions-img").show();
+			;
+			if ($(this).find("input:checked").attr("value") == 0) {
+				$(".conditions").hide();
+				$("#conditions-img").hide();
+				;
+			}
+
 		});
 	} else {
 		$('#ClientSelectProductForm2 .radio').click(function () {
 			showConditions($(this).find("label > span"));
+			$(".conditions").show();
+			$("#conditions-img").show();
+			;
+			if ($(this).find("input:checked").attr("value") == 0) {
+				$(".conditions").hide();
+				$("#conditions-img").hide();
+				;
+			}
 		});
 	}
 	if ($('#ClientSelectProductForm').is("form")) {
@@ -45,14 +62,22 @@ $(document).ready(function () {
 		$('#ClientSelectProductForm .radio').each(function () {
 			if (($(this).find("input:checked").attr("value")) !== undefined) {
 				showConditions($(this).find("label > span"));
-				if ($(this).find("input:checked").attr("value") == 0) $(".conditions").hide();
+				if ($(this).find("input:checked").attr("value") == 0) {
+					$(".conditions").hide();
+					$("#conditions-img").hide();
+					;
+				}
 			}
 		});
 	} else {
 		$('#ClientSelectProductForm2 .radio').each(function () {
 			if (($(this).find("input:checked").attr("value")) !== undefined) {
 				showConditions($(this).find("label > span"));
-				if ($(this).find("input:checked").attr("value") == 0) $(".conditions").hide();
+				if ($(this).find("input:checked").attr("value") == 0) {
+					$(".conditions").hide();
+					$("#conditions-img").hide();
+					;
+				}
 			}
 		});
 	}

@@ -65,8 +65,7 @@ $aCrumbs = array(
 			</div>
 			<div class="span5 offset1">
 				<a data-target="#fl-contacts" data-toggle="modal" href="#fl-contacts">
-					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" title="Карта" />
-				</a>
+					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/map-plan.png" alt="Карта" /> </a>
 
 				<p>
 					Отделение идентификации

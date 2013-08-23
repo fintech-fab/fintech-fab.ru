@@ -171,9 +171,10 @@ label, input, button, select, textarea {
 	border-right: 0;
 
 }
+
 #tabsMenu {
 	/*border-bottom: 1px solid #ddd;*/
-	box-shadow: 0 7px 5px  -3px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 7px 5px -3px rgba(0, 0, 0, 0.1);
 }
 
 .navbar .brand {
@@ -182,6 +183,6 @@ label, input, button, select, textarea {
 	display: block;
 }
 
-.admin-menu .nav  {
+.admin-menu .nav {
 	margin-bottom: 5px;
 }

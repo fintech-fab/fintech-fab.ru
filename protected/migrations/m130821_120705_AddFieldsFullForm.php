@@ -9,6 +9,8 @@ ADD `address_res_city` VARCHAR( 100 ) NOT NULL COMMENT 'Город прожив�
 ADD `address_res_address` VARCHAR( 255 ) NOT NULL COMMENT 'Адрес проживания' AFTER `address_res_city` ,
 ADD `address_reg_as_res` TINYINT( 1 ) NOT NULL COMMENT 'Место проживания совпадает с пропиской' AFTER `address_res_address` ");
 
+		$this->execute("ALTER TABLE `tbl_client` CHANGE `sex` `sex` TINYINT( 1 ) NOT NULL COMMENT 'Пол'");
+
 		if (Yii::app()->hasComponent('cache')) {
 			Yii::app()->getComponent('cache')->flush();
 			echo "Cache flushed\n";

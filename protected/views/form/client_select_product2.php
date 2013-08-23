@@ -40,8 +40,9 @@ $aCrumbs = array(
 	<div class="row span6">
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/01T.png" />
 		<?php
-		if (!($oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct())) {
-			$oClientCreateForm->product = "1";
+		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+		if (!isset($oClientCreateForm->product)) {
+			$oClientCreateForm->product = "101";
 		}
 		?>
 		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts2, array("class" => "all")); ?>

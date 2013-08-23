@@ -15,7 +15,8 @@ $this->showTopPageWidget = false;
 			)
 		)); ?>
 
-		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()->createUrl('/form/3')); ?>
+		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()
+			->createUrl('/form/' . (Yii::app()->clientForm->getCurrentStep() - 1))); ?>
 		<br /> <br />
 
 		<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
@@ -46,13 +47,14 @@ $this->showTopPageWidget = false;
 
 		</div>
 		<div class="row pull-right">
-			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
+			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()
+				->createUrl('/form/' . (Yii::app()->clientForm->getCurrentStep() - 1))); ?>
 		</div>
 	</div>
 
 </div>
 
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'confirm-modal', 'fade' => false, 'htmlOptions' => array( 'style' => 'height: 430px;'))); ?>
+<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'confirm-modal', 'fade' => false, 'htmlOptions' => array('style' => 'height: 430px;'))); ?>
 
 <div class="modal-header">
 	<a class="close" data-dismiss="modal">&times;</a>

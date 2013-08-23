@@ -101,7 +101,8 @@ $aMenu = array(
 			),
 		),
 	),
-	(!Yii::app()->user->isGuest)?'<a href="'.Yii::app()->createUrl("/admin/logout").'" class="btn btn-danger pull-right"><i class="icon-white icon-remove"></i> Выйти из системы</a>':'',
+	(!Yii::app()->user->isGuest) ? '<a href="' . Yii::app()
+			->createUrl("/admin/logout") . '" class="btn btn-danger pull-right"><i class="icon-white icon-remove"></i> Выйти из системы</a>' : '',
 );
 
 $this->widget('bootstrap.widgets.TbNavbar', array(

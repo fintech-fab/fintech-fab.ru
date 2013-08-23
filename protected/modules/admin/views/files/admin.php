@@ -17,35 +17,36 @@ $this->menu = array(
 
 ?>
 
-<h1>Управление изображениями</h1>
+	<h1>Управление изображениями</h1>
 
-<?php 		$this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'images-grid',
-	'dataProvider'=>$itemsProvider,
-	'columns'=>array(
+<?php        $this->widget('zii.widgets.grid.CGridView', array(
+	'id'           => 'images-grid',
+	'dataProvider' => $itemsProvider,
+	'columns'      => array(
 		array(
-			'name'=>'thumb',
-			'header'=>'Изображение',
-			'type'=>'html',
-			'value'=> '(!empty($data["thumb"]))?Chtml::link(CHtml::image($data["thumb"],"image_thumbnail"),$data["image"]):"no image"',
+			'name'   => 'thumb',
+			'header' => 'Изображение',
+			'type'   => 'html',
+			'value'  => '(!empty($data["thumb"]))?Chtml::link(CHtml::image($data["thumb"],"image_thumbnail"),$data["image"]):"no image"',
 
 		),
 		array(
-			'name'=>'count_pages',
-			'header'=>'Использовано на страницах',
-			'value'=> '$data["count_pages"]',
+			'name'   => 'count_pages',
+			'header' => 'Использовано на страницах',
+			'value'  => '$data["count_pages"]',
 		),
 		array(
-			'name'=>'count_tabs',
-			'header'=>'Использовано на вкладках',
-			'value'=> '$data["count_pages"]',
+			'name'   => 'count_tabs',
+			'header' => 'Использовано на вкладках',
+			'value'  => '$data["count_pages"]',
 		),
 		array(
-			'name'=>'count_footer_links',
-			'header'=>'Использовано в ссылках',
-			'value'=> '$data["count_footer_links"]',
+			'name'   => 'count_footer_links',
+			'header' => 'Использовано в ссылках',
+			'value'  => '$data["count_footer_links"]',
 		),
 	),
 )); ?>
 
-Отработало за <?=sprintf('%0.5f',Yii::getLogger()->getExecutionTime())?> с. Скушано памяти: <?=round(memory_get_peak_usage()/(1024*1024),2)."MB"?>
+	Отработало за <?= sprintf('%0.5f', Yii::getLogger()
+	->getExecutionTime()) ?> с. Скушано памяти: <?= round(memory_get_peak_usage() / (1024 * 1024), 2) . "MB" ?>

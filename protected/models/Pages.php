@@ -111,13 +111,13 @@ class Pages extends CActiveRecord
 		$p = new CHtmlPurifier;
 		$p->options = array(
 			'Filter.YouTube'           => true,
-			'HTML.SafeObject' => true,
-			'HTML.SafeIframe' => true,
-			'Output.FlashCompat' => true,
-			'URI.SafeIframeRegexp' =>   '%^(http://|//)(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
+			'HTML.SafeObject'          => true,
+			'HTML.SafeIframe'          => true,
+			'Output.FlashCompat'       => true,
+			'URI.SafeIframeRegexp'     => '%^(http://|//)(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
 			'Attr.AllowedFrameTargets' => array('_blank', '_self', '_parent', '_top'),
-			'HTML.AllowedElements'     => array("div", "p", "ul", "ol", "li", "h3", "h4", "h5", "h6", "img", "a", "b", "i", "s", "span", "u", "em", "strong", "del", "blockquote", "sup", "sub", "pre", "br", "hr", "table", "tbody", "thead", "tr", "td", "th","iframe"),
-			'HTML.AllowedAttributes'   => array("img.src", "img.alt", "img.title", "*.width", "*.height", "a.href", "a.title", "a.target", "*.style", "*.class","iframe.frameborder","iframe.src"),
+			'HTML.AllowedElements'     => array("div", "p", "ul", "ol", "li", "h3", "h4", "h5", "h6", "img", "a", "b", "i", "s", "span", "u", "em", "strong", "del", "blockquote", "sup", "sub", "pre", "br", "hr", "table", "tbody", "thead", "tr", "td", "th", "iframe"),
+			'HTML.AllowedAttributes'   => array("img.src", "img.alt", "img.title", "*.width", "*.height", "a.href", "a.title", "a.target", "*.style", "*.class", "iframe.frameborder", "iframe.src"),
 		);
 		$this->page_content = $p->purify($this->page_content);
 		parent::afterValidate();

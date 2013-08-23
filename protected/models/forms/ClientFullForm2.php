@@ -65,7 +65,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 			'product'
 		);
 
-		$aRules =
+		$aMyRules =
 			array(
 				array(
 					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь на горячую линию.', 'criteria' => array(
@@ -76,10 +76,23 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
-				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица.'),
-				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта.'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с рабочим номером телефона!'),
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с рабочим номером телефона!'),
+
+				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица!'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
+
+				array('job_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'message' => 'Номер не должен совпадать с телефоном контактного лица!'),
+				array('job_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
+
+				array('phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'message' => 'Номер не должен совпадать с телефоном контактного лица!'),
+				array('phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
+
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
 				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts2), 'message' => 'Выберите сумму займа'),
+
+				array('friends_phone', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),
+				array('friends_fio', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),
 
 				array('password, password_repeat', 'required'),
 				//TODO сделать проверку пароля через match
@@ -87,7 +100,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('password', 'length', 'min' => '8'),
 				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),
 			);
-		$aRules = array_merge($aRules, $this->getRulesByFields(
+		$aRules = array_merge($aMyRules, $this->getRulesByFields(
 			array(
 				'first_name',
 				'last_name',
@@ -168,6 +181,18 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				$this->phone = substr($this->phone, 1, 10);
 			}
 		}
+
+		if ($this->job_phone) {
+			//очистка данных
+			$this->job_phone = ltrim($this->job_phone, '+ ');
+			$this->job_phone = preg_replace('/[^\d]/', '', $this->job_phone);
+
+			// убираем лишний знак слева (8-ка или 7-ка)
+			if (strlen($this->job_phone) == 11) {
+				$this->job_phone = substr($this->job_phone, 1, 10);
+			}
+		}
+
 		if ($this->document_number) {
 			$this->document_number = mb_strtoupper($this->document_number, 'UTF-8');
 		}
@@ -226,6 +251,11 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 
 			)
 		);
+	}
+
+	public function checkFriendsOnJobPhone($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkFriendsOnJobPhone($attribute, $param);
 	}
 }
 

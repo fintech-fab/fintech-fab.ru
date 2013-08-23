@@ -16,7 +16,8 @@ $this->showTopPageWidget = false;
 			)
 		)); ?>
 
-		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()->createUrl('/form/3')); ?>
+		<?php echo CHtml::link('← Вернуться к выбору способа идентификации', Yii::app()
+			->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep())); ?>
 		<br /> <br />
 
 		<div id="instructions" class="alert alert-info" style="font-weight: bold; font-size: 1.5em; padding: 10px;">
@@ -33,7 +34,8 @@ $this->showTopPageWidget = false;
 			</div>
 		</div>
 		<div class="row pull-right">
-			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()->createUrl('/form/3')); ?>
+			<?php echo CHtml::link('Выбрать другой способ идентификации', Yii::app()
+				->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep())); ?>
 		</div>
 	</div>
 

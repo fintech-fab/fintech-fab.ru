@@ -131,7 +131,13 @@ class FormController extends Controller
 	 */
 	public function actionIdentification()
 	{
-		if (Yii::app()->clientForm->getCurrentStep() == 3) {
+		if (Yii::app()->clientForm->getCurrentStep() == 3 && !SiteParams::B_FULL_FORM) {
+			$bIdent = true;
+		} elseif (Yii::app()->clientForm->getCurrentStep() == 2 && SiteParams::B_FULL_FORM) {
+			$bIdent = true;
+		}
+
+		if ($bIdent) {
 			if (Yii::app()->clientForm->checkTmpIdentificationFiles("photo")) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
@@ -144,7 +150,13 @@ class FormController extends Controller
 	 */
 	public function actionDocuments()
 	{
-		if (Yii::app()->clientForm->getCurrentStep() == 4) {
+		if (Yii::app()->clientForm->getCurrentStep() == 4 && !SiteParams::B_FULL_FORM) {
+			$bDocs = true;
+		} elseif (Yii::app()->clientForm->getCurrentStep() == 4 && SiteParams::B_FULL_FORM) {
+			$bDocs = true;
+		}
+
+		if ($bDocs) {
 
 			if (Yii::app()->clientForm->checkTmpIdentificationFiles("documents")) {
 

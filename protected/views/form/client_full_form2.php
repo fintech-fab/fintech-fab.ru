@@ -229,7 +229,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
  */
 
 
-Yii::app()->clientScript->registerScript('checkData', '
+Yii::app()->clientScript->registerScript('accordionActions', '
 	function in_array(what, where) {
 	    for(var i=0, length_array=where.length; i<length_array; i++)
             if(what == where[i])
@@ -263,7 +263,7 @@ Yii::app()->clientScript->registerScript('checkData', '
 		var form=$("#"+formName);
 		var settings = form.data("settings");
 		$.each(settings.attributes, function () {
-	        if(this.id == this.id == formName+"_sex_0"||this.id == formName+"_sex_1"){
+	        if(this.id == formName+"_sex_0"||this.id == formName+"_sex_1"){
 	            this.status = 2; // force ajax validation
 	        }
 	    });

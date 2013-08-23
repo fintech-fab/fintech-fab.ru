@@ -498,4 +498,17 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
+	public function checkFriendsOnJobPhone($attribute, $param)
+	{
+
+		$sPhone = $this->owner->$param['phone'];
+		$sJobPhone = $this->owner->$param['job_phone'];
+
+		if ($sJobPhone == $sPhone && empty($this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+
+		return;
+
+	}
 }

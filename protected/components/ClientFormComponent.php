@@ -14,7 +14,6 @@ class ClientFormComponent
 	private $client_id;
 	private $current_step;
 	private $done_steps;
-	const B_FULL_FORM = true;
 
 	public function init()
 	{
@@ -410,7 +409,7 @@ class ClientFormComponent
 	public
 	function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-		$bFullForm = self::B_FULL_FORM;
+		$bFullForm = SiteParams::B_FULL_FORM;
 
 		if ($bFullForm) {
 			switch ($this->current_step) {
@@ -481,7 +480,7 @@ class ClientFormComponent
 			return 'form_sent';
 		}
 
-		$bFullForm = self::B_FULL_FORM;
+		$bFullForm = SiteParams::B_FULL_FORM;
 
 		if ($bFullForm) {
 
@@ -558,7 +557,7 @@ class ClientFormComponent
 	function getPostData()
 	{
 
-		$bFullForm = self::B_FULL_FORM;
+		$bFullForm = SiteParams::B_FULL_FORM;
 
 		if ($bFullForm) {
 			switch ($this->current_step) {
@@ -816,7 +815,11 @@ class ClientFormComponent
 	public
 	function getSessionProduct()
 	{
-		return Yii::app()->session['ClientSelectProductForm']['product'];
+		if (!empty(Yii::app()->session['ClientSelectProductForm']['product'])) {
+			return Yii::app()->session['ClientSelectProductForm']['product'];
+		} else {
+			return Yii::app()->session['ClientSelectProductForm2']['product'];
+		}
 	}
 
 	/**
