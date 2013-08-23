@@ -131,6 +131,8 @@ class FormController extends Controller
 	 */
 	public function actionIdentification()
 	{
+		$bIdent = false;
+
 		if (Yii::app()->clientForm->getCurrentStep() == 3 && !SiteParams::B_FULL_FORM) {
 			$bIdent = true;
 		} elseif (Yii::app()->clientForm->getCurrentStep() == 2 && SiteParams::B_FULL_FORM) {
@@ -150,6 +152,8 @@ class FormController extends Controller
 	 */
 	public function actionDocuments()
 	{
+		$bDocs = false;
+
 		if (Yii::app()->clientForm->getCurrentStep() == 4 && !SiteParams::B_FULL_FORM) {
 			$bDocs = true;
 		} elseif (Yii::app()->clientForm->getCurrentStep() == 4 && SiteParams::B_FULL_FORM) {

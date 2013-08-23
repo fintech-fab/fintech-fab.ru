@@ -55,6 +55,7 @@ class ClientFormComponent
 	{
 
 		$aValidFormData = $oClientForm->getValidAttributes();
+
 		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm2') {
 			if (isset($aValidFormData['phone'])) {
 				/**
@@ -112,6 +113,13 @@ class ClientFormComponent
 			}
 		}
 
+		$aSessionFormData = Yii::app()->session[get_class($oClientForm)];
+
+		//проверяем, есть ли в сессии уже какие-то данные, и проверяем что они лежат в массиве
+		if (!empty($aSessionFormData) && gettype($aSessionFormData) == "array") {
+			//объединяем данные из сессии с новыми валидными данными
+			$aValidFormData = array_merge($aSessionFormData, $aValidFormData);
+		}
 		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
 		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->client_id;
 

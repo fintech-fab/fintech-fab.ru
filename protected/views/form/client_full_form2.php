@@ -213,8 +213,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>
 
 <?php
+
+//TODO разобраться почему нельзя дизейблить инпуты, происходит стирание данных в форме
+// TODO UPD: разобрался! вероятно, стоит вернуть дизейблы скрытых частей формы
 /**
- * TODO разобраться почему нельзя дизейблить инпуты, происходит стирание данных в форме
  * $("#passportData").find(":input").prop("disabled",true);
  * $("#address").find(":input").prop("disabled",true);
  * $("#jobInfo").find(":input").prop("disabled",true);
@@ -425,7 +427,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	jQuery("#addressHeading").click(function()
 	{
 		if(!passportDataOk&&$("#passportData").find("div").hasClass("error")){
-		        $("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+		        //$("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
 		}
 
 		if(!personalDataOk){
