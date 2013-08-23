@@ -49,7 +49,7 @@
 <!-- ClickTale end of Top part -->
 
 <nav class="navbar navbar-top">
-	<div class="navbar-inner">
+	<div class="navbar-inner navbar-inner-main">
 		<div class="container">
 
 			<!-- Special image

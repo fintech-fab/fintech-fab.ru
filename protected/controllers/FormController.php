@@ -14,18 +14,6 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
-		//Yii::app()->clientForm->nextStep();
-
-		if (empty($client_id)) {
-			Yii::app()->session['tmp_client_id'] = Yii::app()->clientForm->getTmpClientId();
-		}
-
-		/*
-		$cookie = new CHttpCookie('test', 'test');
-		$cookie->expire = time()+60*60*24;
-		Yii::app()->request->cookies['test'] = $cookie;
-		*/
-
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)
