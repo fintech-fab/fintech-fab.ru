@@ -498,7 +498,6 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
-	//TODO доделать валидацию
 	public function checkFriendsOnJobPhone($attribute, $param)
 	{
 

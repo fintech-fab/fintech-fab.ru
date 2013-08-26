@@ -73,7 +73,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с номером рабочего телефона!'),
 
-				//TODO доделать валидацию
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица!'),
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
 
@@ -221,11 +220,11 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'relatives_one_fio'   => 'Контактное лицо',
-				'relatives_one_phone' => 'Телефон контактного лица',
+				'relatives_one_fio'   => 'ФИО',
+				'relatives_one_phone' => 'Телефон',
 
-				'friends_fio'         => 'Дополнительный контакт (повышает вероятность одобрения)',
-				'friends_phone'       => 'Телефон дополнительного контакта',
+				'friends_fio'         => 'ФИО',
+				'friends_phone'       => 'Телефон',
 
 				'complete'            => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 

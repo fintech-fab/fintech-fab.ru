@@ -7,6 +7,10 @@ h2 {
 	line-height: 36px;
 }
 
+h4, h5 {
+	font-weight: 400;
+}
+
 p {
 	margin: 0 0 9px;
 }

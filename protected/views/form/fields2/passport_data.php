@@ -42,6 +42,11 @@ $htmlOptions = array(
 	<?php // echo $form->fieldPassportOneFieldRow($oClientCreateForm, array('passport_series','passport_number'), array('passport_number'=>array('class' => 'span2', 'mask' => '999999', 'size'=>'6', 'maxlength'=>'6'),'passport_series'=>array('class' => 'span1', 'mask' => '9999', 'size'=>'4', 'maxlength'=>'4')));?>
 	<div class="control-group">
 		<div class="row">
+			<div class="span5">
+				<h5>Паспорт</h5>
+			</div>
+		</div>
+		<div class="row">
 			<div class="span3">
 				<?= $form->labelEx($oClientCreateForm, 'passport_number', array('class' => 'control-label')); ?>
 				<div class="controls"><?= $form->maskedTextField($oClientCreateForm, 'passport_series', '9999', array('style' => 'width: 40px;', 'size' => '4', 'maxlength' => '4')); ?></div>
@@ -69,6 +74,7 @@ $htmlOptions = array(
 </div>
 
 <div class="span5 offset1">
+	<h5>Второй документ</h5>
 	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3') + $htmlOptions); ?>
 </div>
