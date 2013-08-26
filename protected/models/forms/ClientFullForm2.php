@@ -42,10 +42,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 			'address_reg_city',
 			'address_reg_address',
 
-			'address_res_region',
-			'address_res_city',
-			'address_res_address',
-
 			'relatives_one_fio',
 			'relatives_one_phone',
 
@@ -70,15 +66,14 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array(
 					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь на горячую линию.', 'criteria' => array(
 					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
-				)
+				), 'on'                            => 'scen1'
 				),
-				//TODO сделать сравнение с рабочим телефоном!
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
-				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с рабочим номером телефона!'),
-				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с рабочим номером телефона!'),
+				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с номером рабочего телефона!'),
 
+				//TODO доделать валидацию
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица!'),
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
 
@@ -91,8 +86,13 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
 				array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts2), 'message' => 'Выберите сумму займа'),
 
-				array('friends_phone', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),
+				array('friends_phone', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!'),
 				array('friends_fio', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),
+
+				array('address_res_region', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!',),
+				array('address_res_city', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!'),
+				array('address_res_address', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!'),
+
 
 				array('password, password_repeat', 'required'),
 				//TODO сделать проверку пароля через match
@@ -100,7 +100,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('password', 'length', 'min' => '8'),
 				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),
 			);
-		$aRules = array_merge($aMyRules, $this->getRulesByFields(
+		$aRules = array_merge($this->getRulesByFields(
 			array(
 				'first_name',
 				'last_name',
@@ -151,7 +151,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				'secret_answer',
 			),
 			$aRequired
-		));
+		), $aMyRules);
 
 		return $aRules;
 
@@ -165,12 +165,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 
 	public function beforeValidate()
 	{
-		if ($this->address_reg_as_res) {
-			$this->address_res_region = $this->address_reg_region;
-			$this->address_res_city = $this->address_reg_city;
-			$this->address_res_address = $this->address_reg_address;
-		}
-
 		if ($this->phone) {
 			//очистка данных
 			$this->phone = ltrim($this->phone, '+ ');
@@ -228,10 +222,10 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 			parent::attributeLabels(),
 			array(
 				'relatives_one_fio'   => 'Контактное лицо',
-				'relatives_one_phone' => 'Телефон',
+				'relatives_one_phone' => 'Телефон контактного лица',
 
 				'friends_fio'         => 'Дополнительный контакт (повышает вероятность одобрения)',
-				'friends_phone'       => 'Телефон',
+				'friends_phone'       => 'Телефон дополнительного контакта',
 
 				'complete'            => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 
@@ -257,6 +251,12 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 	{
 		$this->asa('FormFieldValidateBehavior')->checkFriendsOnJobPhone($attribute, $param);
 	}
+
+	public function checkAddressRes($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkAddressRes($attribute, $param);
+	}
+
 }
 
 ?>

@@ -2,12 +2,8 @@
 /* @var $this PagesController */
 /* @var $model Pages */
 
-$this->breadcrumbs = array(
-	'Pages' => array('index'),
-	$model->page_id,
-);
-
 $sUrl = Yii::app()->createAbsoluteUrl('/pages/view/' . $model->page_name);
+
 ?>
 
 <?php

@@ -427,7 +427,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	jQuery("#addressHeading").click(function()
 	{
 		if(!passportDataOk&&$("#passportData").find("div").hasClass("error")){
-		        //$("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
+		        $("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
 		}
 
 		if(!personalDataOk){
@@ -511,6 +511,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	    });
 	}});
 
+	//по нажатии на "Отправка" делаем force валидацию предыдущей части формы
 	jQuery("#sendHeading").click(function()
 	{
 

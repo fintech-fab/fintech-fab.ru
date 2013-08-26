@@ -2,10 +2,7 @@
 /* @var $this PagesController */
 /* @var $model Pages */
 
-$this->breadcrumbs = array(
-	'Pages' => array('index'),
-	'Manage',
-);
+$this->pageTitle = Yii::app()->name . " - Управление страницами";
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){

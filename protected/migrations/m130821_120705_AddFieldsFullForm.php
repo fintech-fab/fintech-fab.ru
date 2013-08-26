@@ -19,12 +19,7 @@ ADD `address_reg_as_res` TINYINT( 1 ) NOT NULL COMMENT 'Место прожив�
 
 	public function down()
 	{
-		$this->execute("ALTER TABLE `tbl_client`
-  DROP `password`,
-  DROP `address_res_region`,
-  DROP `address_res_city`,
-  DROP `address_res_address`,
-  DROP `addres_reg_as_res`");
+		return false;
 	}
 
 	/*

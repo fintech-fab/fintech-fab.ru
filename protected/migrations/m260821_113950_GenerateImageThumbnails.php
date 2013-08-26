@@ -1,5 +1,5 @@
 <?php
-class m260821_113950_AddFieldsFullForm extends CDbMigration
+class m260821_113950_GenerateImageThumbnails extends CDbMigration
 {
 	public function up()
 	{

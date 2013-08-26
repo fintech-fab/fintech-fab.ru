@@ -498,6 +498,7 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
+	//TODO доделать валидацию
 	public function checkFriendsOnJobPhone($attribute, $param)
 	{
 
@@ -508,7 +509,25 @@ class FormFieldValidateBehavior extends CBehavior
 			$this->owner->addError($attribute, $param['message']);
 		}
 
+		if ($attribute == "friends_phone" && !empty($this->owner->$attribute) && $sJobPhone == $this->owner->$attribute) {
+			$this->owner->addError($attribute, $param['message2']);
+		}
+
 		return;
 
 	}
+
+	public function checkAddressRes($attribute, $param)
+	{
+
+		$sRegAsRes = $this->owner->$param['reg_as_res'];
+
+		if (!$sRegAsRes && empty($this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+
+		return;
+
+	}
+
 }

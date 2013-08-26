@@ -42,12 +42,14 @@ class FormController extends Controller
 			if (isset($oClientForm->go_identification)) {
 				if ($oClientForm->validate()) {
 					Yii::app()->clientForm->goIdentification($oClientForm->go_identification);
-					$oClientForm = Yii::app()->clientForm->getFormModel();
+					//$oClientForm = Yii::app()->clientForm->getFormModel();
+					$this->redirect(Yii::app()->createUrl("form"));
 				}
 			} elseif ($oClientForm->validate()) {
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+				$this->redirect(Yii::app()->createUrl("form"));
 			}
 
 		}
