@@ -124,7 +124,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="passportDataHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Паспортные данные</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
+				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -141,7 +141,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="addressHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Постоянная регистрация</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
+				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -158,7 +158,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="jobInfoHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Место работы</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
+				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -175,7 +175,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<h4 id="sendHeading" style="font-weight: 400;" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
 				Отправка</h4>
 			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка!!! Необходимо сначала заполнить все обязательные поля анкеты.',
+				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
 				'htmlOptions' => array('class' => 'errorAlert hide span7')
 			));?>
 		</div>
@@ -195,7 +195,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div class="form-actions">
 			<div class="row">
 				<?php $this->widget('AlertWidget', array(
-					'message'     => 'Ошибка!!! Необходимо сначала правильно заполнить все обязательные поля анкеты!',
+					'message'     => 'Для отправки анкеты необходимо заполнить все обязательные поля!',
 					'htmlOptions' => array('id' => 'submitError', 'class' => 'hide')
 				));?>
 			</div>

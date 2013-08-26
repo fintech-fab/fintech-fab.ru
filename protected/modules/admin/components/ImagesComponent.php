@@ -103,7 +103,6 @@ class ImagesComponent
 		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($sImagesDir)) as $sFileName) {
 
 			if (!is_dir($sFileName)) {
-				//$sFileName = str_replace('/var/www/ru.dev.kreddy/protected/../public', Yii::app()->getBaseUrl(), $sFileName);
 
 				$sThumbName = str_replace('uploads/images', 'uploads/thumbnails', $sFileName);
 
