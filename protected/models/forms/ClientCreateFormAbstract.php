@@ -87,7 +87,7 @@ class ClientCreateFormAbstract extends CFormModel
 	public $address_reg_address; // Адрес (Улица, дом, корпус/строение, квартира)*
 	public $address_reg_post_index; // Индекс
 
-	public $address_reg_as_res = 1; // признак совпадения адресов регистрации и места жительства
+	public $address_reg_as_res = 0; // признак совпадения адресов регистрации и места жительства
 
 	public $address_res_region; // Республика/край/область*
 	public $address_res_city; // Населенный пункт (Город, поселок, деревня и т.д.)*

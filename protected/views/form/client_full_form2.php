@@ -95,7 +95,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	),
 	'action'               => Yii::app()->createUrl('/form/'),
 ));
+
 ?>
+
 
 <?php $collapse = $this->beginWidget('bootstrap.widgets.TbCollapse', array(
 	'id'          => 'accordion',
@@ -104,7 +106,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'class' => 'accordion',
 	),
 ));?>
-
 
 	<div class="accordion-group">
 		<div class="accordion-heading">
@@ -245,9 +246,11 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	if(!$("#regAsResCheckBox").prop("checked")){
 		$("#address_res").find(":input").attr("disabled",false).removeClass("disabled").removeClass("success");
 		$("#address_res").show();
+		$("#address_res").find("label").append("<span class=\"required\">*</span>");
 	} else {
 		$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled").val("");
 		$("#address_res").hide();
+		$("#address_res").find("label").append("<span class=\"required\">*</span>");
 	}
 
 	var personalDataOk = false;
@@ -258,7 +261,10 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 
 	var formName="' . get_class($oClientCreateForm) . '";
 
-
+	/**
+	* вешаем на чекбокс обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
+	* валидации radioButtonListRow без подобных плясок с бубном)
+	*/
 
 	jQuery("#regAsResCheckBox").change(function()
 	{

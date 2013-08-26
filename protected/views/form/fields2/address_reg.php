@@ -42,7 +42,7 @@ $htmlOptions = array(
 );
 
 $checkBoxHtmlOptions = array_merge($htmlOptions, array(
-	'id' => 'regAsResCheckBox',
+	'id' => 'regAsResCheckBox'
 ));
 ?>
 <div class="span5">
