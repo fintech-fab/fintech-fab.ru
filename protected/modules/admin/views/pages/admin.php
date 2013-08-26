@@ -7,17 +7,6 @@ $this->breadcrumbs = array(
 	'Manage',
 );
 
-$this->menu = array(
-	array('label' => 'Список страниц', 'url' => array('pages/index')),
-	array('label' => 'Создать страницу', 'url' => array('pages/create')),
-	array('label' => 'Список вкладок', 'url' => array('tabs/index')),
-	array('label' => 'Создать вкладку', 'url' => array('tabs/create')),
-	array('label' => 'Управление вкладками', 'url' => array('tabs/admin')),
-	array('label' => 'Список нижних ссылок', 'url' => array('footerLinks/index')),
-	array('label' => 'Создать нижнюю ссылку', 'url' => array('footerLinks/create')),
-	array('label' => 'Управление нижними ссылками', 'url' => array('footerLinks/admin')),
-);
-
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();

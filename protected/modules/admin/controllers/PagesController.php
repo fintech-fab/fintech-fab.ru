@@ -97,7 +97,7 @@ class PagesController extends Controller
 		$model = $this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if (isset($_POST['Pages'])) {
 			$model->attributes = $_POST['Pages'];
@@ -131,7 +131,7 @@ class PagesController extends Controller
 	 * Lists all models.
 	 */
 	public function actionIndex()
-	{ //echo '<pre>' . ""; CVarDumper::dump(); echo '</pre>';
+	{
 		$dataProvider = new CActiveDataProvider('Pages');
 		$this->render('index', array(
 			'dataProvider' => $dataProvider,

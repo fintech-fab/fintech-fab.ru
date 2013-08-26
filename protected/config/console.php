@@ -10,6 +10,12 @@ $a = array(
 	'preload'    => array('log'),
 
 
+	'modules'    => array(),
+
+	'import'     => array(
+		'application.extensions.image.*',
+	),
+
 	// application components
 	'components' => array(
 		'db'           => array(
@@ -44,5 +50,6 @@ $a = array(
 );
 
 $a['components'] = CMap::mergeArray($a['components'], require(__DIR__ . '/custom/db.php'));
+$a['modules'] = CMap::mergeArray($a['modules'], require(__DIR__ . '/custom/modules.php'));
 
 return $a;

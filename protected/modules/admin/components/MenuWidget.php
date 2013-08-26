@@ -81,6 +81,14 @@ class MenuWidget extends CWidget
 				),
 			),
 			),
+			array(
+				'name' => 'files', 'label' => 'Изображения', 'content' => array(
+				array(
+					'label' => 'Управление изображениями',
+					'name'  => 'imagesAdmin',
+				),
+			),
+			),
 		);
 
 		foreach ($this->aMenu as &$aTab) {

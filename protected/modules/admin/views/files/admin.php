@@ -5,24 +5,16 @@
  * @var $itemsProvider CArrayDataProvider
  */
 
-$this->menu = array(
-	array('label' => 'Список страниц', 'url' => array('pages/index')),
-	array('label' => 'Создать страницу', 'url' => array('pages/create')),
-	array('label' => 'Список вкладок', 'url' => array('tabs/index')),
-	array('label' => 'Создать вкладку', 'url' => array('tabs/create')),
-	array('label' => 'Управление вкладками', 'url' => array('tabs/admin')),
-	array('label' => 'Список нижних ссылок', 'url' => array('footerLinks/index')),
-	array('label' => 'Создать нижнюю ссылку', 'url' => array('footerLinks/create')),
-);
-
 ?>
 
 	<h1>Управление изображениями</h1>
 
-<?php        $this->widget('zii.widgets.grid.CGridView', array(
+<?php        $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'           => 'images-grid',
 	'dataProvider' => $itemsProvider,
+	'type'         => 'striped bordered condensed',
 	'columns'      => array(
+		//'image',
 		array(
 			'name'   => 'thumb',
 			'header' => 'Изображение',
@@ -44,6 +36,19 @@ $this->menu = array(
 			'name'   => 'count_footer_links',
 			'header' => 'Использовано в ссылках',
 			'value'  => '$data["count_footer_links"]',
+		),
+		array(
+			'class'           => 'bootstrap.widgets.TbButtonColumn',
+			'template'        => '{delete}',
+			'deleteButtonUrl' => '$this->grid->owner->createUrl("files/delete", array("image"=>str_replace("/uploads/images/","",$data["image"])))',
+			/*'buttons' => array
+			(
+				'delete' => array
+				(
+					'url' => '$this->grid->owner->createUrl("admin/files/delete", array("image"=>"$data->thumb"))',
+
+				),
+			),*/
 		),
 	),
 )); ?>
