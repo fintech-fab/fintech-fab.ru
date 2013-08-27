@@ -250,9 +250,10 @@ class ImageController extends CController
 	 */
 	private function requestToLibCCV($file)
 	{
-		$ch = curl_init('http://192.168.10.9/bbf/detect.objects?model=face');
+		$ch = curl_init('http://127.0.0.1/bbf/detect.objects?model=face');
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
 		$post = array(
