@@ -91,7 +91,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('address_res_region', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!',),
 				array('address_res_city', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!'),
 				array('address_res_address', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!'),
-				array('address_reg_as_res', 'in', 'message' => 'Может принимать только значения 1 или 2', 'range' => array(0, 1)),
+				array('address_reg_as_res', 'in', 'message' => 'Может принимать только значения 0 или 1', 'range' => array(0, 1)),
 
 
 				array('password, password_repeat', 'required'),

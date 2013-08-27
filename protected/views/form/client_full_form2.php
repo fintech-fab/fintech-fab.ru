@@ -22,7 +22,6 @@ $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
-	//'enableClientValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(
 		'validateOnChange' => true,
@@ -231,23 +230,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <?php
 
-//TODO разобраться почему нельзя дизейблить инпуты, происходит стирание данных в форме
-// TODO UPD: разобрался! вероятно, стоит вернуть дизейблы скрытых частей формы
-/**
- * $("#passportData").find(":input").prop("disabled",true);
- * $("#address").find(":input").prop("disabled",true);
- * $("#jobInfo").find(":input").prop("disabled",true);
- * $("#sendForm").find(":input").prop("disabled",true);
- *
- *
- */
-
-
 Yii::app()->clientScript->registerScript('accordionActions', '
 
 	$(".errorAlert").find(".alert-block").addClass("alert-block-fullform");
 
-	if(!$("#regAsResCheckBox").prop("checked")){
+	if(!$("#reg_as_res").find("input[type=checkbox]").prop("checked")){
 		$("#address_res").find(":input").attr("disabled",false).removeClass("disabled");
 		$("#address_res").show();
 		$("#address_res").find("label").append("<span class=\"required\">*</span>");
@@ -275,13 +262,13 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	* вешаем на чекбокс обработчик, чтобы по смене сразу валидировать и менять состояние формы
 	*/
 
-	jQuery("#regAsResCheckBox").change(function()
+	jQuery("#reg_as_res").find("input[type=checkbox]").change(function()
 	{
 		/*
 		 * Проверяем, установлен или снят чекбокс, и либо убираем и дизейблим, либо наоборот соответствующие части формы
 		 * Обязательно убираем класс error/success и очищаем поля при этом
 		 */
-		if(!$("#regAsResCheckBox").prop("checked")){
+		if(!$("#reg_as_res").find("input[type=checkbox]").prop("checked")){
 			$("#address_res").find(":input").attr("disabled",false).removeClass("disabled").parents(".control-group").removeClass("error success");
 			$("#address_res").show();
 		} else {
@@ -289,32 +276,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 			$("#address_res").hide();
 		}
 
-		/*
-		 * Проходим по атрибутам формы, ищем нужный, ставим ему нужный статус (статус 2 - принудительная валидация)
-		 */
-		var form=$("#"+formName);
-		var settings = form.data("settings");
-		var regExp = new RegExp("_reg_as_res");
-		$.each(settings.attributes, function () {
-			var sID = this.id;
-	        if(sID.match(regExp)){
-	            this.status = 2; // force ajax validation
-	        }
-	    });
-	    form.data("settings", settings);
 
-		/*
-		 * Ищем нужное поле, валидируем, обновляем его стиль
-		 */
-	    $.fn.yiiactiveform.validate(form, function (data) {
-	        $.each(settings.attributes, function () {
-	            var sID = this.id;
-				if(sID.match(regExp)){
-	                $.fn.yiiactiveform.updateInput(this, data, form);
-	                this.afterValidateAttribute(); //запускаем эвент afterValidateAttribute для данного поля
-	            }
-	        });
-	    });
 	});
 
 	/**

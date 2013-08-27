@@ -44,7 +44,7 @@ $htmlOptions = array(
 	)
 );
 //отдельно задаем свойства для радиокнопок, для корректной отработки валидации и сопутствующих JS
-$sexHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_sex'), 'uncheckValue' => '999');
+$sexHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_sex'));
 
 Yii::app()->clientScript->registerScript('personalDataScript', '
 $("#' . get_class($oClientCreateForm) . '_complete").parents(".controls").removeClass("controls");
