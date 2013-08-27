@@ -32,7 +32,7 @@ $htmlOptions = array(
 				if(iCount==0){
 					sendFormOk = true;
 				}
-			}
+				}
 		}'
 	)
 );

@@ -38,7 +38,6 @@ $htmlOptions = array(
 				}
 				$("#sendForm").find(":input").prop("disabled",false);
 				$("#submitButton").removeClass("disabled");
-				jQuery("#product").find(":input").change();
 				if(iCount==0){
 					jobInfoOk = true;
 				}
