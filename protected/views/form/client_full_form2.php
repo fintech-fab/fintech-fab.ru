@@ -27,6 +27,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
+		'beforeValidate'   => 'js: function(){
+			if(personalDataOk
+			&&passportDataOk
+			&&addressOk
+			&&jobInfoOk
+			){
+				return true;
+			} else {
+				alertModal("Ошибка!","Сначала следует заполнить все поля формы", "OK");
+			}
+
+		}',
 		'afterValidate'    => 'js: function(){
 			var hasError = false;
 			if($("#personalData").find("div").hasClass("error"))
@@ -109,7 +121,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<h4 class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#personalData">
+			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#personalData">
 				Личные данные</h4>
 		</div>
 		<div id="personalData" class="accordion-body collapse in">
@@ -139,7 +151,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="addressHeading" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="addressHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse" data-parent="#accordion1">
 				Постоянная регистрация</h4>
 			<?php $this->widget('AlertWidget', array(
 				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
@@ -156,7 +168,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="jobInfoHeading" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="jobInfoHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse" data-parent="#accordion1">
 				Место работы</h4>
 			<?php $this->widget('AlertWidget', array(
 				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
@@ -173,7 +185,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="sendHeading" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="sendHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse" data-parent="#accordion1">
 				Отправка</h4>
 			<?php $this->widget('AlertWidget', array(
 				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
@@ -203,9 +215,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<div class="clearfix"></div>
 			<div class="row">
 				<? $this->widget('bootstrap.widgets.TbButton', array(
-					'buttonType' => 'submit',
-					'type'       => 'primary',
-					'label'      => 'Отправить →',
+					'id'          => 'submitButton',
+					'buttonType'  => 'submit',
+					'type'        => 'primary',
+					'label'       => 'Отправить →',
+					'htmlOptions' => array(
+						'class' => 'disabled'
+					)
 				)); ?>
 			</div>
 		</div>
@@ -223,35 +239,29 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
  * $("#jobInfo").find(":input").prop("disabled",true);
  * $("#sendForm").find(":input").prop("disabled",true);
  *
- * TODO сделать более правильно работающую цепочку вызовов, с обратным проходом
- *
- * if(!personalDataOk){
- * jQuery("#passportDataHeading").click();
- * }
  *
  */
 
 
 Yii::app()->clientScript->registerScript('accordionActions', '
-	function in_array(what, where) {
-	    for(var i=0, length_array=where.length; i<length_array; i++)
-            if(what == where[i])
-                return true;
-	    return false;
-	}
-
 
 	$(".errorAlert").find(".alert-block").addClass("alert-block-fullform");
 
 	if(!$("#regAsResCheckBox").prop("checked")){
-		$("#address_res").find(":input").attr("disabled",false).removeClass("disabled").removeClass("success");
+		$("#address_res").find(":input").attr("disabled",false).removeClass("disabled");
 		$("#address_res").show();
 		$("#address_res").find("label").append("<span class=\"required\">*</span>");
 	} else {
-		$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled").val("");
+		$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled").parents(".control-group").addClass("success").val("");
 		$("#address_res").hide();
 		$("#address_res").find("label").append("<span class=\"required\">*</span>");
 	}
+
+
+	$("#passportData").find(":input").prop("disabled",true);
+    $("#address").find(":input").prop("disabled",true);
+    $("#jobInfo").find(":input").prop("disabled",true);
+    $("#sendForm").find(":input").prop("disabled",true);
 
 	var personalDataOk = false;
 	var passportDataOk = false;
@@ -262,20 +272,26 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	var formName="' . get_class($oClientCreateForm) . '";
 
 	/**
-	* вешаем на чекбокс обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
-	* валидации radioButtonListRow без подобных плясок с бубном)
+	* вешаем на чекбокс обработчик, чтобы по смене сразу валидировать и менять состояние формы
 	*/
 
 	jQuery("#regAsResCheckBox").change(function()
 	{
+		/*
+		 * Проверяем, установлен или снят чекбокс, и либо убираем и дизейблим, либо наоборот соответствующие части формы
+		 * Обязательно убираем класс error/success и очищаем поля при этом
+		 */
 		if(!$("#regAsResCheckBox").prop("checked")){
-			$("#address_res").find(":input").attr("disabled",false).removeClass("disabled").removeClass("success");
+			$("#address_res").find(":input").attr("disabled",false).removeClass("disabled").parents(".control-group").removeClass("error success");
 			$("#address_res").show();
 		} else {
-			$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled").val("").parents(".control-group").removeClass("error success").find(".help-inline").hide();
+			$("#address_res").find(":input").attr("disabled","disabled").addClass("disabled").val("").parents(".control-group").removeClass("error").addClass("success").find(".help-inline").hide();
 			$("#address_res").hide();
 		}
 
+		/*
+		 * Проходим по атрибутам формы, ищем нужный, ставим ему нужный статус (статус 2 - принудительная валидация)
+		 */
 		var form=$("#"+formName);
 		var settings = form.data("settings");
 		var regExp = new RegExp("_reg_as_res");
@@ -287,17 +303,20 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	    });
 	    form.data("settings", settings);
 
-		// trigger ajax validation
+		/*
+		 * Ищем нужное поле, валидируем, обновляем его стиль
+		 */
 	    $.fn.yiiactiveform.validate(form, function (data) {
 	        $.each(settings.attributes, function () {
 	            var sID = this.id;
 				if(sID.match(regExp)){
 	                $.fn.yiiactiveform.updateInput(this, data, form);
-	                this.afterValidateAttribute();
+	                this.afterValidateAttribute(); //запускаем эвент afterValidateAttribute для данного поля
 	            }
 	        });
 	    });
 	});
+
 	/**
 	* вешаем на радиобаттоны "Пол" обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
 	* валидации radioButtonListRow без подобных плясок с бубном)
@@ -422,11 +441,6 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	//по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
 	jQuery("#passportDataHeading").click(function()
 	{
-
-		if(!personalDataOk&&$("#personalData").find("div").hasClass("error")){
-			$("#passportDataHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
-		}
-
 		if($("#passportDataHeading").attr("href")=="#passportData"){
 			return;
 		}
@@ -441,6 +455,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 			formName+"_birthday",
 			formName+"_phone",
 			formName+"_email",
+			formName+"_complete",
 			formName+"_sex",
 			formName+"_sex_0",
 			formName+"_sex_1"
@@ -468,14 +483,6 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	//по нажатии на "Постоянную регистрацию" делаем force валидацию предыдущей части формы
 	jQuery("#addressHeading").click(function()
 	{
-		if(!passportDataOk&&$("#passportData").find("div").hasClass("error")){
-		        $("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
-		        $("#addressHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
-		}
-
-		if(!personalDataOk){
-			jQuery("#passportDataHeading").click();
-		}
 
 	if(personalDataOk&&$("#addressHeading").attr("href")!="#address"){
 		var form=$("#"+formName);
@@ -512,13 +519,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	//по нажатии на "Место работы" делаем force валидацию предыдущей части формы
 	jQuery("#jobInfoHeading").click(function()
 	{
-	if(!addressOk&&$("#address").find("div").hasClass("error")){
-	        $("#jobInfoHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
-	}
 
-	if(!passportDataOk){
-		jQuery("#addressHeading").click();
-	}
 	if(personalDataOk&&passportDataOk&&$("#jobInfoHeading").attr("href")!="#jobInfo"){
 		var form=$("#"+formName);
         var settings = form.data("settings");
@@ -557,14 +558,6 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	//по нажатии на "Отправка" делаем force валидацию предыдущей части формы
 	jQuery("#sendHeading").click(function()
 	{
-
-	if(!jobInfoOk&&$("#jobInfo").find("div").hasClass("error")){
-	        $("#sendHeading").parent().find(".errorAlert").fadeIn(400).delay(4000).fadeOut( 800 );
-	}
-
-	if(!addressOk){
-		jQuery("#jobInfoHeading").click();
-	}
 
 	if(personalDataOk&&passportDataOk&&addressOk&&$("#sendHeading").attr("href")!="#sendForm"){
 		var form=$("#"+formName);

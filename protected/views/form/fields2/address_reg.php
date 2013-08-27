@@ -10,8 +10,6 @@ $htmlOptions = array(
 	'errorOptions' => array(
 		'afterValidateAttribute' => 'js: function(html){
 			addressOk = false;
-			if($("#personalData").hasClass("in")) $("#personalData").collapse("hide");
-			if($("#passportData").hasClass("in")) $("#passportData").collapse("hide");
 			var formName="' . get_class($oClientCreateForm) . '";
 			var aAttrs = Array(
 				"address_reg_region",
@@ -23,19 +21,28 @@ $htmlOptions = array(
 				"relatives_one_fio",
 				"relatives_one_phone"
 			);
-			var bFlag = true;
+			var iCount = 0;
 			var sAttrName;
 			for(i=0;i<aAttrs.length;i++)
 			{
 				sAttrName = formName +"_"+aAttrs[i];
 				if(!$("#"+sAttrName).parents(".control-group").hasClass("success")){
-					bFlag = false;
+					iCount++;
 				}
 			}
-			if(bFlag){
+			if(iCount<=1){
 				$("#jobInfoHeading").attr("href","#jobInfo");
-				if(!$("#jobInfo").hasClass("in")) $("#jobInfo").collapse("show");
-				addressOk = true;
+				if(!$("#jobInfo").hasClass("in")){
+					$("#jobInfo").collapse("show");
+				}
+				if($("#passportData").hasClass("in")){
+					$("#passportData").collapse("hide");
+				}
+				$("#jobInfo").find(":input").prop("disabled",false);
+				$("#sendHeading").removeClass("disabled cursor-default");
+				if(iCount==0){
+					addressOk = true;
+				}
 			}
 		}'
 	)

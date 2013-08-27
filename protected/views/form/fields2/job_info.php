@@ -9,9 +9,6 @@ $htmlOptions = array(
 	'errorOptions' => array(
 		'afterValidateAttribute' => 'js: function(html){
 			jobInfoOk = false;
-			if($("#personalData").hasClass("in")) $("#personalData").collapse("hide");
-			if($("#passportData").hasClass("in")) $("#passportData").collapse("hide");
-			if($("#address").hasClass("in")) $("#address").collapse("hide");
 			var formName="' . get_class($oClientCreateForm) . '";
 			var aAttrs = Array(
 				"job_company",
@@ -22,19 +19,29 @@ $htmlOptions = array(
 				"job_monthly_outcome",
 				"have_past_credit"
 			);
-			var bFlag = true;
+			var iCount = 0;
 			var sAttrName;
 			for(i=0;i<aAttrs.length;i++)
 			{
 				sAttrName = formName +"_"+aAttrs[i];
 				if(!$("#"+sAttrName).parents(".control-group").hasClass("success")){
-					bFlag = false;
+					iCount++;
 				}
 			}
-			if(bFlag){
+			if(iCount<=1){
 				$("#sendHeading").attr("href","#sendForm");
-				if(!$("#sendForm").hasClass("in")) $("#sendForm").collapse("show");
-				jobInfoOk = true;
+				if(!$("#sendForm").hasClass("in")){
+					$("#sendForm").collapse("show");
+				}
+				if($("#address").hasClass("in")){
+					$("#address").collapse("hide");
+				}
+				$("#sendForm").find(":input").prop("disabled",false);
+				$("#submitButton").removeClass("disabled");
+				jQuery("#product").find(":input").change();
+				if(iCount==0){
+					jobInfoOk = true;
+				}
 			}
 		}'
 	)

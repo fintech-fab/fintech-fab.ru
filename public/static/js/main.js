@@ -44,3 +44,10 @@ function alertModal(heading, question, okButtonTxt) {
 
 	confirmModal.modal('show');
 };
+
+function in_array(what, where) {
+	for (var i = 0, length_array = where.length; i < length_array; i++)
+		if (what == where[i])
+			return true;
+	return false;
+}

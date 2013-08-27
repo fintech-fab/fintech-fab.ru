@@ -20,19 +20,28 @@ $htmlOptions = array(
 				"document",
 				"document_number"
 			);
-			var bFlag = true;
+			var iCount = 0;
 			var sAttrName;
 			for(i=0;i<aAttrs.length;i++)
 			{
 				sAttrName = formName +"_"+aAttrs[i];
 				if(!$("#"+sAttrName).parents(".control-group").hasClass("success")){
-					bFlag = false;
+					iCount++;
 				}
 			}
-			if(bFlag){
+			if(iCount<=1){
 				$("#addressHeading").attr("href","#address");
-				if(!$("#address").hasClass("in")) $("#address").collapse("show");
-				passportDataOk = true;
+				if(!$("#address").hasClass("in")){
+					$("#address").collapse("show");
+				}
+				if($("#personalData").hasClass("in")){
+					$("#personalData").collapse("hide");
+				}
+				$("#address").find(":input").prop("disabled",false);
+				$("#jobInfoHeading").removeClass("disabled cursor-default");
+				if(iCount==0){
+					passportDataOk = true;
+				}
 			}
 		}'
 	)

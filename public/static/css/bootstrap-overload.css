@@ -190,3 +190,7 @@ label, input, button, select, textarea {
 .admin-menu .nav {
 	margin-bottom: 5px;
 }
+
+.cursor-default {
+	cursor: default;
+}
