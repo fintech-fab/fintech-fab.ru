@@ -1,14 +1,19 @@
 <?php
-/* @var $this DefaultController */
+/**
+ * @var $this DefaultController
+ * @var $data
+ */
 
 $this->breadcrumbs = array(
 	$this->module->id,
 );
 ?>
-<h1><?php echo $this->uniqueId . '/' . $this->action->id; ?></h1>
+	<h3 class="pay_legend">Личный кабинет</h3>
+	<br />
+	<h4><?= $data['last_name'] . ' ' . $data['first_name'] . ' ' . $data['third_name']; ?></h4>
+	<p>Баланс счета:    <?= @$data['balance']; ?> рублей</p>
+<?php
 
-<p>
-	This is the view content for action "<?php echo $this->action->id; ?>". The action belongs to the controller
-	"<?php echo get_class($this); ?>" in the "<?php echo $this->module->id; ?>" module. </p><p>
-	You may customize this page by editing <tt><?php echo __FILE__; ?></tt>
-</p>
+echo '<pre>';
+print_r($data);
+echo '</pre>';

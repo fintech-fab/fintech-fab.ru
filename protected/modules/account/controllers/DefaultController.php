@@ -38,7 +38,14 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{
-		$this->render('index');
+		$aData = AdminKreddyApi::getClientData();
+
+		if ($aData && $aData['errorCode'] === 0) {
+			$this->render('index', array('data' => $aData));
+		} else {
+			Yii::app()->user->logout();
+			$this->redirect(Yii::app()->user->loginUrl);
+		}
 	}
 
 	public function actionLogin()
@@ -57,7 +64,7 @@ class DefaultController extends Controller
 				$model->attributes = $_POST['LoginForm'];
 				// validate user input and redirect to the previous page if valid
 				if ($model->validate() && $model->login()) {
-					$this->redirect(Yii::app()->user->returnUrl);
+					$this->redirect(Yii::app()->createUrl("/account"));
 				}
 			}
 			// display the login form
