@@ -40,9 +40,8 @@ $htmlOptions = array(
 				}
 				$("#jobInfo").find(":input").prop("disabled",false);
 				$("#sendHeading").removeClass("disabled cursor-default");
-				if(iCount==0){
-					addressOk = true;
-				}
+
+				addressOk = true;
 			}
 		}'
 	)

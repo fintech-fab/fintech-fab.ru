@@ -29,9 +29,8 @@ $htmlOptions = array(
 			}
 			if(iCount<=1){
 				$("#submitButton").removeClass("disabled");
-				if(iCount==0){
-					sendFormOk = true;
-				}
+
+				sendFormOk = true;
 				}
 		}'
 	)

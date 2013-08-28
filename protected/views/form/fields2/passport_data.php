@@ -39,9 +39,8 @@ $htmlOptions = array(
 				}
 				$("#address").find(":input").prop("disabled",false);
 				$("#jobInfoHeading").removeClass("disabled cursor-default");
-				if(iCount==0){
-					passportDataOk = true;
-				}
+
+				passportDataOk = true;
 			}
 		}'
 	)
