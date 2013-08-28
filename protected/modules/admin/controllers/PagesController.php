@@ -53,7 +53,8 @@ class PagesController extends Controller
 	/**
 	 * Displays a particular model.
 	 *
-	 * @param integer $id the ID of the model to be displayed
+	 * @param $name
+	 *
 	 */
 	public function actionView($name)
 	{
@@ -157,10 +158,11 @@ class PagesController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 *
-	 * @param integer $id the ID of the model to be loaded
+	 * @param $name
+	 *
+	 * @throws CHttpException
 	 *
 	 * @return Pages the loaded model
-	 * @throws CHttpException
 	 */
 	public function loadModelByName($name)
 	{
