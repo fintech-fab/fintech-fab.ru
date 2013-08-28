@@ -14,6 +14,10 @@ class FormController extends Controller
 
 		$client_id = Yii::app()->clientForm->getClientId();
 
+		//$city = IpGeoBase::getCityByIP(Yii::app()->request->getUserHostAddress());
+
+		//echo '<pre>' . ""; CVarDumper::dump($city); echo '</pre>';
+
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
 		 * текущему этапу заполнения анкеты)

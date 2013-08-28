@@ -120,7 +120,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#personalData">
+			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" href="#personalData">
 				Личные данные</h4>
 		</div>
 		<div id="personalData" class="accordion-body collapse in">
@@ -133,12 +133,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="passportDataHeading" class="accordion-toggle span3" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="passportDataHeading" class="accordion-toggle span3" data-toggle="collapse">
 				Паспортные данные</h4>
-			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
-				'htmlOptions' => array('class' => 'errorAlert hide span7')
-			));?>
 		</div>
 		<div id="passportData" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -150,12 +146,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="addressHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="addressHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
 				Постоянная регистрация</h4>
-			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
-				'htmlOptions' => array('class' => 'errorAlert hide span7')
-			));?>
 		</div>
 		<div id="address" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -167,12 +159,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="jobInfoHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="jobInfoHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
 				Место работы</h4>
-			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
-				'htmlOptions' => array('class' => 'errorAlert hide span7')
-			));?>
 		</div>
 		<div id="jobInfo" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -184,12 +172,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="accordion-group">
 		<div class="accordion-heading row">
-			<h4 id="sendHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse" data-parent="#accordion1">
+			<h4 id="sendHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
 				Отправка</h4>
-			<?php $this->widget('AlertWidget', array(
-				'message'     => 'Ошибка! Необходимо сначала заполнить все обязательные поля анкеты.',
-				'htmlOptions' => array('class' => 'errorAlert hide span7')
-			));?>
 		</div>
 		<div id="sendForm" class="accordion-body collapse">
 			<div class="accordion-inner">
@@ -287,8 +271,10 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	{
 		var form=$("#"+formName);
 		var settings = form.data("settings");
+		var regExp = new RegExp(formName+"_sex");
 		$.each(settings.attributes, function () {
-	        if(this.id == formName+"_sex_0"||this.id == formName+"_sex_1"){
+	        var sID = this.id;
+	        if(sID.match(regExp)){
 	            this.status = 2; // force ajax validation
 	        }
 	    });
@@ -354,50 +340,6 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	        });
 	    });
 
-	});
-	//по получению фокуса чекбоксами (через клавишу TAB например)
-	//сразу ставим значение по-умолчанию
-	jQuery("#sex").find(":input").focus(function()
-	{
-		var bChecked = false;
-		a = $("#sex").find(":input");
-		$.each(a, function(){
-			if($(this).attr("checked")=="checked"){
-				bChecked = true;
-			}
-		});
-		if(!bChecked){
-			jQuery("#' . get_class($oClientCreateForm) . '_sex_0").attr("checked",true).change();
-		}
-	});
-
-	jQuery("#product").find(":input").focus(function()
-	{
-		var bChecked = false;
-		a = $("#product").find(":input");
-		$.each(a, function(){
-			if($(this).attr("checked")=="checked"){
-				bChecked = true;
-			}
-		});
-
-		if(!bChecked){
-			jQuery("#product").find(":input").first().next().find(":input").attr("checked","checked").change();
-		}
-	});
-
-	jQuery("#have_past_credit").find(":input").focus(function()
-	{
-		var bChecked = false;
-		a = $("#have_past_credit").find(":input");
-		$.each(a, function(){
-			if($(this).attr("checked")=="checked"){
-				bChecked = true;
-			}
-		});
-		if(!bChecked){
-			jQuery("#have_past_credit").find(":input").first().next().find(":input").attr("checked","checked").change();
-		}
 	});
 
 	//по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
