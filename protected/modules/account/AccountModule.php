@@ -19,10 +19,6 @@ class AccountModule extends CWebModule
 		if (parent::beforeControllerAction($controller, $action)) {
 			// this method is called before any module controller action is performed
 			// you may place customized code here
-			if (Yii::app()->user->isGuest) {
-				$controller->redirect(Yii::app()->createUrl("account/login"));
-			}
-
 			return true;
 		} else {
 			return false;
