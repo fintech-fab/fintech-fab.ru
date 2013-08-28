@@ -3,6 +3,8 @@
 class DefaultController extends Controller
 {
 
+	public $layout = '//layouts/column2';
+
 	public function filters()
 	{
 		return array(
@@ -38,9 +40,10 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{
-		$aData = AdminKreddyApi::getClientData();
+		$oApi = new AdminKreddyApi();
+		$aData = $oApi->getClientData();
 
-		if ($aData && $aData['errorCode'] === 0) {
+		if ($aData && $aData['code'] === 0) {
 			$this->render('index', array('data' => $aData));
 		} else {
 			Yii::app()->user->logout();

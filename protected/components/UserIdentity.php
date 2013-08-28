@@ -36,9 +36,10 @@ class UserIdentity extends CUserIdentity
 		} else {
 			$sPhone = $this->username;
 			$sPassword = $this->password;
-			$sToken = AdminKreddyApi::getClientToken($sPhone, $sPassword);
+			$oApi = new AdminKreddyApi();
+			$bAuth = $oApi->getAuth($sPhone, $sPassword);
 
-			if ($sToken !== false) {
+			if ($bAuth) {
 				$this->errorCode = self::ERROR_NONE;
 			} else {
 				$this->errorCode = self::ERROR_USERNAME_INVALID;

@@ -9,6 +9,8 @@ class AccountModule extends CWebModule
 		//TODO то же сделать для админки!
 		Yii::app()->user->loginUrl = Yii::app()->createUrl('account/login');
 		Yii::app()->user->setStateKeyPrefix('_account');
+		Yii::app()->user->authTimeout = 15;
+
 
 		// import the module-level models and components
 		$this->setImport(array(
