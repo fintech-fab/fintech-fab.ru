@@ -7,11 +7,11 @@
  * http://194.85.91.253:8090/geo/geo.html
  *
  */
-class IpGeoBase
+class ids_ipGeoBase
 {
 
 	/** @var boolean */
-	public static $bEncode = true;
+	public static $bEncode = false;
 
 	/**
 	 * поля которые нужно получить в ответе на запрос по IP
@@ -238,7 +238,7 @@ class IpGeoBase
 		echo "\n"; echo 'curl_errno() = '; print_r(curl_errno( $curl )); echo "\n";
 		*/
 		if ($result) {
-			$aResult = ids_convert_simpleXMLToArray(simplexml_load_string($result));
+			$aResult = self::simpleXMLToArray(simplexml_load_string($result));
 		} else {
 			$aResult = array('ip' => array('error' => 1));
 		}
@@ -321,6 +321,80 @@ class IpGeoBase
 		return $bValid;
 	}
 
+	private function simpleXMLToArray(\SimpleXMLElement $xml, $attributesKey = null, $childrenKey = null, $valueKey = null)
+	{
+
+		if ($childrenKey && !is_string($childrenKey)) {
+			$childrenKey = '@children';
+		}
+		if ($attributesKey && !is_string($attributesKey)) {
+			$attributesKey = '@attributes';
+		}
+		if ($valueKey && !is_string($valueKey)) {
+			$valueKey = '@values';
+		}
+
+		$return = array();
+		$name = $xml->getName();
+		$_value = trim((string)$xml);
+		if (!strlen($_value)) {
+			$_value = null;
+		};
+
+		if ($_value !== null) {
+			if ($valueKey) {
+				$return[$valueKey] = $_value;
+			} else {
+				$return = $_value;
+			}
+		}
+
+		$children = array();
+		$first = true;
+		foreach ($xml->children() as $elementName => $child) {
+			$value = self::simpleXMLToArray($child, $attributesKey, $childrenKey, $valueKey);
+			if (isset($children[$elementName])) {
+				if (is_array($children[$elementName])) {
+					if ($first) {
+						$temp = $children[$elementName];
+						unset($children[$elementName]);
+						$children[$elementName][] = $temp;
+						$first = false;
+					}
+					$children[$elementName][] = $value;
+				} else {
+					$children[$elementName] = array($children[$elementName], $value);
+				}
+			} else {
+				$children[$elementName] = $value;
+			}
+		}
+		if ($children) {
+			if ($childrenKey) {
+				$return[$childrenKey] = $children;
+			} else {
+				$return = array_merge($return, $children);
+			}
+		}
+
+		$attributes = array();
+		foreach ($xml->attributes() as $name => $value) {
+			$attributes[$name] = trim($value);
+		}
+		if ($attributes) {
+			if ($attributesKey) {
+				$return[$attributesKey] = $attributes;
+			} else {
+				if (!is_array($return)) {
+					$return = array('returnValue' => $return);
+				}
+				$return = array_merge($return, $attributes);
+			}
+		}
+
+		return $return;
+	}
 }
+
 
 ?>

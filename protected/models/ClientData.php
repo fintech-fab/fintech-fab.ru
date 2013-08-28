@@ -306,6 +306,10 @@ class ClientData extends CActiveRecord
 					$this->get_way = 1;
 					break;
 				case 103:
+					$this->product = 3;
+					$this->get_way = 1;
+					break;
+				case 104:
 					$this->product = 1;
 					$this->get_way = 2;
 					break;

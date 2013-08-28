@@ -45,7 +45,7 @@ $aCrumbs = array(
 			$oClientCreateForm->product = "101";
 		}
 		?>
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts2, array("class" => "all")); ?>
+		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::getProducts(), array("class" => "all")); ?>
 
 	</div>
 
