@@ -40,15 +40,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		}',
 		'afterValidate'    => 'js: function(){
 			var hasError = false;
-			if($("#personalData").find("div").hasClass("error"))
-			{
+			if($("#personalData").find("div").hasClass("error")) {
+				hasError = true;
 				if(!$("#personalData").hasClass("in")){
 					$("#personalData").collapse("show");
 				}
-				hasError = true;
 			}
-			else if($("#passportData").find("div").hasClass("error"))
-			{
+			if($("#passportData").find("div").hasClass("error")) {
 				personalDataOk = true;
 				hasError = true;
 				$("#passportDataHeading").attr("href","#passportData");
@@ -56,8 +54,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 					$("#passportData").collapse("show");
 				}
 			}
-			else if($("#address").find("div").hasClass("error"))
-			{
+			if($("#address").find("div").hasClass("error"))	{
 				personalDataOk = true;
 				passportDataOk = true;
 				hasError = true;
@@ -66,10 +63,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				if(!$("#address").hasClass("in")){
 					$("#address").collapse("show");
 				}
-
 			}
-			else if($("#jobInfo").find("div").hasClass("error"))
-			{
+			if($("#jobInfo").find("div").hasClass("error"))	{
 				personalDataOk = true;
 				passportDataOk = true;
 				addressOk = true;
@@ -81,8 +76,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 					$("#jobInfo").collapse("show");
 				}
 			}
-			else if($("#sendForm").find("div").hasClass("error"))
-			{
+			if($("#sendForm").find("div").hasClass("error")) {
 			    personalDataOk = true;
 				passportDataOk = true;
 				addressOk = true;
@@ -118,97 +112,97 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	),
 ));?>
 
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" href="#personalData">
-				Личные данные</h4>
-		</div>
-		<div id="personalData" class="accordion-body collapse in">
-			<div class="accordion-inner">
-				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/personal_data.php' ?>
-				</div>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" href="#personalData">
+			Личные данные</h4>
+	</div>
+	<div id="personalData" class="accordion-body collapse in">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/personal_data.php' ?>
 			</div>
 		</div>
 	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading row">
-			<h4 id="passportDataHeading" class="accordion-toggle span3" data-toggle="collapse">
-				Паспортные данные</h4>
-		</div>
-		<div id="passportData" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/passport_data.php' ?>
-				</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading row">
+		<h4 id="passportDataHeading" class="accordion-toggle span3" data-toggle="collapse">
+			Паспортные данные</h4>
+	</div>
+	<div id="passportData" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/passport_data.php' ?>
 			</div>
 		</div>
 	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading row">
-			<h4 id="addressHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
-				Постоянная регистрация</h4>
-		</div>
-		<div id="address" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/address_reg.php' ?>
-				</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading row">
+		<h4 id="addressHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
+			Постоянная регистрация</h4>
+	</div>
+	<div id="address" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/address_reg.php' ?>
 			</div>
 		</div>
 	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading row">
-			<h4 id="jobInfoHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
-				Место работы</h4>
-		</div>
-		<div id="jobInfo" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/job_info.php' ?>
-				</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading row">
+		<h4 id="jobInfoHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
+			Место работы</h4>
+	</div>
+	<div id="jobInfo" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/job_info.php' ?>
 			</div>
 		</div>
 	</div>
-	<div class="accordion-group">
-		<div class="accordion-heading row">
-			<h4 id="sendHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
-				Отправка</h4>
-		</div>
-		<div id="sendForm" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/send.php' ?>
-				</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading row">
+		<h4 id="sendHeading" class="accordion-toggle span3 disabled cursor-default" data-toggle="collapse">
+			Отправка</h4>
+	</div>
+	<div id="sendForm" class="accordion-body collapse">
+		<div class="accordion-inner">
+			<div class="row">
+				<? require dirname(__FILE__) . '/fields2/send.php' ?>
 			</div>
 		</div>
 	</div>
+</div>
 <?php $this->endWidget(); ?>
 
 
-	<div class="clearfix"></div>
-	<div class="row span10">
-		<div class="form-actions">
-			<div class="row">
-				<?php $this->widget('AlertWidget', array(
-					'message'     => 'Для отправки анкеты необходимо заполнить все обязательные поля!',
-					'htmlOptions' => array('id' => 'submitError', 'class' => 'hide')
-				));?>
-			</div>
-			<div class="clearfix"></div>
-			<div class="row">
-				<? $this->widget('bootstrap.widgets.TbButton', array(
-					'id'          => 'submitButton',
-					'buttonType'  => 'submit',
-					'type'        => 'primary',
-					'label'       => 'Отправить →',
-					'htmlOptions' => array(
-						'class' => 'disabled'
-					)
-				)); ?>
-			</div>
+<div class="clearfix"></div>
+<div class="row span10">
+	<div class="form-actions">
+		<div class="row">
+			<?php $this->widget('AlertWidget', array(
+				'message'     => 'Для отправки анкеты необходимо заполнить все обязательные поля!',
+				'htmlOptions' => array('id' => 'submitError', 'class' => 'hide')
+			));?>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+			<? $this->widget('bootstrap.widgets.TbButton', array(
+				'id'          => 'submitButton',
+				'buttonType'  => 'submit',
+				'type'        => 'primary',
+				'label'       => 'Отправить →',
+				'htmlOptions' => array(
+					'class' => 'disabled'
+				)
+			)); ?>
 		</div>
 	</div>
+</div>
 
 <?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>
 

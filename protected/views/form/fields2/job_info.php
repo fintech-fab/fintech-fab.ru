@@ -38,9 +38,8 @@ $htmlOptions = array(
 				}
 				$("#sendForm").find(":input").prop("disabled",false);
 				$("#submitButton").removeClass("disabled");
-				if(iCount==0){
-					jobInfoOk = true;
-				}
+
+				jobInfoOk = true;
 			}
 		}'
 	)

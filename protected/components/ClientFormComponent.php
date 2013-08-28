@@ -322,7 +322,7 @@ class ClientFormComponent
 				return array(
 					'action' => 'render',
 					'params' => array(
-						'view'   => 'client_confirm_phone_via_sms',
+						'view'   => SiteParams::B_FULL_FORM ? 'client_confirm_phone_via_sms2' : 'client_confirm_phone_via_sms',
 						'params' => array(
 							'oClientCreateForm' => $oClientForm,
 							'phone'             => Yii::app()->clientForm->getSessionPhone(),
