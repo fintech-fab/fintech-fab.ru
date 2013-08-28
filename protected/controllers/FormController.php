@@ -12,6 +12,16 @@ class FormController extends Controller
 		 * @var string                   $sView
 		 */
 
+		//if(!Yii::app()->user->isGuest)
+		//{
+		echo '<pre>' . "";
+		CVarDumper::dump(Yii::app()->user->isGuest);
+		echo '</pre>';
+		echo '<pre>' . "";
+		CVarDumper::dump(Yii::app()->session['token']);
+		echo '</pre>';
+		//}
+
 		$client_id = Yii::app()->clientForm->getClientId();
 
 		/*
