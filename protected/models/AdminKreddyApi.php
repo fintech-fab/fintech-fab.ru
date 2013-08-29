@@ -34,6 +34,9 @@ class AdminKreddyApi extends CModel
 	public function init()
 	{
 		$this->token = $this->getSessionToken();
+		if (!empty($this->token)) {
+			$this->renewClientToken();
+		}
 	}
 
 	public function getAuth($sPhone, $sPassword)
