@@ -2,9 +2,6 @@
 
 class DefaultController extends Controller
 {
-
-	public $layout = '//layouts/column2';
-
 	public function filters()
 	{
 		return array(
@@ -53,7 +50,6 @@ class DefaultController extends Controller
 
 	public function actionLogin()
 	{
-		$this->layout = '//layouts/column1';
 
 		if (Yii::app()->user->isGuest) {
 			$model = new LoginForm;

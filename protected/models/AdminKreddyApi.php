@@ -144,7 +144,7 @@ class AdminKreddyApi extends CModel
 					}
 					break;
 				case 'base-data':
-					$aData = array('code' => self::ERROR_NONE, 'balance' => '-10000', 'first_name' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
+					$aData = array('code' => self::ERROR_NONE, 'balance' => '1000', 'first_name' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
 					break;
 				default:
 					$aData = array('code' => self::ERROR_AUTH);
