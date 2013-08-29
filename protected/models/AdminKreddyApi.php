@@ -57,6 +57,24 @@ class AdminKreddyApi extends CModel
 		}
 	}
 
+	public function getSmsAuth($sPhone, $sPassword)
+	{
+		//заглушка
+
+		$aRequest = array('action' => 'sms-auth', 'sms-password' => $sPassword);
+
+		$aTokenData = $this->requestAdminKreddyApi($aRequest);
+
+		if ($aTokenData['code'] === self::ERROR_NONE) {
+			$this->setSessionToken($aTokenData['token']);
+			$this->token = $aTokenData['token'];
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function renewClientToken()
 	{
 		//отсылаем текущий токен и получаем новый токен в ответ, обновляем его в сессии
