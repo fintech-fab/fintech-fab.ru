@@ -184,7 +184,9 @@ class IkTbActiveForm extends TbActiveForm
 					'model'          => $oForm,
 					'attribute'      => $sAttribute,
 					'data'           => Dictionaries::getRegions(),
-					'options'        => $aDefaultOptions,
+					'options'        => array(
+						'formatNoMatches' => 'js:function() { return "Ничего не найдено"; } ',
+					) + $aDefaultOptions,
 				), true
 			);
 
