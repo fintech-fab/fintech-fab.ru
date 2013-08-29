@@ -183,7 +183,7 @@ class IkTbActiveForm extends TbActiveForm
 					'asDropDownList' => true,
 					'model'          => $oForm,
 					'attribute'      => $sAttribute,
-					'data'           => Dictionaries::getRegions(),
+					'data'           => array("0" => "") + Dictionaries::getRegions(),
 					'options'        => array(
 						'formatNoMatches' => 'js:function() { return "Ничего не найдено"; } ',
 					) + $aDefaultOptions,
