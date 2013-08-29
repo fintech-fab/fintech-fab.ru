@@ -3,6 +3,7 @@
  * @var $this DefaultController
  * @var $data
  * @var $secureData
+ * @var $smsState
  */
 
 $this->breadcrumbs = array(
@@ -21,12 +22,8 @@ $this->breadcrumbs = array(
 			echo '</pre>';
 			if ($secureData['code'] == 7) {
 				//форма запроса СМС-пароля
+				$this->renderPartial('sms_password', array('smsState' => $smsState));
 			}
-			?>
-
-			<?php
-
-			$this->endWidget();
 			?>
 		</div>
 		<div class="span4">

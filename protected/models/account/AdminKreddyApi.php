@@ -76,6 +76,19 @@ class AdminKreddyApi extends CModel
 		}
 	}
 
+	public function sendSMS()
+	{
+		$aRequest = array('action' => 'sms-send');
+
+		$bResult = $this->requestAdminKreddyApi($aRequest);
+
+		if ($bResult['code'] === self::ERROR_NONE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function renewClientToken()
 	{
 		//отсылаем текущий токен и получаем новый токен в ответ, обновляем его в сессии
@@ -180,6 +193,9 @@ class AdminKreddyApi extends CModel
 					if ($aRequest['sms-password'] == '15426378') {
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
 					}
+					break;
+				case 'sms-send':
+					$aData = array('code' => self::ERROR_NONE, 'message' => 'OK');
 					break;
 				case 'getNewToken':
 					if ($aRequest['token'] == '159753') {

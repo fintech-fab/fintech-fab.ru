@@ -39,14 +39,47 @@ class DefaultController extends Controller
 	{
 		$oApi = new AdminKreddyApi();
 		$aData = $oApi->getClientData();
-
+		$smsState = array();
 
 		if ($aData && $aData['code'] === 0) {
 			$aSecureData = $oApi->getClientSecureData();
-			$this->render('index', array('data' => $aData, 'secureData' => $aSecureData));
+			$this->render('index', array('data' => $aData, 'secureData' => $aSecureData, 'smsState' => $smsState));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
+		}
+	}
+
+	public function actionAjaxSendSms()
+	{
+		if (Yii::app()->request->isAjaxRequest) {
+			$oApi = new AdminKreddyApi();
+			//$aResult = $oApi->s
+		}
+		Yii::app()->end();
+	}
+
+	public function actionCheckSMSCode()
+	{
+		if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
+			$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
+			if (isset($aAction['action'])) {
+				switch ($aAction['action']) {
+					case 'render':
+						$this->render($aAction['params']['view'], $aAction['params']['params']);
+						break;
+					case 'redirect':
+						$this->redirect($aAction['url']);
+						break;
+					default:
+						$this->redirect(Yii::app()->createUrl("form"));
+						break;
+				}
+			} else {
+				$this->redirect(Yii::app()->createUrl("form"));
+			}
+		} else {
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
 	}
 

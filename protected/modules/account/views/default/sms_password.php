@@ -40,7 +40,7 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'sendSms',
 				'buttonType'  => 'ajaxSubmit',
-				'url'         => Yii::app()->createUrl('form/ajaxsendsms'),
+				'url'         => Yii::app()->createUrl('/account/ajaxsendsms'),
 				'size'        => 'small',
 				'label'       => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с кодом подтверждения',
 				'ajaxOptions' => array(
@@ -52,14 +52,14 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
                                 	if(data.type==0)
                                 	{
                                 	    $('#send_sms').hide();
-                                		$('#sms_code_row').show();
+                                		$('#sms_pass_row').show();
                                 		$('.form-actions').show();
                                			$('#alertsmssent').fadeIn();
                                 	}
                                 	else if(data.type==1)
                                 	{
                                 	    $('#send_sms').hide();
-                                		$('#sms_code_row').show();
+                                		$('#sms_pass_row').show();
                                 		$('.form-actions').show();
                                			$('#actionAnswer').html(data.text).show();
                                 	}
@@ -86,13 +86,13 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 <?php
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                     => get_class($oClientCreateForm),
+	'id'                     => get_class($passForm),
 	'enableClientValidation' => true,
 	'clientOptions'          => array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action'                 => Yii::app()->createUrl('/form/checksmscode'),
+	'action'                 => Yii::app()->createUrl('/account/checksmspass'),
 ));
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
@@ -101,7 +101,7 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 
 <div class="span10<?php if ($flagHideForm) {
 	echo ' hide';
-} ?>" id="sms_code_row">
+} ?>" id="sms_pass_row">
 	<?php Yii::app()->user->setFlash('success', Dictionaries::C_SMS_SUCCESS); ?>
 	<?php $this->widget('bootstrap.widgets.TbAlert', array(
 		'block'       => true, // display a larger alert block?
@@ -110,8 +110,8 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 		'htmlOptions' => array('style' => 'display:none;', 'id' => 'alertsmssent'),
 	)); ?>
 	<label>Введите код из SMS:</label>
-	<?php echo $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
-	<?php echo $form->error($oClientCreateForm, 'sms_code'); ?>
+	<?php echo $form->textField($passForm, 'smsPassword', array('class' => 'span4')); ?>
+	<?php echo $form->error($passForm, 'smsPassword'); ?>
 </div>        <span class="span10 help-block error<?php if (empty($actionAnswer)) {
 	echo " hide";
 } ?>" id="actionAnswer">
