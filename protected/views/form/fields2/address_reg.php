@@ -53,7 +53,7 @@ $htmlOptions = array(
 	<h5>Адрес регистрации</h5>
 
 	<div class="control-group ">
-		<?= $form->labelEx($oClientCreateForm, 'address_reg_region') ?>
+		<?= $form->labelEx($oClientCreateForm, 'address_reg_region', array("class" => 'control-label')) ?>
 		<div class="controls">
 			<?php
 			$this->widget('bootstrap.widgets.TbSelect2', array(
@@ -62,9 +62,8 @@ $htmlOptions = array(
 					'attribute'      => 'address_reg_region',
 					'data'           => Dictionaries::getRegions(),
 					'options'        => array(
-						'allowClear' => true,
-						'class'      => 'span3',
-					) + $htmlOptions
+						'class' => 'span3',
+					) + $htmlOptions,
 				)
 			);
 			?>
@@ -80,7 +79,26 @@ $htmlOptions = array(
 	</div>
 	<div id="address_res">
 		<h5>Фактический адрес проживания</h5>
-		<?= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
+
+		<div class="control-group ">
+			<?= $form->labelEx($oClientCreateForm, 'address_res_region', array("class" => 'control-label')) ?>
+			<div class="controls">
+				<?php
+				$this->widget('bootstrap.widgets.TbSelect2', array(
+						'asDropDownList' => true,
+						'model'          => $oClientCreateForm,
+						'attribute'      => 'address_res_region',
+						'data'           => Dictionaries::getRegions(),
+						'options'        => array(
+							'class' => 'span3',
+						) + $htmlOptions,
+					)
+				);
+				?>
+				<?= $form->error($oClientCreateForm, 'address_res_region'); ?>
+			</div>
+		</div>
+		<? //= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
 		<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', array('class' => 'span3') + $htmlOptions); ?>
 		<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', array('class' => 'span3') + $htmlOptions); ?>
 	</div>
