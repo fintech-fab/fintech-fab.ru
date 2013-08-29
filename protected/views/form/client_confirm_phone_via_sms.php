@@ -45,8 +45,6 @@ $this->pageTitle = Yii::app()->name;
 					'action'                 => Yii::app()->createUrl('/form/ajaxsendsms'),
 				));
 
-				// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
-				$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 				?>
 				<? $this->widget('bootstrap.widgets.TbButton', array(
 					'id'          => 'sendSms',
@@ -105,9 +103,6 @@ $this->pageTitle = Yii::app()->name;
 		),
 		'action'                 => Yii::app()->createUrl('/form/checksmscode'),
 	));
-
-	// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
-	$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 	?>
 
 	<div class="span10<?php if ($flagHideForm) {
