@@ -8,20 +8,21 @@
 		<!-- content -->
 		<div class="span3">
 			<div id="sidebar">
-				<?php
-				$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
+				<div class="well" style="padding: 8px; 0;">
+					<?php
+					//$this->menu[] = array('label' => 'LIST HEADER');
+					$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
-				/*$this->beginWidget('zii.widgets.CPortlet', array(
-					'title' => 'Меню',
-				));*/
-				$this->widget('bootstrap.widgets.TbMenu', array(
-					'type'        => 'pills', // '', 'tabs', 'pills' (or 'list')
-					'stacked'     => false, // whether this is a stacked menu
-					'items'       => $this->menu,
-					'htmlOptions' => array('class' => 'operations'),
-				));
-				//$this->endWidget();
-				?>
+					$this->beginWidget('bootstrap.widgets.TbMenu', array(
+						'type'        => 'pills', // '', 'tabs', 'pills' (or 'list')
+						//'stacked'     => false, // whether this is a stacked menu
+						'items'       => $this->menu,
+						'htmlOptions' => array('style' => 'margin-bottom: 0;'),
+					));
+					echo '<p>ololo</p>';
+					$this->endWidget();
+					?>
+				</div>
 			</div>
 			<!-- sidebar -->
 		</div>
