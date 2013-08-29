@@ -25,7 +25,7 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index'),
+				'actions' => array('logout', 'index', 'ajaxsendsms', 'checksmspass', 'ajaxindex'),
 				'users'   => array('@'),
 			),
 			array(
@@ -39,14 +39,35 @@ class DefaultController extends Controller
 	{
 		$oApi = new AdminKreddyApi();
 		$aData = $oApi->getClientData();
-		$smsState = array();
+		$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'passOK' => Yii::app()->session['smsPassOK']);
+		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($aData && $aData['code'] === 0) {
 			$aSecureData = $oApi->getClientSecureData();
-			$this->render('index', array('data' => $aData, 'secureData' => $aSecureData, 'smsState' => $smsState));
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState), true);
+			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'secureData' => $aSecureData));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
+		}
+	}
+
+	public function actionAjaxIndex()
+	{
+		if (Yii::app()->request->isAjaxRequest) {
+			$oApi = new AdminKreddyApi();
+			$aData = $oApi->getClientData();
+			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'passOK' => Yii::app()->session['smsPassOK']);
+			$oSmsPassForm = new SMSPasswordForm();
+
+			if ($aData && $aData['code'] === 0) {
+				$aSecureData = $oApi->getClientSecureData();
+				$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState), true);
+				$this->renderPartial('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'secureData' => $aSecureData));
+			} else {
+				Yii::app()->user->logout();
+				$this->redirect(Yii::app()->user->loginUrl);
+			}
 		}
 	}
 
@@ -54,36 +75,66 @@ class DefaultController extends Controller
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			$oApi = new AdminKreddyApi();
-			//$aResult = $oApi->s
+			$aResult = $oApi->sendSMS();
+
+			if ($aResult['code'] == 0) {
+				Yii::app()->session['smsPassSent'] = true;
+			}
+
+			echo CJSON::encode(array(
+				"type" => $aResult['code'],
+				"text" => $aResult['message'],
+			));
 		}
 		Yii::app()->end();
 	}
 
-	public function actionCheckSMSCode()
+	public function actionCheckSMSPass()
 	{
-		if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
-			$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
-			if (isset($aAction['action'])) {
-				switch ($aAction['action']) {
-					case 'render':
-						$this->render($aAction['params']['view'], $aAction['params']['params']);
-						break;
-					case 'redirect':
-						$this->redirect($aAction['url']);
-						break;
-					default:
-						$this->redirect(Yii::app()->createUrl("form"));
-						break;
+		//$SmsTries = SiteParams::MAX_SMSCODE_TRIES;
+
+		if (Yii::app()->request->isAjaxRequest) {
+			if (isset($_POST['SMSPasswordForm'])) {
+				//$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
+				$passForm = new SMSPasswordForm();
+				$aPostData = $_POST['SMSPasswordForm'];
+				$passForm->setAttributes($aPostData);
+
+				if ($passForm->validate()) {
+					$oApi = new AdminKreddyApi();
+					$sRes = $oApi->getSmsAuth($passForm->smsPassword);
+					if ($sRes) {
+						Yii::app()->session['smsPassOK'] = true;
+						echo CJSON::encode(array(
+							"type" => 0,
+							"text" => Yii::app()->createUrl("account/ajaxindex"),
+						));
+					} else {
+						echo CJSON::encode(array(
+							"type" => 2,
+							"text" => 'Неверный пароль!',
+						));
+					}
+
+				} else {
+					echo CJSON::encode(array(
+						"type" => 2,
+						"text" => 'Неверный пароль!',
+					));
 				}
 			} else {
-				$this->redirect(Yii::app()->createUrl("form"));
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => 'Неизвестная ошибка!',
+				));
 			}
 		} else {
-			$this->redirect(Yii::app()->createUrl("form"));
+			$this->redirect(Yii::app()->createUrl("account"));
 		}
 	}
 
-	public function actionLogin()
+	public
+	function actionLogin()
 	{
 
 		if (Yii::app()->user->isGuest) {
@@ -113,7 +164,8 @@ class DefaultController extends Controller
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */
-	public function actionLogout()
+	public
+	function actionLogout()
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);

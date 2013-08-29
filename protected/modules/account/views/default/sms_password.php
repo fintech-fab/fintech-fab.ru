@@ -2,6 +2,8 @@
 /**
  * @var DefaultController $this
  * @var SMSPasswordForm   $form
+ * @var                   $smsState
+ * @var                   $passForm
  */
 
 /*
@@ -12,7 +14,11 @@
 <?php
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
-$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
+
+$flagSmsSent = $smsState['sent'];
+$flagSmsPassOK = $smsState['passOK'];
+
+$flagHideForm = empty($flagSmsSent);
 ?>
 
 <div class="span10">
@@ -22,8 +28,6 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 		?>
 		<div id="send_sms">
 			<?php
-			$passForm = new SMSPasswordForm();
-
 			$form2 = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				'id'                     => get_class($passForm) . '_smsPassword',
 				'enableClientValidation' => true,
@@ -34,15 +38,13 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 				'action'                 => Yii::app()->createUrl('/account/ajaxsendsms'),
 			));
 
-			// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
-			$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 			?>
 			<? $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'sendSms',
 				'buttonType'  => 'ajaxSubmit',
 				'url'         => Yii::app()->createUrl('/account/ajaxsendsms'),
 				'size'        => 'small',
-				'label'       => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с кодом подтверждения',
+				'label'       => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с паролем',
 				'ajaxOptions' => array(
 					'dataType' => "json",
 					'type'     => "POST",
@@ -95,18 +97,17 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action'                 => Yii::app()->createUrl('/account/checksmspass'),
 ));
 
-// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
-$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 ?>
 
-<div class="span10<?php if ($flagHideForm) {
+<div class="span10<?php if ($flagHideForm || $flagSmsPassOK) {
+	//прячем если стоит флаг "спрятать" или если СМС-авторизация уже пройдена
 	echo ' hide';
 } ?>" id="sms_pass_row">
 	<?php Yii::app()->user->setFlash('success', Dictionaries::C_SMS_SUCCESS); ?>
 	<?php $this->widget('bootstrap.widgets.TbAlert', array(
-		'block'       => true, // display a larger alert block?
-		'fade'        => false, // use transitions?
-		'closeText'   => '&times;', // close link text - if set to false, no close link is displayed
+		'block'       => true,
+		'fade'        => false,
+		'closeText'   => '&times;',
 		'htmlOptions' => array('style' => 'display:none;', 'id' => 'alertsmssent'),
 	)); ?>
 	<label>Введите код из SMS:</label>
@@ -114,23 +115,41 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 	<?php echo $form->error($passForm, 'smsPassword'); ?>
 </div>        <span class="span10 help-block error<?php if (empty($actionAnswer)) {
 	echo " hide";
-} ?>" id="actionAnswer">
-			<?php if (!empty($actionAnswer)) {
-				echo $actionAnswer;
-			} ?>
-		</span>
+} ?>" id="actionAnswer"></span>
 
 
 <div class="clearfix"></div>
 <div class="row span11">
-	<div class="form-actions<?php if ($flagHideForm) {
+	<div class="form-actions<?php if ($flagHideForm || $flagSmsPassOK) {
+		//прячем если стоит флаг "спрятать" или если СМС-авторизация уже пройдена
 		echo ' hide';
 	} ?>">
 		<?php
 		$this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType' => 'submit',
-			'type'       => 'primary',
-			'label'      => 'Далее →',
+			'buttonType'  => 'ajaxSubmit',
+			'type'        => 'primary',
+			'url'         => Yii::app()->createUrl('/account/checksmspass'),
+			'size'        => 'small',
+			'label'       => 'Отправить пароль',
+			'ajaxOptions' => array(
+				'dataType' => "json",
+				'type'     => "POST",
+				'success'  => "function(data)
+                                {
+                                	if(data.type==0)
+                                	{
+                                        $('#main-content').load(data.text);
+                                        //location.reload();
+                                	}
+                                	else if(data.type==2)
+                                	{
+                                	    //ругаемся ошибкой
+                               			$('#actionAnswer').html(data.text).show();
+                                	}
+                                	return;
+                                } ",
+			),
+
 		)); ?>
 	</div>
 </div>
@@ -138,8 +157,3 @@ $flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 
 $this->endWidget();
 ?>
-
-<?php $this->widget('YaMetrikaGoalsWidget', array(
-	'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
-	'iSkippedSteps' => 2,
-)); ?>

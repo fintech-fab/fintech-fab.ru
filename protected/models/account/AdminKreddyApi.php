@@ -58,11 +58,11 @@ class AdminKreddyApi extends CModel
 		}
 	}
 
-	public function getSmsAuth($sPhone, $sPassword)
+	public function getSmsAuth($sSmsPassword)
 	{
 		//заглушка
 
-		$aRequest = array('action' => 'sms-auth', 'sms-password' => $sPassword);
+		$aRequest = array('action' => 'sms-auth', 'sms-password' => $sSmsPassword);
 
 		$aTokenData = $this->requestAdminKreddyApi($aRequest);
 
@@ -80,13 +80,9 @@ class AdminKreddyApi extends CModel
 	{
 		$aRequest = array('action' => 'sms-send');
 
-		$bResult = $this->requestAdminKreddyApi($aRequest);
+		$aResult = $this->requestAdminKreddyApi($aRequest);
 
-		if ($bResult['code'] === self::ERROR_NONE) {
-			return true;
-		} else {
-			return false;
-		}
+		return $aResult;
 	}
 
 	public function renewClientToken()
