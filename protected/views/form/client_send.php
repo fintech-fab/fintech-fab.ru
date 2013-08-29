@@ -15,8 +15,6 @@ $this->pageTitle = Yii::app()->name;
 
 <div class="row">
 
-	<?php $this->widget('CheckBrowserWidget'); ?>
-
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<?php
