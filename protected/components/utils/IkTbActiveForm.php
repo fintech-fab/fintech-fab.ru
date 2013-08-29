@@ -157,7 +157,7 @@ class IkTbActiveForm extends TbActiveForm
 
 	public function regionSelect2Row(CModel $oForm, $sAttribute, $aHtmlOptions = array())
 	{
-		$sReturn = '<div class="control-group ">';
+		$sReturn = '';
 
 		if (empty($aHtmlOptions['hideLabel'])) {
 			$sReturn .= $this->label(
@@ -177,8 +177,7 @@ class IkTbActiveForm extends TbActiveForm
 
 		$sReturn .=
 			$this->dateField($oForm, $sAttribute, $aDefaultOptions) .
-			$this->error($oForm, $sAttribute) .
-			'</div>';
+			$this->error($oForm, $sAttribute);
 
 		return $sReturn;
 	}
