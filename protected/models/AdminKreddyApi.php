@@ -42,10 +42,10 @@ class AdminKreddyApi extends CModel
 	public function getAuth($sPhone, $sPassword)
 	{
 		//заглушка
-		$aTokenData = array('code' => 1);
-		if ($sPhone == "9154701913" && $sPassword == "159753") {
-			$aTokenData = array('code' => self::ERROR_NONE, 'token' => '159753');
-		}
+
+		$aRequest = array('action' => 'login', 'phone' => $sPhone, 'password' => $sPassword);
+
+		$aTokenData = $this->requestAdminKreddyApi($aRequest);
 
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
@@ -59,17 +59,21 @@ class AdminKreddyApi extends CModel
 
 	public function renewClientToken()
 	{
-		//заглушка
-		//отсылаем текущий токен
-		//получаем токен в ответ
-		$aTokenData = array('code' => self::ERROR_NONE, 'token' => '159753');
+		//отсылаем текущий токен и получаем новый токен в ответ, обновляем его в сессии
 
-		if ($aTokenData['code']) {
+		$aRequest = array('action' => 'getNewToken', 'token' => '159753');
+
+		$aTokenData = $this->requestAdminKreddyApi($aRequest);
+
+		if ($aTokenData['code'] == self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 
 			return true;
 		} else {
+			$this->setSessionToken(null);
+			$this->token = null;
+
 			return false;
 		}
 	}
@@ -79,7 +83,7 @@ class AdminKreddyApi extends CModel
 		$aData = array('code' => self::ERROR_AUTH, 'first_name' => '', 'last_name' => '', 'third_name' => '', 'balance' => '');
 		if (!empty($this->token)) {
 			//тут типа запрос данных по токену
-			$aGetData = $this->getData('base', $this->token);
+			$aGetData = $this->getData('base');
 
 			$aData = array_merge($aData, $aGetData);
 		} else {
@@ -89,49 +93,64 @@ class AdminKreddyApi extends CModel
 		return $aData;
 	}
 
-	public function getClientName()
+	private function getData($sType)
 	{
-		$sToken = $this->getSessionToken();
-		$aData = array();
-		if (!empty($sToken)) {
-			//тут типа запрос данных по токену
-			$aData = $this->getData('name', $sToken);
-		} else {
-			$aData = false;
+		$aData = array('code' => self::ERROR_AUTH);
+		if (!empty($this->token)) {
+			switch ($sType) {
+				case 'base':
+					$aRequest = array('action' => 'base-data');
+					break;
+				default:
+					$aRequest = array('action' => 'base-data');
+					break;
+			}
+
+			$aData = $this->requestAdminKreddyApi($aRequest);
 		}
 
 		return $aData;
 	}
 
-	private function getData($sType, $sToken)
+	private function requestAdminKreddyApi($aRequest)
 	{
-		$aData = array('code' => self::ERROR_AUTH);
-		//тут curl запрашивает данные
+		//тут у нас непосредственно curl запрашивает данные
+		/*$ch = curl_init('http://127.0.0.1/');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
+		curl_setopt($ch, CURLOPT_POST, true);
+
+		$post = $aRequest;
+
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+
+		$response = curl_exec($ch);*/
+
+		//$aData = CJSON::decode($response);
+
 		//заглушка
+		$aData = array('code' => self::ERROR_AUTH);
 
-		switch ($sType) {
-			case 'base':
-				$aData = array('code' => self::ERROR_TOKEN_EXPIRE);
-				break;
-			case 'secure':
-				$aData = array('');
-				break;
-		}
-
-		if ($aData['code'] === self::ERROR_TOKEN_EXPIRE) {
-			$this->renewClientToken();
-			//тут перезапрос данных
-			//заглушка
-			switch ($sType) {
-				case 'base':
+		if ($this->token == '159753' || $aRequest['action'] === 'login') {
+			switch ($aRequest['action']) {
+				case 'login':
+					if ($aRequest['phone'] == '9154701913' && $aRequest['password'] == '159753') {
+						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
+					}
+					break;
+				case 'getNewToken':
+					if ($aRequest['token'] == '159753') {
+						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
+					}
+					break;
+				case 'base-data':
 					$aData = array('code' => self::ERROR_NONE, 'balance' => '-10000', 'first_name' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
 					break;
-				case 'secure':
-					$aData = array('');
+				default:
+					$aData = array('code' => self::ERROR_AUTH);
 					break;
 			}
 		}
-
 
 		return $aData;
 	}

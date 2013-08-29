@@ -53,6 +53,8 @@ class DefaultController extends Controller
 
 	public function actionLogin()
 	{
+		$this->layout = '//layouts/column1';
+
 		if (Yii::app()->user->isGuest) {
 			$model = new LoginForm;
 

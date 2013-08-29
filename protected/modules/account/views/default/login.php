@@ -8,7 +8,7 @@ $this->breadcrumbs = array(
 	'Вход',
 );
 ?>
-<h1>Вход в систему</h1>
+<h2 class='pay_legend'>Вход в личный кабинет</h2>
 <div class="form">
 	<?php $form = $this->beginWidget('CActiveForm', array(
 		'id'                     => 'login-form',

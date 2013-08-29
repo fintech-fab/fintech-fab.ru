@@ -9,16 +9,18 @@
 		<div class="span3">
 			<div id="sidebar">
 				<?php
-				$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('site/logout')));
+				$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
-				$this->beginWidget('zii.widgets.CPortlet', array(
+				/*$this->beginWidget('zii.widgets.CPortlet', array(
 					'title' => 'Меню',
-				));
-				$this->widget('zii.widgets.CMenu', array(
+				));*/
+				$this->widget('bootstrap.widgets.TbMenu', array(
+					'type'        => 'pills', // '', 'tabs', 'pills' (or 'list')
+					'stacked'     => false, // whether this is a stacked menu
 					'items'       => $this->menu,
 					'htmlOptions' => array('class' => 'operations'),
 				));
-				$this->endWidget();
+				//$this->endWidget();
 				?>
 			</div>
 			<!-- sidebar -->
