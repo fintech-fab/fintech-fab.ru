@@ -155,29 +155,42 @@ class IkTbActiveForm extends TbActiveForm
 
 	}
 
-	public function regionSelect2Row(CModel $oForm, $sAttribute, $aHtmlOptions = array())
+	public function regionHorizFormSelect2Row(CModel $oForm, $sAttribute, $aHtmlOptions = array())
 	{
-		$sReturn = '';
+		$sReturn = '<div class="control-group">';
 
 		if (empty($aHtmlOptions['hideLabel'])) {
 			$sReturn .= $this->label(
 				$oForm,
 				$sAttribute,
 				array(
-					'required' => $oForm->isAttributeRequired($sAttribute)
+					'required' => $oForm->isAttributeRequired($sAttribute),
+					"class"    => 'control-label',
 				)
 			);
 		}
 
-		$aDefaultOptions = array();
+		$aDefaultOptions = array(
+			'class' => 'span3',
+		);
 
 		if (!empty($aHtmlOptions)) {
 			$aDefaultOptions = array_merge($aDefaultOptions, $aHtmlOptions);
 		}
 
+		$sReturn .= '<div class="controls">' .
+			$this->widget('bootstrap.widgets.TbSelect2', array(
+					'asDropDownList' => true,
+					'model'          => $oForm,
+					'attribute'      => $sAttribute,
+					'data'           => Dictionaries::getRegions(),
+					'options'        => $aDefaultOptions,
+				), true
+			);
+
 		$sReturn .=
-			$this->dateField($oForm, $sAttribute, $aDefaultOptions) .
-			$this->error($oForm, $sAttribute);
+			$this->error($oForm, $sAttribute) .
+			'</div></div>';
 
 		return $sReturn;
 	}
