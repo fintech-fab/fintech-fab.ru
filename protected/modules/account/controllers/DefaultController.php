@@ -39,11 +39,11 @@ class DefaultController extends Controller
 	{
 		$oApi = new AdminKreddyApi();
 		$aData = $oApi->getClientData();
-		$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'passOK' => Yii::app()->session['smsPassOK']);
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($aData && $aData['code'] === 0) {
 			$aSecureData = $oApi->getClientSecureData();
+			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'passOK' => $aSecureData['code'] == 0);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState), true);
 			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'secureData' => $aSecureData));
 		} else {
@@ -57,11 +57,11 @@ class DefaultController extends Controller
 		if (Yii::app()->request->isAjaxRequest) {
 			$oApi = new AdminKreddyApi();
 			$aData = $oApi->getClientData();
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'passOK' => Yii::app()->session['smsPassOK']);
 			$oSmsPassForm = new SMSPasswordForm();
 
 			if ($aData && $aData['code'] === 0) {
 				$aSecureData = $oApi->getClientSecureData();
+				$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'passOK' => $aSecureData['code'] == 0);
 				$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState), true);
 				$this->renderPartial('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'secureData' => $aSecureData));
 			} else {
@@ -102,9 +102,8 @@ class DefaultController extends Controller
 
 				if ($passForm->validate()) {
 					$oApi = new AdminKreddyApi();
-					$sRes = $oApi->getSmsAuth($passForm->smsPassword);
-					if ($sRes) {
-						Yii::app()->session['smsPassOK'] = true;
+					$bRes = $oApi->getSmsAuth($passForm->smsPassword);
+					if ($bRes) {
 						echo CJSON::encode(array(
 							"type" => 0,
 							"text" => Yii::app()->createUrl("account/ajaxindex"),

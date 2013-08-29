@@ -42,8 +42,6 @@ class AdminKreddyApi extends CModel
 
 	public function getAuth($sPhone, $sPassword)
 	{
-		//заглушка
-
 		$aRequest = array('action' => 'login', 'phone' => $sPhone, 'password' => $sPassword);
 
 		$aTokenData = $this->requestAdminKreddyApi($aRequest);
@@ -60,8 +58,6 @@ class AdminKreddyApi extends CModel
 
 	public function getSmsAuth($sSmsPassword)
 	{
-		//заглушка
-
 		$aRequest = array('action' => 'sms-auth', 'sms-password' => $sSmsPassword);
 
 		$aTokenData = $this->requestAdminKreddyApi($aRequest);
@@ -167,13 +163,11 @@ class AdminKreddyApi extends CModel
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
-		$post = $aRequest;
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+		$response = curl_exec($ch);
 
-		$response = curl_exec($ch);*/
-
-		//$aData = CJSON::decode($response);
+		$aData = CJSON::decode($response);*/
 
 		//заглушка
 		$aData = array('code' => self::ERROR_AUTH);
