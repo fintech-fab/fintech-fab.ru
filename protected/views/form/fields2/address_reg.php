@@ -51,7 +51,28 @@ $htmlOptions = array(
 ?>
 <div class="span5">
 	<h5>Адрес регистрации</h5>
-	<?= $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
+
+	<div class="control-group ">
+		<?= $form->labelEx($oClientCreateForm, 'address_reg_region') ?>
+		<div class="controls">
+			<?php
+			$this->widget('bootstrap.widgets.TbSelect2', array(
+					'asDropDownList' => true,
+					'model'          => $oClientCreateForm,
+					'attribute'      => 'address_reg_region',
+					'data'           => Dictionaries::getRegions(),
+					'options'        => array(
+						'allowClear' => true,
+						'class'      => 'span3',
+					) + $htmlOptions
+				)
+			);
+			?>
+			<?= $form->error($oClientCreateForm, 'address_reg_region'); ?>
+		</div>
+	</div>
+
+	<? //= $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', $htmlOptions); ?>
 	<div id="reg_as_res">
