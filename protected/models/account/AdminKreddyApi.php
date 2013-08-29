@@ -13,6 +13,7 @@ class AdminKreddyApi extends CModel
 	const ERROR_NONE = 0;
 	const ERROR_AUTH = 2;
 	const ERROR_TOKEN_EXPIRE = 5;
+	const ERROR_NEED_SMS_AUTH = 7;
 
 	private $token;
 
@@ -111,6 +112,22 @@ class AdminKreddyApi extends CModel
 		return $aData;
 	}
 
+	public function getClientSecureData()
+	{
+		$aData = array('code' => self::ERROR_AUTH, 'secure1' => '', 'secure2' => '');
+
+		if (!empty($this->token)) {
+			//тут типа запрос данных по токену
+			$aGetData = $this->getData('secure');
+
+			$aData = array_merge($aData, $aGetData);
+		} else {
+			$aData = false;
+		}
+
+		return $aData;
+	}
+
 	private function getData($sType)
 	{
 		$aData = array('code' => self::ERROR_AUTH);
@@ -118,6 +135,9 @@ class AdminKreddyApi extends CModel
 			switch ($sType) {
 				case 'base':
 					$aRequest = array('action' => 'base-data');
+					break;
+				case 'secure':
+					$aRequest = array('action' => 'secure-data');
 					break;
 				default:
 					$aRequest = array('action' => 'base-data');
@@ -156,6 +176,11 @@ class AdminKreddyApi extends CModel
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
 					}
 					break;
+				case 'sms-auth':
+					if ($aRequest['sms-password'] == '15426378') {
+						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
+					}
+					break;
 				case 'getNewToken':
 					if ($aRequest['token'] == '159753') {
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
@@ -164,11 +189,33 @@ class AdminKreddyApi extends CModel
 				case 'base-data':
 					$aData = array('code' => self::ERROR_NONE, 'balance' => '1000', 'first_name' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
 					break;
+				case 'secure-data':
+					$aData = array('code' => self::ERROR_NEED_SMS_AUTH);
+					break;
 				default:
 					$aData = array('code' => self::ERROR_AUTH);
 					break;
 			}
 		}
+		if ($this->token == '159753159753') {
+			switch ($aRequest['action']) {
+				case 'getNewToken':
+					if ($aRequest['token'] == '159753') {
+						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
+					}
+					break;
+				case 'base-data':
+					$aData = array('code' => self::ERROR_NONE, 'balance' => '1000', 'first_name' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
+					break;
+				case 'secure-data':
+					$aData = array('code' => self::ERROR_NONE, 'secure1' => 'some-data1', 'secure2' => 'some-data2');
+					break;
+				default:
+					$aData = array('code' => self::ERROR_AUTH);
+					break;
+			}
+		}
+
 
 		return $aData;
 	}

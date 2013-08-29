@@ -2,6 +2,7 @@
 /**
  * @var $this DefaultController
  * @var $data
+ * @var $secureData
  */
 
 $this->breadcrumbs = array(
@@ -16,11 +17,18 @@ $this->breadcrumbs = array(
 
 			echo '<pre>';
 			print_r($data);
+			print_r($secureData);
 			echo '</pre>';
+			if ($secureData['code'] == 7) {
+				//форма запроса СМС-пароля
+			}
+			?>
 
+			<?php
+
+			$this->endWidget();
 			?>
 		</div>
-		<!-- content -->
 		<div class="span4">
 			<div class="well" style="padding: 8px; 0;">
 				<?php

@@ -40,8 +40,10 @@ class DefaultController extends Controller
 		$oApi = new AdminKreddyApi();
 		$aData = $oApi->getClientData();
 
+
 		if ($aData && $aData['code'] === 0) {
-			$this->render('index', array('data' => $aData));
+			$aSecureData = $oApi->getClientSecureData();
+			$this->render('index', array('data' => $aData, 'secureData' => $aSecureData));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);

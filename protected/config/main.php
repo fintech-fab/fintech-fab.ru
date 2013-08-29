@@ -17,6 +17,7 @@ $a = array(
 	'import'         => array(
 		'application.models.*',
 		'application.models.forms.*',
+		'application.models.account.*',
 		'application.controllers.*',
 		'application.components.*',
 		'application.components.crypt.*',
