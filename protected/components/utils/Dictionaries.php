@@ -159,7 +159,7 @@ class Dictionaries
 	public static $aDocumentsErrors = array(
 		1 => 'Введите 9 цифр (серия и номер) без пробелов',
 		2 => 'Неверный формат, пример правильного номера: 12АБ123456',
-		3 => 'Введите 6 цифр без пробелов',
+		3 => 'Введите цифры без пробелов',
 		4 => 'Неверный формат, пример правильного номера: АБ1234567',
 		5 => 'Введите 12 цифр без пробелов',
 		6 => 'Введите 11 цифр без пробелов и дефисов',
@@ -278,7 +278,7 @@ class Dictionaries
 			$aProducts = array(
 				"101" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на карту Кредди</span>",
 				"102" => "<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на 2 недели на карту Кредди</span>",
-				"103" => "<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='4 займа' data-time='7'>10 000 рублей на 2 недели на карту Кредди</span>",
+				"103" => "<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='4 займа' data-time='7'>10000 рублей на 2 недели на карту Кредди</span>",
 				"104" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на мобильный (МТС, Билайн, Мегафон)</span>",
 			);
 

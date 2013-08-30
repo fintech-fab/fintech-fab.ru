@@ -916,6 +916,9 @@ class ClientFormComponent
 		Yii::app()->session['ClientAddressForm'] = null;
 		Yii::app()->session['ClientJobInfoForm'] = null;
 		Yii::app()->session['ClientSendForm'] = null;
+
+		Yii::app()->session['ClientSelectProductForm2'] = null;
+		Yii::app()->session['ClientFullForm2'] = null;
 	}
 
 

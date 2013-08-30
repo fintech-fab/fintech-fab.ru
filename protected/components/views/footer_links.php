@@ -44,7 +44,14 @@
 			$this->endWidget();
 		}
 	}
-	?>
 
+	Yii::app()->clientScript->registerScript('openModalByUrl', "
+            var sHash = $(location).attr('hash');
+			if(typeof sHash!='undefined' && sHash.length){
+                $(sHash).modal('show');
+			}
+", CClientScript::POS_READY);
+
+	?>
 
 </div>

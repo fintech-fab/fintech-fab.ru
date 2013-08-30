@@ -77,13 +77,14 @@ $(function () {
 	var oBrowserCompatForVideo = new BrowserCompatForVideo();
 
 	if (oBrowserCompatForVideo.isMobile()) {
-		$("#attention_message").html(" <strong>Внимание!</strong> Во время заполнения анкеты Вы можете пройти видеоидентификацию. Видеоидентификация работает только <strong>на компьютере</strong>, в браузерах Chrome и Firefox последних версий.");
+		$("#attention_message").html(sMobileMessage);
+		var sYourBrowserHtml = "";
 		if (oBrowserCompatForVideo.getBrowser()) {
-			$("#your_browser").html(" Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong> (мобильная версия). ");
+			sYourBrowserHtml = " Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong> (мобильная версия). ";
 		} else {
-			$("#your_browser").html(" Вы зашли на сайт с мобильного устройства. ");
+			sYourBrowserHtml = " Вы зашли на сайт с мобильного устройства. ";
 		}
-		$("#your_browser").html($("#your_browser").html() + "Пожалуйста, зайдите на сайт с компьютера, если хотите пройти видеоидентификацию.");
+		$("#your_browser").html(sYourBrowserHtml + "Пожалуйста, зайдите на сайт с компьютера, если хотите пройти видеоидентификацию.");
 		$("#get_browser").hide();
 		$("#browserFormat").show();
 	} else if (oBrowserCompatForVideo.isNotCompatible()) {

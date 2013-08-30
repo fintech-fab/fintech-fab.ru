@@ -12,9 +12,6 @@ $aCrumbs = array(
 	array('Заявка на займ', 5, 3)
 );
 
-$this->widget('CheckBrowserWidget');
-
-
 $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 <?php

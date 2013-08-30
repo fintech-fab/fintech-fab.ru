@@ -247,7 +247,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * Проверка на валидность номера пенсионного удостоверения
-	 * 6 цифр
+	 * просто цифры
 	 *
 	 * @param $sNumber
 	 *
@@ -255,7 +255,7 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	private function checkValidPensionCertificate($sNumber)
 	{
-		return (preg_match('/^\d{6}$/', $sNumber) > 0);
+		return (preg_match('/^\d*$/', $sNumber) > 0);
 	}
 
 	/**
