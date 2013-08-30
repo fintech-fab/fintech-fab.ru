@@ -55,7 +55,7 @@ $this->breadcrumbs = array(
 			?>
 
 			<div style="padding-left: 20px;">
-				<h4><?= $data['last_name'] . ' ' . @$data['first_name'] . ' ' . @$data['third_name']; ?></h4>
+				<h4><?= @$data['last_name'] . ' ' . @$data['first_name'] . ' ' . @$data['third_name']; ?></h4>
 
 				<p>
 					<?php if (@$data['balance'] < 0) {
