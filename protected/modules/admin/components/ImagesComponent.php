@@ -15,7 +15,9 @@ class ImagesComponent
 		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($sImagesDir)) as $sFileName) {
 
 			if (!is_dir($sFileName)) {
-				$sFileName = str_replace('/var/www/ru.dev.kreddy/protected/../public', Yii::app()
+				$sReplace = str_replace('/uploads/images', '', $sImagesDir);
+
+				$sFileName = str_replace($sReplace, Yii::app()
 					->getBaseUrl(), $sFileName);
 				$sThumbName = str_replace('uploads/images', 'uploads/thumbnails', $sFileName);
 				$aItems[] = array('thumb' => $sThumbName, 'image' => $sFileName);
@@ -34,7 +36,9 @@ class ImagesComponent
 		$iIndex = 0;
 		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($sImagesDir)) as $sFileName) {
 			if (!is_dir($sFileName)) {
-				$sFileName = str_replace('/var/www/ru.dev.kreddy/protected/../public', Yii::app()
+				$sReplace = str_replace('/uploads/images', '', $sImagesDir);
+
+				$sFileName = str_replace($sReplace, Yii::app()
 					->getBaseUrl(), $sFileName);
 				$sThumbName = str_replace('uploads/images', 'uploads/thumbnails', $sFileName);
 				$aItems[] = array('id' => $iIndex, 'thumb' => $sThumbName, 'image' => $sFileName);
