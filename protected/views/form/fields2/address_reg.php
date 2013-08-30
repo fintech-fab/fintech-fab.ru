@@ -50,7 +50,9 @@ $htmlOptions = array(
 ?>
 <div class="span5">
 	<h5>Адрес регистрации</h5>
-	<?= $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
+
+	<?= $form->regionHorizFormSelect2Row($oClientCreateForm, 'address_reg_region', array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
+	<? //= $form->dropDownListRow($oClientCreateForm, 'address_reg_region', Dictionaries::getRegions(), array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', $htmlOptions); ?>
 	<div id="reg_as_res">
@@ -58,7 +60,9 @@ $htmlOptions = array(
 	</div>
 	<div id="address_res">
 		<h5>Фактический адрес проживания</h5>
-		<?= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
+
+		<?= $form->regionHorizFormSelect2Row($oClientCreateForm, 'address_res_region', array('empty' => '', 'class' => 'span3') + $htmlOptions); ?>
+		<? //= $form->dropDownListRow($oClientCreateForm, 'address_res_region', Dictionaries::getRegions(), array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
 		<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', array('class' => 'span3') + $htmlOptions); ?>
 		<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', array('class' => 'span3') + $htmlOptions); ?>
 	</div>
