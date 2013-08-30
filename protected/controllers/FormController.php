@@ -20,6 +20,7 @@ class FormController extends Controller
 		 */
 		$oClientForm = Yii::app()->clientForm->getFormModel();
 
+
 		/**
 		 * AJAX валидация
 		 */

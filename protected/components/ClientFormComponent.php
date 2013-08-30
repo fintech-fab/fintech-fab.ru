@@ -734,7 +734,7 @@ class ClientFormComponent
 	public
 	function getSessionPhone()
 	{
-		if (isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) {
+		if (!SiteParams::B_FULL_FORM && isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) {
 			$sPhone = Yii::app()->session['ClientPersonalDataForm']['phone'];
 		} elseif (isset(Yii::app()->session['ClientFullForm2']['phone'])) {
 			$sPhone = Yii::app()->session['ClientFullForm2']['phone'];
@@ -831,7 +831,7 @@ class ClientFormComponent
 	public
 	function getSessionProduct()
 	{
-		if (!empty(Yii::app()->session['ClientSelectProductForm']['product'])) {
+		if (!SiteParams::B_FULL_FORM) {
 			return Yii::app()->session['ClientSelectProductForm']['product'];
 		} else {
 			return Yii::app()->session['ClientSelectProductForm2']['product'];
