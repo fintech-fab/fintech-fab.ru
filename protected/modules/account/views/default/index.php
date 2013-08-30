@@ -59,11 +59,12 @@ $this->breadcrumbs = array(
 
 				<p>
 					<?php if (@$data['balance'] < 0) {
-						echo '<strong>Задолженность:</strong> ' . ($data['balance'] * -1);
+						echo '<strong>Задолженность:</strong> ' . ($data['balance'] * -1) . ' руб. <br/>';
+						echo '<strong>Вернуть до:</strong> ' . $data['dt_to'] . '<br/>';
 					} else {
-						echo '<strong>Баланс:</strong> ' . ($data['balance']);
+						echo '<strong>Баланс:</strong> ' . ($data['balance']) . ' руб. <br/>';
 					}
-					?> руб. </p>
+					?></p>
 			</div>
 			<?php $this->endWidget(); ?>
 

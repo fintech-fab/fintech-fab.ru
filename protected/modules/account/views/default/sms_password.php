@@ -4,6 +4,7 @@
  * @var SMSPasswordForm   $form
  * @var                   $smsState
  * @var                   $passForm
+ * @var                   $needSmsPass
  */
 
 /*
@@ -15,16 +16,16 @@
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
 
-$flagSmsSent = $smsState['sent'];
+$hideSmsSendButton = ($smsState['sent'] || !$smsState['needSmsPass']);
 $flagSmsPassOK = $smsState['passOK'];
 
-$flagHideForm = empty($flagSmsSent);
+$flagHideForm = (empty($flagSmsSent) || $flagSmsPassOK);
 ?>
 
 <div class="span10">
 	<?php
 	// если SMS на телефон ещё не отсылалось
-	if (empty($flagSmsSent)) {
+	if (empty($hideSmsSendButton)) {
 		?>
 		<div id="send_sms">
 			<?php
@@ -74,6 +75,10 @@ $flagHideForm = empty($flagSmsSent);
                                 	{
                                         $('#actionAnswer').html(data.text).show();
                                 	}
+                                	else
+                                	{
+                                        $('#actionAnswer').html('Неизвестная ошибка!').show();
+                                	}
                                 } ",
 				),
 			)); ?>
@@ -99,7 +104,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 ?>
 
-<div class="span10<?php if ($flagHideForm || $flagSmsPassOK) {
+<div class="span10<?php if ($flagHideForm) {
 	//прячем если стоит флаг "спрятать" или если СМС-авторизация уже пройдена
 	echo ' hide';
 } ?>" id="sms_pass_row">
@@ -120,7 +125,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <div class="clearfix"></div>
 <div class="row span11">
-	<div class="form-actions<?php if ($flagHideForm || $flagSmsPassOK) {
+	<div class="form-actions<?php if ($flagHideForm) {
 		//прячем если стоит флаг "спрятать" или если СМС-авторизация уже пройдена
 		echo ' hide';
 	} ?>">

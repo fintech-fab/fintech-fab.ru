@@ -19,6 +19,9 @@ class AdminKreddyApi extends CModel
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_BALANCE = 'siteClient/getBalance';
 
+	const API_ACTION_REQ_SMS_PASS = 'siteToken/reqSms';
+	const API_ACTION_CHECK_SMS_PASS = 'siteToken/checkSms';
+
 	private $token;
 
 	public function attributeNames()
@@ -84,9 +87,9 @@ class AdminKreddyApi extends CModel
 
 	public function getSmsAuth($sSmsPassword)
 	{
-		/*$aRequest = array('password' => $sSmsPassword);
+		$aRequest = array('password' => $sSmsPassword);
 
-		//$aTokenData = $this->requestAdminKreddyApi($aRequest);
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_SMS_PASS, $aRequest);
 
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
@@ -95,14 +98,12 @@ class AdminKreddyApi extends CModel
 			return true;
 		} else {
 			return false;
-		}*/
+		}
 	}
 
 	public function sendSMS()
 	{
-		$aRequest = array('action' => 'sms-send');
-
-		$aResult = $this->requestAdminKreddyApi($aRequest);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_PASS);
 
 		return $aResult;
 	}
