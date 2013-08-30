@@ -1,6 +1,6 @@
 <?php
 
-Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+//Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 
 $a = array(
 	'basePath'       => __DIR__ . '/..',
@@ -44,7 +44,8 @@ $a = array(
 			'class' => 'application.components.SiteParams',
 		),
 		'bootstrap'    => array(
-			'class' => 'ext.bootstrap.components.Bootstrap',
+			'class'           => 'ext.bootstrap.components.Bootstrap',
+			'tooltipSelector' => '[rel=tooltip]',
 		),
 		'image'        => array(
 			'class'  => 'application.extensions.image.CImageComponent',

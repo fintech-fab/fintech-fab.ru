@@ -21,11 +21,12 @@
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
 
 	<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-	<?php Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
+	<?php //Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
 	<?php Yii::app()->bootstrap->registerCoreCss();
 	Yii::app()->bootstrap->registerYiiCss();
 	Yii::app()->bootstrap->registerCoreScripts();
 	?>
+
 
 	<link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
 </head>

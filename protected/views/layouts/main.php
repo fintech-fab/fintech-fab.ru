@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
 
 	<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-	<?php Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
+	<?php //Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
 	<?php Yii::app()->bootstrap->registerCoreCss();
 	Yii::app()->bootstrap->registerYiiCss();
 	Yii::app()->bootstrap->registerCoreScripts();
@@ -58,8 +58,7 @@
 
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
 			<a href="<?php echo Yii::app()->request->baseUrl; ?>/" class="brand">
-				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" />
-			</a>
+				<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
 
 			<span class="hotline pull-right">
 				<small>
@@ -85,9 +84,10 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 <div class="container">
 	<div class="row">
 		<div class="span12">
-				<h2 class="learn-more">Узнай больше о нас!</h2>
+			<h2 class="learn-more">Узнай больше о нас!</h2>
 
-			<p class="intro learn-more">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a></p>
+			<p class="intro learn-more">Если возникнут вопросы, позвони нам, или
+				<a href="mailto:info@kreddy.ru">напиши</a></p>
 		</div>
 
 		<div class="row" style="margin-left: 0;">
