@@ -20,8 +20,15 @@ $this->breadcrumbs = array(
 
 		echo '<pre>';
 		print_r($data);
-		print_r($secureData);
 		echo '</pre>';
+		if ($secureData['code'] == 0) {
+			echo '<pre>';
+			print_r($secureData);
+			echo '</pre>';
+		} else {
+			echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
+		}
+
 		//if ($secureData['code'] == 7&&isset($passFormRender)) {
 		//форма запроса СМС-пароля
 		echo $passFormRender;

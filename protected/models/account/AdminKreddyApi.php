@@ -222,7 +222,6 @@ class AdminKreddyApi extends CModel
 			}
 		}
 
-
 		return $aData;
 	}
 
