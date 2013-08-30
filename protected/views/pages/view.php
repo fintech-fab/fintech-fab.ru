@@ -2,17 +2,15 @@
 /* @var $this PagesController */
 /* @var $model Pages */
 
-$this->breadcrumbs=array(
-	'Pages'=>array('index'),
+$this->breadcrumbs = array(
+	'Pages' => array('index'),
 	$model->page_id,
 );
 
 $this->showTopPageWidget = true;
-?>
 
-<!--h1>View Pages #<?php //echo $model->page_id; ?></h1-->
 
-<?php /*$this->widget('zii.widgets.CDetailView', array(
+/*$this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'page_id',
@@ -20,10 +18,9 @@ $this->showTopPageWidget = true;
 		'page_title',
 		'page_content',
 	),
-));*/ ?>
+));*/
 
-<?php
-$this->pageTitle=Yii::app()->name." - ".CHtml::encode($model->page_title);
-?>
 
-<?php echo $model->page_content; ?>
+$this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
+
+echo $model->page_content;

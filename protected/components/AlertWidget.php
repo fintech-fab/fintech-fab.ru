@@ -15,4 +15,4 @@ class AlertWidget extends CWidget
 	}
 }
 
-?>
+

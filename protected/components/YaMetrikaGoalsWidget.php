@@ -20,4 +20,4 @@ class YaMetrikaGoalsWidget extends CWidget
 	}
 }
 
-?>
+

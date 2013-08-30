@@ -23,4 +23,4 @@ class BottomTabsWidget extends CWidget
 	}
 }
 
-?>
+

@@ -97,18 +97,6 @@ class FormController extends Controller
 		}
 	}
 
-	public function actionAjaxForm($form = null)
-	{
-		$this->layout = "//layouts/ajax";
-		$oClientForm = new ClientPersonalDataForm();
-		$sView = 'client_personal_data';
-		// Just before rendering the view that
-		// has our activeform
-		Yii::app()->clientScript->corePackages = array();
-		$this->renderPartial($sView, array('oClientCreateForm' => $oClientForm), false, true);
-	}
-
-
 	/**
 	 *  Переход на шаг $step
 	 * @param int $step

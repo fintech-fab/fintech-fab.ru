@@ -29,4 +29,4 @@ class StepsBreadCrumbsWidget extends CWidget
 	}
 }
 
-?>
+
