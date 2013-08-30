@@ -194,3 +194,27 @@ label, input, button, select, textarea {
 .cursor-default {
 	cursor: default;
 }
+
+.control-group.success .select2-container .select2-choice {
+	color: #468847;
+	border-color: #468847;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.control-group.success .select2-container .select2-choice div {
+	border-left: 1px solid #468847;
+}
+
+.control-group.error .select2-container .select2-choice {
+	color: #b94a48;
+	border-color: #b94a48;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.control-group.error .select2-container .select2-choice div {
+	border-left: 1px solid #b94a48;
+}
