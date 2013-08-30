@@ -815,8 +815,12 @@ class ClientFormComponent
 		}
 
 		$aSessionFormData = Yii::app()->session[get_class($oClientForm)];
-		$aSessionFormData['password'] = '';
-		$aSessionFormData['password_repeat'] = '';
+		if (isset($aSessionFormData['password'])) {
+			$aSessionFormData['password'] = '';
+		}
+		if (isset($aSessionFormData['password_repeat'])) {
+			$aSessionFormData['password_repeat'] = '';
+		}
 
 		return $aSessionFormData;
 	}
