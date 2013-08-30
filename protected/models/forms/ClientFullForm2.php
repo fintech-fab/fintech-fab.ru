@@ -95,7 +95,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 
 
 				array('password, password_repeat', 'required'),
-				//TODO сделать проверку пароля через match
 				array('password', 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!'),
 				array('password', 'length', 'min' => '8'),
 				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),

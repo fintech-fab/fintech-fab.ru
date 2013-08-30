@@ -113,7 +113,7 @@ class ClientFormComponent
 			}
 		}
 
-		$aSessionFormData = Yii::app()->session[get_class($oClientForm)];
+		$aSessionFormData = $this->getSessionFormData($oClientForm);
 
 		//проверяем, есть ли в сессии уже какие-то данные, и проверяем что они лежат в массиве
 		if (!empty($aSessionFormData) && gettype($aSessionFormData) == "array") {
@@ -814,7 +814,11 @@ class ClientFormComponent
 			return null;
 		}
 
-		return Yii::app()->session[get_class($oClientForm)];
+		$aSessionFormData = Yii::app()->session[get_class($oClientForm)];
+		$aSessionFormData['password'] = '';
+		$aSessionFormData['password_repeat'] = '';
+
+		return $aSessionFormData;
 	}
 
 	/**
