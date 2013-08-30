@@ -147,7 +147,7 @@ class FormController extends Controller
 
 		if (Yii::app()->clientForm->getCurrentStep() == 4 && !SiteParams::B_FULL_FORM) {
 			$bDocs = true;
-		} elseif (Yii::app()->clientForm->getCurrentStep() == 4 && SiteParams::B_FULL_FORM) {
+		} elseif (Yii::app()->clientForm->getCurrentStep() == 3 && SiteParams::B_FULL_FORM) {
 			$bDocs = true;
 		}
 
