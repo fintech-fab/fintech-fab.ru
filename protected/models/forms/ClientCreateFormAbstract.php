@@ -285,7 +285,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 
 				case 'job_income_add':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля их списка', 'range' => array_keys(Dictionaries::$aOverMoney));
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля из списка', 'range' => array_keys(Dictionaries::$aOverMoney));
 					break;
 
 				case 'have_car':
@@ -306,7 +306,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 
 				case 'secret_question':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля их списка', 'range' => array_keys(Dictionaries::$aSecretQuestions));
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля из списка', 'range' => array_keys(Dictionaries::$aSecretQuestions));
 					break;
 
 				case 'citizenship':

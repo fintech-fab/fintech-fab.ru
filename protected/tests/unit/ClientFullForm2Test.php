@@ -3,6 +3,36 @@
 class ClientFullForm2Test extends CTestCase
 {
 
+	public function testClientPassword()
+	{
+
+		$aPostData = array(
+			'password'        => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdgflhsdgfjsdgf',
+			'password_repeat' => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdgflhsdgfjsdgf',
+		);
+
+
+		$oForm = new ClientFullForm2();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('password'), print_r($oForm->getError('password'), true));
+
+		$aPostData = array(
+			'password'        => '34536546kjljflkdfjgабвгд',
+			'password_repeat' => '34536546kjljflkdfjgабвгд',
+		);
+
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('password'));
+
+
+	}
+
 	public function testValidateFormEmail()
 	{
 		$oForm = new ClientFullForm2();
@@ -67,7 +97,7 @@ class ClientFullForm2Test extends CTestCase
 		$oForm->validate(array('job_income_add'));
 		$aErrors = $oForm->getErrors();
 		$this->assertNotEmpty($aErrors['job_income_add']);
-		$this->assertEquals('Выберите значение поля их списка', $aErrors['job_income_add'][0]);
+		$this->assertEquals('Выберите значение поля из списка', $aErrors['job_income_add'][0]);
 	}
 
 	/**
