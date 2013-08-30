@@ -163,7 +163,7 @@ class AdminKreddyApi extends CModel
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		//тут у нас непосредственно curl запрашивает данные
-		$ch = curl_init('http://admin.kreddy-test.topas/siteApi/' . $sAction);
+		$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
