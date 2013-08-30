@@ -22,9 +22,9 @@ $aCrumbs = array(
 <div class="row">
 
 	<?php $this->widget('CheckBrowserWidget', array(
-		'sMessage'     => "<strong>Внимание!</strong> Для того чтобы пройти
-видеоидентификацию, Вам нужен браузер <strong>Chrome</strong> или <strong>Firefox</strong>
-последних версий.",
+		'sMessage'     => '<strong>Внимание!</strong> Для того чтобы пройти'
+		. ' видеоидентификацию, Вам нужен браузер <strong>Chrome</strong> или <strong>Firefox</strong>'
+		. ' последних версий.',
 		'aHtmlOptions' => array(
 			'style' => 'font-size: 15px;',
 		)
