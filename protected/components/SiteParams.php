@@ -7,7 +7,7 @@
 class SiteParams
 {
 
-	const B_FULL_FORM = false;
+	const B_FULL_FORM = true;
 
 	const CTIME_HOUR = 3600;
 	const CTIME_DAY = 86400;
