@@ -27,9 +27,7 @@ $this->breadcrumbs = array(
 		echo $passFormRender;
 
 		if ($smsState['smsAuthDone']) {
-			echo '<strong>Подписка активна до:</strong> ' . (@$data['subscription']['activity_to']) . ' <br/>';
-			echo '<strong>Баланс:</strong> ' . (@$data['subscription']['balance']) . ' руб. <br/>';
-			echo '<strong>Доступно займов:</strong> ' . (@$data['subscription']['available_loans']) . '<br/>';
+
 		}
 		?>
 	</div>
@@ -41,11 +39,7 @@ $this->breadcrumbs = array(
 					Yii::app()->createUrl('account')
 				)
 			);
-			$this->menu[] = array(
-				'label' => 'История займов', 'url' => array(
-					Yii::app()->createUrl('account/history')
-				)
-			);
+			$this->menu[] = array('label' => 'История займов', 'url' => array(Yii::app()->createUrl('account')));
 			$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
 			$this->beginWidget('bootstrap.widgets.TbMenu', array(

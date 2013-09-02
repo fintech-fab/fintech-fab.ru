@@ -18,6 +18,7 @@ class AdminKreddyApi extends CModel
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
+	const API_ACTION_GET_HISTORY = 'siteClient/getHistory';
 
 	const API_ACTION_REQ_SMS_PASS = 'siteToken/reqSms';
 	const API_ACTION_CHECK_SMS_PASS = 'siteToken/checkSms';
@@ -108,12 +109,12 @@ class AdminKreddyApi extends CModel
 		return $aResult;
 	}
 
-	public function getClientData()
+	public function getClientInfo()
 	{
-		$aData = array('code' => self::ERROR_AUTH, 'balance' => '');
+		$aData = array('code' => self::ERROR_AUTH);
 		if (!empty($this->token)) {
 			//тут типа запрос данных по токену
-			$aGetData = $this->getData('base');
+			$aGetData = $this->getData('info');
 
 			$aData = array_merge($aData, $aGetData);
 		} else {
@@ -123,13 +124,12 @@ class AdminKreddyApi extends CModel
 		return $aData;
 	}
 
-	public function getClientSecureData()
+	public function getHistory()
 	{
-		$aData = array('code' => self::ERROR_AUTH, 'secure1' => '', 'secure2' => '');
-
+		$aData = array('code' => self::ERROR_AUTH);
 		if (!empty($this->token)) {
 			//тут типа запрос данных по токену
-			$aGetData = $this->getData('secure');
+			$aGetData = $this->getData('history');
 
 			$aData = array_merge($aData, $aGetData);
 		} else {
@@ -144,14 +144,14 @@ class AdminKreddyApi extends CModel
 		$aData = array('code' => self::ERROR_AUTH);
 		if (!empty($this->token)) {
 			switch ($sType) {
-				case 'base':
-					$sAction = 'siteClient/getBalance';
+				case 'info':
+					$sAction = self::API_ACTION_GET_INFO;
 					break;
-				//case 'secure':
-				//	$sAction
-				//	break;
+				case 'history':
+					$sAction = self::API_ACTION_GET_HISTORY;
+					break;
 				default:
-					$sAction = 'siteClient/getBalance';
+					$sAction = 'siteClient/getInfo';
 					break;
 			}
 
@@ -182,14 +182,14 @@ class AdminKreddyApi extends CModel
 		$aData = array('code' => self::ERROR_AUTH);
 
 		if ($this->token == '159753' || $sAction === self::API_ACTION_TOKEN_CREATE) {
-			switch ($aRequest['action']) {
+			switch ($sAction) {
 				case self::API_ACTION_TOKEN_CREATE:
 					if ($aRequest['login'] == '9154701913' && $aRequest['password'] == '159753') {
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
 					}
 					break;
 				case self::API_ACTION_CHECK_SMS_PASS:
-					if ($aRequest['password'] == '15426378') {
+					if ($aRequest['password'] == '159753') {
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
 					}
 					break;
@@ -202,10 +202,10 @@ class AdminKreddyApi extends CModel
 					}
 					break;
 				case self::API_ACTION_GET_INFO:
-					$aData = array('code' => self::ERROR_NONE, 'balance' => '1000', 'expire_to' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
+					$aData = array('code' => 9, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''));
 					break;
-				case 'secure-data':
-					$aData = array('code' => self::ERROR_NEED_SMS_AUTH);
+				case self::API_ACTION_GET_HISTORY:
+					$aData = array('code' => 9);
 					break;
 				default:
 					$aData = array('code' => self::ERROR_AUTH);
@@ -213,17 +213,17 @@ class AdminKreddyApi extends CModel
 			}
 		}
 		if ($this->token == '159753159753') {
-			switch ($aRequest['action']) {
-				case 'getNewToken':
-					if ($aRequest['token'] == '159753') {
+			switch ($sAction) {
+				case self::API_ACTION_TOKEN_UPDATE:
+					if ($aRequest['token'] == '159753159753') {
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
 					}
 					break;
-				case 'base-data':
-					$aData = array('code' => self::ERROR_NONE, 'balance' => '1000', 'first_name' => 'Василий', 'last_name' => 'Пупкин', 'third_name' => 'Иванович');
+				case self::API_ACTION_GET_INFO:
+					$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
 					break;
-				case 'secure-data':
-					$aData = array('code' => self::ERROR_NONE, 'secure1' => 'some-data1', 'secure2' => 'some-data2');
+				case self::API_ACTION_GET_HISTORY:
+					$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
 					break;
 				default:
 					$aData = array('code' => self::ERROR_AUTH);

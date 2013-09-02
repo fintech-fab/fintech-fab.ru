@@ -17,9 +17,9 @@
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
 
 $hideSmsSendButton = ($smsState['sent'] || !$smsState['needSmsPass']);
-$flagSmsPassOK = $smsState['passOK'];
+$flagSmsAuthDone = $smsState['smsAuthDone'];
 
-$flagHideForm = (empty($flagSmsSent) || $flagSmsPassOK);
+$flagHideForm = (empty($smsState['sent']) || $flagSmsAuthDone);
 ?>
 
 <div class="span10">
@@ -133,7 +133,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		$this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'  => 'ajaxSubmit',
 			'type'        => 'primary',
-			'url'         => Yii::app()->createUrl('/account/checksmspass'),
+			'url'         => Yii::app()->createUrl('/account/checksmspass', array('act' => $act)),
 			'size'        => 'small',
 			'label'       => 'Отправить пароль',
 			'ajaxOptions' => array(
@@ -144,7 +144,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
                                 	if(data.type==0)
                                 	{
                                         $('#main-content').load(data.text);
-                                        //location.reload();
                                 	}
                                 	else if(data.type==2)
                                 	{
