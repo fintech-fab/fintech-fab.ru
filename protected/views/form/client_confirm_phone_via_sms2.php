@@ -54,7 +54,7 @@ $aCrumbs = array(
 				// поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
 				$flagHideForm = (empty($flagSmsSent) || !empty($flagExceededTries));
 				?>
-				<? $this->widget('bootstrap.widgets.TbButton', array(
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'id'          => 'sendSms',
 					'buttonType'  => 'ajaxSubmit',
 					'url'         => Yii::app()->createUrl('form/ajaxsendsms'),

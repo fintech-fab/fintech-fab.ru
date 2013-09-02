@@ -46,7 +46,7 @@ $this->pageTitle = Yii::app()->name;
 				));
 
 				?>
-				<? $this->widget('bootstrap.widgets.TbButton', array(
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'id'          => 'sendSms',
 					'buttonType'  => 'ajaxSubmit',
 					'url'         => Yii::app()->createUrl('form/ajaxsendsms'),
