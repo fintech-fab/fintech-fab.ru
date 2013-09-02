@@ -38,6 +38,7 @@ $htmlOptions = array(
 				$("#addressHeading").removeClass("disabled cursor-default");
 
 				personalDataOk = true;
+				yaCounter21390544.reachGoal("expand_1");
 			}
 		}'
 	)

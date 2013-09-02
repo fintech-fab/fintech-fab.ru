@@ -81,9 +81,18 @@ class RedactorUploadAction extends CAction
 		}
 
 		$ext = $file->getExtensionName();
-		$name = $file->name;
-		if (strlen($ext)) {
+		$name = trim($file->name);
+
+		if (strlen($ext) > 0) {
 			$name = substr($name, 0, -1 - strlen($ext));
+		}
+
+		// удаление повторных пробелов
+		$name = preg_replace('/\s\s+/', '_', $name);
+
+		// если в имени файла есть запрещённые символы, то заменяем имя на хэш
+		if (preg_match("/^[a-z0-9\-_]+$/ui", $name) == 0) {
+			$name = substr(md5($name), 0, strlen($name));
 		}
 
 		$fileThumbPath = $dstThumbDir . $name . '.' . $ext;
@@ -99,6 +108,7 @@ class RedactorUploadAction extends CAction
 		 * до 100 пикселей по ширине (если картинка больше этого размера)
 		 */
 		$imgSize = getimagesize($webroot . $filePath);
+
 		if ($imgSize) {
 			$file->saveAs($webroot . $fileThumbPath, false);
 			if ($imgSize > 100) {
@@ -113,7 +123,8 @@ class RedactorUploadAction extends CAction
 		return array(Yii::app()->baseUrl . $filePath, $file->name);
 	}
 
-	public function run()
+	public
+	function run()
 	{
 		if (isset($this->saveCallback) && is_callable($this->saveCallback)) {
 			$save = $this->saveCallback;

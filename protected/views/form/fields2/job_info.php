@@ -40,6 +40,7 @@ $htmlOptions = array(
 				$("#submitButton").removeClass("disabled");
 
 				jobInfoOk = true;
+				yaCounter21390544.reachGoal("expand_4");
 			}
 		}'
 	)

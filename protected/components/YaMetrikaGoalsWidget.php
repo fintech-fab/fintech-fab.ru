@@ -14,10 +14,10 @@ class YaMetrikaGoalsWidget extends CWidget
 
 	public function run()
 	{
-		$this->iDoneSteps = (int)$this->iDoneSteps;
+		if ($this->iDoneSteps !== 'sms') {
+			$this->iDoneSteps = (int)$this->iDoneSteps;
+		}
 		$this->iDoneSteps = (!empty($this->iSkippedSteps)) ? ($this->iDoneSteps - (int)$this->iSkippedSteps) : $this->iDoneSteps;
 		$this->render('ya_metrika_goals');
 	}
 }
-
-

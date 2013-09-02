@@ -42,6 +42,7 @@ $htmlOptions = array(
 				$("#sendHeading").removeClass("disabled cursor-default");
 
 				addressOk = true;
+				yaCounter21390544.reachGoal("expand_3");
 			}
 		}'
 	)

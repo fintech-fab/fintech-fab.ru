@@ -11,7 +11,13 @@ class ImagesComponent
 
 	public static function ImagesList()
 	{
+		$aItems = array();
+
 		$sImagesDir = Yii::app()->getBasePath() . '/../public/uploads/images';
+		if (!file_exists($sImagesDir)) {
+			return $aItems;
+		}
+
 		foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($sImagesDir)) as $sFileName) {
 
 			if (!is_dir($sFileName)) {
@@ -22,9 +28,6 @@ class ImagesComponent
 				$sThumbName = str_replace('uploads/images', 'uploads/thumbnails', $sFileName);
 				$aItems[] = array('thumb' => $sThumbName, 'image' => $sFileName);
 			}
-		}
-		if (!isset($aItems)) {
-			$aItems = array();
 		}
 
 		return $aItems;
