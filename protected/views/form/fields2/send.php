@@ -31,6 +31,7 @@ $htmlOptions = array(
 				$("#submitButton").removeClass("disabled");
 
 				sendFormOk = true;
+				yaCounter21390544.reachGoal("expand_5");
 				}
 		}'
 	)

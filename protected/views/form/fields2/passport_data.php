@@ -41,6 +41,7 @@ $htmlOptions = array(
 				$("#jobInfoHeading").removeClass("disabled cursor-default");
 
 				passportDataOk = true;
+				yaCounter21390544.reachGoal("expand_2");
 			}
 		}'
 	)
