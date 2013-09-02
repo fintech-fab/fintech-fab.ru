@@ -220,7 +220,7 @@ class ids_ipGeoBase
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_URL, "http://194.85.91.253:8090/geo/geo.html");
 		curl_setopt($curl, CURLOPT_HEADER, 0);
-		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 15);
+		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 15);
 		curl_setopt($curl, CURLOPT_POST, 1);
 
