@@ -5,6 +5,7 @@
  * @var $smsState
  * @var $passForm
  * @var $passFormRender
+ * @var $history
  */
 
 $this->breadcrumbs = array(
@@ -27,7 +28,9 @@ $this->breadcrumbs = array(
 		echo $passFormRender;
 
 		if ($smsState['smsAuthDone']) {
-
+			echo '<pre>';
+			print_r($history);
+			echo '</pre>';
 		}
 		?>
 	</div>

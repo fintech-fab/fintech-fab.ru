@@ -53,9 +53,6 @@ class AdminKreddyApi extends CModel
 		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
 
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
-		echo '<pre>' . "";
-		CVarDumper::dump($aTokenData);
-		echo '</pre>';
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];

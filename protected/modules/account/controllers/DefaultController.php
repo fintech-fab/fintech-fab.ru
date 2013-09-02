@@ -38,6 +38,10 @@ class DefaultController extends Controller
 		);
 	}
 
+	/**
+	 * Главная страница личного кабинета
+	 */
+
 	public function actionIndex()
 	{
 		$oApi = new AdminKreddyApi();
@@ -54,38 +58,9 @@ class DefaultController extends Controller
 		}
 	}
 
-	public function actionHistory()
-	{
-		$oApi = new AdminKreddyApi();
-		$aData = $oApi->getHistory();
-		$oSmsPassForm = new SMSPasswordForm();
-
-		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
-			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'smsState' => $smsState));
-		} else {
-			Yii::app()->user->logout();
-			$this->redirect(Yii::app()->user->loginUrl);
-		}
-	}
-
-	public function actionAjaxHistory()
-	{
-		$oApi = new AdminKreddyApi();
-		$aData = $oApi->getHistory();
-		$oSmsPassForm = new SMSPasswordForm();
-
-		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
-			$this->renderPartial('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'smsState' => $smsState));
-		} else {
-			Yii::app()->user->logout();
-			$this->redirect(Yii::app()->user->loginUrl);
-		}
-	}
-
+	/**
+	 * AJAX-перезагрузка главной страницы
+	 */
 	public function actionAjaxIndex()
 	{
 		if (Yii::app()->request->isAjaxRequest) {
@@ -104,6 +79,53 @@ class DefaultController extends Controller
 		}
 	}
 
+	/**
+	 * История операций
+	 */
+
+	public function actionHistory()
+	{
+		$oApi = new AdminKreddyApi();
+		$aData = $oApi->getClientInfo();
+		$aHistory = $oApi->getHistory();
+		$oSmsPassForm = new SMSPasswordForm();
+
+		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
+			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
+			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'history' => $aHistory, 'smsState' => $smsState));
+		} else {
+			Yii::app()->user->logout();
+			$this->redirect(Yii::app()->user->loginUrl);
+		}
+	}
+
+	/**
+	 * AJAX-перезагрузка истории
+	 */
+
+	public function actionAjaxHistory()
+	{
+		$oApi = new AdminKreddyApi();
+		$aData = $oApi->getClientInfo();
+		$aHistory = $oApi->getHistory();
+		$oSmsPassForm = new SMSPasswordForm();
+
+		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
+			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
+			$this->renderPartial('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'history' => $aHistory, 'smsState' => $smsState));
+		} else {
+			Yii::app()->user->logout();
+			$this->redirect(Yii::app()->user->loginUrl);
+		}
+	}
+
+
+	/**
+	 * Запрос на отправку SMS с паролем
+	 */
+
 	public function actionAjaxSendSms()
 	{
 		if (Yii::app()->request->isAjaxRequest) {
@@ -121,6 +143,12 @@ class DefaultController extends Controller
 		}
 		Yii::app()->end();
 	}
+
+	/**
+	 * Проверка SMS-пароля
+	 *
+	 * @param string $act
+	 */
 
 	public function actionCheckSMSPass($act = 'index')
 	{
@@ -178,8 +206,8 @@ class DefaultController extends Controller
 			}
 
 			// collect user input data
-			if (isset($_POST['LoginForm'])) {
-				$model->attributes = $_POST['LoginForm'];
+			if (isset($_POST['AccountLoginForm'])) {
+				$model->attributes = $_POST['AccountLoginForm'];
 				// validate user input and redirect to the previous page if valid
 				if ($model->validate() && $model->login()) {
 					$this->redirect(Yii::app()->createUrl("/account"));

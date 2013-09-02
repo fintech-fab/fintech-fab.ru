@@ -1,7 +1,7 @@
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
-/* @var $form CActiveForm */
+/* @var $form IkTbActiveForm */
 
 $this->pageTitle = Yii::app()->name . ' - Вход';
 $this->breadcrumbs = array(
@@ -10,20 +10,18 @@ $this->breadcrumbs = array(
 ?>
 <h2 class='pay_legend'>Вход в личный кабинет</h2>
 <div class="form">
-	<?php $form = $this->beginWidget('CActiveForm', array(
-		'id'                     => 'login-form',
-		'enableClientValidation' => true,
-		'clientOptions'          => array(
-			'validateOnSubmit' => true,
+	<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+		'id'                   => 'login-form',
+		'enableAjaxValidation' => false,
+		'clientOptions'        => array(
+			'validateOnSubmit' => false,
 		),
 	)); ?>
 
-	<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
+	<p class="note">Для входа в личный кабинет введите свой номер телефона и пароль</p>
 
 	<div class="row">
-		<?php echo $form->labelEx($model, 'username'); ?>
-		<?php echo $form->textField($model, 'username'); ?>
-		<?php echo $form->error($model, 'username'); ?>
+		<?= $form->phoneMaskedRow($model, 'username'); ?>
 	</div>
 
 	<div class="row">
@@ -33,7 +31,12 @@ $this->breadcrumbs = array(
 	</div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Вход'); ?>
+		<? $this->widget('bootstrap.widgets.TbButton', array(
+			'id'         => 'submitButton',
+			'buttonType' => 'submit',
+			'type'       => 'primary',
+			'label'      => 'Войти',
+		)); ?>
 	</div>
 
 	<?php $this->endWidget(); ?>
