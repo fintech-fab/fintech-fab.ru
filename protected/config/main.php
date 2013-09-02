@@ -1,6 +1,6 @@
 <?php
 
-//Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 
 $a = array(
 	'basePath'       => __DIR__ . '/..',
@@ -53,6 +53,7 @@ $a = array(
 		),
 		'user'         => array(
 			'allowAutoLogin' => true,
+			'loginUrl'       => array('admin/login'),
 		),
 
 		'urlManager'   => array(
@@ -63,11 +64,14 @@ $a = array(
 				'gii/<controller:\w+>'                             => 'gii/<controller>',
 				'gii/<controller:\w+>/<action:\w+>'                => 'gii/<controller>/<action>',
 
-				'admin'                                            => 'admin',
-				'admin/<controller:\w+>'                           => 'admin/<controller>',
-				'admin/<controller:\w+>/<action:\w+>/<id:\d+>'     => 'admin/<controller>/<action>',
-				'admin/<controller:\w+>/<action:\w+>/<name:\w+>'   => 'admin/<controller>/<action>',
-				'admin/<controller:\w+>/<action:\w+>'              => 'admin/<controller>/<action>',
+				'admin'                                          => 'admin',
+				'admin/login'                                    => 'admin/default/login',
+				'admin/logout'                                   => 'admin/default/logout',
+				'admin/<controller:\w+>'                         => 'admin/<controller>',
+				'admin/<controller:\w+>/<action:\w+>/<id:\d+>'   => 'admin/<controller>/<action>',
+				'admin/<controller:\w+>/<action:\w+>/<name:\w+>' => 'admin/<controller>/<action>',
+				'admin/<controller:\w+>/<action:\w+>'            => 'admin/<controller>/<action>',
+
 
 				'account'                                          => 'account',
 				'account/<action:\w+>'                             => 'account/default/<action>',

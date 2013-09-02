@@ -20,6 +20,7 @@ class FormController extends Controller
 		 */
 		$oClientForm = Yii::app()->clientForm->getFormModel();
 
+
 		/**
 		 * AJAX валидация
 		 */
@@ -42,12 +43,14 @@ class FormController extends Controller
 			if (isset($oClientForm->go_identification)) {
 				if ($oClientForm->validate()) {
 					Yii::app()->clientForm->goIdentification($oClientForm->go_identification);
-					$oClientForm = Yii::app()->clientForm->getFormModel();
+					//$oClientForm = Yii::app()->clientForm->getFormModel();
+					$this->redirect(Yii::app()->createUrl("form"));
 				}
 			} elseif ($oClientForm->validate()) {
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+				$this->redirect(Yii::app()->createUrl("form"));
 			}
 
 		}
@@ -74,7 +77,7 @@ class FormController extends Controller
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
-		if ($sView == 'client_confirm_phone_via_sms') {
+		if ($sView == 'client_confirm_phone_via_sms' || $sView == 'client_confirm_phone_via_sms2') {
 			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
 
 			$flagExceededTries = ($smsCountTries >= SiteParams::MAX_SMSCODE_TRIES);
@@ -119,7 +122,15 @@ class FormController extends Controller
 	 */
 	public function actionIdentification()
 	{
-		if (Yii::app()->clientForm->getCurrentStep() == 3) {
+		$bIdent = false;
+
+		if (Yii::app()->clientForm->getCurrentStep() == 3 && !SiteParams::B_FULL_FORM) {
+			$bIdent = true;
+		} elseif (Yii::app()->clientForm->getCurrentStep() == 2 && SiteParams::B_FULL_FORM) {
+			$bIdent = true;
+		}
+
+		if ($bIdent) {
 			if (Yii::app()->clientForm->checkTmpIdentificationFiles("photo")) {
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			}
@@ -132,7 +143,15 @@ class FormController extends Controller
 	 */
 	public function actionDocuments()
 	{
-		if (Yii::app()->clientForm->getCurrentStep() == 4) {
+		$bDocs = false;
+
+		if (Yii::app()->clientForm->getCurrentStep() == 4 && !SiteParams::B_FULL_FORM) {
+			$bDocs = true;
+		} elseif (Yii::app()->clientForm->getCurrentStep() == 3 && SiteParams::B_FULL_FORM) {
+			$bDocs = true;
+		}
+
+		if ($bDocs) {
 
 			if (Yii::app()->clientForm->checkTmpIdentificationFiles("documents")) {
 

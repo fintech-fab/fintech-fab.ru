@@ -13,4 +13,4 @@ class FormProgressBarWidget extends CWidget
 		$this->render('progress_bar');
 	}
 }
-?>
+

@@ -20,5 +20,9 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 	),
 ));
 
+Yii::app()->clientScript->registerScript('messageForBrowser', '
+	var sMessage = "' . $this->sMessage . '";
+	var sMobileMessage = "' . $this->sMobileMessage . '";
+', CClientScript::POS_BEGIN);
 $sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/browser.js';
 Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);

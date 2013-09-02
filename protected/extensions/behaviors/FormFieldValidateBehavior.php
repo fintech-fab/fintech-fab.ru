@@ -247,7 +247,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * Проверка на валидность номера пенсионного удостоверения
-	 * 6 цифр
+	 * просто цифры
 	 *
 	 * @param $sNumber
 	 *
@@ -255,7 +255,7 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	private function checkValidPensionCertificate($sNumber)
 	{
-		return (preg_match('/^\d{6}$/', $sNumber) > 0);
+		return (preg_match('/^\d*$/', $sNumber) > 0);
 	}
 
 	/**
@@ -496,6 +496,37 @@ class FormFieldValidateBehavior extends CBehavior
 				$this->owner->addError($dateAttribute1, $sDate1Label . ' не может быть позже или в тот же день с ' . $sDate2Label);
 			}
 		}
+	}
+
+	public function checkFriendsOnJobPhone($attribute, $param)
+	{
+
+		$sPhone = $this->owner->$param['phone'];
+		$sJobPhone = $this->owner->$param['job_phone'];
+
+		if ($sJobPhone == $sPhone && empty($this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+
+		if ($attribute == "friends_phone" && !empty($this->owner->$attribute) && $sJobPhone == $this->owner->$attribute) {
+			$this->owner->addError($attribute, $param['message2']);
+		}
+
+		return;
+
+	}
+
+	public function checkAddressRes($attribute, $param)
+	{
+
+		$sRegAsRes = $this->owner->$param['reg_as_res'];
+
+		if (!$sRegAsRes && empty($this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+
+		return;
+
 	}
 
 }

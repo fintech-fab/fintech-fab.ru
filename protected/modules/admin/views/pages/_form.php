@@ -9,7 +9,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 <div class="form">
 
-	<?php $form = $this->beginWidget('CActiveForm', array(
+	<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		'id'                   => 'pages-form',
 		'enableAjaxValidation' => true,
 	)); ?>
@@ -44,24 +44,35 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 			'options'     => array(
 				'lang'                     => 'ru',
-				'deniedTags' => array('html', 'head', 'link', 'body', 'meta', 'script', 'style', 'applet'),
-				'removeEmptyTags'=>false,
-				'convertDivs' => false,
 				'toolbar'                  => 'classic',
+				'convertDivs'              => false,
+				'paragraphy'               => false,
+				'autoresize'               => false,
+				'removeEmptyTags'          => false,
+				'imageGetJson'             => Yii::app()->getBaseUrl() . '/admin/files/imagesList',
 				'buttons'                  => array(
 					'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',
 					'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-					'image', 'table', 'link', '|',
+					'image', 'video', 'table', 'link', '|',
 					'fontcolor', 'backcolor', '|', 'alignment', '|', 'horizontalrule'
 				),
 				'iframe'                   => true,
+				'css'                      => array(
+					'/static/css/bootstrap4redactor.min.css',
+					'/static/css/main.css',
+					'/static/css/bootstrap-overload.css',
+					'/static/css/form.css',
+					'/static/css/style.css',
+					'/static/css/payment.css',
+					'/static/css/redactor-table.css'
+				),
 				'imageUpload'              => Yii::app()->createUrl("admin/files/imageUpload"),
 				'imageUploadErrorCallback' => 'js: function(json) { alert(json.error); }',
 				'uploadFields'             => array(
 					Yii::app()->request->csrfTokenName => Yii::app()->request->csrfToken,
 				),
 			),
-			'htmlOptions' => array('style' => "width: 100%; height: 400px;"),
+			'htmlOptions' => array('style' => "width: 100%; height: 500px;"),
 		));
 		?>
 	</div>

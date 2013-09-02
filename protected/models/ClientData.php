@@ -51,51 +51,57 @@
  * This is the model class for table "tbl_client".
  *
  * The followings are the available columns in table 'tbl_client':
- * @property string $client_id
- * @property string $ip;
- * @property string $tracking_id
- * @property string $phone
- * @property string $job_phone
- * @property string $first_name
- * @property string $last_name
- * @property string $third_name
+ *
+ * @property string  $client_id
+ * @property string  $ip             ;
+ * @property string  $tracking_id
+ * @property string  $phone
+ * @property string  $password
+ * @property string  $job_phone
+ * @property string  $first_name
+ * @property string  $last_name
+ * @property string  $third_name
  * @property integer $sex
- * @property string $birthday
- * @property string $email
- * @property string $passport_series
- * @property string $passport_number
- * @property string $passport_issued
- * @property string $passport_code
- * @property string $passport_date
- * @property string $document
- * @property string $document_number
- * @property string $address_reg_region
- * @property string $address_reg_city
- * @property string $address_reg_address
- * @property string $relatives_one_fio
- * @property string $relatives_one_phone
- * @property string $friends_fio
- * @property string $friends_phone
- * @property string $job_company
- * @property string $job_position
- * @property string $job_time
- * @property string $job_monthly_income
- * @property string $job_monthly_outcome
+ * @property string  $birthday
+ * @property string  $email
+ * @property string  $passport_series
+ * @property string  $passport_number
+ * @property string  $passport_issued
+ * @property string  $passport_code
+ * @property string  $passport_date
+ * @property string  $document
+ * @property string  $document_number
+ * @property integer $address_reg_region
+ * @property string  $address_reg_city
+ * @property string  $address_reg_address
+ * @property integer $address_res_region
+ * @property string  $address_res_city
+ * @property string  $address_res_address
+ * @property integer $address_reg_as_res
+ * @property string  $relatives_one_fio
+ * @property string  $relatives_one_phone
+ * @property string  $friends_fio
+ * @property string  $friends_phone
+ * @property string  $job_company
+ * @property string  $job_position
+ * @property string  $job_time
+ * @property string  $job_monthly_income
+ * @property string  $job_monthly_outcome
  * @property integer $have_past_credit
  * @property integer $secret_question;
- * @property string $secret_answer;
+ * @property string  $secret_answer  ;
  * @property integer $numeric_code
  * @property integer $sms_code
  * @property integer $product
  * @property integer $get_way
  * @property integer $complete
- * @property int $flag_processed
- * @property string $dt_add
- * @property string $dt_update
- * @property int $identification_type
- * @property int $flag_identified
- * @property int $flag_sms_confirmed
- * @property int $flag_archived
+ * @property int     $flag_processed
+ * @property string  $dt_add
+ * @property string  $dt_update
+ * @property int     $identification_type
+ * @property int     $flag_identified
+ * @property int     $flag_sms_confirmed
+ * @property int     $flag_archived
  *
  * @method ClientData[] findAll()
  * @method ClientData[] findAllByAttributes()
@@ -108,7 +114,9 @@ class ClientData extends CActiveRecord
 
 	/**
 	 * Returns the static model of the specified AR class.
+	 *
 	 * @param string $className active record class name.
+	 *
 	 * @return ClientData the static model class
 	 */
 	public static function model($className = __CLASS__)
@@ -146,27 +154,30 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, ip, tracking_id, phone, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
 
 	/**
 	 * @param $sPhone
+	 *
 	 * @return ClientData
 	 */
 	public function scopePhone($sPhone)
 	{
 		$this->getDbCriteria()->addColumnCondition(array(
-			'phone' => $sPhone,
+			'phone'              => $sPhone,
 			'flag_sms_confirmed' => 0,
-			'flag_archived' => 0,
+			'flag_archived'      => 0,
 		));
+
 		return $this;
 	}
 
 	/**
 	 * @param $iClientId
+	 *
 	 * @return ClientData
 	 */
 
@@ -175,6 +186,7 @@ class ClientData extends CActiveRecord
 		$this->getDbCriteria()->addColumnCondition(array(
 			'client_id' => $iClientId
 		));
+
 		return $this;
 	}
 
@@ -203,8 +215,8 @@ class ClientData extends CActiveRecord
 			$oClientData = new self;
 		}
 
-		if($oClientData&&$oClientData->complete==1){
-			$oClientData->flag_archived=1;
+		if ($oClientData && $oClientData->complete == 1) {
+			$oClientData->flag_archived = 1;
 			$oClientData->save();
 			$oClientData = new self;
 		}
@@ -213,45 +225,53 @@ class ClientData extends CActiveRecord
 		$oClientData->dt_add = date('Y-m-d H:i:s', time());
 		$oClientData->flag_processed = 0;
 		$oClientData->save();
+
 		return $oClientData;
 	}
 
 	/**
 	 * @param $sPhone
+	 *
 	 * @return bool|string
 	 */
 	public static function getClientIdByPhone($sPhone)
 	{
 		$oClientData = self::model()->scopePhone($sPhone)->find();
+
 		return ($oClientData) ? $oClientData->client_id : null;
 	}
 
 	/**
 	 * @param $client_id
+	 *
 	 * @return array|null
 	 */
 
 	public static function getClientDataById($client_id)
 	{
 		$oClientData = self::model()->scopeClientId($client_id)->find();
+
 		return ($oClientData) ? $oClientData->getAttributes() : null;
 
 	}
 
 	/**
-	 * @param string $sCode
+	 * @param string  $sCode
 	 * @param integer $client_id
+	 *
 	 * @return bool
 	 */
 	public static function compareSMSCodeByClientId($sCode, $client_id)
 	{
 		$aClientData = self::model()->getClientDataById($client_id);
-		return ($aClientData['sms_code']==$sCode);
+
+		return ($aClientData['sms_code'] == $sCode);
 	}
 
 	/**
 	 * @param $aClientFormData
 	 * @param $client_id
+	 *
 	 * @return bool
 	 */
 	public static function saveClientDataById($aClientFormData, $client_id)
@@ -260,8 +280,10 @@ class ClientData extends CActiveRecord
 		if ($oClientData) {
 			$oClientData->setAttributes($aClientFormData);
 			$oClientData->save();
+
 			return true;
 		}
+
 		return false;
 	}
 
@@ -269,8 +291,38 @@ class ClientData extends CActiveRecord
 	{
 		$this->dt_update = date('Y-m-d H:i:s', time());
 		$sDateFormatInBase = "Y-m-d";
-		$this->birthday=date($sDateFormatInBase,strtotime($this->birthday));
-		$this->passport_date=date($sDateFormatInBase,strtotime($this->passport_date));
+		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
+		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
+
+		if ($this->product >= 100) {
+
+			switch ($this->product) {
+				case 101:
+					$this->product = 1;
+					$this->get_way = 1;
+					break;
+				case 102:
+					$this->product = 2;
+					$this->get_way = 1;
+					break;
+				case 103:
+					$this->product = 3;
+					$this->get_way = 1;
+					break;
+				case 104:
+					$this->product = 1;
+					$this->get_way = 2;
+					break;
+				default:
+					$this->product = 0;
+					$this->get_way = 0;
+					break;
+			}
+		}
+		if ($this->product == 0) {
+			$this->get_way = 0;
+		}
+
 		return parent::beforeSave();
 	}
 
@@ -290,56 +342,62 @@ class ClientData extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'client_id' => 'Client',
-			'ip' => 'IP',
-			'tracking_id' => 'Tracking ID',
-			'phone' => 'Phone',
-			'job_phone' => 'Job Phone',
-			'first_name' => 'First Name',
-			'last_name' => 'Last Name',
-			'third_name' => 'Third Name',
-			'sex' => 'Sex',
-			'birthday' => 'Birthday',
-			'email' => 'Email',
-			'passport_series' => 'Passport Series',
-			'passport_number' => 'Passport Number',
-			'passport_issued' => 'Passport Issued',
-			'passport_code' => 'Passport Code',
-			'passport_date' => 'Passport Date',
-			'document' => 'Document',
-			'document_number' => 'Document Number',
-			'address_reg_region' => 'Address Reg Region',
-			'address_reg_city' => 'Address Reg City',
+			'client_id'           => 'Client',
+			'ip'                  => 'IP',
+			'tracking_id'         => 'Tracking ID',
+			'phone'               => 'Phone',
+			'password'            => 'Password',
+			'job_phone'           => 'Job Phone',
+			'first_name'          => 'First Name',
+			'last_name'           => 'Last Name',
+			'third_name'          => 'Third Name',
+			'sex'                 => 'Sex',
+			'birthday'            => 'Birthday',
+			'email'               => 'Email',
+			'passport_series'     => 'Passport Series',
+			'passport_number'     => 'Passport Number',
+			'passport_issued'     => 'Passport Issued',
+			'passport_code'       => 'Passport Code',
+			'passport_date'       => 'Passport Date',
+			'document'            => 'Document',
+			'document_number'     => 'Document Number',
+			'address_reg_region'  => 'Address Reg Region',
+			'address_reg_city'    => 'Address Reg City',
 			'address_reg_address' => 'Address Reg Address',
-			'relatives_one_fio' => 'Relatives One Fio',
+			'address_res_region'  => 'Address Res Region',
+			'address_res_city'    => 'Address Res City',
+			'address_res_address' => 'Address Res Address',
+			'address_reg_as_res'  => 'Address Reg As Res',
+			'relatives_one_fio'   => 'Relatives One Fio',
 			'relatives_one_phone' => 'Relatives One Phone',
-			'friends_fio' => 'Friends Fio',
-			'friends_phone' => 'Friends Phone',
-			'job_company' => 'Job Company',
-			'job_position' => 'Job Position',
-			'job_time' => 'Job Time',
-			'job_monthly_income' => 'Job Monthly Income',
+			'friends_fio'         => 'Friends Fio',
+			'friends_phone'       => 'Friends Phone',
+			'job_company'         => 'Job Company',
+			'job_position'        => 'Job Position',
+			'job_time'            => 'Job Time',
+			'job_monthly_income'  => 'Job Monthly Income',
 			'job_monthly_outcome' => 'Job Monthly Outcome',
-			'have_past_credit' => 'Have Past Credit',
-			'secret_question' => 'Secret Question',
-			'secret_answer' => 'Secret  Answer',
-			'numeric_code' => 'Numeric Code',
-			'sms_code' => 'SMS Code',
-			'product' => 'Product',
-			'get_way' => 'Get Way',
-			'complete' => 'Complete',
-			'dt_add' => 'Dt Add',
-			'dt_update' => 'Dt Update',
-			'identification_type'=>'Identification Type',
-			'flag_identified' => 'Flag Identified',
-			'flag_sms_confirmed' => 'Flag SMS Confirmed',
-			'flag_processed' => 'Flag Processed',
-			'flag_archived' => 'Flag Archived',
+			'have_past_credit'    => 'Have Past Credit',
+			'secret_question'     => 'Secret Question',
+			'secret_answer'       => 'Secret  Answer',
+			'numeric_code'        => 'Numeric Code',
+			'sms_code'            => 'SMS Code',
+			'product'             => 'Product',
+			'get_way'             => 'Get Way',
+			'complete'            => 'Complete',
+			'dt_add'              => 'Dt Add',
+			'dt_update'           => 'Dt Update',
+			'identification_type' => 'Identification Type',
+			'flag_identified'     => 'Flag Identified',
+			'flag_sms_confirmed'  => 'Flag SMS Confirmed',
+			'flag_processed'      => 'Flag Processed',
+			'flag_archived'       => 'Flag Archived',
 		);
 	}
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
 	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
 	 */
 	public function search()
@@ -353,6 +411,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('ip', $this->client_id, true);
 		$criteria->compare('tracking_id', $this->client_id, true);
 		$criteria->compare('phone', $this->phone, true);
+		$criteria->compare('password', $this->phone, true);
 		$criteria->compare('job_phone', $this->job_phone, true);
 		$criteria->compare('first_name', $this->first_name, true);
 		$criteria->compare('last_name', $this->last_name, true);
@@ -367,9 +426,13 @@ class ClientData extends CActiveRecord
 		$criteria->compare('passport_date', $this->passport_date, true);
 		$criteria->compare('document', $this->document, true);
 		$criteria->compare('document_number', $this->document_number, true);
-		$criteria->compare('address_reg_region', $this->address_reg_region, true);
+		$criteria->compare('address_reg_region', $this->address_reg_region);
 		$criteria->compare('address_reg_city', $this->address_reg_city, true);
 		$criteria->compare('address_reg_address', $this->address_reg_address, true);
+		$criteria->compare('address_res_region', $this->address_reg_region);
+		$criteria->compare('address_res_city', $this->address_reg_city, true);
+		$criteria->compare('address_res_address', $this->address_reg_address, true);
+		$criteria->compare('address_reg_as_res', $this->address_reg_region);
 		$criteria->compare('relatives_one_fio', $this->relatives_one_fio, true);
 		$criteria->compare('relatives_one_phone', $this->relatives_one_phone, true);
 		$criteria->compare('friends_fio', $this->friends_fio, true);
@@ -399,4 +462,4 @@ class ClientData extends CActiveRecord
 			'criteria' => $criteria,
 		));
 	}
-} 
+}

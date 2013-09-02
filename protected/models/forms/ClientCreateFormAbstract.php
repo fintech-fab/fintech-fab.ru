@@ -87,7 +87,7 @@ class ClientCreateFormAbstract extends CFormModel
 	public $address_reg_address; // Адрес (Улица, дом, корпус/строение, квартира)*
 	public $address_reg_post_index; // Индекс
 
-	public $address_reg_as_res = 1; // признак совпадения адресов регистрации и места жительства
+	public $address_reg_as_res = 0; // признак совпадения адресов регистрации и места жительства
 
 	public $address_res_region; // Республика/край/область*
 	public $address_res_city; // Населенный пункт (Город, поселок, деревня и т.д.)*
@@ -266,7 +266,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
-					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern'=>'/^9\d{'.(SiteParams::C_PHONE_LENGTH - 1).'}$/');
+					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/');
 					break;
 				case 'phone_home':
 				case 'job_phone':
@@ -285,7 +285,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 
 				case 'job_income_add':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля их списка', 'range' => array_keys(Dictionaries::$aOverMoney));
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля из списка', 'range' => array_keys(Dictionaries::$aOverMoney));
 					break;
 
 				case 'have_car':
@@ -306,7 +306,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 
 				case 'secret_question':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля их списка', 'range' => array_keys(Dictionaries::$aSecretQuestions));
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение поля из списка', 'range' => array_keys(Dictionaries::$aSecretQuestions));
 					break;
 
 				case 'citizenship':
@@ -477,6 +477,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	public function getAttributes($aAttributes = null)
 	{
+
 		if (!$aAttributes) {
 			$aAttributes = array();
 			$aRules = $this->rules();
@@ -486,7 +487,9 @@ class ClientCreateFormAbstract extends CFormModel
 				} elseif (gettype($aRule[0]) === "array") {
 					foreach ($aRule[0] as $aSubRule) {
 						if (gettype($aSubRule[0]) === "string") {
-							$aAttributes[] = $aSubRule[0];
+							if (strlen($aSubRule[0]) > 1) {
+								$aAttributes[] = $aSubRule[0];
+							}
 						}
 					}
 				}

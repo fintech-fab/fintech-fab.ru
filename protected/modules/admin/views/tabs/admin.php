@@ -2,21 +2,7 @@
 /* @var $this TabsController */
 /* @var $model Tabs */
 
-$this->breadcrumbs = array(
-	'Tabs' => array('index'),
-	'Manage',
-);
-
-$this->menu = array(
-	array('label' => 'Список страниц', 'url' => array('pages/index')),
-	array('label' => 'Создать страницу', 'url' => array('pages/create')),
-	array('label' => 'Управление страницами', 'url' => array('pages/admin')),
-	array('label' => 'Список вкладок', 'url' => array('tabs/index')),
-	array('label' => 'Создать вкладку', 'url' => array('tabs/create')),
-	array('label' => 'Список нижних ссылок', 'url' => array('footerLinks/index')),
-	array('label' => 'Создать нижнюю ссылку', 'url' => array('footerLinks/create')),
-	array('label' => 'Управление нижними ссылками', 'url' => array('footerLinks/admin')),
-);
+$this->pageTitle = Yii::app()->name . " - Управление вкладками";
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -75,18 +61,19 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
 		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'                    => 'tabs-grid',
+	'type'                  => 'striped bordered condensed',
 	'dataProvider'          => $model->search(),
 	'filter'                => $model,
 	'rowCssClassExpression' => '"items[]_{$data->tab_id}"',
 	'columns'               => array(
-		'tab_id',
+		array('name' => 'tab_id', 'header' => 'ID', 'htmlOptions' => array('style' => 'width: 50px;')),
 		'tab_name',
 		'tab_title',
 		//'tab_content',
 		array(
-			'class' => 'CButtonColumn',
+			'class' => 'bootstrap.widgets.TbButtonColumn',
 		),
 	),
 )); ?>

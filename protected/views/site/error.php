@@ -1,9 +1,10 @@
 <?php
 /* @var $this SiteController */
 /* @var $error array */
+/* @var $code */
 
-$this->pageTitle=Yii::app()->name . ' - Ошибка';
-$this->breadcrumbs=array(
+$this->pageTitle = Yii::app()->name . ' - Ошибка';
+$this->breadcrumbs = array(
 	'Ошибка',
 );
 

@@ -6,7 +6,8 @@ class FooterLinksWidget extends CWidget
 
 	public function run()
 	{
-		$this->render('footer_links');
+		if (!empty($this->links)) {
+			$this->render('footer_links');
+		}
 	}
 }
-?>

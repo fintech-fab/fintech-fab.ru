@@ -21,8 +21,8 @@
 	<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
 
 	<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-	<?php //Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
-	<?php Yii::app()->bootstrap->registerCoreCss();
+	<?php
+	Yii::app()->bootstrap->registerCoreCss();
 	Yii::app()->bootstrap->registerYiiCss();
 	Yii::app()->bootstrap->registerCoreScripts();
 	?>
@@ -49,7 +49,7 @@
 <!-- ClickTale end of Top part -->
 
 <nav class="navbar navbar-top">
-	<div class="navbar-inner">
+	<div class="navbar-inner navbar-inner-main">
 		<div class="container">
 
 			<!-- Special image

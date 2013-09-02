@@ -2,20 +2,7 @@
 /* @var $this FooterLinksController */
 /* @var $model FooterLinks */
 
-$this->breadcrumbs = array(
-	'Footer Links' => array('index'),
-	'Manage',
-);
-
-$this->menu = array(
-	array('label' => 'Список страниц', 'url' => array('pages/index')),
-	array('label' => 'Создать страницу', 'url' => array('pages/create')),
-	array('label' => 'Список вкладок', 'url' => array('tabs/index')),
-	array('label' => 'Создать вкладку', 'url' => array('tabs/create')),
-	array('label' => 'Управление вкладками', 'url' => array('tabs/admin')),
-	array('label' => 'Список нижних ссылок', 'url' => array('footerLinks/index')),
-	array('label' => 'Создать нижнюю ссылку', 'url' => array('footerLinks/create')),
-);
+$this->pageTitle = Yii::app()->name . " - Управление ссылками";
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -73,19 +60,20 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
 		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'                    => 'footer-links-grid',
+	'type'                  => 'striped bordered condensed',
 	'dataProvider'          => $model->search(),
 	'filter'                => $model,
 	'rowCssClassExpression' => '"items[]_{$data->link_id}"',
 	'columns'               => array(
-		'link_id',
+		array('name' => 'link_id', 'header' => 'ID', 'htmlOptions' => array('style' => 'width: 50px;')),
 		'link_name',
 		'link_title',
 		'link_url',
 		//'link_content',
 		array(
-			'class' => 'CButtonColumn',
+			'class' => 'bootstrap.widgets.TbButtonColumn',
 		),
 	),
 )); ?>

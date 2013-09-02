@@ -36,8 +36,18 @@ function alertModal(heading, question, okButtonTxt) {
 
 	confirmModal.find('#okButton').click(function (event) {
 		confirmModal.modal('hide');
-		$(document).delay(400).queue(function(){errorHappened = false; $(document).clearQueue();});
+		$(document).delay(1000).queue(function () {
+			errorHappened = false;
+			$(document).clearQueue();
+		});
 	});
 
 	confirmModal.modal('show');
 };
+
+function in_array(what, where) {
+	for (var i = 0, length_array = where.length; i < length_array; i++)
+		if (what == where[i])
+			return true;
+	return false;
+}
