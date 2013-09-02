@@ -82,6 +82,8 @@ class ImagesComponent
 	{
 		$sPath = Yii::app()->getBasePath() . '/../public/uploads/images/';
 		@unlink($sPath . $sImage);
+		$sPath = Yii::app()->getBasePath() . '/../public/uploads/thumbnails/';
+		@unlink($sPath . $sImage);
 	}
 
 	/**
