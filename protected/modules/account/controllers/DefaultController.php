@@ -169,7 +169,7 @@ class DefaultController extends Controller
 	{
 
 		if (Yii::app()->user->isGuest) {
-			$model = new LoginForm;
+			$model = new AccountLoginForm;
 
 			// if it is ajax validation request
 			if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
