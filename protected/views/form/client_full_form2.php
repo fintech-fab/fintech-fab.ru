@@ -31,7 +31,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			){
 				return true;
 			} else {
-				alertModal("Ошибка!","Сначала следует заполнить все поля формы", "OK");
+				alertModal("Ошибка!","Сначала следует заполнить все поля формы и поставить галочку, что Вы согласны с условиями", "OK");
 			}
 
 		}',
