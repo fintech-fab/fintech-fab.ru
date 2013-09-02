@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class PagesController
+ */
 
 class PagesController extends Controller
 {
