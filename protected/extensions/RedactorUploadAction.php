@@ -81,13 +81,14 @@ class RedactorUploadAction extends CAction
 		}
 
 		$ext = $file->getExtensionName();
-		$name = $file->name;
+		$name = trim($file->name);
 
-		if (strlen($ext)) {
-			$name = trim(substr($name, 0, -1 - strlen($ext)));
+		if (strlen($ext) > 0) {
+			$name = substr($name, 0, -1 - strlen($ext));
 		}
 
-		$name = str_replace(array(" ", "  "), "-", $name);
+		// удаление повторных пробелов
+		$name = preg_replace('/\s\s+/', '_', $name);
 
 		// если в имени файла есть запрещённые символы, то заменяем имя на хэш
 		if (preg_match("/^[a-z0-9\-_]+$/ui", $name) == 0) {
