@@ -34,12 +34,12 @@ $this->breadcrumbs = array(
 	<div class="span4">
 		<div class="well" style="padding: 8px; 0;">
 			<?php
+			$this->menu[] = array('label' => 'Состояние подписки', 'url' => array(Yii::app()->createUrl('account')));
 			$this->menu[] = array(
-				'label' => 'Состояние подписки', 'url' => array(
+				'label'     => 'История займов', 'url' => array(
 					Yii::app()->createUrl('account')
-				)
+				), 'active' => true
 			);
-			$this->menu[] = array('label' => 'История займов', 'url' => array(Yii::app()->createUrl('account')));
 			$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
 			$this->beginWidget('bootstrap.widgets.TbMenu', array(
