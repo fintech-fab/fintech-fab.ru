@@ -6,7 +6,7 @@ class PagesController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout='//layouts/column2';
+	public $layout = '//layouts/column2';
 
 	/**
 	 * @return array action filters
@@ -22,54 +22,76 @@ class PagesController extends Controller
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
+	 *
 	 * @return array access control rules
 	 */
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('view'),
-				'users'=>array('*'),
+			array(
+				'allow', // allow all users to perform 'index' and 'view' actions
+				'actions' => array('view', 'viewById'),
+				'users'   => array('*'),
 			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
+			array(
+				'deny', // deny all users
+				'users' => array('*'),
 			),
 		);
 	}
 
 	/**
 	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
+	 *
+	 * @param $name
+	 *
+	 * @internal param int $id the ID of the model to be displayed
 	 */
 	public function actionView($name)
 	{
-		$this->layout='//layouts/column1';
-		$this->render('view',array(
-			'model'=>$this->loadModelByName($name),
+		$this->layout = '//layouts/column1';
+		$this->render('view', array(
+			'model' => $this->loadModelByName($name),
 		));
+	}
+
+	/**
+	 * @param $id
+	 */
+	public function actionViewById($id)
+	{
+		$this->renderPartial('viewPartial', array(
+			'model' => $this->loadModel($id),
+		), false, true);
 	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
+	 *
 	 * @param integer $id the ID of the model to be loaded
+	 *
 	 * @return Pages the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModelByName($name)
 	{
 		//$model=Pages::model()->findByPk($id);
-		$model=Pages::model()->findByAttributes(array('page_name'=>$name));
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		$model = Pages::model()->findByAttributes(array('page_name' => $name));
+		if ($model === null) {
+			throw new CHttpException(404, 'The requested page does not exist.');
+		}
+
 		return $model;
 	}
 
 	public function loadModel($id)
 	{
-		$model=Pages::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		$model = Pages::model()->findByPk($id);
+		if ($model === null) {
+			throw new CHttpException(404, 'The requested page does not exist.');
+		}
+
 		return $model;
 	}
 }

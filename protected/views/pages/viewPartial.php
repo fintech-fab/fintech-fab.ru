@@ -1,8 +1,8 @@
 <?php
-/* @var $this FooterLinksController */
-/* @var $model FooterLinks */
+/* @var $this PagesController */
+/* @var $model Pages */
 
-$this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->link_title);
+$this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +16,6 @@ $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->link_title);
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->getBaseUrl(true); ?>/static/css/payment.css" />
 </head>
 <body>
-<?php echo $model->link_content; ?>
+<?php echo $model->page_content; ?>
 </body>
 </html>
