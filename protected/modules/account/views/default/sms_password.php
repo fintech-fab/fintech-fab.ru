@@ -2,7 +2,6 @@
 /**
  * @var DefaultController $this
  * @var SMSPasswordForm   $form
- * @var                   $smsState
  * @var                   $passForm
  * @var                   $needSmsPass
  * @var                   $act
@@ -17,10 +16,10 @@
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или исчерпаны все попытки ввода
 
-$hideSmsSendButton = ($smsState['sent'] || !$smsState['needSmsPass']);
-$flagSmsAuthDone = $smsState['smsAuthDone'];
+$hideSmsSendButton = ($this->smsState['sent'] || !$this->smsState['needSmsPass']);
+$flagSmsAuthDone = $this->smsState['smsAuthDone'];
 
-$flagHideForm = (empty($smsState['sent']) || $flagSmsAuthDone);
+$flagHideForm = (empty($this->smsState['sent']) || $flagSmsAuthDone);
 ?>
 
 <div class="span10">

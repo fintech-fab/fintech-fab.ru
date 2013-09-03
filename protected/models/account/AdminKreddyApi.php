@@ -23,7 +23,7 @@ class AdminKreddyApi extends CModel
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
-	const API_ACTION_GET_HISTORY = 'siteClient/getHistory';
+	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteSms/auth';
 	const API_ACTION_CHECK_SMS_CODE = 'siteSms/auth';

@@ -1,10 +1,18 @@
 <?php
-
+/**
+ * Class DefaultController
+ */
 class DefaultController extends Controller
 {
 
-	public $layout = '/layouts/column1';
+	public $layout = '/layouts/column2';
 
+	public $clientData;
+	public $smsState;
+
+	/**
+	 * @return array
+	 */
 	public function filters()
 	{
 		return array(
@@ -44,18 +52,17 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{
-
 		echo '<pre>' . "";
 		CVarDumper::dump(Yii::app()->session['akApi_token']);
 		echo '</pre>';
 		$oApi = new AdminKreddyApi();
-		$aData = $oApi->getClientInfo();
+		$this->clientData = $oApi->getClientInfo();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9 || $aData['code'] === 777)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $aData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'index'), true);
-			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'smsState' => $smsState));
+		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9 || $this->clientData['code'] === 777)) {
+			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
+			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -69,13 +76,13 @@ class DefaultController extends Controller
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			$oApi = new AdminKreddyApi();
-			$aData = $oApi->getClientInfo();
+			$this->clientData = $oApi->getClientInfo();
 			$oSmsPassForm = new SMSPasswordForm();
 
-			if ($aData && ($aData['code'] === 0 || $aData['code'] === 9 || $aData['code'] === 777)) {
-				$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $aData['code'] == 9);
-				$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'index'), true);
-				$this->renderPartial('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'smsState' => $smsState));
+			if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9 || $this->clientData['code'] === 777)) {
+				$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+				$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
+				$this->renderPartial('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
 			} else {
 				Yii::app()->user->logout();
 				$this->redirect(Yii::app()->user->loginUrl);
@@ -90,14 +97,14 @@ class DefaultController extends Controller
 	public function actionHistory()
 	{
 		$oApi = new AdminKreddyApi();
-		$aData = $oApi->getClientInfo();
+		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $aData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
-			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'history' => $aHistory, 'smsState' => $smsState));
+		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
+			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true);
+			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -111,14 +118,14 @@ class DefaultController extends Controller
 	public function actionAjaxHistory()
 	{
 		$oApi = new AdminKreddyApi();
-		$aData = $oApi->getClientInfo();
+		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
-			$this->renderPartial('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'history' => $aHistory, 'smsState' => $smsState));
+		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
+			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $this->clientData['code'] == 0, 'needSmsPass' => $this->clientData['code'] == 9);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true);
+			$this->renderPartial('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -214,6 +221,7 @@ class DefaultController extends Controller
 
 	public function actionLogin()
 	{
+		$this->layout = '/layouts/column1';
 
 		if (Yii::app()->user->isGuest) {
 			$model = new AccountLoginForm;
