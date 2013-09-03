@@ -17,6 +17,7 @@ class AdminKreddyApi extends CModel
 	const SMS_AUTH_OK = 0;
 	const SMS_SEND_OK = 1;
 	const SMS_CODE_ERROR = 2;
+	const SMS_CANT_SEND = 3;
 
 	const API_ACTION_TEST = 'siteClient/test';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
@@ -157,8 +158,9 @@ class AdminKreddyApi extends CModel
 			//тут типа запрос данных по токену
 			$aGetData = $this->getData('info');
 
-			//echo '<pre>' . ""; CVarDumper::dump($aGetData); echo '</pre>';
+			//if(gettype($aGetData)==='array'){
 			$aData = array_merge($aData, $aGetData);
+			//}
 		} else {
 			$aData = false;
 		}
@@ -197,7 +199,7 @@ class AdminKreddyApi extends CModel
 		if (!empty($this->token)) {
 			switch ($sType) {
 				case 'info':
-					$sAction = self::API_ACTION_TEST;
+					$sAction = self::API_ACTION_GET_INFO;
 					break;
 				case 'history':
 					$sAction = self::API_ACTION_GET_HISTORY;

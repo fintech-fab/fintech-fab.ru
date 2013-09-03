@@ -44,12 +44,16 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{
+
+		echo '<pre>' . "";
+		CVarDumper::dump(Yii::app()->session['akApi_token']);
+		echo '</pre>';
 		$oApi = new AdminKreddyApi();
 		$aData = $oApi->getClientInfo();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
+		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9 || $aData['code'] === 777)) {
+			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $aData['code'] == 9);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'index'), true);
 			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'smsState' => $smsState));
 		} else {
@@ -68,8 +72,8 @@ class DefaultController extends Controller
 			$aData = $oApi->getClientInfo();
 			$oSmsPassForm = new SMSPasswordForm();
 
-			if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-				$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
+			if ($aData && ($aData['code'] === 0 || $aData['code'] === 9 || $aData['code'] === 777)) {
+				$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $aData['code'] == 9);
 				$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'index'), true);
 				$this->renderPartial('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'smsState' => $smsState));
 			} else {
@@ -91,7 +95,7 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($aData && ($aData['code'] === 0 || $aData['code'] === 9)) {
-			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $aData['code'] == 0, 'needSmsPass' => $aData['code'] == 9);
+			$smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $aData['code'] == 9);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsState' => $smsState, 'act' => 'history'), true);
 			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'data' => $aData, 'history' => $aHistory, 'smsState' => $smsState));
 		} else {
@@ -136,9 +140,26 @@ class DefaultController extends Controller
 				Yii::app()->session['smsPassSent'] = true;
 			}
 
+			if (empty($aResult['sms_message'])) {
+				$aResult['sms_message'] = '';
+			}
+
+			if (isset($aResult['sms_auth'])) {
+				switch ($aResult['sms_auth']) {
+					case 1:
+						$iSmsCode = 0;
+						break;
+					default:
+						$iSmsCode = 3;
+						break;
+				}
+			} else {
+				$iSmsCode = 3;
+			}
+
 			echo CJSON::encode(array(
-				"type" => $aResult['code'],
-				"text" => $aResult['message'],
+				"type" => $iSmsCode,
+				"text" => $aResult['sms_message'],
 			));
 		}
 		Yii::app()->end();
@@ -152,11 +173,8 @@ class DefaultController extends Controller
 
 	public function actionCheckSMSPass($act = 'index')
 	{
-		//$SmsTries = SiteParams::MAX_SMSCODE_TRIES;
-
 		if (Yii::app()->request->isAjaxRequest) {
 			if (isset($_POST['SMSPasswordForm'])) {
-				//$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
 				$passForm = new SMSPasswordForm();
 				$aPostData = $_POST['SMSPasswordForm'];
 				$passForm->setAttributes($aPostData);
@@ -165,6 +183,7 @@ class DefaultController extends Controller
 					$oApi = new AdminKreddyApi();
 					$bRes = $oApi->getSmsAuth($passForm->smsPassword);
 					if ($bRes) {
+						Yii::app()->session['smsAuthDone'] = true;
 						echo CJSON::encode(array(
 							"type" => 0,
 							"text" => Yii::app()->createUrl("account/ajax" . $act),
