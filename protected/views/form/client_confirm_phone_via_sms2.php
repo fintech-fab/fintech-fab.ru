@@ -29,7 +29,7 @@ $flagHideFormCheckSMSCode = empty($flagSmsSent) || !empty($flagExceededTries);
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 	<div class="span10">
-		Для завершения регистрации Вам нужно подтвердить свой телефон. <br /> Ваш телефон:
+		Для завершения регистрации Вам необходимо подтвердить свой телефон. <br /> Ваш телефон:
 		<strong>+7<?php echo $phone; ?></strong> <br /><br />
 
 		<?php
@@ -123,6 +123,15 @@ $flagHideFormCheckSMSCode = empty($flagSmsSent) || !empty($flagExceededTries);
 	$this->endWidget();
 	?>
 
+	<?php
+	// если исчерпано число попыток, то форма ввода кода не показывается, но нужно вывести сообщение
+	if (!empty($actionAnswer) && !empty($flagExceededTries)) {
+		echo '
+	<div class="help-block error span10" id="exceededTries">
+		' . $actionAnswer . '
+	</div>
+	';
+	} ?>
 	<?php $this->widget('YaMetrikaGoalsWidget', array(
 		'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
 		'iSkippedSteps' => 2,
