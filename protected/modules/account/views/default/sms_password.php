@@ -5,6 +5,7 @@
  * @var                   $smsState
  * @var                   $passForm
  * @var                   $needSmsPass
+ * @var                   $act
  */
 
 /*
@@ -58,9 +59,7 @@ $flagHideForm = (empty($smsState['sent']) || $flagSmsAuthDone);
                                 		$('#sms_pass_row').show();
                                 		$('.form-actions').show();
                                			$('#alertsmssent').fadeIn();
-                                	}
-                                	else if(data.type==1)
-                                	{
+                                	} else if(data.type==1) {
                                 	    $('#send_sms').hide();
                                 		$('#sms_pass_row').show();
                                 		$('.form-actions').show();

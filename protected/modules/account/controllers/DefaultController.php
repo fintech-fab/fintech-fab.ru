@@ -132,7 +132,7 @@ class DefaultController extends Controller
 			$oApi = new AdminKreddyApi();
 			$aResult = $oApi->sendSMS();
 
-			if ($aResult['code'] == 0) {
+			if ($aResult && $aResult['code'] == 0 || $aResult['sms_auth' == 1]) {
 				Yii::app()->session['smsPassSent'] = true;
 			}
 

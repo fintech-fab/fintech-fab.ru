@@ -9,21 +9,29 @@
 
 class AdminKreddyApi extends CModel
 {
-
 	const ERROR_NONE = 0;
 	const ERROR_AUTH = 2;
 	const ERROR_TOKEN_EXPIRE = 5;
-	const ERROR_NEED_SMS_AUTH = 7;
+	const ERROR_NEED_SMS_AUTH = 9;
 
+	const SMS_AUTH_OK = 0;
+	const SMS_SEND_OK = 1;
+	const SMS_CODE_ERROR = 2;
+
+	const API_ACTION_TEST = 'siteClient/test';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getHistory';
 
-	const API_ACTION_REQ_SMS_PASS = 'siteToken/reqSms';
-	const API_ACTION_CHECK_SMS_PASS = 'siteToken/checkSms';
+	const API_ACTION_REQ_SMS_CODE = 'siteSms/auth';
+	const API_ACTION_CHECK_SMS_CODE = 'siteSms/auth';
 
 	private $token;
+
+	/**
+	 * @return array
+	 */
 
 	public function attributeNames()
 	{
@@ -39,6 +47,9 @@ class AdminKreddyApi extends CModel
 		$this->init();
 	}
 
+	/**
+	 *
+	 */
 
 	public function init()
 	{
@@ -47,6 +58,13 @@ class AdminKreddyApi extends CModel
 			$this->updateClientToken();
 		}
 	}
+
+	/**
+	 * @param $sPhone
+	 * @param $sPassword
+	 *
+	 * @return bool
+	 */
 
 	public function getAuth($sPhone, $sPassword)
 	{
@@ -62,6 +80,10 @@ class AdminKreddyApi extends CModel
 			return false;
 		}
 	}
+
+	/**
+	 * @return bool
+	 */
 
 	public function updateClientToken()
 	{
@@ -83,13 +105,19 @@ class AdminKreddyApi extends CModel
 		}
 	}
 
+	/**
+	 * @param $sSmsPassword
+	 *
+	 * @return bool
+	 */
+
 	public function getSmsAuth($sSmsPassword)
 	{
-		$aRequest = array('password' => $sSmsPassword);
+		$aRequest = array('sms_code' => $sSmsPassword);
 
-		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_SMS_PASS, $aRequest);
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_SMS_CODE, $aRequest);
 
-		if ($aTokenData['code'] === self::ERROR_NONE) {
+		if ($aTokenData['code'] === self::ERROR_NONE && $aTokenData['sms_auth'] === self::SMS_AUTH_OK) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 
@@ -99,12 +127,28 @@ class AdminKreddyApi extends CModel
 		}
 	}
 
-	public function sendSMS()
+	/**
+	 * @param bool $resend
+	 *
+	 * @return mixed
+	 */
+
+	public function sendSMS($resend = false)
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_PASS);
+		$aResult = false;
+		if (!$resend) {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE);
+		} else {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('resend' => 1));
+		}
 
 		return $aResult;
 	}
+
+
+	/**
+	 * @return array|bool
+	 */
 
 	public function getClientInfo()
 	{
@@ -113,6 +157,7 @@ class AdminKreddyApi extends CModel
 			//тут типа запрос данных по токену
 			$aGetData = $this->getData('info');
 
+			//echo '<pre>' . ""; CVarDumper::dump($aGetData); echo '</pre>';
 			$aData = array_merge($aData, $aGetData);
 		} else {
 			$aData = false;
@@ -120,6 +165,10 @@ class AdminKreddyApi extends CModel
 
 		return $aData;
 	}
+
+	/**
+	 * @return array|bool
+	 */
 
 	public function getHistory()
 	{
@@ -136,19 +185,25 @@ class AdminKreddyApi extends CModel
 		return $aData;
 	}
 
+	/**
+	 * @param $sType
+	 *
+	 * @return array|mixed
+	 */
+
 	private function getData($sType)
 	{
 		$aData = array('code' => self::ERROR_AUTH);
 		if (!empty($this->token)) {
 			switch ($sType) {
 				case 'info':
-					$sAction = self::API_ACTION_GET_INFO;
+					$sAction = self::API_ACTION_TEST;
 					break;
 				case 'history':
 					$sAction = self::API_ACTION_GET_HISTORY;
 					break;
 				default:
-					$sAction = 'siteClient/getInfo';
+					$sAction = self::API_ACTION_GET_INFO;
 					break;
 			}
 
@@ -158,10 +213,17 @@ class AdminKreddyApi extends CModel
 		return $aData;
 	}
 
+	/**
+	 * @param       $sAction
+	 * @param array $aRequest
+	 *
+	 * @return mixed
+	 */
+
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		//тут у нас непосредственно curl запрашивает данные
-		/*$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
+		$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
@@ -173,10 +235,10 @@ class AdminKreddyApi extends CModel
 
 		$response = curl_exec($ch);
 
-		$aData = CJSON::decode($response);*/
+		$aData = CJSON::decode($response);
 
 		//заглушка
-		$aData = array('code' => self::ERROR_AUTH);
+		/*$aData = array('code' => self::ERROR_AUTH);
 
 		if ($this->token == '159753' || $sAction === self::API_ACTION_TOKEN_CREATE) {
 			switch ($sAction) {
@@ -185,12 +247,12 @@ class AdminKreddyApi extends CModel
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
 					}
 					break;
-				case self::API_ACTION_CHECK_SMS_PASS:
+				case self::API_ACTION_CHECK_SMS_CODE:
 					if ($aRequest['password'] == '159753') {
 						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
 					}
 					break;
-				case self::API_ACTION_REQ_SMS_PASS:
+				case self::API_ACTION_REQ_SMS_CODE:
 					$aData = array('code' => self::ERROR_NONE, 'message' => 'OK');
 					break;
 				case self::API_ACTION_TOKEN_UPDATE:
@@ -226,7 +288,7 @@ class AdminKreddyApi extends CModel
 					$aData = array('code' => self::ERROR_AUTH);
 					break;
 			}
-		}
+		}*/
 
 		return $aData;
 	}
