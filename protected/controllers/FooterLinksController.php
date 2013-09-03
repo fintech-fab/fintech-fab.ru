@@ -43,13 +43,29 @@ class FooterLinksController extends Controller
 	/**
 	 * Displays a particular model.
 	 *
-	 * @param integer $id the ID of the model to be displayed
+	 * @param $name
 	 */
-	public function actionView($id)
+	public function actionView($name)
 	{
 		$this->renderPartial('view', array(
-			'model' => $this->loadModel($id),
+			'model' => $this->loadModelByName($name),
 		), false, true);
+	}
+
+	/**
+	 * @param $name
+	 *
+	 * @return CActiveRecord
+	 * @throws CHttpException
+	 */
+	public function loadModelByName($name)
+	{
+		$model = FooterLinks::model()->findByAttributes(array('link_name' => $name));
+		if ($model === null) {
+			throw new CHttpException(404, 'The requested page does not exist.');
+		}
+
+		return $model;
 	}
 
 	/**

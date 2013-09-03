@@ -30,7 +30,7 @@ class PagesController extends Controller
 		return array(
 			array(
 				'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array('view', 'viewById'),
+				'actions' => array('view', 'viewPartial'),
 				'users'   => array('*'),
 			),
 			array(
@@ -44,8 +44,6 @@ class PagesController extends Controller
 	 * Displays a particular model.
 	 *
 	 * @param $name
-	 *
-	 * @internal param int $id the ID of the model to be displayed
 	 */
 	public function actionView($name)
 	{
@@ -56,13 +54,29 @@ class PagesController extends Controller
 	}
 
 	/**
-	 * @param $id
+	 * @param $name
 	 */
-	public function actionViewById($id)
+	public function actionViewPartial($name)
 	{
 		$this->renderPartial('viewPartial', array(
-			'model' => $this->loadModel($id),
+			'model' => $this->loadModelByName($name),
 		), false, true);
+	}
+
+	/**
+	 * @param $name
+	 *
+	 * @return CActiveRecord
+	 * @throws CHttpException
+	 */
+	public function loadModelByName($name)
+	{
+		$model = Pages::model()->findByAttributes(array('page_name' => $name));
+		if ($model === null) {
+			throw new CHttpException(404, 'The requested page does not exist.');
+		}
+
+		return $model;
 	}
 
 	/**
@@ -74,17 +88,6 @@ class PagesController extends Controller
 	 * @return Pages the loaded model
 	 * @throws CHttpException
 	 */
-	public function loadModelByName($name)
-	{
-		//$model=Pages::model()->findByPk($id);
-		$model = Pages::model()->findByAttributes(array('page_name' => $name));
-		if ($model === null) {
-			throw new CHttpException(404, 'The requested page does not exist.');
-		}
-
-		return $model;
-	}
-
 	public function loadModel($id)
 	{
 		$model = Pages::model()->findByPk($id);
