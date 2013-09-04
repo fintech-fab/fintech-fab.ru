@@ -25,28 +25,28 @@ $this->menu[] = array(
 );
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
-if ($this->clientData['code'] == 0) {
-} else {
+if ($this->smsState['needSmsPass']) {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
+} else {
+	$this->widget('bootstrap.widgets.TbGridView', array(
+		'id'           => 'history-grid',
+		'dataProvider' => $historyProvider,
+		'type'         => 'striped bordered condensed',
+		'columns'      => array(
+			'id',
+			'client_product_id',
+			'transfer_group_id',
+			'transfer_type_id',
+			'amount_system',
+			'amount_actual',
+			'dt_add',
+			'dt_update'
+		),
+	));
+
 }
+
 echo $passFormRender;
-
-
-$this->widget('bootstrap.widgets.TbGridView', array(
-	'id'           => 'history-grid',
-	'dataProvider' => $historyProvider,
-	'type'         => 'striped bordered condensed',
-	'columns'      => array(
-		'id',
-		'client_product_id',
-		'transfer_group_id',
-		'transfer_type_id',
-		'amount_system',
-		'amount_actual',
-		'dt_add',
-		'dt_update'
-	),
-));
 
 echo '<pre>';
 print_r($history);

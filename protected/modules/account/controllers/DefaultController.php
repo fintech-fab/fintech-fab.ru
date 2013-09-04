@@ -57,7 +57,10 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->setSmsState($this->clientData['code']);
+			if ($this->clientData['code'] == 9) {
+				$needSmsPass = true;
+			}
+			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
 			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
 		} else {
@@ -78,7 +81,10 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->setSmsState($this->clientData['code']);
+			if ($this->clientData['code'] == 9) {
+				$needSmsPass = true;
+			}
+			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
 			$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
 		} else {
@@ -106,7 +112,10 @@ class DefaultController extends Controller
 
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->setSmsState($this->clientData['code']);
+			if ($this->clientData['code'] == 9) {
+				$needSmsPass = true;
+			}
+			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
 			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 		} else {
@@ -128,7 +137,10 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->setSmsState($this->clientData['code']);
+			if ($this->clientData['code'] == 9) {
+				$needSmsPass = true;
+			}
+			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
 			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
 		} else {
@@ -292,7 +304,8 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * @param int $code
+	 * @param bool $needSmsPass
+	 *
 	 */
 
 	public function setSmsState($needSmsPass = false)
