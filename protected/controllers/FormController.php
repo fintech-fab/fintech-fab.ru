@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class FormController
+ */
 class FormController extends Controller
 {
 	public $showTopPageWidget = true;

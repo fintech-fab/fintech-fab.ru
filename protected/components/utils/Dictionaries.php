@@ -258,6 +258,9 @@ class Dictionaries
 		"3" => "14",
 	);
 
+	/**
+	 * @return array
+	 */
 	public static function getProducts()
 	{
 		$aProducts = array(
@@ -267,14 +270,7 @@ class Dictionaries
 			//"0"   => "Только регистрация, пока не брать займ",
 		);
 
-		$sIp = Yii::app()->request->getUserHostAddress();
-		$sRegion = ids_ipGeoBase::getRegionByIP($sIp);
-
-		if (Yii::app()->siteParams->isLocalServer()) {
-			$sRegion = 'Москва';
-		}
-
-		if ($sRegion == 'Москва') {
+		if (Yii::app()->siteParams->isLocalServer() || self::isMoscowRegion()) {
 			$aProducts = array(
 				"101" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на карту Кредди</span>",
 				"102" => "<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на неделю на карту Кредди</span>",
@@ -435,6 +431,11 @@ class Dictionaries
 		return self::$aRegions;
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return string
+	 */
 	public static function getRegionName($id)
 	{
 		return empty(self::$aRegions[$id])
@@ -442,6 +443,11 @@ class Dictionaries
 			: self::$aRegions[$id];
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return string
+	 */
 	public static function getMaritalName($id)
 	{
 		return empty(self::$aMaritalStatuses[$id])
@@ -449,12 +455,23 @@ class Dictionaries
 			: self::$aMaritalStatuses[$id];
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return string
+	 */
 	public static function getLiabilitiesName($id)
 	{
 		return empty(self::$aLiabilities[$id])
 			? ''
 			: self::$aLiabilities[$id];
 	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return string
+	 */
 
 	public static function getYesNo($id)
 	{
@@ -463,5 +480,42 @@ class Dictionaries
 		}
 
 		return self::$aYesNo[$id];
+	}
+
+	/**
+	 * @return bool
+	 */
+	public static function isMoscowRegion()
+	{
+		if (isset(Yii::app()->session['isMoscowRegion']) && Yii::app()->session['isMoscowRegion']) {
+			return true;
+		} else {
+			$sIp = Yii::app()->request->getUserHostAddress();
+			$sRegion = ids_ipGeoBase::getRegionByIP($sIp);
+			if ($sRegion) {
+				if ($sRegion = 'Москва') {
+					Yii::app()->session['isMoscowRegion'] = true;
+
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				$oIpLite = new ip2location_lite;
+				$locations = $oIpLite->getCity($sIp);
+
+				if (!empty($locations) && is_array($locations) && !empty($locations['regionName'])) {
+					if ($locations['regionName'] === 'MOSCOW CITY') {
+						Yii::app()->session['isMoscowRegion'] = true;
+
+						return true;
+					} else {
+						return false;
+					}
+				}
+			}
+
+			return true; //если не удалось узнать регион, считаем что московский
+		}
 	}
 }

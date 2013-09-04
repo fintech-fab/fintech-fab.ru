@@ -1,6 +1,6 @@
 <?php
 
-class PagesController extends Controller
+class FooterLinksController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -30,7 +30,7 @@ class PagesController extends Controller
 		return array(
 			array(
 				'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array('view', 'viewPartial'),
+				'actions' => array('view'),
 				'users'   => array('*'),
 			),
 			array(
@@ -47,18 +47,7 @@ class PagesController extends Controller
 	 */
 	public function actionView($name)
 	{
-		$this->layout = '//layouts/column1';
-		$this->render('view', array(
-			'model' => $this->loadModelByName($name),
-		));
-	}
-
-	/**
-	 * @param $name
-	 */
-	public function actionViewPartial($name)
-	{
-		$this->renderPartial('viewPartial', array(
+		$this->renderPartial('view', array(
 			'model' => $this->loadModelByName($name),
 		), false, true);
 	}
@@ -71,7 +60,7 @@ class PagesController extends Controller
 	 */
 	public function loadModelByName($name)
 	{
-		$model = Pages::model()->findByAttributes(array('page_name' => $name));
+		$model = FooterLinks::model()->findByAttributes(array('link_name' => $name));
 		if ($model === null) {
 			throw new CHttpException(404, 'The requested page does not exist.');
 		}
@@ -90,7 +79,7 @@ class PagesController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model = Pages::model()->findByPk($id);
+		$model = FooterLinks::model()->findByPk($id);
 		if ($model === null) {
 			throw new CHttpException(404, 'The requested page does not exist.');
 		}

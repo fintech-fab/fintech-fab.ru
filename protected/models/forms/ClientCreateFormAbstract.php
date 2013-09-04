@@ -554,14 +554,14 @@ class ClientCreateFormAbstract extends CFormModel
 			'address_reg_region'     => 'Регион (республика/край/область)',
 			'address_reg_post_index' => 'Индекс',
 			'address_reg_city'       => 'Населенный пункт (город, поселок, деревня)',
-			'address_reg_address'    => 'Адрес (улица, дом, корпус/строение, квартира',
+			'address_reg_address'    => 'Адрес (улица, дом, корпус/строение, квартира)',
 
 			'address_reg_as_res'     => 'Совпадает с адресом проживания',
 
 			'address_res_region'     => 'Регион (республика/край/область)',
 			'address_res_post_index' => 'Индекс',
 			'address_res_city'       => 'Населенный пункт (город, поселок, деревня и т.д.)',
-			'address_res_address'    => 'Адрес (улица, дом, корпус/строение, квартира',
+			'address_res_address'    => 'Адрес (улица, дом, корпус/строение, квартира)',
 
 			'passport_series'        => 'Серия',
 			'passport_number'        => 'Номер',

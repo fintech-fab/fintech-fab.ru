@@ -29,7 +29,35 @@
 
 <?php
 if ($this->curStep == 1) {
-	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/chosen-conditions.js';
+	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/conditions.js';
 	Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
+
+	$sFormName = SiteParams::B_FULL_FORM ? 'ClientSelectProductForm2' : 'ClientSelectProductForm';
+	Yii::app()->clientScript->registerScript('myConditions', '
+		jQuery("#' . $sFormName . ' .radio").click(function () {
+			showConditions(jQuery(this).find("label > span"));
+			jQuery(".conditions").show();
+			jQuery("#conditions-img").show();
+			;
+			if (jQuery(this).find("input:checked").attr("value") == 0) {
+				jQuery(".conditions").hide();
+				jQuery("#conditions-img").hide();
+				;
+			}
+		});
+
+		jQuery("#' . $sFormName . ' .radio").each(function () {
+			if ((jQuery(this).find("input:checked").attr("value")) !== undefined) {
+				showConditions(jQuery(this).find("label > span"));
+				if (jQuery(this).find("input:checked").attr("value") == 0) {
+					jQuery(".conditions").hide();
+					jQuery("#conditions-img").hide();
+					;
+				}
+			}
+		});
+
+		showConditions(jQuery("#' . $sFormName . ' .radio:first label > span"));
+	', CClientScript::POS_READY);
 }
 ?>
