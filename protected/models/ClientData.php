@@ -287,7 +287,7 @@ class ClientData extends CActiveRecord
 		return false;
 	}
 
-	public function beforeSave()
+	protected function beforeSave()
 	{
 		$this->dt_update = date('Y-m-d H:i:s', time());
 		$sDateFormatInBase = "Y-m-d";

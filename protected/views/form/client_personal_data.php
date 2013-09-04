@@ -50,7 +50,7 @@ $this->pageTitle = Yii::app()->name;
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
 
 		<h2>Контактные данные</h2>
-		<? require dirname(__FILE__) . '/fields/contacts.php' ?>
+		<?php require dirname(__FILE__) . '/fields/contacts.php' ?>
 	</div>
 
 	<?php $this->widget('ChosenConditionsWidget', array(
@@ -59,24 +59,24 @@ $this->pageTitle = Yii::app()->name;
 
 	<div class="row span12">
 		<div class="span5"><h2>Личные данные</h2>
-			<? require dirname(__FILE__) . '/fields/name.php' ?>
-			<? require dirname(__FILE__) . '/fields/personal_info.php' ?>
+			<?php require dirname(__FILE__) . '/fields/name.php' ?>
+			<?php require dirname(__FILE__) . '/fields/personal_info.php' ?>
 		</div>
 		<div class="span5"><h2>Паспортные данные</h2>
-			<? require dirname(__FILE__) . '/fields/passport.php' ?>
+			<?php require dirname(__FILE__) . '/fields/passport.php' ?>
 		</div>
 	</div>
 
 	<div class="row span12">
 		<h2>Второй документ</h2>
 
-		<? require dirname(__FILE__) . '/fields/document.php' ?>
+		<?php require dirname(__FILE__) . '/fields/document.php' ?>
 	</div>
 
 	<div class="clearfix"></div>
 	<div class="row span11">
 		<div class="form-actions">
-			<? $this->widget('bootstrap.widgets.TbButton', array(
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type'       => 'primary',
 				'label'      => 'Далее →',

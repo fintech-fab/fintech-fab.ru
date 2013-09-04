@@ -40,7 +40,7 @@ $this->pageTitle = Yii::app()->name;
 		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
 
 		<h2>Адрес</h2>
-		<? require dirname(__FILE__) . '/fields/address_reg.php' ?>
+		<?php require dirname(__FILE__) . '/fields/address_reg.php' ?>
 	</div>
 
 	<?php $this->widget('ChosenConditionsWidget', array(
@@ -49,11 +49,11 @@ $this->pageTitle = Yii::app()->name;
 
 	<div class="row span12">
 		<h2>Контактное лицо</h2>
-		<? require dirname(__FILE__) . '/fields/relatives_one.php' ?>
+		<?php require dirname(__FILE__) . '/fields/relatives_one.php' ?>
 	</div>
 	<div class="row span12">
 		<h2>Дополнительный контакт (родственника/друга)</h2>
-		<? require dirname(__FILE__) . '/fields/friend.php' ?>
+		<?php require dirname(__FILE__) . '/fields/friend.php' ?>
 		<span class="span10">
 		<?php $this->widget('bootstrap.widgets.TbLabel', array(
 			'label'       => '* Указывая дополнительный номер телефона родственника или друга, Вы увеличиваете шансы получить одобрение по займу.',
@@ -65,7 +65,7 @@ $this->pageTitle = Yii::app()->name;
 	<div class="clearfix"></div>
 	<div class="row span11">
 		<div class="form-actions">
-			<? $this->widget('bootstrap.widgets.TbButton', array(
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type'       => 'primary',
 				'label'      => 'Далее →',

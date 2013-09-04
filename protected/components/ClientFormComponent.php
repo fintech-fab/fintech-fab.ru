@@ -338,14 +338,6 @@ class ClientFormComponent
 
 			$oClientForm = Yii::app()->clientForm->getFormModel();
 
-			/*$this->render('client_confirm_phone_via_sms', array(
-				'oClientCreateForm' => $oClientForm,
-				'phone'             => Yii::app()->clientForm->getSessionPhone(),
-				'actionAnswer'      => Dictionaries::C_ERR_SMS_TRIES,
-				'flagExceededTries' => true,
-				'flagSmsSent'       => $flagSmsSent,
-			));*/
-
 			return array(
 				'action' => 'render',
 				'params' => array(

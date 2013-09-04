@@ -162,7 +162,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 	 * Перед валидацией приводим телефон к 10-значному виду, для валидации уникальности по БД
 	 */
 
-	public function beforeValidate()
+	protected function beforeValidate()
 	{
 		if ($this->phone) {
 			//очистка данных
