@@ -277,7 +277,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 
 				case 'numeric_code':
-					$aRules[] = array($sFieldName, 'checkValidClientNumericCode', 'message' => 'Цифровой код должен состоять не менее, чем из ' . SiteParams::C_NUMERIC_CODE_MIN_LENGTH . ' цифр');
+					$aRules[] = array($sFieldName, 'checkValidClientNumericCode', 'message' => 'Цифровой код должен состоять не менее, чем из ' . SiteParams::C_NUMERIC_CODE_MIN_LENGTH . ' цифр и не более чем из ' . SiteParams::C_NUMERIC_CODE_MAX_LENGTH . ' цифр');
 					break;
 
 				case 'email':
