@@ -59,6 +59,8 @@ class DefaultController extends Controller
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			if ($this->clientData['code'] == 9) {
 				$needSmsPass = true;
+			} else {
+				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
@@ -83,6 +85,8 @@ class DefaultController extends Controller
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			if ($this->clientData['code'] == 9) {
 				$needSmsPass = true;
+			} else {
+				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
@@ -104,8 +108,8 @@ class DefaultController extends Controller
 		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
-		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['invoices'])) {
-			$oHistoryDataProvider = new CArrayDataProvider($aHistory['invoices']);
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time'));
 		} else {
 			$oHistoryDataProvider = new CArrayDataProvider(array());
 		}
@@ -114,6 +118,8 @@ class DefaultController extends Controller
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			if ($this->clientData['code'] == 9) {
 				$needSmsPass = true;
+			} else {
+				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
@@ -135,14 +141,21 @@ class DefaultController extends Controller
 		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time'));
+		} else {
+			$oHistoryDataProvider = new CArrayDataProvider(array());
+		}
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			if ($this->clientData['code'] == 9) {
 				$needSmsPass = true;
+			} else {
+				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
-			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
+			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);

@@ -26,10 +26,17 @@ $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->create
 //echo '<pre>';
 //print_r($this->clientData);
 //echo '</pre>';
-if ($this->clientData['code'] == 0) {
-	echo '<strong>Подписка активна до:</strong> ' . (@$this->clientData['subscription']['activity_to']) . ' <br/>';
-	echo '<strong>Баланс:</strong> ' . (@$this->clientData['subscription']['balance']) . ' руб. <br/>';
-	echo '<strong>Доступно займов:</strong> ' . (@$this->clientData['subscription']['available_loans']) . '<br/>';
+
+echo "<h4>Состояние подписки</h4>";
+
+if (!$this->smsState['needSmsPass']) {
+	if (@$this->clientData['subscription'] == false) {
+		echo "<h5>Нет активных подписок</h5>";
+	} else {
+		echo '<strong>Подписка активна до:</strong> ' . (@$this->clientData['subscription']['activity_to']) . ' <br/>';
+		echo '<strong>Баланс:</strong> ' . (@$this->clientData['subscription']['balance']) . ' руб. <br/>';
+		echo '<strong>Доступно займов:</strong> ' . (@$this->clientData['subscription']['available_loans']) . '<br/>';
+	}
 
 } else {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";

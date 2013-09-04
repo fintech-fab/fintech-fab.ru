@@ -18,12 +18,14 @@ $this->menu[] = array(
 
 );
 $this->menu[] = array(
-	'label'  => 'История займов', 'url' => array(
+	'label'  => 'История операций', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	),
 	'active' => true
 );
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
+
+echo "<h4>История операций</h4>";
 
 if ($this->smsState['needSmsPass']) {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
@@ -33,14 +35,12 @@ if ($this->smsState['needSmsPass']) {
 		'dataProvider' => $historyProvider,
 		'type'         => 'striped bordered condensed',
 		'columns'      => array(
-			'id',
-			'client_product_id',
-			'transfer_group_id',
-			'transfer_type_id',
-			'amount_system',
-			'amount_actual',
-			'dt_add',
-			'dt_update'
+			array('name' => 'time', 'header' => 'Дата'),
+			array('name' => 'type', 'header' => 'Тип'),
+			array(
+				'name'  => 'amount', 'header' => 'Сумма',
+				'value' => '($data["amount"]>0)?"+".$data["amount"]:$data["amount"]',
+			),
 		),
 	));
 
