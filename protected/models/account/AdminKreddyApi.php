@@ -24,6 +24,7 @@ class AdminKreddyApi extends CModel
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
+	const API_ACTION_RECOVER_PASSWORD = 'siteClient/recoverPassword';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteSms/auth';
 	const API_ACTION_CHECK_SMS_CODE = 'siteSms/auth';
@@ -224,73 +225,83 @@ class AdminKreddyApi extends CModel
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-		//тут у нас непосредственно curl запрашивает данные
-		$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
+		if ($sAction === self::API_ACTION_RECOVER_PASSWORD) {
+			//тут у нас непосредственно curl запрашивает данные
+			$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
-		curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
+			curl_setopt($ch, CURLOPT_POST, true);
 
-		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
+			$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
-		$response = curl_exec($ch);
+			$response = curl_exec($ch);
 
-		$aData = CJSON::decode($response);
+			$aData = CJSON::decode($response);
+		} else {
 
-		//заглушка
-		/*$aData = array('code' => self::ERROR_AUTH);
+			//заглушка
+			$aData = array('code' => self::ERROR_AUTH);
 
-		if ($this->token == '159753' || $sAction === self::API_ACTION_TOKEN_CREATE) {
-			switch ($sAction) {
-				case self::API_ACTION_TOKEN_CREATE:
-					if ($aRequest['login'] == '9154701913' && $aRequest['password'] == '159753') {
-						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
-					}
-					break;
-				case self::API_ACTION_CHECK_SMS_CODE:
-					if ($aRequest['password'] == '159753') {
-						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
-					}
-					break;
-				case self::API_ACTION_REQ_SMS_CODE:
-					$aData = array('code' => self::ERROR_NONE, 'message' => 'OK');
-					break;
-				case self::API_ACTION_TOKEN_UPDATE:
-					if ($aRequest['token'] == '159753') {
-						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
-					}
-					break;
-				case self::API_ACTION_GET_INFO:
-					$aData = array('code' => 9, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''));
-					break;
-				case self::API_ACTION_GET_HISTORY:
-					$aData = array('code' => 9);
-					break;
-				default:
-					$aData = array('code' => self::ERROR_AUTH);
-					break;
+			if ($this->token == '159753' || $sAction === self::API_ACTION_TOKEN_CREATE) {
+				switch ($sAction) {
+					case self::API_ACTION_TOKEN_CREATE:
+						if ($aRequest['login'] == '9154701913' && $aRequest['password'] == '159753') {
+							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
+						}
+						break;
+					case self::API_ACTION_CHECK_SMS_CODE:
+						if ($aRequest['password'] == '159753') {
+							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
+						}
+						break;
+					case self::API_ACTION_REQ_SMS_CODE:
+						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK');
+						break;
+					case self::API_ACTION_TOKEN_UPDATE:
+						if ($aRequest['token'] == '159753') {
+							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
+						}
+						break;
+					case self::API_ACTION_GET_INFO:
+						$aData = array('code' => 9, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''));
+						break;
+					case self::API_ACTION_GET_HISTORY:
+						$aData = array('code' => 9);
+						break;
+					case self::API_ACTION_RECOVER_PASSWORD:
+						if ($aRequest['phone'] === '9808055488' && empty($aRequest['sms_code'])) {
+							$aData = array('code' => self::SMS_SEND_OK, 'message' => 'СМС с кодом успешно отправлено');
+						} elseif ($aRequest['phone'] === '9808055488') {
+
+						}
+						break;
+					default:
+						$aData = array('code' => self::ERROR_AUTH);
+						break;
+				}
+			}
+			if ($this->token == '159753159753') {
+				switch ($sAction) {
+					case self::API_ACTION_TOKEN_UPDATE:
+						if ($aRequest['token'] == '159753159753') {
+							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
+						}
+						break;
+					case self::API_ACTION_GET_INFO:
+						$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
+						break;
+					case self::API_ACTION_GET_HISTORY:
+						$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
+						break;
+					default:
+						$aData = array('code' => self::ERROR_AUTH);
+						break;
+				}
 			}
 		}
-		if ($this->token == '159753159753') {
-			switch ($sAction) {
-				case self::API_ACTION_TOKEN_UPDATE:
-					if ($aRequest['token'] == '159753159753') {
-						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
-					}
-					break;
-				case self::API_ACTION_GET_INFO:
-					$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
-					break;
-				case self::API_ACTION_GET_HISTORY:
-					$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
-					break;
-				default:
-					$aData = array('code' => self::ERROR_AUTH);
-					break;
-			}
-		}*/
 
 		return $aData;
 	}
