@@ -99,7 +99,7 @@ class FormFieldValidateBehavior extends CBehavior
 		//очистка данных
 		$this->owner->$attribute = trim($this->owner->$attribute);
 		$this->owner->$attribute = preg_replace('/\s+/', '', $this->owner->$attribute);
-		if (strlen($this->owner->$attribute) < SiteParams::C_NUMERIC_CODE_MIN_LENGTH || !preg_match('/^\d+$/', $this->owner->$attribute)) {
+		if (strlen($this->owner->$attribute) < SiteParams::C_NUMERIC_CODE_MIN_LENGTH || strlen($this->owner->$attribute) > SiteParams::C_NUMERIC_CODE_MAX_LENGTH || !preg_match('/^\d+$/', $this->owner->$attribute)) {
 			$this->owner->addError($attribute, $param['message']);
 		}
 	}
