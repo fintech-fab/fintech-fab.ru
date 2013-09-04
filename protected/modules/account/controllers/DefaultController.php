@@ -57,7 +57,7 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+			$this->setSmsState($this->clientData['code']);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
 			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
 		} else {
@@ -78,7 +78,7 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+			$this->setSmsState($this->clientData['code']);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
 			$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
 		} else {
@@ -106,7 +106,7 @@ class DefaultController extends Controller
 
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+			$this->setSmsState($this->clientData['code']);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
 			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 		} else {
@@ -128,7 +128,7 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $this->clientData['code'] == 0, 'needSmsPass' => $this->clientData['code'] == 9);
+			$this->setSmsState($this->clientData['code']);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
 			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
 		} else {
@@ -289,5 +289,14 @@ class DefaultController extends Controller
 				echo $output;
 			}
 		}
+	}
+
+	/**
+	 * @param int $code
+	 */
+
+	public function setSmsState($needSmsPass = false)
+	{
+		$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass);
 	}
 }
