@@ -4,16 +4,11 @@
 	<div class="row">
 		<div class="span8">
 			<h3 class="pay_legend">Личный кабинет</h3><br />
-		</div>
-	</div>
-	<div class="clearfix"></div>
-	<div class="row">
-		<div class="span8">
 			<?php echo $content; ?>
 		</div>
 		<!-- content -->
 		<div class="span4">
-			<div class="well" style="padding: 8px; 0;">
+			<div class="well" style="padding: 8px; 0; margin-top: 20px;">
 				<?php
 
 				$this->beginWidget('bootstrap.widgets.TbMenu', array(
@@ -25,12 +20,16 @@
 				?>
 
 				<div style="padding-left: 20px;">
-					<h4><?= @$this->clientData['last_name'] . ' ' . @$this->clientData['first_name'] . ' ' . @$this->clientData['third_name']; ?></h4>
+					<h4><?= @$this->clientData['client_data']['fullname']; ?></h4>
 
 					<p>
 						<?php if (@$this->clientData['active_loan']['balance'] < 0) {
 							echo '<strong>Задолженность:</strong> ' . (@$this->clientData['active_loan']['balance'] * -1) . ' руб. <br/>';
-							echo '<strong>Вернуть до:</strong> ' . @$this->clientData['active_loan']['expired_to'] . '<br/>';
+							if (@$this->clientData['active_load']['expired']) {
+								echo '<strong>Платеж просрочен!<br/>Требовалось вернуть до: </strong> ' . @$this->clientData['active_loan']['expired_to'] . '<br/>';
+							} else {
+								echo '<strong>Вернуть до:</strong> ' . @$this->clientData['active_loan']['expired_to'] . '<br/>';
+							}
 						} else {
 							echo '<strong>Баланс:</strong> ' . (@$this->clientData['active_loan']['balance']) . ' руб. <br/>';
 						}

@@ -313,4 +313,9 @@ class AdminKreddyApi extends CModel
 		Yii::app()->session['akApi_token'] = $token;
 	}
 
+	public function logout()
+	{
+		$this->setSessionToken(null);
+	}
+
 }

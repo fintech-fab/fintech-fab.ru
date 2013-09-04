@@ -22,21 +22,16 @@ $this->menu[] = array(
 	)
 );
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
-?>
-<?php
 
-echo '<pre>';
-print_r($this->clientData);
-echo '</pre>';
+//echo '<pre>';
+//print_r($this->clientData);
+//echo '</pre>';
 if ($this->clientData['code'] == 0) {
+	echo '<strong>Подписка активна до:</strong> ' . (@$this->clientData['subscription']['activity_to']) . ' <br/>';
+	echo '<strong>Баланс:</strong> ' . (@$this->clientData['subscription']['balance']) . ' руб. <br/>';
+	echo '<strong>Доступно займов:</strong> ' . (@$this->clientData['subscription']['available_loans']) . '<br/>';
+
 } else {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
 }
 echo $passFormRender;
-
-if ($this->smsState['smsAuthDone']) {
-	echo '<strong>Подписка активна до:</strong> ' . (@$this->clientData['subscription']['activity_to']) . ' <br/>';
-	echo '<strong>Баланс:</strong> ' . (@$this->clientData['subscription']['balance']) . ' руб. <br/>';
-	echo '<strong>Доступно займов:</strong> ' . (@$this->clientData['subscription']['available_loans']) . '<br/>';
-}
-?>

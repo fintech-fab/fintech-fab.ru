@@ -52,14 +52,11 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{
-		echo '<pre>' . "";
-		CVarDumper::dump(Yii::app()->session['akApi_token']);
-		echo '</pre>';
 		$oApi = new AdminKreddyApi();
 		$this->clientData = $oApi->getClientInfo();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9 || $this->clientData['code'] === 777)) {
+		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
 			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
@@ -74,20 +71,21 @@ class DefaultController extends Controller
 	 */
 	public function actionAjaxIndex()
 	{
-		if (Yii::app()->request->isAjaxRequest) {
-			$oApi = new AdminKreddyApi();
-			$this->clientData = $oApi->getClientInfo();
-			$oSmsPassForm = new SMSPasswordForm();
+		$this->layout = '/layouts/column2_ajax';
+		//if (Yii::app()->request->isAjaxRequest) {
+		$oApi = new AdminKreddyApi();
+		$this->clientData = $oApi->getClientInfo();
+		$oSmsPassForm = new SMSPasswordForm();
 
-			if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9 || $this->clientData['code'] === 777)) {
-				$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
-				$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
-				$this->renderPartial('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
-			} else {
-				Yii::app()->user->logout();
-				$this->redirect(Yii::app()->user->loginUrl);
-			}
+		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
+			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
+			$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
+		} else {
+			Yii::app()->user->logout();
+			$this->redirect(Yii::app()->user->loginUrl);
 		}
+		//}
 	}
 
 	/**
@@ -100,11 +98,17 @@ class DefaultController extends Controller
 		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['invoices'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['invoices']);
+		} else {
+			$oHistoryDataProvider = new CArrayDataProvider(array());
+		}
+
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $this->clientData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true);
-			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
+			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -117,6 +121,7 @@ class DefaultController extends Controller
 
 	public function actionAjaxHistory()
 	{
+		$this->layout = '/layouts/column2_ajax';
 		$oApi = new AdminKreddyApi();
 		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
@@ -124,8 +129,8 @@ class DefaultController extends Controller
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => $this->clientData['code'] == 0, 'needSmsPass' => $this->clientData['code'] == 9);
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true);
-			$this->renderPartial('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
+			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -252,7 +257,37 @@ class DefaultController extends Controller
 	 */
 	public function actionLogout()
 	{
+		Yii::app()->session['smsPassSent'] = false;
+		Yii::app()->session['smsAuthDone'] = false;
+		$oApi = new AdminKreddyApi();
+		$oApi->logout();
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+
+	/**
+	 * @param      $view
+	 * @param null $data
+	 * @param bool $return
+	 *
+	 * @return string
+	 */
+
+	public function renderWithoutProcess($view, $data = null, $return = false)
+	{
+		if ($this->beforeRender($view)) {
+			$output = $this->renderPartial($view, $data, true);
+			if (($layoutFile = $this->getLayoutFile($this->layout)) !== false) {
+				$output = $this->renderFile($layoutFile, array('content' => $output), true);
+			}
+
+			$this->afterRender($view, $output);
+
+			if ($return) {
+				return $output;
+			} else {
+				echo $output;
+			}
+		}
 	}
 }
