@@ -86,7 +86,6 @@ class ApiController extends CController
 	 *
 	 * @return bool
 	 */
-
 	protected function beforeAction($oAction)
 	{
 		if (!Yii::app()->siteParams->isLocalServer()) {

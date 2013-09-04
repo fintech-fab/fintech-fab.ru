@@ -31,7 +31,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			){
 				return true;
 			} else {
-				alertModal("Ошибка!","Сначала следует заполнить все поля формы", "OK");
+				alertModal("Ошибка!","Сначала следует заполнить все поля формы и подтвердить, что Вы согласны с условиями", "OK");
 			}
 
 		}',
@@ -117,7 +117,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="personalData" class="accordion-body collapse in">
 			<div class="accordion-inner">
 				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/personal_data.php' ?>
+					<?php require dirname(__FILE__) . '/fields2/personal_data.php' ?>
 				</div>
 			</div>
 		</div>
@@ -130,7 +130,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="passportData" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/passport_data.php' ?>
+					<?php require dirname(__FILE__) . '/fields2/passport_data.php' ?>
 				</div>
 			</div>
 		</div>
@@ -143,7 +143,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="address" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/address_reg.php' ?>
+					<?php require dirname(__FILE__) . '/fields2/address_reg.php' ?>
 				</div>
 			</div>
 		</div>
@@ -156,7 +156,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="jobInfo" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/job_info.php' ?>
+					<?php require dirname(__FILE__) . '/fields2/job_info.php' ?>
 				</div>
 			</div>
 		</div>
@@ -169,7 +169,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="sendForm" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<? require dirname(__FILE__) . '/fields2/send.php' ?>
+					<?php require dirname(__FILE__) . '/fields2/send.php' ?>
 				</div>
 			</div>
 		</div>
@@ -188,7 +188,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			</div>
 			<div class="clearfix"></div>
 			<div class="row">
-				<? $this->widget('bootstrap.widgets.TbButton', array(
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'id'          => 'submitButton',
 					'buttonType'  => 'submit',
 					'type'        => 'primary',

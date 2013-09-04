@@ -77,7 +77,7 @@ class ClientAddressForm extends ClientCreateFormAbstract
 	 * Перед валидацией приводим номера телефонов к 10-значному виду для сравнения с phone
 	 *
 	 */
-	public function beforeValidate()
+	protected function beforeValidate()
 	{
 		if ($this->relatives_one_phone) {
 			//очистка данных

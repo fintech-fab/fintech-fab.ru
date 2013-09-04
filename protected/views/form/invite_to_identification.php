@@ -84,7 +84,7 @@ $this->pageTitle = Yii::app()->name;
 		<div class="row">
 			<div class="span5">
 				<div class="form-actions ident-actions">
-					<? $this->widget('bootstrap.widgets.TbButton', array(
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'ident1',
 						'buttonType'  => 'button',
 						'type'        => 'primary',
@@ -106,7 +106,7 @@ $this->pageTitle = Yii::app()->name;
 			</div>
 			<div class="span5 offset1">
 				<div class="form-actions ident-actions">
-					<? $this->widget('bootstrap.widgets.TbButton', array(
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'buttonType'  => 'button',
 						'type'        => 'primary',
 						'label'       => 'Пройти идентификацию в отделении →',
