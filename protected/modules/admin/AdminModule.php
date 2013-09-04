@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class AdminModule
+ */
 class AdminModule extends CWebModule
 {
 	public $ipFilters = array('127.0.0.1', '::1');
@@ -19,6 +21,11 @@ class AdminModule extends CWebModule
 		//Yii::app()->theme = 'bootstrap';
 	}
 
+	/**
+	 * @param $ip
+	 *
+	 * @return bool
+	 */
 	protected function allowIp($ip)
 	{
 		if (empty($this->ipFilters)) {
@@ -33,6 +40,12 @@ class AdminModule extends CWebModule
 		return false;
 	}
 
+	/**
+	 * @param CController $controller
+	 * @param CAction     $action
+	 *
+	 * @return bool
+	 */
 	public function beforeControllerAction($controller, $action)
 	{
 		Yii::app()->errorHandler->errorAction = 'admin/default/error';

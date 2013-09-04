@@ -3,10 +3,8 @@
 /* @var $model LoginForm */
 /* @var $form CActiveForm */
 
-$this->pageTitle = Yii::app()->name . ' - Вход';
-$this->breadcrumbs = array(
-	'Вход',
-);
+$this->pageTitle = Yii::app()->name . ' - Вход в личный кабинет';
+
 ?>
 <h1>Вход в систему</h1>
 <div class="form">

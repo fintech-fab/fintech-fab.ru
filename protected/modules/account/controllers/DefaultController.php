@@ -63,8 +63,11 @@ class DefaultController extends Controller
 				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
+			/**
+			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
+			 */
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
-			$this->render('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
+			$this->render('index', array('passFormRender' => $sPassFormRender));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -90,7 +93,7 @@ class DefaultController extends Controller
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
-			$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm));
+			$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -108,22 +111,19 @@ class DefaultController extends Controller
 		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
-		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
-			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time'));
-		} else {
-			$oHistoryDataProvider = new CArrayDataProvider(array());
-		}
+
+		$oHistoryDataProvider = $this->getHistoryDataProvider($aHistory);
 
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			if ($this->clientData['code'] == 9) {
+			if ($aHistory['code'] == 9) {
 				$needSmsPass = true;
 			} else {
 				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
-			$this->render('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
+			$this->render('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -141,21 +141,19 @@ class DefaultController extends Controller
 		$this->clientData = $oApi->getClientInfo();
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
-		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
-			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time'));
-		} else {
-			$oHistoryDataProvider = new CArrayDataProvider(array());
-		}
+
+
+		$oHistoryDataProvider = $this->getHistoryDataProvider($aHistory);
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			if ($this->clientData['code'] == 9) {
+			if ($aHistory['code'] == 9) {
 				$needSmsPass = true;
 			} else {
 				$needSmsPass = false;
 			}
 			$this->setSmsState($needSmsPass);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
-			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'passForm' => $oSmsPassForm, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
+			$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -321,8 +319,38 @@ class DefaultController extends Controller
 	 *
 	 */
 
-	public function setSmsState($needSmsPass = false)
+	private function setSmsState($needSmsPass = false)
 	{
 		$this->smsState = array('sent' => Yii::app()->session['smsPassSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass);
 	}
+
+	/**
+	 * @return CSort
+	 */
+	private function getHistorySort()
+	{
+		$sort = new CSort;
+		$sort->defaultOrder = 'time DESC';
+		$sort->attributes = array('time', 'type', 'type_id', 'amount');
+
+		return $sort;
+	}
+
+	/**
+	 * @param $aHistory
+	 *
+	 * @return \CArrayDataProvider
+	 */
+
+	private function getHistoryDataProvider($aHistory)
+	{
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time', 'sort' => $this->getHistorySort()));
+		} else {
+			$oHistoryDataProvider = new CArrayDataProvider(array());
+		}
+
+		return $oHistoryDataProvider;
+	}
+
 }

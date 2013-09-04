@@ -1,7 +1,6 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $passForm
  * @var $passFormRender
  * @var $history
  * @var $historyProvider
@@ -10,6 +9,8 @@
 $this->breadcrumbs = array(
 	$this->module->id,
 );
+
+$this->pageTitle = Yii::app()->name . ' - История операций';
 
 $this->menu[] = array(
 	'label' => 'Состояние подписки', 'url' => array(
@@ -27,6 +28,7 @@ $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->create
 
 echo "<h4>История операций</h4>";
 
+
 if ($this->smsState['needSmsPass']) {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
 } else {
@@ -36,10 +38,17 @@ if ($this->smsState['needSmsPass']) {
 		'type'         => 'striped bordered condensed',
 		'columns'      => array(
 			array('name' => 'time', 'header' => 'Дата'),
-			array('name' => 'type', 'header' => 'Тип'),
+			array(
+				'name'  => 'type', 'header' => 'Тип',
+				'value' => '($data["type"]=="invoice")?"Оплата услуги":"Получение денег"',
+			),
+			array(
+				'name'  => 'type_id', 'header' => 'Тип',
+				'value' => '($data["type"]=="invoice")?SiteParams::$aTypes[$data["type_id"]]:"Получение займа"',
+			),
 			array(
 				'name'  => 'amount', 'header' => 'Сумма',
-				'value' => '($data["amount"]>0)?"+".$data["amount"]:$data["amount"]',
+				'value' => 'abs($data["amount"])',
 			),
 		),
 	));
@@ -48,7 +57,7 @@ if ($this->smsState['needSmsPass']) {
 
 echo $passFormRender;
 
-echo '<pre>';
-print_r($history);
-CVarDumper::dump($historyProvider);
-echo '</pre>';
+//echo '<pre>';
+//print_r($history);
+//CVarDumper::dump($historyProvider);
+//echo '</pre>';

@@ -2,13 +2,14 @@
 /**
  * @var $this DefaultController
  * @var $smsState
- * @var $passForm
  * @var $passFormRender
  */
 
 $this->breadcrumbs = array(
 	$this->module->id,
 );
+
+$this->pageTitle = Yii::app()->name . ' - Состояние подписки';
 
 $this->menu[] = array(
 	'label'  => 'Состояние подписки', 'url' => array(
@@ -22,10 +23,6 @@ $this->menu[] = array(
 	)
 );
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
-
-//echo '<pre>';
-//print_r($this->clientData);
-//echo '</pre>';
 
 echo "<h4>Состояние подписки</h4>";
 
@@ -42,3 +39,7 @@ if (!$this->smsState['needSmsPass']) {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
 }
 echo $passFormRender;
+
+//echo '<pre>';
+//print_r($this->clientData);
+//echo '</pre>';

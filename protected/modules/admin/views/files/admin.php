@@ -4,7 +4,7 @@
 /**
  * @var $itemsProvider CArrayDataProvider
  */
-
+$this->pageTitle = Yii::app()->name . ' - Управление изображениями';
 ?>
 
 	<h1>Управление изображениями</h1>
