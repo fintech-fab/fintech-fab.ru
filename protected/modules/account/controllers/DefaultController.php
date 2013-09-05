@@ -52,17 +52,13 @@ class DefaultController extends Controller
 
 	public function actionIndex($ajax = 0)
 	{
+		//TODO всё в модель
 		$oApi = new AdminKreddyApi();
 		$this->clientData = $oApi->getClientInfo();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			if ($this->clientData['code'] === 9) {
-				$needSmsPass = true;
-			} else {
-				$needSmsPass = false;
-			}
-			$this->setSmsState($needSmsPass);
+		if ($oApi->isResultAuth($this->clientData)) {
+			$this->smsState = $oApi->getSmsState($this->clientData);
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
@@ -90,16 +86,11 @@ class DefaultController extends Controller
 		$aHistory = $oApi->getHistory();
 		$oSmsPassForm = new SMSPasswordForm();
 
-		$oHistoryDataProvider = $this->getHistoryDataProvider($aHistory);
+		$oHistoryDataProvider = $oApi->getHistoryDataProvider($aHistory);
 
 
-		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			if ($aHistory['code'] === 9) {
-				$needSmsPass = true;
-			} else {
-				$needSmsPass = false;
-			}
-			$this->setSmsState($needSmsPass);
+		if ($oApi->isResultAuth($this->clientData)) {
+			$this->smsState = $oApi->getSmsState($aHistory);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
 			if ($ajax == 1) {
 				$this->layout = '/layouts/column2_ajax';
@@ -176,7 +167,8 @@ class DefaultController extends Controller
 			} else {
 				$needSmsActionCode = false;
 			}
-			$this->setSmsState($needSmsPass, $needSmsActionCode);
+			//TODO needSmsActionCode проверять в модели
+			$this->smsState = $oApi->getSmsState($aTest, $needSmsActionCode);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'test'), true, false);
 			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
 
@@ -265,6 +257,7 @@ class DefaultController extends Controller
 	public
 	function actionCheckSmsPass($act = 'index')
 	{
+		//TODO вынести в API в том числе JSON-ответы
 		if (Yii::app()->request->isAjaxRequest) {
 			if (isset($_POST['SMSPasswordForm'])) {
 				$passForm = new SMSPasswordForm();
@@ -381,54 +374,12 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * @param bool $needSmsPass
-	 * @param bool $needSmsActionCode
-	 */
-
-	private
-	function setSmsState($needSmsPass = false, $needSmsActionCode = false)
-	{
-		$this->smsState = array('passSent' => Yii::app()->session['smsPassSent'], 'codeSent' => Yii::app()->session['smsCodeSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass, 'needSmsActionCode' => $needSmsActionCode);
-	}
-
-	/**
-	 * @return CSort
-	 */
-	private
-	function getHistorySort()
-	{
-		$sort = new CSort;
-		$sort->defaultOrder = 'time DESC';
-		$sort->attributes = array('time', 'type', 'type_id', 'amount');
-
-		return $sort;
-	}
-
-	/**
-	 * @param $aHistory
-	 *
-	 * @return \CArrayDataProvider
-	 */
-
-	private
-	function getHistoryDataProvider($aHistory)
-	{
-		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
-			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time', 'sort' => $this->getHistorySort()));
-		} else {
-			$oHistoryDataProvider = new CArrayDataProvider(array());
-		}
-
-		return $oHistoryDataProvider;
-	}
-
-	/**
 	 * @param $aResult
-	 * @param $oApi
 	 * @param $act
 	 *
 	 * @return string
 	 */
+	//TODO вынести в API
 	public
 	function checkSmsCode($aResult, $act)
 	{

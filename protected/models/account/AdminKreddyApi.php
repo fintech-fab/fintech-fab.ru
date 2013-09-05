@@ -222,7 +222,7 @@ class AdminKreddyApi extends CModel
 	}
 
 	/**
-	 * @param int    $test
+	 * @param bool   $get_code
 	 * @param string $sms_code
 	 *
 	 * @return array|bool
@@ -394,5 +394,104 @@ class AdminKreddyApi extends CModel
 	{
 		$this->setSessionToken(null);
 	}
+
+	/**
+	 * @param $aResult
+	 *
+	 * @return int
+	 */
+	public function getResultStatus($aResult)
+	{
+		if (isset($aResult) && isset($aResult['code'])) {
+			$iRet = $aResult['code'];
+		} else {
+			$iRet = self::ERROR_AUTH;
+		}
+
+		return $iRet;
+	}
+
+	/**
+	 * Проверяем полученный ответ API на его уровень авторизации
+	 * коды 0, 9, 10 - авторизация в порядке
+	 *
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isResultAuth($aResult)
+	{
+		$iStatus = $this->getResultStatus($aResult);
+		if ($iStatus === self::ERROR_NONE || $iStatus == self::ERROR_NEED_SMS_AUTH || self::ERROR_NEED_SMS_CODE) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Проверяем, требует ли ответ API авторизации по СМС
+	 *
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isNeedSmsAuth($aResult)
+	{
+		$iStatus = $this->getResultStatus($aResult);
+		if ($iStatus === 9) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @param      $aResult
+	 * @param bool $needSmsActionCode
+	 *
+	 * @internal param bool $needSmsPass
+	 * @return array
+	 */
+
+	public
+	function getSmsState($aResult, $needSmsActionCode = false)
+	{
+		$needSmsPass = $this->isNeedSmsAuth($aResult);
+
+		return array('passSent' => Yii::app()->session['smsPassSent'], 'codeSent' => Yii::app()->session['smsCodeSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass, 'needSmsActionCode' => $needSmsActionCode);
+	}
+
+	/**
+	 * @return CSort
+	 */
+
+	private
+	function getHistorySort()
+	{
+		$sort = new CSort;
+		$sort->defaultOrder = 'time DESC';
+		$sort->attributes = array('time', 'type', 'type_id', 'amount');
+
+		return $sort;
+	}
+
+	/**
+	 * @param $aHistory
+	 *
+	 * @return \CArrayDataProvider
+	 */
+	public
+	function getHistoryDataProvider($aHistory)
+	{
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time', 'sort' => $this->getHistorySort()));
+		} else {
+			$oHistoryDataProvider = new CArrayDataProvider(array());
+		}
+
+		return $oHistoryDataProvider;
+	}
+
 
 }
