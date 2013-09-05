@@ -1,13 +1,13 @@
 <?php
 /**
- * Class SMSPasswordForm
+ * Class SMSCodeForm
  */
-class SMSPasswordForm extends CFormModel
+class SMSCodeForm extends CFormModel
 {
 	/**
 	 * @var boolean заполненность формы
 	 */
-	public $smsPassword;
+	public $smsCode;
 
 	/**
 	 * @return array
@@ -16,7 +16,7 @@ class SMSPasswordForm extends CFormModel
 	{
 		$aRules = array();
 
-		$aRules[] = array('smsPassword', 'required', 'message' => 'Поле обязательно к заполнению');
+		$aRules[] = array('smsCode', 'required', 'message' => 'Поле обязательно к заполнению');
 
 		//$aRules[] = array('smsPassword', 'match', 'message' => 'SMS-код состоит из '.SiteParams::C_SMSCODE_LENGTH.' цифр',
 		//	'pattern' => '/^\d{'.SiteParams::C_SMSCODE_LENGTH.'}$/');
@@ -30,6 +30,6 @@ class SMSPasswordForm extends CFormModel
 	 */
 	public function attributeLabels()
 	{
-		return array('smsPassword' => 'Пароль из SMS');
+		return array('smsCode' => 'Код из SMS');
 	}
 }

@@ -13,21 +13,24 @@ class AdminKreddyApi extends CModel
 	const ERROR_AUTH = 2;
 	const ERROR_TOKEN_EXPIRE = 5;
 	const ERROR_NEED_SMS_AUTH = 9;
+	const ERROR_NEED_SMS_CODE = 10;
 
 	const SMS_AUTH_OK = 0;
 	const SMS_SEND_OK = 1;
 	const SMS_CODE_ERROR = 2;
 	const SMS_CANT_SEND = 3;
 
-	const API_ACTION_TEST = 'siteClient/test';
+	const SMS_PASSWORD_SEND_OK = 1;
+
+	const API_ACTION_TEST = 'siteClient/doTest';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 	const API_ACTION_RECOVER_PASSWORD = 'siteClient/recoverPassword';
 
-	const API_ACTION_REQ_SMS_CODE = 'siteSms/auth';
-	const API_ACTION_CHECK_SMS_CODE = 'siteSms/auth';
+	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
+	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
 	private $token;
 
@@ -117,32 +120,61 @@ class AdminKreddyApi extends CModel
 	{
 		$aRequest = array('sms_code' => $sSmsPassword);
 
-		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_SMS_CODE, $aRequest);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_SMS_CODE, $aRequest);
 
-		if ($aTokenData['code'] === self::ERROR_NONE && $aTokenData['sms_auth'] === self::SMS_AUTH_OK) {
-			$this->setSessionToken($aTokenData['token']);
-			$this->token = $aTokenData['token'];
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setSessionToken($aResult['token']);
+			$this->token = $aResult['token'];
 
-			return true;
+			return $aResult;
 		} else {
-			return false;
+			return $aResult;
 		}
 	}
 
 	/**
-	 * @param bool $resend
+	 * @param bool|int $resend
 	 *
 	 * @return mixed
 	 */
 
 	public function sendSMS($resend = false)
 	{
-		$aResult = false;
 		if (!$resend) {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE);
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('sms_resend' => 0));
 		} else {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('resend' => 1));
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('sms_resend' => 1));
 		}
+
+		return $aResult;
+	}
+
+	/**
+	 * @param      $phone
+	 * @param bool $resend
+	 *
+	 * @return mixed
+	 */
+	public function recoveryPasswordSendSms($phone, $resend = false)
+	{
+		if (!$resend) {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone));
+		} else {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 1));
+		}
+
+		return $aResult;
+	}
+
+	/**
+	 * @param $phone
+	 * @param $sms_code
+	 *
+	 * @return mixed
+	 */
+	public function recoveryPasswordCheckSms($phone, $sms_code)
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_code' => $sms_code));
 
 		return $aResult;
 	}
@@ -175,6 +207,7 @@ class AdminKreddyApi extends CModel
 
 	public function getHistory()
 	{
+		//TODO убрать либо тут $aData, либо в else, во всех экшнах
 		$aData = array('code' => self::ERROR_AUTH);
 		if (!empty($this->token)) {
 			//тут типа запрос данных по токену
@@ -186,6 +219,30 @@ class AdminKreddyApi extends CModel
 		}
 
 		return $aData;
+	}
+
+	/**
+	 * @param int    $test
+	 * @param string $sms_code
+	 *
+	 * @return array|bool
+	 */
+	public function doTest($get_code = false, $sms_code = '')
+	{
+		$aResult = array('code' => self::ERROR_AUTH);
+
+		if (!empty($this->token)) {
+			if (!empty($sms_code)) {
+				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST, array('sms_code' => $sms_code));
+			} elseif ($get_code) {
+				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST);
+				echo 1;
+			} else {
+				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST, array('test_code' => 1));
+			}
+		}
+
+		return $aResult;
 	}
 
 	/**
@@ -225,7 +282,7 @@ class AdminKreddyApi extends CModel
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-		if ($sAction === self::API_ACTION_RECOVER_PASSWORD) {
+		if ($sAction !== self::API_ACTION_RECOVER_PASSWORD) {
 			//тут у нас непосредственно curl запрашивает данные
 			$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
 
@@ -244,7 +301,17 @@ class AdminKreddyApi extends CModel
 
 			//заглушка
 			$aData = array('code' => self::ERROR_AUTH);
-
+			if (empty($this->token)) {
+				switch ($sAction) {
+					case self::API_ACTION_RECOVER_PASSWORD:
+						if ($aRequest['phone'] === '9808055488' && empty($aRequest['sms_code'])) {
+							$aData = array('code' => self::SMS_SEND_OK, 'message' => 'СМС с кодом успешно отправлено');
+						} elseif ($aRequest['phone'] === '9808055488' && $aRequest['sms_code'] === '1111') {
+							$aData = array('code' => self::SMS_PASSWORD_SEND_OK, 'message' => 'СМС с паролем успешно отправлено');
+						}
+						break;
+				}
+			}
 			if ($this->token == '159753' || $sAction === self::API_ACTION_TOKEN_CREATE) {
 				switch ($sAction) {
 					case self::API_ACTION_TOKEN_CREATE:

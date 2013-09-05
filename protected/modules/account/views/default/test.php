@@ -3,6 +3,7 @@
  * @var $this DefaultController
  * @var $smsState
  * @var $passFormRender
+ * @var $codeFormRender
  */
 
 $this->breadcrumbs = array(
@@ -27,20 +28,24 @@ $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->create
 echo "<h4>Состояние подписки</h4>";
 
 if (!$this->smsState['needSmsPass']) {
-	if (@$this->clientData['subscription'] == false) {
-		echo "<h5>Нет активных подписок</h5>";
-	} else {
-		echo '<strong>Продукт:</strong> ' . (@$this->clientData['subscription']['product']) . ' <br/>';
-		echo '<strong>Подписка активна до:</strong> ' . (@$this->clientData['subscription']['activity_to']) . ' <br/>';
-		echo '<strong>Баланс:</strong> ' . (@$this->clientData['subscription']['balance']) . ' руб. <br/>';
-		echo '<strong>Доступно займов:</strong> ' . (@$this->clientData['subscription']['available_loans']) . '<br/>';
-	}
 
 } else {
 	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
 }
+
+if (!$this->smsState['needSmsActionCode']) {
+
+} else {
+	echo "<h5>Для выполнения действия требуется одноразовый SMS-код</h5>";
+}
 echo $passFormRender;
 
-//echo '<pre>';
-//print_r($this->clientData);
-//echo '</pre>';
+echo $codeFormRender;
+
+echo '<pre>' . "";
+CVarDumper::dump($this->clientData);
+echo '</pre>';
+echo '<pre>' . "";
+CVarDumper::dump($aTest);
+echo '</pre>';
+
