@@ -183,15 +183,38 @@ class DefaultController extends Controller
 	 * Запрос на отправку SMS с паролем
 	 */
 
-	public
-	function actionAjaxSendSms()
+	public function actionAjaxSendSms($resend = 0)
 	{
 		if (Yii::app()->request->isAjaxRequest) {
+			$bResend = ($resend == 1);
+
+			if (!$bResend && !empty(Yii::app()->session['smsPassSent'])) {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => "SMS уже отправлено",
+				));
+
+				Yii::app()->end();
+			}
+
+			if ($bResend &&
+				!empty(Yii::app()->session['smsPassSentTime']) &&
+				((time() - Yii::app()->session['smsPassSentTime']) < 1 * 60)
+			) {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => "Должна пройти минута до следующей отправки SMS",
+				));
+
+				Yii::app()->end();
+			}
+
 			$oApi = new AdminKreddyApi();
-			$aResult = $oApi->sendSMS();
+			$aResult = $oApi->sendSMS($bResend);
 
 			if ($aResult && $aResult['code'] == 0 || $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsPassSent'] = true;
+				Yii::app()->session['smsPassSentTime'] = time();
 			}
 
 			if (empty($aResult['sms_message'])) {

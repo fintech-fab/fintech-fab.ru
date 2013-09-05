@@ -15,11 +15,11 @@
 
 $this->pageTitle = Yii::app()->name;
 
-$hideSmsSendButton = ($this->smsState['sent'] || !$this->smsState['needSmsPass']);
+$hideSmsSendButton = ($this->smsState['passSent'] || !$this->smsState['needSmsPass']);
 $flagSmsAuthDone = $this->smsState['smsAuthDone'];
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или авторизация уже выполнена
-$flagHideFormCheckSMSCode = (empty($smsState['sent']) || $flagSmsAuthDone);
+$flagHideFormCheckSMSCode = (empty($smsState['passSent']) || $flagSmsAuthDone);
 ?>
 
 <div class="row">
@@ -44,7 +44,7 @@ $flagHideFormCheckSMSCode = (empty($smsState['sent']) || $flagSmsAuthDone);
 			'buttonType'  => 'ajaxSubmit',
 			'url'         => Yii::app()->createUrl('/account/ajaxsendsms', array('act' => $act)),
 			'size'        => 'small',
-			'label'       => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с паролем',
+			'label'       => 'Отправить на +7' . Yii::app()->user->getId() . ' SMS с паролем',
 			'ajaxOptions' => array(
 				'dataType' => "json",
 				'type'     => "POST",
