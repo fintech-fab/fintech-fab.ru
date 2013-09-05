@@ -158,7 +158,7 @@ class AdminKreddyApi extends CModel
 	public function recoveryPasswordSendSms($phone, $resend = false)
 	{
 		if (!$resend) {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone));
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 0));
 		} else {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 1));
 		}
@@ -305,9 +305,9 @@ class AdminKreddyApi extends CModel
 				switch ($sAction) {
 					case self::API_ACTION_RECOVER_PASSWORD:
 						if ($aRequest['phone'] === '9808055488' && empty($aRequest['sms_code'])) {
-							$aData = array('code' => self::SMS_SEND_OK, 'message' => 'СМС с кодом успешно отправлено');
+							$aData = array('code' => self::ERROR_AUTH, 'sms_status' => self::SMS_SEND_OK, 'message' => 'СМС с кодом успешно отправлено');
 						} elseif ($aRequest['phone'] === '9808055488' && $aRequest['sms_code'] === '1111') {
-							$aData = array('code' => self::SMS_PASSWORD_SEND_OK, 'message' => 'СМС с паролем успешно отправлено');
+							$aData = array('code' => self::ERROR_AUTH, 'sms_status' => self::SMS_SEND_OK, 'message' => 'СМС с паролем успешно отправлено');
 						}
 						break;
 				}
