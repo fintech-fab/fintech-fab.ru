@@ -197,6 +197,7 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 
+			//TODO: вынести в SiteParams число минут до следующей отправки SMS
 			if ($bResend &&
 				!empty(Yii::app()->session['smsPassSentTime']) &&
 				((time() - Yii::app()->session['smsPassSentTime']) < 1 * 60)
