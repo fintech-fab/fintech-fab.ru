@@ -171,7 +171,7 @@ class DefaultController extends Controller
 			if (!$bResend && !empty(Yii::app()->session['smsPassSent'])) {
 				echo CJSON::encode(array(
 					"type" => 2,
-					"text" => "", //TODO: текст ошибки?
+					"text" => "SMS уже отправлено",
 				));
 
 				Yii::app()->end();
@@ -183,7 +183,7 @@ class DefaultController extends Controller
 			) {
 				echo CJSON::encode(array(
 					"type" => 2,
-					"text" => "текст ошибки", //TODO: текст ошибки?
+					"text" => "Должна пройти минута до следующей отправки SMS",
 				));
 
 				Yii::app()->end();
