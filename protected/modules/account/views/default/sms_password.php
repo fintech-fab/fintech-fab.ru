@@ -168,6 +168,8 @@ $flagHideFormCheckSMSCode = (empty($smsState['sent']) || $flagSmsAuthDone);
                                 	} else if(data.type==2) {
                                 	    //ругаемся ошибкой
                                			jQuery('#actionAnswerResend').html(data.text).show();
+                                	} else {
+                               			jQuery('#actionAnswerResend').html(data.text).show();
                                 	}
                                 	return;
                                 } ",
@@ -191,7 +193,7 @@ Yii::app()->clientScript->registerScript('showUntilResend', '
 	function showUntilResend() {
 		iSecondsLeft = Math.floor((sendTime - (new Date())) / 1000 + 1*60);
 		if(iSecondsLeft < 0) {
-			jQuery("#btnResend").removeProp("disabled").removeClass("disabled");
+			jQuery("#btnResend").removeAttr("disabled").removeClass("disabled");
 			jQuery("#textUntilResend").fadeOut("slow");
 			return;
 		}
