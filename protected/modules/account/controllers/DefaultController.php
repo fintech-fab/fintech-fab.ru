@@ -88,7 +88,6 @@ class DefaultController extends Controller
 
 		$oHistoryDataProvider = $oApi->getHistoryDataProvider($aHistory);
 
-
 		if ($oApi->isResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($aHistory);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);

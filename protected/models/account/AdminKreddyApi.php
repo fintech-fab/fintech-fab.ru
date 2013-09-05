@@ -422,7 +422,8 @@ class AdminKreddyApi extends CModel
 	public function isResultAuth($aResult)
 	{
 		$iStatus = $this->getResultStatus($aResult);
-		if ($iStatus === self::ERROR_NONE || $iStatus == self::ERROR_NEED_SMS_AUTH || self::ERROR_NEED_SMS_CODE) {
+
+		if ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE) {
 			return true;
 		} else {
 			return false;
