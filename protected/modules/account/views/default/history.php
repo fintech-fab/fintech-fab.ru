@@ -12,18 +12,29 @@ $this->breadcrumbs = array(
 
 $this->pageTitle = Yii::app()->name . ' - История операций';
 
-$this->menu[] = array(
-	'label' => 'Состояние подписки', 'url' => array(
+$this->menu = array(
+	array(
+		'label' => 'Состояние подписки', 'url' => array(
 		Yii::app()->createUrl('account')
 	)
 
-);
-$this->menu[] = array(
-	'label'  => 'История операций', 'url' => array(
+	),
+	array(
+		'label'  => 'История операций', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	),
-	'active' => true
+		'active' => true
+	)
 );
+
+if ($this->smsState['smsAuthDone']) {
+	$this->menu[] = array(
+		'label' => 'Тестовое действие', 'url' => array(
+			Yii::app()->createUrl('account/test')
+		),
+	);
+}
+
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
 echo "<h4>История операций</h4>";

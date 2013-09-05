@@ -11,17 +11,28 @@ $this->breadcrumbs = array(
 
 $this->pageTitle = Yii::app()->name . ' - Состояние подписки';
 
-$this->menu[] = array(
-	'label'  => 'Состояние подписки', 'url' => array(
+$this->menu = array(
+	array(
+		'label'  => 'Состояние подписки', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
-	'active' => true,
-);
-$this->menu[] = array(
-	'label' => 'История займов', 'url' => array(
+		'active' => true,
+	),
+	array(
+		'label' => 'История займов', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	)
+	)
 );
+
+if ($this->smsState['smsAuthDone']) {
+	$this->menu[] = array(
+		'label' => 'Тестовое действие', 'url' => array(
+			Yii::app()->createUrl('account/test')
+		)
+	);
+}
+
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
 echo "<h4>Состояние подписки</h4>";

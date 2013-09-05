@@ -118,7 +118,7 @@ class DefaultController extends Controller
 	 * История операций
 	 */
 
-	public function actionTest($getcode = 0)
+	public function actionTest($getcode = 0, $ajax = 0)
 	{
 		$oApi = new AdminKreddyApi();
 		$aTest = array('code' => $oApi::ERROR_AUTH);
@@ -132,7 +132,7 @@ class DefaultController extends Controller
 				$oApi = new AdminKreddyApi();
 				if ($codeForm->validate()) {
 					$aTest = $oApi->doTest(false, $codeForm->smsCode);
-					echo $this->checkSmsCode($aTest, $oApi, 'test');
+					echo $this->checkSmsCode($aTest, 'test');
 				} else {
 					echo CJSON::encode(array(
 						"type" => 2,
@@ -143,11 +143,18 @@ class DefaultController extends Controller
 			}
 		} elseif (Yii::app()->request->isAjaxRequest && $getcode == 1) {
 			$aTest = $oApi->doTest(true);
-			echo '<pre>' . "";
-			CVarDumper::dump($aTest);
-			echo '</pre>';
-			//if ($aTest['sms_auth'] == 1) {
-			//}
+			if ($aTest['sms_status'] == 1) {
+				echo CJSON::encode(array(
+					"type" => 0,
+					"text" => 'СМС с кодом отправлено',
+				));
+			} else {
+				echo CJSON::encode(array(
+					"type" => 3,
+					"text" => 'Ошибка отправки СМС',
+				));
+			}
+			Yii::app()->end();
 		} else {
 			$aTest = $oApi->doTest();
 		}
@@ -172,7 +179,13 @@ class DefaultController extends Controller
 			$this->setSmsState($needSmsPass, $needSmsActionCode);
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'test'), true, false);
 			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
-			$this->render('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
+
+			if ($ajax == 1) {
+				$this->layout = '/layouts/column2_ajax';
+				$this->renderWithoutProcess('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
+			} else {
+				$this->render('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
+			}
 		} else {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -416,9 +429,9 @@ class DefaultController extends Controller
 	 * @return string
 	 */
 	public
-	function checkSmsCode($aResult, $oApi, $act)
+	function checkSmsCode($aResult, $act)
 	{
-		if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
+		if ($aResult['sms_status'] == AdminKreddyApi::SMS_AUTH_OK) {
 			Yii::app()->session['smsAuthDone'] = true;
 
 			return CJSON::encode(array(

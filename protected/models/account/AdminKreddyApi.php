@@ -236,7 +236,6 @@ class AdminKreddyApi extends CModel
 				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST, array('sms_code' => $sms_code));
 			} elseif ($get_code) {
 				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST);
-				echo 1;
 			} else {
 				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST, array('test_code' => 1));
 			}

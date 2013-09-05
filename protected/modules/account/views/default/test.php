@@ -12,39 +12,50 @@ $this->breadcrumbs = array(
 
 $this->pageTitle = Yii::app()->name . ' - Состояние подписки';
 
-$this->menu[] = array(
-	'label'  => 'Состояние подписки', 'url' => array(
+$this->menu = array(
+	array(
+		'label' => 'Состояние подписки', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
-	'active' => true,
-);
-$this->menu[] = array(
-	'label' => 'История займов', 'url' => array(
+	),
+	array(
+		'label' => 'История займов', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	)
+	)
 );
+
+if ($this->smsState['smsAuthDone']) {
+	$this->menu[] = array(
+		'label'  => 'Тестовое действие', 'url' => array(
+			Yii::app()->createUrl('account/test')
+		),
+		'active' => true,
+	);
+}
+
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
-echo "<h4>Состояние подписки</h4>";
+echo "<h4>Тестовое действие</h4>";
 
 if (!$this->smsState['needSmsPass']) {
 
 } else {
-	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
+	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю. Сделать это можно на главной странице личного кабинета.</h5>";
 }
 
 if (!$this->smsState['needSmsActionCode']) {
 
 } else {
-	echo "<h5>Для выполнения действия требуется одноразовый SMS-код</h5>";
+	echo "<h5>Для выполнения действия требуется одноразовый SMS-код.</h5>";
 }
-echo $passFormRender;
+//echo $passFormRender;
 
 echo $codeFormRender;
 
-echo '<pre>' . "";
-CVarDumper::dump($this->clientData);
-echo '</pre>';
+//echo '<pre>' . "";
+//CVarDumper::dump($this->clientData);
+//echo '</pre>';
 echo '<pre>' . "";
 CVarDumper::dump($aTest);
 echo '</pre>';
