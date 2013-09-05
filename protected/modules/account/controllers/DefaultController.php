@@ -160,19 +160,41 @@ class DefaultController extends Controller
 		}
 	}
 
-
 	/**
-	 * Запрос на отправку SMS с паролем
+	 * Запрос на отправку или переотправку SMS с паролем
 	 */
-
-	public function actionAjaxSendSms()
+	public function actionAjaxSendSms($resend = 0)
 	{
 		if (Yii::app()->request->isAjaxRequest) {
+			$bResend = ($resend == 1);
+
+			if (!$bResend && !empty(Yii::app()->session['smsPassSent'])) {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => "", //TODO: текст ошибки?
+				));
+
+				Yii::app()->end();
+			}
+
+			if ($bResend &&
+				!empty(Yii::app()->session['smsPassSentTime']) &&
+				((time() - Yii::app()->session['smsPassSentTime']) < 1 * 60)
+			) {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => "текст ошибки", //TODO: текст ошибки?
+				));
+
+				Yii::app()->end();
+			}
+
 			$oApi = new AdminKreddyApi();
-			$aResult = $oApi->sendSMS();
+			$aResult = $oApi->sendSMS($bResend);
 
 			if ($aResult && $aResult['code'] == 0 || $aResult['sms_auth'] == 1) {
 				Yii::app()->session['smsPassSent'] = true;
+				Yii::app()->session['smsPassSentTime'] = time();
 			}
 
 			if (empty($aResult['sms_message'])) {
