@@ -190,8 +190,13 @@ class ClientData extends CActiveRecord
 		return $this;
 	}
 
+	/**
+	 * Проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
+	 * @param $phone
+	 *
+	 * @return bool
+	 */
 
-	//проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
 	public static function checkClientByPhone($phone)
 	{
 		$oClientData = self::model()->scopePhone($phone)->find();
@@ -287,6 +292,9 @@ class ClientData extends CActiveRecord
 		return false;
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function beforeSave()
 	{
 		$this->dt_update = date('Y-m-d H:i:s', time());
