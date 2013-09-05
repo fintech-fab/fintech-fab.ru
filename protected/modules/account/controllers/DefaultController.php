@@ -180,243 +180,211 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Запрос на отправку или переотправку SMS с паролем
+	 * Запрос на отправку SMS с паролем
 	 */
-<<<<<<< Updated upstream
-	public function actionAjaxSendSms($resend = 0)
-=======
 
 	public
 	function actionAjaxSendSms()
->>>>>>> Stashed changes
 	{
 		if (Yii::app()->request->isAjaxRequest) {
-			$bResend = ($resend == 1);
+			$oApi = new AdminKreddyApi();
+			$aResult = $oApi->sendSMS();
 
-			if (!$bResend && !empty(Yii::app()->session['smsPassSent'])) {
-				echo CJSON::encode(array(
-					"type" => 2,
-					"text" => "SMS уже отправлено",
-				));
-
-				Yii::app()->end();
+			if ($aResult && $aResult['code'] == 0 || $aResult['sms_status'] == 1) {
+				Yii::app()->session['smsPassSent'] = true;
 			}
 
-if ($bResend &&
-	!empty(Yii::app()->session['smsPassSentTime']) &&
-	((time() - Yii::app()->session['smsPassSentTime']) < 1 * 60)
-) {
-	echo CJSON::encode(array(
-		"type" => 2,
-		"text" => "Должна пройти минута до следующей отправки SMS",
-	));
+			if (empty($aResult['sms_message'])) {
+				$aResult['sms_message'] = '';
+			}
 
-	Yii::app()->end();
-}
+			if (isset($aResult['sms_status'])) {
+				switch ($aResult['sms_status']) {
+					case 1:
+						$iSmsCode = 0;
+						break;
+					default:
+						$iSmsCode = 3;
+						break;
+				}
+			} else {
+				$iSmsCode = 3;
+			}
 
-$oApi = new AdminKreddyApi();
-$aResult = $oApi->sendSMS($bResend);
-
-if ($aResult && $aResult['code'] == 0 || $aResult['sms_status'] == 1) {
-	Yii::app()->session['smsPassSent'] = true;
-	Yii::app()->session['smsPassSentTime'] = time();
-}
-
-if (empty($aResult['sms_message'])) {
-	$aResult['sms_message'] = '';
-}
-
-if (isset($aResult['sms_status'])) {
-	switch ($aResult['sms_status']) {
-		case 1:
-			$iSmsCode = 0;
-			break;
-		default:
-			$iSmsCode = 3;
-			break;
+			echo CJSON::encode(array(
+				"type" => $iSmsCode,
+				"text" => $aResult['sms_message'],
+			));
+		}
+		Yii::app()->end();
 	}
-} else {
-	$iSmsCode = 3;
-}
 
-echo CJSON::encode(array(
-	"type" => $iSmsCode,
-	"text" => $aResult['sms_message'],
-));
-}
-Yii::app()->end();
-}
+	/**
+	 * Проверка SMS-пароля
+	 *
+	 * @param string $act
+	 */
 
-/**
- * Проверка SMS-пароля
- *
- * @param string $act
- */
+	public
+	function actionCheckSmsPass($act = 'index')
+	{
+		if (Yii::app()->request->isAjaxRequest) {
+			if (isset($_POST['SMSPasswordForm'])) {
+				$passForm = new SMSPasswordForm();
+				$aPostData = $_POST['SMSPasswordForm'];
+				$passForm->setAttributes($aPostData);
+				$oApi = new AdminKreddyApi();
+				if ($passForm->validate()) {
+					$aResult = $oApi->getSmsAuth($passForm->smsPassword);
+					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
+						Yii::app()->session['smsAuthDone'] = true;
+						echo CJSON::encode(array(
+							"type" => 0,
+							"text" => Yii::app()->createUrl("account/" . $act, array('ajax' => 1)),
+						));
+					} elseif ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
+						echo CJSON::encode(array(
+							"type" => 2,
+							"text" => 'Вы превысили допустимое число попыток ввода пароля!',
+						));
+					} else {
+						echo CJSON::encode(array(
+							"type" => 2,
+							"text" => 'Неверный пароль!',
+						));
+					}
 
-public
-function actionCheckSmsPass($act = 'index')
-{
-	if (Yii::app()->request->isAjaxRequest) {
-		if (isset($_POST['SMSPasswordForm'])) {
-			$passForm = new SMSPasswordForm();
-			$aPostData = $_POST['SMSPasswordForm'];
-			$passForm->setAttributes($aPostData);
-			$oApi = new AdminKreddyApi();
-			if ($passForm->validate()) {
-				$aResult = $oApi->getSmsAuth($passForm->smsPassword);
-				if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
-					Yii::app()->session['smsAuthDone'] = true;
-					echo CJSON::encode(array(
-						"type" => 0,
-						"text" => Yii::app()->createUrl("account/" . $act, array('ajax' => 1)),
-					));
-				} elseif ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
-					echo CJSON::encode(array(
-						"type" => 2,
-						"text" => 'Вы превысили допустимое число попыток ввода пароля!',
-					));
 				} else {
 					echo CJSON::encode(array(
 						"type" => 2,
 						"text" => 'Неверный пароль!',
 					));
 				}
-
 			} else {
 				echo CJSON::encode(array(
 					"type" => 2,
-					"text" => 'Неверный пароль!',
+					"text" => 'Неизвестная ошибка!',
 				));
 			}
 		} else {
-			echo CJSON::encode(array(
-				"type" => 2,
-				"text" => 'Неизвестная ошибка!',
-			));
+			$this->redirect(Yii::app()->createUrl("account"));
 		}
-	} else {
-		$this->redirect(Yii::app()->createUrl("account"));
 	}
-}
 
-public
-function actionLogin()
-{
-	$this->layout = '/layouts/column1';
+	public
+	function actionLogin()
+	{
+		$this->layout = '/layouts/column1';
 
-	if (Yii::app()->user->isGuest) {
-		$model = new AccountLoginForm;
+		if (Yii::app()->user->isGuest) {
+			$model = new AccountLoginForm;
 
-		// if it is ajax validation request
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
+			// if it is ajax validation request
+			if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
+				echo CActiveForm::validate($model);
+				Yii::app()->end();
+			}
+
+			// collect user input data
+			if (isset($_POST['AccountLoginForm'])) {
+				$model->attributes = $_POST['AccountLoginForm'];
+				// validate user input and redirect to the previous page if valid
+				if ($model->validate() && $model->login()) {
+					$this->redirect(Yii::app()->createUrl("/account"));
+				}
+			}
+			// display the login form
+			$this->render('login', array('model' => $model));
+		} else {
+			$this->redirect(Yii::app()->createUrl("/account"));
 		}
+	}
 
-		// collect user input data
-		if (isset($_POST['AccountLoginForm'])) {
-			$model->attributes = $_POST['AccountLoginForm'];
-			// validate user input and redirect to the previous page if valid
-			if ($model->validate() && $model->login()) {
-				$this->redirect(Yii::app()->createUrl("/account"));
+	/**
+	 * Logs out the current user and redirect to homepage.
+	 */
+	public
+	function actionLogout()
+	{
+		Yii::app()->session['smsPassSent'] = false;
+		Yii::app()->session['smsAuthDone'] = false;
+		$oApi = new AdminKreddyApi();
+		$oApi->logout();
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->homeUrl);
+	}
+
+	/**
+	 * @param      $view
+	 * @param null $data
+	 * @param bool $return
+	 *
+	 * @return string
+	 */
+
+	public
+	function renderWithoutProcess($view, $data = null, $return = false)
+	{
+		if ($this->beforeRender($view)) {
+			$output = $this->renderPartial($view, $data, true);
+			if (($layoutFile = $this->getLayoutFile($this->layout)) !== false) {
+				$output = $this->renderFile($layoutFile, array('content' => $output), true);
+			}
+
+			$this->afterRender($view, $output);
+
+			if ($return) {
+				return $output;
+			} else {
+				echo $output;
 			}
 		}
-		// display the login form
-		$this->render('login', array('model' => $model));
-	} else {
-		$this->redirect(Yii::app()->createUrl("/account"));
+
+		return false;
 	}
-}
 
-/**
- * Logs out the current user and redirect to homepage.
- */
-public
-function actionLogout()
-{
-	Yii::app()->session['smsPassSent'] = false;
-	Yii::app()->session['smsAuthDone'] = false;
-	$oApi = new AdminKreddyApi();
-	$oApi->logout();
-	Yii::app()->user->logout();
-	$this->redirect(Yii::app()->homeUrl);
-}
+	/**
+	 * @param bool $needSmsPass
+	 * @param bool $needSmsActionCode
+	 */
 
-/**
- * @param      $view
- * @param null $data
- * @param bool $return
- *
- * @return string
- */
+	private
+	function setSmsState($needSmsPass = false, $needSmsActionCode = false)
+	{
+		$this->smsState = array('passSent' => Yii::app()->session['smsPassSent'], 'codeSent' => Yii::app()->session['smsCodeSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass, 'needSmsActionCode' => $needSmsActionCode);
+	}
 
-public
-function renderWithoutProcess($view, $data = null, $return = false)
-{
-	if ($this->beforeRender($view)) {
-		$output = $this->renderPartial($view, $data, true);
-		if (($layoutFile = $this->getLayoutFile($this->layout)) !== false) {
-			$output = $this->renderFile($layoutFile, array('content' => $output), true);
-		}
+	/**
+	 * @return CSort
+	 */
+	private
+	function getHistorySort()
+	{
+		$sort = new CSort;
+		$sort->defaultOrder = 'time DESC';
+		$sort->attributes = array('time', 'type', 'type_id', 'amount');
 
-		$this->afterRender($view, $output);
+		return $sort;
+	}
 
-		if ($return) {
-			return $output;
+	/**
+	 * @param $aHistory
+	 *
+	 * @return \CArrayDataProvider
+	 */
+
+	private
+	function getHistoryDataProvider($aHistory)
+	{
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time', 'sort' => $this->getHistorySort()));
 		} else {
-			echo $output;
+			$oHistoryDataProvider = new CArrayDataProvider(array());
 		}
+
+		return $oHistoryDataProvider;
 	}
 
-	return false;
-}
-
-/**
- * @param bool $needSmsPass
- * @param bool $needSmsActionCode
- */
-
-private
-function setSmsState($needSmsPass = false, $needSmsActionCode = false)
-{
-	$this->smsState = array('passSent' => Yii::app()->session['smsPassSent'], 'codeSent' => Yii::app()->session['smsCodeSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass, 'needSmsActionCode' => $needSmsActionCode);
-}
-
-/**
- * @return CSort
- */
-private
-function getHistorySort()
-{
-	$sort = new CSort;
-	$sort->defaultOrder = 'time DESC';
-	$sort->attributes = array('time', 'type', 'type_id', 'amount');
-
-	return $sort;
-}
-
-/**
- * @param $aHistory
- *
- * @return \CArrayDataProvider
- */
-
-private
-function getHistoryDataProvider($aHistory)
-{
-	if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
-		$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time', 'sort' => $this->getHistorySort()));
-	} else {
-		$oHistoryDataProvider = new CArrayDataProvider(array());
-	}
-
-	return $oHistoryDataProvider;
-}
-
-<<<<<<<
-Updated upstream
-}
-=======
 	/**
 	 * @param $aResult
 	 * @param $oApi
@@ -451,4 +419,3 @@ Updated upstream
 
 
 }
->>>>>>> Stashed changes
