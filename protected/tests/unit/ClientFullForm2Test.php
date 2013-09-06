@@ -69,7 +69,7 @@ class ClientFullForm2Test extends CTestCase
 			'address_res_region'  => '',
 			'address_res_city'    => '',
 			'address_res_address' => '',
-			'address_reg_as_res'  => '6',
+			'address_reg_as_res'  => '',
 		);
 
 		$aPostData[] = array(
@@ -79,7 +79,7 @@ class ClientFullForm2Test extends CTestCase
 			'address_res_region'  => 0,
 			'address_res_city'    => 'dfgdfg',
 			'address_res_address' => 'dfgdfg',
-			'address_reg_as_res'  => 'sdfdfg',
+			'address_reg_as_res'  => '',
 		);
 
 		$aPostData[] = array(
@@ -89,7 +89,7 @@ class ClientFullForm2Test extends CTestCase
 			'address_res_region'  => 'dfgg',
 			'address_res_city'    => 'dfgdfg',
 			'address_res_address' => 'dfgdfg',
-			'address_reg_as_res'  => 'dfgfg',
+			'address_reg_as_res'  => '',
 		);
 
 		foreach ($aPostData as $aPost) {

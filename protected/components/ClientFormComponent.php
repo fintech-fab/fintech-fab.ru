@@ -686,6 +686,9 @@ class ClientFormComponent
 		}
 	}
 
+	/**
+	 * @param $iIdentCode
+	 */
 	public
 	function goIdentification($iIdentCode)
 	{
@@ -949,6 +952,11 @@ class ClientFormComponent
 		return $sGeneratedCode;
 	}
 
+	/**
+	 * @param $aFiles
+	 *
+	 * @return bool
+	 */
 	public
 	function checkFiles($aFiles)
 	{
@@ -965,6 +973,9 @@ class ClientFormComponent
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public
 	function checkIdentificationFiles()
 	{
@@ -986,6 +997,11 @@ class ClientFormComponent
 		return false;
 	}
 
+	/**
+	 * @param null $sIdentType
+	 *
+	 * @return bool
+	 */
 	public
 	function checkTmpIdentificationFiles($sIdentType = null)
 	{
@@ -1017,7 +1033,9 @@ class ClientFormComponent
 		return false;
 	}
 
-
+	/**
+	 * @return bool
+	 */
 	public
 	function moveIdentificationFiles()
 	{
@@ -1036,6 +1054,13 @@ class ClientFormComponent
 		return $this->moveFiles($aFiles, $sFilesPath, Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/');
 	}
 
+	/**
+	 * @param $aFiles
+	 * @param $sOldPath
+	 * @param $sNewPath
+	 *
+	 * @return bool
+	 */
 	public
 	function moveFiles($aFiles, $sOldPath, $sNewPath)
 	{
@@ -1055,6 +1080,9 @@ class ClientFormComponent
 		return true;
 	}
 
+	/**
+	 * @param $dirPath
+	 */
 	public
 	static function deleteDir($dirPath)
 	{

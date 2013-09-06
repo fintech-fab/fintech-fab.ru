@@ -514,6 +514,10 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
 	public function checkFriendsOnJobPhone($attribute, $param)
 	{
 
@@ -532,6 +536,10 @@ class FormFieldValidateBehavior extends CBehavior
 
 	}
 
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
 	public function checkAddressRes($attribute, $param)
 	{
 

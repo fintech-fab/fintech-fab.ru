@@ -14,6 +14,9 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 	public $password;
 	public $password_repeat;
 
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 		// всегда обязательные поля
@@ -217,6 +220,9 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 		return parent::beforeValidate();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
 		return array_merge(
@@ -248,10 +254,19 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 		);
 	}
 
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
 	public function checkFriendsOnJobPhone($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkFriendsOnJobPhone($attribute, $param);
 	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
 
 	public function checkAddressRes($attribute, $param)
 	{
