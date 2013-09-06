@@ -8,7 +8,7 @@ class AccountModule extends CWebModule
 	{
 		// this method is called when the module is being created
 		// you may place code here to customize the module or the application
-		//TODO то же сделать для админки!
+
 		Yii::app()->user->loginUrl = Yii::app()->createUrl('account/login');
 		Yii::app()->user->setStateKeyPrefix('_account');
 

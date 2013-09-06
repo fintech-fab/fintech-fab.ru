@@ -53,7 +53,7 @@ $a = array(
 		),
 		'user'         => array(
 			'allowAutoLogin' => true,
-			'loginUrl'       => array('admin/login'),
+			'loginUrl'       => array('account/login'),
 		),
 
 		'urlManager'   => array(
@@ -64,13 +64,13 @@ $a = array(
 				'gii/<controller:\w+>'                             => 'gii/<controller>',
 				'gii/<controller:\w+>/<action:\w+>'                => 'gii/<controller>/<action>',
 
-				'admin'                                          => 'admin',
-				'admin/login'                                    => 'admin/default/login',
-				'admin/logout'                                   => 'admin/default/logout',
-				'admin/<controller:\w+>'                         => 'admin/<controller>',
-				'admin/<controller:\w+>/<action:\w+>/<id:\d+>'   => 'admin/<controller>/<action>',
-				'admin/<controller:\w+>/<action:\w+>/<name:\w+>' => 'admin/<controller>/<action>',
-				'admin/<controller:\w+>/<action:\w+>'            => 'admin/<controller>/<action>',
+				'admin'                                            => 'admin',
+				'admin/login'                                      => 'admin/default/login',
+				'admin/logout'                                     => 'admin/default/logout',
+				'admin/<controller:\w+>'                           => 'admin/<controller>',
+				'admin/<controller:\w+>/<action:\w+>/<id:\d+>'     => 'admin/<controller>/<action>',
+				'admin/<controller:\w+>/<action:\w+>/<name:\w+>'   => 'admin/<controller>/<action>',
+				'admin/<controller:\w+>/<action:\w+>'              => 'admin/<controller>/<action>',
 
 
 				'account'                                          => 'account',

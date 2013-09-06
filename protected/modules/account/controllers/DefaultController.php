@@ -117,7 +117,7 @@ class DefaultController extends Controller
 	{
 		$oApi = new AdminKreddyApi();
 		$aTest = array('code' => $oApi::ERROR_AUTH);
-		//TODO тут и везде в прочих местах брать данные не из _POST, а через средства Yii
+
 		if (Yii::app()->request->isAjaxRequest && isset($_POST['SMSCodeForm'])) {
 
 			if (isset($_POST['SMSCodeForm'])) {

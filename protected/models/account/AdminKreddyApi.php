@@ -252,15 +252,12 @@ class AdminKreddyApi extends CModel
 
 	public function getHistory()
 	{
-		//TODO убрать либо тут $aData, либо в else, во всех экшнах
 		$aData = array('code' => self::ERROR_AUTH);
 		if (!empty($this->token)) {
 			//тут типа запрос данных по токену
 			$aGetData = $this->getData('history');
 
 			$aData = array_merge($aData, $aGetData);
-		} else {
-			$aData = false;
 		}
 
 		return $aData;
