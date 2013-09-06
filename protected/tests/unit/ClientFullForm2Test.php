@@ -1,4 +1,12 @@
 <?php
+/**
+ * Class ClientFullForm2Test
+ * @method assertEmpty
+ * @method assertNotEmpty
+ * @method assertTrue
+ * @method assertEquals
+ *
+ */
 
 class ClientFullForm2Test extends CTestCase
 {
@@ -49,8 +57,134 @@ class ClientFullForm2Test extends CTestCase
 
 	}
 
+	public function testValidateAddress()
+	{
+		$oForm = new ClientFullForm2();
 
-	public function testValidateJobFields()
+		$aPostData = array();
+		$aPostData[] = array(
+			'address_reg_region'  => '',
+			'address_reg_city'    => '',
+			'address_reg_address' => '',
+			'address_res_region'  => '',
+			'address_res_city'    => '',
+			'address_res_address' => '',
+			'address_reg_as_res'  => '6',
+		);
+
+		$aPostData[] = array(
+			'address_reg_region'  => 0,
+			'address_reg_city'    => 'dfgfg',
+			'address_reg_address' => 'dfgdfg',
+			'address_res_region'  => 0,
+			'address_res_city'    => 'dfgdfg',
+			'address_res_address' => 'dfgdfg',
+			'address_reg_as_res'  => 'sdfdfg',
+		);
+
+		$aPostData[] = array(
+			'address_reg_region'  => 'dfgdfg',
+			'address_reg_city'    => 'dfgfg',
+			'address_reg_address' => 'dfgdfg',
+			'address_res_region'  => 'dfgg',
+			'address_res_city'    => 'dfgdfg',
+			'address_res_address' => 'dfgdfg',
+			'address_reg_as_res'  => 'dfgfg',
+		);
+
+		foreach ($aPostData as $aPost) {
+			$oForm->setAttributes($aPost);
+			$oForm->validate();
+			$aErrors = $oForm->getErrors();
+			$this->assertNotEmpty($aErrors['address_reg_region']);
+			$this->assertNotEmpty($aErrors['address_reg_city']);
+			$this->assertNotEmpty($aErrors['address_reg_address']);
+			$this->assertNotEmpty($aErrors['address_res_region']);
+			$this->assertNotEmpty($aErrors['address_res_city']);
+			$this->assertNotEmpty($aErrors['address_res_address']);
+			//$this->assertNotEmpty($aErrors['address_reg_as_res']);
+		}
+
+		$aPostData = array();
+		$aPostData[] = array(
+			'address_reg_region'  => 2,
+			'address_reg_city'    => 'ввапрапрпп 11',
+			'address_reg_address' => 'вапвапвапапрапр 22',
+			'address_res_region'  => '',
+			'address_res_city'    => '',
+			'address_res_address' => '',
+			'address_reg_as_res'  => 0,
+		);
+
+		$aPostData[] = array(
+			'address_reg_region'  => 20,
+			'address_reg_city'    => 'вапрапрпп',
+			'address_reg_address' => 'вапвапвапапрап',
+			'address_res_region'  => 'dfgdfgdf',
+			'address_res_city'    => 'dfgdfg',
+			'address_res_address' => 'dfgdfgdf',
+			'address_reg_as_res'  => 0,
+		);
+
+		foreach ($aPostData as $aPost) {
+			$oForm->setAttributes($aPost);
+			$oForm->validate();
+			$aErrors = $oForm->getErrors();
+			$this->assertEmpty($aErrors['address_reg_region'], print_r($oForm->getError('address_reg_region'), true));
+			$this->assertEmpty($aErrors['address_reg_city'], print_r($oForm->getError('address_reg_city'), true));
+			$this->assertEmpty($aErrors['address_reg_address'], print_r($oForm->getError('address_reg_address'), true));
+			$this->assertNotEmpty($aErrors['address_res_region']);
+			$this->assertNotEmpty($aErrors['address_res_city']);
+			$this->assertNotEmpty($aErrors['address_res_address']);
+			$this->assertEmpty($aErrors['address_reg_as_res'], print_r($oForm->getError('address_reg_as_res'), true));
+		}
+
+		$aPostData = array();
+		$aPostData[] = array(
+			'address_reg_region'  => 2,
+			'address_reg_city'    => 'ввапрапрпп 11',
+			'address_reg_address' => 'вапвапвапапрапр 22',
+			'address_res_region'  => '',
+			'address_res_city'    => '',
+			'address_res_address' => '',
+			'address_reg_as_res'  => 1,
+		);
+
+		$aPostData[] = array(
+			'address_reg_region'  => 20,
+			'address_reg_city'    => 'вапрапрпп',
+			'address_reg_address' => 'вапвапвапапрап',
+			'address_res_region'  => 'dfgdfgdf',
+			'address_res_city'    => 'dfgdfg',
+			'address_res_address' => 'dfgdfgdf',
+			'address_reg_as_res'  => 1,
+		);
+
+		foreach ($aPostData as $aPost) {
+			$oForm->setAttributes($aPost);
+			$oForm->validate();
+			$aErrors = $oForm->getErrors();
+			$this->assertEmpty($aErrors['address_reg_region'], print_r($oForm->getError('address_reg_region'), true));
+			$this->assertEmpty($aErrors['address_reg_city'], print_r($oForm->getError('address_reg_city'), true));
+			$this->assertEmpty($aErrors['address_reg_address'], print_r($oForm->getError('address_reg_address'), true));
+			$this->assertEmpty($aErrors['address_res_region'], print_r($oForm->getError('address_res_region'), true));
+			$this->assertEmpty($aErrors['address_res_city'], print_r($oForm->getError('address_res_city'), true));
+			$this->assertEmpty($aErrors['address_res_address'], print_r($oForm->getError('address_res_address'), true));
+			$this->assertEmpty($aErrors['address_reg_as_res'], print_r($oForm->getError('address_reg_as_res'), true));
+		}
+
+
+		/*
+				$oForm->email = 'billgates@microsoft.com';
+				$oForm->validate();
+				$aErrors = $oForm->getErrors();
+				$this->assertTrue(!isset($aErrors['email']));*/
+
+	}
+
+
+	public
+	function testValidateJobFields()
 	{
 		$oForm = new ClientFullForm2();
 
@@ -80,7 +214,8 @@ class ClientFullForm2Test extends CTestCase
 		}
 	}
 
-	public function testSex()
+	public
+	function testSex()
 	{
 		$oForm = new ClientFullForm2();
 		$oForm->sex = 5;
@@ -90,7 +225,8 @@ class ClientFullForm2Test extends CTestCase
 		$this->assertEquals('Укажите пол', $aErrors['sex'][0]);
 	}
 
-	public function t1estJobIncomeAdd()
+	public
+	function t1estJobIncomeAdd()
 	{
 		$oForm = new ClientFullForm2();
 		$oForm->job_income_add = 56;
@@ -103,7 +239,8 @@ class ClientFullForm2Test extends CTestCase
 	/**
 	 * @dataProvider fieldsFormForCheckErrorProvider
 	 */
-	public function  testCheckFieldsOnError($field, $value, $method)
+	public
+	function  testCheckFieldsOnError($field, $value, $method)
 	{
 		$oForm = new ClientFullForm2();
 
@@ -116,7 +253,8 @@ class ClientFullForm2Test extends CTestCase
 	/**
 	 * @dataProvider fieldsFormForCheckSuccessProvider
 	 */
-	public function  testCheckFieldsOnSuccess($field, $strRowValue, $strCleanValue)
+	public
+	function  testCheckFieldsOnSuccess($field, $strRowValue, $strCleanValue)
 	{
 		$oForm = new ClientFullForm2();
 
@@ -127,8 +265,11 @@ class ClientFullForm2Test extends CTestCase
 		$this->assertEquals($strCleanValue, $oForm->$field);
 	}
 
-
-	public static function fieldsFormForCheckErrorProvider()
+	/**
+	 * @return array
+	 */
+	public
+	static function fieldsFormForCheckErrorProvider()
 	{
 		return array(
 			array(
@@ -261,6 +402,10 @@ class ClientFullForm2Test extends CTestCase
 		);
 	}
 
+	/**
+	 * @return array
+	 */
+
 	public static function fieldsFormForCheckSuccessProvider()
 	{
 		return array(
@@ -336,4 +481,100 @@ class ClientFullForm2Test extends CTestCase
 
 		);
 	}
+
+	/**
+	 * Проверка обязательности ФИО и телефона друга, если рабочий телефон одинаковый с мобильным
+	 */
+	public function testFriendsOnJobPhone()
+	{
+
+
+		$sPhone = '+7 926 266 26 26';
+		$sJobPhone = $sPhone;
+		$sFriendsPhone = '';
+		$sFriendsFio = '';
+
+		$aPostData = array(
+			'phone'         => $sPhone,
+			'job_phone'     => $sJobPhone,
+			'friends_phone' => $sFriendsPhone,
+			'friends_fio'   => $sFriendsFio
+		);
+
+		$oForm = new ClientFullForm2();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('friends_phone'));
+		$this->assertNotEmpty($oForm->getError('friends_fio'));
+
+		$sJobPhone = '9151001010';
+
+		$aPostData = array(
+			'phone'         => $sPhone,
+			'job_phone'     => $sJobPhone,
+			'friends_phone' => $sFriendsPhone,
+			'friends_fio'   => $sFriendsFio
+		);
+
+		$oForm = new ClientFullForm2();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('friends_phone'), print_r($oForm->getError('friends_phone'), true));
+		$this->assertEmpty($oForm->getError('friends_fio'), print_r($oForm->getError('friends_fio'), true));
+	}
+
+	public function testCheckPhonesNoValid()
+	{
+
+		$sPhone = '9' . substr((rand(1000000000, 1999999999)), 1);
+		$sJobPhone = '9' . substr((rand(1000000000, 1999999999)), 1);
+		$sRelOnePhone = $sPhone;
+		$sFriendsPhone = $sJobPhone;
+
+		$aPostData = array(
+			'phone'               => $sPhone,
+			'job_phone'           => $sJobPhone,
+			'relatives_one_phone' => $sRelOnePhone,
+			'friends_phone'       => $sFriendsPhone
+		);
+
+
+		$oForm = new ClientFullForm2();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('phone'));
+		$this->assertNotEmpty($oForm->getError('job_phone'));
+		$this->assertNotEmpty($oForm->getError('friends_phone'));
+		$this->assertNotEmpty($oForm->getError('relatives_one_phone'));
+
+		$sPhone = '9' . substr((rand(1000000000, 1999999999)), 1);
+		$sJobPhone = $sPhone;
+		$sRelOnePhone = $sPhone;
+		$sFriendsPhone = $sJobPhone;
+
+		$aPostData = array(
+			'phone'               => $sPhone,
+			'job_phone'           => $sJobPhone,
+			'relatives_one_phone' => $sRelOnePhone,
+			'friends_phone'       => $sFriendsPhone
+		);
+
+
+		$oForm = new ClientFullForm2();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('phone'));
+		$this->assertNotEmpty($oForm->getError('job_phone'));
+		$this->assertNotEmpty($oForm->getError('friends_phone'));
+		$this->assertNotEmpty($oForm->getError('relatives_one_phone'));
+	}
+
 }

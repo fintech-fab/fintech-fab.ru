@@ -9,6 +9,8 @@
 
 /**
  * Class ModelsTest
+ * @method assertEmpty
+ * @method assertNotEmpty
  */
 
 class ModelsTest extends CTestCase
@@ -212,98 +214,5 @@ class ModelsTest extends CTestCase
 		$this->assertNotEmpty($oForm->getError('phone'), print_r($oForm->getError('phone'), true));
 	}
 
-	public function testCheckPhonesNoValid()
-	{
 
-		$sPhone = '9' . substr((rand(1000000000, 1999999999)), 1);
-		$sJobPhone = '9' . substr((rand(1000000000, 1999999999)), 1);
-		$sRelOnePhone = $sPhone;
-		$sFriendsPhone = $sJobPhone;
-
-		$aPostData = array(
-			'phone'               => $sPhone,
-			'job_phone'           => $sJobPhone,
-			'relatives_one_phone' => $sRelOnePhone,
-			'friends_phone'       => $sFriendsPhone
-		);
-
-
-		$oForm = new ClientFullForm2();
-		$oForm->setAttributes($aPostData);
-
-		$oForm->validate();
-
-		$this->assertNotEmpty($oForm->getError('phone'));
-		$this->assertNotEmpty($oForm->getError('job_phone'));
-		$this->assertNotEmpty($oForm->getError('friends_phone'));
-		$this->assertNotEmpty($oForm->getError('relatives_one_phone'));
-
-		$sPhone = '9' . substr((rand(1000000000, 1999999999)), 1);
-		$sJobPhone = $sPhone;
-		$sRelOnePhone = $sPhone;
-		$sFriendsPhone = $sJobPhone;
-
-		$aPostData = array(
-			'phone'               => $sPhone,
-			'job_phone'           => $sJobPhone,
-			'relatives_one_phone' => $sRelOnePhone,
-			'friends_phone'       => $sFriendsPhone
-		);
-
-
-		$oForm = new ClientFullForm2();
-		$oForm->setAttributes($aPostData);
-
-		$oForm->validate();
-
-		$this->assertNotEmpty($oForm->getError('phone'));
-		$this->assertNotEmpty($oForm->getError('job_phone'));
-		$this->assertNotEmpty($oForm->getError('friends_phone'));
-		$this->assertNotEmpty($oForm->getError('relatives_one_phone'));
-	}
-
-	/**
-	 * Проверка обязательности ФИО и телефона друга, если рабочий телефон одинаковый с мобильным
-	 */
-	public function testFriendsOnJobPhone()
-	{
-
-
-		$sPhone = '+7 926 266 26 26';
-		$sJobPhone = $sPhone;
-		$sFriendsPhone = '';
-		$sFriendsFio = '';
-
-		$aPostData = array(
-			'phone'         => $sPhone,
-			'job_phone'     => $sJobPhone,
-			'friends_phone' => $sFriendsPhone,
-			'friends_fio'   => $sFriendsFio
-		);
-
-		$oForm = new ClientFullForm2();
-		$oForm->setAttributes($aPostData);
-
-		$oForm->validate();
-
-		$this->assertNotEmpty($oForm->getError('friends_phone'));
-		$this->assertNotEmpty($oForm->getError('friends_fio'));
-
-		$sJobPhone = '9151001010';
-
-		$aPostData = array(
-			'phone'         => $sPhone,
-			'job_phone'     => $sJobPhone,
-			'friends_phone' => $sFriendsPhone,
-			'friends_fio'   => $sFriendsFio
-		);
-
-		$oForm = new ClientFullForm2();
-		$oForm->setAttributes($aPostData);
-
-		$oForm->validate();
-
-		$this->assertEmpty($oForm->getError('friends_phone'), print_r($oForm->getError('friends_phone'), true));
-		$this->assertEmpty($oForm->getError('friends_fio'), print_r($oForm->getError('friends_fio'), true));
-	}
 }

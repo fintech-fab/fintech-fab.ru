@@ -50,7 +50,7 @@ class AccountLoginForm extends CFormModel
 		if (!$this->hasErrors()) {
 			$this->_identity = new UserIdentity($this->username, $this->password);
 			if (!$this->_identity->authenticate()) {
-				$this->addError('password', 'Неверное имя или пароль.');
+				$this->addError('password', 'Неверный номер или пароль.');
 			}
 		}
 	}
@@ -76,6 +76,9 @@ class AccountLoginForm extends CFormModel
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function beforeValidate()
 	{
 		if ($this->username) {

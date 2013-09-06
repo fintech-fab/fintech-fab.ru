@@ -118,6 +118,9 @@ class DefaultController extends Controller
 		$oApi = new AdminKreddyApi();
 		$aTest = array('code' => $oApi::ERROR_AUTH);
 
+		/**
+		 * Действия на случай, если запрос пришел через AJAX
+		 */
 		if (Yii::app()->request->isAjaxRequest && isset($_POST['SMSCodeForm'])) {
 
 			if (isset($_POST['SMSCodeForm'])) {
@@ -127,7 +130,7 @@ class DefaultController extends Controller
 				$oApi = new AdminKreddyApi();
 				if ($codeForm->validate()) {
 					$aTest = $oApi->doTest(false, $codeForm->smsCode);
-					echo $this->checkSmsCode($aTest, 'test');
+					echo $this->getCheckSmsCodeAnswer($aTest, 'test');
 				} else {
 					echo CJSON::encode(array(
 						"type" => 2,
@@ -150,15 +153,12 @@ class DefaultController extends Controller
 				));
 			}
 			Yii::app()->end();
-		} else {
-			$aTest = $oApi->doTest();
 		}
-
-
+		/**
+		 * Основные действия
+		 */
 		$this->clientData = $oApi->getClientInfo();
-		$oSmsPassForm = new SMSPasswordForm();
-		$oSmsCodeForm = new SMSCodeForm();
-
+		$aTest = $oApi->doTest();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
 			if ($aTest['code'] === 9) {
@@ -173,6 +173,8 @@ class DefaultController extends Controller
 			}
 			//TODO needSmsActionCode проверять в модели
 			$this->smsState = $oApi->getSmsState($aTest, $needSmsActionCode);
+			$oSmsPassForm = new SMSPasswordForm();
+			$oSmsCodeForm = new SMSCodeForm();
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'test'), true, false);
 			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
 
@@ -374,31 +376,28 @@ class DefaultController extends Controller
 	 *
 	 * @return string
 	 */
-	//TODO вынести в API
-	public
-	function checkSmsCode($aResult, $act)
-	{
-		if ($aResult['sms_status'] == AdminKreddyApi::SMS_AUTH_OK) {
-			Yii::app()->session['smsAuthDone'] = true;
 
-			return CJSON::encode(array(
+	private
+	function getCheckSmsCodeAnswer($aResult, $act)
+	{
+		if (AdminKreddyApi::checkSmsAuthStatus($aResult)) {
+			$aRet = array(
 				"type" => 0,
 				"text" => Yii::app()->createUrl("account/" . $act, array('ajax' => 1)),
-			));
-		} elseif ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
-			return CJSON::encode(array(
+			);
+		} elseif ($aResult['sms_status'] == 5) { //TODO превышено число попыток ввода пароля
+			$aRet = array(
 				"type" => 2,
 				"text" => 'Вы превысили допустимое число попыток ввода пароля!',
-			));
+			);
 		} else {
-			return CJSON::encode(array(
+			$aRet = array(
 				"type" => 2,
 				"text" => 'Неверный пароль!',
-			));
+			);
 		}
 
-
+		return $aRet;
 	}
-
 
 }

@@ -93,6 +93,8 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('address_res_address', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!'),
 				array('address_reg_as_res', 'in', 'message' => 'Может принимать только значения 0 или 1', 'range' => array(0, 1)),
 
+				array('address_res_city', 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
+				array('address_res_address', 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
 
 				array('password, password_repeat', 'required'),
 				array('password', 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!'),

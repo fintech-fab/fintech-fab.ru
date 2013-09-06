@@ -505,6 +505,24 @@ class AdminKreddyApi extends CModel
 	}
 
 	/**
+	 * @param $aResult
+	 *
+	 * @return string
+	 */
+
+	public static
+	function checkSmsAuthStatus($aResult)
+	{
+		if ($aResult['sms_status'] == self::SMS_AUTH_OK) {
+			Yii::app()->session['smsAuthDone'] = true;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * @return CSort
 	 */
 
