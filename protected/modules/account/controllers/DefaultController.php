@@ -31,7 +31,7 @@ class DefaultController extends Controller
 		return array(
 			array(
 				'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array('login'),
+				'actions' => array('login', 'resetpassword', 'ajaxsendsmscode', 'checksmspasscode'),
 				'users'   => array('*'),
 			),
 			array(
@@ -293,6 +293,145 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl("account"));
 		}
 	}
+
+	public
+	function actionResetPassword()
+	{
+		$this->layout = '/layouts/column1';
+
+		if (Yii::app()->user->isGuest) {
+			$model = new AccountResetPasswordForm;
+			$this->render('reset_password', array('model' => $model, 'phoneEntered' => !empty(Yii::app()->session['smsCodeSentTime'])));
+		} else {
+			$this->redirect(Yii::app()->createUrl("/account"));
+		}
+	}
+
+	public
+	function actionAjaxSendSmsCode($resend = 0)
+	{
+		if (Yii::app()->request->isAjaxRequest) {
+			$bResend = ($resend == 1);
+
+			$model = new AccountResetPasswordForm;
+			if (isset($_POST['AccountRemindPasswordForm_ajaxsendsms'])) {
+				echo '<pre>' . "";
+				CVarDumper::dump($_POST['AccountRemindPasswordForm_ajaxsendsms']);
+				echo '</pre>';
+				/*$model-> = $_POST['AccountRemindPasswordForm_ajaxsendsms'];
+				if (!$model->validate()) {
+					echo CJSON::encode(array(
+						"type" => 2,
+						"text" => "Введите правильный телефон",
+					));
+					Yii::app()->end();
+				}*/
+			}
+
+			if (!$bResend && !empty(Yii::app()->session['smsCodeSent'])) {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => "SMS уже отправлено",
+				));
+
+				Yii::app()->end();
+			}
+
+			//TODO: здесь и в аналогичном экшне вынести в SiteParams кол-во минут до отправки нового SMS
+			if ($bResend &&
+				!empty(Yii::app()->session['smsCodeSentTime']) &&
+				((time() - Yii::app()->session['smsCodeSentTime']) < 1 * 60)
+			) {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => "Должна пройти минута до следующей отправки SMS",
+				));
+
+				Yii::app()->end();
+			}
+
+			$oApi = new AdminKreddyApi();
+			//$aResult = $oApi->sendSMS($bResend);
+			$aResult['code'] = 0;
+			$aResult['sms_status'] = 1;
+
+			if ($aResult && $aResult['code'] == 0 || $aResult['sms_status'] == 1) {
+				Yii::app()->session['smsCodeSent'] = true;
+				Yii::app()->session['smsCodeSentTime'] = time();
+			}
+
+			if (empty($aResult['sms_message'])) {
+				$aResult['sms_message'] = '';
+			}
+
+			if (isset($aResult['sms_status'])) {
+				switch ($aResult['sms_status']) {
+					case 1:
+						$iSmsCode = 0;
+						break;
+					default:
+						$iSmsCode = 3;
+						break;
+				}
+			} else {
+				$iSmsCode = 3;
+			}
+
+			echo CJSON::encode(array(
+				"type" => $iSmsCode,
+				"text" => $aResult['sms_message'],
+			));
+		}
+
+		Yii::app()->end();
+	}
+
+	public
+	function actionCheckSmsCode()
+	{
+		if (Yii::app()->request->isAjaxRequest) {
+			if (isset($_POST['SMSPasswordForm'])) {
+				$passForm = new SMSPasswordForm();
+				$aPostData = $_POST['SMSPasswordForm'];
+				$passForm->setAttributes($aPostData);
+				$oApi = new AdminKreddyApi();
+				if ($passForm->validate()) {
+					$aResult = $oApi->getSmsAuth($passForm->smsPassword);
+					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
+						Yii::app()->session['smsAuthDone'] = true;
+						echo CJSON::encode(array(
+							"type" => 0,
+							"text" => Yii::app()->createUrl("account/login", array('ajax' => 1)),
+						));
+					} elseif ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
+						echo CJSON::encode(array(
+							"type" => 2,
+							"text" => 'Вы превысили допустимое число попыток ввода пароля!',
+						));
+					} else {
+						echo CJSON::encode(array(
+							"type" => 2,
+							"text" => 'Неверный пароль!',
+						));
+					}
+
+				} else {
+					echo CJSON::encode(array(
+						"type" => 2,
+						"text" => 'Неверный пароль!',
+					));
+				}
+			} else {
+				echo CJSON::encode(array(
+					"type" => 2,
+					"text" => 'Неизвестная ошибка!',
+				));
+			}
+		} else {
+			$this->redirect(Yii::app()->createUrl("account"));
+		}
+	}
+
 
 	public
 	function actionLogin()
