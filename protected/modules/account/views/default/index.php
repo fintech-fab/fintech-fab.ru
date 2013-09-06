@@ -9,7 +9,7 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Состояние подписки';
+$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подписки';
 
 $this->menu = array(
 	array(
@@ -19,7 +19,7 @@ $this->menu = array(
 		'active' => true,
 	),
 	array(
-		'label' => 'История займов', 'url' => array(
+		'label' => 'История операций', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	)
 	)
@@ -35,23 +35,46 @@ if ($this->smsState['smsAuthDone']) {
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
-echo "<h4>Состояние подписки</h4>";
+$sBalance = $this->clientData['subscription']['balance'];
+$sProduct = $this->clientData['subscription']['product'];
+$sActivityTo = $this->clientData['subscription']['activity_to'];
+$sAvailableLoans = $this->clientData['subscription']['available_loans'];
+$sMoratoriumTo = $this->clientData['subscription']['moratorium_to'];
 
-if (!$this->smsState['needSmsPass']) {
-	if (@$this->clientData['subscription'] == false) {
-		echo "<h5>Нет активных подписок</h5>";
+?>
+
+	<h4>Состояние подписки</h4>
+
+<?php
+if (!$this->smsState['needSmsPass']) { //если не требуется авторизоваться по СМС-паролю
+	if ($this->clientData['subscription'] == false) { //если нет подписки
+		?>
+		<h5>Нет активных подписок</h5>
+	<?php
 	} else {
-		echo '<strong>Продукт:</strong> ' . (@$this->clientData['subscription']['product']) . ' <br/>';
-		echo '<strong>Подписка активна до:</strong> ' . (@$this->clientData['subscription']['activity_to']) . ' <br/>';
-		echo '<strong>Баланс:</strong> ' . (@$this->clientData['subscription']['balance']) . ' руб. <br/>';
-		echo '<strong>Доступно займов:</strong> ' . (@$this->clientData['subscription']['available_loans']) . '<br/>';
+		?>
+		<strong>Баланс:</strong>  <?= $sBalance ?> руб. <br />
+		<strong>Продукт:</strong> <?= $sProduct ?><br />
+		<strong>Подписка активна до:</strong>  <?= $sActivityTo ?> <br />
+		<strong>Доступно займов:</strong> <?= $sAvailableLoans ?><br />
+		<?php
+		if (!empty($sMoratoriumTo)) {
+			?>
+			<strong>Мораторий на получение займа до:</strong> <?= $sMoratoriumTo ?>
+			<br />
+		<?php
+		}
 	}
 
 } else {
-	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
+	?>
+	<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>
+<?php
 }
-echo $passFormRender;
+?>
+<?= $passFormRender // отображаем форму запроса СМС-пароля?>
 
-//echo '<pre>';
-//print_r($this->clientData);
-//echo '</pre>';
+<?php
+echo '<pre>';
+CVarDumper::dump($this->clientData);
+echo '</pre>';

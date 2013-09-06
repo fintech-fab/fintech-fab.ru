@@ -10,15 +10,21 @@
 class AdminKreddyApi extends CModel
 {
 	const ERROR_NONE = 0;
+	const ERROR_UNKNOWN = 1;
 	const ERROR_AUTH = 2;
+	const ERROR_TOKEN_DATA = 3;
+	const ERROR_TOKEN_VERIFY = 4;
 	const ERROR_TOKEN_EXPIRE = 5;
+	const ERROR_TOKEN_NOT_EXIST = 6;
+	const CLIENT_NOT_EXIST = 7;
+	const CLIENT_DATA_NOT_EXIST = 8;
 	const ERROR_NEED_SMS_AUTH = 9;
 	const ERROR_NEED_SMS_CODE = 10;
 
 	const SMS_AUTH_OK = 0;
 	const SMS_SEND_OK = 1;
 	const SMS_CODE_ERROR = 2;
-	const SMS_CANT_SEND = 3;
+	const SMS_BLOCKED = 3;
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
@@ -27,7 +33,7 @@ class AdminKreddyApi extends CModel
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
-	const API_ACTION_RECOVER_PASSWORD = 'siteClient/recoverPassword';
+	const API_ACTION_RECOVER_PASSWORD = 'siteClient/resetPassword';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -125,6 +131,7 @@ class AdminKreddyApi extends CModel
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
+			Yii::app()->session['smsAuthDone'] = true;
 
 			return $aResult;
 		} else {
@@ -186,16 +193,54 @@ class AdminKreddyApi extends CModel
 
 	public function getClientInfo()
 	{
-		$aData = array('code' => self::ERROR_AUTH);
+		$aData = array(
+			'code'         => self::ERROR_AUTH,
+			'client_data'  => array(
+				'is_debt'  => null,
+				'fullname' => ''
+			),
+			'active_loan'  => array(
+				'balance'    => false,
+				'expired'    => false,
+				'expired_to' => false
+			),
+			'subscription' => array(
+				'product'         => false,
+				'activity_to'     => false,
+				'available_loans' => false,
+				'moratorium_to'   => false,
+				'balance'         => false
+			)
+		);
 		if (!empty($this->token)) {
-			//тут типа запрос данных по токену
+			//тут запрос данных по токену
 			$aGetData = $this->getData('info');
+			//объединяем "пустой" массив и массив полученных от API данных, включая подмассивы
+			if (gettype($aGetData) === 'array') {
+				if (isset($aGetData['client_data']) && gettype($aGetData['client_data']) === 'array') {
+					$aData['client_data'] = array_merge($aData['client_data'], $aGetData['client_data']);
+				}
+				if (isset($aGetData['active_loan']) && gettype($aGetData['active_loan']) === 'array') {
+					$aData['active_loan'] = array_merge($aData['active_loan'], $aGetData['active_loan']);
+				}
+				if (isset($aGetData['subscription']) && gettype($aGetData['subscription']) === 'array') {
+					$aData['subscription'] = array_merge($aData['subscription'], $aGetData['subscription']);
+				}
 
-			//if(gettype($aGetData)==='array'){
-			$aData = array_merge($aData, $aGetData);
-			//}
-		} else {
-			$aData = false;
+				$aData['code'] = (isset($aGetData['code'])) ? $aGetData['code'] : self::ERROR_AUTH;
+			}
+			//если есть дата, то преобразуем ее в необходимый формат
+			if ($aData['active_loan']['expired_to']) {
+				$aData['active_loan']['expired_to'] = date('d.m.Y H:i', strtotime($aData['active_loan']['expired_to']));
+			}
+
+			if ($aData['subscription']['activity_to']) {
+				$aData['subscription']['activity_to'] = date('d.m.Y H:i', strtotime($aData['subscription']['activity_to']));
+			}
+
+			if ($aData['subscription']['moratorium_to']) {
+				$aData['subscription']['moratorium_to'] = date('d.m.Y H:i', strtotime($aData['active_loan']['moratorium_to']));
+			}
 		}
 
 		return $aData;
@@ -281,22 +326,21 @@ class AdminKreddyApi extends CModel
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-		if ($sAction !== self::API_ACTION_RECOVER_PASSWORD) {
-			//тут у нас непосредственно curl запрашивает данные
-			$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
+		$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
 
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
-			curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
+		curl_setopt($ch, CURLOPT_POST, true);
 
-			$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
+		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
-			$response = curl_exec($ch);
+		$response = curl_exec($ch);
 
-			$aData = CJSON::decode($response);
-		} else {
+		$aData = CJSON::decode($response);
+
+		/*if{
 
 			//заглушка
 			$aData = array('code' => self::ERROR_AUTH);
@@ -367,7 +411,7 @@ class AdminKreddyApi extends CModel
 						break;
 				}
 			}
-		}
+		}*/
 
 		return $aData;
 	}
@@ -419,7 +463,7 @@ class AdminKreddyApi extends CModel
 	 *
 	 * @return bool
 	 */
-	public function isResultAuth($aResult)
+	public function getIsResultAuth($aResult)
 	{
 		$iStatus = $this->getResultStatus($aResult);
 
@@ -437,7 +481,7 @@ class AdminKreddyApi extends CModel
 	 *
 	 * @return bool
 	 */
-	public function isNeedSmsAuth($aResult)
+	public function getIsNeedSmsAuth($aResult)
 	{
 		$iStatus = $this->getResultStatus($aResult);
 		if ($iStatus === 9) {
@@ -458,7 +502,7 @@ class AdminKreddyApi extends CModel
 	public
 	function getSmsState($aResult, $needSmsActionCode = false)
 	{
-		$needSmsPass = $this->isNeedSmsAuth($aResult);
+		$needSmsPass = $this->getIsNeedSmsAuth($aResult);
 
 		return array('passSent' => Yii::app()->session['smsPassSent'], 'codeSent' => Yii::app()->session['smsCodeSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass, 'needSmsActionCode' => $needSmsActionCode);
 	}

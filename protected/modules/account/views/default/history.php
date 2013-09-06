@@ -10,7 +10,7 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - История операций';
+$this->pageTitle = Yii::app()->name . ' - Личный кабинет - История операций';
 
 $this->menu = array(
 	array(
@@ -36,25 +36,30 @@ if ($this->smsState['smsAuthDone']) {
 }
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
+?>
+	<h4>История операций</h4>
 
-echo "<h4>История операций</h4>";
-
-
+<?php
 if ($this->smsState['needSmsPass']) {
-	echo "<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>";
+	?>
+	<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>
+<?php
 } else {
 	$this->widget('bootstrap.widgets.TbGridView', array(
 		'id'           => 'history-grid',
 		'dataProvider' => $historyProvider,
 		'type'         => 'striped bordered condensed',
 		'columns'      => array(
-			array('name' => 'time', 'header' => 'Дата'),
 			array(
-				'name'  => 'type', 'header' => 'Тип',
+				'name'  => 'time', 'header' => 'Дата и время',
+				'value' => 'date("d.m.Y H:i",strtotime($data["time"]))',
+			),
+			array(
+				'name'  => 'type', 'header' => 'Тип операции',
 				'value' => '($data["type"]=="invoice")?"Оплата услуги":"Получение денег"',
 			),
 			array(
-				'name'  => 'type_id', 'header' => 'Тип',
+				'name'  => 'type_id', 'header' => 'Операция',
 				'value' => '($data["type"]=="invoice")?SiteParams::$aTypes[$data["type_id"]]:"Получение займа"',
 			),
 			array(
@@ -63,11 +68,12 @@ if ($this->smsState['needSmsPass']) {
 			),
 		),
 	));
-
 }
+?>
 
-echo $passFormRender;
+<?= $passFormRender // отображаем форму запроса СМС-пароля ?>
 
+<?php
 //echo '<pre>';
 //print_r($history);
 //CVarDumper::dump($historyProvider);

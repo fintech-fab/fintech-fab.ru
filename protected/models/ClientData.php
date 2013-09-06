@@ -191,7 +191,12 @@ class ClientData extends CActiveRecord
 	}
 
 
-	//проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
+	/**
+	 * Проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
+	 * @param $phone
+	 *
+	 * @return bool
+	 */
 	public static function checkClientByPhone($phone)
 	{
 		$oClientData = self::model()->scopePhone($phone)->find();

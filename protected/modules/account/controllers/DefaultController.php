@@ -50,20 +50,20 @@ class DefaultController extends Controller
 	 * Главная страница личного кабинета
 	 */
 
-	public function actionIndex($ajax = 0)
+	public function actionIndex()
 	{
-		//TODO всё в модель
 		$oApi = new AdminKreddyApi();
+		//получаем основную информацию из API
 		$this->clientData = $oApi->getClientInfo();
-		$oSmsPassForm = new SMSPasswordForm();
 
-		if ($oApi->isResultAuth($this->clientData)) {
+		if ($oApi->getIsResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($this->clientData);
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
+			$oSmsPassForm = new SMSPasswordForm();
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
-			if ($ajax == 1) {
+			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender));
 			} else {
@@ -79,19 +79,24 @@ class DefaultController extends Controller
 	 * История операций
 	 */
 
-	public function actionHistory($ajax = 0)
+	public function actionHistory()
 	{
 		$oApi = new AdminKreddyApi();
+		//получаем основную информацию из API
 		$this->clientData = $oApi->getClientInfo();
+		//получаем историю операций из API
 		$aHistory = $oApi->getHistory();
-		$oSmsPassForm = new SMSPasswordForm();
 
 		$oHistoryDataProvider = $oApi->getHistoryDataProvider($aHistory);
 
-		if ($oApi->isResultAuth($this->clientData)) {
+		if ($oApi->getIsResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($aHistory);
+			/**
+			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
+			 */
+			$oSmsPassForm = new SMSPasswordForm();
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
-			if ($ajax == 1) {
+			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 			} else {
@@ -108,7 +113,7 @@ class DefaultController extends Controller
 	 * История операций
 	 */
 
-	public function actionTest($getcode = 0, $ajax = 0)
+	public function actionTest($getcode = 0)
 	{
 		$oApi = new AdminKreddyApi();
 		$aTest = array('code' => $oApi::ERROR_AUTH);
@@ -171,7 +176,7 @@ class DefaultController extends Controller
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'test'), true, false);
 			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
 
-			if ($ajax == 1) {
+			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
 			} else {
@@ -256,9 +261,16 @@ class DefaultController extends Controller
 	public
 	function actionCheckSmsPass($act = 'index')
 	{
-		//TODO вынести в API в том числе JSON-ответы
 		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['SMSPasswordForm'])) {
+			$aAnswer = array(
+				"type" => 2,
+				"text" => 'Неверный пароль!',
+			);
+
+			$bIsPost = Yii::app()->request->getIsPostRequest();
+			$aPasswordForm = Yii::app()->request->getParam('SMSPasswordForm');
+
+			if ($bIsPost && isset($aPasswordForm)) {
 				$passForm = new SMSPasswordForm();
 				$aPostData = $_POST['SMSPasswordForm'];
 				$passForm->setAttributes($aPostData);
@@ -266,35 +278,19 @@ class DefaultController extends Controller
 				if ($passForm->validate()) {
 					$aResult = $oApi->getSmsAuth($passForm->smsPassword);
 					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
-						Yii::app()->session['smsAuthDone'] = true;
-						echo CJSON::encode(array(
+						$aAnswer = array(
 							"type" => 0,
-							"text" => Yii::app()->createUrl("account/" . $act, array('ajax' => 1)),
-						));
+							"text" => Yii::app()->createUrl("account/" . $act),
+						);
 					} elseif ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
-						echo CJSON::encode(array(
+						$aAnswer = array(
 							"type" => 2,
 							"text" => 'Вы превысили допустимое число попыток ввода пароля!',
-						));
-					} else {
-						echo CJSON::encode(array(
-							"type" => 2,
-							"text" => 'Неверный пароль!',
-						));
+						);
 					}
-
-				} else {
-					echo CJSON::encode(array(
-						"type" => 2,
-						"text" => 'Неверный пароль!',
-					));
 				}
-			} else {
-				echo CJSON::encode(array(
-					"type" => 2,
-					"text" => 'Неизвестная ошибка!',
-				));
 			}
+			echo CJSON::encode($aAnswer);
 		} else {
 			$this->redirect(Yii::app()->createUrl("account"));
 		}

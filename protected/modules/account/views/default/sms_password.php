@@ -176,7 +176,9 @@ $aParams = array(
 	</div>
 
 	<div class="clearfix"></div>
+
 	<?php
+	//TODO jQuery('#" . get_class($oForm) . "_ajaxresendsms').show(); => .hide()
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'  => 'ajaxSubmit',
 		'type'        => 'primary',

@@ -1,4 +1,45 @@
-<?php /* @var $this Controller */ ?>
+<?php /* @var $this Controller */
+
+
+$sFullName = $this->clientData['client_data']['fullname'];
+$bIsDebt = $this->clientData['client_data']['is_debt'];
+$iBalance = $this->clientData['active_loan']['balance'];
+$bExpired = $this->clientData['active_loan']['expired'];
+$sExpiredTo = $this->clientData['active_loan']['expired_to'];
+
+if (!$iBalance) {
+	if (isset($bIsDebt) && $bIsDebt) {
+		$sDebtMessage = '<strong>У вас есть задолженность по кредиту.</strong><br/>Авторизуйтесь по SMS-паролю для получения подробной информации.<br/>';
+	} elseif (isset($bIsDebt) && !$bIsDebt) {
+		$sDebtMessage = '<strong>У вас нет задолженности по кредиту.</strong><br/>Авторизуйтесь по SMS-паролю для получения подробной информации.<br/>';
+	} else {
+		$sDebtMessage = '<strong>Произошла ошибка!</strong><br/>Выйдите из личного кабинета и выполните вход заново.<br/>Если ошибка повторится, позвоните на горячую линию.';
+	}
+
+	$sBalanceMessage = '';
+	$sExpireToMessage = '';
+
+} else {
+	$sDebtMessage = '';
+
+	if ($iBalance < 0) {
+		$sBalanceMessage = '<strong>Задолженность:</strong> ' . abs($iBalance) . ' руб. <br/>';
+	} else {
+		$sBalanceMessage = '<strong>Баланс:</strong> ' . abs($iBalance) . ' руб. <br/>';
+	}
+	$sExpireToMessage = '<strong>Вернуть до:</strong> ' . $sExpiredTo . '<br/>';
+}
+
+if ($bExpired) {
+	$sExpiredMessage = '<strong>Платеж просрочен!</strong><br/>';
+} else {
+	$sExpiredMessage = '';
+}
+
+
+?>
+
+
 <?php $this->beginContent('/layouts/main'); ?>
 <div class="container" id="main-content">
 	<div class="row">
@@ -20,20 +61,14 @@
 				?>
 
 				<div style="padding-left: 20px;">
-					<h4><?= @$this->clientData['client_data']['fullname']; ?></h4>
+					<h4><?= $sFullName; ?></h4>
 
 					<p>
-						<?php if (@$this->clientData['active_loan']['balance'] < 0) {
-							echo '<strong>Задолженность:</strong> ' . (@$this->clientData['active_loan']['balance'] * -1) . ' руб. <br/>';
-							if (@$this->clientData['active_load']['expired']) {
-								echo '<strong>Платеж просрочен!<br/>Требовалось вернуть до: </strong> ' . @$this->clientData['active_loan']['expired_to'] . '<br/>';
-							} else {
-								echo '<strong>Вернуть до:</strong> ' . @$this->clientData['active_loan']['expired_to'] . '<br/>';
-							}
-						} else {
-							echo '<strong>Баланс:</strong> ' . (@$this->clientData['active_loan']['balance']) . ' руб. <br/>';
-						}
-						?></p>
+						<?= $sExpiredMessage; ?>
+						<?= $sBalanceMessage; ?>
+						<?= $sExpireToMessage ?>
+						<?= $sDebtMessage ?>
+					</p>
 				</div>
 				<?php $this->endWidget(); ?>
 
