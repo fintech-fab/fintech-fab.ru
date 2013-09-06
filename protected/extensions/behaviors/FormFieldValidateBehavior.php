@@ -548,6 +548,10 @@ class FormFieldValidateBehavior extends CBehavior
 		if (!$sRegAsRes && empty($this->owner->$attribute)) {
 			$this->owner->addError($attribute, $param['message']);
 		}
+		if (!$sRegAsRes && $attribute === 'address_res_region' && !in_array($this->owner->$attribute, array_keys(Dictionaries::getRegions()))) {
+			$this->owner->addError($attribute, $param['message2']);
+		}
+
 
 		return;
 
