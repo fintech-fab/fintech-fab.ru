@@ -9,7 +9,7 @@
 class AccountResetPasswordForm extends CFormModel
 {
 	public $phone;
-	public $code;
+	public $smsCode;
 
 	/**
 	 * Declares the validation rules.
@@ -19,9 +19,13 @@ class AccountResetPasswordForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('phone', 'required'),
-			array('phone', 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр'),
-			array('phone', 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/')
+			array('phone', 'required', 'on' => 'phoneRequired'),
+			array('phone', 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр', 'on' => 'phoneRequired'),
+			array(
+				'phone', 'match', 'message' => 'Номер телефона должен начинаться на +7 9',
+				                  'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/', 'on' => 'phoneRequired'
+			),
+			array('smsCode', 'required', 'message' => 'Поле обязательно к заполнению', 'on' => 'codeRequired'),
 		);
 	}
 
@@ -31,8 +35,8 @@ class AccountResetPasswordForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'phone' => 'Телефон',
-			'code'  => 'Код',
+			'phone'   => 'Телефон',
+			'smsCode' => 'Код',
 		);
 	}
 

@@ -29,16 +29,13 @@ $urlAjaxSendSMS = Yii::app()->createUrl('/account/ajaxsendsmscode', array('resen
 $urlAjaxResendSMS = Yii::app()->createUrl('/account/ajaxsendsmscode', array('resend' => 1));
 
 $sessionPhone = !empty(Yii::app()->session['phoneResetPassword']) ? Yii::app()->session['phoneResetPassword'] : '';
-echo '<pre>' . "";
-CVarDumper::dump($sessionPhone);
-echo '</pre>';
 
 $aParams = array(
 	'minutesUntil'      => 1,
 	'btnResendLabel'    => 'Выслать код на телефон повторно',
 	'mainContentId'     => 'main-content',
 	'enterSMSPassLabel' => 'Введите код из SMS:',
-	'fieldSMSPassName'  => 'code',
+	'fieldSMSPassName'  => 'smsCode',
 	'phone'             => $sessionPhone,
 );
 ?>
@@ -59,8 +56,8 @@ $aParams = array(
 	));
 	?>
 
-	<div>
-		Ваш телефон: <span id="<?php echo get_class($model); ?>_enteredPhone"><?php echo $aParams['phone']; ?></span>
+	<div class="well">
+		Ваш телефон: <span id="<?php echo get_class($model); ?>_enteredPhone">+7<?php echo $aParams['phone']; ?></span>
 	</div>
 
 	<?php
@@ -135,7 +132,7 @@ $aParams = array(
 				'dataType' => "json",
 				'type'     => "POST",
 				'success'  => "function(data) {
-									jQuery('#" . get_class($model) . "_actionAnswer').html(data.text).hide();
+									jQuery('#" . get_class($model) . "_actionAnswersend').html(data.text).hide();
 									var enteredPhone = jQuery('#" . get_class($model) . "_phone').val();
                                     jQuery('#" . get_class($model) . "_enteredPhone').html(enteredPhone);
                                 	if(data.type == 0) { /* SMS успешно отправлено */
@@ -148,20 +145,22 @@ $aParams = array(
                                 		showUntilResend();
                                			jQuery('#" . get_class($model) . "_alertsmssent').fadeIn().delay(3000).fadeOut();
                                		} else if(data.type == 2) { /* Общая ошибка */
-                                	    jQuery('#" . get_class($model) . "_ajaxsendsms').hide();
-                                		jQuery('#" . get_class($model) . "_actionAnswer').html(data.text).show();
+                                		jQuery('#" . get_class($model) . "_actionAnswersend').html(data.text).show();
                                 	} else if(data.type == 1) { /* Ошибка - SMS уже было отправлено */
                                 	    jQuery('#" . get_class($model) . "_ajaxsendsms').hide();
                                 		jQuery('#" . get_class($model) . "_checksmspass').show();
-                               			jQuery('#" . get_class($model) . "_actionAnswer').html(data.text).show();
+                               			jQuery('#" . get_class($model) . "_actionAnswersend').html(data.text).show();
                                		} else if(data.type == 3) { /* Ошибка при отправке SMS */
-                                        jQuery('#" . get_class($model) . "_actionAnswer').html(data.text).show();
+                                        jQuery('#" . get_class($model) . "_actionAnswersend').html(data.text).show();
                                 	} else {
-                                	    jQuery('#" . get_class($model) . "_actionAnswer').html('Неизвестная ошибка!').show();
+                                	    jQuery('#" . get_class($model) . "_actionAnswersend').html('Неизвестная ошибка!').show();
                                 	}
                                 } ",
 			),
 		));
+		?>
+		<div class="help-block error" id="<?php echo get_class($model); ?>_actionAnswersend"></div>
+		<?php
 
 		$this->endWidget();
 	}

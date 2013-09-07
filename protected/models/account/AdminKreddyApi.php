@@ -27,7 +27,7 @@ class AdminKreddyApi extends CModel
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
-	const API_ACTION_RECOVER_PASSWORD = 'siteClient/recoverPassword';
+	const API_ACTION_RECOVER_PASSWORD = 'siteClient/resetPassword';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -155,7 +155,7 @@ class AdminKreddyApi extends CModel
 	 *
 	 * @return mixed
 	 */
-	public function recoveryPasswordSendSms($phone, $resend = false)
+	public function resetPasswordSendSms($phone, $resend = false)
 	{
 		if (!$resend) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 0));
@@ -172,7 +172,7 @@ class AdminKreddyApi extends CModel
 	 *
 	 * @return mixed
 	 */
-	public function recoveryPasswordCheckSms($phone, $sms_code)
+	public function resetPasswordCheckSms($phone, $sms_code)
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_code' => $sms_code));
 
@@ -282,22 +282,23 @@ class AdminKreddyApi extends CModel
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-		if ($sAction !== self::API_ACTION_RECOVER_PASSWORD) {
-			//тут у нас непосредственно curl запрашивает данные
-			$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
+		//if ($sAction !== self::API_ACTION_RECOVER_PASSWORD) {
+		//тут у нас непосредственно curl запрашивает данные
+		$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
 
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
-			curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
+		curl_setopt($ch, CURLOPT_POST, true);
 
-			$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
+		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
-			$response = curl_exec($ch);
+		$response = curl_exec($ch);
 
-			$aData = CJSON::decode($response);
-		} else {
+		$aData = CJSON::decode($response);
+
+		/*} else {
 
 			//заглушка
 			$aData = array('code' => self::ERROR_AUTH);
@@ -368,7 +369,7 @@ class AdminKreddyApi extends CModel
 						break;
 				}
 			}
-		}
+		}*/
 
 		return $aData;
 	}

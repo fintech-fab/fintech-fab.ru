@@ -31,7 +31,7 @@ class DefaultController extends Controller
 		return array(
 			array(
 				'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array('login', 'resetpassword', 'ajaxsendsmscode', 'checksmspasscode'),
+				'actions' => array('login', 'resetpassword', 'ajaxsendsmscode', 'checksmscode'),
 				'users'   => array('*'),
 			),
 			array(
@@ -313,28 +313,33 @@ class DefaultController extends Controller
 		if (Yii::app()->request->isAjaxRequest) {
 			$bResend = ($resend == 1);
 
-			$model = new AccountResetPasswordForm;
-			if (isset($_POST['AccountRemindPasswordForm_ajaxsendsms'])) {
-				echo '<pre>' . "";
-				CVarDumper::dump($_POST['AccountRemindPasswordForm_ajaxsendsms']);
-				echo '</pre>';
-				/*$model-> = $_POST['AccountRemindPasswordForm_ajaxsendsms'];
-				if (!$model->validate()) {
-					echo CJSON::encode(array(
-						"type" => 2,
-						"text" => "Введите правильный телефон",
-					));
-					Yii::app()->end();
-				}*/
-			}
+			$phone = "";
 
-			if (!$bResend && !empty(Yii::app()->session['smsCodeSent'])) {
-				echo CJSON::encode(array(
-					"type" => 2,
-					"text" => "SMS уже отправлено",
-				));
+			if (!$bResend) {
+				if (isset($_POST['AccountResetPasswordForm'])) {
+					$model = new AccountResetPasswordForm('phoneRequired');
+					$model->attributes = $_POST['AccountResetPasswordForm'];
+					if (!$model->validate()) {
+						echo CJSON::encode(array(
+							"type" => 2,
+							"text" => "Введите правильный телефон",
+						));
+						Yii::app()->end();
+					} else {
+						$phone = $model->phone;
 
-				Yii::app()->end();
+						if (!empty(Yii::app()->session['smsCodeSent'])) {
+							echo CJSON::encode(array(
+								"type" => 2,
+								"text" => "SMS уже отправлено",
+							));
+
+							Yii::app()->end();
+						}
+					}
+				}
+			} else {
+				$phone = Yii::app()->session['phoneResetPassword'];
 			}
 
 			//TODO: здесь и в аналогичном экшне вынести в SiteParams кол-во минут до отправки нового SMS
@@ -351,11 +356,11 @@ class DefaultController extends Controller
 			}
 
 			$oApi = new AdminKreddyApi();
-			//$aResult = $oApi->sendSMS($bResend);
-			$aResult['code'] = 0;
+			$aResult = $oApi->resetPasswordSendSms($phone, $bResend);
+			$aResult['code'] = 10;
 			$aResult['sms_status'] = 1;
 
-			if ($aResult && $aResult['code'] == 0 || $aResult['sms_status'] == 1) {
+			if ($aResult && $aResult['code'] == 10 || $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsCodeSent'] = true;
 				Yii::app()->session['smsCodeSentTime'] = time();
 			}
@@ -382,7 +387,6 @@ class DefaultController extends Controller
 				"text" => $aResult['sms_message'],
 			));
 		}
-
 		Yii::app()->end();
 	}
 
@@ -390,35 +394,37 @@ class DefaultController extends Controller
 	function actionCheckSmsCode()
 	{
 		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['SMSPasswordForm'])) {
-				$passForm = new SMSPasswordForm();
-				$aPostData = $_POST['SMSPasswordForm'];
-				$passForm->setAttributes($aPostData);
+			if (!empty(Yii::app()->session['phoneResetPassword'])) {
+				$codeForm = new AccountResetPasswordForm();
+				$aPostData = $_POST['AccountResetPasswordForm'];
+				$codeForm->setAttributes($aPostData);
+				$codeForm->phone = Yii::app()->session['phoneResetPassword'];
 				$oApi = new AdminKreddyApi();
-				if ($passForm->validate()) {
-					$aResult = $oApi->getSmsAuth($passForm->smsPassword);
+				if ($codeForm->validate()) {
+					$aResult = $oApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
 					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
 						Yii::app()->session['smsAuthDone'] = true;
 						echo CJSON::encode(array(
 							"type" => 0,
 							"text" => Yii::app()->createUrl("account/login", array('ajax' => 1)),
 						));
-					} elseif ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
-						echo CJSON::encode(array(
-							"type" => 2,
-							"text" => 'Вы превысили допустимое число попыток ввода пароля!',
-						));
 					} else {
-						echo CJSON::encode(array(
-							"type" => 2,
-							"text" => 'Неверный пароль!',
-						));
+						if ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
+							echo CJSON::encode(array(
+								"type" => 2,
+								"text" => 'Вы превысили допустимое число попыток ввода пароля!',
+							));
+						} else {
+							echo CJSON::encode(array(
+								"type" => 2,
+								"text" => 'Неверный код!1' . $aResult['sms_status'],
+							));
+						}
 					}
-
 				} else {
 					echo CJSON::encode(array(
 						"type" => 2,
-						"text" => 'Неверный пароль!',
+						"text" => 'Неверный код!2',
 					));
 				}
 			} else {
@@ -430,6 +436,7 @@ class DefaultController extends Controller
 		} else {
 			$this->redirect(Yii::app()->createUrl("account"));
 		}
+		Yii::app()->end();
 	}
 
 
