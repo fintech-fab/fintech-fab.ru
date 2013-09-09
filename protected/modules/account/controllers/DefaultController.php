@@ -367,8 +367,6 @@ class DefaultController extends Controller
 
 			$oApi = new AdminKreddyApi();
 			$aResult = $oApi->resetPasswordSendSms($phone, $bResend);
-			$aResult['code'] = 10;
-			$aResult['sms_status'] = 1;
 
 			if ($aResult && $aResult['code'] == 10 || $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsCodeSent'] = true;
