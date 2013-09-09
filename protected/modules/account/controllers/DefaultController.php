@@ -453,6 +453,7 @@ class DefaultController extends Controller
 				if ($codeForm->validate()) {
 					$aResult = $oApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
 					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
+						Yii::app()->session['phoneResetPassword'] = null;
 						$aAnswer = array(
 							"type" => 0,
 							"text" => 'SMS с паролем отправлено',
