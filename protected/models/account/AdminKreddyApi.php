@@ -240,7 +240,7 @@ class AdminKreddyApi extends CModel
 			}
 
 			if ($aData['subscription']['moratorium_to']) {
-				$aData['subscription']['moratorium_to'] = date('d.m.Y H:i', strtotime($aData['active_loan']['moratorium_to']));
+				$aData['subscription']['moratorium_to'] = date('d.m.Y H:i', strtotime($aData['subscription']['moratorium_to']));
 			}
 		}
 
