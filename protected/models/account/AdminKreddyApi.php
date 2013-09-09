@@ -335,6 +335,8 @@ class AdminKreddyApi extends CModel
 
 		$response = curl_exec($ch);
 
+		Yii::log($response);
+
 		$aData = CJSON::decode($response);
 
 		/*if{
