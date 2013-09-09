@@ -512,11 +512,12 @@ class AdminKreddyApi extends CModel
 
 		$aRet = array(
 			'passSent'          => Yii::app()->session['smsPassSent'],
+			'passSentTime'      => Yii::app()->session['smsPassSentTime'],
 			'codeSent'          => Yii::app()->session['smsCodeSent'],
 			'smsAuthDone'       => Yii::app()->session['smsAuthDone'],
 			'needSmsPass'       => $needSmsPass,
 			'needSmsActionCode' => $needSmsActionCode,
-			'smsPassLeftTime'   => $smsPassLeftTime
+			'smsPassLeftTime'   => $smsPassLeftTime,
 		);
 
 		return $aRet;

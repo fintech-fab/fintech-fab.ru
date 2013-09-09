@@ -218,7 +218,7 @@ class DefaultController extends Controller
 			}
 
 			$curTime = time();
-			$leftTime = (!empty($this->smsState['smsPassSentTime'])) ? $this->smsState['smsPassSentTime'] : $curTime;
+			$leftTime = (!empty($this->smsState['passSentTime'])) ? $this->smsState['passSentTime'] : $curTime;
 			$leftTime = $curTime - $leftTime;
 			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
 
