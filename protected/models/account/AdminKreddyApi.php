@@ -439,6 +439,8 @@ class AdminKreddyApi extends CModel
 
 	public function logout()
 	{
+		Yii::app()->session['smsPassSent'] = false;
+		Yii::app()->session['smsAuthDone'] = false;
 		$this->setSessionToken(null);
 	}
 
@@ -506,8 +508,18 @@ class AdminKreddyApi extends CModel
 	function getSmsState($aResult, $needSmsActionCode = false)
 	{
 		$needSmsPass = $this->getIsNeedSmsAuth($aResult);
+		$smsPassLeftTime = self::getSmsPassLeftTime();
 
-		return array('passSent' => Yii::app()->session['smsPassSent'], 'codeSent' => Yii::app()->session['smsCodeSent'], 'smsAuthDone' => Yii::app()->session['smsAuthDone'], 'needSmsPass' => $needSmsPass, 'needSmsActionCode' => $needSmsActionCode);
+		$aRet = array(
+			'passSent'          => Yii::app()->session['smsPassSent'],
+			'codeSent'          => Yii::app()->session['smsCodeSent'],
+			'smsAuthDone'       => Yii::app()->session['smsAuthDone'],
+			'needSmsPass'       => $needSmsPass,
+			'needSmsActionCode' => $needSmsActionCode,
+			'smsPassLeftTime'   => $smsPassLeftTime
+		);
+
+		return $aRet;
 	}
 
 	/**
@@ -557,6 +569,26 @@ class AdminKreddyApi extends CModel
 		}
 
 		return $oHistoryDataProvider;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSmsPassLeftTime()
+	{
+		$curTime = time();
+		$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
+		$leftTime = $curTime - $leftTime;
+		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
+
+		return $leftTime;
+	}
+
+	public function setSmsPassSentAndTime()
+	{
+		Yii::app()->session['smsPassSent'] = true;
+		Yii::app()->session['smsPassSentTime'] = time();
+		Yii::app()->session['smsPassLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
 	}
 
 

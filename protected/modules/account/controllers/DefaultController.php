@@ -56,19 +56,13 @@ class DefaultController extends Controller
 		//получаем основную информацию из API
 		$this->clientData = $oApi->getClientInfo();
 
-		$curTime = time();
-		$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
-		$leftTime = $curTime - $leftTime;
-		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
-		Yii::app()->session['smsPassLeftTime'] = $leftTime;
-
 		if ($oApi->getIsResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($this->clientData);
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->session['smsPassLeftTime'], 'act' => 'index'), true);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => $oApi->getSmsPassLeftTime(), 'act' => 'index'), true);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender));
@@ -211,7 +205,10 @@ class DefaultController extends Controller
 		if (Yii::app()->request->isAjaxRequest) {
 			$bResend = ($resend == 1);
 
-			if (!$bResend && !empty(Yii::app()->session['smsPassSent'])) {
+			$oApi = new AdminKreddyApi();
+			$this->smsState = $oApi->getSmsState($this->clientData);
+
+			if (!$bResend && !empty($this->smsState['smsPassSent'])) {
 				echo CJSON::encode(array(
 					"type" => 2,
 					"text" => "SMS уже отправлено",
@@ -221,15 +218,13 @@ class DefaultController extends Controller
 			}
 
 			$curTime = time();
-			$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
+			$leftTime = (!empty($this->smsState['smsPassSentTime'])) ? $this->smsState['smsPassSentTime'] : $curTime;
 			$leftTime = $curTime - $leftTime;
 			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
 
 			if ($bResend &&
 				($leftTime > 0)
 			) {
-				// обновляем оставшееся время
-				Yii::app()->session['smsPassLeftTime'] = $leftTime;
 				echo CJSON::encode(array(
 					"type" => 2,
 					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
@@ -238,14 +233,12 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 
-			$oApi = new AdminKreddyApi();
 			$aResult = $oApi->sendSMS($bResend);
 
 			//TODO протестить
 			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
-				Yii::app()->session['smsPassSent'] = true;
-				Yii::app()->session['smsPassSentTime'] = time();
-				Yii::app()->session['smsPassLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
+				//устанавливаем флаг "СМС отправлено" и время отправки
+				$oApi->setSmsPassSentAndTime();
 			}
 
 			if (empty($aResult['sms_message'])) {
@@ -268,7 +261,7 @@ class DefaultController extends Controller
 			echo CJSON::encode(array(
 				"type"     => $iSmsCode,
 				"text"     => $aResult['sms_message'],
-				"leftTime" => Yii::app()->session['smsPassLeftTime'],
+				"leftTime" => $oApi->getSmsPassLeftTime(),
 			));
 		}
 		Yii::app()->end();
@@ -428,10 +421,12 @@ class DefaultController extends Controller
 				$aResult['sms_message'] = 'Произошла неизвестная ошибка. Обратитесь на горячую линию.';
 			}
 
+
 			echo CJSON::encode(array(
 				"type"     => $iSmsCode,
 				"text"     => $aResult['sms_message'],
 				"leftTime" => Yii::app()->session['smsCodeLeftTime'],
+				"trace"    => Yii::app()->session['phoneResetPassword'],
 			));
 		}
 		Yii::app()->end();
@@ -527,6 +522,7 @@ class DefaultController extends Controller
 	{
 		Yii::app()->session['smsPassSent'] = false;
 		Yii::app()->session['smsAuthDone'] = false;
+
 		$oApi = new AdminKreddyApi();
 		$oApi->logout();
 		Yii::app()->user->logout();

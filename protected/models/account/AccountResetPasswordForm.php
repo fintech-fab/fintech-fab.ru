@@ -59,13 +59,6 @@ class AccountResetPasswordForm extends CFormModel
 		return parent::beforeValidate();
 	}
 
-	public function afterValidate()
-	{
-		if ($this->phone) {
-			Yii::app()->session['phoneResetPassword'] = $this->phone;
-		}
-	}
-
 	/**
 	 * проверка номера телефона
 	 * @param $attribute

@@ -216,7 +216,7 @@ Yii::app()->clientScript->registerScript('showUntilResend', '
 		iSecondsLeft = Math.floor((leftTime - (new Date()))/1000);
 		if(iSecondsLeft < 0) {
 			jQuery("#' . get_class($model) . '_btnResend").removeAttr("disabled").removeClass("disabled");
-			jQuery("#' . get_class($model) . '_textUntilResend").fadeOut("slow");
+			jQuery("#' . get_class($model) . '_textUntilResend").hide();
 			return;
 		}
 		jQuery("#' . get_class($model) . '_textUntilResend").show("fast");
