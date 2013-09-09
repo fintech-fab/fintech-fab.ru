@@ -24,9 +24,9 @@ $flagHideFormCheckSMSCode = (empty($this->smsState['passSent']) || $flagSmsAuthD
 
 $smsPassSentTime = Yii::app()->session['smsPassSentTime'];
 
-$urlCheckSmsPass = Yii::app()->createUrl('/account/checksmspass', array('act' => $act));
-$urlAjaxSendSMS = Yii::app()->createUrl('/account/ajaxsendsms', array('resend' => 0));
-$urlAjaxResendSMS = Yii::app()->createUrl('/account/ajaxsendsms', array('resend' => 1));
+$urlCheckSmsPass = Yii::app()->createUrl('/account/checkSmsPass', array('act' => $act));
+$urlAjaxSendSMS = Yii::app()->createUrl('/account/ajaxSendSms', array('resend' => 0));
+$urlAjaxResendSMS = Yii::app()->createUrl('/account/ajaxSendSms', array('resend' => 1));
 /**
  * сколько минут до того, как можно отправить новую SMS
  */
@@ -40,10 +40,10 @@ $aParams = array(
 );
 ?>
 <div class="row">
-	<div id="<?php echo get_class($oForm); ?>_alertsmssent" class="alert in alert-success hide span7"><?php echo Dictionaries::C_SMS_SUCCESS; ?></div>
+	<div id="<?php echo get_class($oForm); ?>_alertSmsSent" class="alert in alert-success hide span7"><?php echo Dictionaries::C_SMS_SUCCESS; ?></div>
 	<?php
 	$form3 = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'                     => get_class($oForm) . '_ajaxresendsms',
+		'id'                     => get_class($oForm) . '_ajaxResendSms',
 		'enableClientValidation' => true,
 		'clientOptions'          => array(
 			'validateOnChange' => true,
@@ -72,7 +72,7 @@ $aParams = array(
                                 	if(data.type == 0) {
                                 	    sendTime = new Date();
                                 	    showUntilResend();
-                                	    jQuery('#" . get_class($oForm) . "_alertsmssent').fadeIn().delay(5000).fadeOut();
+                                	    jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(5000).fadeOut();
                                 	    jQuery('#" . get_class($oForm) . "_actionAnswerResend').hide();
                                 	    jQuery('#" . get_class($oForm) . "_textUntilResend').show();
                                 	    jQuery('#" . get_class($oForm) . "_btnResend').addClass('disabled').attr('disabled','disabled');
@@ -101,7 +101,7 @@ $aParams = array(
 	// если SMS на телефон ещё не отсылалось
 	if (empty($hideSmsSendButton)) {
 		$form2 = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-			'id'                     => get_class($oForm) . '_ajaxsendsms',
+			'id'                     => get_class($oForm) . '_ajaxSendSms',
 			'enableClientValidation' => true,
 			'clientOptions'          => array(
 				'validateOnChange' => true,
@@ -125,19 +125,19 @@ $aParams = array(
 				'success'  => "function(data) {
 									jQuery('#" . get_class($oForm) . "_actionAnswer').html(data.text).hide();
                                 	if(data.type == 0) { /* SMS успешно отправлено */
-                                	    jQuery('#" . get_class($oForm) . "_ajaxsendsms').hide();
+                                	    jQuery('#" . get_class($oForm) . "_ajaxSendSms').hide();
                                 	    jQuery('#" . get_class($oForm) . "_textUntilResend').show();
-                                	    jQuery('#" . get_class($oForm) . "_ajaxresendsms').show();
-                                		jQuery('#" . get_class($oForm) . "_checksmspass').show();
+                                	    jQuery('#" . get_class($oForm) . "_ajaxResendSms').show();
+                                		jQuery('#" . get_class($oForm) . "_checkSmsPass').show();
                                 		sendTime = new Date();
                                 		showUntilResend();
-                               			jQuery('#" . get_class($oForm) . "_alertsmssent').fadeIn().delay(3000).fadeOut();
+                               			jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(3000).fadeOut();
                                		} else if(data.type == 2) { /* Общая ошибка */
-                                	    jQuery('#" . get_class($oForm) . "_ajaxsendsms').hide();
+                                	    jQuery('#" . get_class($oForm) . "_ajaxSendSms').hide();
                                 		jQuery('#" . get_class($oForm) . "_actionAnswer').html(data.text).show();
                                 	} else if(data.type == 1) { /* Ошибка - SMS уже было отправлено */
-                                	    jQuery('#" . get_class($oForm) . "_ajaxsendsms').hide();
-                                		jQuery('#" . get_class($oForm) . "_checksmspass').show();
+                                	    jQuery('#" . get_class($oForm) . "_ajaxSendSms').hide();
+                                		jQuery('#" . get_class($oForm) . "_checkSmsPass').show();
                                			jQuery('#" . get_class($oForm) . "_actionAnswer').html(data.text).show();
                                		} else if(data.type == 3) { /* Ошибка при отправке SMS */
                                         jQuery('#" . get_class($oForm) . "_actionAnswer').html(data.text).show();
@@ -152,7 +152,7 @@ $aParams = array(
 	}
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'                     => get_class($oForm) . "_checksmspass",
+		'id'                     => get_class($oForm) . "_checkSmsPass",
 		'enableClientValidation' => true,
 		'htmlOptions'            => array(
 			'class' => "span4" . ($flagHideFormCheckSMSCode ? ' hide' : ''), //прячем если стоит флаг "спрятать" или если СМС-авторизация уже пройдена
@@ -191,7 +191,7 @@ $aParams = array(
 			'success'  => "function(data)  {
                                 	if(data.type == 0) {
                                         jQuery('#" . $aParams['mainContentId'] . "').load(data.text);
-                                        jQuery('#" . get_class($oForm) . "_ajaxresendsms').show();
+                                        jQuery('#" . get_class($oForm) . "_ajaxResendSms').show();
                                 	} else if(data.type == 2) {
                                 	    //ругаемся ошибкой
                                			jQuery('#" . get_class($oForm) . "_actionAnswer').html(data.text).show();
@@ -230,10 +230,9 @@ Yii::app()->clientScript->registerScript('showUntilResend', '
 	}
 ', CClientScript::POS_HEAD);
 if (!$flagHideFormCheckSMSCode) {
-	//TODO: не знаю почему, но без добавления этих 70 сек работает некорректно
 	Yii::app()->clientScript->registerScript('showUntilResend2', '
 	sendTime = new Date();
-	sendTime.setTime((' . $smsPassSentTime . '+70)*1000);
+	sendTime.setTime(' . $smsPassSentTime . '*1000);
 	showUntilResend();
 ', CClientScript::POS_LOAD);
 }

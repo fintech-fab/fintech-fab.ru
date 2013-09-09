@@ -330,8 +330,7 @@ class AdminKreddyApi extends CModel
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
-
-		Yii::trace(CVarDumper::dump($aRequest));
+		Yii::trace(CJSON::encode($aRequest));
 
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 

@@ -369,7 +369,7 @@ class DefaultController extends Controller
 			}
 
 			$oApi = new AdminKreddyApi();
-			$aResult = $oApi->resetPasswordSendSms($phone, $bResend);
+			$aResult = $oApi->resetPasswordSendSms($phone, $bResend); //TODO: посмотреть, что получаем от API
 
 			if ($aResult && $aResult['code'] == 10 || $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsCodeSent'] = true;
@@ -425,7 +425,7 @@ class DefaultController extends Controller
 						Yii::app()->session['smsAuthDone'] = true;
 						$aAnswer = array(
 							"type" => 0,
-							"text" => Yii::app()->createUrl("account/login", array('ajax' => 1)),
+							"text" => 'SMS с паролем отправлено',
 						);
 					} else {
 						if ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
