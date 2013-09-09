@@ -2,8 +2,8 @@
 /**
  * @var AccountResetPasswordForm  $model
  * @var DefaultController         $this
- * @var                           $smsState
- * @var                           $needSmsPass
+ * @var                           $enteredPhone
+ * @var                           $smsLeftTime
  * @var                           $act
  * @var IkTbActiveForm            $form
  * @var IkTbActiveForm            $form2
@@ -16,21 +16,15 @@
 
 $this->pageTitle = Yii::app()->name . " - Восстановить пароль";
 
-$flagSmsAuthDone = !empty(Yii::app()->session['smsAuthDone']);
-
 // форму отправки кода на телефон прячем, если не ввёден валидный телефон
-$hideSmsSendButton = !empty($phoneEntered) || $flagSmsAuthDone; //($this->smsState['passSent'] || !$this->smsState['needSmsPass']);
+$hideSmsSendButton = !empty($enteredPhone);
 
-// поле ввода кода и кнопку "далее" прячем, если не спрятана форма отправки КОДА либо
-$flagHideFormCheckSMSCode = !$hideSmsSendButton || $flagSmsAuthDone; //(empty($this->smsState['passSent']) || $flagSmsAuthDone);
-
-$smsPassLeftTime = Yii::app()->session['smsCodeLeftTime'];
+// поле ввода кода и кнопку "далее" прячем, если не спрятана форма отправки КОДА
+$flagHideFormCheckSMSCode = !$hideSmsSendButton;
 
 $urlCheckSmsPass = Yii::app()->createUrl('/account/checkSmsCode');
 $urlAjaxSendSMS = Yii::app()->createUrl('/account/ajaxSendSmsCode', array('resend' => 0));
 $urlAjaxResendSMS = Yii::app()->createUrl('/account/ajaxSendSmsCode', array('resend' => 1));
-
-$sessionPhone = !empty(Yii::app()->session['phoneResetPassword']) ? Yii::app()->session['phoneResetPassword'] : '';
 
 $aParams = array(
 	'minutesUntil'      => SiteParams::API_MINUTES_UNTIL_RESEND,
@@ -38,7 +32,7 @@ $aParams = array(
 	'mainContentId'     => 'main-content',
 	'enterSMSPassLabel' => 'Введите код из SMS:',
 	'fieldSMSPassName'  => 'smsCode',
-	'phone'             => $sessionPhone,
+	'phone'             => $enteredPhone,
 );
 ?>
 <h2 class='pay_legend' style="margin-left: 20px;">Восстановить пароль</h2>
@@ -232,7 +226,7 @@ $aParams = array(
 		$this->endWidget();
 		?>
 
-		<div class="alert in alert-success span10<?php echo empty($flagSmsAuthDone) ? ' hide' : ''; ?>" id="<?php echo get_class($model); ?>_smsAuthDone">
+		<div class="alert in alert-success span10 hide" id="<?php echo get_class($model); ?>_smsAuthDone">
 			SMS с паролем отправлено на телефон. <br><br> <?php echo CHtml::link('Выполнить вход &raquo;', Yii::app()
 				->createUrl('/account/login')); ?>
 		</div>
@@ -263,7 +257,7 @@ Yii::app()->clientScript->registerScript('showUntilResend', '
 if (!$flagHideFormCheckSMSCode) {
 	Yii::app()->clientScript->registerScript('showUntilResend2', '
 	leftTime = new Date();
-	leftTime.setTime(leftTime.getTime() + ' . $smsPassLeftTime . '*1000);
+	leftTime.setTime(leftTime.getTime() + ' . $smsLeftTime . '*1000);
 	showUntilResend();
 ', CClientScript::POS_LOAD);
 }

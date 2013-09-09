@@ -68,7 +68,7 @@ class DefaultController extends Controller
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'index'), true);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->session['smsPassLeftTime'], 'act' => 'index'), true);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender));
@@ -95,13 +95,19 @@ class DefaultController extends Controller
 
 		$oHistoryDataProvider = $oApi->getHistoryDataProvider($aHistory);
 
+		$curTime = time();
+		$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
+		$leftTime = $curTime - $leftTime;
+		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
+		Yii::app()->session['smsPassLeftTime'] = $leftTime;
+
 		if ($oApi->getIsResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($aHistory);
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'history'), true, false);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->session['smsPassLeftTime'], 'act' => 'history'), true, false);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
@@ -181,7 +187,7 @@ class DefaultController extends Controller
 			$this->smsState = $oApi->getSmsState($aTest, $needSmsActionCode);
 			$oSmsPassForm = new SMSPasswordForm();
 			$oSmsCodeForm = new SMSCodeForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'act' => 'test'), true, false);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->session['smsPassLeftTime'], 'act' => 'test'), true, false);
 			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
 
 			if (Yii::app()->request->isAjaxRequest) {
@@ -329,7 +335,7 @@ class DefaultController extends Controller
 			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
 			Yii::app()->session['smsCodeLeftTime'] = $leftTime;
 
-			$this->render('reset_password', array('model' => $model, 'phoneEntered' => !empty(Yii::app()->session['smsCodeSentTime'])));
+			$this->render('reset_password', array('model' => $model, 'enteredPhone' => Yii::app()->session['phoneResetPassword'], 'smsLeftTime' => Yii::app()->session['smsCodeLeftTime'],));
 		} else {
 			$this->redirect(Yii::app()->createUrl("/account"));
 		}
@@ -399,9 +405,9 @@ class DefaultController extends Controller
 			Yii::trace(CJSON::encode($aResult));
 
 			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
-				Yii::app()->session['smsCodeSent'] = true;
 				Yii::app()->session['smsCodeSentTime'] = time();
 				Yii::app()->session['smsCodeLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
+				Yii::app()->session['phoneResetPassword'] = $phone;
 			}
 
 			if (empty($aResult['sms_message'])) {
@@ -454,6 +460,9 @@ class DefaultController extends Controller
 					$aResult = $oApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
 					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
 						Yii::app()->session['phoneResetPassword'] = null;
+						Yii::app()->session['smsCodeLeftTime'] = null;
+						Yii::app()->session['smsCodeSendTime'] = null;
+
 						$aAnswer = array(
 							"type" => 0,
 							"text" => 'SMS с паролем отправлено',
