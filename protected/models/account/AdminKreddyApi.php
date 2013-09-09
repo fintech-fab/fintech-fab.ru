@@ -28,7 +28,7 @@ class AdminKreddyApi extends CModel
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
-	const API_URL = 'http://admin.kreddy.topas/siteApi/';
+	const API_URL = 'https://admin.kreddy.ru:8081/siteApi/';
 	const API_ACTION_TEST = 'siteClient/doTest';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
