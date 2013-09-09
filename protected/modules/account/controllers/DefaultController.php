@@ -56,6 +56,12 @@ class DefaultController extends Controller
 		//получаем основную информацию из API
 		$this->clientData = $oApi->getClientInfo();
 
+		$curTime = time();
+		$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
+		$leftTime = $curTime - $leftTime;
+		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
+		Yii::app()->session['smsPassLeftTime'] = $leftTime;
+
 		if ($oApi->getIsResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($this->clientData);
 			/**
@@ -208,11 +214,16 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 
-			//TODO: resend сделать. время на стороне клиента.
+			$curTime = time();
+			$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
+			$leftTime = $curTime - $leftTime;
+			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
+
 			if ($bResend &&
-				!empty(Yii::app()->session['smsPassSentTime']) &&
-				((time() - Yii::app()->session['smsPassSentTime']) < SiteParams::API_MINUTES_UNTIL_RESEND * 60)
+				($leftTime > 0)
 			) {
+				// обновляем оставшееся время
+				Yii::app()->session['smsPassLeftTime'] = $leftTime;
 				echo CJSON::encode(array(
 					"type" => 2,
 					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
@@ -225,9 +236,10 @@ class DefaultController extends Controller
 			$aResult = $oApi->sendSMS($bResend);
 
 			//TODO протестить
-			if ($aResult && $aResult['code'] == 0 && $aResult['sms_status'] == 1) {
+			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsPassSent'] = true;
 				Yii::app()->session['smsPassSentTime'] = time();
+				Yii::app()->session['smsPassLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
 			}
 
 			if (empty($aResult['sms_message'])) {
@@ -248,8 +260,9 @@ class DefaultController extends Controller
 			}
 
 			echo CJSON::encode(array(
-				"type" => $iSmsCode,
-				"text" => $aResult['sms_message'],
+				"type"     => $iSmsCode,
+				"text"     => $aResult['sms_message'],
+				"leftTime" => Yii::app()->session['smsPassLeftTime'],
 			));
 		}
 		Yii::app()->end();

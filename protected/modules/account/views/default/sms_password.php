@@ -15,14 +15,14 @@
 
 $this->pageTitle = Yii::app()->name;
 $oForm = $passForm;
-
-$hideSmsSendButton = ($this->smsState['passSent'] || !$this->smsState['needSmsPass']);
-$flagSmsAuthDone = $this->smsState['smsAuthDone'];
+//TODO: уточнить $hideSmsSendButton
+$hideSmsSendButton = (!empty(Yii::app()->session['smsPassSent'])); // || empty(Yii::app()->session['needSmsPass']));
+$flagSmsAuthDone = !empty(Yii::app()->session['smsAuthDone']);
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или авторизация уже выполнена
-$flagHideFormCheckSMSCode = (empty($this->smsState['passSent']) || $flagSmsAuthDone);
+$flagHideFormCheckSMSCode = (empty(Yii::app()->session['smsPassSent']) || $flagSmsAuthDone);
 
-$smsPassSentTime = Yii::app()->session['smsPassSentTime'];
+$smsPassLeftTime = Yii::app()->session['smsPassLeftTime'];
 
 $urlCheckSmsPass = Yii::app()->createUrl('/account/checkSmsPass', array('act' => $act));
 $urlAjaxSendSMS = Yii::app()->createUrl('/account/ajaxSendSms', array('resend' => 0));
@@ -32,7 +32,7 @@ $urlAjaxResendSMS = Yii::app()->createUrl('/account/ajaxSendSms', array('resend'
  */
 
 $aParams = array(
-	'minutesUntil'      => 1,
+	'minutesUntil'      => SiteParams::API_MINUTES_UNTIL_RESEND,
 	'btnResendLabel'    => 'Выслать пароль на телефон повторно',
 	'mainContentId'     => 'main-content',
 	'enterSMSPassLabel' => 'Введите пароль из SMS:',
@@ -70,8 +70,9 @@ $aParams = array(
                                		    return;
                                		}
                                 	if(data.type == 0) {
-                                	    sendTime = new Date();
-                                	    showUntilResend();
+                                	    leftTime = new Date();
+										leftTime.setTime(leftTime.getTime() + data.leftTime*1000);
+										showUntilResend();
                                 	    jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(5000).fadeOut();
                                 	    jQuery('#" . get_class($oForm) . "_actionAnswerResend').hide();
                                 	    jQuery('#" . get_class($oForm) . "_textUntilResend').show();
@@ -88,7 +89,7 @@ $aParams = array(
 
 	));?>
 	<div id="<?php echo get_class($oForm); ?>_textUntilResend">Повторно запросить SMS можно через:
-		<span id="<?php echo get_class($oForm); ?>_untilResend">1:00</span>
+		<span id="<?php echo get_class($oForm); ?>_untilResend"><?php echo $aParams['minutesUntil']; ?>:00</span>
 
 		<div class="help-block error hide" id="<?php echo get_class($oForm); ?>_actionAnswerResend"></div>
 	</div>
@@ -129,7 +130,8 @@ $aParams = array(
                                 	    jQuery('#" . get_class($oForm) . "_textUntilResend').show();
                                 	    jQuery('#" . get_class($oForm) . "_ajaxResendSms').show();
                                 		jQuery('#" . get_class($oForm) . "_checkSmsPass').show();
-                                		sendTime = new Date();
+                                		leftTime = new Date();
+										leftTime.setTime(leftTime.getTime() + data.leftTime*1000);
                                 		showUntilResend();
                                			jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(3000).fadeOut();
                                		} else if(data.type == 2) { /* Общая ошибка */
@@ -211,15 +213,15 @@ $aParams = array(
 
 <?php
 Yii::app()->clientScript->registerScript('showUntilResend', '
-	var sendTime;
-	var iMinutesUntil = ' . $aParams['minutesUntil'] . ';
+	var leftTime;
 	function showUntilResend() {
-		iSecondsLeft = Math.floor((sendTime - (new Date())) / 1000 + iMinutesUntil*60);
+		iSecondsLeft = Math.floor((leftTime - (new Date()))/1000);
 		if(iSecondsLeft < 0) {
 			jQuery("#' . get_class($oForm) . '_btnResend").removeAttr("disabled").removeClass("disabled");
 			jQuery("#' . get_class($oForm) . '_textUntilResend").fadeOut("slow");
 			return;
 		}
+		jQuery("#' . get_class($oForm) . '_textUntilResend").show("fast");
 		iMinutesLeft = Math.floor(iSecondsLeft/60);
 		iSecondsLeft -= iMinutesLeft*60;
 		if(iSecondsLeft < 10) {
@@ -231,8 +233,8 @@ Yii::app()->clientScript->registerScript('showUntilResend', '
 ', CClientScript::POS_HEAD);
 if (!$flagHideFormCheckSMSCode) {
 	Yii::app()->clientScript->registerScript('showUntilResend2', '
-	sendTime = new Date();
-	sendTime.setTime(' . $smsPassSentTime . '*1000);
+	leftTime = new Date();
+	leftTime.setTime(leftTime.getTime() + ' . $smsPassLeftTime . '*1000);
 	showUntilResend();
 ', CClientScript::POS_LOAD);
 }
