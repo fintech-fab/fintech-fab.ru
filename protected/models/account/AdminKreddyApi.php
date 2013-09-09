@@ -497,6 +497,23 @@ class AdminKreddyApi extends CModel
 	}
 
 	/**
+	 * Проверяем, требует ли action API авторизации по СМС
+	 *
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function getIsNeedSmsCode($aResult)
+	{
+		$iStatus = $this->getResultStatus($aResult);
+		if ($iStatus === 10) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * @param      $aResult
 	 * @param bool $needSmsActionCode
 	 *
@@ -505,9 +522,10 @@ class AdminKreddyApi extends CModel
 	 */
 
 	public
-	function getSmsState($aResult, $needSmsActionCode = false)
+	function getSmsState($aResult)
 	{
 		$needSmsPass = $this->getIsNeedSmsAuth($aResult);
+		$needSmsActionCode = $this->getIsNeedSmsCode($aResult);
 		$smsPassLeftTime = self::getSmsPassLeftTime();
 
 		$aRet = array(

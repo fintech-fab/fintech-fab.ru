@@ -89,19 +89,13 @@ class DefaultController extends Controller
 
 		$oHistoryDataProvider = $oApi->getHistoryDataProvider($aHistory);
 
-		$curTime = time();
-		$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
-		$leftTime = $curTime - $leftTime;
-		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
-		Yii::app()->session['smsPassLeftTime'] = $leftTime;
-
 		if ($oApi->getIsResultAuth($this->clientData)) {
 			$this->smsState = $oApi->getSmsState($aHistory);
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->session['smsPassLeftTime'], 'act' => 'history'), true, false);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => $oApi->getSmsPassLeftTime(), 'act' => 'history'), true, false);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
@@ -167,21 +161,12 @@ class DefaultController extends Controller
 		$aTest = $oApi->doTest();
 
 		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-			if ($aTest['code'] === 9) {
-				$needSmsPass = true;
-			} else {
-				$needSmsPass = false;
-			}
-			if ($aTest['code'] === 10) {
-				$needSmsActionCode = true;
-			} else {
-				$needSmsActionCode = false;
-			}
+
 			//TODO needSmsActionCode проверять в модели
-			$this->smsState = $oApi->getSmsState($aTest, $needSmsActionCode);
+			$this->smsState = $oApi->getSmsState($aTest);
 			$oSmsPassForm = new SMSPasswordForm();
 			$oSmsCodeForm = new SMSCodeForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->session['smsPassLeftTime'], 'act' => 'test'), true, false);
+			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => $oApi->getSmsPassLeftTime(), 'act' => 'test'), true, false);
 			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
 
 			if (Yii::app()->request->isAjaxRequest) {
