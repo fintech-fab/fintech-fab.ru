@@ -30,7 +30,7 @@
 		array(
 			'name'   => 'count_tabs',
 			'header' => 'Использовано на вкладках',
-			'value'  => '$data["count_pages"]',
+			'value'  => '$data["count_tabs"]',
 		),
 		array(
 			'name'   => 'count_footer_links',
