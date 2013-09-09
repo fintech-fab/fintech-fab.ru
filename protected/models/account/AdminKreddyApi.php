@@ -162,7 +162,7 @@ class AdminKreddyApi extends CModel
 	 *
 	 * @return mixed
 	 */
-	public function recoveryPasswordSendSms($phone, $resend = false)
+	public function resetPasswordSendSms($phone, $resend = false)
 	{
 		if (!$resend) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 0));
@@ -179,7 +179,7 @@ class AdminKreddyApi extends CModel
 	 *
 	 * @return mixed
 	 */
-	public function recoveryPasswordCheckSms($phone, $sms_code)
+	public function resetPasswordCheckSms($phone, $sms_code)
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_code' => $sms_code));
 
