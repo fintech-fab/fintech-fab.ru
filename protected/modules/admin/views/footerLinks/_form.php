@@ -65,6 +65,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 				'paragraphy'               => false,
 				'autoresize'               => false,
 				'removeEmptyTags'          => false,
+				'imageGetJson'             => Yii::app()->getBaseUrl() . '/admin/files/imagesList',
 				'buttons'                  => array(
 					'html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', 'underline', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|',
 					'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
