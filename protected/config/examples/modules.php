@@ -1,6 +1,6 @@
 <?php
 return array(
-	'gii'   => array(
+	'gii'     => array(
 		'generatorPaths' => array(
 			'bootstrap.gii',
 			'application.gii',
@@ -9,7 +9,8 @@ return array(
 		'password'       => '111',
 		'ipFilters'      => array('127.0.0.1', '::1'),
 	),
-	'admin' => array(
+	'admin'   => array(
 		'ipFilters' => array('127.0.0.1', '::1'),
 	),
+	'account' => array(),
 );
