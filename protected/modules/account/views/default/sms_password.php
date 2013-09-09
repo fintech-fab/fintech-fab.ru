@@ -179,7 +179,6 @@ $aParams = array(
 	<div class="clearfix"></div>
 
 	<?php
-	//TODO jQuery('#" . get_class($model) . "_ajaxresendsms').show(); => .hide()
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'  => 'ajaxSubmit',
 		'type'        => 'primary',
@@ -192,7 +191,7 @@ $aParams = array(
 			'success'  => "function(data)  {
                                 	if(data.type == 0) {
                                         jQuery('#" . $aParams['mainContentId'] . "').load(data.text);
-                                        jQuery('#" . get_class($model) . "_ajaxResendSms').show();
+                                        jQuery('#" . get_class($model) . "_ajaxResendSms').hide();
                                 	} else if(data.type == 2) {
                                 	    //ругаемся ошибкой
                                			jQuery('#" . get_class($model) . "_actionAnswer').html(data.text).show();
