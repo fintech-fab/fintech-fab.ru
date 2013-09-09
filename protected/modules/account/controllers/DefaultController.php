@@ -208,14 +208,14 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 
-			//TODO: вынести в SiteParams число минут до следующей отправки SMS
+			//TODO: resend сделать. время на стороне клиента.
 			if ($bResend &&
 				!empty(Yii::app()->session['smsPassSentTime']) &&
-				((time() - Yii::app()->session['smsPassSentTime']) < 1 * 60)
+				((time() - Yii::app()->session['smsPassSentTime']) < SiteParams::API_MINUTES_UNTIL_RESEND * 60)
 			) {
 				echo CJSON::encode(array(
 					"type" => 2,
-					"text" => "Должна пройти минута до следующей отправки SMS",
+					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
 				));
 
 				Yii::app()->end();
@@ -309,6 +309,13 @@ class DefaultController extends Controller
 
 		if (Yii::app()->user->isGuest) {
 			$model = new AccountResetPasswordForm;
+
+			$curTime = time();
+			$leftTime = (!empty(Yii::app()->session['smsCodeSentTime'])) ? Yii::app()->session['smsCodeSentTime'] : $curTime;
+			$leftTime = $curTime - $leftTime;
+			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
+			Yii::app()->session['smsCodeLeftTime'] = $leftTime;
+
 			$this->render('reset_password', array('model' => $model, 'phoneEntered' => !empty(Yii::app()->session['smsCodeSentTime'])));
 		} else {
 			$this->redirect(Yii::app()->createUrl("/account"));
@@ -317,7 +324,7 @@ class DefaultController extends Controller
 
 	/**
 	 * Отправка на телефон SMS с кодом (для дальнейшей идентификации)
-	 * Если SMS отсылается впервые, дополнительно проводится проверка телефона
+	 * Если SMS отсылается впервые, дополнительно проводится проверка телефона на валидность
 	 *
 	 * @param int $resend - повторная ли отправка SMS с кодом
 	 */
@@ -356,26 +363,32 @@ class DefaultController extends Controller
 				$phone = Yii::app()->session['phoneResetPassword'];
 			}
 
-			//TODO: здесь и в аналогичном экшне вынести в SiteParams кол-во минут до отправки нового SMS
+			$curTime = time();
+			$leftTime = (!empty(Yii::app()->session['smsCodeSentTime'])) ? Yii::app()->session['smsCodeSentTime'] : $curTime;
+			$leftTime = $curTime - $leftTime;
+			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
+
 			if ($bResend &&
-				!empty(Yii::app()->session['smsCodeSentTime']) &&
-				((time() - Yii::app()->session['smsCodeSentTime']) < 1 * 60)
+				($leftTime > 0)
 			) {
+				// обновляем оставшееся время
+				Yii::app()->session['smsCodeLeftTime'] = $leftTime;
 				echo CJSON::encode(array(
 					"type" => 2,
-					"text" => "Должна пройти минута до следующей отправки SMS",
+					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
 				));
 
 				Yii::app()->end();
 			}
 
 			$oApi = new AdminKreddyApi();
-			$aResult = $oApi->resetPasswordSendSms($phone, $bResend); //TODO: посмотреть, что получаем от API
+			$aResult = $oApi->resetPasswordSendSms($phone, $bResend);
 			Yii::trace(CJSON::encode($aResult));
 
 			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsCodeSent'] = true;
 				Yii::app()->session['smsCodeSentTime'] = time();
+				Yii::app()->session['smsCodeLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
 			}
 
 			if (empty($aResult['sms_message'])) {
@@ -397,8 +410,9 @@ class DefaultController extends Controller
 			}
 
 			echo CJSON::encode(array(
-				"type" => $iSmsCode,
-				"text" => $aResult['sms_message'],
+				"type"     => $iSmsCode,
+				"text"     => $aResult['sms_message'],
+				"leftTime" => Yii::app()->session['smsCodeLeftTime'],
 			));
 		}
 		Yii::app()->end();
@@ -416,7 +430,8 @@ class DefaultController extends Controller
 				"text" => 'Неверный код!',
 			);
 
-			if (!empty(Yii::app()->session['phoneResetPassword'])) {
+			// если в сессии нет телефона либо если пароль уже отправлен
+			if (!empty(Yii::app()->session['phoneResetPassword']) && empty(Yii::app()->session['smsAuthDone'])) {
 				$codeForm = new AccountResetPasswordForm('codeRequired');
 				$aPostData = $_POST['AccountResetPasswordForm'];
 				$codeForm->setAttributes($aPostData);

@@ -19,6 +19,13 @@ class SiteParams
 	const EMPTY_DATETIME = '0000-00-00 00:00:00';
 	const EMPTY_TIME = '00:00:00';
 
+	/**
+	 *  Количество минут до возможности повторной отправки и текст ошибка
+	 */
+	const API_MINUTES_UNTIL_RESEND = 1;
+	const API_MINUTES_RESEND_ERROR = "Должна пройти минута до следующей отправки SMS";
+
+
 	const U_ACTION_TYPE_FORM = 1;
 	const U_ACTION_TYPE_SMS = 2;
 	const U_ACTION_TYPE_BLOCK_FORM = 8;
