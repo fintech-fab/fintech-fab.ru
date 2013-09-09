@@ -110,7 +110,7 @@ class DefaultController extends Controller
 
 
 	/**
-	 * История операций
+	 * тест
 	 */
 
 	public function actionTest($getcode = 0)
@@ -191,7 +191,7 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Запрос на отправку SMS с паролем
+	 * Запрос на отправку SMS с паролем (для доступа к приватным данным в личном кабинете)
 	 */
 
 	public function actionAjaxSendSms($resend = 0)
@@ -255,7 +255,7 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Проверка SMS-пароля
+	 * Проверка SMS-пароля в личном кабинете (доступ к приватным данным)
 	 *
 	 * @param string $act
 	 */
@@ -298,6 +298,9 @@ class DefaultController extends Controller
 		}
 	}
 
+	/**
+	 *
+	 */
 	public
 	function actionResetPassword()
 	{
@@ -397,10 +400,17 @@ class DefaultController extends Controller
 		Yii::app()->end();
 	}
 
+	/**
+	 *
+	 */
 	public
 	function actionCheckSmsCode()
 	{
 		if (Yii::app()->request->isAjaxRequest) {
+			$aAnswer = array(
+				"type" => 2,
+				"text" => 'Неверный код!',
+			);
 			if (!empty(Yii::app()->session['phoneResetPassword'])) {
 				$codeForm = new AccountResetPasswordForm();
 				$aPostData = $_POST['AccountResetPasswordForm'];
@@ -411,35 +421,26 @@ class DefaultController extends Controller
 					$aResult = $oApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
 					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
 						Yii::app()->session['smsAuthDone'] = true;
-						echo CJSON::encode(array(
+						$aAnswer = array(
 							"type" => 0,
 							"text" => Yii::app()->createUrl("account/login", array('ajax' => 1)),
-						));
+						);
 					} else {
 						if ($aResult['sms_status'] == 5) { //превышено число попыток ввода пароля
-							echo CJSON::encode(array(
+							$aAnswer = array(
 								"type" => 2,
 								"text" => 'Вы превысили допустимое число попыток ввода пароля!',
-							));
-						} else {
-							echo CJSON::encode(array(
-								"type" => 2,
-								"text" => 'Неверный код!1' . $aResult['sms_status'],
-							));
+							);
 						}
 					}
-				} else {
-					echo CJSON::encode(array(
-						"type" => 2,
-						"text" => 'Неверный код!2',
-					));
 				}
 			} else {
-				echo CJSON::encode(array(
+				$aAnswer = array(
 					"type" => 2,
-					"text" => 'Неизвестная ошибка!',
-				));
+					"text" => 'Неизвестная ошибка! Перезагрузите страницу.',
+				);
 			}
+			echo CJSON::encode($aAnswer);
 		} else {
 			$this->redirect(Yii::app()->createUrl("account"));
 		}
