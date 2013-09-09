@@ -444,7 +444,7 @@ class DefaultController extends Controller
 			);
 
 			// если в сессии нет телефона либо если пароль уже отправлен
-			if (!empty(Yii::app()->session['phoneResetPassword']) && empty(Yii::app()->session['smsAuthDone'])) {
+			if (!empty(Yii::app()->session['phoneResetPassword'])) {
 				$codeForm = new AccountResetPasswordForm('codeRequired');
 				$aPostData = $_POST['AccountResetPasswordForm'];
 				$codeForm->setAttributes($aPostData);
@@ -453,7 +453,6 @@ class DefaultController extends Controller
 				if ($codeForm->validate()) {
 					$aResult = $oApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
 					if ($aResult['sms_status'] == $oApi::SMS_AUTH_OK) {
-						Yii::app()->session['smsAuthDone'] = true;
 						$aAnswer = array(
 							"type" => 0,
 							"text" => 'SMS с паролем отправлено',

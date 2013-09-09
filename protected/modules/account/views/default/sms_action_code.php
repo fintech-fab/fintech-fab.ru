@@ -56,7 +56,7 @@ $flagHideFormCheckSMSCode = (empty($smsState['passSent']));
                                 		jQuery('#" . get_class($codeForm) . "_checksmspass').show();
                                 		sendTime = new Date();
                                 		showUntilResend();
-                               			jQuery('#alertsmssent').fadeIn().delay(5000).fadeOut();
+                               			jQuery('#alertsmssent').fadeIn();
                                		} else if(data.type == 2) { /* Общая ошибка */
                                 	    jQuery('#" . get_class($codeForm) . "_ajaxsendsms').hide();
                                 		jQuery('#actionAnswer').html(data.text).show();
@@ -160,7 +160,7 @@ $flagHideFormCheckSMSCode = (empty($smsState['passSent']));
                                 	if(data.type==0) {
                                 	    sendTime = new Date();
                                 	    showUntilResend();
-                                	    jQuery('#alertsmssent').fadeIn().delay(5000).fadeOut();
+                                	    jQuery('#alertsmssent').fadeIn();
                                 	    jQuery('#actionAnswerResend').hide();
                                 	    jQuery('#textUntilResend').show();
                                 	    jQuery('#btnResend').addClass('disabled').attr('disabled','disabled');

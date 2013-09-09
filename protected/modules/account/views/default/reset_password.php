@@ -77,7 +77,7 @@ $aParams = array(
 			'disabled'    => true,
 			'ajaxOptions' => array(
 				'dataType' => "json",
-				'type'     => "POST", //TODO: fadein убрать здесь и ниже
+				'type'     => "POST",
 				'success'  => "function(data)  {
                                		if(!data) {
                                		    return;
@@ -86,7 +86,7 @@ $aParams = array(
                                 	    leftTime = new Date();
 										leftTime.setTime(leftTime.getTime() + data.leftTime*1000);
 										showUntilResend();
-                                	    jQuery('#" . get_class($model) . "_alertSmsSent').fadeIn().delay(5000).fadeOut();
+                                	    jQuery('#" . get_class($model) . "_alertSmsSent').fadeIn().delay(30000).fadeOut();
                                 	    jQuery('#" . get_class($model) . "_actionAnswerResend').hide();
                                 	    jQuery('#" . get_class($model) . "_textUntilResend').show();
                                 	    jQuery('#" . get_class($model) . "_btnResend').addClass('disabled').attr('disabled','disabled');
@@ -125,7 +125,8 @@ $aParams = array(
 			));
 			?>
 
-			<p class="note">Для сброса пароля введите свой номер телефона</p>
+			<p class="note">Для получения нового пароля введите свой номер телефона.<br />На указанный номер будет
+				отправлено SMS с кодом для подтверждения получения нового пароля.</p>
 
 			<?php echo $form2->phoneMaskedRow($model, 'phone', array('size' => '15')); ?>
 			<br>
@@ -152,7 +153,7 @@ $aParams = array(
                                 		leftTime = new Date();
 										leftTime.setTime(leftTime.getTime() + data.leftTime*1000);
                                 		showUntilResend();
-                               			jQuery('#" . get_class($model) . "_alertSmsSent').fadeIn().delay(3000).fadeOut();
+                               			jQuery('#" . get_class($model) . "_alertSmsSent').fadeIn().delay(30000).fadeOut();
                                		} else if(data.type == 2) { /* Общая ошибка */
                                 		jQuery('#" . get_class($model) . "_actionAnswerSend').html(data.text).show();
                                 	} else if(data.type == 1) { /* Ошибка - SMS уже было отправлено */

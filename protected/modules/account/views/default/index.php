@@ -25,13 +25,13 @@ $this->menu = array(
 	)
 );
 
-if ($this->smsState['smsAuthDone']) {
+/*if ($this->smsState['smsAuthDone']) {
 	$this->menu[] = array(
 		'label' => 'Тестовое действие', 'url' => array(
 			Yii::app()->createUrl('account/test')
 		)
 	);
-}
+}*/
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
@@ -43,7 +43,7 @@ $sMoratoriumTo = $this->clientData['subscription']['moratorium_to'];
 
 ?>
 
-	<h4>Состояние подписки</h4>
+<h4>Состояние подписки</h4>
 
 <?php
 if (!$this->smsState['needSmsPass']) { //если не требуется авторизоваться по СМС-паролю
@@ -73,8 +73,3 @@ if (!$this->smsState['needSmsPass']) { //если не требуется авт
 }
 ?>
 <?= $passFormRender // отображаем форму запроса СМС-пароля?>
-
-<?php
-echo '<pre>';
-CVarDumper::dump($this->clientData);
-echo '</pre>';

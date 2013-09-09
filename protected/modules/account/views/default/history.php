@@ -27,17 +27,17 @@ $this->menu = array(
 	)
 );
 
-if ($this->smsState['smsAuthDone']) {
+/*if ($this->smsState['smsAuthDone']) {
 	$this->menu[] = array(
 		'label' => 'Тестовое действие', 'url' => array(
 			Yii::app()->createUrl('account/test')
 		),
 	);
-}
+}*/
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 ?>
-	<h4>История операций</h4>
+<h4>История операций</h4>
 
 <?php
 if ($this->smsState['needSmsPass']) {
@@ -72,9 +72,3 @@ if ($this->smsState['needSmsPass']) {
 ?>
 
 <?= $passFormRender // отображаем форму запроса СМС-пароля ?>
-
-<?php
-//echo '<pre>';
-//print_r($history);
-//CVarDumper::dump($historyProvider);
-//echo '</pre>';

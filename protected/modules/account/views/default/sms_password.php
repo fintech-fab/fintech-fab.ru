@@ -73,7 +73,7 @@ $aParams = array(
                                 	    leftTime = new Date();
 										leftTime.setTime(leftTime.getTime() + data.leftTime*1000);
 										showUntilResend();
-                                	    jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(5000).fadeOut();
+                                	    jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(30000).fadeOut();
                                 	    jQuery('#" . get_class($oForm) . "_actionAnswerResend').hide();
                                 	    jQuery('#" . get_class($oForm) . "_textUntilResend').show();
                                 	    jQuery('#" . get_class($oForm) . "_btnResend').addClass('disabled').attr('disabled','disabled');
@@ -133,7 +133,7 @@ $aParams = array(
                                 		leftTime = new Date();
 										leftTime.setTime(leftTime.getTime() + data.leftTime*1000);
                                 		showUntilResend();
-                               			jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(3000).fadeOut();
+                               			jQuery('#" . get_class($oForm) . "_alertSmsSent').fadeIn().delay(30000).fadeOut();
                                		} else if(data.type == 2) { /* Общая ошибка */
                                 	    jQuery('#" . get_class($oForm) . "_ajaxSendSms').hide();
                                 		jQuery('#" . get_class($oForm) . "_actionAnswer').html(data.text).show();
