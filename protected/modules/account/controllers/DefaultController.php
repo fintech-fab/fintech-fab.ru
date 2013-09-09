@@ -113,7 +113,7 @@ class DefaultController extends Controller
 	 * тест
 	 */
 
-	public function actionTest($getcode = 0)
+	/*public function actionTest($getcode = 0)
 	{
 		$oApi = new AdminKreddyApi();
 		$aTest = array('code' => $oApi::ERROR_AUTH);
@@ -121,65 +121,64 @@ class DefaultController extends Controller
 		/**
 		 * Действия на случай, если запрос пришел через AJAX
 		 */
-		if (Yii::app()->request->isAjaxRequest && isset($_POST['SMSCodeForm'])) {
+	/*if (Yii::app()->request->isAjaxRequest && isset($_POST['SMSCodeForm'])) {
 
-			if (isset($_POST['SMSCodeForm'])) {
-				$codeForm = new SMSCodeForm();
-				$aPostData = $_POST['SMSCodeForm'];
-				$codeForm->setAttributes($aPostData);
-				$oApi = new AdminKreddyApi();
-				if ($codeForm->validate()) {
-					$aTest = $oApi->doTest(false, $codeForm->smsCode);
-					echo $this->getCheckSmsCodeAnswer($aTest, 'test');
-				} else {
-					echo CJSON::encode(array(
-						"type" => 2,
-						"text" => 'Неизвестная ошибка!',
-					));
-				}
-				Yii::app()->end();
-			}
-		} elseif (Yii::app()->request->isAjaxRequest && $getcode == 1) {
-			$aTest = $oApi->doTest(true);
-			if ($aTest['sms_status'] == 1) {
-				echo CJSON::encode(array(
-					"type" => 0,
-					"text" => 'СМС с кодом отправлено',
-				));
+		if (isset($_POST['SMSCodeForm'])) {
+			$codeForm = new SMSCodeForm();
+			$aPostData = $_POST['SMSCodeForm'];
+			$codeForm->setAttributes($aPostData);
+			$oApi = new AdminKreddyApi();
+			if ($codeForm->validate()) {
+				$aTest = $oApi->doTest(false, $codeForm->smsCode);
+				echo $this->getCheckSmsCodeAnswer($aTest, 'test');
 			} else {
 				echo CJSON::encode(array(
-					"type" => 3,
-					"text" => 'Ошибка отправки СМС',
+					"type" => 2,
+					"text" => 'Неизвестная ошибка!',
 				));
 			}
 			Yii::app()->end();
 		}
-		/**
-		 * Основные действия
-		 */
-		$this->clientData = $oApi->getClientInfo();
-		$aTest = $oApi->doTest();
-
-		if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
-
-			//TODO needSmsActionCode проверять в модели
-			$this->smsState = $oApi->getSmsState($aTest);
-			$oSmsPassForm = new SMSPasswordForm();
-			$oSmsCodeForm = new SMSCodeForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => $oApi->getSmsPassLeftTime(), 'act' => 'test'), true, false);
-			$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
-
-			if (Yii::app()->request->isAjaxRequest) {
-				$this->layout = '/layouts/column2_ajax';
-				$this->renderWithoutProcess('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
-			} else {
-				$this->render('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
-			}
+	} elseif (Yii::app()->request->isAjaxRequest && $getcode == 1) {
+		$aTest = $oApi->doTest(true);
+		if ($aTest['sms_status'] == 1) {
+			echo CJSON::encode(array(
+				"type" => 0,
+				"text" => 'СМС с кодом отправлено',
+			));
 		} else {
-			Yii::app()->user->logout();
-			$this->redirect(Yii::app()->user->loginUrl);
+			echo CJSON::encode(array(
+				"type" => 3,
+				"text" => 'Ошибка отправки СМС',
+			));
 		}
+		Yii::app()->end();
 	}
+	/**
+	 * Основные действия
+	 */
+	/*$this->clientData = $oApi->getClientInfo();
+	$aTest = $oApi->doTest();
+
+	if ($this->clientData && ($this->clientData['code'] === 0 || $this->clientData['code'] === 9)) {
+
+		$this->smsState = $oApi->getSmsState($aTest);
+		$oSmsPassForm = new SMSPasswordForm();
+		$oSmsCodeForm = new SMSCodeForm();
+		$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => $oApi->getSmsPassLeftTime(), 'act' => 'test'), true, false);
+		$sCodeFormRender = $this->renderPartial('sms_action_code', array('codeForm' => $oSmsCodeForm, 'act' => 'test'), true, false);
+
+		if (Yii::app()->request->isAjaxRequest) {
+			$this->layout = '/layouts/column2_ajax';
+			$this->renderWithoutProcess('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
+		} else {
+			$this->render('test', array('passFormRender' => $sPassFormRender, 'codeFormRender' => $sCodeFormRender, 'aTest' => $aTest));
+		}
+	} else {
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->user->loginUrl);
+	}
+}*/
 
 	/**
 	 * Запрос на отправку SMS с паролем (для доступа к приватным данным в личном кабинете)
