@@ -224,7 +224,8 @@ class DefaultController extends Controller
 			$oApi = new AdminKreddyApi();
 			$aResult = $oApi->sendSMS($bResend);
 
-			if ($aResult && $aResult['code'] == 0 || $aResult['sms_status'] == 1) {
+			//TODO протестить
+			if ($aResult && $aResult['code'] == 0 && $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsPassSent'] = true;
 				Yii::app()->session['smsPassSentTime'] = time();
 			}
@@ -370,8 +371,9 @@ class DefaultController extends Controller
 
 			$oApi = new AdminKreddyApi();
 			$aResult = $oApi->resetPasswordSendSms($phone, $bResend); //TODO: посмотреть, что получаем от API
+			Yii::trace(CJSON::encode($aResult));
 
-			if ($aResult && $aResult['code'] == 10 || $aResult['sms_status'] == 1) {
+			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsCodeSent'] = true;
 				Yii::app()->session['smsCodeSentTime'] = time();
 			}
@@ -391,6 +393,7 @@ class DefaultController extends Controller
 				}
 			} else {
 				$iSmsCode = 3;
+				$aResult['sms_message'] = 'Произошла неизвестная ошибка. Обратитесь на горячую линию.';
 			}
 
 			echo CJSON::encode(array(

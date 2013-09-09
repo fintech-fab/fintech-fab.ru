@@ -103,21 +103,7 @@ $a = array(
 			'errorAction' => 'site/error',
 		),
 
-		'log'          => array(
-			'class'  => 'CLogRouter',
-			'routes' => array(
-				array(
-					'class'  => 'CFileLogRoute',
-					'levels' => 'error, warning, trace',
-				),
-				array(
-					'class'         => 'CWebLogRoute',
-					'categories'    => 'application',
-					'levels'        => 'error, warning, trace, profile, info',
-					'showInFireBug' => true
-				),
-			),
-		),
+		'log'          => array(),
 
 		'session'      => array(
 			'timeout'     => 60 * 60 * 2,
@@ -141,5 +127,6 @@ $a = array(
 $a['components'] = CMap::mergeArray($a['components'], require(__DIR__ . '/custom/db.php'));
 $a['modules'] = CMap::mergeArray($a['modules'], require(__DIR__ . '/custom/modules.php'));
 $a['params'] = CMap::mergeArray($a['params'], require(__DIR__ . '/custom/params.php'));
+$a['components']['log'] = CMap::mergeArray($a['components']['log'], require(__DIR__ . '/custom/log.php'));
 
 return $a;
