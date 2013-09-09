@@ -299,7 +299,7 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 *
+	 *  Форма восстановления пароля, необходимого для входа в личный кабинет
 	 */
 	public
 	function actionResetPassword()
@@ -315,7 +315,10 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * @param int $resend
+	 * Отправка на телефон SMS с кодом (для дальнейшей идентификации)
+	 * Если SMS отсылается впервые, дополнительно проводится проверка телефона
+	 *
+	 * @param int $resend - повторная ли отправка SMS с кодом
 	 */
 	public
 	function actionAjaxSendSmsCode($resend = 0)
@@ -367,8 +370,6 @@ class DefaultController extends Controller
 
 			$oApi = new AdminKreddyApi();
 			$aResult = $oApi->resetPasswordSendSms($phone, $bResend);
-			$aResult['code'] = 10;
-			$aResult['sms_status'] = 1;
 
 			if ($aResult && $aResult['code'] == 10 || $aResult['sms_status'] == 1) {
 				Yii::app()->session['smsCodeSent'] = true;
@@ -401,7 +402,7 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 *
+	 * Проверка кода, отправленного в SMS. Если код верен - отправка SMS с паролем на телефон из сессии
 	 */
 	public
 	function actionCheckSmsCode()
@@ -411,8 +412,9 @@ class DefaultController extends Controller
 				"type" => 2,
 				"text" => 'Неверный код!',
 			);
+
 			if (!empty(Yii::app()->session['phoneResetPassword'])) {
-				$codeForm = new AccountResetPasswordForm();
+				$codeForm = new AccountResetPasswordForm('codeRequired');
 				$aPostData = $_POST['AccountResetPasswordForm'];
 				$codeForm->setAttributes($aPostData);
 				$codeForm->phone = Yii::app()->session['phoneResetPassword'];
