@@ -28,12 +28,13 @@ class AdminKreddyApi extends CModel
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
+	const API_URL = 'http://admin.kreddy.topas/siteApi/';
 	const API_ACTION_TEST = 'siteClient/doTest';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
-	const API_ACTION_RECOVER_PASSWORD = 'siteClient/resetPassword';
+	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -165,9 +166,9 @@ class AdminKreddyApi extends CModel
 	public function resetPasswordSendSms($phone, $resend = false)
 	{
 		if (!$resend) {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 0));
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $phone, 'sms_resend' => 0));
 		} else {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_resend' => 1));
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $phone, 'sms_resend' => 1));
 		}
 
 		return $aResult;
@@ -181,7 +182,7 @@ class AdminKreddyApi extends CModel
 	 */
 	public function resetPasswordCheckSms($phone, $sms_code)
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RECOVER_PASSWORD, array('phone' => $phone, 'sms_code' => $sms_code));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $phone, 'sms_code' => $sms_code));
 
 		return $aResult;
 	}
@@ -323,11 +324,14 @@ class AdminKreddyApi extends CModel
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-		$ch = curl_init('http://admin.kreddy.topas/siteApi/' . $sAction);
+		$ch = curl_init(self::API_URL . $sAction);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
+
+
+		Yii::trace(CVarDumper::dump($aRequest));
 
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 
@@ -335,7 +339,7 @@ class AdminKreddyApi extends CModel
 
 		$response = curl_exec($ch);
 
-		Yii::log($response);
+		Yii::trace($response);
 
 		$aData = CJSON::decode($response);
 

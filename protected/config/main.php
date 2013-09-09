@@ -109,7 +109,6 @@ $a = array(
 				array(
 					'class'  => 'CFileLogRoute',
 					'levels' => 'error, warning, trace',
-
 				),
 				array(
 					'class'         => 'CWebLogRoute',
