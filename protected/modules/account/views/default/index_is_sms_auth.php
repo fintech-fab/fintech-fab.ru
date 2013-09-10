@@ -16,7 +16,7 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 <h4>Состояние подписки</h4>
 
 <?php
-if (Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если нет подписки
+if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если нет подписки
 	?>
 	<h5>Нет активных подписок</h5>
 <?php
