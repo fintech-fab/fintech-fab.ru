@@ -65,6 +65,7 @@ class DefaultController extends Controller
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'index'), true);
+
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess($sView, array('passFormRender' => $sPassFormRender));

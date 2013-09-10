@@ -16,7 +16,7 @@
 $this->pageTitle = Yii::app()->name;
 $model = $passForm;
 
-$hideSmsSendButton = (!empty($this->smsState['passSent']) || empty($this->smsState['needSmsPass']));
+$hideSmsSendButton = (!empty($this->smsState['passSent']) || Yii::app()->adminKreddyApi->isSmsAuth());
 $flagSmsAuthDone = !empty($this->smsState['smsAuthDone']);
 
 // поле ввода кода и кнопку "далее" прячем, если не отправлено смс или авторизация уже выполнена

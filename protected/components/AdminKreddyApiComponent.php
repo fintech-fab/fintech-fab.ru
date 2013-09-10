@@ -36,6 +36,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
+	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -357,6 +358,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getProducts()
+	{
+		$aData = array('code' => self::ERROR_AUTH);
+		$aGetData = $this->getData('products');
+		$aData = array_merge($aData, $aGetData);
+
+		return $aData;
+	}
+
+	/**
 	 * @param bool   $bGetCode
 	 * @param string $sSmsCode
 	 *
@@ -398,6 +411,9 @@ class AdminKreddyApiComponent
 					break;
 				case 'history':
 					$sAction = self::API_ACTION_GET_HISTORY;
+					break;
+				case 'products':
+					$sAction = self::API_ACTION_GET_PRODUCTS;
 					break;
 				default:
 					$sAction = self::API_ACTION_GET_INFO;
