@@ -134,13 +134,8 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 
-			$curTime = time();
-			$leftTime = (!empty($this->smsState['passSentTime'])) ? $this->smsState['passSentTime'] : $curTime;
-			$leftTime = $curTime - $leftTime;
-			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
-
 			if ($bResend &&
-				($leftTime > 0)
+				(Yii::app()->adminKreddyApi->getSmsPassLeftTime() > 0)
 			) {
 				echo CJSON::encode(array(
 					"type" => 2,
@@ -286,16 +281,8 @@ class DefaultController extends Controller
 				$sPhone = Yii::app()->session['phoneResetPassword'];
 			}
 
-			// считаем время до разрешённой переотправки
-			$curTime = time();
-			$leftTime = (!empty(Yii::app()->session['smsCodeSentTime'])) ? Yii::app()->session['smsCodeSentTime'] : $curTime;
-			$leftTime = $curTime - $leftTime;
-			$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
-
 			// если SMS отправляется повторно, но время до разрешённой переотправки ещё не наступило, выдаём ошибку
-			if ($bResend && $leftTime > 0) {
-				// обновляем оставшееся время
-				Yii::app()->session['smsCodeLeftTime'] = $leftTime;
+			if ($bResend && Yii::app()->adminKreddyApi->getSmsCodeLeftTime() > 0) {
 				echo CJSON::encode(array(
 					"type" => 2,
 					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
@@ -304,15 +291,13 @@ class DefaultController extends Controller
 			}
 
 			$aResult = Yii::app()->adminKreddyApi->resetPasswordSendSms($sPhone, $bResend);
-			Yii::trace(CJSON::encode($aResult));
 
 			/**
 			 * если API сообщило, что требуется SMS-код и он отправлен клиенту, то записываем
 			 * в сессию время отправки, время до разрешённой переотправки и телефон
 			 */
 			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
-				Yii::app()->session['smsCodeSentTime'] = time();
-				Yii::app()->session['smsCodeLeftTime'] = $leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
+				Yii::app()->adminKreddyApi->setSmsCodeSentAndTime();
 				Yii::app()->session['phoneResetPassword'] = $sPhone;
 			}
 
@@ -339,7 +324,7 @@ class DefaultController extends Controller
 			echo CJSON::encode(array(
 				"type"     => $iSmsCode,
 				"text"     => $aResult['sms_message'],
-				"leftTime" => $leftTime,
+				"leftTime" => Yii::app()->adminKreddyApi->getSmsCodeLeftTime(),
 			));
 		}
 		Yii::app()->end();

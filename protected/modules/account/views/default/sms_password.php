@@ -4,7 +4,6 @@
  * @var DefaultController $this
  * @var SMSPasswordForm   $passForm
  * @var                   $smsState
- * @var                   $needSmsPass
  * @var                   $smsLeftTime
  * @var                   $act
  * @var IkTbActiveForm    $form

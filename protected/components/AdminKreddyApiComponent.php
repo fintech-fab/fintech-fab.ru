@@ -618,25 +618,24 @@ class AdminKreddyApiComponent
 	 * @return array
 	 */
 
-	public
-	function getSmsState($aResult = null)
+	public function getSmsState($aResult = null)
 	{
 		if (!isset($aResult)) {
 			$aResult = $this->getClientInfo();
 		}
 
-		$needSmsPass = $this->getIsNeedSmsAuth($aResult);
-		$needSmsActionCode = $this->getIsNeedSmsCode($aResult);
 		$smsPassLeftTime = self::getSmsPassLeftTime();
 
+		/**
+		 * 1 группа - статусы СМС восстановления пароля
+		 * 2 - статусы получения пароля СМС-авторизации
+		 */
 		$aRet = array(
-			'passSent'          => Yii::app()->session['smsPassSent'],
-			'passSentTime'      => Yii::app()->session['smsPassSentTime'],
-			'codeSent'          => Yii::app()->session['smsCodeSent'],
-			'smsAuthDone'       => Yii::app()->session['smsAuthDone'],
-			'needSmsPass'       => $needSmsPass,
-			'needSmsActionCode' => $needSmsActionCode,
-			'smsPassLeftTime'   => $smsPassLeftTime,
+			'passSent'        => Yii::app()->session['smsPassSent'],
+			'passSentTime'    => Yii::app()->session['smsPassSentTime'],
+			'codeSent'        => Yii::app()->session['smsCodeSent'],
+			'authDone'        => Yii::app()->session['smsAuthDone'],
+			'smsPassLeftTime' => $smsPassLeftTime,
 		);
 
 		return $aRet;
@@ -685,11 +684,15 @@ class AdminKreddyApiComponent
 	 *
 	 * @return \CArrayDataProvider
 	 */
-	public
-	function getHistoryDataProvider($aHistory)
+	public function getHistoryDataProvider($aHistory)
 	{
 		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
-			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'], array('keyField' => 'time', 'sort' => $this->getHistorySort()));
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'],
+				array(
+					'keyField' => 'time',
+					'sort'     => $this->getHistorySort()
+				)
+			);
 		} else {
 			$oHistoryDataProvider = new CArrayDataProvider(array());
 		}
@@ -703,7 +706,9 @@ class AdminKreddyApiComponent
 	public function getSmsPassLeftTime()
 	{
 		$curTime = time();
-		$leftTime = (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : $curTime;
+		$leftTime = (!empty(Yii::app()->session['smsPassSentTime']))
+			? Yii::app()->session['smsPassSentTime']
+			: $curTime;
 		$leftTime = $curTime - $leftTime;
 		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
 
@@ -723,7 +728,9 @@ class AdminKreddyApiComponent
 	public function getSmsCodeLeftTime()
 	{
 		$iCurTime = time();
-		$iLeftTime = (!empty(Yii::app()->session['smsCodeSentTime'])) ? Yii::app()->session['smsCodeSentTime'] : $iCurTime;
+		$iLeftTime = (!empty(Yii::app()->session['smsCodeSentTime']))
+			? Yii::app()->session['smsCodeSentTime']
+			: $iCurTime;
 		$iLeftTime = $iCurTime - $iLeftTime;
 		$iLeftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $iLeftTime;
 
