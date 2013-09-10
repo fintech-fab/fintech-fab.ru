@@ -62,7 +62,7 @@ class DefaultController extends Controller
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'index'), true);
-
+			//если запрос пришел через AJAX, то рендерим представление без layouts/main
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess($sView, array('passFormRender' => $sPassFormRender));
@@ -96,6 +96,7 @@ class DefaultController extends Controller
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'history'), true, false);
+			//если запрос пришел через AJAX, то рендерим представление без layouts/main
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
