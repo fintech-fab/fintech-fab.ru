@@ -8,7 +8,7 @@
  * Ввести пароль из SMS
  */
 
-$this->pageTitle = Yii::app()->name . " - Восстановить пароль";
+$this->pageTitle = Yii::app()->name . " - Восстановление пароля";
 ?>
 <h2 class='pay_legend' style="margin-left: 20px;">Восстановить пароль</h2>
 <div class="form" id="activeForm">

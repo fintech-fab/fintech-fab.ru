@@ -12,7 +12,7 @@
  * //Также есть возможность повторно отправить SMS - с новым кодом.
  */
 
-$this->pageTitle = Yii::app()->name . " - Восстановить пароль";
+$this->pageTitle = Yii::app()->name . " - Восстановление пароля";
 ?>
 
 <h2 class='pay_legend' style="margin-left: 20px;">Восстановить пароль</h2>
