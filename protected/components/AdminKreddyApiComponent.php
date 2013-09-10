@@ -104,11 +104,7 @@ class AdminKreddyApiComponent
 
 	public function isAuth()
 	{
-		if (!empty($this->token)) {
-			return true;
-		} else {
-			return false;
-		}
+		return (!empty($this->token));
 	}
 
 	/**
@@ -151,11 +147,9 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
 			Yii::app()->session['smsAuthDone'] = true;
-
-			return $aResult;
-		} else {
-			return $aResult;
 		}
+
+		return $aResult;
 	}
 
 	/**
@@ -534,7 +528,6 @@ class AdminKreddyApiComponent
 	/**
 	 * @return mixed
 	 */
-
 	private function getSessionToken()
 	{
 		return Yii::app()->session['akApi_token'];
@@ -543,7 +536,6 @@ class AdminKreddyApiComponent
 	/**
 	 * @param $token
 	 */
-
 	private function setSessionToken($token)
 	{
 		Yii::app()->session['akApi_token'] = $token;
@@ -551,12 +543,9 @@ class AdminKreddyApiComponent
 
 	public function logout()
 	{
-		Yii::app()->session['smsPassSent'] = false;
-		Yii::app()->session['smsAuthDone'] = false;
-		Yii::app()->session['smsPassSent'] = false;
-		Yii::app()->session['smsPassSentTime'] = false;
-		Yii::app()->session['smsCodeSent'] = false;
-		Yii::app()->session['smsAuthDone'] = false;
+		// очищаем сессии, связанные с отправкой SMS
+		$this->clearSmsState();
+
 		$this->setSessionToken(null);
 	}
 
@@ -587,11 +576,7 @@ class AdminKreddyApiComponent
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
 
-		if ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE) {
-			return true;
-		} else {
-			return false;
-		}
+		return ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE);
 	}
 
 	/**
@@ -604,11 +589,8 @@ class AdminKreddyApiComponent
 	public function getIsNeedSmsAuth($aResult)
 	{
 		$iStatus = $this->getResultStatus($aResult);
-		if ($iStatus === 9) {
-			return true;
-		} else {
-			return false;
-		}
+
+		return ($iStatus === 9);
 	}
 
 	/**
@@ -621,40 +603,95 @@ class AdminKreddyApiComponent
 	public function getIsNeedSmsCode($aResult)
 	{
 		$iStatus = $this->getResultStatus($aResult);
-		if ($iStatus === 10) {
-			return true;
-		} else {
-			return false;
-		}
+
+		return ($iStatus === 10);
 	}
 
 	/**
-	 * @param $aResult
-	 *
-	 * @return array
+	 * очищаем сессии, связанные с отправкой SMS
 	 */
-
-	public function getSmsState($aResult = null)
+	private function clearSmsState()
 	{
-		if (!isset($aResult)) {
-			$aResult = $this->getClientInfo();
-		}
+		$this->clearSmsPassState();
+		$this->clearResetPassSmsCodeState();
+	}
 
-		$smsPassLeftTime = self::getSmsPassLeftTime();
+	/**
+	 * очищаем сессии, связанные с отправкой SMS (форма Восстановления пароля)
+	 */
+	public function clearResetPassSmsCodeState()
+	{
+		Yii::app()->session['resetPassword']['smsCodeSent'] = null;
+		Yii::app()->session['resetPassword']['smsCodeSentTime'] = null;
+		Yii::app()->session['resetPassword']['smsCodeLeftTime'] = null;
+		Yii::app()->session['resetPassword']['phone'] = null;
+	}
 
-		/**
-		 * 1 группа - статусы СМС восстановления пароля
-		 * 2 - статусы получения пароля СМС-авторизации
-		 */
-		$aRet = array(
-			'passSent'        => Yii::app()->session['smsPassSent'],
-			'passSentTime'    => Yii::app()->session['smsPassSentTime'],
-			'codeSent'        => Yii::app()->session['smsCodeSent'],
-			'authDone'        => Yii::app()->session['smsAuthDone'],
-			'smsPassLeftTime' => $smsPassLeftTime,
-		);
+	/**
+	 * очищаем сессии, связанные с отправкой SMS (форма SMS пароль)
+	 */
+	public function clearSmsPassState()
+	{
+		Yii::app()->session['smsPassSent'] = null;
+		Yii::app()->session['smsPassSentTime'] = null;
+		Yii::app()->session['smsPassLeftTime'] = null;
+		Yii::app()->session['smsAuthDone'] = null;
+	}
 
-		return $aRet;
+	/**
+	 * @return bool
+	 */
+	public function checkSmsPassSent()
+	{
+		return (!empty(Yii::app()->session['smsPassSent']));
+	}
+
+	/**
+	 * @return int|''
+	 */
+	public function getSmsPassSentTime()
+	{
+		return (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : '';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function checkResetPassSmsCodeSent()
+	{
+		return (!empty(Yii::app()->session['resetPassword']['smsCodeSent']));
+	}
+
+	/**
+	 * @return int|''
+	 */
+	public function getResetPassSmsCodeSentTime()
+	{
+		return (!empty(Yii::app()->session['resetPassword']['smsCodeSentTime'])) ? Yii::app()->session['resetPassword']['smsCodeSentTime'] : '';
+	}
+
+	/**
+	 * @param $sPhone string
+	 */
+	public function setResetPassPhone($sPhone)
+	{
+		Yii::app()->session['resetPassword']['phone'] = $sPhone;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getResetPassPhone()
+	{
+		return (!empty(Yii::app()->session['resetPassword']['phone'])) ? Yii::app()->session['resetPassword']['phone'] : '';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function checkResetPassPhone()
+	{
+		return (!empty(Yii::app()->session['resetPassword']['phone']));
 	}
 
 	/**
@@ -679,7 +716,7 @@ class AdminKreddyApiComponent
 	 */
 	public function isSmsAuth()
 	{
-		return (Yii::app()->session['smsAuthDone']) ? Yii::app()->session['smsAuthDone'] : false;
+		return (!empty(Yii::app()->session['smsAuthDone'])) ? Yii::app()->session['smsAuthDone'] : false;
 	}
 
 	/**
@@ -717,7 +754,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return mixed
+	 * @return integer
 	 */
 	public function getSmsPassLeftTime()
 	{
@@ -739,13 +776,15 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return mixed
+	 * Получаем время, оставшееся до возможности повторной отправки SMS (форма Восстановление пароля)
+	 *
+	 * @return integer
 	 */
-	public function getSmsCodeLeftTime()
+	public function getResetPassSmsCodeLeftTime()
 	{
 		$iCurTime = time();
-		$iLeftTime = (!empty(Yii::app()->session['smsCodeSentTime']))
-			? Yii::app()->session['smsCodeSentTime']
+		$iLeftTime = (!empty(Yii::app()->session['resetPassword']['smsCodeSentTime']))
+			? Yii::app()->session['resetPassword']['smsCodeSentTime']
 			: $iCurTime;
 		$iLeftTime = $iCurTime - $iLeftTime;
 		$iLeftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $iLeftTime;
@@ -753,11 +792,11 @@ class AdminKreddyApiComponent
 		return $iLeftTime;
 	}
 
-	public function setSmsCodeSentAndTime()
+	public function setResetPassSmsCodeSentAndTime()
 	{
-		Yii::app()->session['smsCodeSent'] = true;
-		Yii::app()->session['smsCodeSentTime'] = time();
-		Yii::app()->session['smsCodeLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
+		Yii::app()->session['resetPassword']['smsCodeSent'] = true;
+		Yii::app()->session['resetPassword']['smsCodeSentTime'] = time();
+		Yii::app()->session['resetPassword']['smsCodeLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
 	}
 
 	/**
