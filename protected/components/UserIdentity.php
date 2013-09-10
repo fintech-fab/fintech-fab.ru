@@ -18,7 +18,7 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{
-
+		//если username - имя админа, то логинимся своими средствами
 		if ($this->username === Yii::app()->params['adminName']) {
 			$users = array(
 				// username => password
@@ -33,7 +33,7 @@ class UserIdentity extends CUserIdentity
 			} else {
 				$this->errorCode = self::ERROR_NONE;
 			}
-		} else {
+		} else { //иначе логинимся через API
 			$sPhone = $this->username;
 			$sPassword = $this->password;
 			$bAuth = Yii::app()->adminKreddyApi->getAuth($sPhone, $sPassword);

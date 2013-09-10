@@ -20,6 +20,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 	'id'           => 'history-grid',
 	'dataProvider' => $historyProvider,
 	'type'         => 'striped bordered condensed',
+	'emptyText'    => 'История операций пуста',
 	'columns'      => array(
 		array(
 			'name'  => 'time', 'header' => 'Дата и время',

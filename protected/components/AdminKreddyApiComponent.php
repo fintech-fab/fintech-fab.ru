@@ -425,17 +425,17 @@ class AdminKreddyApiComponent
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
-		//TODO убрать
-		Yii::trace(CJSON::encode($aRequest));
-
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
+
+		//TODO убрать
+		Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
 		$response = curl_exec($ch);
 
 		//TODO убрать
-		Yii::trace($response);
+		Yii::trace("Action: " . $sAction . " - Response: " . $response);
 
 		$aData = CJSON::decode($response);
 
