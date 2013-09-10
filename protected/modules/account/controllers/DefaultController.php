@@ -55,6 +55,7 @@ class DefaultController extends Controller
 		if (Yii::app()->adminKreddyApi->getIsResultAuth()) {
 			$this->smsState = Yii::app()->adminKreddyApi->getSmsState();
 			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+				//выбираем представление в зависимости от статуса СМС-авторизации
 				$sView = 'index_is_sms_auth';
 			} else {
 				$sView = 'index_not_sms_auth';
@@ -89,6 +90,12 @@ class DefaultController extends Controller
 
 		if (Yii::app()->adminKreddyApi->getIsResultAuth()) {
 			$this->smsState = Yii::app()->adminKreddyApi->getSmsState($aHistory);
+			//выбираем представление в зависимости от статуса СМС-авторизации
+			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+				$sView = 'history_is_sms_auth';
+			} else {
+				$sView = 'history_not_sms_auth';
+			}
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
@@ -96,9 +103,9 @@ class DefaultController extends Controller
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'history'), true, false);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
-				$this->renderWithoutProcess('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
+				$this->renderWithoutProcess($sView, array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 			} else {
-				$this->render('history', array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
+				$this->render($sView, array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
 			}
 		} else {
 			Yii::app()->user->logout();
