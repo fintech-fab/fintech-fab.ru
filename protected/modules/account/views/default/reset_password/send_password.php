@@ -30,7 +30,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановить пароль"
 				'class' => "span4",
 			),
 			'action'                 => Yii::app()
-				->createUrl('/account/ajaxResetPassSendSmsCode', array('bResend' => true)),
+				->createUrl('/account/ajaxResetPassSendSmsCode', array('resend' => 1)),
 		));
 		?>
 
@@ -43,7 +43,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановить пароль"
 			'id'          => 'btnResend',
 			'buttonType'  => 'ajaxSubmit',
 			'icon'        => 'icon-refresh',
-			'url'         => Yii::app()->createUrl('/account/ajaxResetPassSendSmsCode', array('bResend' => true)),
+			'url'         => Yii::app()->createUrl('/account/ajaxResetPassSendSmsCode', array('resend' => 1)),
 			'size'        => 'small',
 			'label'       => 'Выслать код на телефон повторно',
 			'disabled'    => true,
