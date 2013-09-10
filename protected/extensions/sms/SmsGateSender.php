@@ -40,27 +40,27 @@ class SmsGateSender
 	 */
 	public function send($sPhone, $message)
 	{
-		$aPostQuery = http_build_query(
-			array(
-				'username' => $this->_external_user,
-				'password' => $this->_external_pwd,
-				'to'       => $sPhone,
-				'from'     => 'KREDDY',
-				'coding'   => 2,
-				'text'     => $message,
-				'priority' => 0,
-				'mclass'   => 1,
-				'dlrmask'  => 31
-			)
-		);
+		/*	$aPostQuery = http_build_query(
+				array(
+					'username' => $this->_external_user,
+					'password' => $this->_external_pwd,
+					'to'       => $sPhone,
+					'from'     => 'KREDDY',
+					'coding'   => 2,
+					'text'     => $message,
+					'priority' => 0,
+					'mclass'   => 1,
+					'dlrmask'  => 31
+				)
+			);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->_external_url);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $aPostQuery);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$sResult = trim(curl_exec($ch));
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $this->_external_url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $aPostQuery);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$sResult = trim(curl_exec($ch));*/
 
 		//Logger::write('sms_gate_send', $sPhone . '/' . $message . '/' . $sResult, 0);
 

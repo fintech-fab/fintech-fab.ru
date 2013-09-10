@@ -47,7 +47,7 @@ class DefaultController extends Controller
 	/**
 	 * Главная страница личного кабинета
 	 */
-
+//TODO: однотипный код (в actionHistory практически такой же) не копипастить
 	public function actionIndex()
 	{
 		if (Yii::app()->adminKreddyApi->isAuth()) {
@@ -61,7 +61,12 @@ class DefaultController extends Controller
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'index'), true);
+			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
+				$sResetPassView = 'sms_password/send_password';
+			} else {
+				$sResetPassView = 'sms_password/check_password';
+			}
+			$sPassFormRender = $this->renderPartial($sResetPassView, array('model' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'index'), true);
 
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
@@ -97,7 +102,12 @@ class DefaultController extends Controller
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'history'), true, false);
+			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
+				$sResetPassView = 'sms_password/send_password';
+			} else {
+				$sResetPassView = 'sms_password/check_password';
+			}
+			$sPassFormRender = $this->renderPartial($sResetPassView, array('model' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'history'), true, false);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
 				$this->renderWithoutProcess($sView, array('passFormRender' => $sPassFormRender, 'history' => $aHistory, 'historyProvider' => $oHistoryDataProvider));
@@ -125,6 +135,7 @@ class DefaultController extends Controller
 					"sms_code"    => 2,
 					"sms_message" => "SMS уже отправлено",
 				);
+				echo CJSON::encode($aAnswer);
 				Yii::app()->end();
 			}
 
@@ -133,6 +144,7 @@ class DefaultController extends Controller
 					"sms_code"    => 2,
 					"sms_message" => SiteParams::API_MINUTES_RESEND_ERROR,
 				);
+				echo CJSON::encode($aAnswer);
 				Yii::app()->end();
 			}
 
@@ -151,7 +163,8 @@ class DefaultController extends Controller
 			if (isset($aResult['sms_status'])) {
 				switch ($aResult['sms_status']) {
 					case 1:
-						$iSmsCode = 0;
+						$iSmsCode = 0; // успешно! переходим на след. форму
+						$aResult['sms_message'] = Yii::app()->createUrl("/account/checkSmsPass");
 						break;
 					default:
 						$iSmsCode = 3;
@@ -167,7 +180,7 @@ class DefaultController extends Controller
 			);
 
 			echo CJSON::encode(array_merge($aAnswer, array(
-				"leftTime" => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), //TODO: вынести во view
+				"sms_left_time" => Yii::app()->adminKreddyApi->getSmsPassLeftTime(),
 			)));
 		}
 		Yii::app()->end();
@@ -211,7 +224,15 @@ class DefaultController extends Controller
 			}
 			echo CJSON::encode($aAnswer);
 		} else {
-			$this->redirect(Yii::app()->createUrl("account"));
+			$this->layout = '/layouts/column1';
+
+			$model = new SMSPasswordForm();
+
+			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
+				$this->render('reset_password/send_password', array('model' => $model,));
+			} else {
+				$this->render('reset_password/check_password', array('model' => $model,));
+			}
 		}
 	}
 
