@@ -727,8 +727,9 @@ class AdminKreddyApiComponent
 	 *
 	 * @return \CArrayDataProvider
 	 */
-	public function getHistoryDataProvider($aHistory)
+	public function getHistoryDataProvider()
 	{
+		$aHistory = $this->getHistory();
 		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
 			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'],
 				array(
