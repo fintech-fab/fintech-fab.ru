@@ -723,8 +723,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $aHistory
-	 *
 	 * @return \CArrayDataProvider
 	 */
 	public function getHistoryDataProvider()
