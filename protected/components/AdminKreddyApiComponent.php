@@ -41,6 +41,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
 	private $token;
+	private $aClientInfo;
 
 	/**
 	 * @return array
@@ -89,6 +90,20 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 *
+	 * @return bool
+	 */
+
+	public function isAuth()
+	{
+		if (!empty($this->token)) {
 			return true;
 		} else {
 			return false;
@@ -182,13 +197,17 @@ class AdminKreddyApiComponent
 		return $aResult;
 	}
 
-
 	/**
 	 * @return array|bool
 	 */
 
 	public function getClientInfo()
 	{
+
+		if (isset($this->aClientInfo)) {
+			return $this->aClientInfo;
+		}
+
 		$aData = array(
 			'code'         => self::ERROR_AUTH,
 			'client_data'  => array(
@@ -209,33 +228,121 @@ class AdminKreddyApiComponent
 			)
 		);
 		if (!empty($this->token)) {
-			//тут запрос данных по токену
+			//запрос данных по токену
 			$aGetData = $this->getData('info');
 
-			//если subscription пустой - делаем unset()
-			//это необходимо чтобы массив subscription не был заменен на путой при слиянии массивов
 			if (is_array($aGetData)) {
-				if (empty($aGetData['subscription'])) {
-					unset($aGetData['subscription']);
-				}
-				if (empty($aGetData['active_loan'])) {
-					unset($aGetData['active_loan']);
-				}
+				//если subscription пустой - делаем unset()
+				//это необходимо чтобы массив subscription не был заменен на путой при слиянии массивов
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
-			//форматируем дату в "русский" формат
-			$aData['active_loan']['expired_to'] = $this->formatRusDate($aData['active_loan']['expired_to']);
-			$aData['subscription']['activity_to'] = $this->formatRusDate($aData['subscription']['activity_to']);
-			$aData['subscription']['moratorium_to'] = $this->formatRusDate($aData['subscription']['moratorium_to']);
 		}
+
+		$this->aClientInfo = $aData;
 
 		return $aData;
 	}
 
 	/**
-	 * @return array|bool
+	 * @return int
+	 */
+	public function getBalance()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return ($aClientInfo['active_loan']['balance']) ? $aClientInfo['active_loan']['balance'] : 0;
+	}
+
+	/**
+	 * @return int|number
+	 */
+	public function getAbsBalance()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return ($aClientInfo['active_loan']['balance']) ? abs($aClientInfo['active_loan']['balance']) : 0;
+	}
+
+	/**
+	 * @return bool|string
 	 */
 
+	public function getSubscriptionProduct()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription']['product'])) ? $aClientInfo['subscription']['product'] : false;
+	}
+
+	/**
+	 * @return int|number
+	 */
+	public function getSubscriptionActivity()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? abs($aClientInfo['subscription']['activity_to']) : false;
+		$sActivityTo = $this->formatRusDate($sActivityTo);
+
+		return $sActivityTo;
+	}
+
+	/**
+	 * @return int|number
+	 */
+	public function getSubscriptionAvailableLoans()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription']['available_loans'])) ? abs($aClientInfo['subscription']['available_loans']) : 0;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getSubscriptionMoratorium()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sMoratoriumTo = (!empty($aClientInfo['subscription']['moratorium_to'])) ? abs($aClientInfo['subscription']['moratorium_to']) : false;
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
+
+		return $sMoratoriumTo;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getActiveLoanExpired()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to'])) ? abs($aClientInfo['active_loan']['expired_to']) : false;
+		$sExpiredTo = $this->formatRusDate($sExpiredTo);
+
+		return $sExpiredTo;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getClientFullName()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['client_data']['fullname'])) ? $aClientInfo['client_data']['fullname'] : '';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsDebt()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['client_data']['is_debt'])) ? (boolean)$aClientInfo['client_data']['is_debt'] : false;
+	}
+
+	/**
+	 * @return array
+	 */
 	public function getHistory()
 	{
 		$aData = array('code' => self::ERROR_AUTH);
@@ -461,9 +568,10 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function getIsResultAuth($aResult)
+	public function getIsResultAuth()
 	{
-		$iStatus = $this->getResultStatus($aResult);
+		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
+		$iStatus = $this->getResultStatus($aInfo);
 
 		if ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE) {
 			return true;
@@ -513,8 +621,12 @@ class AdminKreddyApiComponent
 	 */
 
 	public
-	function getSmsState($aResult)
+	function getSmsState($aResult = null)
 	{
+		if (!isset($aResult)) {
+			$aResult = $this->getClientInfo();
+		}
+
 		$needSmsPass = $this->getIsNeedSmsAuth($aResult);
 		$needSmsActionCode = $this->getIsNeedSmsCode($aResult);
 		$smsPassLeftTime = self::getSmsPassLeftTime();
@@ -538,8 +650,7 @@ class AdminKreddyApiComponent
 	 * @return string
 	 */
 
-	public
-	function checkSmsAuthStatus($aResult)
+	public function checkSmsAuthStatus($aResult)
 	{
 		if ($aResult['sms_status'] == self::SMS_AUTH_OK) {
 			Yii::app()->session['smsAuthDone'] = true;
@@ -551,11 +662,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isSmsAuth()
+	{
+		return (Yii::app()->session['smsAuthDone']) ? Yii::app()->session['smsAuthDone'] : false;
+	}
+
+	/**
 	 * @return CSort
 	 */
 
-	private
-	function getHistorySort()
+	private function getHistorySort()
 	{
 		$sort = new CSort;
 		$sort->defaultOrder = 'time DESC';

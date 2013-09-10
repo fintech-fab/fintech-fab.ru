@@ -6,8 +6,6 @@ class DefaultController extends Controller
 {
 
 	public $layout = '/layouts/column2';
-
-	public $clientData;
 	public $smsState;
 
 	/**
@@ -53,10 +51,14 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		//получаем основную информацию из API
-		$this->clientData = Yii::app()->adminKreddyApi->getClientInfo();
 
-		if (Yii::app()->adminKreddyApi->getIsResultAuth($this->clientData)) {
-			$this->smsState = Yii::app()->adminKreddyApi->getSmsState($this->clientData);
+		if (Yii::app()->adminKreddyApi->getIsResultAuth()) {
+			$this->smsState = Yii::app()->adminKreddyApi->getSmsState();
+			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+				$sView = 'index_is_sms_auth';
+			} else {
+				$sView = 'index_not_sms_auth';
+			}
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
@@ -64,9 +66,9 @@ class DefaultController extends Controller
 			$sPassFormRender = $this->renderPartial('sms_password', array('passForm' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'index'), true);
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
-				$this->renderWithoutProcess('index', array('passFormRender' => $sPassFormRender));
+				$this->renderWithoutProcess($sView, array('passFormRender' => $sPassFormRender));
 			} else {
-				$this->render('index', array('passFormRender' => $sPassFormRender));
+				$this->render($sView, array('passFormRender' => $sPassFormRender));
 			}
 		} else {
 			Yii::app()->user->logout();
@@ -80,14 +82,12 @@ class DefaultController extends Controller
 
 	public function actionHistory()
 	{
-		//получаем основную информацию из API
-		$this->clientData = Yii::app()->adminKreddyApi->getClientInfo();
 		//получаем историю операций из API
 		$aHistory = Yii::app()->adminKreddyApi->getHistory();
 
 		$oHistoryDataProvider = Yii::app()->adminKreddyApi->getHistoryDataProvider($aHistory);
 
-		if (Yii::app()->adminKreddyApi->getIsResultAuth($this->clientData)) {
+		if (Yii::app()->adminKreddyApi->getIsResultAuth()) {
 			$this->smsState = Yii::app()->adminKreddyApi->getSmsState($aHistory);
 			/**
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
@@ -116,7 +116,7 @@ class DefaultController extends Controller
 		if (Yii::app()->request->isAjaxRequest) {
 			$bResend = (boolean)$resend;
 
-			$this->smsState = Yii::app()->adminKreddyApi->getSmsState($this->clientData);
+			$this->smsState = Yii::app()->adminKreddyApi->getSmsState();
 
 			if (!$bResend && !empty($this->smsState['smsPassSent'])) {
 				echo CJSON::encode(array(

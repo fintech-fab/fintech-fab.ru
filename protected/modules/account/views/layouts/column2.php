@@ -1,44 +1,6 @@
 <?php /* @var $this Controller */
 
-
-$sFullName = $this->clientData['client_data']['fullname'];
-$bIsDebt = $this->clientData['client_data']['is_debt'];
-$iBalance = $this->clientData['active_loan']['balance'];
-$bExpired = $this->clientData['active_loan']['expired'];
-$sExpiredTo = $this->clientData['active_loan']['expired_to'];
-
-if (!$iBalance) {
-	if (isset($bIsDebt) && $bIsDebt) {
-		$sDebtMessage = '<strong>У вас есть задолженность по кредиту.</strong><br/>Авторизуйтесь по SMS-паролю для получения подробной информации.<br/>';
-	} elseif (isset($bIsDebt) && !$bIsDebt) {
-		$sDebtMessage = '<strong>У вас нет задолженности по кредиту.</strong><br/>Авторизуйтесь по SMS-паролю для получения подробной информации.<br/>';
-	} else {
-		$sDebtMessage = '<strong>Произошла ошибка!</strong><br/>Выйдите из личного кабинета и выполните вход заново.<br/>Если ошибка повторится, позвоните на горячую линию.';
-	}
-
-	$sBalanceMessage = '';
-	$sExpireToMessage = '';
-
-} else {
-	$sDebtMessage = '';
-
-	if ($iBalance < 0) {
-		$sBalanceMessage = '<strong>Задолженность:</strong> ' . abs($iBalance) . ' руб. <br/>';
-	} else {
-		$sBalanceMessage = '<strong>Баланс:</strong> ' . abs($iBalance) . ' руб. <br/>';
-	}
-	$sExpireToMessage = '<strong>Вернуть до:</strong> ' . $sExpiredTo . '<br/>';
-}
-
-if ($bExpired) {
-	$sExpiredMessage = '<strong>Платеж просрочен!</strong><br/>';
-} else {
-	$sExpiredMessage = '';
-}
-
-
 ?>
-
 
 <?php $this->beginContent('/layouts/main'); ?>
 <div class="container" id="main-content">
@@ -61,14 +23,11 @@ if ($bExpired) {
 				?>
 
 				<div style="padding-left: 20px;">
-					<h4><?= $sFullName; ?></h4>
-
-					<p>
-						<?= $sExpiredMessage; ?>
-						<?= $sBalanceMessage; ?>
-						<?= $sExpireToMessage ?>
-						<?= $sDebtMessage ?>
-					</p>
+					<?php
+					(Yii::app()->adminKreddyApi->isSmsAuth())
+						? $this->renderPartial('is_sms_auth')
+						: $this->renderPartial('not_sms_auth');
+					?>
 				</div>
 				<?php $this->endWidget(); ?>
 
