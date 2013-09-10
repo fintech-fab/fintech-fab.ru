@@ -120,29 +120,17 @@ class DefaultController extends Controller
 		if (Yii::app()->request->isAjaxRequest) {
 			$bResend = (boolean)$resend;
 
-			if (!$bResend && !empty($this->smsState['smsPassSent'])) {
-				echo CJSON::encode(array(
-					"type" => 2,
-					"text" => "SMS уже отправлено",
-				));
-
-				Yii::app()->end();
+			if (!$bResend && Yii::app()->adminKreddyApi->checkSmsPassSent()) {
+				$this->echoJsonAnswerAppEnd(2, "SMS уже отправлено");
 			}
 
-			if ($bResend &&
-				(Yii::app()->adminKreddyApi->getSmsPassLeftTime() > 0)
-			) {
-				echo CJSON::encode(array(
-					"type" => 2,
-					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
-				));
-
-				Yii::app()->end();
+			if ($bResend && Yii::app()->adminKreddyApi->getSmsPassLeftTime() > 0) {
+				$this->echoJsonAnswerAppEnd(2, SiteParams::API_MINUTES_RESEND_ERROR);
 			}
 
 			$aResult = Yii::app()->adminKreddyApi->sendSmsPassword($bResend);
 
-			//TODO протестить
+			//TODO: протестить
 			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
 				//устанавливаем флаг "СМС отправлено" и время отправки
 				Yii::app()->adminKreddyApi->setSmsPassSentAndTime();
@@ -168,7 +156,7 @@ class DefaultController extends Controller
 			echo CJSON::encode(array(
 				"type"     => $iSmsCode,
 				"text"     => $aResult['sms_message'],
-				"leftTime" => Yii::app()->adminKreddyApi->getSmsPassLeftTime(),
+				"leftTime" => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), //TODO: вынести во view
 			));
 		}
 		Yii::app()->end();
@@ -179,7 +167,6 @@ class DefaultController extends Controller
 	 *
 	 * @param string $act
 	 */
-
 	public function actionCheckSmsPass($act = 'index')
 	{
 		if (Yii::app()->request->isAjaxRequest) {
@@ -226,7 +213,7 @@ class DefaultController extends Controller
 
 		if (Yii::app()->user->isGuest) {
 			$model = new AccountResetPasswordForm;
-			$this->render('reset_password/send_code', array('model' => $model,));
+			$this->render('reset_password/send_code', array('model' => $model));
 		} else {
 			$this->redirect(Yii::app()->createUrl("/account"));
 		}
@@ -236,11 +223,12 @@ class DefaultController extends Controller
 	 * Отправка на телефон SMS с кодом (для дальнейшей идентификации)
 	 * Если SMS отсылается впервые, дополнительно проводится проверка телефона на валидность
 	 *
-	 * @param bool $bResend - повторная ли отправка SMS с кодом
+	 * @param int $resend - повторная ли отправка SMS с кодом
 	 */
-	public function actionAjaxResetPassSendSmsCode($bResend = false)
+	public function actionAjaxResetPassSendSmsCode($resend = 0)
 	{
 		if (Yii::app()->request->isAjaxRequest) {
+			$bResend = (boolean)$resend;
 			$sPhone = "";
 
 			// если SMS отправляется впервые, то валидириуем данные и записываем в переменную $phone
@@ -249,42 +237,26 @@ class DefaultController extends Controller
 					$model = new AccountResetPasswordForm('phoneRequired');
 					$model->attributes = $_POST['AccountResetPasswordForm'];
 					if (!$model->validate()) {
-						echo CJSON::encode(array(
-							"type" => 2,
-							"text" => "Введите правильный телефон",
-						));
-						Yii::app()->end();
+						$this->echoJsonAnswerAppEnd(2, "Введите правильный телефон");
 					} else {
-						if (!empty(Yii::app()->session['smsCodeSentTime'])) {
-							echo CJSON::encode(array(
-								"type" => 2,
-								"text" => "SMS уже отправлено",
-							));
-							Yii::app()->end();
+						if (Yii::app()->adminKreddyApi->checkResetPassSmsCodeSent()) {
+							$this->echoJsonAnswerAppEnd(2, "SMS уже отправлено");
 						}
 					}
+					// запоминаем введённый телефон
 					$sPhone = $model->phone;
 				} else {
-					echo CJSON::encode(array(
-						"type" => 2,
-						"text" => "Введите телефон",
-					));
-					Yii::app()->end();
+					$this->echoJsonAnswerAppEnd(2, "Введите телефон");
 				}
 			} else {
-				// если повторная отправка, то берём данные из сессии
-				Yii::app()->adminKreddyApi->setResetPassPhone($sPhone);
-			}
+				// если SMS отправляется повторно, но время до разрешённой переотправки ещё не наступило, выдаём ошибку
+				if (Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime() > 0) {
+					$this->echoJsonAnswerAppEnd(2, SiteParams::API_MINUTES_RESEND_ERROR);
+				}
 
-			// если SMS отправляется повторно, но время до разрешённой переотправки ещё не наступило, выдаём ошибку
-			if ($bResend && Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime() > 0) {
-				echo CJSON::encode(array(
-					"type" => 2,
-					"text" => SiteParams::API_MINUTES_RESEND_ERROR,
-				));
-				Yii::app()->end();
+				// если повторная отправка, то берём телефон из сессии
+				$sPhone = Yii::app()->adminKreddyApi->getResetPassPhone();
 			}
-
 			$aResult = Yii::app()->adminKreddyApi->resetPasswordSendSms($sPhone, $bResend);
 
 			/**
@@ -319,7 +291,7 @@ class DefaultController extends Controller
 			echo CJSON::encode(array(
 				"type"     => $iSmsCode,
 				"text"     => $aResult['sms_message'],
-				"leftTime" => Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime(),
+				"leftTime" => Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime(), //TODO: вынести во view + $this->echo....
 			));
 		}
 		Yii::app()->end();
@@ -334,7 +306,7 @@ class DefaultController extends Controller
 			$aAnswer = array(
 				"type" => 2,
 				"text" => 'Неверный код!',
-			);
+			); //TODO: воспользоваться функцией $this->echoJson...
 
 			// если в сессии нет телефона либо если пароль уже отправлен
 			if (Yii::app()->adminKreddyApi->checkResetPassPhone()) {
@@ -418,9 +390,6 @@ class DefaultController extends Controller
 	 */
 	public function actionLogout()
 	{
-		Yii::app()->session['smsPassSent'] = false;
-		Yii::app()->session['smsAuthDone'] = false;
-
 		Yii::app()->adminKreddyApi->logout();
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
@@ -452,5 +421,21 @@ class DefaultController extends Controller
 		}
 
 		return false;
+	}
+
+	/**
+	 * Выводит в JSON ответ и завершает работу приложения
+	 *
+	 * @param $iType
+	 * @param $sText
+	 */
+	private function echoJsonAnswerAppEnd($iType, $sText)
+	{
+		$aJsonAnswer = array(
+			"type" => $iType,
+			"text" => $sText,
+		);
+		echo CJSON::encode($aJsonAnswer);
+		Yii::app()->end();
 	}
 }
