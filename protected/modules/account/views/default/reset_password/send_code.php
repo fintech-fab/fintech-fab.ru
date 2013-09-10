@@ -47,12 +47,11 @@ $this->pageTitle = Yii::app()->name . " - Восстановить пароль"
 			'dataType' => "json",
 			'type'     => "POST",
 			'success'  => "function(data) {
-									if(data.type == 0) {
+									if(data.sms_code == 0) {
 										// загрузка следующей формы
-										window.location.replace(data.text);
-                                	} else if(data.text) {
-                                	    // если есть текст ответа, то выводим его
-                               			jQuery('#actionAnswer').html(data.text).parent().show();
+										window.location.replace(data.sms_message);
+                                	} else if(data.sms_code == 2 && data.sms_message) { // если есть текст ответа, то выводим его
+                               			jQuery('#actionAnswer').html(data.sms_message).parent().show();
                                 	} else {
                                			jQuery('#actionAnswer').html('Произошла неизвестная ошибка. Обратитесь в горячую линию').parent().show();
                                 	}
@@ -73,7 +72,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановить пароль"
 	<div class="clearfix"></div>
 
 	<div class="row">
-		<div class="span4"><?php echo CHtml::link('&laquo; Вернуться к вводу пароля', Yii::app()
+		<div class="span4"><?php echo CHtml::link('&laquo; Вернуться к форме входа', Yii::app()
 				->createUrl('/account/login')); ?>
 		</div>
 	</div>
