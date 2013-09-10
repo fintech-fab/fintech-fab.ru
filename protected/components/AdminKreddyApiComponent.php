@@ -564,8 +564,6 @@ class AdminKreddyApiComponent
 	 * Проверяем полученный ответ API на его уровень авторизации
 	 * коды 0, 9, 10 - авторизация в порядке
 	 *
-	 * @param $aResult
-	 *
 	 * @return bool
 	 */
 	public function getIsResultAuth()

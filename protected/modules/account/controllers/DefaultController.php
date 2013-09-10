@@ -190,8 +190,7 @@ class DefaultController extends Controller
 	 * @param string $act
 	 */
 
-	public
-	function actionCheckSmsPass($act = 'index')
+	public function actionCheckSmsPass($act = 'index')
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			$aAnswer = array(
@@ -231,8 +230,7 @@ class DefaultController extends Controller
 	/**
 	 *  Форма восстановления пароля, необходимого для входа в личный кабинет
 	 */
-	public
-	function actionResetPassword()
+	public function actionResetPassword()
 	{
 		$this->layout = '/layouts/column1';
 
@@ -257,8 +255,7 @@ class DefaultController extends Controller
 	 *
 	 * @param int $resend - повторная ли отправка SMS с кодом
 	 */
-	public
-	function actionAjaxSendSmsCode($resend = 0)
+	public function actionAjaxSendSmsCode($resend = 0)
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			$bResend = (boolean)$resend;
@@ -351,8 +348,7 @@ class DefaultController extends Controller
 	/**
 	 * Проверка кода, отправленного в SMS. Если код верен - отправка SMS с паролем на телефон из сессии
 	 */
-	public
-	function actionCheckSmsCode()
+	public function actionCheckSmsCode()
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			$aAnswer = array(
@@ -401,8 +397,7 @@ class DefaultController extends Controller
 	}
 
 
-	public
-	function actionLogin()
+	public function actionLogin()
 	{
 		$this->layout = '/layouts/column1';
 
@@ -433,8 +428,7 @@ class DefaultController extends Controller
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */
-	public
-	function actionLogout()
+	public function actionLogout()
 	{
 		Yii::app()->session['smsPassSent'] = false;
 		Yii::app()->session['smsAuthDone'] = false;
@@ -452,8 +446,7 @@ class DefaultController extends Controller
 	 * @return string
 	 */
 
-	public
-	function renderWithoutProcess($view, $data = null, $return = false)
+	public function renderWithoutProcess($view, $data = null, $return = false)
 	{
 		if ($this->beforeRender($view)) {
 			$output = $this->renderPartial($view, $data, true);
