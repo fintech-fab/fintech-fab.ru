@@ -97,19 +97,6 @@ class AdminKreddyApiComponent
 		}
 	}
 
-	/**
-	 *
-	 * @return bool
-	 */
-
-	public function isAuth()
-	{
-		if (!empty($this->token)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	/**
 	 * @return bool
@@ -578,16 +565,16 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверяем полученный ответ API на его уровень авторизации
-	 * коды 0, 9, 10 - авторизация в порядке
+	 * коды 0, 9 - авторизация в порядке
 	 *
 	 * @return bool
 	 */
-	public function getIsResultAuth()
+	public function isAuth()
 	{
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
 
-		if ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE) {
+		if ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH) {
 			return true;
 		} else {
 			return false;

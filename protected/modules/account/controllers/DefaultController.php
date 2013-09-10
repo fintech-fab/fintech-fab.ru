@@ -50,9 +50,7 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{
-		//получаем основную информацию из API
-
-		if (Yii::app()->adminKreddyApi->getIsResultAuth()) {
+		if (Yii::app()->adminKreddyApi->isAuth()) {
 			$this->smsState = Yii::app()->adminKreddyApi->getSmsState();
 			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
 				//выбираем представление в зависимости от статуса СМС-авторизации
@@ -89,7 +87,7 @@ class DefaultController extends Controller
 
 		$oHistoryDataProvider = Yii::app()->adminKreddyApi->getHistoryDataProvider($aHistory);
 
-		if (Yii::app()->adminKreddyApi->getIsResultAuth()) {
+		if (Yii::app()->adminKreddyApi->isAuth()) {
 			$this->smsState = Yii::app()->adminKreddyApi->getSmsState($aHistory);
 			//выбираем представление в зависимости от статуса СМС-авторизации
 			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
