@@ -34,7 +34,6 @@ $this->menu = array(
 }*/
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
-
 $sBalance = $this->clientData['subscription']['balance'];
 $sProduct = $this->clientData['subscription']['product'];
 $sActivityTo = $this->clientData['subscription']['activity_to'];
@@ -47,7 +46,7 @@ $sMoratoriumTo = $this->clientData['subscription']['moratorium_to'];
 
 <?php
 if (!$this->smsState['needSmsPass']) { //если не требуется авторизоваться по СМС-паролю
-	if ($this->clientData['subscription'] == false) { //если нет подписки
+	if (empty($sProduct)) { //если нет подписки
 		?>
 		<h5>Нет активных подписок</h5>
 	<?php

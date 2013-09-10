@@ -36,8 +36,7 @@ class UserIdentity extends CUserIdentity
 		} else {
 			$sPhone = $this->username;
 			$sPassword = $this->password;
-			$oApi = new AdminKreddyApi();
-			$bAuth = $oApi->getAuth($sPhone, $sPassword);
+			$bAuth = Yii::app()->adminKreddyApi->getAuth($sPhone, $sPassword);
 
 			if ($bAuth) {
 				$this->errorCode = self::ERROR_NONE;
