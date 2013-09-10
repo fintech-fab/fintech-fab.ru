@@ -228,9 +228,9 @@ class DefaultController extends Controller
 			$model = new SMSPasswordForm();
 
 			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
-				$this->render('reset_password/send_password', array('model' => $model,));
+				$this->render('sms_password/send_password', array('model' => $model,));
 			} else {
-				$this->render('reset_password/check_password', array('model' => $model,));
+				$this->render('sms_password/check_password', array('model' => $model,));
 			}
 		}
 	}
