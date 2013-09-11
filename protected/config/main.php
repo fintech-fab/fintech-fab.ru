@@ -27,7 +27,12 @@ $a = array(
 		'application.extensions.sms.*',
 	),
 
-	'modules'        => array(),
+	'modules'        => array(
+		'admin'   => array(
+			'ipFilters' => array('127.0.0.1', '::1'),
+		),
+		'account' => array(),
+	),
 
 	'params'         => array(),
 

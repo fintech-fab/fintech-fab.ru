@@ -50,7 +50,7 @@ class DefaultController extends Controller
 	//TODO: однотипный код (в actionHistory практически такой же) не копипастить
 	public function actionIndex()
 	{
-		//TODO пренести в отдельную функцию
+		//TODO пренести returnUrl в отдельную функцию
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 		if (Yii::app()->adminKreddyApi->isAuth()) {
 			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
@@ -77,7 +77,7 @@ class DefaultController extends Controller
 
 	public function actionHistory()
 	{
-		//TODO пренести в отдельную функцию
+		//TODO пренести returnUrl в отдельную функцию
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/history'));
 		//получаем историю операций из API
 		$oHistoryDataProvider = Yii::app()->adminKreddyApi->getHistoryDataProvider();

@@ -29,7 +29,7 @@ class AdminKreddyApiComponent
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
-	const API_URL = 'http://admin.kreddy.topas/siteApi/';
+	const API_URL = 'https://admin.kreddy.ru:8081/siteApi/';
 	const API_ACTION_TEST = 'siteClient/doTest';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
@@ -54,15 +54,6 @@ class AdminKreddyApiComponent
 	public function attributeNames()
 	{
 		return array('token' => 'Token');
-	}
-
-	/**
-	 * Constructor.
-	 */
-
-	public function __construct()
-	{
-		$this->init();
 	}
 
 	/**
@@ -476,7 +467,10 @@ class AdminKreddyApiComponent
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-		$ch = curl_init(self::API_URL . $sAction);
+
+		$sApiUrl = (Yii::app()->params['adminKreddyApiUrl']) ? (Yii::app()->params['adminKreddyApiUrl']) : self::API_URL;
+
+		$ch = curl_init($sApiUrl . $sAction);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
@@ -495,79 +489,6 @@ class AdminKreddyApiComponent
 		Yii::trace("Action: " . $sAction . " - Response: " . $response);
 
 		$aData = CJSON::decode($response);
-
-		/*if{
-
-			//заглушка
-			$aData = array('code' => self::ERROR_AUTH);
-			if (empty($this->token)) {
-				switch ($sAction) {
-					case self::API_ACTION_RECOVER_PASSWORD:
-						if ($aRequest['phone'] === '9808055488' && empty($aRequest['sms_code'])) {
-							$aData = array('code' => self::ERROR_AUTH, 'sms_status' => self::SMS_SEND_OK, 'message' => 'СМС с кодом успешно отправлено');
-						} elseif ($aRequest['phone'] === '9808055488' && $aRequest['sms_code'] === '1111') {
-							$aData = array('code' => self::ERROR_AUTH, 'sms_status' => self::SMS_SEND_OK, 'message' => 'СМС с паролем успешно отправлено');
-						}
-						break;
-				}
-			}
-			if ($this->token == '159753' || $sAction === self::API_ACTION_TOKEN_CREATE) {
-				switch ($sAction) {
-					case self::API_ACTION_TOKEN_CREATE:
-						if ($aRequest['login'] == '9154701913' && $aRequest['password'] == '159753') {
-							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
-						}
-						break;
-					case self::API_ACTION_CHECK_SMS_CODE:
-						if ($aRequest['password'] == '159753') {
-							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
-						}
-						break;
-					case self::API_ACTION_REQ_SMS_CODE:
-						$aData = array('code' => self::ERROR_NONE, 'message' => 'OK');
-						break;
-					case self::API_ACTION_TOKEN_UPDATE:
-						if ($aRequest['token'] == '159753') {
-							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753');
-						}
-						break;
-					case self::API_ACTION_GET_INFO:
-						$aData = array('code' => 9, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''));
-						break;
-					case self::API_ACTION_GET_HISTORY:
-						$aData = array('code' => 9);
-						break;
-					case self::API_ACTION_RECOVER_PASSWORD:
-						if ($aRequest['phone'] === '9808055488' && empty($aRequest['sms_code'])) {
-							$aData = array('code' => self::SMS_SEND_OK, 'message' => 'СМС с кодом успешно отправлено');
-						} elseif ($aRequest['phone'] === '9808055488') {
-
-						}
-						break;
-					default:
-						$aData = array('code' => self::ERROR_AUTH);
-						break;
-				}
-			}
-			if ($this->token == '159753159753') {
-				switch ($sAction) {
-					case self::API_ACTION_TOKEN_UPDATE:
-						if ($aRequest['token'] == '159753159753') {
-							$aData = array('code' => self::ERROR_NONE, 'message' => 'OK', 'token' => '159753159753');
-						}
-						break;
-					case self::API_ACTION_GET_INFO:
-						$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
-						break;
-					case self::API_ACTION_GET_HISTORY:
-						$aData = array('code' => self::ERROR_NONE, 'active_loan' => array('balance' => '-1000', 'expired_to' => '10-10-1000', 'expired' => ''), 'subscription' => array('activity_to' => '20-20-2000', 'available_loans' => 1, 'balance' => '-3000'));
-						break;
-					default:
-						$aData = array('code' => self::ERROR_AUTH);
-						break;
-				}
-			}
-		}*/
 
 		return $aData;
 	}
@@ -597,6 +518,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Передаем полученный от API результат и извлекаем из него код
+	 *
 	 * @param $aResult
 	 *
 	 * @return int
@@ -614,7 +537,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверяем полученный ответ API на его уровень авторизации
-	 * коды 0, 9 - авторизация в порядке
+	 * коды 0, 9, 10 - авторизация в порядке
 	 *
 	 * @return bool
 	 */
@@ -623,6 +546,7 @@ class AdminKreddyApiComponent
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
 
+		//TODO 11 код для doSubscribe
 		return ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE);
 	}
 
@@ -637,11 +561,11 @@ class AdminKreddyApiComponent
 	{
 		$iStatus = $this->getResultStatus($aResult);
 
-		return ($iStatus === 9);
+		return ($iStatus === self::ERROR_NEED_SMS_AUTH);
 	}
 
 	/**
-	 * Проверяем, требует ли action API авторизации по СМС
+	 * Проверяем, требует ли action API подтверждения одноразовым СМС-кодом
 	 *
 	 * @param $aResult
 	 *
@@ -651,7 +575,7 @@ class AdminKreddyApiComponent
 	{
 		$iStatus = $this->getResultStatus($aResult);
 
-		return ($iStatus === 10);
+		return ($iStatus === self::ERROR_NEED_SMS_CODE);
 	}
 
 	/**
@@ -686,6 +610,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверяем, отправлено ли СМС с паролем аутентификации
 	 * @return bool
 	 */
 	public function checkSmsPassSent()
@@ -694,6 +619,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращаем время отправки СМС-пароля
 	 * @return int|''
 	 */
 	public function getSmsPassSentTime()
@@ -702,6 +628,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверяем, отправлено ли СМС с кодом подтверждения восстановления пароля
 	 * @return bool
 	 */
 	public function checkResetPassSmsCodeSent()
@@ -710,6 +637,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращаем время отправки СМС с кодом подтверждения восстановления пароля
 	 * @return int|''
 	 */
 	public function getResetPassSmsCodeSentTime()
@@ -718,6 +646,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Сохраняем в сессию телефон, на который запрошено восстановление пароля
+	 *
 	 * @param $sPhone string
 	 */
 	public function setResetPassPhone($sPhone)
@@ -775,6 +705,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Сортировщик для истории операций
+	 *
 	 * @return CSort
 	 */
 
@@ -788,6 +720,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * DataProvider для истории операций
+	 *
 	 * @return \CArrayDataProvider
 	 */
 	public function getHistoryDataProvider()
@@ -808,6 +742,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращаем время (в секундах), оставшееся до момента, когда можно запросить СМС-пароль повторно
+	 *
 	 * @return integer
 	 */
 	public function getSmsPassLeftTime()
@@ -822,6 +758,9 @@ class AdminKreddyApiComponent
 		return $leftTime;
 	}
 
+	/**
+	 * Сохраняем время отправки СМС-пароля и ставим флаг "СМС отправлено"
+	 */
 	public function setSmsPassSentAndTime()
 	{
 		Yii::app()->session['smsPassSent'] = true;
@@ -846,6 +785,9 @@ class AdminKreddyApiComponent
 		return $iLeftTime;
 	}
 
+	/**
+	 * Сохраняем время отправки СМС-кода для восстановления пароля и ставим флаг "СМС отправлено"
+	 */
 	public function setResetPassSmsCodeSentAndTime()
 	{
 		Yii::app()->session['resetPassSmsCodeSent'] = true;
@@ -854,6 +796,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Форматируем дату в вид 01.01.2013 00:00
+	 *
 	 * @param $sDate
 	 *
 	 * @return bool|string
@@ -872,6 +816,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Сохраняем последнее полученное сообщение о СМС-статусе запроса
+	 *
 	 * @param $sMessage
 	 */
 
@@ -881,6 +827,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращаем последнее полученное сообщение о СМС-статусе запроса
+	 *
 	 * @return string
 	 */
 	public function getLastSmsMessage()
