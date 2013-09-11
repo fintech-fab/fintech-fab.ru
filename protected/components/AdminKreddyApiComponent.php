@@ -1,11 +1,8 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: popov
- * Date: 28.08.13
- * Time: 12:02
- * To change this template use File | Settings | File Templates.
+ * Class AdminKreddyApiComponent
  */
+
 
 class AdminKreddyApiComponent
 {
@@ -29,7 +26,6 @@ class AdminKreddyApiComponent
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
-	const API_URL = 'https://admin.kreddy.ru:8081/siteApi/';
 	const API_ACTION_TEST = 'siteClient/doTest';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
@@ -46,6 +42,10 @@ class AdminKreddyApiComponent
 	private $iLastCode;
 	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
+
+	public $sApiUrl = '';
+	public $sTestApiUrl = '';
+
 
 	/**
 	 * @return array
@@ -198,7 +198,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
 			}
 		}
 
@@ -467,8 +467,7 @@ class AdminKreddyApiComponent
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
-
-		$sApiUrl = (Yii::app()->params['adminKreddyApiUrl']) ? (Yii::app()->params['adminKreddyApiUrl']) : self::API_URL;
+		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
 
 		$ch = curl_init($sApiUrl . $sAction);
 

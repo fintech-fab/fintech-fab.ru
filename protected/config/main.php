@@ -43,7 +43,9 @@ $a = array(
 			'class' => 'application.components.ClientFormComponent',
 		),
 		'adminKreddyApi' => array(
-			'class' => 'application.components.AdminKreddyApiComponent',
+			'class'       => 'application.components.AdminKreddyApiComponent',
+			'sApiUrl'     => 'https://admin.kreddy.ru:8081/siteApi/',
+			'sTestApiUrl' => 'http://admin.kreddy.topas/siteApi/'
 		),
 		'antiBot'        => array(
 			'class' => 'application.components.AntiBotComponent',

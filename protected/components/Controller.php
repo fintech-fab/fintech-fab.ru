@@ -25,6 +25,12 @@ class Controller extends CController
 	 */
 	public $showTopPageWidget = false;
 
+	/**
+	 * @param CAction $aAction
+	 *
+	 * @return bool
+	 */
+
 	protected function beforeAction($aAction)
 	{
 

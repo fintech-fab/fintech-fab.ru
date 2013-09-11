@@ -249,7 +249,7 @@ class ClientFormComponent
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		if (!empty($sPhone) && !empty($sSmsCode)) {
 			//отправляем СМС
-			if (!YII_DEBUG) {
+			if (!Yii::app()->params['bSmsGateIsOff']) {
 				SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 			}
 

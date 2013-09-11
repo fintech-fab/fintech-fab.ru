@@ -34,7 +34,7 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'ajaxSendSms', 'checkSmsPass', 'history', 'test', 'smsPassAuth', 'smsPassResend'),
+				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'smsPassResend'),
 				'users'   => array('@'),
 			),
 			array(
@@ -45,30 +45,55 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Главная страница личного кабинета
+	 * @param CAction $aAction
+	 *
+	 * @return bool|void
 	 */
-	//TODO: однотипный код (в actionHistory практически такой же) не копипастить
-	public function actionIndex()
+
+	protected function beforeAction(\CAction $aAction)
 	{
-		//TODO пренести returnUrl в отдельную функцию
-		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
-		if (Yii::app()->adminKreddyApi->isAuth()) {
-			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
-				//выбираем представление в зависимости от статуса СМС-авторизации
-				$sView = 'index_is_sms_auth';
-			} else {
-				$sView = 'index_not_sms_auth';
-			}
-			/**
-			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
-			 */
-			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
-			$this->render($sView, array('passFormRender' => $sPassFormRender));
-		} else {
+		$sActionId = $this->action->getId();
+
+		$aActionsNotNeedAuth = array(
+			'login',
+			'resetPassword',
+			'resetPassSendPass',
+			'resetPassSmsSentSuccess',
+			'resetPasswordResendSmsCode'
+		);
+
+		//если действие не в списке не требующих авторизации, то проверяем статус авторизации
+		// проверка авторизации, логаут в случае если не авторизован
+		if (!in_array($sActionId, $aActionsNotNeedAuth) &&
+			!Yii::app()->adminKreddyApi->isAuth()
+		) {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
 		}
+
+		return parent::beforeAction($aAction);
+	}
+
+
+	/**
+	 * Главная страница личного кабинета
+	 */
+	public function actionIndex()
+	{
+		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
+
+		//выбираем представление в зависимости от статуса СМС-авторизации
+		if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+			$sView = 'index_is_sms_auth';
+		} else {
+			$sView = 'index_not_sms_auth';
+		}
+		/**
+		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
+		 */
+		$oSmsPassForm = new SMSPasswordForm();
+		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
+		$this->render($sView, array('passFormRender' => $sPassFormRender));
 	}
 
 	/**
@@ -77,30 +102,28 @@ class DefaultController extends Controller
 
 	public function actionHistory()
 	{
-		//TODO пренести returnUrl в отдельную функцию
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/history'));
+
 		//получаем историю операций из API
 		$oHistoryDataProvider = Yii::app()->adminKreddyApi->getHistoryDataProvider();
 
-		if (Yii::app()->adminKreddyApi->isAuth()) {
-			//выбираем представление в зависимости от статуса СМС-авторизации
-			if (Yii::app()->adminKreddyApi->isSmsAuth()) {
-				$sView = 'history_is_sms_auth';
-			} else {
-				$sView = 'history_not_sms_auth';
-			}
-			/**
-			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
-			 */
-			$oSmsPassForm = new SMSPasswordForm();
-			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
-			$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
+		//выбираем представление в зависимости от статуса СМС-авторизации
+		if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+			$sView = 'history_is_sms_auth';
 		} else {
-			Yii::app()->user->logout();
-			$this->redirect(Yii::app()->user->loginUrl);
+			$sView = 'history_not_sms_auth';
 		}
+		/**
+		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
+		 */
+		$oSmsPassForm = new SMSPasswordForm();
+		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+		$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
 
+	/**
+	 * Авторизация по СМС-паролю
+	 */
 
 	public function actionSmsPassAuth()
 	{
@@ -311,31 +334,4 @@ class DefaultController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
-	/**
-	 * @param      $view
-	 * @param null $data
-	 * @param bool $return
-	 *
-	 * @return string
-	 */
-
-	public function renderWithoutProcess($view, $data = null, $return = false)
-	{
-		if ($this->beforeRender($view)) {
-			$output = $this->renderPartial($view, $data, true);
-			if (($layoutFile = $this->getLayoutFile($this->layout)) !== false) {
-				$output = $this->renderFile($layoutFile, array('content' => $output), true);
-			}
-
-			$this->afterRender($view, $output);
-
-			if ($return) {
-				return $output;
-			} else {
-				echo $output;
-			}
-		}
-
-		return false;
-	}
 }
