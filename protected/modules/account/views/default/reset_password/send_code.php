@@ -19,11 +19,11 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 <div class="form" id="activeForm">
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'          => 'ajaxSendSms',
+		'id'          => 'resetPasswordForm',
 		'htmlOptions' => array(
 			'class' => "span10",
 		),
-		'action'      => Yii::app()->createUrl('/account/ajaxResetPassSendSmsCode'),
+		'action'      => Yii::app()->createUrl('/account/resetPassword'),
 	));
 	?>
 
@@ -38,25 +38,9 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 
 	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
-		'id'          => 'sendSms',
-		'type'        => 'primary',
-		'buttonType'  => 'ajaxSubmit',
-		'url'         => Yii::app()->createUrl('/account/ajaxResetPassSendSmsCode', array('resend' => 0)),
-		'label'       => 'Отправить SMS с кодом',
-		'ajaxOptions' => array(
-			'dataType' => "json",
-			'type'     => "POST",
-			'success'  => "function(data) {
-									if(data.sms_code == 0) {
-										// загрузка следующей формы
-										window.location.replace(data.sms_message);
-                                	} else if(data.sms_code == 2 && data.sms_message) { // если есть текст ответа, то выводим его
-                               			jQuery('#actionAnswer').html(data.sms_message).parent().show();
-                                	} else {
-                               			jQuery('#actionAnswer').html('Произошла неизвестная ошибка. Обратитесь в горячую линию').parent().show();
-                                	}
-                                } ",
-		),
+		'type'       => 'primary',
+		'buttonType' => 'submit',
+		'label'      => 'Отправить SMS с кодом',
 	));
 	?>
 

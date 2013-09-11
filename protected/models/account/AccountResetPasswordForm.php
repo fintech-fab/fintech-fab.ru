@@ -19,11 +19,11 @@ class AccountResetPasswordForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('phone', 'required', 'on' => 'phoneRequired'),
-			array('phone', 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр', 'on' => 'phoneRequired'),
+			array('phone', 'required'),
+			array('phone', 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр'),
 			array(
 				'phone', 'match', 'message' => 'Номер телефона должен начинаться на +7 9',
-				                  'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/', 'on' => 'phoneRequired'
+				                  'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/'
 			),
 			array('smsCode', 'required', 'message' => 'Поле обязательно к заполнению', 'on' => 'codeRequired'),
 		);

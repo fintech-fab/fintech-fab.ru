@@ -8,6 +8,7 @@ class SMSPasswordForm extends CFormModel
 	 * @var boolean заполненность формы
 	 */
 	public $smsPassword;
+	public $sendSmsPassword;
 
 	/**
 	 * @return array
@@ -17,6 +18,7 @@ class SMSPasswordForm extends CFormModel
 		$aRules = array();
 
 		$aRules[] = array('smsPassword', 'required', 'message' => 'Поле обязательно к заполнению');
+		$aRules[] = array('sendSmsPassword', 'safe');
 
 		//$aRules[] = array('smsPassword', 'match', 'message' => 'SMS-код состоит из '.SiteParams::C_SMSCODE_LENGTH.' цифр',
 		//	'pattern' => '/^\d{'.SiteParams::C_SMSCODE_LENGTH.'}$/');

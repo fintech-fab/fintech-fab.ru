@@ -29,7 +29,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 				'class' => "span4",
 			),
 			'action'                 => Yii::app()
-				->createUrl('/account/ajaxResetPassSendSmsCode', array('resend' => 1)),
+				->createUrl('/account/resetPasswordResendSmsCode'),
 		));
 		?>
 
@@ -39,38 +39,12 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 
 		<?php
 		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'          => 'btnResend',
-			'buttonType'  => 'ajaxSubmit',
-			'icon'        => 'icon-refresh',
-			'url'         => Yii::app()->createUrl('/account/ajaxResetPassSendSmsCode', array('resend' => 1)),
-			'size'        => 'small',
-			'label'       => 'Выслать код на телефон повторно',
-			'disabled'    => true,
-			'ajaxOptions' => array(
-				'dataType' => "json",
-				'type'     => "POST",
-				'success'  => "function(data)  {
-                                	if(data.sms_code == 0) { // если успешно отправлено (код - 0)
-                                	    // показываем сообщение, что SMS отправлено
-                                	    jQuery('#alertSmsSent').fadeOut(5000).fadeIn();
-
-                                	    // запускаем счётчик оставшихся секунд
-                                	    leftTime = new Date();
-										leftTime.setTime(leftTime.getTime()+data.sms_left_time*1000);
-										showUntilResend();
-
-										// блокируем кнопку повторно отправки
-                                	    jQuery('#btnResend').addClass('disabled').attr('disabled','disabled');
-                                	} else if(data.sms_code == 2) {
-                                	    //ругаемся ошибкой
-                               			jQuery('#actionAnswerResend').html(data.sms_message).parent().show();
-                                	} else {
-                               			jQuery('#actionAnswerResend').html('Произошла неизвестная ошибка. Обратитесь в горячую линию').parent().show();
-                                	}
-                                	return;
-                                } ",
-			),
-
+			'id'         => 'btnResend',
+			'buttonType' => 'submit',
+			'icon'       => 'icon-refresh',
+			'size'       => 'small',
+			'label'      => 'Выслать код на телефон повторно',
+			'disabled'   => true,
 		));
 		?>
 		<div id="textUntilResend" class="hide">Повторно запросить SMS можно через: <span id="untilResend"></span></div>
@@ -92,7 +66,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 			'validateOnChange' => true,
 			'validateOnSubmit' => true,
 		),
-		'action'                 => Yii::app()->createUrl('/account/resetPassSendSmsPass'),
+		'action'                 => Yii::app()->createUrl('/account/resetPassSendPass'),
 	));
 	?>
 
@@ -106,26 +80,10 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 
 	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType'  => 'ajaxSubmit',
-		'type'        => 'primary',
-		'url'         => Yii::app()->createUrl('/account/resetPassSendSmsPass'),
-		'size'        => 'small',
-		'label'       => 'Получить пароль',
-		'ajaxOptions' => array(
-			'dataType' => "json",
-			'type'     => "POST",
-			'success'  => "function(data)  {
-                                	if(data.sms_code == 0) {
-										// загрузка следующей формы
-										window.location.replace(data.sms_message);
-                                	} else if(data.sms_code == 2 && data.sms_message) { // если есть текст ответа, то выводим его
-                               			jQuery('#actionAnswer').html(data.sms_message).show();
-                                	} else {
-                               			jQuery('#actionAnswer').html('Произошла неизвестная ошибка. Обратитесь в горячую линию').show();
-                                	}
-                                } ",
-		),
-
+		'buttonType' => 'submit',
+		'type'       => 'primary',
+		'size'       => 'small',
+		'label'      => 'Получить пароль',
 	));
 	/**
 	 * конец формы проверки пароля
@@ -136,8 +94,10 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 </div>
 
 <?php
+//подключаем JS с таймером для кнопки
 $sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/sms_countdown.js';
 Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
+//передаем данные для JS-таймера
 Yii::app()->clientScript->registerScript('showUntilResend2', '
 	leftTime = new Date();
 	leftTime.setTime(leftTime.getTime() + ' . Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime() . '*1000);

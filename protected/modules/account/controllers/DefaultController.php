@@ -29,12 +29,12 @@ class DefaultController extends Controller
 		return array(
 			array(
 				'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array('login', 'resetPassword', 'ajaxResetPassSendSmsCode', 'resetPassSendSmsPass', 'resetPassSmsSentSuccess'),
+				'actions' => array('login', 'resetPassword', 'resetPassSendPass', 'resetPassSmsSentSuccess', 'resetPasswordResendSmsCode'),
 				'users'   => array('*'),
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'ajaxSendSms', 'checkSmsPass', 'history', 'test'),
+				'actions' => array('logout', 'index', 'ajaxSendSms', 'checkSmsPass', 'history', 'test', 'smsPassAuth'),
 				'users'   => array('@'),
 			),
 			array(
@@ -61,12 +61,7 @@ class DefaultController extends Controller
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
-				$sResetPassView = 'sms_password/send_password';
-			} else {
-				$sResetPassView = 'sms_password/check_password';
-			}
-			$sPassFormRender = $this->renderPartial($sResetPassView, array('model' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'index'), true);
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
 			//если запрос пришел через AJAX, то рендерим представление без layouts/main
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
@@ -100,12 +95,7 @@ class DefaultController extends Controller
 			 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 			 */
 			$oSmsPassForm = new SMSPasswordForm();
-			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
-				$sResetPassView = 'sms_password/send_password';
-			} else {
-				$sResetPassView = 'sms_password/check_password';
-			}
-			$sPassFormRender = $this->renderPartial($sResetPassView, array('model' => $oSmsPassForm, 'smsLeftTime' => Yii::app()->adminKreddyApi->getSmsPassLeftTime(), 'act' => 'history'), true, false);
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 			//если запрос пришел через AJAX, то рендерим представление без layouts/main
 			if (Yii::app()->request->isAjaxRequest) {
 				$this->layout = '/layouts/column2_ajax';
@@ -120,118 +110,68 @@ class DefaultController extends Controller
 	}
 
 
-	/**
-	 * Запрос на отправку SMS с паролем (для доступа к приватным данным в личном кабинете)
-	 */
-
-	public function actionAjaxSendSms($resend = 0)
+	public function actionSmsPassAuth()
 	{
-		if (Yii::app()->request->isAjaxRequest) {
-			$bResend = (boolean)$resend;
+		$oSmsPassForm = new SMSPasswordForm();
+		$aPost = Yii::app()->request->getParam('SMSPasswordForm', array());
 
-			if (!$bResend && Yii::app()->adminKreddyApi->checkSmsPassSent()) {
-				$aAnswer = array(
-					"sms_code"    => 2,
-					"sms_message" => "SMS уже отправлено",
-				);
-				echo CJSON::encode($aAnswer);
-				Yii::app()->end();
-			}
-
-			if ($bResend && Yii::app()->adminKreddyApi->getSmsPassLeftTime() > 0) {
-				$aAnswer = array(
-					"sms_code"    => 2,
-					"sms_message" => SiteParams::API_MINUTES_RESEND_ERROR,
-				);
-				echo CJSON::encode($aAnswer);
-				Yii::app()->end();
-			}
-
-			$aResult = Yii::app()->adminKreddyApi->sendSmsPassword($bResend);
-
-			//TODO: протестить
-			if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
-				//устанавливаем флаг "СМС отправлено" и время отправки
-				Yii::app()->adminKreddyApi->setSmsPassSentAndTime();
-			}
-
-			if (empty($aResult['sms_message'])) {
-				$aResult['sms_message'] = '';
-			}
-
-			if (isset($aResult['sms_status'])) {
-				switch ($aResult['sms_status']) {
-					case 1:
-						$iSmsCode = 0; // успешно! переходим на след. форму
-						$aResult['sms_message'] = Yii::app()->createUrl("/account/checkSmsPass");
-						break;
-					default:
-						$iSmsCode = 3;
-						break;
-				}
-			} else {
-				$iSmsCode = 3;
-			}
-
-			$aAnswer = array(
-				"sms_code"    => $iSmsCode,
-				"sms_message" => $aResult['sms_message'],
-			);
-
-			echo CJSON::encode(array_merge($aAnswer, array(
-				"sms_left_time" => Yii::app()->adminKreddyApi->getSmsPassLeftTime(),
-			)));
+		//если уже авторизованы по СМС, то редирект на главную страницу ЛК
+		if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
 		}
-		Yii::app()->end();
+
+		//если передан параметр sendSmsPassword (нажата кнопка "Отправить пароль на номер ...")
+		if (isset($aPost['sendSmsPassword']) && (int)$aPost['sendSmsPassword'] === 1) {
+			//делаем запрос на отправку SMS
+			$aResult = Yii::app()->adminKreddyApi->sendSmsPassword(false);
+			if ($aResult) {
+				$this->render('sms_password/check_password', array('model' => $oSmsPassForm,));
+			} else {
+				//TODO сделать форму ошибки отправки СМС
+				$this->render('sms_password/send_password', array('model' => $oSmsPassForm,));
+			}
+			Yii::app()->end();
+		} elseif ($aPost) { //если передан POST-запрос, т.е. отправлен СМС-пароль на проверку
+			$oSmsPassForm->setAttributes($aPost);
+
+			if ($oSmsPassForm->validate()) {
+				//проверяем пароль
+				$aResult = Yii::app()->adminKreddyApi->getSmsAuth($oSmsPassForm->smsPassword);
+				if ($aResult) {
+					//TODO сделать редирект на нужный экшен, откуда получен запрос на авторизацию
+					$this->redirect(Yii::app()->createUrl("/account/"));
+				} else {
+					$oSmsPassForm->addError('smsPassword', Yii::app()->adminKreddyApi->getLastSmsMessage());
+					$this->render('sms_password/check_password', array('model' => $oSmsPassForm,));
+					Yii::app()->end();
+				}
+			}
+
+		} elseif (!Yii::app()->adminKreddyApi->checkSmsPassSent()) { //если СМС не отправлялось
+			$this->render('sms_password/send_password', array('model' => $oSmsPassForm,));
+			Yii::app()->end();
+		}
+		$this->render('sms_password/check_password', array('model' => $oSmsPassForm,));
 	}
 
-	/**
-	 * Проверка SMS-пароля в личном кабинете (доступ к приватным данным)
-	 *
-	 * @param string $act
-	 */
-	public function actionCheckSmsPass($act = 'index')
+	public function actionSmsPassResend()
 	{
-		if (Yii::app()->request->isAjaxRequest) {
-			$aAnswer = array(
-				"sms_code"    => 2,
-				"sms_message" => 'Неверный пароль!',
-			);
+		$oForm = new SMSPasswordForm();
 
-			$bIsPost = Yii::app()->request->getIsPostRequest();
-			$aPasswordForm = Yii::app()->request->getParam('SMSPasswordForm');
+		if (Yii::app()->adminKreddyApi->getSmsPassLeftTime() > 0) {
+			$this->render('sms_password/check_password', array('model' => $oForm,));
+			Yii::app()->end();
+		}
 
-			if ($bIsPost && isset($aPasswordForm)) {
-				$passForm = new SMSPasswordForm();
-				$aPostData = $_POST['SMSPasswordForm'];
-				$passForm->setAttributes($aPostData);
-
-				if ($passForm->validate()) {
-					$aResult = Yii::app()->adminKreddyApi->getSmsAuth($passForm->smsPassword);
-					if ($aResult['sms_status'] == AdminKreddyApiComponent::SMS_AUTH_OK) {
-						$aAnswer = array(
-							"sms_code"    => 0,
-							"sms_message" => Yii::app()->createUrl("account/" . $act),
-						);
-					} elseif ($aResult['sms_status'] == AdminKreddyApiComponent::SMS_CODE_TRIES_EXCEED) { //превышено число попыток ввода пароля
-						$aAnswer = array(
-							"sms_code"    => 2,
-							"sms_message" => 'Вы превысили допустимое число попыток ввода пароля!',
-						);
-					}
-				}
-			}
-			echo CJSON::encode($aAnswer);
-		} else {
-			$this->layout = '/layouts/column1';
-
-			$model = new SMSPasswordForm();
-
-			if (!Yii::app()->adminKreddyApi->checkSmsPassSent()) {
-				$this->render('sms_password/send_password', array('model' => $model,));
+		if ($oForm->validate()) {
+			if ($aResult = Yii::app()->adminKreddyApi->sendSmsPassword(true)) {
+				$this->redirect(Yii::app()->createUrl("/account/smsPassAuth"));
 			} else {
-				$this->render('sms_password/check_password', array('model' => $model,));
+				$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				$this->render('reset_password/send_password', array('model' => $oForm,));
+				Yii::app()->end();
 			}
+
 		}
 	}
 
@@ -242,28 +182,8 @@ class DefaultController extends Controller
 	{
 		$this->layout = '/layouts/column1';
 
-		if (Yii::app()->user->isGuest) {
-			$model = new AccountResetPasswordForm;
-			if (Yii::app()->adminKreddyApi->checkResetPassPhone()) {
-				$this->render('reset_password/send_password', array('model' => $model,));
-			} else {
-				$this->render('reset_password/send_code', array('model' => $model,));
-			}
-		} else {
+		if (!Yii::app()->user->isGuest) {
 			$this->redirect(Yii::app()->createUrl("/account"));
-		}
-	}
-
-	/**
-	 * Отправка на телефон SMS с кодом (для дальнейшей идентификации)
-	 * Если SMS отсылается впервые, дополнительно проводится проверка телефона на валидность
-	 *
-	 * @param int $resend - повторная ли отправка SMS с кодом
-	 */
-	public function actionAjaxResetPassSendSmsCode($resend = 0)
-	{
-		if (!Yii::app()->request->getIsAjaxRequest()) {
-			Yii::app()->end();
 		}
 
 		$aPost = Yii::app()->request->getParam('AccountResetPasswordForm', array());
@@ -272,162 +192,77 @@ class DefaultController extends Controller
 		if ($aPost) {
 			$oForm->setAttributes($aPost);
 			if ($oForm->validate()) {
-				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($sPhone, $bResend)) {
-
-					$this->render('ok-message');
-
+				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, false)) {
+					$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
 				} else {
-					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastError());
+					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
+					$this->render('reset_password/send_code', array('model' => $oForm,));
+					Yii::app()->end();
 				}
 
 			}
 		}
-
-
-		$bResend = (boolean)$resend;
-		$sPhone = "";
-
-		// если SMS отправляется впервые, то валидириуем данные и записываем в переменную $phone
-		if (!$bResend) {
-
-			if (isset($_POST['AccountResetPasswordForm'])) {
-
-				$model = new AccountResetPasswordForm('phoneRequired');
-				$model->attributes = $_POST['AccountResetPasswordForm'];
-
-				if (!$model->validate()) {
-
-					$this->doRenderJsonSms(2, 'Введите правильный телефон');
-
-				} else {
-
-					if (Yii::app()->adminKreddyApi->checkResetPassSmsCodeSent()) {
-						$this->doRenderJsonSms(2, 'SMS уже отправлено');
-					}
-
-				}
-				// берём телефон
-				$sPhone = $model->phone;
-
-			} else {
-				$this->doRenderJsonSms(2, 'Введите телефон');
-			}
-
-		} else {
-
-			// если SMS отправляется повторно, но время до разрешённой переотправки ещё не наступило, выдаём ошибку
-			if (Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime() > 0) {
-				$this->doRenderJsonSms(2, SiteParams::API_MINUTES_RESEND_ERROR);
-			}
-
-			// если повторная отправка, то берём телефон из сессии
-			$sPhone = Yii::app()->adminKreddyApi->getResetPassPhone();
-		}
-
-		$aResult = Yii::app()->adminKreddyApi->resetPasswordSendSms($sPhone, $bResend);
-
-		/**
-		 * если API сообщило, что требуется SMS-код и он отправлен клиенту, то записываем
-		 * в сессию время отправки, время до разрешённой переотправки и телефон
-		 */
-		if ($aResult && $aResult['code'] == 10 && $aResult['sms_status'] == 1) {
-			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
-			Yii::app()->adminKreddyApi->setResetPassPhone($sPhone);
-		}
-
-		if (empty($aResult['sms_message'])) {
-			$aResult['sms_message'] = '';
-		}
-
-		if (isset($aResult['sms_status'])) {
-			switch ($aResult['sms_status']) {
-				// $iSmsCode = 0 - ошибок нет
-				case 1:
-					$iSmsCode = 0;
-					$aResult['sms_message'] = Yii::app()->createUrl("/account/resetPassSendSmsPass");
-					break;
-				default:
-					$iSmsCode = 3;
-					break;
-			}
-		} else {
-			$iSmsCode = 3;
-			$aResult['sms_message'] = 'Произошла неизвестная ошибка. Обратитесь в горячую линию.';
-		}
-		$this->doRenderJsonSms($iSmsCode, $aResult['sms_message'], true);
-
+		$this->render('reset_password/send_code', array('model' => $oForm,));
 	}
 
-
-	private function doRenderJsonSms($iSmsCode, $sMessage, $bSentLeftTime = false)
+	public function actionResetPasswordResendSmsCode()
 	{
-		$aResult = array(
-			"sms_code"    => $iSmsCode,
-			"sms_message" => $sMessage,
-		);
-		if ($bSentLeftTime) {
-			$aResult['sms_left_time'] = Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime();
+		$this->layout = '/layouts/column1';
+		// если в сессии нет телефона, то перенаправляем на форму ввода телефона
+		if (!Yii::app()->adminKreddyApi->checkResetPassPhone()) {
+			$this->redirect(Yii::app()->createUrl("account/resetPassword"));
 		}
-		echo CJSON::encode($aResult);
-		Yii::app()->end();
 
+		$oForm = new AccountResetPasswordForm();
+
+		//если время до следующей переотправки СМС не истекло
+		if (Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime() > 0) {
+			$this->render('reset_password/send_password', array('model' => $oForm,));
+			Yii::app()->end();
+		}
+		//загружаем в форму телефон, сохраненный в сессии
+		$oForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
+		if ($oForm->validate()) {
+			if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, true)) {
+				$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
+			} else {
+				$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				$this->render('reset_password/send_password', array('model' => $oForm,));
+				Yii::app()->end();
+			}
+
+		}
 	}
 
 	/**
 	 * Проверка кода, отправленного в SMS. Если код верен - отправка SMS с паролем на телефон из сессии
 	 */
-	public function actionResetPassSendSmsPass()
+	public function actionResetPassSendPass()
 	{
-		if (Yii::app()->request->isAjaxRequest) {
-			$aAnswer = array(
-				"sms_code"    => 2,
-				"sms_message" => 'Неверный код!',
-			);
+		$this->layout = '/layouts/column1';
 
-			// если в сессии нет телефона либо если пароль уже отправлен
-			if (Yii::app()->adminKreddyApi->checkResetPassPhone()) {
-				$codeForm = new AccountResetPasswordForm('codeRequired');
-				$aPostData = $_POST['AccountResetPasswordForm'];
-				$codeForm->setAttributes($aPostData);
-				$codeForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
-
-				if ($codeForm->validate()) {
-					$aResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
-
-					if ($aResult['sms_status'] == AdminKreddyApiComponent::SMS_AUTH_OK) {
-						$aAnswer = array(
-							"sms_code"    => 0,
-							//"sms_message" => 'SMS с паролем отправлено',
-							"sms_message" => Yii::app()->createUrl("/account/resetPassSmsSentSuccess"),
-						);
-					} else {
-						if ($aResult['sms_status'] == AdminKreddyApiComponent::SMS_CODE_TRIES_EXCEED) { //превышено число попыток ввода пароля
-							$aAnswer = array(
-								"sms_code"    => 2,
-								"sms_message" => 'Вы превысили допустимое число попыток ввода пароля!',
-							);
-						}
-					}
-				}
-			} else {
-				$aAnswer = array(
-					"sms_code"    => 2,
-					"sms_message" => 'Неизвестная ошибка! Перезагрузите страницу.',
-				);
-			}
-			echo CJSON::encode($aAnswer);
-			Yii::app()->end();
-		} else {
-			$this->layout = '/layouts/column1';
-
-			// если в сессии нет телефона, то перенаправляем на форму ввода телефона
-			if (!Yii::app()->adminKreddyApi->checkResetPassPhone()) {
-				$this->redirect(Yii::app()->createUrl("account/resetPassword"));
-			}
-
-			$model = new AccountResetPasswordForm;
-			$this->render('reset_password/send_password', array('model' => $model,));
+		// если в сессии нет телефона, то перенаправляем на форму ввода телефона
+		if (!Yii::app()->adminKreddyApi->checkResetPassPhone()) {
+			$this->redirect(Yii::app()->createUrl("account/resetPassword"));
 		}
+
+		$codeForm = new AccountResetPasswordForm('codeRequired');
+		$aPost = Yii::app()->request->getParam('AccountResetPasswordForm', array());
+		if ($aPost) {
+			$codeForm->setAttributes($aPost);
+			$codeForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
+			if ($codeForm->validate()) {
+				$aResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($codeForm->phone, $codeForm->smsCode);
+				if ($aResult) {
+					$this->redirect(Yii::app()->createUrl("/account/resetPassSmsSentSuccess"));
+				} else {
+					$oForm = new AccountResetPasswordForm();
+					$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+					$this->render('reset_password/send_password', array('model' => $oForm,));
+				}
+			}
+		}
+		$this->render('reset_password/send_password', array('model' => $codeForm,));
 	}
 
 	/**
@@ -448,7 +283,8 @@ class DefaultController extends Controller
 	}
 
 
-	public function actionLogin()
+	public
+	function actionLogin()
 	{
 		$this->layout = '/layouts/column1';
 
@@ -479,7 +315,8 @@ class DefaultController extends Controller
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */
-	public function actionLogout()
+	public
+	function actionLogout()
 	{
 		Yii::app()->adminKreddyApi->logout();
 		Yii::app()->user->logout();
@@ -494,7 +331,8 @@ class DefaultController extends Controller
 	 * @return string
 	 */
 
-	public function renderWithoutProcess($view, $data = null, $return = false)
+	public
+	function renderWithoutProcess($view, $data = null, $return = false)
 	{
 		if ($this->beforeRender($view)) {
 			$output = $this->renderPartial($view, $data, true);

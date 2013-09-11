@@ -43,6 +43,9 @@ class AdminKreddyApiComponent
 
 	private $token;
 	private $aClientInfo;
+	private $lastCode;
+	private $lastMessage = '';
+	private $lastSmsMessage = '';
 
 	/**
 	 * @return array
@@ -137,12 +140,23 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
 			Yii::app()->session['smsAuthDone'] = true;
+
+			return true;
+		} else {
+			//проверяем, получили ли мы sms_message
+			if (isset($aResult['sms_message'])) {
+				$this->lastSmsMessage = $aResult['sms_message'];
+			} else {
+				$this->lastSmsMessage = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
+			}
 		}
 
-		return $aResult;
+		return false;
 	}
 
 	/**
+	 * Отправка СМС-пароля для СМС-авторизации
+	 *
 	 * @param bool $bResend
 	 *
 	 * @return mixed
@@ -152,7 +166,22 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('sms_resend' => (int)$bResend));
 
-		return $aResult;
+		if ($aResult && $aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
+			//устанавливаем флаг "СМС отправлено" и время отправки
+			Yii::app()->adminKreddyApi->setSmsPassSentAndTime();
+			$this->lastSmsMessage = $aResult['sms_message'];
+
+			return true;
+		} else {
+			//проверяем, получили ли мы sms_message
+			if (isset($aResult['sms_message'])) {
+				$this->lastSmsMessage = $aResult['sms_message'];
+			} else {
+				$this->lastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -163,10 +192,26 @@ class AdminKreddyApiComponent
 	 */
 	public function resetPasswordSendSms($sPhone, $bResend = false)
 	{
-
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_resend' => (int)$bResend));
+		//если результат успешный
+		if ($aResult && $aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
+			//ставим флаг "смс отправлено" и сохраняем время отправки в сесссию
+			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
+			//сохраняем телефон в сессию
+			Yii::app()->adminKreddyApi->setResetPassPhone($sPhone);
+			$this->lastSmsMessage = $aResult['sms_message'];
 
-		return $aResult;
+			return true;
+		} else {
+			//проверяем, получили ли мы sms_message
+			if (isset($aResult['sms_message'])) {
+				$this->lastSmsMessage = $aResult['sms_message'];
+			} else {
+				$this->lastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -179,7 +224,19 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_code' => $sSmsCode));
 
-		return $aResult;
+		if ($aResult['sms_status'] == AdminKreddyApiComponent::SMS_AUTH_OK) {
+			$this->lastSmsMessage = $aResult['sms_message'];
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->lastSmsMessage = $aResult['sms_message'];
+			} else {
+				$this->lastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+			}
+
+			return false;
+		}
 	}
 
 	/**
@@ -804,5 +861,10 @@ class AdminKreddyApiComponent
 		}
 
 		return $sDate;
+	}
+
+	public function getLastSmsMessage()
+	{
+		return $this->lastSmsMessage;
 	}
 }

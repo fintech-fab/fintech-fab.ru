@@ -1,8 +1,8 @@
 <?php
 /**
- * @var AccountResetPasswordForm $model
- * @var DefaultController        $this
- * @var IkTbActiveForm           $form
+ * @var SMSPasswordForm   $model
+ * @var DefaultController $this
+ * @var IkTbActiveForm    $form
  */
 
 /*
@@ -14,38 +14,27 @@
 
 $this->pageTitle = Yii::app()->name;
 ?>
-
+<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'          => 'ajaxSendSms',
+	'id'          => 'smsPassAuth',
 	'htmlOptions' => array(
 		'class' => "span10",
 	),
-	'action'      => Yii::app()->createUrl('/account/ajaxSendSms'),
+	'action'      => Yii::app()->createUrl('/account/smsPassAuth'),
 ));
 ?>
 <div class="row">
 	<?php
+
+	$model->sendSmsPassword = 1;
+	echo $form->hiddenField($model, 'sendSmsPassword');
+
 	$this->widget('bootstrap.widgets.TbButton', array(
-		'id'          => 'sendSms',
-		'type'        => 'primary',
-		'buttonType'  => 'ajaxSubmit',
-		'url'         => Yii::app()->createUrl('/account/ajaxSendSms'),
-		'label'       => 'Отправить на +7' . Yii::app()->user->getId() . ' SMS с паролем',
-		'ajaxOptions' => array(
-			'dataType' => "json",
-			'type'     => "POST",
-			'success'  => "function(data) {
-									if(data.sms_code == 0) {
-										// загрузка следующей формы
-										window.location.replace(data.sms_message);
-                                	} else if(data.sms_code == 2 && data.sms_message) { // если есть текст ответа, то выводим его
-                               			jQuery('#actionAnswer').html(data.sms_message).parent().show();
-                                	} else {
-                               			jQuery('#actionAnswer').html('Произошла неизвестная ошибка. Обратитесь в горячую линию').parent().show();
-                                	}
-                                } ",
-		),
+		'id'         => 'sendSms',
+		'type'       => 'primary',
+		'buttonType' => 'submit',
+		'label'      => 'Отправить на +7' . Yii::app()->user->getId() . ' SMS с паролем',
 	));
 	?>
 </div>
