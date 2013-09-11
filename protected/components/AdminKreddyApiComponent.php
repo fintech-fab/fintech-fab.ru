@@ -43,9 +43,9 @@ class AdminKreddyApiComponent
 
 	private $token;
 	private $aClientInfo;
-	private $lastCode;
-	private $lastMessage = '';
-	private $lastSmsMessage = '';
+	private $iLastCode;
+	private $sLastMessage = '';
+	private $sLastSmsMessage = '';
 
 	/**
 	 * @return array
@@ -145,9 +145,9 @@ class AdminKreddyApiComponent
 		} else {
 			//проверяем, получили ли мы sms_message
 			if (isset($aResult['sms_message'])) {
-				$this->lastSmsMessage = $aResult['sms_message'];
+				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->lastSmsMessage = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
+				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
 			}
 		}
 
@@ -175,9 +175,9 @@ class AdminKreddyApiComponent
 		} else {
 			//проверяем, получили ли мы sms_message
 			if (isset($aResult['sms_message'])) {
-				$this->lastSmsMessage = $aResult['sms_message'];
+				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->lastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
 			}
 		}
 
@@ -199,15 +199,15 @@ class AdminKreddyApiComponent
 			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
 			//сохраняем телефон в сессию
 			Yii::app()->adminKreddyApi->setResetPassPhone($sPhone);
-			$this->lastSmsMessage = $aResult['sms_message'];
+			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
 		} else {
 			//проверяем, получили ли мы sms_message
 			if (isset($aResult['sms_message'])) {
-				$this->lastSmsMessage = $aResult['sms_message'];
+				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->lastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+				$this->setLastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
 			}
 		}
 
@@ -230,9 +230,9 @@ class AdminKreddyApiComponent
 			return true;
 		} else {
 			if (isset($aResult['sms_message'])) {
-				$this->lastSmsMessage = $aResult['sms_message'];
+				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->lastSmsMessage = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
 			}
 
 			return false;
@@ -726,6 +726,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Загрузка из сессии сохраненного номера телефона, указанного в форме восстановления пароля
+	 *
 	 * @return string
 	 */
 	public function getResetPassPhone()
@@ -734,6 +736,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверяем, есть ли в сессии номер телефна, указанный в форме восстановления пароля
 	 * @return bool
 	 */
 	public function checkResetPassPhone()
@@ -742,9 +745,12 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 *
+	 * Проверяем статус СМС-авторизации для переданного результата
+	 *
 	 * @param $aResult
 	 *
-	 * @return string
+	 * @return bool
 	 */
 
 	public function checkSmsAuthStatus($aResult)
@@ -759,6 +765,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверяем, авторизован ли пользователь через СМС-пароль
+	 *
 	 * @return bool
 	 */
 	public function isSmsAuth()
@@ -863,8 +871,20 @@ class AdminKreddyApiComponent
 		return $sDate;
 	}
 
+	/**
+	 * @param $sMessage
+	 */
+
+	public function setLastSmsMessage($sMessage)
+	{
+		$this->sLastSmsMessage = $sMessage;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getLastSmsMessage()
 	{
-		return $this->lastSmsMessage;
+		return $this->sLastSmsMessage;
 	}
 }

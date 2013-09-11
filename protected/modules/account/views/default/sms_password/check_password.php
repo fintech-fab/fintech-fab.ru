@@ -27,7 +27,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'class' => "span4",
 	),
 	'action'                 => Yii::app()
-		->createUrl('/account/ajaxSendSms', array('resend' => 1)),
+		->createUrl('/account/smsPassResend'),
 ));
 ?>
 
@@ -38,9 +38,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php
 $this->widget('bootstrap.widgets.TbButton', array(
 	'id'         => 'btnResend',
-	'buttonType' => 'ajaxSubmit',
+	'buttonType' => 'submit',
 	'icon'       => 'icon-refresh',
-	'url'        => Yii::app()->createUrl('/account/ajaxSendSms', array('resend' => 1)),
 	'size'       => 'small',
 	'label'      => 'Выслать код на телефон повторно',
 	'disabled'   => true,
