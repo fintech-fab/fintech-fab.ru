@@ -17,6 +17,7 @@ class AdminKreddyApiComponent
 	const CLIENT_DATA_NOT_EXIST = 8;
 	const ERROR_NEED_SMS_AUTH = 9;
 	const ERROR_NEED_SMS_CODE = 10;
+	const ERROR_NOT_ALLOWED = 11;
 
 	const SMS_AUTH_OK = 0;
 	const SMS_SEND_OK = 1;
@@ -26,7 +27,7 @@ class AdminKreddyApiComponent
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
-	const API_ACTION_TEST = 'siteClient/doTest';
+	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
@@ -157,10 +158,10 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('sms_resend' => (int)$bResend));
 
-		if ($aResult && $aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
+		if ($aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
 			//устанавливаем флаг "СМС отправлено" и время отправки
 			Yii::app()->adminKreddyApi->setSmsPassSentAndTime();
-			$this->lastSmsMessage = $aResult['sms_message'];
+			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
 		} else {
@@ -185,7 +186,7 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_resend' => (int)$bResend));
 		//если результат успешный
-		if ($aResult && $aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
+		if ($aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
 			//ставим флаг "смс отправлено" и сохраняем время отправки в сесссию
 			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
 			//сохраняем телефон в сессию
@@ -215,8 +216,8 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_code' => $sSmsCode));
 
-		if ($aResult['sms_status'] == AdminKreddyApiComponent::SMS_AUTH_OK) {
-			$this->lastSmsMessage = $aResult['sms_message'];
+		if ($aResult['sms_status'] == self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
 		} else {
@@ -394,15 +395,55 @@ class AdminKreddyApiComponent
 	 */
 	public function getProducts()
 	{
-		$aData = array('code' => self::ERROR_AUTH);
 		$aGetData = $this->getData('products');
-		$aData = array_merge($aData, $aGetData);
+		if (isset($aGetData['products'])) {
+			$aProducts = array();
+			foreach ($aGetData['products'] as $product) {
+				$aProducts[$product['id']] = $product['name'];
+			}
 
-		return $aData;
+			return $aProducts;
+		}
+
+		return false;
+
 	}
 
 	/**
-	 * @param bool   $bGetCode
+	 * @return bool
+	 */
+	public function checkSubscribe()
+	{
+		//проверяем возможность подписки
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
+
+		return ($aResult['code'] !== self::ERROR_NOT_ALLOWED);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function sendSmsSubscribe()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+			}
+
+			return false;
+		}
+	}
+
+	/**
 	 * @param string $sSmsCode
 	 *
 	 * @param        $iProduct
@@ -410,22 +451,24 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array|bool
 	 */
-	public function doSubscription($bGetCode = false, $sSmsCode = '', $iProduct = null, $iChannelType = null)
+	public function doSubscribe($sSmsCode, $iProduct, $iChannelType)
 	{
-		$aResult = array('code' => self::ERROR_AUTH);
 
-		if (!empty($this->token)) {
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product' => $iProduct, 'channel_type' => $iChannelType));
 
-			if (!empty($sSmsCode)) { //если передан СМС-код, то отправляем его в API
-				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST, array('sms_code' => $sSmsCode));
-			} elseif ($bGetCode) { //если сделан запрос кода, то запрашиваем код
-				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST);
-			} else { //если параметры не переданы то запрашиваем статус, нужен ли код подтверждения
-				$aResult = $this->requestAdminKreddyApi(self::API_ACTION_TEST, array('test_code' => 1));
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
 			}
-		}
 
-		return $aResult;
+			return false;
+		}
 	}
 
 	/**
@@ -436,27 +479,24 @@ class AdminKreddyApiComponent
 
 	private function getData($sType)
 	{
-
-		$aData = array('code' => self::ERROR_AUTH);
-		if (!empty($this->token)) {
-			//проверяем, какие данные запрошены, и выбираем необходимый экшн и отправляем запрос в API
-			switch ($sType) {
-				case 'info':
-					$sAction = self::API_ACTION_GET_INFO;
-					break;
-				case 'history':
-					$sAction = self::API_ACTION_GET_HISTORY;
-					break;
-				case 'products':
-					$sAction = self::API_ACTION_GET_PRODUCTS;
-					break;
-				default:
-					$sAction = self::API_ACTION_GET_INFO;
-					break;
-			}
-
-			$aData = $this->requestAdminKreddyApi($sAction);
+		//проверяем, какие данные запрошены, и выбираем необходимый экшн и отправляем запрос в API
+		switch ($sType) {
+			case 'info':
+				$sAction = self::API_ACTION_GET_INFO;
+				break;
+			case 'history':
+				$sAction = self::API_ACTION_GET_HISTORY;
+				break;
+			case 'products':
+				$sAction = self::API_ACTION_GET_PRODUCTS;
+				break;
+			default:
+				$sAction = self::API_ACTION_GET_INFO;
+				break;
 		}
+
+		$aData = $this->requestAdminKreddyApi($sAction);
+
 
 		return $aData;
 	}
@@ -471,6 +511,8 @@ class AdminKreddyApiComponent
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
+		$aData = array('code' => self::ERROR_AUTH);
+
 
 		$ch = curl_init($sApiUrl . $sAction);
 
@@ -487,10 +529,11 @@ class AdminKreddyApiComponent
 
 		$response = curl_exec($ch);
 
-		//TODO убрать
-		Yii::trace("Action: " . $sAction . " - Response: " . $response);
-
-		$aData = CJSON::decode($response);
+		if ($response) {
+			//TODO убрать
+			Yii::trace("Action: " . $sAction . " - Response: " . $response);
+			$aData = CJSON::decode($response);
+		}
 
 		return $aData;
 	}
@@ -548,7 +591,6 @@ class AdminKreddyApiComponent
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
 
-		//TODO 11 код для doSubscribe
 		return ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE);
 	}
 

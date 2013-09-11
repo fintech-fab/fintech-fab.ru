@@ -1,4 +1,7 @@
-<?php /* @var $this Controller */ ?>
+<?php /* @var $this Controller */
+//TODO заменить <?php echo на <?=
+//TODO перенести общие блоки лэйаутов в отдельные файлы
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

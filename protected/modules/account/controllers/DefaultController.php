@@ -34,7 +34,7 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'smsPassResend'),
+				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'smsPassResend', 'subscribe', 'doSubscribe', 'checkSubscribeCode'),
 				'users'   => array('@'),
 			),
 			array(
@@ -121,6 +121,24 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm();
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 		$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
+	}
+
+	public function actionSubscribe()
+	{
+		$oProductForm = new ClientSelectProductForm();
+		$this->render('subscription/subscribe', array('model' => $oProductForm));
+	}
+
+	public function actionDoSubscribe()
+	{
+		$oProductForm = new ClientSelectProductForm();
+		$this->render('subscription/subscribe', array('model' => $oProductForm));
+	}
+
+	public function actionCheckSubscribeCode()
+	{
+		$oProductForm = new ClientSelectProductForm();
+		$this->render('subscription/subscribe', array('model' => $oProductForm));
 	}
 
 	/**
