@@ -80,6 +80,8 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
+		Yii::app()->adminKreddyApi->getProducts();
+
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 		//выбираем представление в зависимости от статуса СМС-авторизации

@@ -405,9 +405,12 @@ class AdminKreddyApiComponent
 	 * @param bool   $bGetCode
 	 * @param string $sSmsCode
 	 *
+	 * @param        $iProduct
+	 * @param        $iChannelType
+	 *
 	 * @return array|bool
 	 */
-	public function doTest($bGetCode = false, $sSmsCode = '')
+	public function doSubscription($bGetCode = false, $sSmsCode = '', $iProduct = null, $iChannelType = null)
 	{
 		$aResult = array('code' => self::ERROR_AUTH);
 
