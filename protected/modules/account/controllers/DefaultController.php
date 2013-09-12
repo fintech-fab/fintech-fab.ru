@@ -181,7 +181,7 @@ class DefaultController extends Controller
 		) {
 			$oForm = new SMSPasswordForm();
 			$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
-			$this->render('reset_password/send_password', array('model' => $oForm,));
+			$this->render('sms_password/send_password', array('model' => $oForm,));
 			Yii::app()->end();
 		}
 		$this->redirect(Yii::app()->createUrl('account/smsPassAuth'));
