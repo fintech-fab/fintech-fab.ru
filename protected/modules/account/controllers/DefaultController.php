@@ -80,8 +80,6 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
-		Yii::app()->adminKreddyApi->getProducts();
-
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
@@ -125,19 +123,45 @@ class DefaultController extends Controller
 
 	public function actionSubscribe()
 	{
-		$oProductForm = new ClientSelectProductForm();
+		//TODO сделать проверку isSmsAuth
+		//TODO заменить isSmsAuth на getIsSmsAuth
+		//если действует мораторий, то действие недоступно
+		if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		$oProductForm = new ClientSubscribeForm();
 		$this->render('subscription/subscribe', array('model' => $oProductForm));
 	}
 
 	public function actionDoSubscribe()
 	{
-		$oProductForm = new ClientSelectProductForm();
+		//если действует мораторий, то действие недоступно
+		if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+		$oProductForm = new ClientSubscribeForm();
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ClientSubscribeForm', array());
+			$oProductForm->setAttributes($aPost);
+			if ($oProductForm->validate()) {
+				echo $oProductForm['product'];
+				$this->render('subscription/do_subscribe', array('model' => $oProductForm));
+				Yii::app()->end();
+			}
+		}
 		$this->render('subscription/subscribe', array('model' => $oProductForm));
+		Yii::app()->end();
 	}
 
 	public function actionCheckSubscribeCode()
 	{
-		$oProductForm = new ClientSelectProductForm();
+		//если действует мораторий, то действие недоступно
+		if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		$oProductForm = new ClientSubscribeForm();
 		$this->render('subscription/subscribe', array('model' => $oProductForm));
 	}
 

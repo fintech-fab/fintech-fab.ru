@@ -40,9 +40,11 @@ class AdminKreddyApiComponent
 
 	private $token;
 	private $aClientInfo;
-	private $iLastCode;
-	private $sLastMessage = '';
+	private $aProducts;
+	private $iLastCode; //TODO сохранять сюда последние коды
+	private $sLastMessage = ''; //TODO сохранять сюда последние сообщения
 	private $sLastSmsMessage = '';
+
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
@@ -71,6 +73,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Авторизация в API, получаем токен и сохраняем в сессию
+	 *
 	 * @param $sPhone
 	 * @param $sPassword
 	 *
@@ -93,6 +97,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Обновляем токен, выполняется при инициализации компонента
+	 *
 	 * @return bool
 	 */
 
@@ -117,6 +123,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем СМС-авторизацию по СМС-паролю для доступа к закрытым данным
+	 *
 	 * @param $sSmsPassword
 	 *
 	 * @return bool
@@ -177,6 +185,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Отправка СМС-кода для подтверждения восстановления пароля
+	 *
 	 * @param      $sPhone
 	 * @param bool $bResend
 	 *
@@ -207,6 +217,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка СМС-кола для подтверждения восстановления пароля
+	 *
 	 * @param $sPhone
 	 * @param $sSmsCode
 	 *
@@ -232,6 +244,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение основной информации о клиенте в виде массива
+	 *
 	 * @return array|bool
 	 */
 
@@ -375,6 +389,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение истории операций в виде массива
+	 *
 	 * @return array
 	 */
 	public function getHistory()
@@ -391,18 +407,84 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Сортировщик для истории операций
+	 *
+	 * @return CSort
+	 */
+
+	private function getHistorySort()
+	{
+		$sort = new CSort;
+		$sort->defaultOrder = 'time DESC';
+		$sort->attributes = array('time', 'type', 'type_id', 'amount');
+
+		return $sort;
+	}
+
+	/**
+	 * DataProvider для истории операций
+	 *
+	 * @return \CArrayDataProvider
+	 */
+	public function getHistoryDataProvider()
+	{
+		$aHistory = $this->getHistory();
+		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
+			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'],
+				array(
+					'keyField' => 'time',
+					'sort'     => $this->getHistorySort()
+				)
+			);
+		} else {
+			$oHistoryDataProvider = new CArrayDataProvider(array());
+		}
+
+		return $oHistoryDataProvider;
+	}
+
+
+	/**
+	 * Получение массива с информацией о продуктах
+	 *
 	 * @return array
 	 */
 	public function getProducts()
 	{
+		if (isset($this->aProducts)) {
+			return $this->aProducts;
+		}
+		//TODO сделать получение и сохранение способов получения продукта
 		$aGetData = $this->getData('products');
 		if (isset($aGetData['products'])) {
 			$aProducts = array();
 			foreach ($aGetData['products'] as $product) {
-				$aProducts[$product['id']] = $product['name'];
+				$aProducts[$product['id']] = $product;
 			}
+			$this->aProducts = $aProducts;
 
 			return $aProducts;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Получение списка продуктов
+	 *
+	 * @return array
+	 */
+	public function getProductsList()
+	{
+		$aProducts = $this->getProducts();
+		if ($aProducts) {
+			$aProductsList = array();
+			foreach ($aProducts as $aProduct) {
+				$aProductsList[$aProduct['id']] = $aProduct['name'];
+			}
+
+			return $aProductsList;
 		}
 
 		return false;
@@ -410,6 +492,23 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение названия продукта по ID
+	 *
+	 * @param $iProductId
+	 *
+	 * @return bool|string
+	 */
+
+	public function getProductNameById($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		return (isset($aProducts[$iProductId]['name'])) ? $aProducts[$iProductId]['name'] : false;
+	}
+
+	/**
+	 * Проверка возможности подписки
+	 *
 	 * @return bool
 	 */
 	public function checkSubscribe()
@@ -421,6 +520,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Отправка СМС с кодом подтверждения подписки
+	 *
 	 * @return bool
 	 */
 	public function sendSmsSubscribe()
@@ -444,6 +545,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Подписка, подписанная СМС-кодом
+	 *
 	 * @param string $sSmsCode
 	 *
 	 * @param        $iProduct
@@ -472,6 +575,9 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Роутер запросов для получения данных
+	 * Получает запросы на данные и перенаправляет на requestAdminKreddyApi() с нужным экшном
+	 *
 	 * @param $sType
 	 *
 	 * @return array|mixed
@@ -502,6 +608,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Интерфейс для обращения к API через curl
+	 *
 	 * @param       $sAction
 	 * @param array $aRequest
 	 *
@@ -539,6 +647,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение токена, сохраненного в сессию
+	 *
 	 * @return mixed
 	 */
 	private function getSessionToken()
@@ -547,6 +657,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Сохранение токена в сессию
+	 *
 	 * @param $token
 	 */
 	private function setSessionToken($token)
@@ -554,6 +666,9 @@ class AdminKreddyApiComponent
 		Yii::app()->session['akApi_token'] = $token;
 	}
 
+	/**
+	 * Логаут, чистит данные в сессии и удаляет токен
+	 */
 	public function logout()
 	{
 		// очищаем сессии, связанные с отправкой SMS
@@ -748,42 +863,6 @@ class AdminKreddyApiComponent
 		return (!empty(Yii::app()->session['smsAuthDone'])) ? Yii::app()->session['smsAuthDone'] : false;
 	}
 
-	/**
-	 * Сортировщик для истории операций
-	 *
-	 * @return CSort
-	 */
-
-	private function getHistorySort()
-	{
-		$sort = new CSort;
-		$sort->defaultOrder = 'time DESC';
-		$sort->attributes = array('time', 'type', 'type_id', 'amount');
-
-		return $sort;
-	}
-
-	/**
-	 * DataProvider для истории операций
-	 *
-	 * @return \CArrayDataProvider
-	 */
-	public function getHistoryDataProvider()
-	{
-		$aHistory = $this->getHistory();
-		if (isset($aHistory) && $aHistory['code'] === 0 && isset($aHistory['history'])) {
-			$oHistoryDataProvider = new CArrayDataProvider($aHistory['history'],
-				array(
-					'keyField' => 'time',
-					'sort'     => $this->getHistorySort()
-				)
-			);
-		} else {
-			$oHistoryDataProvider = new CArrayDataProvider(array());
-		}
-
-		return $oHistoryDataProvider;
-	}
 
 	/**
 	 * Возвращаем время (в секундах), оставшееся до момента, когда можно запросить СМС-пароль повторно
