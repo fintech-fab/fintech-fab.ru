@@ -12,7 +12,7 @@
 		<!-- content -->
 		<div class="span4">
 			<?php
-			(Yii::app()->adminKreddyApi->isSmsAuth())
+			(Yii::app()->adminKreddyApi->getIsSmsAuth())
 				? $this->renderPartial('menu_is_sms_auth')
 				: $this->renderPartial('menu_not_sms_auth');
 			?>
