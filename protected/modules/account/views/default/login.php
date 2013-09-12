@@ -33,6 +33,7 @@ $this->breadcrumbs = array(
 			'id'         => 'submitButton',
 			'buttonType' => 'submit',
 			'type'       => 'primary',
+			'size'       => 'small',
 			'label'      => 'Войти',
 		)); ?>
 		<?php echo CHtml::link('Забыли пароль?', Yii::app()

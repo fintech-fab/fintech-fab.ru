@@ -17,8 +17,10 @@ class SMSPasswordForm extends CFormModel
 	{
 		$aRules = array();
 
-		$aRules[] = array('smsPassword', 'required', 'message' => 'Поле обязательно к заполнению');
-		$aRules[] = array('sendSmsPassword', 'safe');
+		$aRules[] = array('smsPassword', 'required', 'message' => 'Поле обязательно к заполнению', 'on' => 'passRequired');
+		$aRules[] = array('smsPassword', 'safe', 'on' => 'codeRequired');
+		$aRules[] = array('sendSmsPassword', 'required', 'requiredValue' => 1, 'on' => 'sendRequired');
+		$aRules[] = array('sendSmsPassword', 'safe', 'on' => 'passRequired');
 
 		//TODO сделать валидацию
 

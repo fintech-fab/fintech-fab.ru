@@ -14,7 +14,9 @@
 
 $this->pageTitle = Yii::app()->name;
 ?>
-<h5>Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю </h5>
+<div class="alert in alert-block alert-warning span7">
+	Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю
+</div>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'          => 'smsPassAuth',
@@ -33,6 +35,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'id'         => 'sendSms',
 		'type'       => 'primary',
+		'size'       => 'small',
 		'buttonType' => 'submit',
 		'label'      => 'Отправить на +7' . Yii::app()->user->getId() . ' SMS с паролем',
 	));

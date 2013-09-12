@@ -19,9 +19,14 @@ $this->widget('bootstrap.widgets.TbBox', array(
 $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');
 ?>
-	<div class="alert in alert-block alert-warning span7">
-		Для подтверждения подписки требуется подтверждение одноразовым СМС-кодом
+
+
+
+	<div class="alert in alert-block alert-error span7">
+		При отправке SMS с паролем произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка
+		повторяется, позвоните на горячую линию.
 	</div>
+
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',

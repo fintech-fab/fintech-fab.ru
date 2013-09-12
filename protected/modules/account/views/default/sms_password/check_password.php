@@ -36,6 +36,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 
 <?php
+
+$model->sendSmsPassword = 1;
+echo $form->hiddenField($model, 'sendSmsPassword');
+
 $this->widget('bootstrap.widgets.TbButton', array(
 	'id'         => 'btnResend',
 	'buttonType' => 'submit',

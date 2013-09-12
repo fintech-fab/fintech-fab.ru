@@ -20,7 +20,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
 			'type'       => 'primary',
-			'label'      => 'Далее →',
+			'size'       => 'small',
+			'label'      => 'Оформить подписку',
 		)); ?>
 	</div>
 

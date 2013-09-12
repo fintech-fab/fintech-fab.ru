@@ -39,6 +39,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'type'       => 'primary',
+		'size'       => 'small',
 		'buttonType' => 'submit',
 		'label'      => 'Отправить SMS с кодом',
 	));
