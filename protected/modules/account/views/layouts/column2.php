@@ -7,7 +7,7 @@
 	<div class="row">
 		<div class="span8">
 			<h3 class="pay_legend">Личный кабинет</h3><br />
-			<?php echo $content; ?>
+			<?= $content; ?>
 		</div>
 		<!-- content -->
 		<div class="span4">

@@ -3,7 +3,7 @@
 <div class="container">
 	<div class="row">
 		<div class="span9">
-			<?php echo $content; ?>
+			<?= $content; ?>
 		</div>
 		<!-- content -->
 		<div class="span3">

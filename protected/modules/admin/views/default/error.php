@@ -10,7 +10,7 @@ $this->breadcrumbs = array(
 
 $this->showTopPageWidget = true;
 ?>
-<h2>Ошибка <?php echo $code; ?></h2>
+<h2>Ошибка <?= $code; ?></h2>
 <div class="error">
-	<?php echo CHtml::encode($message); ?>
+	<?= CHtml::encode($message); ?>
 </div>

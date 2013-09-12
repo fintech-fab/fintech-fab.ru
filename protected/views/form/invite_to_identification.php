@@ -35,7 +35,7 @@ $this->pageTitle = Yii::app()->name;
 			'id'     => get_class($oClientCreateForm),
 			'action' => Yii::app()->createUrl('/form/'),
 		)); ?>
-		<?php echo $form->hiddenField($oClientCreateForm, 'go_identification'); ?>
+		<?= $form->hiddenField($oClientCreateForm, 'go_identification'); ?>
 		<div class="row">
 			<div class="span5">
 				<h4 class="center">
@@ -55,7 +55,8 @@ $this->pageTitle = Yii::app()->name;
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="span5">
-				<iframe src="<?php echo Yii::app()
+				<iframe src="<?=
+				Yii::app()
 					->createUrl('/form/checkwebcam'); ?>" width="400px" height="230px" frameborder="no" scrolling="no"></iframe>
 			</div>
 			<div class="span5 offset1">
@@ -72,7 +73,8 @@ $this->pageTitle = Yii::app()->name;
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="span5">
-				<?php echo $form->checkBoxRow($oClientCreateForm, 'agree', array(
+				<?=
+				$form->checkBoxRow($oClientCreateForm, 'agree', array(
 					'id'       => 'agreeCheckBox',
 					'onchange' => 'js: if($("#agreeCheckBox").prop("checked")){ $("#ident1").attr("disabled",false).removeClass("disabled");}else{$("#ident1").attr("disabled","disabled").addClass("disabled");}'
 				));

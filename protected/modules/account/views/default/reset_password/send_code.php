@@ -31,7 +31,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 		SMS с кодом для подтверждения получения нового пароля.</p>
 
 	<div class="row">
-		<?php echo $form->phoneMaskedRow($model, 'phone', array('size' => '15')); ?>
+		<?= $form->phoneMaskedRow($model, 'phone', array('size' => '15')); ?>
 	</div>
 
 	<div class="clearfix"></div>
@@ -57,7 +57,8 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	<div class="clearfix"></div>
 
 	<div class="row">
-		<div class="span4"><?php echo CHtml::link('&laquo; Вернуться к форме входа', Yii::app()
+		<div class="span4"><?=
+			CHtml::link('&laquo; Вернуться к форме входа', Yii::app()
 				->createUrl('/account/login')); ?>
 		</div>
 	</div>

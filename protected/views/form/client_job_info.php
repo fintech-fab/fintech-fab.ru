@@ -36,7 +36,7 @@ $this->pageTitle = Yii::app()->name;
 
 	?>
 	<div class="row span6">
-		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/04T.png"> <br />
+		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/04T.png"> <br />
 		<?php require dirname(__FILE__) . '/fields/job.php' ?>
 	</div>
 

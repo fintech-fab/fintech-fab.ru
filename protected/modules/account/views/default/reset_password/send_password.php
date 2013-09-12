@@ -15,7 +15,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 <div class="form" id="activeForm">
 	<div class="row">
 
-		<div id="alertSmsSent" class="alert in alert-success span10"><?php echo Dictionaries::C_SMS_SUCCESS; ?></div>
+		<div id="alertSmsSent" class="alert in alert-success span10"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 
 		<?php
 		$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -34,7 +34,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 		?>
 
 		<div class="well">
-			Ваш телефон: +7<?php echo Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
+			Ваш телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
 		</div>
 
 		<?php
@@ -71,8 +71,8 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	?>
 
 	<label>Введите код из SMS:</label>
-	<?php echo $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
-	<?php echo $form->error($model, 'smsCode'); ?>
+	<?= $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
+	<?= $form->error($model, 'smsCode'); ?>
 
 	<div class="help-block error hide" id="actionAnswer"></div>
 

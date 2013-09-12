@@ -23,11 +23,6 @@ class SMSCodeForm extends CFormModel
 		$aRules[] = array('sendSmsCode', 'required', 'requiredValue' => 1, 'on' => 'sendRequired');
 		$aRules[] = array('sendSmsCode', 'safe', 'on' => 'codeRequired');
 
-		//TODO сделать валидацию
-
-		//$aRules[] = array('smsPassword', 'match', 'message' => 'SMS-код состоит из '.SiteParams::C_SMSCODE_LENGTH.' цифр',
-		//	'pattern' => '/^\d{'.SiteParams::C_SMSCODE_LENGTH.'}$/');
-
 		return $aRules;
 
 	}

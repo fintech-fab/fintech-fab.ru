@@ -13,7 +13,7 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 ?>
 
 
-	<div id="alertSmsSent" class="alert in alert-success span4"><?php echo Dictionaries::C_SMS_SUCCESS; ?></div>
+	<div id="alertSmsSent" class="alert in alert-success span4"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -32,7 +32,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 
 	<div class="well">
-		Ваш телефон: +7<?php echo Yii::app()->user->getId(); ?>
+		Ваш телефон: +7<?= Yii::app()->user->getId(); ?>
 	</div>
 
 <?php
@@ -71,8 +71,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 
 	<label>Введите пароль из SMS:</label>
-<?php echo $form->textField($model, 'smsPassword', array('class' => 'span4')); ?>
-<?php echo $form->error($model, 'smsPassword'); ?>
+<?= $form->textField($model, 'smsPassword', array('class' => 'span4')); ?>
+<?= $form->error($model, 'smsPassword'); ?>
 
 	<div class="help-block error hide" id="actionAnswer"></div>
 

@@ -24,7 +24,7 @@ $flagHideFormCheckSMSCode = empty($flagSmsSent) || !empty($flagExceededTries);
 
 	<div class="span10">
 		Для завершения регистрации Вам необходимо подтвердить свой телефон. <br /> Ваш телефон:
-		<strong>+7<?php echo $phone; ?></strong> <br /><br />
+		<strong>+7<?= $phone; ?></strong> <br /><br />
 
 		<?php
 		// если SMS на телефон ещё не отсылалось
@@ -86,11 +86,11 @@ $flagHideFormCheckSMSCode = empty($flagSmsSent) || !empty($flagExceededTries);
 		'action'                 => Yii::app()->createUrl('/form/checksmscode'),
 	));
 	?>
-	<div id="alertsmssent" class="alert in alert-success hide"><?php echo Dictionaries::C_SMS_SUCCESS; ?></div>
+	<div id="alertsmssent" class="alert in alert-success hide"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 
 	<label>Введите код из SMS:</label>
-	<?php echo $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
-	<?php echo $form->error($oClientCreateForm, 'sms_code'); ?>
+	<?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
+	<?= $form->error($oClientCreateForm, 'sms_code'); ?>
 
 	<div class="help-block error<?= empty($actionAnswer) ? ' hide' : ''; ?>" id="actionAnswer">
 		<?php if (!empty($actionAnswer)) {

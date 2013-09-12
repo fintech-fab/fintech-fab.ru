@@ -219,6 +219,7 @@ class DefaultController extends Controller
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
 			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+			//TODO сделать отправку выбранного channel_type
 			if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, 'kreddy')) {
 				$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
 				Yii::app()->end();
