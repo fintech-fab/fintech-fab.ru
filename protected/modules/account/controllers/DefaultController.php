@@ -200,20 +200,22 @@ class DefaultController extends Controller
 		$aPost = Yii::app()->request->getParam('AccountResetPasswordForm', array());
 		$oForm = new AccountResetPasswordForm();
 
-		if ($aPost) {
-			$oForm->setAttributes($aPost);
-			if ($oForm->validate()) {
-				//делаем запрос на отправку смс
-				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, false)) {
-					$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
-				} else {
-					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
-					$this->render('reset_password/send_code', array('model' => $oForm,));
-					Yii::app()->end();
-				}
+		// если передан телефон на проверку
 
+		$oForm->setAttributes($aPost);
+		//проверяем телефон на валидность и если введён новый телефон и не удалось отправить на него SMS, то выдаём соответствующее сообщение
+		if ($oForm->validate()) {
+			if (Yii::app()->adminKreddyApi->getResetPassPhone() !== $oForm->phone
+				&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, false)
+			) {
+				$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
+			} else {
+				$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
 			}
+		} else {
+			$oForm->addError('phone', $oForm->errors);
 		}
+
 		$this->render('reset_password/send_code', array('model' => $oForm,));
 	}
 
