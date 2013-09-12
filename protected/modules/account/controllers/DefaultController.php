@@ -121,6 +121,9 @@ class DefaultController extends Controller
 		$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
 
+	/**
+	 * Вывод формы выбора продукта для подписки
+	 */
 	public function actionSubscribe()
 	{
 		//проверяем, возможно ли действие
@@ -132,6 +135,10 @@ class DefaultController extends Controller
 		$this->render('subscription/subscribe', array('model' => $oProductForm));
 	}
 
+	/**
+	 * Обработка данных от формы, переданной из /account/subscribe
+	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
+	 */
 	public function actionDoSubscribe()
 	{
 		//проверяем, возможно ли действие
@@ -145,6 +152,7 @@ class DefaultController extends Controller
 			$oProductForm->setAttributes($aPost);
 
 			if ($oProductForm->validate()) {
+				//сохраняем в сессию выбранный продукт
 				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
 				$oForm = new SMSCodeForm('sendRequired');
 				$this->render('subscription/do_subscribe', array('model' => $oForm));
@@ -155,6 +163,12 @@ class DefaultController extends Controller
 		Yii::app()->end();
 	}
 
+	/**
+	 * Обработка данных от /account/doSubscribe
+	 * проверяет, была ли нажата кнопка "Отправить" (наличие в POST-запросе значения sendSmSCode=1)
+	 * если нет, то редирект на /account/subscribe
+	 * если кнопка нажата, отправляет СМС и рисует форму ввода СМС-кода
+	 */
 	public function actionDoSubscribeSmsConfirm()
 	{
 		//если действует мораторий
@@ -164,22 +178,19 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
-		if (!Yii::app()->request->getIsPostRequest()) {
-			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
-		}
-
 		$oForm = new SMSCodeForm('sendRequired');
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
 		$oForm->setAttributes($aPost);
-		//TODO проверка отправлена ли уже СМС, если да, то не валидируем, а рисуем представление
+		//проверяем, передан ли параметр sendSmsCode (валидируем по правилам формы, сценарий sendRequired)
 		if ($oForm->validate()) {
-
 			if (Yii::app()->adminKreddyApi->sendSmsSubscribe()) {
+				unset($oForm);
+				//создаем новую форму с новым сценарием валидации - codeRequired
 				$oForm = new SMSCodeForm('codeRequired');
 				$this->render('subscription/do_subscribe_check_sms_code', array('model' => $oForm));
 				Yii::app()->end();
 			}
-			$oForm = new SMSCodeForm('sendRequired');
+			//рисуем ошибку
 			$this->render('subscription/do_subscribe_error', array('model' => $oForm));
 			Yii::app()->end();
 		}
@@ -187,6 +198,10 @@ class DefaultController extends Controller
 
 	}
 
+	/**
+	 * Проверка СМС-кода для подписки и отправка запроса на подписку в API
+	 * если все ОК - сообщаем это клиенту, иначе перерисовываем форму проверки с ошибками
+	 */
 	public function actionDoSubscribeCheckSmsCode()
 	{
 		//проверяем, возможно ли действие
@@ -194,8 +209,13 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
+		if (!Yii::app()->request->isPostRequest) {
+			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+		}
+
 		$oForm = new SMSCodeForm('codeRequired');
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
+
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
 			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();

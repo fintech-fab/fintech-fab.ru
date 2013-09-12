@@ -755,7 +755,7 @@ class AdminKreddyApiComponent
 			Yii::trace("Action: " . $sAction . " - Response: " . $response);
 			$aGetData = CJSON::decode($response);
 
-			if (is_array($aData)) {
+			if (is_array($aGetData)) {
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
