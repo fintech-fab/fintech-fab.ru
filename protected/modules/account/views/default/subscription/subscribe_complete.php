@@ -3,6 +3,7 @@
 /* @var ClientSubscribeForm $model */
 /* @var IkTbActiveForm $form */
 
+$this->pageTitle = Yii::app()->name . " - Оформление подписки";
 ?>
 <h4>Оформление подписки</h4>
 

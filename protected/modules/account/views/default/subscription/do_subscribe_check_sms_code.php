@@ -3,6 +3,7 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
+$this->pageTitle = Yii::app()->name . " - Оформление подписки";
 ?>
 <h4>Оформление подписки</h4>
 <?php

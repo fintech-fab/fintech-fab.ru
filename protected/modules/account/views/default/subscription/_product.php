@@ -4,6 +4,7 @@
 
 $iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
+$this->pageTitle = Yii::app()->name . " - Оформление подписки";
 ?>
 
 <ul>
