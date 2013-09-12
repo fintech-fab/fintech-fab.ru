@@ -3,7 +3,6 @@
  * @var $this Controller
  */
 
-//TODO сделать чтобы при 0 или положительном балансе не было "вернуть до"
 $this->menu = array(
 	array(
 		'label'  => 'Состояние подписки', 'url' => array(
@@ -22,13 +21,13 @@ $this->menu = array(
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
-
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
+	$sExpireToMessage = '<strong>Вернуть до:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpired() . '<br/>';
 } else {
 	$sBalanceMessage = '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
+	$sExpireToMessage = '';
 }
-$sExpireToMessage = '<strong>Вернуть до:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpired() . '<br/>';
 
 if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 	$sExpiredMessage = '<strong>Платеж просрочен!</strong><br/>';

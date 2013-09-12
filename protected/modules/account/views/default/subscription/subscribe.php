@@ -3,6 +3,7 @@
 /* @var ClientSubscribeForm $model */
 /* @var IkTbActiveForm $form */
 
+$this->pageTitle = Yii::app()->name . " - Оформление подписки";
 ?>
 	<h4>Оформление подписки</h4>
 
@@ -11,6 +12,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
 	'action' => Yii::app()->createUrl('/account/doSubscribe'),
 ));
+
+$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+if ($model->product === false && Yii::app()->adminKreddyApi->getProductsList() !== false) {
+	$model->product = reset(array_keys(Yii::app()->adminKreddyApi->getProductsList()));
+}
 ?>
 
 <?= $form->radioButtonListRow($model, 'product', Yii::app()->adminKreddyApi->getProductsList(), array("class" => "all")); ?>
