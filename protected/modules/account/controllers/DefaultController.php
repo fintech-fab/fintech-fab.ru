@@ -140,14 +140,13 @@ class DefaultController extends Controller
 		/**
 		 * если передан параметр sendSmsPassword (нажата кнопка "Отправить пароль на номер ...")
 		 * и СМС с паролем еще не отправляли
+		 * делаем запрос на отправку SMS
 		 */
-		if (isset($aPost['sendSmsPassword']) && (int)$aPost['sendSmsPassword'] === 1 && !Yii::app()->adminKreddyApi->checkSmsPassSent()) {
-			//делаем запрос на отправку SMS
-			if (Yii::app()->adminKreddyApi->sendSmsPassword(false)) {
-				$this->render('sms_password/check_password', array('model' => $oSmsPassForm,));
-			} else {
-				$this->render('sms_password/send_password_error', array('model' => $oSmsPassForm,));
-			}
+		if (isset($aPost['sendSmsPassword']) && (int)$aPost['sendSmsPassword'] === 1
+			&& !Yii::app()->adminKreddyApi->checkSmsPassSent() &&
+			!Yii::app()->adminKreddyApi->sendSmsPassword(false)
+		) {
+			$this->render('sms_password/send_password_error', array('model' => $oSmsPassForm,));
 			Yii::app()->end();
 		} elseif ($aPost) { //если передан POST-запрос, т.е. отправлен СМС-пароль на проверку
 			$oSmsPassForm->setAttributes($aPost);
