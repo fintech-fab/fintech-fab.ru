@@ -14,6 +14,7 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 		$aRules = array(
+			array('product', 'required', 'message' => 'Выберите продукт'),
 			array('product', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getProductsList()), 'message' => 'Выберите продукт'),
 			//TODO сделать запрос способа получения из API
 			//array('product', 'channel_type', 'range' => array_keys(Yii::app()->adminKreddyApi->getProductsList()), 'message' => 'Выберите способ получения')

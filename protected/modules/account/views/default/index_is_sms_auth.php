@@ -26,12 +26,13 @@ if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если нет �
 	<strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?><br />
 	<strong>Подписка активна до:</strong>  <?= Yii::app()->adminKreddyApi->getSubscriptionActivity(); ?> <br />
 	<strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
-	<?php
-	if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
-		?>
-		<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionMoratorium() ?>
-		<br />
-	<?php
-	}
+<?php
 }
+if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+	?>
+	<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionMoratorium() ?>
+	<br />
+<?php
+}
+
 ?>

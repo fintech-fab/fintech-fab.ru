@@ -328,7 +328,7 @@ class AdminKreddyApiComponent
 	public function getSubscriptionActivity()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? abs($aClientInfo['subscription']['activity_to']) : false;
+		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? $aClientInfo['subscription']['activity_to'] : false;
 		$sActivityTo = $this->formatRusDate($sActivityTo);
 
 		return $sActivityTo;
@@ -341,7 +341,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['available_loans'])) ? abs($aClientInfo['subscription']['available_loans']) : 0;
+		return (!empty($aClientInfo['subscription']['available_loans'])) ? $aClientInfo['subscription']['available_loans'] : 0;
 	}
 
 	/**
@@ -350,7 +350,9 @@ class AdminKreddyApiComponent
 	public function getSubscriptionMoratorium()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sMoratoriumTo = (!empty($aClientInfo['subscription']['moratorium_to'])) ? abs($aClientInfo['subscription']['moratorium_to']) : false;
+		$sMoratoriumTo = (isset($aClientInfo['subscription']['moratorium_to']))
+			? $aClientInfo['subscription']['moratorium_to']
+			: null;
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
 
 		return $sMoratoriumTo;
@@ -362,7 +364,9 @@ class AdminKreddyApiComponent
 	public function getActiveLoanExpired()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to'])) ? abs($aClientInfo['active_loan']['expired_to']) : false;
+		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to']))
+			? $aClientInfo['active_loan']['expired_to']
+			: false;
 		$sExpiredTo = $this->formatRusDate($sExpiredTo);
 
 		return $sExpiredTo;
@@ -503,7 +507,94 @@ class AdminKreddyApiComponent
 	{
 		$aProducts = $this->getProducts();
 
-		return (isset($aProducts[$iProductId]['name'])) ? $aProducts[$iProductId]['name'] : false;
+		return (isset($aProducts[$iProductId]['name']))
+			? $aProducts[$iProductId]['name']
+			: false;
+	}
+
+	/**
+	 * Получение стоимости продукта по ID
+	 *
+	 * @param $iProductId
+	 *
+	 * @return bool|string
+	 */
+
+	public function getProductCostById($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		return (isset($aProducts[$iProductId]['subscription_cost']))
+			? $aProducts[$iProductId]['subscription_cost']
+			: false;
+	}
+
+	/**
+	 * Получение срока действия продукта по ID
+	 *
+	 * @param $iProductId
+	 *
+	 * @return bool|string
+	 */
+
+	public function getProductLifetimeById($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		return (isset($aProducts[$iProductId]['subscription_lifetime']))
+			? ($aProducts[$iProductId]['subscription_lifetime'] / 3600 / 24)
+			: false;
+	}
+
+	/**
+	 * Получение суммы займа по ID продукта
+	 *
+	 * @param $iProductId
+	 *
+	 * @return bool|string
+	 */
+
+	public function getProductLoanAmountById($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		return (isset($aProducts[$iProductId]['loan_amount']))
+			? $aProducts[$iProductId]['loan_amount']
+			: false;
+	}
+
+	/**
+	 * Получения количества займов для продукта по ID
+	 *
+	 * @param $iProductId
+	 *
+	 * @return bool|string
+	 */
+
+	public function getProductLoanCountById($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		return (isset($aProducts[$iProductId]['loan_count']))
+			? $aProducts[$iProductId]['loan_count']
+			: false;
+	}
+
+	/**
+	 * Получение срока займа по ID продукта
+	 *
+	 * @param $iProductId
+	 *
+	 * @return bool|string
+	 */
+
+	public function getProductLoanLifetimeById($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		return (isset($aProducts[$iProductId]['loan_lifetime']))
+			? ($aProducts[$iProductId]['loan_lifetime'] / 3600 / 24)
+			: false;
 	}
 
 	/**
@@ -516,7 +607,7 @@ class AdminKreddyApiComponent
 		//проверяем возможность подписки
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
 
-		return ($aResult['code'] !== self::ERROR_NOT_ALLOWED);
+		return (($aResult['code'] !== self::ERROR_NOT_ALLOWED) && ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
 	}
 
 	/**
@@ -557,7 +648,7 @@ class AdminKreddyApiComponent
 	public function doSubscribe($sSmsCode, $iProduct, $iChannelType)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product' => $iProduct, 'channel_type' => $iChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_type' => $iChannelType));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -572,6 +663,28 @@ class AdminKreddyApiComponent
 
 			return false;
 		}
+	}
+
+	/**
+	 * Сохранение выбранного продукта в сессию
+	 *
+	 * @param $iProductId
+	 */
+	public function setSubscribeSelectedProduct($iProductId)
+	{
+		Yii::app()->session['subscribeSelectedProduct'] = $iProductId;
+	}
+
+	/**
+	 * Получение выбранного продукта из сессии
+	 *
+	 * @return bool
+	 */
+	public function getSubscribeSelectedProduct()
+	{
+		return (isset(Yii::app()->session['subscribeSelectedProduct']))
+			? Yii::app()->session['subscribeSelectedProduct'] :
+			false;
 	}
 
 	/**

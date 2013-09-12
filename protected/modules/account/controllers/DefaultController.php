@@ -34,7 +34,7 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'smsPassResend', 'subscribe', 'doSubscribe', 'checkSubscribeCode'),
+				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode', 'doSubscribeSmsConfirm'),
 				'users'   => array('@'),
 			),
 			array(
@@ -125,8 +125,8 @@ class DefaultController extends Controller
 	{
 		//TODO сделать проверку isSmsAuth
 		//TODO заменить isSmsAuth на getIsSmsAuth
-		//если действует мораторий, то действие недоступно
-		if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
@@ -136,17 +136,20 @@ class DefaultController extends Controller
 
 	public function actionDoSubscribe()
 	{
-		//если действует мораторий, то действие недоступно
-		if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
+
 		$oProductForm = new ClientSubscribeForm();
 		if (Yii::app()->request->getIsPostRequest()) {
 			$aPost = Yii::app()->request->getParam('ClientSubscribeForm', array());
 			$oProductForm->setAttributes($aPost);
+
 			if ($oProductForm->validate()) {
-				echo $oProductForm['product'];
-				$this->render('subscription/do_subscribe', array('model' => $oProductForm));
+				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+				$oForm = new SMSCodeForm('sendRequired');
+				$this->render('subscription/do_subscribe', array('model' => $oForm));
 				Yii::app()->end();
 			}
 		}
@@ -154,15 +157,55 @@ class DefaultController extends Controller
 		Yii::app()->end();
 	}
 
-	public function actionCheckSubscribeCode()
+	public function actionDoSubscribeSmsConfirm()
 	{
-		//если действует мораторий, то действие недоступно
-		if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+		//если действует мораторий
+		//или API ответил, что действие невозможно
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
-		$oProductForm = new ClientSubscribeForm();
-		$this->render('subscription/subscribe', array('model' => $oProductForm));
+		if (!Yii::app()->request->getIsPostRequest()) {
+			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+		}
+
+		$oForm = new SMSCodeForm('sendRequired');
+		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
+		$oForm->setAttributes($aPost);
+		if ($oForm->validate()) {
+			//TODO проверка отправлена ли уже СМС
+			if (Yii::app()->adminKreddyApi->sendSmsSubscribe()) {
+				$oForm = new SMSCodeForm('codeRequired');
+				$this->render('subscription/do_subscribe_check_sms_code', array('model' => $oForm));
+				Yii::app()->end();
+			}
+			//TODO вывод ошибки если не удалось отправить СМС
+		}
+		$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+
+	}
+
+	public function actionDoSubscribeCheckSmsCode()
+	{
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		$oForm = new SMSCodeForm('codeRequired');
+		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
+		$oForm->setAttributes($aPost);
+		if ($oForm->validate()) {
+
+			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+			if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, 'kreddy')) {
+				$this->render('subscription/subscribe_complete');
+			}
+			$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+		}
+		$this->render('subscription/do_subscribe_check_sms_code', array('model' => $oForm));
+
 	}
 
 	/**

@@ -2,6 +2,8 @@
 /**
  * @var $this Controller
  */
+
+//TODO сделать чтобы при 0 или положительном балансе не было "вернуть до"
 $this->menu = array(
 	array(
 		'label'  => 'Состояние подписки', 'url' => array(

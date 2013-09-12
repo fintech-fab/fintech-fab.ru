@@ -9,23 +9,22 @@
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
-	'action' => Yii::app()->createUrl('/account/doSubscribeSmsConfirm'),
+	'action' => Yii::app()->createUrl('/account/doSubscribeCheckSmsCode'),
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => 'Подписка на продукт',
 	'content' => $this->renderPartial('subscription/_product', array(), true)
 ));
-$model->sendSmsCode = 1;
-echo $form->hiddenField($model, 'sendSmsCode');
 ?>
 
 	<p>Для подтверждения подписки требуется подтверждение одноразовым СМС-кодом</p>
 	<div class="form-actions">
+		<?= $form->textFieldRow($model, 'smsCode') ?>
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
 			'type'       => 'primary',
-			'label'      => 'Отправить СМС с кодом подтверждения на номер +7' . Yii::app()->user->getId(),
+			'label'      => 'Подтвердить',
 		)); ?>
 	</div>
 
