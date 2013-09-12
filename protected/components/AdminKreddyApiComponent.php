@@ -820,7 +820,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function isAuth()
+	public function getIsAuth()
 	{
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
@@ -977,7 +977,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function isSmsAuth()
+	public function getIsSmsAuth()
 	{
 		return (!empty(Yii::app()->session['smsAuthDone'])) ? Yii::app()->session['smsAuthDone'] : false;
 	}

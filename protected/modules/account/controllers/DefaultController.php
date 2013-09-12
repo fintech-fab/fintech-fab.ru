@@ -65,7 +65,7 @@ class DefaultController extends Controller
 		//если действие не в списке не требующих авторизации, то проверяем статус авторизации
 		// проверка авторизации, логаут в случае если не авторизован
 		if (!in_array($sActionId, $aActionsNotNeedAuth) &&
-			!Yii::app()->adminKreddyApi->isAuth()
+			!Yii::app()->adminKreddyApi->getIsAuth()
 		) {
 			Yii::app()->user->logout();
 			$this->redirect(Yii::app()->user->loginUrl);
@@ -83,7 +83,7 @@ class DefaultController extends Controller
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
-		if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$sView = 'index_is_sms_auth';
 		} else {
 			$sView = 'index_not_sms_auth';
@@ -108,7 +108,7 @@ class DefaultController extends Controller
 		$oHistoryDataProvider = Yii::app()->adminKreddyApi->getHistoryDataProvider();
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
-		if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$sView = 'history_is_sms_auth';
 		} else {
 			$sView = 'history_not_sms_auth';
@@ -123,8 +123,6 @@ class DefaultController extends Controller
 
 	public function actionSubscribe()
 	{
-		//TODO сделать проверку isSmsAuth
-		//TODO заменить isSmsAuth на getIsSmsAuth
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
@@ -220,7 +218,7 @@ class DefaultController extends Controller
 		$aPost = Yii::app()->request->getParam('SMSPasswordForm', array());
 
 		//если уже авторизованы по СМС, то редирект на главную страницу ЛК
-		if (Yii::app()->adminKreddyApi->isSmsAuth()) {
+		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
