@@ -1,6 +1,6 @@
 <?php
 
 return array(
-	'isDebug'    => true,
-	'debugLevel' => 3
+	'isDebug'    => false,
+	'debugLevel' => 0
 );
