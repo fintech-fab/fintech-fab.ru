@@ -3,12 +3,12 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление подписки";
+$this->pageTitle = Yii::app()->name . " - Оформление пакета";
 ?>
-<h4>Оформление подписки</h4>
+<h4>Оформление пакета</h4>
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Подписка на продукт',
+	'title'   => 'Оформление пакета',
 	'content' => $this->renderPartial('subscription/_product', array(), true)
 ));
 ?>
@@ -16,7 +16,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getId() ?>
 </div>
 <div class="alert in alert-block alert-info span7">
-	Для подтверждения подписки введите код, пришедший Вам по SMS
+	Для подтверждения операции введите код, пришедший Вам по SMS
 </div>
 <div class="form" id="activeForm">
 	<?php

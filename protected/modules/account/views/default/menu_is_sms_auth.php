@@ -5,7 +5,7 @@
 
 $this->menu = array(
 	array(
-		'label'  => 'Состояние подписки', 'url' => array(
+		'label'  => 'Ваш пакет займов', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
 		'active' => (Yii::app()->controller->action->getId() == 'index'),
@@ -21,7 +21,7 @@ $this->menu = array(
 
 if (Yii::app()->adminKreddyApi->checkSubscribe()) {
 	$this->menu[] = array(
-		'label'  => 'Оформление подписки', 'url' => array(
+		'label'  => 'Оформление пакета займов', 'url' => array(
 			Yii::app()->createUrl('account/subscribe')
 		),
 		//'active' => (Yii::app()->controller->action->id == 'subscribe'),

@@ -5,7 +5,7 @@
 
 $this->menu = array(
 	array(
-		'label'  => 'Состояние подписки', 'url' => array(
+		'label'  => 'Ваш пакет займов', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
 		'active' => (Yii::app()->controller->action->getId() == 'index') ? true : false,

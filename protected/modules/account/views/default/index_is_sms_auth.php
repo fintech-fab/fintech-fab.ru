@@ -13,12 +13,12 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 
 ?>
 
-<h4>Состояние подписки</h4>
+<h4>Ваш пакет займов</h4>
 
 <?php
 if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если нет подписки
 	?>
-	<h5>Нет активных подписок</h5>
+	<h5>Нет активных пакетов</h5>
 <?php
 } else {
 	?>

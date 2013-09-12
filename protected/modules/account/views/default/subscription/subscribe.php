@@ -3,9 +3,9 @@
 /* @var ClientSubscribeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление подписки";
+$this->pageTitle = Yii::app()->name . " - Оформление пакета";
 ?>
-	<h4>Оформление подписки</h4>
+	<h4>Оформление пакета</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -27,7 +27,7 @@ if ($model->product === false && Yii::app()->adminKreddyApi->getProductsList() !
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Оформить подписку',
+			'label'      => 'Оформить пакет',
 		)); ?>
 	</div>
 
