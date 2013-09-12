@@ -41,8 +41,8 @@ class AdminKreddyApiComponent
 	private $token;
 	private $aClientInfo;
 	private $aProducts;
-	private $iLastCode; //TODO сохранять сюда последние коды
-	private $sLastMessage = ''; //TODO сохранять сюда последние сообщения
+	private $iLastCode;
+	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
 
 
@@ -732,7 +732,7 @@ class AdminKreddyApiComponent
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
-		$aData = array('code' => self::ERROR_AUTH);
+		$aData = array('code' => self::ERROR_AUTH, 'message' => 'Произошла неизвестная ошибка. Позвоните на горячую линию.');
 
 
 		$ch = curl_init($sApiUrl . $sAction);
@@ -753,8 +753,14 @@ class AdminKreddyApiComponent
 		if ($response) {
 			//TODO убрать
 			Yii::trace("Action: " . $sAction . " - Response: " . $response);
-			$aData = CJSON::decode($response);
+			$aGetData = CJSON::decode($response);
+
+			if (is_array($aData)) {
+				$aData = CMap::mergeArray($aData, $aGetData);
+			}
 		}
+		$this->setLastMessage($aData['message']);
+		$this->setLastCode($aData['code']);
 
 		return $aData;
 	}
@@ -1070,5 +1076,48 @@ class AdminKreddyApiComponent
 	public function getLastSmsMessage()
 	{
 		return $this->sLastSmsMessage;
+	}
+
+	/**
+	 * Сохраняем последнее полученное сообщение о статусе запроса
+	 *
+	 * @param $sMessage
+	 */
+
+	public function setLastMessage($sMessage)
+	{
+		$this->sLastMessage = $sMessage;
+	}
+
+	/**
+	 * Возвращаем последнее полученное сообщение о статусе запроса
+	 *
+	 * @return string
+	 */
+	public function getLastMessage()
+	{
+		return $this->sLastMessage;
+	}
+
+	/**
+	 * Сохраняем последний полученный код статуса запроса
+	 *
+	 * @param $iCode
+	 *
+	 */
+
+	public function setLastCode($iCode)
+	{
+		$this->iLastCode = $iCode;
+	}
+
+	/**
+	 * Возвращаем последний полученный код статуса запроса
+	 *
+	 * @return integer
+	 */
+	public function getLastCode()
+	{
+		return $this->iLastCode;
 	}
 }

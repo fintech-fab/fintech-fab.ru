@@ -197,10 +197,10 @@ class DefaultController extends Controller
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
-
 			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 			if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, 'kreddy')) {
-				$this->render('subscription/subscribe_complete');
+				$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
+				Yii::app()->end();
 			}
 			$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
 		}
