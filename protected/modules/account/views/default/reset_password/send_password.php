@@ -12,86 +12,88 @@
 $this->pageTitle = Yii::app()->name . " - Восстановление пароля";
 ?>
 <h2 class='pay_legend' style="margin-left: 20px;">Восстановить пароль</h2>
+
+
+<div id="alertSmsSent" class="alert in alert-success span7"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
+<div class="clearfix"></div>
+<div class="well well-small span4">
+	Ваш телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
+</div>
+<div class="clearfix"></div>
 <div class="form" id="activeForm">
-	<div class="row">
-
-		<div id="alertSmsSent" class="alert in alert-success span10"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
-
-		<?php
-		$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-			'id'                     => 'ajaxResendSms',
-			'enableClientValidation' => true,
-			'clientOptions'          => array(
-				'validateOnChange' => true,
-				'validateOnSubmit' => true,
-			),
-			'htmlOptions'            => array(
-				'class' => "span4",
-			),
-			'action'                 => Yii::app()
-				->createUrl('/account/resetPasswordResendSmsCode'),
-		));
-		?>
-
-		<div class="well">
-			Ваш телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
-		</div>
-
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'         => 'btnResend',
-			'buttonType' => 'submit',
-			'icon'       => 'icon-refresh',
-			'size'       => 'small',
-			'label'      => 'Выслать код на телефон повторно',
-			'disabled'   => true,
-		));
-		?>
-		<div id="textUntilResend" class="hide">Повторно запросить SMS можно через: <span id="untilResend"></span></div>
-		<div id="actionAnswerResend" class="help-block error"></div>
-		<?php
-		$this->endWidget();
-		?>
-
-	</div>
-
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'                     => "checkSmsPass",
+		'id'                     => 'ajaxResendSms',
 		'enableClientValidation' => true,
-		'htmlOptions'            => array(
-			'class' => "span4",
-		),
 		'clientOptions'          => array(
 			'validateOnChange' => true,
 			'validateOnSubmit' => true,
 		),
-		'action'                 => Yii::app()->createUrl('/account/resetPassSendPass'),
+		'htmlOptions'            => array(
+			'class' => "span4",
+		),
+		'action'                 => Yii::app()
+			->createUrl('/account/resetPasswordResendSmsCode'),
 	));
 	?>
 
-	<label>Введите код из SMS:</label>
-	<?= $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
-	<?= $form->error($model, 'smsCode'); ?>
 
-	<div class="help-block error hide" id="actionAnswer"></div>
-
-	<div class="clearfix"></div>
 
 	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
+		'id'         => 'btnResend',
 		'buttonType' => 'submit',
-		'type'       => 'primary',
+		'icon'       => 'icon-refresh',
 		'size'       => 'small',
-		'label'      => 'Получить пароль',
+		'label'      => 'Выслать код на телефон повторно',
+		'disabled'   => true,
 	));
-	/**
-	 * конец формы проверки пароля
-	 */
+	?>
+	<div id="textUntilResend" class="hide">Повторно запросить SMS можно через: <span id="untilResend"></span></div>
+	<div id="actionAnswerResend" class="help-block error"></div>
+	<?php
 	$this->endWidget();
 	?>
 
 </div>
+
+<?php
+$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+	'id'                     => "checkSmsPass",
+	'enableClientValidation' => true,
+	'htmlOptions'            => array(
+		'class' => "span4",
+	),
+	'clientOptions'          => array(
+		'validateOnChange' => true,
+		'validateOnSubmit' => true,
+	),
+	'action'                 => Yii::app()->createUrl('/account/resetPassSendPass'),
+));
+?>
+
+<label>Введите код из SMS:</label>
+<?= $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
+<?= $form->error($model, 'smsCode'); ?>
+
+<div class="help-block error hide" id="actionAnswer"></div>
+
+<div class="clearfix"></div>
+
+<?php
+$this->widget('bootstrap.widgets.TbButton', array(
+	'buttonType' => 'submit',
+	'type'       => 'primary',
+	'size'       => 'small',
+	'label'      => 'Получить пароль',
+));
+/**
+ * конец формы проверки пароля
+ */
+$this->endWidget();
+?>
+
+
 
 <?php
 //подключаем JS с таймером для кнопки
