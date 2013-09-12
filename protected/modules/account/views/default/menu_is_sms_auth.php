@@ -8,16 +8,28 @@ $this->menu = array(
 		'label'  => 'Состояние подписки', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
-		'active' => (Yii::app()->controller->action->id == 'index'),
+		'active' => (Yii::app()->controller->action->getId() == 'index'),
 	),
 	array(
 		'label'  => 'История операций', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	),
-		'active' => (Yii::app()->controller->action->id == 'history'),
+		'active' => (Yii::app()->controller->action->getId() == 'history'),
 
 	)
 );
+
+if (Yii::app()->adminKreddyApi->checkSubscribe()) {
+	$this->menu[] = array(
+		'label'  => 'Оформление подписки', 'url' => array(
+			Yii::app()->createUrl('account/subscribe')
+		),
+		//'active' => (Yii::app()->controller->action->id == 'subscribe'),
+		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'subscribe')) !== false)
+	);
+
+}
+
 
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 

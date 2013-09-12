@@ -12,7 +12,10 @@ $this->widget('bootstrap.widgets.TbBox', array(
 	'content' => $this->renderPartial('subscription/_product', array(), true)
 ));
 ?>
-<div class="alert in alert-block alert-warning span7">
+<div class="alert in alert-block alert-success span7">
+	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getId() ?>
+</div>
+<div class="alert in alert-block alert-info span7">
 	Для подтверждения подписки введите код, пришедший Вам по SMS
 </div>
 <div class="form" id="activeForm">

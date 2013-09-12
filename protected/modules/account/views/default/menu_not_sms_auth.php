@@ -8,13 +8,13 @@ $this->menu = array(
 		'label'  => 'Состояние подписки', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
-		'active' => (Yii::app()->controller->action->id == 'index') ? true : false,
+		'active' => (Yii::app()->controller->action->getId() == 'index') ? true : false,
 	),
 	array(
 		'label'  => 'История операций', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	),
-		'active' => (Yii::app()->controller->action->id == 'history') ? true : false,
+		'active' => (Yii::app()->controller->action->getId() == 'history') ? true : false,
 	)
 );
 

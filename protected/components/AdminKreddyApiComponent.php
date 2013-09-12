@@ -44,6 +44,7 @@ class AdminKreddyApiComponent
 	private $iLastCode;
 	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
+	private $bIsCanSubscribe = null;
 
 
 	public $sApiUrl = '';
@@ -491,7 +492,7 @@ class AdminKreddyApiComponent
 			return $aProductsList;
 		}
 
-		return false;
+		return array();
 
 	}
 
@@ -604,10 +605,14 @@ class AdminKreddyApiComponent
 	 */
 	public function checkSubscribe()
 	{
-		//проверяем возможность подписки
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
+		if (!isset($this->bIsCanSubscribe)) {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
 
-		return (($aResult['code'] !== self::ERROR_NOT_ALLOWED) && ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
+			$this->bIsCanSubscribe = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
+				&& ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
+		}
+
+		return $this->bIsCanSubscribe;
 	}
 
 	/**
