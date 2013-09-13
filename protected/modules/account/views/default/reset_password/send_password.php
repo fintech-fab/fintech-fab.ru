@@ -50,59 +50,56 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	));
 	?>
 	<div id="textUntilResend" class="hide">Повторно запросить SMS можно через: <span id="untilResend"></span></div>
-	<div id="actionAnswerResend" class="help-block error"></div>
 	<?php
 	$this->endWidget();
 	?>
+	<div class="clearfix"></div>
+	<?php
 
-</div>
+	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+		'id'                     => "checkSmsPass",
+		'enableClientValidation' => true,
+		'htmlOptions'            => array(
+			'class' => "span4",
+		),
+		'clientOptions'          => array(
+			'validateOnChange' => true,
+			'validateOnSubmit' => true,
+		),
+		'action'                 => Yii::app()->createUrl('/account/resetPassSendPass'),
+	));
+	?>
 
-<?php
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                     => "checkSmsPass",
-	'enableClientValidation' => true,
-	'htmlOptions'            => array(
-		'class' => "span4",
-	),
-	'clientOptions'          => array(
-		'validateOnChange' => true,
-		'validateOnSubmit' => true,
-	),
-	'action'                 => Yii::app()->createUrl('/account/resetPassSendPass'),
-));
-?>
+	<label>Введите код из SMS:</label>
+	<?= $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
+	<?= $form->error($model, 'smsCode'); ?>
 
-<label>Введите код из SMS:</label>
-<?= $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
-<?= $form->error($model, 'smsCode'); ?>
+	<div class="clearfix"></div>
 
-<div class="help-block error hide" id="actionAnswer"></div>
-
-<div class="clearfix"></div>
-
-<?php
-$this->widget('bootstrap.widgets.TbButton', array(
-	'buttonType' => 'submit',
-	'type'       => 'primary',
-	'size'       => 'small',
-	'label'      => 'Получить пароль',
-));
-/**
- * конец формы проверки пароля
- */
-$this->endWidget();
-?>
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType' => 'submit',
+		'type'       => 'primary',
+		'size'       => 'small',
+		'label'      => 'Получить пароль',
+	));
+	/**
+	 * конец формы проверки пароля
+	 */
+	$this->endWidget();
+	?>
 
 
 
-<?php
-//подключаем JS с таймером для кнопки
-$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/sms_countdown.js';
-Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
-//передаем данные для JS-таймера
-Yii::app()->clientScript->registerScript('showUntilResend2', '
+	<?php
+	//подключаем JS с таймером для кнопки
+	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/sms_countdown.js';
+	Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
+	//передаем данные для JS-таймера
+	Yii::app()->clientScript->registerScript('showUntilResend2', '
 	leftTime = new Date();
 	leftTime.setTime(leftTime.getTime() + ' . Yii::app()->adminKreddyApi->getResetPassSmsCodeLeftTime() . '*1000);
 	showUntilResend();'
-	, CClientScript::POS_LOAD);
-?>
+		, CClientScript::POS_LOAD);
+	?>
+</div>

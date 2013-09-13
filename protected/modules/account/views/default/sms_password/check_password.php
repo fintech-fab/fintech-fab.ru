@@ -54,12 +54,12 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 		));
 		?>
 		<div id="textUntilResend" class="hide">Повторно запросить SMS можно через: <span id="untilResend"></span></div>
-		<div id="actionAnswerResend" class="help-block error"></div>
 		<?php
 		$this->endWidget();
 		?>
-
+		<div class="clearfix"></div>
 		<?php
+
 		$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'id'                     => "checkSmsPass",
 			'enableClientValidation' => true,
@@ -77,8 +77,6 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 		<label>Введите пароль из SMS:</label>
 		<?= $form->textField($model, 'smsPassword', array('class' => 'span4')); ?>
 		<?= $form->error($model, 'smsPassword'); ?>
-
-		<div class="help-block error hide" id="actionAnswer"></div>
 
 		<div class="clearfix"></div>
 
