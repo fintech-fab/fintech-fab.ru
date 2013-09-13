@@ -311,6 +311,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение сообщения статуса (активен, в скоринге, ожидает оплаты)
+	 *
+	 * @return bool
+	 */
+	public function getStatusMessage()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return ($aClientInfo['status']['title']) ? $aClientInfo['status']['title'] : false;
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getBalance()
