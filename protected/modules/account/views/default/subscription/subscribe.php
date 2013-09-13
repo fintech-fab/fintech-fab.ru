@@ -14,8 +14,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-if ($model->product === false && Yii::app()->adminKreddyApi->getProductsList() !== false) {
-	$model->product = reset(array_keys(Yii::app()->adminKreddyApi->getProductsList()));
+//проверяем, есть ли продукт в сессии, и есть ли список продуктов
+if ($model->product === false && Yii::app()->adminKreddyApi->getClientProductsAndChannelsList() !== false) {
+	//устанавливаем в качестве выбранного продукта первый в массиве
+	$model->product = reset(array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()));
 }
 ?>
 

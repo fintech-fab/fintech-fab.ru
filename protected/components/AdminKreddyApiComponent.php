@@ -485,7 +485,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение массива с информацией о продуктах
 	 *
-	 * @return array
+	 * @return array|bool
 	 */
 	public function getProducts()
 	{
@@ -502,7 +502,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение массива с информацией о каналах
 	 *
-	 * @return array
+	 * @return array|bool
 	 */
 	public function getProductsChannels()
 	{
@@ -517,27 +517,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Получение списка продуктов
-	 *
-	 * @return array
-	 */
-	public function getProductsList()
-	{
-		$aProducts = $this->getProducts();
-		if (isset($aProducts) && is_array($aProducts)) {
-			$aProductsList = array();
-			foreach ($aProducts as $aProduct) {
-				$aProductsList[$aProduct['id']] = $aProduct['name'];
-			}
-
-			return $aProductsList;
-		}
-
-		return array();
-
-	}
-
-	/**
 	 * Получение списка продуктов и каналов для данного пользователя.
 	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
 	 *
@@ -546,19 +525,26 @@ class AdminKreddyApiComponent
 
 	public function getClientProductsAndChannelsList()
 	{
+		//получаем список продуктов
 		$aProducts = $this->getProducts();
+		//получаем список каналов
 		$aChannels = $this->getProductsChannels();
+		//получаем список каналов, доступных клиенту
 		$aClientChannels = $this->getClientChannels();
-		if (is_array($aProducts) && is_array($aChannels)) {
+		//проверяем, что получили массивы
+		if (is_array($aProducts) && is_array($aChannels) && is_array($aClientChannels)) {
 			$aProductsAndChannels = array();
+			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
-
+				//получаем из продукта каналы, по которым его можно получить
 				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
 					? $aProduct['channel_types']
 					: array();
+				//перебираем каналы, по которым можно получить продукт
 				foreach ($aProductChannels as $sChannel) {
+					//проверяем, что у канала есть описание
+					//проверяем, что данный канал доступен пользователю
 					if (isset($aChannels[$sChannel])
-						&& is_array($aClientChannels)
 						&& in_array($sChannel, $aClientChannels)
 					) {
 						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . mb_convert_case($aChannels[$sChannel], MB_CASE_LOWER, "UTF-8");
