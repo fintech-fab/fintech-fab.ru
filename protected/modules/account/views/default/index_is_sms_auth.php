@@ -39,11 +39,14 @@ if (!Yii::app()->adminKreddyApi->getSubscriptionProduct() && !Yii::app()->adminK
 		: "&mdash;"; ?>
 	<br />
 	<strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
-<?php
-}
-if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+	<?php if (Yii::app()->adminKreddyApi->getSubscriptionMoratorium()) {
+		?>
+		<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionMoratorium() ?>
+		<br />
+	<?php
+	}
 	?>
-	<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionMoratorium() ?>
-	<br />
 <?php
 }
+
+
