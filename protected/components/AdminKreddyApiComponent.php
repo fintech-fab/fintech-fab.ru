@@ -293,6 +293,19 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function getClientChannels()
+	{
+		$aClientInfo = $this->getClientInfo();
+		if (isset($aClientInfo['channel_types']) && is_array($aClientInfo['channel_types'])) {
+			return $aClientInfo['channel_types'];
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getBalance()
@@ -448,6 +461,25 @@ class AdminKreddyApiComponent
 		return $oHistoryDataProvider;
 	}
 
+	/**
+	 * Получение массива с информацией о продуктах и каналах
+	 *
+	 * @return array
+	 */
+	public function getProductsAndChannels()
+	{
+		if (isset($this->aProductsAndChannels)) {
+			return $this->aProductsAndChannels;
+		}
+		$aProductsAndChannels = $this->getData('products');
+		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
+			$this->aProductsAndChannels = $aProductsAndChannels;
+
+			return $aProductsAndChannels;
+		}
+
+		return false;
+	}
 
 	/**
 	 * Получение массива с информацией о продуктах
@@ -456,24 +488,32 @@ class AdminKreddyApiComponent
 	 */
 	public function getProducts()
 	{
-		if (isset($this->aProducts)) {
-			return $this->aProducts;
-		}
-		//TODO сделать получение и сохранение способов получения продукта
-		$aGetData = $this->getData('products');
-		if (isset($aGetData['products'])) {
-			$aProducts = array();
-			foreach ($aGetData['products'] as $product) {
-				$aProducts[$product['id']] = $product;
-			}
-			$this->aProducts = $aProducts;
+		$aProducts = $this->getProductsAndChannels();
 
-			return $aProducts;
+		if (isset($aProducts['products'])) {
+
+			return $aProducts['products'];
 		}
 
 		return false;
 	}
 
+	/**
+	 * Получение массива с информацией о каналах
+	 *
+	 * @return array
+	 */
+	public function getProductsChannels()
+	{
+		$aProducts = $this->getProductsAndChannels();
+
+		if (isset($aProducts['channel_types'])) {
+
+			return $aProducts['channel_types'];
+		}
+
+		return false;
+	}
 
 	/**
 	 * Получение списка продуктов
@@ -483,7 +523,7 @@ class AdminKreddyApiComponent
 	public function getProductsList()
 	{
 		$aProducts = $this->getProducts();
-		if ($aProducts) {
+		if (isset($aProducts) && is_array($aProducts)) {
 			$aProductsList = array();
 			foreach ($aProducts as $aProduct) {
 				$aProductsList[$aProduct['id']] = $aProduct['name'];
@@ -493,6 +533,43 @@ class AdminKreddyApiComponent
 		}
 
 		return array();
+
+	}
+
+	/**
+	 * Получение списка продуктов и каналов для данного пользователя.
+	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
+	 *
+	 * @return array|bool
+	 */
+
+	public function getClientProductsAndChannelsList()
+	{
+		$aProductsAndChannels = $this->getProductsAndChannels();
+		$aProducts = $this->getProducts();
+		$aChannels = $this->getProductsChannels();
+		$aClientChannels = $this->getClientChannels();
+		if (is_array($aProducts) && is_array($aChannels)) {
+			$aProductsAndChannels = array();
+			foreach ($aProducts as $aProduct) {
+
+				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
+					? $aProduct['channel_types']
+					: array();
+				foreach ($aProductChannels as $sChannel) {
+					if (isset($aChannels[$sChannel])
+						&& is_array($aClientChannels)
+						&& in_array($sChannel, $aClientChannels)
+					) {
+						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . mb_convert_case($aChannels[$sChannel], MB_CASE_LOWER, "UTF-8");
+					}
+				}
+			}
+
+			return $aProductsAndChannels;
+		}
+
+		return false;
 
 	}
 
@@ -673,23 +750,42 @@ class AdminKreddyApiComponent
 	/**
 	 * Сохранение выбранного продукта в сессию
 	 *
-	 * @param $iProductId
+	 * @param $sProduct
 	 */
-	public function setSubscribeSelectedProduct($iProductId)
+	public function setSubscribeSelectedProduct($sProduct)
 	{
-		Yii::app()->session['subscribeSelectedProduct'] = $iProductId;
+		Yii::app()->session['subscribeSelectedProduct'] = $sProduct;
 	}
 
 	/**
 	 * Получение выбранного продукта из сессии
 	 *
-	 * @return bool
+	 * @return string:bool
 	 */
 	public function getSubscribeSelectedProduct()
 	{
 		return (isset(Yii::app()->session['subscribeSelectedProduct']))
 			? Yii::app()->session['subscribeSelectedProduct'] :
 			false;
+	}
+
+	/**
+	 * Получение выбранного продукта из сессии
+	 *
+	 * @return string:bool
+	 */
+	public function getSubscribeSelectedProductId()
+	{
+		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
+
+		if (count($aProduct) === 2) {
+			$iProductId = $aProduct[0];
+
+			return $iProductId;
+		}
+
+		return false;
+
 	}
 
 	/**
@@ -1124,5 +1220,23 @@ class AdminKreddyApiComponent
 	public function getLastCode()
 	{
 		return $this->iLastCode;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsNotAllowed()
+	{
+		return ($this->getLastCode() === self::ERROR_NOT_ALLOWED);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsError()
+	{
+		return ($this->getLastCode() !== self::ERROR_NONE
+			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
+			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE);
 	}
 }

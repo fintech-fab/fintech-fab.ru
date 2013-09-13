@@ -19,7 +19,7 @@ if ($model->product === false && Yii::app()->adminKreddyApi->getProductsList() !
 }
 ?>
 
-<?= $form->radioButtonListRow($model, 'product', Yii::app()->adminKreddyApi->getProductsList(), array("class" => "all")); ?>
+<?= $form->radioButtonListRow($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all")); ?>
 
 
 	<div class="form-actions">

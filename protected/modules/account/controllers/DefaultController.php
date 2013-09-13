@@ -218,13 +218,20 @@ class DefaultController extends Controller
 
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
-			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-			//TODO сделать отправку выбранного channel_type
-			if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, 'kreddy')) {
-				$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
-				Yii::app()->end();
+			$sProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+			$aProductAndChannel = explode('_', $sProduct);
+			if (count($aProductAndChannel) === 2) {
+				if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $aProductAndChannel[0], $aProductAndChannel[1])) {
+					$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
+					Yii::app()->end();
+				}
 			}
-			$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+
+			if (!Yii::app()->adminKreddyApi->getIsNotAllowed() && !Yii::app()->adminKreddyApi->getIsError()) {
+				$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+			} else {
+				$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastMessage());
+			}
 		}
 		$this->render('subscription/do_subscribe_check_sms_code', array('model' => $oForm));
 	}

@@ -2,7 +2,7 @@
 //* @var DefaultController $this */
 /* @var ClientSubscribeForm $model */
 
-$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
 
 ?>
 
