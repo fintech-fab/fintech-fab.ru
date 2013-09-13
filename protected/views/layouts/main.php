@@ -111,7 +111,7 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 					'links' => FooterLinks::model()->findAll(array('order' => 'link_order')),
 				));
 				?>
-				<p>&copy; 2012 ООО "Финансовые Решения"</p>
+				<p>&copy; <?= SiteParams::copyrightYear() ?> ООО "Финансовые Решения"</p>
 			</div>
 		</div>
 	</div>
