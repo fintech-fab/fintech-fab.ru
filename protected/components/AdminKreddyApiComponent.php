@@ -342,6 +342,18 @@ class AdminKreddyApiComponent
 		return ($aClientInfo['active_loan']['balance']) ? abs($aClientInfo['active_loan']['balance']) : 0;
 	}
 
+
+	/**
+	 * @return bool|string
+	 */
+
+	public function getSubscriptionRequest()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+	}
+
 	/**
 	 * @return bool|string
 	 */

@@ -16,10 +16,18 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 <h4>Ваш пакет займов</h4>
 
 <?php
-if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если нет подписки
+//если нет подписки
+if (!Yii::app()->adminKreddyApi->getSubscriptionProduct() && !Yii::app()->adminKreddyApi->getSubscriptionRequest()) {
 	?>
 	<h5>Нет активных пакетов</h5>
 <?php
+//если подписка "висит" на скоринге
+} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) {
+	?>
+	<strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
+	<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />
+<?php
+//если подписка есть
 } else {
 	?>
 	<strong>Баланс:</strong>  <?= Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
