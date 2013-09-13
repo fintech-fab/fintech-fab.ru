@@ -219,12 +219,17 @@ class DefaultController extends Controller
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
 			$sProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+			//получаем массив, содержащий ID продукта и тип канала получения
 			$aProductAndChannel = explode('_', $sProduct);
+			//проверяем, что в массиве 2 значения (ID и канал)
 			if (count($aProductAndChannel) === 2) {
+				//пробуем оформить подписку
 				if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $aProductAndChannel[0], $aProductAndChannel[1])) {
 					$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
 					Yii::app()->end();
 				}
+			} else {
+				$oForm->addError('smsCode', AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			if (!Yii::app()->adminKreddyApi->getIsNotAllowed() && !Yii::app()->adminKreddyApi->getIsError()) {

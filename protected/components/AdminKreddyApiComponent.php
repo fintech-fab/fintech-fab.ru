@@ -38,6 +38,8 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
+	const ERROR_MESSAGE_UNKNOWN = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+
 	private $token;
 	private $aClientInfo;
 	private $aProducts;
@@ -178,7 +180,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
 
@@ -210,7 +212,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
 
@@ -237,7 +239,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -293,6 +295,9 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем массив с каналами, доступными клиенту
+	 * array('kreddy,'mobile')
+	 *
 	 * @return bool
 	 */
 	public function getClientChannels()
@@ -472,13 +477,9 @@ class AdminKreddyApiComponent
 			return $this->aProductsAndChannels;
 		}
 		$aProductsAndChannels = $this->getData('products');
-		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
-			$this->aProductsAndChannels = $aProductsAndChannels;
+		$this->aProductsAndChannels = $aProductsAndChannels;
 
-			return $aProductsAndChannels;
-		}
-
-		return false;
+		return $aProductsAndChannels;
 	}
 
 	/**
@@ -545,7 +546,6 @@ class AdminKreddyApiComponent
 
 	public function getClientProductsAndChannelsList()
 	{
-		$aProductsAndChannels = $this->getProductsAndChannels();
 		$aProducts = $this->getProducts();
 		$aChannels = $this->getProductsChannels();
 		$aClientChannels = $this->getClientChannels();
@@ -710,7 +710,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
