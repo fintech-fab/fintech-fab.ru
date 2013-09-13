@@ -1,13 +1,14 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html>
 <html lang="en">
-<!-- head start -->
-<?php $this->beginContent('//layouts/main_head');
-echo $content;
-$this->endContent();
-?>
+<head><!-- head start -->
+	<?php $this->beginContent('//layouts/main_head');
+	echo $content;
+	$this->endContent();
+	?>
+</head>
 <!-- head end --><!-- ClickTale Bottom part -->
-<div id="ClickTaleDiv" style="display: none;"></div>
+
 <script type="text/javascript">
 	if (document.location.protocol != 'https:')
 		document.write(unescape("%3Cscript%20src='http://s.clicktale.net/WRe0.js'%20type='text/javascript'%3E%3C/script%3E"));
@@ -25,6 +26,7 @@ $this->endContent();
 
 
 <body class="home">
+<div id="ClickTaleDiv" style="display: none;"></div>
 <!--  header navbar start -->
 <?php $this->beginContent('//layouts/main_navbar_top');
 echo $content;

@@ -1,12 +1,14 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html>
 <html lang="en">
-<!-- head start -->
-<?php $this->beginContent('//layouts/main_head');
-echo $content;
-$this->endContent();
-?>
-<!-- head end -->
+
+<head><!-- head start -->
+	<?php $this->beginContent('//layouts/main_head');
+	echo $content;
+	$this->endContent();
+	?>
+	<!-- head end -->
+</head>
 
 <body class="home">
 <!--  header navbar start -->
