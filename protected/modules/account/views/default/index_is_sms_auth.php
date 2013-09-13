@@ -48,5 +48,3 @@ if (!Yii::app()->adminKreddyApi->getSubscriptionProduct() && !Yii::app()->adminK
 	?>
 <?php
 }
-
-
