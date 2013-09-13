@@ -388,9 +388,11 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращает дату окончания моратория на займ, если такой мораторий есть
+	 *
 	 * @return bool|string
 	 */
-	public function getSubscriptionMoratorium()
+	public function getSubscriptionLoanMoratorium()
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sMoratoriumTo = (isset($aClientInfo['subscription']['moratorium_to']))

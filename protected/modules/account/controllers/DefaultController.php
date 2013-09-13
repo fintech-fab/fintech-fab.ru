@@ -84,7 +84,15 @@ class DefaultController extends Controller
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-			$sView = 'index_is_sms_auth';
+			if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()
+				&& !Yii::app()->adminKreddyApi->getSubscriptionRequest()
+			) { //если нет подписки
+				$sView = 'index_is_sms_auth/no_subscription';
+			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
+				$sView = 'index_is_sms_auth/subscription_scoring';
+			} else { //если подписка есть
+				$sView = 'index_is_sms_auth/is_subscription';
+			}
 		} else {
 			$sView = 'index_not_sms_auth';
 		}
