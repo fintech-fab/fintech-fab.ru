@@ -21,12 +21,12 @@ $this->pageTitle = Yii::app()->name;
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'          => 'smsPassAuth',
 	'htmlOptions' => array(
-		'class' => "span10",
+		'class' => "span7",
 	),
 	'action'      => Yii::app()->createUrl('/account/sendSmsPass'),
 ));
 ?>
-<div class="row">
+<div class="center">
 	<?php
 
 	$model->sendSmsPassword = 1;

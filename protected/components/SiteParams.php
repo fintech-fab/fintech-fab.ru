@@ -492,6 +492,16 @@ class SiteParams
 		return curl_exec($ch);
 	}
 
+	/**
+	 * @return string
+	 */
+
+	public static function copyrightYear()
+	{
+		$copyYear = 2012;
+		$curYear = date('Y');
+		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
+	}
 }
 
 /**
@@ -531,4 +541,5 @@ class SiteParamValue
 			: null;
 
 	}
+
 }

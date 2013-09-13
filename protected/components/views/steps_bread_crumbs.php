@@ -3,8 +3,8 @@
  * @var $this StepsBreadCrumbsWidget
  */
 ?>
-<ul <?php echo($this->aHtmlOptions['class'] ? ' class="' . $this->aHtmlOptions['class'] . '"' : ''); ?>
-	<?php echo($this->aHtmlOptions['id'] ? ' id="' . $this->aHtmlOptions['id'] . '"' : ''); ?> >
+<ul <?= ($this->aHtmlOptions['class'] ? ' class="' . $this->aHtmlOptions['class'] . '"' : ''); ?>
+	<?= ($this->aHtmlOptions['id'] ? ' id="' . $this->aHtmlOptions['id'] . '"' : ''); ?> >
 	<?php
 
 	$number = 1;

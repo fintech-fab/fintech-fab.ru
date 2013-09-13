@@ -54,7 +54,7 @@ $productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + arr
 	}
 	?>
 	<div id="product">
-		<?php echo $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::getProducts(), array("class" => "all") + $productHtmlOptions); ?>
+		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::getProducts(), array("class" => "all") + $productHtmlOptions); ?>
 	</div>
 	<?= $form->passwordFieldRow($oClientCreateForm, 'password', $htmlOptions); ?>
 	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', $htmlOptions); ?>

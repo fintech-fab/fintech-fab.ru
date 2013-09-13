@@ -38,12 +38,15 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
+	const ERROR_MESSAGE_UNKNOWN = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+
 	private $token;
 	private $aClientInfo;
 	private $aProducts;
 	private $iLastCode;
 	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
+	private $bIsCanSubscribe = null;
 
 
 	public $sApiUrl = '';
@@ -177,7 +180,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
 
@@ -209,7 +212,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
 
@@ -236,7 +239,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -292,6 +295,34 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем массив с каналами, доступными клиенту
+	 * array('kreddy,'mobile')
+	 *
+	 * @return bool
+	 */
+	public function getClientChannels()
+	{
+		$aClientInfo = $this->getClientInfo();
+		if (isset($aClientInfo['channel_types']) && is_array($aClientInfo['channel_types'])) {
+			return $aClientInfo['channel_types'];
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Получение сообщения статуса (активен, в скоринге, ожидает оплаты)
+	 *
+	 * @return bool
+	 */
+	public function getStatusMessage()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return ($aClientInfo['status']['title']) ? $aClientInfo['status']['title'] : false;
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getBalance()
@@ -309,6 +340,18 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return ($aClientInfo['active_loan']['balance']) ? abs($aClientInfo['active_loan']['balance']) : 0;
+	}
+
+
+	/**
+	 * @return bool|string
+	 */
+
+	public function getSubscriptionRequest()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
 	}
 
 	/**
@@ -345,9 +388,11 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращает дату окончания моратория на займ, если такой мораторий есть
+	 *
 	 * @return bool|string
 	 */
-	public function getSubscriptionMoratorium()
+	public function getSubscriptionLoanMoratorium()
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sMoratoriumTo = (isset($aClientInfo['subscription']['moratorium_to']))
@@ -447,48 +492,93 @@ class AdminKreddyApiComponent
 		return $oHistoryDataProvider;
 	}
 
+	/**
+	 * Получение массива с информацией о продуктах и каналах
+	 *
+	 * @return array
+	 */
+	public function getProductsAndChannels()
+	{
+		if (isset($this->aProductsAndChannels)) {
+			return $this->aProductsAndChannels;
+		}
+		$aProductsAndChannels = $this->getData('products');
+		$this->aProductsAndChannels = $aProductsAndChannels;
+
+		return $aProductsAndChannels;
+	}
 
 	/**
 	 * Получение массива с информацией о продуктах
 	 *
-	 * @return array
+	 * @return array|bool
 	 */
 	public function getProducts()
 	{
-		if (isset($this->aProducts)) {
-			return $this->aProducts;
-		}
-		//TODO сделать получение и сохранение способов получения продукта
-		$aGetData = $this->getData('products');
-		if (isset($aGetData['products'])) {
-			$aProducts = array();
-			foreach ($aGetData['products'] as $product) {
-				$aProducts[$product['id']] = $product;
-			}
-			$this->aProducts = $aProducts;
+		$aProducts = $this->getProductsAndChannels();
 
-			return $aProducts;
+		if (isset($aProducts['products'])) {
+
+			return $aProducts['products'];
 		}
 
 		return false;
 	}
 
+	/**
+	 * Получение массива с информацией о каналах
+	 *
+	 * @return array|bool
+	 */
+	public function getProductsChannels()
+	{
+		$aProducts = $this->getProductsAndChannels();
+
+		if (isset($aProducts['channel_types'])) {
+
+			return $aProducts['channel_types'];
+		}
+
+		return false;
+	}
 
 	/**
-	 * Получение списка продуктов
+	 * Получение списка продуктов и каналов для данного пользователя.
+	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
 	 *
-	 * @return array
+	 * @return array|bool
 	 */
-	public function getProductsList()
+
+	public function getClientProductsAndChannelsList()
 	{
+		//получаем список продуктов
 		$aProducts = $this->getProducts();
-		if ($aProducts) {
-			$aProductsList = array();
+		//получаем список каналов
+		$aChannels = $this->getProductsChannels();
+		//получаем список каналов, доступных клиенту
+		$aClientChannels = $this->getClientChannels();
+		//проверяем, что получили массивы
+		if (is_array($aProducts) && is_array($aChannels) && is_array($aClientChannels)) {
+			$aProductsAndChannels = array();
+			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
-				$aProductsList[$aProduct['id']] = $aProduct['name'];
+				//получаем из продукта каналы, по которым его можно получить
+				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
+					? $aProduct['channel_types']
+					: array();
+				//перебираем каналы, по которым можно получить продукт
+				foreach ($aProductChannels as $sChannel) {
+					//проверяем, что у канала есть описание
+					//проверяем, что данный канал доступен пользователю
+					if (isset($aChannels[$sChannel])
+						&& in_array($sChannel, $aClientChannels)
+					) {
+						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . mb_convert_case($aChannels[$sChannel], MB_CASE_LOWER, "UTF-8");
+					}
+				}
 			}
 
-			return $aProductsList;
+			return $aProductsAndChannels;
 		}
 
 		return false;
@@ -604,10 +694,14 @@ class AdminKreddyApiComponent
 	 */
 	public function checkSubscribe()
 	{
-		//проверяем возможность подписки
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
+		if (!isset($this->bIsCanSubscribe)) {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
 
-		return (($aResult['code'] !== self::ERROR_NOT_ALLOWED) && ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
+			$this->bIsCanSubscribe = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
+				&& ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
+		}
+
+		return $this->bIsCanSubscribe;
 	}
 
 	/**
@@ -628,7 +722,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -668,23 +762,42 @@ class AdminKreddyApiComponent
 	/**
 	 * Сохранение выбранного продукта в сессию
 	 *
-	 * @param $iProductId
+	 * @param $sProduct
 	 */
-	public function setSubscribeSelectedProduct($iProductId)
+	public function setSubscribeSelectedProduct($sProduct)
 	{
-		Yii::app()->session['subscribeSelectedProduct'] = $iProductId;
+		Yii::app()->session['subscribeSelectedProduct'] = $sProduct;
 	}
 
 	/**
 	 * Получение выбранного продукта из сессии
 	 *
-	 * @return bool
+	 * @return string:bool
 	 */
 	public function getSubscribeSelectedProduct()
 	{
 		return (isset(Yii::app()->session['subscribeSelectedProduct']))
 			? Yii::app()->session['subscribeSelectedProduct'] :
 			false;
+	}
+
+	/**
+	 * Получение выбранного продукта из сессии
+	 *
+	 * @return string:bool
+	 */
+	public function getSubscribeSelectedProductId()
+	{
+		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
+
+		if (count($aProduct) === 2) {
+			$iProductId = $aProduct[0];
+
+			return $iProductId;
+		}
+
+		return false;
+
 	}
 
 	/**
@@ -755,7 +868,7 @@ class AdminKreddyApiComponent
 			Yii::trace("Action: " . $sAction . " - Response: " . $response);
 			$aGetData = CJSON::decode($response);
 
-			if (is_array($aData)) {
+			if (is_array($aGetData)) {
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -1119,5 +1232,23 @@ class AdminKreddyApiComponent
 	public function getLastCode()
 	{
 		return $this->iLastCode;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsNotAllowed()
+	{
+		return ($this->getLastCode() === self::ERROR_NOT_ALLOWED);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsError()
+	{
+		return ($this->getLastCode() !== self::ERROR_NONE
+			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
+			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE);
 	}
 }

@@ -2,7 +2,7 @@
 //* @var DefaultController $this */
 /* @var ClientSubscribeForm $model */
 
-$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
 
 ?>
 
@@ -16,12 +16,13 @@ $iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 	<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanLifetimeById($iProductId) ?>
 		&nbsp;дней
 	</li>
-	<li><strong>Стоимость подписки:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId) ?>
+	<li><strong>Стоимость пакета:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId) ?>
 		&nbsp;рублей
 	</li>
-	<li><strong>Срок подписки:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
+	<li><strong>Срок действия
+			пакета:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
 		&nbsp;дней
 	</li>
-	<li><strong>Количество займов по
-			подписке:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId) ?></li>
+	<li><strong>Количество займов в
+			пакете:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId) ?></li>
 </ul>

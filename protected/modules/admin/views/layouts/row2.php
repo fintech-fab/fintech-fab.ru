@@ -18,7 +18,7 @@
 	<div class="clearfix"></div>
 	<div class="row">
 		<div class="span12">
-			<?php echo $content; ?>
+			<?= $content; ?>
 		</div>
 	</div>
 	<!-- content -->

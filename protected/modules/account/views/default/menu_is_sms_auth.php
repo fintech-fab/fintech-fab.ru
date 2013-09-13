@@ -3,32 +3,43 @@
  * @var $this Controller
  */
 
-//TODO сделать чтобы при 0 или положительном балансе не было "вернуть до"
 $this->menu = array(
 	array(
-		'label'  => 'Состояние подписки', 'url' => array(
+		'label'  => 'Ваш пакет займов', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
-		'active' => (Yii::app()->controller->action->id == 'index'),
+		'active' => (Yii::app()->controller->action->getId() == 'index'),
 	),
 	array(
 		'label'  => 'История операций', 'url' => array(
 		Yii::app()->createUrl('account/history')
 	),
-		'active' => (Yii::app()->controller->action->id == 'history'),
+		'active' => (Yii::app()->controller->action->getId() == 'history'),
 
 	)
 );
 
-$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
+if (Yii::app()->adminKreddyApi->checkSubscribe()) {
+	$this->menu[] = array(
+		'label'  => 'Оформление пакета займов', 'url' => array(
+			Yii::app()->createUrl('account/subscribe')
+		),
+		//'active' => (Yii::app()->controller->action->id == 'subscribe'),
+		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'subscribe')) !== false)
+	);
 
+}
+
+
+$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
+	$sExpireToMessage = '<strong>Вернуть до:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpired() . '<br/>';
 } else {
 	$sBalanceMessage = '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
+	$sExpireToMessage = '';
 }
-$sExpireToMessage = '<strong>Вернуть до:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpired() . '<br/>';
 
 if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 	$sExpiredMessage = '<strong>Платеж просрочен!</strong><br/>';

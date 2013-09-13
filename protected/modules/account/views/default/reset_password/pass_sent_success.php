@@ -15,7 +15,8 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	<div class="row">
 
 		<div class="alert in alert-success span10" id="smsAuthDone">
-			SMS с паролем отправлено на телефон. <br><br> <?php echo CHtml::link('Выполнить вход &raquo;', Yii::app()
+			SMS с паролем отправлено на телефон. <br><br> <?=
+			CHtml::link('Выполнить вход &raquo;', Yii::app()
 				->createUrl('/account/login')); ?>
 		</div>
 

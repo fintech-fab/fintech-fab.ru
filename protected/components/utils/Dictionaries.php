@@ -17,6 +17,7 @@ class Dictionaries
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
 
 	const C_SMS_SUCCESS = 'SMS с кодом успешно отправлено';
+	const C_SMS_PASS_SUCCESS = 'SMS с паролем успешно отправлено';
 
 	const C_SEX_FEMALE = 1;
 	const C_SEX_MALE = 2;

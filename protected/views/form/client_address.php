@@ -37,7 +37,7 @@ $this->pageTitle = Yii::app()->name;
 	?>
 
 	<div class="row span6">
-		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/03T.png">
+		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/03T.png">
 
 		<h2>Адрес</h2>
 		<?php require dirname(__FILE__) . '/fields/address_reg.php' ?>

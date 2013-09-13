@@ -25,7 +25,7 @@ $this->breadcrumbs = array(
 	</div>
 
 	<div class="row">
-		<?php echo $form->passwordFieldRow($model, 'password'); ?>
+		<?= $form->passwordFieldRow($model, 'password'); ?>
 	</div>
 
 	<div class="row buttons">
@@ -36,7 +36,8 @@ $this->breadcrumbs = array(
 			'size'       => 'small',
 			'label'      => 'Войти',
 		)); ?>
-		<?php echo CHtml::link('Забыли пароль?', Yii::app()
+		<?=
+		CHtml::link('Забыли пароль?', Yii::app()
 			->createUrl('/account/resetPassword'), array("style" => "margin-left: 50px;")); ?>
 	</div>
 

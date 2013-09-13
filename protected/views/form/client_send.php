@@ -32,7 +32,7 @@ $this->pageTitle = Yii::app()->name;
 	?>
 
 	<div class="row span5">
-		<img src="<?php echo Yii::app()->request->baseUrl; ?>/static/img/05T.png"> <br />
+		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/05T.png"> <br />
 		<?php require dirname(__FILE__) . '/fields/numeric_code.php' ?>
 		<?php require dirname(__FILE__) . '/fields/secret_question.php' ?>
 		<?php require dirname(__FILE__) . '/fields/complete.php' ?>
