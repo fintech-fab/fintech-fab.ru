@@ -82,4 +82,6 @@ UPDATE `kreddy`.`tbl_client`
 SET `sms_code` = '*'
 WHERE `dt_update` <= TIMESTAMP((NOW() - INTERVAL 2 DAY)) AND `sms_code` != '';
 
-
+UPDATE `kreddy`.`tbl_client`
+SET `flag_cleared` = '1'
+WHERE `dt_update` <= TIMESTAMP((NOW() - INTERVAL 2 DAY));
