@@ -832,7 +832,7 @@ class AdminKreddyApiComponent
 	{
 		if (!isset($this->bIsCanSubscribe)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
-
+			//TODO тут и в прочих местах сделать проверку статуса через метод
 			$this->bIsCanSubscribe = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
 				&& ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
 		}
