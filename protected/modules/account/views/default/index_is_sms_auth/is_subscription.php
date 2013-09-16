@@ -23,7 +23,7 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 (Yii::app()->adminKreddyApi->getSubscriptionActivity()) ?
 	Yii::app()->adminKreddyApi->getSubscriptionActivity()
 	: "&mdash;"; ?>
-<br />    <strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
+<br /><strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
 <?php if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
 	?>
 	<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>

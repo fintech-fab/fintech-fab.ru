@@ -430,9 +430,23 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return bool|string
+	 * @return bool
 	 */
 	public function getActiveLoanExpired()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$bExpired = (!empty($aClientInfo['active_loan']['expired']))
+			? $aClientInfo['active_loan']['expired']
+			: false;
+
+		return $bExpired;
+	}
+
+
+	/**
+	 * @return bool|string
+	 */
+	public function getActiveLoanExpiredTo()
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to']))

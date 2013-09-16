@@ -43,7 +43,7 @@ $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->create
 
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
-	$sExpireToMessage = '<strong>Вернуть до:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpired() . '<br/>';
+	$sExpireToMessage = '<strong>Вернуть до:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() . '<br/>';
 } else {
 	$sBalanceMessage = '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
 	$sExpireToMessage = '';
