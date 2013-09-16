@@ -80,6 +80,11 @@ class FormController extends Controller
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
+		//если текущее представление max_sms_tries, то очищаем сессию
+		if ($sView === 'client_confirm_phone_via_sms2/max_sms_tries' || $sView === 'client_confirm_phone_via_sms/max_sms_tries') {
+			Yii::app()->clientForm->clearClientSession();
+		}
+
 		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
@@ -147,12 +152,17 @@ class FormController extends Controller
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
-
+	/**
+	 * проверка веб-камеры
+	 */
 	public function actionCheckWebCam()
 	{
 		$this->renderPartial('check_webcam', array(), false, true);
 	}
 
+	/**
+	 * Отправка SMS с кодом
+	 */
 	public function actionSendSmsCode()
 	{
 		// если SMS уже было отправлено, переводим на следующий шаг
@@ -175,6 +185,9 @@ class FormController extends Controller
 		}
 	}
 
+	/**
+	 * проверка кода, введённого пользователем
+	 */
 	public function actionCheckSmsCode()
 	{
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm

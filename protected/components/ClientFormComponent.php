@@ -462,8 +462,6 @@ class ClientFormComponent
 					break;
 				case 6:
 					if ($this->getSmsCountTries() === SiteParams::MAX_SMSCODE_TRIES) {
-						$this->clearClientSession();
-
 						return 'client_confirm_phone_via_sms2/max_sms_tries';
 					}
 
@@ -509,8 +507,6 @@ class ClientFormComponent
 					break;
 				case 10:
 					if ($this->getSmsCountTries() === SiteParams::MAX_SMSCODE_TRIES) {
-						$this->clearClientSession();
-
 						return 'client_confirm_phone_via_sms/max_sms_tries';
 					}
 
@@ -538,7 +534,7 @@ class ClientFormComponent
 			switch ($this->current_step) {
 				case 0:
 				{
-
+					//TODO: заменить на Yii::app()->request->getParam('')
 					if (isset($_POST['ClientSelectProductForm2'])) {
 						return $_POST['ClientSelectProductForm2'];
 					}
