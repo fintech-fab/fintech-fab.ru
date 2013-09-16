@@ -40,8 +40,8 @@ class SmsGateSender
 	 */
 	public function send($sPhone, $message)
 	{
+		//проверяем, отключен ли СМС-гейт в настройках сайта
 		if (!Yii::app()->params['bSmsGateIsOff']) {
-
 
 			$aPostQuery = http_build_query(
 				array(
