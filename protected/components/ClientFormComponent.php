@@ -249,9 +249,7 @@ class ClientFormComponent
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		if (!empty($sPhone) && !empty($sSmsCode)) {
 			//отправляем СМС
-			if (!Yii::app()->params['bSmsGateIsOff']) {
-				SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
-			}
+			SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 			//если отправлено успешно,
 			//то добавляем в лог запрос sms с этого ip
@@ -478,6 +476,7 @@ class ClientFormComponent
 	public
 	function getView()
 	{
+		//если в сессии стоит флаг "отобразить form_sent" то передаем это представление
 		if ($this->isFormSent()) {
 			return 'form_sent';
 		}

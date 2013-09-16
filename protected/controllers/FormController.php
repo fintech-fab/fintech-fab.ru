@@ -75,6 +75,7 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
+		//если текущее представление form_sent, то отключаем его отображение при следующей загрузке
 		if ($sView === 'form_sent') {
 			Yii::app()->clientForm->setFormSent(false);
 		}

@@ -40,7 +40,10 @@ class SmsGateSender
 	 */
 	public function send($sPhone, $message)
 	{
-		/*	$aPostQuery = http_build_query(
+		if (!Yii::app()->params['bSmsGateIsOff']) {
+
+
+			$aPostQuery = http_build_query(
 				array(
 					'username' => $this->_external_user,
 					'password' => $this->_external_pwd,
@@ -60,7 +63,8 @@ class SmsGateSender
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $aPostQuery);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$sResult = trim(curl_exec($ch));*/
+			$sResult = trim(curl_exec($ch));
+		}
 
 		//Logger::write('sms_gate_send', $sPhone . '/' . $message . '/' . $sResult, 0);
 
