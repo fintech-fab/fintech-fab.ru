@@ -169,8 +169,11 @@ class FormController extends Controller
 		}
 
 		// если в сессии стоит флаг, что SMS отправлено
-		if (Yii::app()->clientForm->getFlagSmsSent() || !Yii::app()->clientForm->getSessionPhone()) {
+		if (Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepNext);
+			$this->redirect(Yii::app()->createUrl("form"));
+		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
+			Yii::app()->clientForm->clearClientSession();
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
@@ -191,7 +194,6 @@ class FormController extends Controller
 
 	/**
 	 * проверка кода, введённого пользователем
-	 * TODO: исправить, что после очистки сессии можно зайти на страницу
 	 */
 	public function actionCheckSmsCode()
 	{
@@ -205,10 +207,11 @@ class FormController extends Controller
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 
-		if (!Yii::app()->clientForm->getFlagSmsSent()) {
+		if (!Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepBack);
 			$this->redirect(Yii::app()->createUrl("form"));
-		} elseif (empty($aPostData)) {
+		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
+			Yii::app()->clientForm->clearClientSession();
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
