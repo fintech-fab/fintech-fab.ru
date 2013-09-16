@@ -24,8 +24,16 @@ if (Yii::app()->adminKreddyApi->checkSubscribe()) {
 		'label'  => 'Оформление пакета займов', 'url' => array(
 			Yii::app()->createUrl('account/subscribe')
 		),
-		//'active' => (Yii::app()->controller->action->id == 'subscribe'),
 		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'subscribe')) !== false)
+	);
+}
+
+if (Yii::app()->adminKreddyApi->checkLoan()) {
+	$this->menu[] = array(
+		'label'  => 'Оформление займа', 'url' => array(
+			Yii::app()->createUrl('account/loan')
+		),
+		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'loan')) !== false)
 	);
 
 }

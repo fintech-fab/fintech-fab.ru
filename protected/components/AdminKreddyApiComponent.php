@@ -48,6 +48,7 @@ class AdminKreddyApiComponent
 	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
 	private $bIsCanSubscribe = null;
+	private $bIsCanGetLoan = null;
 
 
 	public $sApiUrl = '';
@@ -309,6 +310,19 @@ class AdminKreddyApiComponent
 		} else {
 			return array();
 		}
+	}
+
+	/**
+	 * @param $sChannel
+	 *
+	 * @return bool
+	 */
+
+	public function getChannelNameById($sChannel)
+	{
+		$aChannels = $this->getProductsChannels();
+
+		return (isset($aChannels[$sChannel])) ? $aChannels[$sChannel] : false;
 	}
 
 	/**
@@ -729,14 +743,14 @@ class AdminKreddyApiComponent
 	 */
 	public function checkLoan()
 	{
-		if (!isset($this->bIsCanSubscribe)) {
+		if (!isset($this->bIsCanGetLoan)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('test_code' => 1));
 
-			$this->bIsCanSubscribe = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
+			$this->bIsCanGetLoan = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
 				&& ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
 		}
 
-		return $this->bIsCanSubscribe;
+		return $this->bIsCanGetLoan;
 	}
 
 	/**
@@ -769,14 +783,15 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param        $iChannelType
+	 * @param        $sChannelType
+	 *
 	 *
 	 * @return array|bool
 	 */
-	public function doLoan($sSmsCode, $iChannelType)
+	public function doLoan($sSmsCode, $sChannelType)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_type' => $iChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_type' => $sChannelType));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
