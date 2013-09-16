@@ -209,14 +209,13 @@ class FormController extends Controller
 		if ($oClientSmsForm->validate()) {
 			$oAnswer = Yii::app()->clientForm->checkSmsCode($oClientSmsForm->sms_code);
 
-			// если код верен -
+			// если код верен - перенаправляем на form
 			if ($oAnswer === true) {
 				$this->redirect(Yii::app()->createUrl("form"));
 			}
 
-			// если превышено число ошибок
+			// если превышено число ошибок - перенаправляем на form
 			if ($oAnswer === Dictionaries::C_ERR_SMS_TRIES) {
-				Yii::app()->clientForm->clearClientSession();
 				$this->redirect(Yii::app()->createUrl("form"));
 			}
 
