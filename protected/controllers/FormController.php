@@ -80,24 +80,7 @@ class FormController extends Controller
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
-		if ($sView == 'client_confirm_phone_via_sms' || $sView == 'client_confirm_phone_via_sms2') {
-			$smsCountTries = Yii::app()->clientForm->getSmsCountTries();
-
-			$flagExceededTries = ($smsCountTries >= SiteParams::MAX_SMSCODE_TRIES);
-			$flagSmsSent = Yii::app()->clientForm->getFlagSmsSent();
-
-			$this->render($sView, array(
-				'oClientCreateForm' => $oClientForm,
-				'phone'             => Yii::app()->clientForm->getSessionPhone(),
-				'actionAnswer'      => ($flagExceededTries
-					? Dictionaries::C_ERR_SMS_TRIES
-					: ''),
-				'flagExceededTries' => $flagExceededTries,
-				'flagSmsSent'       => $flagSmsSent,
-			));
-		} else {
-			$this->render($sView, array('oClientCreateForm' => $oClientForm));
-		}
+		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
 	/**
@@ -170,37 +153,69 @@ class FormController extends Controller
 		$this->renderPartial('check_webcam', array(), false, true);
 	}
 
-	public function actionAjaxSendSms()
+	public function actionSendSmsCode()
 	{
-		if (Yii::app()->request->isAjaxRequest) {
-			echo Yii::app()->clientForm->ajaxSendSmsRequest();
+		// если SMS уже было отправлено, переводим на следующий шаг
+		if (Yii::app()->clientForm->getFlagSmsSent()) {
+			Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
-		Yii::app()->end();
-	}
 
-	public function actionCheckSMSCode()
-	{
-		if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
-			$aAction = Yii::app()->clientForm->checkSmsCode($_POST['ClientConfirmPhoneViaSMSForm']);
-			if (isset($aAction['action'])) {
-				switch ($aAction['action']) {
-					case 'render':
-						$this->render($aAction['params']['view'], $aAction['params']['params']);
-						break;
-					case 'redirect':
-						$this->redirect($aAction['url']);
-						break;
-					default:
-						$this->redirect(Yii::app()->createUrl("form"));
-						break;
-				}
-			} else {
-				$this->redirect(Yii::app()->createUrl("form"));
-			}
+		$oAnswer = Yii::app()->clientForm->sendSmsCode();
+
+		// если были ошибки при отправке, то выводим их в представлении
+		if ($oAnswer !== true) {
+			$this->render('client_confirm_phone_via_sms2/send_sms_code_error', array(
+					'sErrorMessage' => $oAnswer,
+				)
+			);
 		} else {
+			Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 	}
+
+	public function actionCheckSmsCode()
+	{
+		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
+		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
+
+		// если POST запроса не было и SMS не отправлено, возвращаем на предыдуший шаг
+		if (empty($aPostData)) {
+			if (!Yii::app()->clientForm->getFlagSmsSent()) {
+				$iStepBack = SiteParams::B_FULL_FORM ? 5 : 9;
+				Yii::app()->clientForm->setCurrentStep($iStepBack);
+			}
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+
+		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
+		$oClientSmsForm->setAttributes($aPostData);
+
+		// если форма валидна, то проверяем код
+		if ($oClientSmsForm->validate()) {
+			$oAnswer = Yii::app()->clientForm->checkSmsCode($oClientSmsForm->sms_code);
+
+			// если код верен -
+			if ($oAnswer === true) {
+				$this->redirect(Yii::app()->createUrl("form"));
+			}
+
+			// если превышено число ошибок
+			if ($oAnswer === Dictionaries::C_ERR_SMS_TRIES) {
+				Yii::app()->clientForm->clearClientSession();
+				$this->redirect(Yii::app()->createUrl("form"));
+			}
+
+			// если код неверен - добавляем ошибку
+			$oClientSmsForm->addError('sms_code', $oAnswer);
+		}
+
+		$this->render('client_confirm_phone_via_sms2/check_sms_code', array(
+			'oClientCreateForm' => $oClientSmsForm,
+		));
+	}
+
 
 	// Uncomment the following methods and override them if needed
 	/*
