@@ -43,7 +43,7 @@ $aCrumbs = array(
 		$this->endWidget();
 		?>
 
-		<div class="help-block error" id="errorMessage">
+		<div class="alert in alert-block fade alert-error" id="errorMessage">
 			<?= $sErrorMessage ?>
 		</div>
 	</div>

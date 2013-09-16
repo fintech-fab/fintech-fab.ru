@@ -80,11 +80,6 @@ class FormController extends Controller
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
-		//если текущее представление max_sms_tries, то очищаем сессию
-		if ($sView === 'client_confirm_phone_via_sms2/max_sms_tries' || $sView === 'client_confirm_phone_via_sms/max_sms_tries') {
-			Yii::app()->clientForm->clearClientSession();
-		}
-
 		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
@@ -162,70 +157,77 @@ class FormController extends Controller
 
 	/**
 	 * Отправка SMS с кодом
+	 * TODO: исправить, что после очистки сессии можно зайти на страницу
 	 */
 	public function actionSendSmsCode()
 	{
-		// если SMS уже было отправлено, переводим на следующий шаг
-		if (Yii::app()->clientForm->getFlagSmsSent()) {
-			Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+		// номера шагов формы проверки SMS кода
+		if (SiteParams::B_FULL_FORM) {
+			$iStepNext = 6;
+		} else {
+			$iStepNext = 10;
+		}
+
+		// если в сессии стоит флаг, что SMS отправлено
+		if (Yii::app()->clientForm->getFlagSmsSent() || !Yii::app()->clientForm->getSessionPhone()) {
+			Yii::app()->clientForm->setCurrentStep($iStepNext);
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
+		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
 		$oAnswer = Yii::app()->clientForm->sendSmsCode();
 
 		// если были ошибки при отправке, то выводим их в представлении
 		if ($oAnswer !== true) {
-			$this->render('client_confirm_phone_via_sms2/send_sms_code_error', array(
+			$this->render('confirm_phone_full_form2/send_sms_code_error', array(
 					'sErrorMessage' => $oAnswer,
 				)
 			);
 		} else {
-			Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+			Yii::app()->clientForm->setCurrentStep($iStepNext);
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 	}
 
 	/**
 	 * проверка кода, введённого пользователем
+	 * TODO: исправить, что после очистки сессии можно зайти на страницу
 	 */
 	public function actionCheckSmsCode()
 	{
+		// номера шагов формы отправки SMS кода
+		if (SiteParams::B_FULL_FORM) {
+			$iStepBack = 5;
+		} else {
+			$iStepBack = 9;
+		}
+
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 
-		// если POST запроса не было и SMS не отправлено, возвращаем на предыдуший шаг
-		if (empty($aPostData)) {
-			if (!Yii::app()->clientForm->getFlagSmsSent()) {
-				$iStepBack = SiteParams::B_FULL_FORM ? 5 : 9;
-				Yii::app()->clientForm->setCurrentStep($iStepBack);
-			}
+		if (!Yii::app()->clientForm->getFlagSmsSent()) {
+			Yii::app()->clientForm->setCurrentStep($iStepBack);
+			$this->redirect(Yii::app()->createUrl("form"));
+		} elseif (empty($aPostData)) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
-		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
-		$oClientSmsForm->setAttributes($aPostData);
+		// сверяем код. если $oAnswer !== true, то ошибка
+		$oAnswer = Yii::app()->clientForm->checkSmsCode($aPostData);
 
-		// если форма валидна, то проверяем код
-		if ($oClientSmsForm->validate()) {
-			$oAnswer = Yii::app()->clientForm->checkSmsCode($oClientSmsForm->sms_code);
+		// если код неверен и не превышено число ошибок - добавляем текст ошибки к атрибуту
+		if (!empty($aPostData) && $oAnswer !== true) {
 
-			// если код верен - перенаправляем на form
-			if ($oAnswer === true) {
-				$this->redirect(Yii::app()->createUrl("form"));
-			}
-
-			// если превышено число ошибок - перенаправляем на form
-			if ($oAnswer === Dictionaries::C_ERR_SMS_TRIES) {
-				$this->redirect(Yii::app()->createUrl("form"));
-			}
-
-			// если код неверен - добавляем ошибку
+			$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
+			$oClientSmsForm->setAttributes($aPostData);
 			$oClientSmsForm->addError('sms_code', $oAnswer);
-		}
+			$this->render('confirm_phone_full_form2/check_sms_code', array(
+				'oClientCreateForm' => $oClientSmsForm,
+			));
 
-		$this->render('client_confirm_phone_via_sms2/check_sms_code', array(
-			'oClientCreateForm' => $oClientSmsForm,
-		));
+		} else {
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
 	}
 
 

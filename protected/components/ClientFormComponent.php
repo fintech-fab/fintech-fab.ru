@@ -265,19 +265,24 @@ class ClientFormComponent
 	/**
 	 * Сверяет код с кодом из базы
 	 *
-	 * @param string $sCode
+	 * @param array $aPostData
 	 *
 	 * @return array
 	 */
-	public function checkSmsCode($sCode)
+	public function checkSmsCode($aPostData)
 	{
 		$client_id = $this->getClientId();
 		$iSmsCountTries = $this->getSmsCountTries();
 
+		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
+		$oClientSmsForm->setAttributes($aPostData);
+
 		// если число попыток ввода кода меньше максимально допустимых
 		if ($iSmsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
-			// если введённые данные совпадают
-			if (ClientData::compareSMSCodeByClientId($sCode, $client_id)) {
+			// если введённые данные валидны и совпадают с кодом из базы
+			if ($oClientSmsForm->validate()
+				&& ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $client_id)
+			) {
 				// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
 				$aData['flag_sms_confirmed'] = 1;
 				ClientData::saveClientDataById($aData, $client_id);
@@ -294,6 +299,8 @@ class ClientFormComponent
 				// если это была последняя попытка
 				if ($iSmsCountTries == SiteParams::MAX_SMSCODE_TRIES) {
 					// возвращаем сообщение о превышении числа попыток
+					$this->clearClientSession();
+
 					return Dictionaries::C_ERR_SMS_TRIES;
 				} else {
 					// выводим сообщение - код неверен + сколько осталось попыток
@@ -304,6 +311,8 @@ class ClientFormComponent
 			}
 		} else {
 			// возвращаем сообщение о превышении числа попыток
+			$this->clearClientSession();
+
 			return Dictionaries::C_ERR_SMS_TRIES;
 		}
 	}
@@ -458,14 +467,10 @@ class ClientFormComponent
 					return 'client_full_form2';
 					break;
 				case 5:
-					return 'client_confirm_phone_via_sms2/send_sms_code';
+					return 'confirm_phone_full_form2/send_sms_code';
 					break;
 				case 6:
-					if ($this->getSmsCountTries() === SiteParams::MAX_SMSCODE_TRIES) {
-						return 'client_confirm_phone_via_sms2/max_sms_tries';
-					}
-
-					return 'client_confirm_phone_via_sms2/check_sms_code';
+					return 'confirm_phone_full_form2/check_sms_code';
 					break;
 				default:
 					return 'client_select_product2';
@@ -503,14 +508,10 @@ class ClientFormComponent
 					return 'client_send';
 					break;
 				case 9:
-					return 'client_confirm_phone_via_sms/send_sms_code';
+					return 'confirm_phone/send_sms_code';
 					break;
 				case 10:
-					if ($this->getSmsCountTries() === SiteParams::MAX_SMSCODE_TRIES) {
-						return 'client_confirm_phone_via_sms/max_sms_tries';
-					}
-
-					return 'client_confirm_phone_via_sms/check_sms_code';
+					return 'confirm_phone/check_sms_code';
 					break;
 				default:
 					return 'client_select_product';
