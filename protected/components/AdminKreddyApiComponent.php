@@ -28,6 +28,7 @@ class AdminKreddyApiComponent
 	const SMS_PASSWORD_SEND_OK = 1;
 
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
+	const API_ACTION_LOAN = 'siteClient/doLoan';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
@@ -298,7 +299,7 @@ class AdminKreddyApiComponent
 	 * Получаем массив с каналами, доступными клиенту
 	 * array('kreddy,'mobile')
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public function getClientChannels()
 	{
@@ -306,7 +307,7 @@ class AdminKreddyApiComponent
 		if (isset($aClientInfo['channel_types']) && is_array($aClientInfo['channel_types'])) {
 			return $aClientInfo['channel_types'];
 		} else {
-			return false;
+			return array();
 		}
 	}
 
@@ -363,6 +364,17 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (!empty($aClientInfo['subscription']['product'])) ? $aClientInfo['subscription']['product'] : false;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+
+	public function getSubscriptionProductId()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription']['product_id'])) ? $aClientInfo['subscription']['product_id'] : false;
 	}
 
 	/**
@@ -543,6 +555,29 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получения списка каналов, доступных клиенту
+	 *
+	 * @return array
+	 */
+
+	public function getClientProductsChannelsList()
+	{
+		$aProducts = $this->getProductsAndChannels();
+		$aClientChannels = $this->getClientChannels();
+
+		$aClientChannelsList = array();
+		if (isset($aProducts['channel_types']) && isset($aClientChannels)) {
+			foreach ($aClientChannels as $sChannel) {
+				if (isset($aProducts['channel_types'][$sChannel])) {
+					$aClientChannelsList[$sChannel] = $aProducts['channel_types'][$sChannel];
+				}
+			}
+		}
+
+		return $aClientChannelsList;
+	}
+
+	/**
 	 * Получение списка продуктов и каналов для данного пользователя.
 	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
 	 *
@@ -688,6 +723,78 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка возможности получения займа
+	 *
+	 * @return bool
+	 */
+	public function checkLoan()
+	{
+		if (!isset($this->bIsCanSubscribe)) {
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('test_code' => 1));
+
+			$this->bIsCanSubscribe = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
+				&& ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
+		}
+
+		return $this->bIsCanSubscribe;
+	}
+
+	/**
+	 * Отправка СМС с кодом подтверждения займа
+	 *
+	 * @return bool
+	 */
+	public function sendSmsLoan()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Взять займ, подписанный СМС-кодом
+	 *
+	 * @param string $sSmsCode
+	 *
+	 * @param        $iChannelType
+	 *
+	 * @return array|bool
+	 */
+	public function doLoan($sSmsCode, $iChannelType)
+	{
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_type' => $iChannelType));
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+			}
+
+			return false;
+		}
+	}
+
+
+	/**
 	 * Проверка возможности подписки
 	 *
 	 * @return bool
@@ -735,14 +842,14 @@ class AdminKreddyApiComponent
 	 * @param string $sSmsCode
 	 *
 	 * @param        $iProduct
-	 * @param        $iChannelType
+	 * @param        $sChannelType
 	 *
 	 * @return array|bool
 	 */
-	public function doSubscribe($sSmsCode, $iProduct, $iChannelType)
+	public function doSubscribe($sSmsCode, $iProduct, $sChannelType)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_type' => $iChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_type' => $sChannelType));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -778,6 +885,29 @@ class AdminKreddyApiComponent
 	{
 		return (isset(Yii::app()->session['subscribeSelectedProduct']))
 			? Yii::app()->session['subscribeSelectedProduct'] :
+			false;
+	}
+
+	/**
+	 * Сохранение в сессию выбранного канала получения продукта
+	 *
+	 * @param $sChannel
+	 */
+	public function setLoanSelectedChannel($sChannel)
+	{
+		Yii::app()->session['loanSelectedChannel'] = $sChannel;
+	}
+
+	/**
+	 * Получение выбранного канала из сессии
+	 *
+	 * @return bool
+	 */
+
+	public function getLoanSelectedChannel()
+	{
+		return (isset(Yii::app()->session['loanSelectedChannel']))
+			? Yii::app()->session['loanSelectedChannel'] :
 			false;
 	}
 

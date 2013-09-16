@@ -3,13 +3,13 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление пакета";
+$this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
-<h4>Оформление пакета</h4>
+<h4>Оформление займа</h4>
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Пакет',
-	'content' => $this->renderPartial('subscription/_product', array(), true)
+	'title'   => 'Займ',
+	'content' => $this->renderPartial('loan/_loan', array(), true)
 ));
 ?>
 <div class="alert in alert-block alert-success span7">
@@ -21,8 +21,8 @@ $this->widget('bootstrap.widgets.TbBox', array(
 <div class="form" id="activeForm">
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'          => 'products-form',
-		'action'      => Yii::app()->createUrl('/account/doSubscribeCheckSmsCode'),
+		'id'          => 'loan-form',
+		'action'      => Yii::app()->createUrl('/account/doLoanCheckSmsCode'),
 		'htmlOptions' => array(
 			'class' => "span4",
 		),

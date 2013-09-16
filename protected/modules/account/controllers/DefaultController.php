@@ -34,7 +34,7 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode', 'doSubscribeSmsConfirm', 'sendSmsPass'),
+				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode', 'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode'),
 				'users'   => array('@'),
 			),
 			array(
@@ -247,6 +247,124 @@ class DefaultController extends Controller
 			}
 		}
 		$this->render('subscription/do_subscribe_check_sms_code', array('model' => $oForm));
+	}
+
+	/**
+	 * Вывод формы выбора займа
+	 */
+	public function actionLoan()
+	{
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		$oLoanForm = new ClientLoanForm();
+		$this->render('loan/loan', array('model' => $oLoanForm));
+	}
+
+	/**
+	 * Обработка данных от формы, переданной из /account/loan
+	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
+	 */
+	public function actionDoLoan()
+	{
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		$oLoanForm = new ClientLoanForm();
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ClientLoanForm', array());
+			$oLoanForm->setAttributes($aPost);
+
+			if ($oLoanForm->validate()) {
+				//сохраняем в сессию выбранный продукт
+				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_type);
+				$oForm = new SMSCodeForm('sendRequired');
+				$this->render('loan/do_loan', array('model' => $oForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('loan/loan', array('model' => $oLoanForm));
+		Yii::app()->end();
+	}
+
+	/**
+	 * Обработка данных от /account/doLoan
+	 * проверяет, была ли нажата кнопка "Отправить" (наличие в POST-запросе значения sendSmSCode=1)
+	 * если нет, то редирект на /account/loan
+	 * если кнопка нажата, отправляет СМС и рисует форму ввода СМС-кода
+	 */
+	public function actionDoLoanSmsConfirm()
+	{
+		//если действует мораторий
+		//или API ответил, что действие невозможно
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		$oForm = new SMSCodeForm('sendRequired');
+		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
+		$oForm->setAttributes($aPost);
+		//проверяем, передан ли параметр sendSmsCode (валидируем по правилам формы, сценарий sendRequired)
+		if ($oForm->validate()) {
+			if (Yii::app()->adminKreddyApi->sendSmsLoan()) {
+				unset($oForm);
+				//создаем новую форму с новым сценарием валидации - codeRequired
+				$oForm = new SMSCodeForm('codeRequired');
+				$this->render('loan/do_loan_check_sms_code', array('model' => $oForm));
+				Yii::app()->end();
+			}
+			//рисуем ошибку
+			$this->render('loan/do_loan_error', array('model' => $oForm));
+			Yii::app()->end();
+		}
+		$this->redirect(Yii::app()->createUrl('/account/loan'));
+
+	}
+
+	/**
+	 * Проверка СМС-кода для подписки и отправка запроса на подписку в API
+	 * если все ОК - сообщаем это клиенту, иначе перерисовываем форму проверки с ошибками
+	 */
+	public function actionDoLoanCheckSmsCode()
+	{
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		if (!Yii::app()->request->isPostRequest) {
+			$this->redirect(Yii::app()->createUrl('/account/loan'));
+		}
+
+		$oForm = new SMSCodeForm('codeRequired');
+		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
+
+		$oForm->setAttributes($aPost);
+		if ($oForm->validate()) {
+			$sChannelType = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
+			//получаем массив, содержащий ID продукта и тип канала получения
+			//проверяем, что в массиве 2 значения (ID и канал)
+
+			//пробуем оформить подписку
+			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $sChannelType)) {
+				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
+				Yii::app()->end();
+			} else {
+				$oForm->addError('smsCode', AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			if (!Yii::app()->adminKreddyApi->getIsNotAllowed() && !Yii::app()->adminKreddyApi->getIsError()) {
+				$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+			} else {
+				$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastMessage());
+			}
+		}
+		$this->render('loan/do_loan_check_sms_code', array('model' => $oForm));
 	}
 
 
