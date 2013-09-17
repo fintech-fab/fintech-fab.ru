@@ -9,12 +9,22 @@ $this->pageTitle = Yii::app()->name;
 $aCrumbs = array(
 	array('Выбор пакета', 1),
 	array('Заявка на займ', 2),
-	array('Подтверджение номера телефона', 3)
+	array('Подтверждение номера телефона', 3)
 );
 
 $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 <?php
+// если форма уже была заполнена, регистрируем js-переменную
+if (Yii::app()->clientForm->getFlagFullFormFilled()) {
+
+	Yii::app()->clientScript->registerScript('scriptFlagFullFormFilled', '
+		bFlagFullFormFilled = true;
+
+		// разблокировали кнопку Отправить
+		$("#submitButton").removeClass("disabled").attr("disabled",false);
+	', CClientScript::POS_READY);
+}
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
@@ -28,7 +38,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			&&passportDataOk
 			&&addressOk
 			&&jobInfoOk
+			|| (bFlagFullFormFilled === true)
 			){
+				// разблокировали все поля, чтобы они провалидировались
+				$("#jobInfo").find(":input").attr("disabled",false);
+				$("#passportData").find(":input").attr("disabled",false);
+				$("#address").find(":input").attr("disabled",false);
+				$("#sendForm").find(":input").attr("disabled",false);
+
 				return true;
 			} else {
 				alertModal("Ошибка!","Сначала следует заполнить все поля формы и подтвердить, что Вы согласны с условиями передачи и обработки персональных данных", "OK");
