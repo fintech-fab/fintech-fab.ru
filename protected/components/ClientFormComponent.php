@@ -225,42 +225,43 @@ class ClientFormComponent
 		$iClientId = $this->getClientId();
 		$aClientForm = ClientData::getClientDataById($iClientId);
 
-		// если код уже есть в базе, выдаём ошибку - SMS уже отправлено
+		// если код уже есть в базе, ставим флаг и вовзращаем true
 		if (!empty($aClientForm['sms_code'])) {
-			return Dictionaries::C_ERR_SMS_SENT;
+			$this->setFlagSmsSent(true);
+
+			return true;
 		}
 
 		$sPhone = $this->getSessionPhone();
-		$sSmsCode = $this->getSmsCode();
 
-		// проверяем, есть ли код в сессии. если нет - генерируем и записываем в сессию
-		if ($sSmsCode === false) {
-			$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
-			$this->setSmsCode($sSmsCode);
-		}
-
-		// если в сессии есть телефон и код
-		if ($sPhone !== false && $sSmsCode !== false) {
-			//отправляем СМС
-			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
-			SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
-
-			//добавляем в лог запрос sms с этого ip
-			Yii::app()->antiBot->addSmsRequest();
-
-			// и записываем в сессию, а также в БД
-			$this->setFlagSmsSent(true);
-			$aClientForm['sms_code'] = $sSmsCode;
-			ClientData::saveClientDataById($aClientForm, $iClientId);
-
-			// возвращаем true
-			return true;
-		} else {
-			// Ошибка при отправке SMS - некуда или нечего отправлять
+		// если в сессии нет телефона, ошибка - некуда отправлять
+		if ($sPhone === false) {
 			return Dictionaries::C_ERR_SMS_CANT_SEND;
 		}
 
+		// генерируем Code
+		$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+
+		//отправляем СМС
+		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+		SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+
+		//добавляем в лог запрос sms с этого ip
+		Yii::app()->antiBot->addSmsRequest();
+
+		$aClientForm['sms_code'] = $sSmsCode;
+		// если не удалось записать в БД - общая ошибка
+		if (!ClientData::saveClientDataById($aClientForm, $iClientId)) {
+			return Dictionaries::C_ERR_GENERAL;
+		}
+
+		// ставим флаг успешной отправки
+		$this->setFlagSmsSent(true);
+
+		// возвращаем true
+		return true;
 	}
+
 
 	/**
 	 * Сверяет код с кодом из базы
@@ -322,8 +323,7 @@ class ClientFormComponent
 	 *
 	 * @return int
 	 */
-	public
-	function getCurrentStep()
+	public function getCurrentStep()
 	{
 		$this->current_step = Yii::app()->session['current_step'];
 
@@ -333,8 +333,7 @@ class ClientFormComponent
 	/**
 	 * @param $iStep
 	 */
-	public
-	function setCurrentStep($iStep)
+	public function setCurrentStep($iStep)
 	{
 		Yii::app()->session['current_step'] = $iStep;
 		$this->current_step = $iStep;
@@ -345,8 +344,7 @@ class ClientFormComponent
 	 *
 	 * @return int
 	 */
-	public
-	function getDoneSteps()
+	public function getDoneSteps()
 	{
 		$this->done_steps = Yii::app()->session['done_steps'];
 
@@ -356,8 +354,7 @@ class ClientFormComponent
 	/**
 	 * @param int $iSteps
 	 */
-	public
-	function setDoneSteps($iSteps)
+	public function setDoneSteps($iSteps)
 	{
 		Yii::app()->session['done_steps'] = $iSteps;
 		$this->done_steps = $iSteps;
@@ -369,8 +366,7 @@ class ClientFormComponent
 	 * @return ClientCreateFormAbstract
 	 */
 
-	public
-	function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
+	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
 		$bFullForm = SiteParams::B_FULL_FORM;
 
@@ -438,8 +434,7 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	public
-	function getView()
+	public function getView()
 	{
 		//если в сессии стоит флаг "отобразить form_sent" то передаем это представление
 		if ($this->isFormSent()) {
@@ -467,9 +462,19 @@ class ClientFormComponent
 					return 'client_full_form2';
 					break;
 				case 5:
+					// если SMS уже отправлялось, рендер формы проверки
+					if ($this->getFlagSmsSent()) {
+						return 'confirm_phone_full_form2/check_sms_code';
+					}
+
 					return 'confirm_phone_full_form2/send_sms_code';
 					break;
 				case 6:
+					// если SMS ещё не отправлялось, рендер формы отправки
+					if (!$this->getFlagSmsSent()) {
+						return 'confirm_phone_full_form2/send_sms_code';
+					}
+
 					return 'confirm_phone_full_form2/check_sms_code';
 					break;
 				default:
@@ -508,9 +513,19 @@ class ClientFormComponent
 					return 'client_send';
 					break;
 				case 9:
+					// если SMS уже отправлялось, рендер формы проверки
+					if ($this->getFlagSmsSent()) {
+						return 'confirm_phone/check_sms_code';
+					}
+
 					return 'confirm_phone/send_sms_code';
 					break;
 				case 10:
+					// если SMS ещё не отправлялось, рендер формы отправки
+					if (!$this->getFlagSmsSent()) {
+						return 'confirm_phone/send_sms_code';
+					}
+
 					return 'confirm_phone/check_sms_code';
 					break;
 				default:
@@ -525,8 +540,7 @@ class ClientFormComponent
 	 *
 	 * @return array|null
 	 */
-	public
-	function getPostData()
+	public function getPostData()
 	{
 
 		$bFullForm = SiteParams::B_FULL_FORM;
@@ -663,8 +677,7 @@ class ClientFormComponent
 	/**
 	 * @param $iIdentCode
 	 */
-	public
-	function goIdentification($iIdentCode)
+	public function goIdentification($iIdentCode)
 	{
 		if (!empty($iIdentCode)) {
 			if ($iIdentCode == 1) {
@@ -684,8 +697,7 @@ class ClientFormComponent
 	 *
 	 * @param int $iSteps
 	 */
-	public
-	function nextStep($iSteps = 1)
+	public function nextStep($iSteps = 1)
 	{
 		if (!($iSteps <= 3)) {
 			$iSteps = 1;
@@ -700,8 +712,7 @@ class ClientFormComponent
 	/**
 	 * @return bool|string
 	 */
-	public
-	function getSessionPhone()
+	public function getSessionPhone()
 	{
 		if (!SiteParams::B_FULL_FORM && isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) {
 			$sPhone = Yii::app()->session['ClientPersonalDataForm']['phone'];
@@ -717,8 +728,7 @@ class ClientFormComponent
 	/**
 	 * @return int
 	 */
-	public
-	function getClientId()
+	public function getClientId()
 	{
 		return Yii::app()->session['client_id'];
 	}
@@ -726,8 +736,7 @@ class ClientFormComponent
 	/**
 	 * @param $iClientId
 	 */
-	public
-	function setClientId($iClientId)
+	public function setClientId($iClientId)
 	{
 		Yii::app()->session['client_id'] = $iClientId;
 	}
@@ -735,8 +744,7 @@ class ClientFormComponent
 	/**
 	 * @return int
 	 */
-	public
-	function getTmpClientId()
+	public function getTmpClientId()
 	{
 		if (empty(Yii::app()->session['tmp_client_id'])) {
 			$tmp_client_id = 'tmp' . rand(0, 999999);
@@ -761,8 +769,7 @@ class ClientFormComponent
 	 *
 	 * @return int|null
 	 */
-	public
-	function getSessionFormClientId(ClientCreateFormAbstract $oClientForm)
+	public function getSessionFormClientId(ClientCreateFormAbstract $oClientForm)
 	{
 		if (!isset($oClientForm)) {
 			return null;
@@ -776,8 +783,7 @@ class ClientFormComponent
 	 *
 	 * @return null|array
 	 */
-	public
-	function getSessionFormData(ClientCreateFormAbstract $oClientForm)
+	public function getSessionFormData(ClientCreateFormAbstract $oClientForm)
 	{
 		if (!isset($oClientForm)) {
 			return null;
@@ -797,8 +803,7 @@ class ClientFormComponent
 	/**
 	 * @return int номер выбранного продукта
 	 */
-	public
-	function getSessionProduct()
+	public function getSessionProduct()
 	{
 		if (!SiteParams::B_FULL_FORM) {
 			return Yii::app()->session['ClientSelectProductForm']['product'];
@@ -810,8 +815,7 @@ class ClientFormComponent
 	/**
 	 * @return int номер выбранного спссоба
 	 */
-	public
-	function getSessionGetWay()
+	public function getSessionGetWay()
 	{
 		return Yii::app()->session['ClientSelectGetWayForm']['get_way'];
 	}
@@ -819,8 +823,7 @@ class ClientFormComponent
 	/**
 	 * @return int
 	 */
-	public
-	function getSmsCountTries()
+	public function getSmsCountTries()
 	{
 		return (isset(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['smsCountTries'])) ? Yii::app()->session['ClientConfirmPhoneViaSMSForm']['smsCountTries'] : 0;
 	}
@@ -828,8 +831,7 @@ class ClientFormComponent
 	/**
 	 * @param int $iSmsCountTries
 	 */
-	public
-	function setSmsCountTries($iSmsCountTries)
+	public function setSmsCountTries($iSmsCountTries)
 	{
 		$array = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
 		$array['smsCountTries'] = $iSmsCountTries;
@@ -837,29 +839,9 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return string|bool
-	 */
-	public function getSmsCode()
-	{
-		return (isset(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['smsCode'])) ? Yii::app()->session['ClientConfirmPhoneViaSMSForm']['smsCode'] : false;
-	}
-
-	/**
-	 * @param $sSmsCode
-	 */
-	public
-	function setSmsCode($sSmsCode)
-	{
-		$array = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
-		$array['smsCode'] = $sSmsCode;
-		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
-	}
-
-	/**
 	 * @return bool
 	 */
-	public
-	function getFlagSmsSent()
+	public function getFlagSmsSent()
 	{
 		return (!empty(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['flagSmsSent']));
 	}
@@ -867,16 +849,14 @@ class ClientFormComponent
 	/**
 	 * @param bool $bFlagSmsSent
 	 */
-	public
-	function setFlagSmsSent($bFlagSmsSent)
+	public function setFlagSmsSent($bFlagSmsSent)
 	{
 		$array = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
 		$array['flagSmsSent'] = $bFlagSmsSent;
 		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
 	}
 
-	public
-	function clearClientSession()
+	public function clearClientSession()
 	{
 		//сбрасываем шаги заполнения анкеты в 0
 		Yii::app()->session['current_step'] = 0;
@@ -932,8 +912,7 @@ class ClientFormComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkFiles($aFiles)
+	public function checkFiles($aFiles)
 	{
 		if (!isset($aFiles) || gettype($aFiles) != 'array') {
 			return false;
@@ -951,8 +930,7 @@ class ClientFormComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function checkIdentificationFiles()
+	public function checkIdentificationFiles()
 	{
 		$iClientId = $this->getClientId();
 
@@ -977,8 +955,7 @@ class ClientFormComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkTmpIdentificationFiles($sIdentType = null)
+	public function checkTmpIdentificationFiles($sIdentType = null)
 	{
 		$sTmpClientId = $this->getTmpClientId();
 
@@ -1011,8 +988,7 @@ class ClientFormComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function moveIdentificationFiles()
+	public function moveIdentificationFiles()
 	{
 		$sTmpClientId = $this->getTmpClientId();
 		$iClientId = $this->getClientId();
@@ -1036,8 +1012,7 @@ class ClientFormComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function moveFiles($aFiles, $sOldPath, $sNewPath)
+	public function moveFiles($aFiles, $sOldPath, $sNewPath)
 	{
 		if (!file_exists($sNewPath)) {
 			@mkdir($sNewPath);
@@ -1081,8 +1056,7 @@ class ClientFormComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function isFormSent()
+	public function isFormSent()
 	{
 		return (!empty(Yii::app()->session['isFormSent'])) ? Yii::app()->session['isFormSent'] : false;
 	}
@@ -1091,8 +1065,7 @@ class ClientFormComponent
 	 * @param $bFormSent
 	 *
 	 */
-	public
-	function setFormSent($bFormSent)
+	public function setFormSent($bFormSent)
 	{
 		Yii::app()->session['isFormSent'] = $bFormSent;
 	}

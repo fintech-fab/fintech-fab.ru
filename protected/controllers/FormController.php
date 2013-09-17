@@ -157,22 +157,12 @@ class FormController extends Controller
 
 	/**
 	 * Отправка SMS с кодом
-	 * TODO: исправить, что после очистки сессии можно зайти на страницу
 	 */
 	public function actionSendSmsCode()
 	{
-		// номера шагов формы проверки SMS кода
-		if (SiteParams::B_FULL_FORM) {
-			$iStepNext = 6;
-		} else {
-			$iStepNext = 10;
-		}
-
-		// если в сессии стоит флаг, что SMS отправлено
-		if (Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
-			Yii::app()->clientForm->setCurrentStep($iStepNext);
-		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
-			Yii::app()->clientForm->clearClientSession();
+		// если в сессии телефона нет - редирект на form
+		if (!Yii::app()->clientForm->getSessionPhone()) {
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
@@ -185,8 +175,6 @@ class FormController extends Controller
 				)
 			);
 			Yii::app()->end();
-		} else {
-			Yii::app()->clientForm->setCurrentStep($iStepNext);
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
@@ -196,28 +184,19 @@ class FormController extends Controller
 	 */
 	public function actionCheckSmsCode()
 	{
-		// номера шагов формы отправки SMS кода
-		if (SiteParams::B_FULL_FORM) {
-			$iStepBack = 5;
-		} else {
-			$iStepBack = 9;
-		}
-
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 
-		if (!Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
-			Yii::app()->clientForm->setCurrentStep($iStepBack);
-		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
-			Yii::app()->clientForm->clearClientSession();
+		// если не было POST запроса - перенаправляем на form
+		if (empty($aPostData)) {
+			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// сверяем код. если $oAnswer !== true, то ошибка
 		$oAnswer = Yii::app()->clientForm->checkSmsCode($aPostData);
 
-		// если код неверен и не превышено число ошибок - добавляем текст ошибки к атрибуту
-		if (!empty($aPostData) && $oAnswer !== true) {
-
+		// если был POST запрос и код неверен - добавляем текст ошибки к атрибуту
+		if ($oAnswer !== true) {
 			$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
 			$oClientSmsForm->setAttributes($aPostData);
 			$oClientSmsForm->addError('sms_code', $oAnswer);
@@ -226,8 +205,8 @@ class FormController extends Controller
 			));
 			Yii::app()->end();
 		}
-		$this->redirect(Yii::app()->createUrl("form"));
 
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 
