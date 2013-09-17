@@ -209,10 +209,8 @@ class FormController extends Controller
 
 		if (!Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepBack);
-			$this->redirect(Yii::app()->createUrl("form"));
 		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->clearClientSession();
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// сверяем код. если $oAnswer !== true, то ошибка
@@ -227,10 +225,11 @@ class FormController extends Controller
 			$this->render('confirm_phone_full_form2/check_sms_code', array(
 				'oClientCreateForm' => $oClientSmsForm,
 			));
+			Yii::app()->end();
 
-		} else {
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
+		$this->redirect(Yii::app()->createUrl("form"));
+
 	}
 
 
