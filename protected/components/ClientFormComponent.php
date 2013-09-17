@@ -185,14 +185,9 @@ class ClientFormComponent
 				$aClientFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				if (!$this->checkIdentificationFiles() || $this->checkTmpIdentificationFiles()) {
-					if ($this->moveIdentificationFiles()) {
-						$aClientData['flag_identified'] = 1;
-						ClientData::saveClientDataById($aClientData, $this->client_id);
-					}
-				}
-
-
+				//TODO выпилить флаг идентификации отсюда и из БД
+				$aClientData['flag_identified'] = 1;
+				ClientData::saveClientDataById($aClientData, $this->client_id);
 			}
 		} else {
 			if ($this->client_id) {
@@ -410,15 +405,10 @@ class ClientFormComponent
 					return new ClientSelectProductForm2();
 					break;
 				case 1:
-				case 2:
-				case 3:
-					return new InviteToIdentificationForm();
-					break;
-				case 4:
 					return new ClientFullForm2();
 					break;
-				case 5:
-				case 6:
+				case 2:
+				case 3:
 					return new ClientConfirmPhoneViaSMSForm();
 					break;
 				default:
@@ -435,24 +425,19 @@ class ClientFormComponent
 					return new ClientSelectGetWayForm();
 					break;
 				case 2:
-				case 3:
-				case 4:
-					return new InviteToIdentificationForm();
-					break;
-				case 5:
 					return new ClientPersonalDataForm();
 					break;
-				case 6:
+				case 3:
 					return new ClientAddressForm();
 					break;
-				case 7:
+				case 4:
 					return new ClientJobInfoForm();
 					break;
-				case 8:
+				case 5:
 					return new ClientSendForm();
 					break;
-				case 9:
-				case 10:
+				case 6:
+				case 7:
 					return new ClientConfirmPhoneViaSMSForm();
 					break;
 				default:
@@ -485,21 +470,12 @@ class ClientFormComponent
 					return 'client_select_product2';
 					break;
 				case 1:
-					return 'invite_to_identification2';
-					break;
-				case 2:
-					return 'identification';
-					break;
-				case 3:
-					return 'documents';
-					break;
-				case 4:
 					return 'client_full_form2';
 					break;
-				case 5:
+				case 2:
 					return 'confirm_phone_full_form2/send_sms_code';
 					break;
-				case 6:
+				case 3:
 					return 'confirm_phone_full_form2/check_sms_code';
 					break;
 				default:
@@ -517,30 +493,21 @@ class ClientFormComponent
 					return 'client_select_get_way';
 					break;
 				case 2:
-					return 'invite_to_identification';
-					break;
-				case 3:
-					return 'identification';
-					break;
-				case 4:
-					return 'documents';
-					break;
-				case 5:
 					return 'client_personal_data';
 					break;
-				case 6:
+				case 3:
 					return 'client_address';
 					break;
-				case 7:
+				case 4:
 					return 'client_job_info';
 					break;
-				case 8:
+				case 5:
 					return 'client_send';
 					break;
-				case 9:
+				case 6:
 					return 'confirm_phone/send_sms_code';
 					break;
-				case 10:
+				case 7:
 					return 'confirm_phone/check_sms_code';
 					break;
 				default:
@@ -575,15 +542,6 @@ class ClientFormComponent
 					break;
 				case 1:
 				{
-					if (isset($_POST['InviteToIdentificationForm'])) {
-						return $_POST['InviteToIdentificationForm'];
-					}
-
-					return null;
-				}
-					break;
-				case 4:
-				{
 					if (isset($_POST['ClientFullForm2'])) {
 						return $_POST['ClientFullForm2'];
 					}
@@ -591,8 +549,8 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 5:
-				case 6:
+				case 2:
+				case 3:
 				{
 					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
 						return $_POST['ClientConfirmPhoneViaSMSForm'];
@@ -629,15 +587,6 @@ class ClientFormComponent
 					break;
 				case 2:
 				{
-					if (isset($_POST['InviteToIdentificationForm'])) {
-						return $_POST['InviteToIdentificationForm'];
-					}
-
-					return null;
-				}
-					break;
-				case 5:
-				{
 					if (isset($_POST['ClientPersonalDataForm'])) {
 						return $_POST['ClientPersonalDataForm'];
 					}
@@ -645,7 +594,7 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 6:
+				case 3:
 				{
 					if (isset($_POST['ClientAddressForm'])) {
 						return $_POST['ClientAddressForm'];
@@ -654,7 +603,7 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 7:
+				case 4:
 				{
 					if (isset($_POST['ClientJobInfoForm'])) {
 						return $_POST['ClientJobInfoForm'];
@@ -663,7 +612,7 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 8:
+				case 5:
 				{
 					if (isset($_POST['ClientSendForm'])) {
 						return $_POST['ClientSendForm'];
@@ -672,8 +621,8 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 9:
-				case 10:
+				case 6:
+				case 7:
 				{
 					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
 						return $_POST['ClientConfirmPhoneViaSMSForm'];
@@ -976,136 +925,6 @@ class ClientFormComponent
 		}
 
 		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public
-	function checkIdentificationFiles()
-	{
-		$iClientId = $this->getClientId();
-
-		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/';
-
-		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
-		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
-		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
-		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
-		$aFiles[] = $sFilesPath . ImageController::C_TYPE_DOCUMENT . '.png';
-		$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
-
-		if ($this->checkFiles($aFiles)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param null $sIdentType
-	 *
-	 * @return bool
-	 */
-	public
-	function checkTmpIdentificationFiles($sIdentType = null)
-	{
-		$sTmpClientId = $this->getTmpClientId();
-
-		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
-
-		if ($sIdentType === "documents") {
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_DOCUMENT . '.png';
-		} elseif ($sIdentType === "photo") {
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
-		} else {
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PASSPORT_LAST . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_DOCUMENT . '.png';
-			$aFiles[] = $sFilesPath . ImageController::C_TYPE_PHOTO . '.png';
-		}
-
-		if ($this->checkFiles($aFiles)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public
-	function moveIdentificationFiles()
-	{
-		$sTmpClientId = $this->getTmpClientId();
-		$iClientId = $this->getClientId();
-
-		$sFilesPath = Yii::app()->basePath . ImageController::C_IMAGES_DIR . $sTmpClientId . '/';
-
-		$aFiles[] = ImageController::C_TYPE_PHOTO . '.png';
-		$aFiles[] = ImageController::C_TYPE_PASSPORT_FRONT_FIRST . '.png';
-		$aFiles[] = ImageController::C_TYPE_PASSPORT_FRONT_SECOND . '.png';
-		$aFiles[] = ImageController::C_TYPE_PASSPORT_NOTIFICATION . '.png';
-		$aFiles[] = ImageController::C_TYPE_PASSPORT_LAST . '.png';
-		$aFiles[] = ImageController::C_TYPE_DOCUMENT . '.png';
-
-		return $this->moveFiles($aFiles, $sFilesPath, Yii::app()->basePath . ImageController::C_IMAGES_DIR . $iClientId . '/');
-	}
-
-	/**
-	 * @param $aFiles
-	 * @param $sOldPath
-	 * @param $sNewPath
-	 *
-	 * @return bool
-	 */
-	public
-	function moveFiles($aFiles, $sOldPath, $sNewPath)
-	{
-		if (!file_exists($sNewPath)) {
-			@mkdir($sNewPath);
-		} else {
-			self::deleteDir($sNewPath);
-			@mkdir($sNewPath);
-		}
-		foreach ($aFiles as $sFile) {
-			if (!@rename($sOldPath . $sFile, $sNewPath . $sFile)) {
-				return false;
-			}
-		}
-		@rmdir($sOldPath);
-
-		return true;
-	}
-
-	/**
-	 * @param $dirPath
-	 */
-	public
-	static function deleteDir($dirPath)
-	{
-		if (!is_dir($dirPath)) {
-			return;
-		}
-		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-			$dirPath .= '/';
-		}
-		$files = @glob($dirPath . '*', GLOB_MARK);
-		foreach ($files as $file) {
-			if (is_dir($file)) {
-				self::deleteDir($file);
-			} else {
-				@unlink($file);
-			}
-		}
-		@rmdir($dirPath);
 	}
 
 	/**

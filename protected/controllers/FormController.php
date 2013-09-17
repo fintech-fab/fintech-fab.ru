@@ -102,59 +102,6 @@ class FormController extends Controller
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
-
-	/**
-	 * Загрузка фото
-	 */
-	public function actionIdentification()
-	{
-		$bIdent = false;
-
-		if (Yii::app()->clientForm->getCurrentStep() == 3 && !SiteParams::B_FULL_FORM) {
-			$bIdent = true;
-		} elseif (Yii::app()->clientForm->getCurrentStep() == 2 && SiteParams::B_FULL_FORM) {
-			$bIdent = true;
-		}
-
-		if ($bIdent) {
-			if (Yii::app()->clientForm->checkTmpIdentificationFiles("photo")) {
-				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-			}
-		}
-		$this->redirect(Yii::app()->createUrl("form"));
-	}
-
-	/**
-	 * Загрузка документов
-	 */
-	public function actionDocuments()
-	{
-		$bDocs = false;
-
-		if (Yii::app()->clientForm->getCurrentStep() == 4 && !SiteParams::B_FULL_FORM) {
-			$bDocs = true;
-		} elseif (Yii::app()->clientForm->getCurrentStep() == 3 && SiteParams::B_FULL_FORM) {
-			$bDocs = true;
-		}
-
-		if ($bDocs) {
-
-			if (Yii::app()->clientForm->checkTmpIdentificationFiles("documents")) {
-
-				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-			}
-		}
-		$this->redirect(Yii::app()->createUrl("form"));
-	}
-
-	/**
-	 * проверка веб-камеры
-	 */
-	public function actionCheckWebCam()
-	{
-		$this->renderPartial('check_webcam', array(), false, true);
-	}
-
 	/**
 	 * Отправка SMS с кодом
 	 * TODO: исправить, что после очистки сессии можно зайти на страницу
@@ -163,9 +110,9 @@ class FormController extends Controller
 	{
 		// номера шагов формы проверки SMS кода
 		if (SiteParams::B_FULL_FORM) {
-			$iStepNext = 6;
+			$iStepNext = 3;
 		} else {
-			$iStepNext = 10;
+			$iStepNext = 7;
 		}
 
 		// если в сессии стоит флаг, что SMS отправлено
@@ -198,9 +145,9 @@ class FormController extends Controller
 	{
 		// номера шагов формы отправки SMS кода
 		if (SiteParams::B_FULL_FORM) {
-			$iStepBack = 5;
+			$iStepBack = 2;
 		} else {
-			$iStepBack = 9;
+			$iStepBack = 6;
 		}
 
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
