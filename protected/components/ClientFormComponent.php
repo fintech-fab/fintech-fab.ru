@@ -324,7 +324,7 @@ class ClientFormComponent
 	 * @param $iClientId
 	 */
 
-	public function sendClientToApiAndLoginAccount($iClientId)
+	public function sendClientToApi($iClientId)
 	{
 		$aClientData = ClientData::getClientDataById($iClientId);
 

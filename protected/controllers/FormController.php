@@ -217,9 +217,11 @@ class FormController extends Controller
 		// сверяем код. если $oAnswer !== true, то ошибка
 		$mAnswer = Yii::app()->clientForm->checkSmsCode($aPostData);
 		if ($mAnswer) {
-			//TODO тут нужно сделать отправку данных в API и редирект в личный кабинет (с автологином)
+			//TODO отправка данных в API и редирект в личный кабинет (с автологином)
 			$iClientId = Yii::app()->clientForm->getClientId();
-			Yii::app()->clientForm->sendClientToApiAndLoginAccount($iClientId);
+			if (Yii::app()->clientForm->sendClientToApi($iClientId)) {
+				$this->redirect(Yii::app()->createUrl("/account"));
+			}
 		}
 		// если код неверен и не превышено число ошибок - добавляем текст ошибки к атрибуту
 		if (!empty($aPostData) && $mAnswer !== true) {
