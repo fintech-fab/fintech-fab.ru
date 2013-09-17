@@ -329,8 +329,18 @@ class ClientFormComponent
 	{
 		$aClientData = ClientData::getClientDataById($iClientId);
 
+		//создаем клиента в admin.kreddy.ru через API
 		if (Yii::app()->adminKreddyApi->createClient($aClientData)) {
-			Yii::app()->adminKreddyApi->getAuth($aClientData->phone, )
+			//пакуем данные логина-пароля в массив
+			$aLogin = array('username' => $aClientData['phone'], 'password' => $aClientData['password']);
+
+			$model = new AccountLoginForm;
+			$model->attributes = $aLogin;
+			//валидируем логин-пароль и логинимся
+			if ($model->validate() && $model->login()) {
+				//перенаправляем в личный кабинет
+				Yii::app()->controller->redirect(Yii::app()->createUrl("/account"));
+			}
 		}
 		//создаем клиента через API
 		//получаем от API авторизацию (сообщение что токен получен)
