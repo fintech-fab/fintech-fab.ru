@@ -102,6 +102,19 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * TODO реализовать метод
+	 *
+	 * @param $aClientData
+	 *
+	 * @return bool
+	 */
+
+	public function createClient($aClientData)
+	{
+		return true;
+	}
+
+	/**
 	 * Обновляем токен, обязательно выполняется при инициализации компонента
 	 *
 	 * @return bool
@@ -1414,4 +1427,6 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE);
 	}
+
+
 }
