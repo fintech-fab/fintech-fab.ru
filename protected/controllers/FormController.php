@@ -171,10 +171,8 @@ class FormController extends Controller
 		// если в сессии стоит флаг, что SMS отправлено
 		if (Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepNext);
-			$this->redirect(Yii::app()->createUrl("form"));
 		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->clearClientSession();
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
@@ -186,10 +184,11 @@ class FormController extends Controller
 					'sErrorMessage' => $oAnswer,
 				)
 			);
+			Yii::app()->end();
 		} else {
 			Yii::app()->clientForm->setCurrentStep($iStepNext);
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	/**
@@ -226,7 +225,6 @@ class FormController extends Controller
 				'oClientCreateForm' => $oClientSmsForm,
 			));
 			Yii::app()->end();
-
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
 
