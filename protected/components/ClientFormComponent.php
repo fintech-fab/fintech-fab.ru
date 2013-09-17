@@ -11,21 +11,21 @@
  */
 class ClientFormComponent
 {
-	private $client_id;
-	private $current_step;
-	private $done_steps;
+	private $iClientId;
+	private $iCurrentStep;
+	private $iDoneSteps;
 
 	public function init()
 	{
-		if (!$this->client_id = $this->getClientId()) {
-			$this->client_id = false;
+		if (!$this->iClientId = $this->getClientId()) {
+			$this->iClientId = false;
 		}
 
-		if (!$this->current_step = $this->getCurrentStep()) {
+		if (!$this->iCurrentStep = $this->getCurrentStep()) {
 			$this->setCurrentStep(0);
 		}
 
-		if (!$this->done_steps = $this->getDoneSteps()) {
+		if (!$this->iDoneSteps = $this->getDoneSteps()) {
 			$this->setDoneSteps(0);
 		}
 	}
@@ -74,8 +74,8 @@ class ClientFormComponent
 					Cookie::compareDataInCookie('client', 'phone', $aValidFormData['phone']) &&
 					!empty($aCookieData['client_id'])
 				) {
-					$this->client_id = $aCookieData['client_id'];
-					$this->setClientId($this->client_id);
+					$this->iClientId = $aCookieData['client_id'];
+					$this->setClientId($this->iClientId);
 
 				} else {
 					/**
@@ -86,14 +86,14 @@ class ClientFormComponent
 					$oClientData = ClientData::addClient($aValidFormData['phone']);
 					Yii::app()->antiBot->addFormRequest();
 					$this->setClientId($oClientData->client_id);
-					$this->client_id = $oClientData->client_id;
+					$this->iClientId = $oClientData->client_id;
 
 					$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $aValidFormData['phone']);
 					Cookie::saveDataToCookie('client', $aCookieData);
 				}
 			}
 
-			if ($this->client_id) {
+			if ($this->iClientId) {
 				if (empty($aValidFormData['product'])) {
 					$aValidFormData['product'] = $this->getSessionProduct();
 				}
@@ -103,13 +103,13 @@ class ClientFormComponent
 				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
 				$aValidFormData['identification_type'] = $this->getIdentType();
-				ClientData::saveClientDataById($aValidFormData, $this->client_id);
+				ClientData::saveClientDataById($aValidFormData, $this->iClientId);
 
 			}
 		} else {
-			if ($this->client_id) {
-				ClientData::saveClientDataById($aValidFormData, $this->client_id);
-				$aValidFormData['client_id'] = $this->client_id;
+			if ($this->iClientId) {
+				ClientData::saveClientDataById($aValidFormData, $this->iClientId);
+				$aValidFormData['client_id'] = $this->iClientId;
 			}
 		}
 
@@ -121,7 +121,7 @@ class ClientFormComponent
 			$aValidFormData = array_merge($aSessionFormData, $aValidFormData);
 		}
 		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
-		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->client_id;
+		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->iClientId;
 
 		return;
 	}
@@ -151,8 +151,8 @@ class ClientFormComponent
 				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
 				!empty($aCookieData['client_id'])
 			) {
-				$this->client_id = $aCookieData['client_id'];
-				$this->setClientId($this->client_id);
+				$this->iClientId = $aCookieData['client_id'];
+				$this->setClientId($this->iClientId);
 
 			} else {
 				/**
@@ -165,12 +165,12 @@ class ClientFormComponent
 				Yii::app()->antiBot->addFormRequest();
 				$this->setClientId($oClientData->client_id);
 
-				$this->client_id = $oClientData->client_id;
+				$this->iClientId = $oClientData->client_id;
 
 				$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $oClientData->phone);
 				Cookie::saveDataToCookie('client', $aCookieData);
 			}
-			if ($this->client_id) {
+			if ($this->iClientId) {
 				$aClientFormData = $oClientForm->getAttributes();
 
 				if (empty($aClientFormData['product'])) {
@@ -183,16 +183,16 @@ class ClientFormComponent
 				$aClientFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aClientFormData['ip'] = Yii::app()->request->getUserHostAddress();
 				$aClientFormData['identification_type'] = $this->getIdentType();
-				ClientData::saveClientDataById($aClientFormData, $this->client_id);
+				ClientData::saveClientDataById($aClientFormData, $this->iClientId);
 
 				//TODO выпилить флаг идентификации отсюда и из БД
 				$aClientData['flag_identified'] = 1;
-				ClientData::saveClientDataById($aClientData, $this->client_id);
+				ClientData::saveClientDataById($aClientData, $this->iClientId);
 			}
 		} else {
-			if ($this->client_id) {
+			if ($this->iClientId) {
 				$aClientFormData = $oClientForm->getAttributes();
-				ClientData::saveClientDataById($aClientFormData, $this->client_id);
+				ClientData::saveClientDataById($aClientFormData, $this->iClientId);
 			}
 		}
 		/**
@@ -200,7 +200,7 @@ class ClientFormComponent
 		 */
 		$aClientFormData = $oClientForm->getAttributes();
 		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
-		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->client_id;
+		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->iClientId;
 
 		return;
 	}
@@ -267,7 +267,7 @@ class ClientFormComponent
 	 */
 	public function checkSmsCode($aPostData)
 	{
-		$client_id = $this->getClientId();
+		$iClientId = $this->getClientId();
 		$iSmsCountTries = $this->getSmsCountTries();
 
 		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
@@ -277,11 +277,11 @@ class ClientFormComponent
 		if ($iSmsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
 			// если введённые данные валидны и совпадают с кодом из базы
 			if ($oClientSmsForm->validate()
-				&& ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $client_id)
+				&& ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $iClientId)
 			) {
 				// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
 				$aData['flag_sms_confirmed'] = 1;
-				ClientData::saveClientDataById($aData, $client_id);
+				ClientData::saveClientDataById($aData, $iClientId);
 
 				//очищаем сессию (данные формы и прочее)
 				$this->clearClientSession();
@@ -337,9 +337,9 @@ class ClientFormComponent
 	 */
 	public function getCurrentStep()
 	{
-		$this->current_step = Yii::app()->session['current_step'];
+		$this->iCurrentStep = Yii::app()->session['current_step'];
 
-		return $this->current_step;
+		return $this->iCurrentStep;
 	}
 
 	/**
@@ -348,7 +348,7 @@ class ClientFormComponent
 	public function setCurrentStep($iStep)
 	{
 		Yii::app()->session['current_step'] = $iStep;
-		$this->current_step = $iStep;
+		$this->iCurrentStep = $iStep;
 	}
 
 	/**
@@ -358,9 +358,9 @@ class ClientFormComponent
 	 */
 	public function getDoneSteps()
 	{
-		$this->done_steps = Yii::app()->session['done_steps'];
+		$this->iDoneSteps = Yii::app()->session['done_steps'];
 
-		return $this->done_steps;
+		return $this->iDoneSteps;
 	}
 
 	/**
@@ -369,7 +369,7 @@ class ClientFormComponent
 	public function setDoneSteps($iSteps)
 	{
 		Yii::app()->session['done_steps'] = $iSteps;
-		$this->done_steps = $iSteps;
+		$this->iDoneSteps = $iSteps;
 	}
 
 	/**
@@ -383,7 +383,7 @@ class ClientFormComponent
 		$bFullForm = SiteParams::B_FULL_FORM;
 
 		if ($bFullForm) {
-			switch ($this->current_step) {
+			switch ($this->iCurrentStep) {
 				case 0:
 					return new ClientSelectProductForm2();
 					break;
@@ -400,7 +400,7 @@ class ClientFormComponent
 			}
 		} else {
 
-			switch ($this->current_step) {
+			switch ($this->iCurrentStep) {
 				case 0:
 					return new ClientSelectProductForm();
 					break;
@@ -447,7 +447,7 @@ class ClientFormComponent
 
 		if ($bFullForm) {
 
-			switch ($this->current_step) {
+			switch ($this->iCurrentStep) {
 				case 0:
 					return 'client_select_product2';
 					break;
@@ -477,7 +477,7 @@ class ClientFormComponent
 		} else {
 
 
-			switch ($this->current_step) {
+			switch ($this->iCurrentStep) {
 				case 0:
 					return 'client_select_product';
 					break;
@@ -530,7 +530,7 @@ class ClientFormComponent
 		$bFullForm = SiteParams::B_FULL_FORM;
 
 		if ($bFullForm) {
-			switch ($this->current_step) {
+			switch ($this->iCurrentStep) {
 				case 0:
 				{
 					//TODO: заменить на Yii::app()->request->getParam('')
@@ -566,7 +566,7 @@ class ClientFormComponent
 
 			}
 		} else {
-			switch ($this->current_step) {
+			switch ($this->iCurrentStep) {
 				case 0:
 				{
 
@@ -668,10 +668,10 @@ class ClientFormComponent
 		if (!($iSteps <= 3)) {
 			$iSteps = 1;
 		}
-		$this->current_step += $iSteps;
-		Yii::app()->session['current_step'] = $this->current_step;
-		if ($this->done_steps < Yii::app()->session['current_step']) {
-			Yii::app()->session['done_steps'] = $this->done_steps = Yii::app()->session['current_step'];
+		$this->iCurrentStep += $iSteps;
+		Yii::app()->session['current_step'] = $this->iCurrentStep;
+		if ($this->iDoneSteps < Yii::app()->session['current_step']) {
+			Yii::app()->session['done_steps'] = $this->iDoneSteps = Yii::app()->session['current_step'];
 		}
 	}
 

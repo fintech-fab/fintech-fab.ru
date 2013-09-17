@@ -15,7 +15,7 @@ class FormController extends Controller
 		 * @var string                   $sView
 		 */
 
-		$client_id = Yii::app()->clientForm->getClientId();
+		$iClientId = Yii::app()->clientForm->getClientId();
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -61,8 +61,8 @@ class FormController extends Controller
 		 * Загрузка данных из сессии в форму, если данные существуют и client_id сессии совпадает с оным в куке
 		 */
 
-		if (Cookie::compareDataInCookie('client', 'client_id', $client_id)
-			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $client_id
+		if (Cookie::compareDataInCookie('client', 'client_id', $iClientId)
+			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (isset($oClientForm) && $oClientForm) {
 				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
