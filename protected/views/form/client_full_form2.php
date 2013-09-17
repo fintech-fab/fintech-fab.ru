@@ -15,13 +15,12 @@ $aCrumbs = array(
 $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 <?php
-// если форма заполнена, регистрируем js-переменную
+// если форма уже была заполнена, регистрируем js-переменную
 if (Yii::app()->clientForm->getFlagFullFormFilled()) {
-	Yii::app()->clientScript->registerScript('scriptFlagFullFormFilled', '
-		var bFlagFullFormFilled = true;
-	', CClientScript::POS_HEAD);
 
-	Yii::app()->clientScript->registerScript('scriptFlagFullFormFilled2', '
+	Yii::app()->clientScript->registerScript('scriptFlagFullFormFilled', '
+		bFlagFullFormFilled = true;
+
 		// разблокировали кнопку Отправить
 		$("#submitButton").removeClass("disabled").attr("disabled",false);
 	', CClientScript::POS_READY);
