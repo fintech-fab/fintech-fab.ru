@@ -143,7 +143,6 @@ class ClientFormComponent
 			 * иначе создаем нового клиента и сохраняем информацию
 			 * о нем в сессию и куку.
 			 */
-
 			$aCookieData = Cookie::getDataFromCookie('client');
 
 			if (
@@ -185,10 +184,15 @@ class ClientFormComponent
 				$aClientFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
+				$aClientFormData['identification_type'] = $this->getIdentType();
+
 				//TODO выпилить флаг идентификации отсюда и из БД
 				$aClientData['flag_identified'] = 1;
 				ClientData::saveClientDataById($aClientData, $this->client_id);
 			}
+
+			// ставим флаг, что полная форма заполнена - чтобы при возврате к ней была активна кнопка "Отправить"
+			$this->setFlagFullFormFilled(true);
 		} else {
 			if ($this->client_id) {
 				$aClientFormData = $oClientForm->getAttributes();
@@ -706,6 +710,24 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @param $bFullFormFilled
+	 */
+	public function setFlagFullFormFilled($bFullFormFilled)
+	{
+		Yii::app()->session['flagClientFullForm2Filled'] = $bFullFormFilled;
+	}
+
+	/**
+	 * Была ли уже заполнена полная форма?
+	 *
+	 * @return bool
+	 */
+	public function getFlagFullFormFilled()
+	{
+		return !empty(Yii::app()->session['flagClientFullForm2Filled']);
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getClientId()
@@ -857,6 +879,8 @@ class ClientFormComponent
 
 		Yii::app()->session['ClientSelectProductForm2'] = null;
 		Yii::app()->session['ClientFullForm2'] = null;
+
+		$this->setFlagFullFormFilled(false);
 	}
 
 
