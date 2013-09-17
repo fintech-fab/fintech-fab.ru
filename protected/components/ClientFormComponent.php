@@ -185,14 +185,9 @@ class ClientFormComponent
 				$aClientFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				if (!$this->checkIdentificationFiles() || $this->checkTmpIdentificationFiles()) {
-					if ($this->moveIdentificationFiles()) {
-						$aClientData['flag_identified'] = 1;
-						ClientData::saveClientDataById($aClientData, $this->client_id);
-					}
-				}
-
-
+				//TODO выпилить флаг идентификации отсюда и из БД
+				$aClientData['flag_identified'] = 1;
+				ClientData::saveClientDataById($aClientData, $this->client_id);
 			}
 		} else {
 			if ($this->client_id) {
