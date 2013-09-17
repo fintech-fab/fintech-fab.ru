@@ -110,12 +110,19 @@ class AdminKreddyApiComponent
 	 * @return bool
 	 */
 
-	public function createClient($aClientData)
+	public function createClientAndLogIn($aClientData)
 	{
 		$aRequest = array('clientData' => $aClientData);
-		$aAnswer = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
-		return ($aAnswer['code'] === 0);
+		if ($aTokenData['code'] === self::ERROR_NONE) {
+			$this->setSessionToken($aTokenData['token']);
+			$this->token = $aTokenData['token'];
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

@@ -215,14 +215,18 @@ class FormController extends Controller
 		}
 
 		// сверяем код. если $oAnswer !== true, то ошибка
-		$oAnswer = Yii::app()->clientForm->checkSmsCode($aPostData);
-
+		$mAnswer = Yii::app()->clientForm->checkSmsCode($aPostData);
+		if ($mAnswer) {
+			//TODO тут нужно сделать отправку данных в API и редирект в личный кабинет (с автологином)
+			$iClientId = Yii::app()->clientForm->getClientId();
+			Yii::app()->clientForm->sendClientToApiAndLoginAccount($iClientId);
+		}
 		// если код неверен и не превышено число ошибок - добавляем текст ошибки к атрибуту
-		if (!empty($aPostData) && $oAnswer !== true) {
+		if (!empty($aPostData) && $mAnswer !== true) {
 
 			$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
 			$oClientSmsForm->setAttributes($aPostData);
-			$oClientSmsForm->addError('sms_code', $oAnswer);
+			$oClientSmsForm->addError('sms_code', $mAnswer);
 			$this->render('confirm_phone_full_form2/check_sms_code', array(
 				'oClientCreateForm' => $oClientSmsForm,
 			));

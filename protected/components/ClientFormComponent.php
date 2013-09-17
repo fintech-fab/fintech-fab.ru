@@ -267,7 +267,7 @@ class ClientFormComponent
 	 *
 	 * @param array $aPostData
 	 *
-	 * @return array
+	 * @return mixed
 	 */
 	public function checkSmsCode($aPostData)
 	{
@@ -290,8 +290,7 @@ class ClientFormComponent
 				//очищаем сессию (данные формы и прочее)
 				$this->clearClientSession();
 				//ставим флаг "форма отправлена" для отображения представления с сообщением "Форма отправлена"
-				//TODO тут нужно сделать отправку данных в API и редирект в личный кабинет (с автологином)
-				$this->sendClientToApiAndLoginAccount($client_id);
+				//TODO выпилить
 				$this->setFormSent(true);
 
 				// успешная проверка
@@ -330,22 +329,9 @@ class ClientFormComponent
 		$aClientData = ClientData::getClientDataById($iClientId);
 
 		//создаем клиента в admin.kreddy.ru через API
-		if (Yii::app()->adminKreddyApi->createClient($aClientData)) {
-			//пакуем данные логина-пароля в массив
-			$aLogin = array('username' => $aClientData['phone'], 'password' => $aClientData['password']);
-
-			$model = new AccountLoginForm;
-			$model->attributes = $aLogin;
-			//валидируем логин-пароль и логинимся
-			if ($model->validate() && $model->login()) {
-				//перенаправляем в личный кабинет
-				Yii::app()->controller->redirect(Yii::app()->createUrl("/account"));
-			}
-		}
-		//создаем клиента через API
 		//получаем от API авторизацию (сообщение что токен получен)
 		//и логиним юзера
-
+		return (Yii::app()->adminKreddyApi->createClientAndLogIn($aClientData));
 	}
 
 	/**
