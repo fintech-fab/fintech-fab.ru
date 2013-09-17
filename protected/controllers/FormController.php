@@ -157,7 +157,6 @@ class FormController extends Controller
 
 	/**
 	 * Отправка SMS с кодом
-	 * TODO: исправить, что после очистки сессии можно зайти на страницу
 	 */
 	public function actionSendSmsCode()
 	{
