@@ -65,7 +65,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 *
+	 * При инициализации обязательно требуется запросить обновление токена
 	 */
 
 	public function init()
@@ -102,12 +102,12 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Обновляем токен, выполняется при инициализации компонента
+	 * Обновляем токен, обязательно выполняется при инициализации компонента
 	 *
 	 * @return bool
 	 */
 
-	public function updateClientToken()
+	protected function updateClientToken()
 	{
 		//отсылаем текущий токен и получаем новый токен в ответ, обновляем его в сессии
 
@@ -160,7 +160,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС-пароля для СМС-авторизации
+	 * Запрос от API СМС-пароля для СМС-авторизации
 	 *
 	 * @param bool $bResend
 	 *
@@ -190,7 +190,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС-кода для подтверждения восстановления пароля
+	 * Запрос от API СМС-кода для подтверждения восстановления пароля
 	 *
 	 * @param      $sPhone
 	 * @param bool $bResend
@@ -222,7 +222,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Проверка СМС-кола для подтверждения восстановления пароля
+	 * Проверка СМС-кода для подтверждения восстановления пароля
 	 *
 	 * @param $sPhone
 	 * @param $sSmsCode
@@ -1394,6 +1394,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка, вернул ли последний выполненный запрос сообщение "операция недоступна" - код 11
+	 *
 	 * @return bool
 	 */
 	public function getIsNotAllowed()
@@ -1402,6 +1404,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка, вернул ли последний выполненный запрос ошибку (коды 0, 9 и 10 - не являются кодами ошибок)
+	 *
 	 * @return bool
 	 */
 	public function getIsError()
