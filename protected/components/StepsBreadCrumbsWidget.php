@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class StepsBreadCrumbsWidget
+ */
 class StepsBreadCrumbsWidget extends CWidget
 {
 	public $aCrumbs = array(

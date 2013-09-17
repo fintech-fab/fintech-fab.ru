@@ -410,15 +410,10 @@ class ClientFormComponent
 					return new ClientSelectProductForm2();
 					break;
 				case 1:
-				case 2:
-				case 3:
-					return new InviteToIdentificationForm();
-					break;
-				case 4:
 					return new ClientFullForm2();
 					break;
-				case 5:
-				case 6:
+				case 2:
+				case 3:
 					return new ClientConfirmPhoneViaSMSForm();
 					break;
 				default:
@@ -435,24 +430,19 @@ class ClientFormComponent
 					return new ClientSelectGetWayForm();
 					break;
 				case 2:
-				case 3:
-				case 4:
-					return new InviteToIdentificationForm();
-					break;
-				case 5:
 					return new ClientPersonalDataForm();
 					break;
-				case 6:
+				case 3:
 					return new ClientAddressForm();
 					break;
-				case 7:
+				case 4:
 					return new ClientJobInfoForm();
 					break;
-				case 8:
+				case 5:
 					return new ClientSendForm();
 					break;
-				case 9:
-				case 10:
+				case 6:
+				case 7:
 					return new ClientConfirmPhoneViaSMSForm();
 					break;
 				default:
@@ -485,21 +475,12 @@ class ClientFormComponent
 					return 'client_select_product2';
 					break;
 				case 1:
-					return 'invite_to_identification2';
-					break;
-				case 2:
-					return 'identification';
-					break;
-				case 3:
-					return 'documents';
-					break;
-				case 4:
 					return 'client_full_form2';
 					break;
-				case 5:
+				case 2:
 					return 'confirm_phone_full_form2/send_sms_code';
 					break;
-				case 6:
+				case 3:
 					return 'confirm_phone_full_form2/check_sms_code';
 					break;
 				default:
@@ -517,30 +498,21 @@ class ClientFormComponent
 					return 'client_select_get_way';
 					break;
 				case 2:
-					return 'invite_to_identification';
-					break;
-				case 3:
-					return 'identification';
-					break;
-				case 4:
-					return 'documents';
-					break;
-				case 5:
 					return 'client_personal_data';
 					break;
-				case 6:
+				case 3:
 					return 'client_address';
 					break;
-				case 7:
+				case 4:
 					return 'client_job_info';
 					break;
-				case 8:
+				case 5:
 					return 'client_send';
 					break;
-				case 9:
+				case 6:
 					return 'confirm_phone/send_sms_code';
 					break;
-				case 10:
+				case 7:
 					return 'confirm_phone/check_sms_code';
 					break;
 				default:
@@ -575,15 +547,6 @@ class ClientFormComponent
 					break;
 				case 1:
 				{
-					if (isset($_POST['InviteToIdentificationForm'])) {
-						return $_POST['InviteToIdentificationForm'];
-					}
-
-					return null;
-				}
-					break;
-				case 4:
-				{
 					if (isset($_POST['ClientFullForm2'])) {
 						return $_POST['ClientFullForm2'];
 					}
@@ -591,8 +554,8 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 5:
-				case 6:
+				case 2:
+				case 3:
 				{
 					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
 						return $_POST['ClientConfirmPhoneViaSMSForm'];
@@ -629,15 +592,6 @@ class ClientFormComponent
 					break;
 				case 2:
 				{
-					if (isset($_POST['InviteToIdentificationForm'])) {
-						return $_POST['InviteToIdentificationForm'];
-					}
-
-					return null;
-				}
-					break;
-				case 5:
-				{
 					if (isset($_POST['ClientPersonalDataForm'])) {
 						return $_POST['ClientPersonalDataForm'];
 					}
@@ -645,7 +599,7 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 6:
+				case 3:
 				{
 					if (isset($_POST['ClientAddressForm'])) {
 						return $_POST['ClientAddressForm'];
@@ -654,7 +608,7 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 7:
+				case 4:
 				{
 					if (isset($_POST['ClientJobInfoForm'])) {
 						return $_POST['ClientJobInfoForm'];
@@ -663,7 +617,7 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 8:
+				case 5:
 				{
 					if (isset($_POST['ClientSendForm'])) {
 						return $_POST['ClientSendForm'];
@@ -672,8 +626,8 @@ class ClientFormComponent
 					return null;
 				}
 					break;
-				case 9:
-				case 10:
+				case 6:
+				case 7:
 				{
 					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
 						return $_POST['ClientConfirmPhoneViaSMSForm'];
