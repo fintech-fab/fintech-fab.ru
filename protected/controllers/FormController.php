@@ -171,10 +171,8 @@ class FormController extends Controller
 		// если в сессии стоит флаг, что SMS отправлено
 		if (Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepNext);
-			$this->redirect(Yii::app()->createUrl("form"));
 		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->clearClientSession();
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
@@ -186,10 +184,11 @@ class FormController extends Controller
 					'sErrorMessage' => $oAnswer,
 				)
 			);
+			Yii::app()->end();
 		} else {
 			Yii::app()->clientForm->setCurrentStep($iStepNext);
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
+		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
 	/**
@@ -210,11 +209,9 @@ class FormController extends Controller
 		//если СМС не отправлено, то редирект на /form, с установкой текущего шага $iStepBack
 		if (!Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepBack);
-			$this->redirect(Yii::app()->createUrl("form"));
 		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
 			//иначе если в сессии нет телефона, то стираем всю сессию и редирект на /form
 			Yii::app()->clientForm->clearClientSession();
-			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// сверяем код. если $oAnswer !== true, то ошибка
@@ -229,10 +226,10 @@ class FormController extends Controller
 			$this->render('confirm_phone_full_form2/check_sms_code', array(
 				'oClientCreateForm' => $oClientSmsForm,
 			));
-
-		} else {
-			$this->redirect(Yii::app()->createUrl("form"));
+			Yii::app()->end();
 		}
+		$this->redirect(Yii::app()->createUrl("form"));
+
 	}
 
 
