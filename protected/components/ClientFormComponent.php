@@ -181,13 +181,9 @@ class ClientFormComponent
 
 				$aClientFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aClientFormData['ip'] = Yii::app()->request->getUserHostAddress();
-				$aClientFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
-				$aClientFormData['identification_type'] = $this->getIdentType();
-
 				//TODO выпилить флаг идентификации отсюда и из БД
-				$aClientData['flag_identified'] = 1;
 				ClientData::saveClientDataById($aClientData, $this->client_id);
 			}
 
