@@ -184,7 +184,6 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aClientFormData, $this->client_id);
 
 				//TODO выпилить флаг идентификации отсюда и из БД
-				ClientData::saveClientDataById($aClientData, $this->client_id);
 			}
 
 			// ставим флаг, что полная форма заполнена - чтобы при возврате к ней была активна кнопка "Отправить"
