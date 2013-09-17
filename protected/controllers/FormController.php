@@ -206,9 +206,11 @@ class FormController extends Controller
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 
+		//если СМС не отправлено, то редирект на /form, с установкой текущего шага $iStepBack
 		if (!Yii::app()->clientForm->getFlagSmsSent() && Yii::app()->clientForm->getSessionPhone()) {
 			Yii::app()->clientForm->setCurrentStep($iStepBack);
 		} elseif (!Yii::app()->clientForm->getSessionPhone()) {
+			//иначе если в сессии нет телефона, то стираем всю сессию и редирект на /form
 			Yii::app()->clientForm->clearClientSession();
 		}
 

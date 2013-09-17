@@ -27,6 +27,7 @@ class AdminKreddyApiComponent
 
 	const SMS_PASSWORD_SEND_OK = 1;
 
+	const API_ACTION_CREATE_CLIENT = 'siteClient/createClient';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_LOAN = 'siteClient/doLoan';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
@@ -96,9 +97,25 @@ class AdminKreddyApiComponent
 			$this->token = $aTokenData['token'];
 
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
+	}
+
+	/**
+	 * TODO реализовать метод
+	 *
+	 * @param $aClientData
+	 *
+	 * @return bool
+	 */
+
+	public function createClient($aClientData)
+	{
+		$aRequest = array('clientData' => $aClientData);
+		$aAnswer = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
+
+		return ($aAnswer['code'] === 0);
 	}
 
 	/**
@@ -1414,4 +1431,6 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE);
 	}
+
+
 }

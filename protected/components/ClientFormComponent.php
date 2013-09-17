@@ -287,7 +287,11 @@ class ClientFormComponent
 				$aData['flag_sms_confirmed'] = 1;
 				ClientData::saveClientDataById($aData, $client_id);
 
+				//очищаем сессию (данные формы и прочее)
 				$this->clearClientSession();
+				//ставим флаг "форма отправлена" для отображения представления с сообщением "Форма отправлена"
+				//TODO тут нужно сделать отправку данных в API и редирект в личный кабинет (с автологином)
+				$this->sendClientToApiAndLoginAccount($client_id);
 				$this->setFormSent(true);
 
 				// успешная проверка
@@ -318,12 +322,38 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @param $iClientId
+	 */
+
+	public function sendClientToApiAndLoginAccount($iClientId)
+	{
+		$aClientData = ClientData::getClientDataById($iClientId);
+
+		//создаем клиента в admin.kreddy.ru через API
+		if (Yii::app()->adminKreddyApi->createClient($aClientData)) {
+			//пакуем данные логина-пароля в массив
+			$aLogin = array('username' => $aClientData['phone'], 'password' => $aClientData['password']);
+
+			$model = new AccountLoginForm;
+			$model->attributes = $aLogin;
+			//валидируем логин-пароль и логинимся
+			if ($model->validate() && $model->login()) {
+				//перенаправляем в личный кабинет
+				Yii::app()->controller->redirect(Yii::app()->createUrl("/account"));
+			}
+		}
+		//создаем клиента через API
+		//получаем от API авторизацию (сообщение что токен получен)
+		//и логиним юзера
+
+	}
+
+	/**
 	 * Возвращает номер текущего шага (нумерация с нуля)
 	 *
 	 * @return int
 	 */
-	public
-	function getCurrentStep()
+	public function getCurrentStep()
 	{
 		$this->current_step = Yii::app()->session['current_step'];
 
