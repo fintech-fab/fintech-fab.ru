@@ -24,7 +24,7 @@ class ClientSelectProductForm2 extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		$aRules[] = array('product', 'in', 'range' => array_keys(Dictionaries::getProducts()), 'message' => 'Выберите сумму займа');
+		$aRules[] = array('product', 'in', 'range' => array_keys(FormatProductsChannels::getProducts()), 'message' => 'Выберите сумму займа');
 
 
 		return $aRules;

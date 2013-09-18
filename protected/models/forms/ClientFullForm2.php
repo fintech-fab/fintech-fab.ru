@@ -86,7 +86,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
 
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
-				array('product', 'in', 'range' => array_keys(Dictionaries::getProducts()), 'message' => 'Выберите сумму займа'),
+				array('product', 'in', 'range' => array_keys(FormatProductsChannels::getProducts()), 'message' => 'Выберите сумму займа'),
 
 				array('friends_phone', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!'),
 				array('friends_fio', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),

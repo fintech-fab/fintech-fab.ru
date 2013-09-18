@@ -41,11 +41,12 @@ $aCrumbs = array(
 		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/01T.png" />
 		<?php
 		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+		// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 		if (!isset($oClientCreateForm->product)) {
-			$oClientCreateForm->product = "101";
+			$oClientCreateForm->product = reset(array_keys(FormatProductsChannels::getProducts()));
 		}
 		?>
-		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::getProducts(), array("class" => "all")); ?>
+		<?= $form->radioButtonListRow($oClientCreateForm, 'product', FormatProductsChannels::getProducts(), array("class" => "all")); ?>
 
 	</div>
 

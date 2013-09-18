@@ -49,12 +49,13 @@ $productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + arr
 <div class="span6" id="product">
 	<?php
 	$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 	if (!isset($oClientCreateForm->product)) {
-		$oClientCreateForm->product = "101";
+		$oClientCreateForm->product = reset(array_keys(FormatProductsChannels::getProducts()));
 	}
 	?>
 	<div id="product">
-		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::getProducts(), array("class" => "all") + $productHtmlOptions); ?>
+		<?= $form->radioButtonListRow($oClientCreateForm, 'product', FormatProductsChannels::getProducts(), array("class" => "all") + $productHtmlOptions); ?>
 	</div>
 	<?= $form->passwordFieldRow($oClientCreateForm, 'password', $htmlOptions); ?>
 	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', $htmlOptions); ?>
