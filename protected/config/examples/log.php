@@ -7,14 +7,8 @@ return array(
 			'levels' => 'error, warning',
 		),
 		array(
-			'class'         => 'CWebLogRoute',
-			'categories'    => 'application',
-			'levels'        => 'error, warning, trace, profile, info',
-			'showInFireBug' => true
-		),
-		array(
 			'class'        => 'CDbLogRoute',
-			'levels'       => 'error, warning, trace',
+			'levels'       => 'error, warning',
 			'connectionID' => 'db',
 			'logTableName' => 'tbl_log',
 
