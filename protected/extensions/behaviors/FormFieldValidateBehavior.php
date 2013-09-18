@@ -73,22 +73,6 @@ class FormFieldValidateBehavior extends CBehavior
 		return empty( $oClient )? false: $oClient;
 	}*/
 
-	/** проверка: если выбирается видеоидентификация, то нужно согласие на обработку персональных данных (чекбокс)
-	 * @param $attribute
-	 * @param $param
-	 */
-	public function checkAgree($attribute, $param)
-	{
-		if (empty($this->owner->$param['identification_type'])) {
-			return;
-		}
-
-		// если выбрана видеоидентификация и не поставлена галочка, то ругаемся
-		if (($this->owner->$param['identification_type'] == '1') && (empty($this->owner->$attribute))) {
-			$this->owner->addError($attribute, $param['message']);
-		}
-	}
-
 	/**
 	 * проверка цифрового кода
 	 * @param $attribute

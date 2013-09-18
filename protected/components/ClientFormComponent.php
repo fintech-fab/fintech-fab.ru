@@ -102,7 +102,6 @@ class ClientFormComponent
 				}
 				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
-				$aValidFormData['identification_type'] = $this->getIdentType();
 				ClientData::saveClientDataById($aValidFormData, $this->iClientId);
 
 			}
@@ -638,23 +637,6 @@ class ClientFormComponent
 		}
 	}
 
-	/**
-	 * @param $iIdentCode
-	 */
-	public function goIdentification($iIdentCode)
-	{
-		if (!empty($iIdentCode)) {
-			if ($iIdentCode == 1) {
-				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-			} elseif ($iIdentCode == 2) {
-				Yii::app()->clientForm->nextStep(3);
-			}
-
-			if ($iIdentCode == 1 || $iIdentCode == 2) {
-				Yii::app()->session['InviteToIdentificationForm'] = array('go_identification' => $iIdentCode);
-			}
-		}
-	}
 
 	/**
 	 * Переводит обработку форм на следующий шаг
@@ -736,14 +718,6 @@ class ClientFormComponent
 		}
 
 		return $tmp_client_id;
-	}
-
-	/**
-	 * @return null
-	 */
-	public function getIdentType()
-	{
-		return (isset(Yii::app()->session['InviteToIdentificationForm']['go_identification'])) ? Yii::app()->session['InviteToIdentificationForm']['go_identification'] : null;
 	}
 
 	/**
