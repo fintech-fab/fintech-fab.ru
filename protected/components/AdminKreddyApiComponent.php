@@ -51,7 +51,6 @@ class AdminKreddyApiComponent
 	private $bIsCanSubscribe = null;
 	private $bIsCanGetLoan = null;
 
-
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
 
@@ -820,7 +819,7 @@ class AdminKreddyApiComponent
 	public function checkLoan()
 	{
 		if (!isset($this->bIsCanGetLoan)) {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('test_code' => 1));
+			$this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('test_code' => 1));
 
 			$this->bIsCanGetLoan = (!$this->getIsNotAllowed()
 				&& !$this->getIsNeedSmsAuth());
@@ -893,7 +892,7 @@ class AdminKreddyApiComponent
 	public function checkSubscribe()
 	{
 		if (!isset($this->bIsCanSubscribe)) {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
+			$this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
 			$this->bIsCanSubscribe = (!$this->getIsNotAllowed()
 				&& !$this->getIsNeedSmsAuth());
 		}
@@ -911,7 +910,7 @@ class AdminKreddyApiComponent
 		//отправляем СМС с кодом
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE);
 
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -1465,7 +1464,9 @@ class AdminKreddyApiComponent
 	{
 		return ($this->getLastCode() !== self::ERROR_NONE
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
-			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE);
+			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE
+			&& $this->getLastCode() !== self::ERROR_NOT_ALLOWED
+		);
 	}
 
 
