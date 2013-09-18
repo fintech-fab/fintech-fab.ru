@@ -669,7 +669,45 @@ class AdminKreddyApiComponent
 		}
 
 		return false;
+	}
 
+	/**
+	 * Получение списка продуктов и каналов для данного пользователя.
+	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
+	 *
+	 * @return array|bool
+	 */
+
+	public function getClientProductsAndChannelsList4Site()
+	{
+		//получаем список продуктов
+		$aProducts = $this->getProducts();
+		//получаем список каналов
+		$aChannels = $this->getProductsChannels();
+		//получаем список каналов, доступных клиенту
+		//проверяем, что получили массивы
+		if (is_array($aProducts) && is_array($aChannels)) {
+			$aProductsAndChannels = array();
+			//перебираем все продукты
+			foreach ($aProducts as $aProduct) {
+				//получаем из продукта каналы, по которым его можно получить
+				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
+					? $aProduct['channel_types']
+					: array();
+				//перебираем каналы, по которым можно получить продукт
+				foreach ($aProductChannels as $sChannel) {
+					//проверяем, что у канала есть описание
+					//проверяем, что данный канал доступен пользователю
+					if (isset($aChannels[$sChannel])) {
+						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = array_merge($aProduct, array('channel_type' => $sChannel));
+					}
+				}
+			}
+
+			return $aProductsAndChannels;
+		}
+
+		return false;
 	}
 
 	/**

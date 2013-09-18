@@ -264,15 +264,26 @@ class Dictionaries
 	 */
 	public static function getProducts()
 	{
+		$aProducts = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList4Site();
+		echo '<pre>' . "";
+		CVarDumper::dump($aProducts);
+		echo '</pre>';
+		$aProductsList = array("0" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>Произошла ошибка!</span>",);
 
-		$aProducts = array(
+
+		$aProductsList = array(
 			"101" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на карту Кредди</span>",
 			"102" => "<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на неделю на карту Кредди</span>",
 			"103" => "<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='2 займа' data-time='14'>10000 рублей на 2 недели на карту Кредди</span>",
 			"104" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на мобильный (МТС, Билайн, Мегафон)</span>",
 		);
 
-		return $aProducts;
+		return $aProductsList;
+	}
+
+	public function formatProductsList()
+	{
+
 	}
 
 	/**
