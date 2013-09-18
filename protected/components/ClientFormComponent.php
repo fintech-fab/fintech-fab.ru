@@ -97,8 +97,8 @@ class ClientFormComponent
 				if (empty($aValidFormData['product'])) {
 					$aValidFormData['product'] = $this->getSessionProduct();
 				}
-				if (empty($aValidFormData['get_way'])) {
-					$aValidFormData['get_way'] = $this->getSessionGetWay();
+				if (empty($aValidFormData['channel_type'])) {
+					$aValidFormData['channel_type'] = $this->getSessionChannelType();
 				}
 				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
@@ -129,7 +129,7 @@ class ClientFormComponent
 	/**
 	 * Выполняет обработку данных формы после проверки.
 	 *
-	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectGetWayForm|ClientPersonalDataForm $oClientForm
+	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectChannelTypeForm|ClientPersonalDataForm $oClientForm
 	 *
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
@@ -175,8 +175,8 @@ class ClientFormComponent
 				if (empty($aClientFormData['product'])) {
 					$aClientFormData['product'] = $this->getSessionProduct();
 				}
-				if (empty($aClientFormData['get_way'])) {
-					$aClientFormData['get_way'] = $this->getSessionGetWay();
+				if (empty($aClientFormData['channel_type'])) {
+					$aClientFormData['channel_type'] = $this->getSessionChannelType();
 				}
 
 				$aClientFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
@@ -403,7 +403,7 @@ class ClientFormComponent
 					return new ClientSelectProductForm();
 					break;
 				case 1:
-					return new ClientSelectGetWayForm();
+					return new ClientSelectChannelTypeForm();
 					break;
 				case 2:
 					return new ClientPersonalDataForm();
@@ -480,7 +480,7 @@ class ClientFormComponent
 					return 'client_select_product';
 					break;
 				case 1:
-					return 'client_select_get_way';
+					return 'client_select_channel_type';
 					break;
 				case 2:
 					return 'client_personal_data';
@@ -577,8 +577,8 @@ class ClientFormComponent
 					break;
 				case 1:
 				{
-					if (isset($_POST['ClientSelectGetWayForm'])) {
-						return $_POST['ClientSelectGetWayForm'];
+					if (isset($_POST['ClientSelectChannelTypeForm'])) {
+						return $_POST['ClientSelectChannelTypeForm'];
 					}
 
 					return null;
@@ -797,9 +797,9 @@ class ClientFormComponent
 	/**
 	 * @return int номер выбранного спссоба
 	 */
-	public function getSessionGetWay()
+	public function getSessionChannelType()
 	{
-		return Yii::app()->session['ClientSelectGetWayForm']['get_way'];
+		return Yii::app()->session['ClientSelectChannelTypeForm']['channel_type'];
 	}
 
 	/**
@@ -850,7 +850,7 @@ class ClientFormComponent
 
 		//чистим данные форм
 		Yii::app()->session['ClientSelectProductForm'] = null;
-		Yii::app()->session['ClientSelectGetWayForm'] = null;
+		Yii::app()->session['ClientSelectChannelTypeForm'] = null;
 		Yii::app()->session['ClientPersonalDataForm'] = null;
 		Yii::app()->session['ClientAddressForm'] = null;
 		Yii::app()->session['ClientJobInfoForm'] = null;

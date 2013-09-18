@@ -93,7 +93,7 @@
  * @property integer $numeric_code
  * @property integer $sms_code
  * @property integer $product
- * @property integer $get_way
+ * @property integer $channel_type
  * @property integer $complete
  * @property int     $flag_processed
  * @property string  $dt_add
@@ -154,7 +154,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, ip, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, get_way, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_type, complete, dt_add, dt_update, flag_processed, identification_type,flag_identified, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -307,28 +307,28 @@ class ClientData extends CActiveRecord
 			switch ($this->product) {
 				case 101:
 					$this->product = 1;
-					$this->get_way = 1;
+					$this->channel_type = 1;
 					break;
 				case 102:
 					$this->product = 2;
-					$this->get_way = 1;
+					$this->channel_type = 1;
 					break;
 				case 103:
 					$this->product = 3;
-					$this->get_way = 1;
+					$this->channel_type = 1;
 					break;
 				case 104:
 					$this->product = 1;
-					$this->get_way = 2;
+					$this->channel_type = 2;
 					break;
 				default:
 					$this->product = 0;
-					$this->get_way = 0;
+					$this->channel_type = 0;
 					break;
 			}
 		}
 		if ($this->product == 0) {
-			$this->get_way = 0;
+			$this->channel_type = 0;
 		}
 
 		return parent::beforeSave();
@@ -391,7 +391,7 @@ class ClientData extends CActiveRecord
 			'numeric_code'        => 'Numeric Code',
 			'sms_code'            => 'SMS Code',
 			'product'             => 'Product',
-			'get_way'             => 'Get Way',
+			'channel_type'        => 'Get Way',
 			'complete'            => 'Complete',
 			'dt_add'              => 'Dt Add',
 			'dt_update'           => 'Dt Update',
@@ -456,7 +456,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('numeric_code', $this->numeric_code);
 		$criteria->compare('sms_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
-		$criteria->compare('get_way', $this->get_way);
+		$criteria->compare('channel_type', $this->channel_type);
 		$criteria->compare('complete', $this->complete);
 		$criteria->compare('dt_add', $this->dt_add, true);
 		$criteria->compare('dt_update', $this->dt_update, true);

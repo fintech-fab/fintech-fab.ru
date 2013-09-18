@@ -1,6 +1,6 @@
 <?php
 /* @var FormController $this */
-/* @var ClientSelectGetWayForm $model */
+/* @var ClientSelectChannelTypeForm $model */
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
@@ -34,12 +34,12 @@ $this->pageTitle = Yii::app()->name;
 	<div class="row span6">
 		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/02T.png">
 		<?php
-		if (!(($oClientCreateForm->get_way = Yii::app()->clientForm->getSessionGetWay()) && (array_key_exists($oClientCreateForm->get_way, Dictionaries::aWays(Yii::app()->clientForm->getSessionProduct()))))) {
-			$oClientCreateForm->get_way = "1";
+		if (!(($oClientCreateForm->channel_type = Yii::app()->clientForm->getSessionChannelType()) && (array_key_exists($oClientCreateForm->channel_type, Dictionaries::aChannels(Yii::app()->clientForm->getSessionProduct()))))) {
+			$oClientCreateForm->channel_type = "1";
 		}
 		?>
 		<?=
-		$form->radioButtonListRow($oClientCreateForm, 'get_way', Dictionaries::aWays(Yii::app()->clientForm->getSessionProduct()));
+		$form->radioButtonListRow($oClientCreateForm, 'channel_type', Dictionaries::aChannels(Yii::app()->clientForm->getSessionProduct()));
 		?>
 	</div>
 
