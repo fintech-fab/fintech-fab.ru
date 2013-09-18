@@ -1,52 +1,4 @@
 <?php
-
-/**
- * - 1 -
- * Контактные данные:
- * + Телефон
- * + Электронная почта
- * Личные данные:
- * + Фамилия
- * + Имя
- * + Отчество
- * + Дата рождения
- * + Пол
- * Паспортные данные:
- * + Серия / номер
- * + Когда выдан
- * -+ Кем выдан
- * + Код подразделения
- * Второй документ:
- * + Название
- * + Номер
- *
- * - 2 -
- * Адрес:
- * + Регион
- * + Город
- * + Адрес
- * Контактное лицо:
- * - ФИО
- * - Номер телефона
- *
- * - 3 -
- * Информация о работе:
- * - Место работы (название компании)
- * - Должность
- * - Номер телефона
- * - Стаж работы
- * - Среднемесячный доход
- * - Среднемесячный расход
- * - Наличие кредитов и займов в прошлом
- *
- * - 5 -
- * Подтверждение и отправка заявки
- * - Цифровой код
- * * Он потребуется для идентификации при получении займов через контактный центр "Кредди"
- * ** Должен содержать не менее 4 цифр
- * v Согласен с условиями и передачей данных
- *
- */
 /**
  * This is the model class for table "tbl_client".
  *
@@ -93,7 +45,7 @@
  * @property integer $numeric_code
  * @property integer $sms_code
  * @property integer $product
- * @property integer $channel_type
+ * @property integer $channel_id
  * @property integer $complete
  * @property string  $dt_add
  * @property string  $dt_update
@@ -150,7 +102,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, ip, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_type, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_id, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -297,33 +249,15 @@ class ClientData extends CActiveRecord
 		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
 		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
 
-		if ($this->product >= 100) {
-
-			switch ($this->product) {
-				case 101:
-					$this->product = 1;
-					$this->channel_type = 1;
-					break;
-				case 102:
-					$this->product = 2;
-					$this->channel_type = 1;
-					break;
-				case 103:
-					$this->product = 3;
-					$this->channel_type = 1;
-					break;
-				case 104:
-					$this->product = 1;
-					$this->channel_type = 2;
-					break;
-				default:
-					$this->product = 0;
-					$this->channel_type = 0;
-					break;
+		if (preg_match("/_/", $this->product)) {
+			$aProductAndChannel = explode("_", $this->product);
+			if (count($aProductAndChannel) === 2) {
+				$this->product = $aProductAndChannel[0];
+				$this->channel_id = $aProductAndChannel[1];
 			}
 		}
 		if ($this->product == 0) {
-			$this->channel_type = 0;
+			$this->channel_id = 0;
 		}
 
 		return parent::beforeSave();
@@ -386,7 +320,7 @@ class ClientData extends CActiveRecord
 			'numeric_code'        => 'Numeric Code',
 			'sms_code'            => 'SMS Code',
 			'product'             => 'Product',
-			'channel_type'        => 'Get Way',
+			'channel_id'          => 'Get Way',
 			'complete'            => 'Complete',
 			'dt_add'              => 'Dt Add',
 			'dt_update'           => 'Dt Update',
@@ -448,7 +382,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('numeric_code', $this->numeric_code);
 		$criteria->compare('sms_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
-		$criteria->compare('channel_type', $this->channel_type);
+		$criteria->compare('channel_id', $this->channel_id);
 		$criteria->compare('complete', $this->complete);
 		$criteria->compare('dt_add', $this->dt_add, true);
 		$criteria->compare('dt_update', $this->dt_update, true);

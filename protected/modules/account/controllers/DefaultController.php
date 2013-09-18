@@ -281,7 +281,7 @@ class DefaultController extends Controller
 
 			if ($oLoanForm->validate()) {
 				//сохраняем в сессию выбранный продукт
-				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_type);
+				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
 				$oForm = new SMSCodeForm('sendRequired');
 				$this->render('loan/do_loan', array('model' => $oForm));
 				Yii::app()->end();
@@ -346,12 +346,12 @@ class DefaultController extends Controller
 
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
-			$sChannelType = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
+			$iChannelId = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
 			//получаем массив, содержащий ID продукта и тип канала получения
 			//проверяем, что в массиве 2 значения (ID и канал)
 
 			//пробуем оформить подписку
-			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $sChannelType)) {
+			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
 				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
 				Yii::app()->end();
 			} else {

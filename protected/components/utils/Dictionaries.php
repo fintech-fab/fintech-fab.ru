@@ -265,25 +265,53 @@ class Dictionaries
 	public static function getProducts()
 	{
 		$aProducts = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList4Site();
-		echo '<pre>' . "";
-		CVarDumper::dump($aProducts);
-		echo '</pre>';
-		$aProductsList = array("0" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>Произошла ошибка!</span>",);
 
-
-		$aProductsList = array(
-			"101" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на карту Кредди</span>",
-			"102" => "<span data-price='1500' data-final-price='6000' data-price-count='60 дней' data-count='4 займа' data-time='7'>6000 рублей на неделю на карту Кредди</span>",
-			"103" => "<span data-price='1500' data-final-price='10000' data-price-count='60 дней' data-count='2 займа' data-time='14'>10000 рублей на 2 недели на карту Кредди</span>",
-			"104" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>3000 рублей на неделю на мобильный (МТС, Билайн, Мегафон)</span>",
-		);
+		$aProductsList = self::formatProductsList($aProducts);
 
 		return $aProductsList;
 	}
 
-	public function formatProductsList()
-	{
+	/**
+	 * @param $aProducts
+	 *
+	 * @return array
+	 */
 
+	public static function formatProductsList($aProducts)
+	{
+		$aProductsList = array();
+		if (is_array($aProducts)) {
+			foreach ($aProducts as $key => $aProduct) {
+				$iLoanLifetime = (int)($aProduct['loan_lifetime'] / 3600 / 24);
+				$iSubscriptionLifetime = (int)($aProduct['subscription_lifetime'] / 3600 / 24);
+				$aProductsList[$key] = "<span data-price='" . $aProduct['subscription_cost']
+					. "' data-final-price='" . $aProduct['amount'] . "' data-price-count='"
+					. $iSubscriptionLifetime
+					. "' data-count='" . $aProduct['loan_count']
+					. "' data-time='" . $iLoanLifetime . "'>"
+					. $aProduct['amount'] . " рублей на "
+					. ($iLoanLifetime == 7 ? 'неделю' : ($iLoanLifetime == 14 ? '2 недели' : $iLoanLifetime . ' дней'))
+					. " " . self::formatChannelName($aProduct['channel_name']) . "</span>";
+			}
+		} else {
+			$aProductsList = array("0" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>Произошла ошибка!</span>",);
+		}
+
+		return $aProductsList;
+	}
+
+	/**
+	 * @param $sName
+	 *
+	 * @return string
+	 */
+	public function formatChannelName($sName)
+	{
+		if (preg_match("/карт/", $sName)) {
+			return 'на карту Кредди';
+		} elseif (preg_match("/мобил/", $sName)) {
+			return 'на мобильный (МТС, Билайн, Мегафон)';
+		}
 	}
 
 	/**

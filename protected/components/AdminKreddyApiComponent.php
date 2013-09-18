@@ -188,7 +188,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param bool $bResend
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 
 	public function sendSmsPassword($bResend = false)
@@ -219,7 +219,7 @@ class AdminKreddyApiComponent
 	 * @param      $sPhone
 	 * @param bool $bResend
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public function resetPasswordSendSms($sPhone, $bResend = false)
 	{
@@ -251,7 +251,7 @@ class AdminKreddyApiComponent
 	 * @param $sPhone
 	 * @param $sSmsCode
 	 *
-	 * @return mixed
+	 * @return string|bool
 	 */
 	public function resetPasswordCheckSms($sPhone, $sSmsCode)
 	{
@@ -329,24 +329,24 @@ class AdminKreddyApiComponent
 	public function getClientChannels()
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (isset($aClientInfo['channel_types']) && is_array($aClientInfo['channel_types'])) {
-			return $aClientInfo['channel_types'];
+		if (isset($aClientInfo['channels']) && is_array($aClientInfo['channels'])) {
+			return $aClientInfo['channels'];
 		} else {
 			return array();
 		}
 	}
 
 	/**
-	 * @param $sChannel
+	 * @param $iChannel
 	 *
 	 * @return bool
 	 */
 
-	public function getChannelNameById($sChannel)
+	public function getChannelNameById($iChannel)
 	{
 		$aChannels = $this->getProductsChannels();
 
-		return (isset($aChannels[$sChannel])) ? $aChannels[$sChannel] : false;
+		return (isset($aChannels[$iChannel])) ? $aChannels[$iChannel] : false;
 	}
 
 	/**
@@ -598,9 +598,9 @@ class AdminKreddyApiComponent
 	{
 		$aProducts = $this->getProductsAndChannels();
 
-		if (isset($aProducts['channel_types'])) {
+		if (isset($aProducts['channels'])) {
 
-			return $aProducts['channel_types'];
+			return $aProducts['channels'];
 		}
 
 		return false;
@@ -618,10 +618,10 @@ class AdminKreddyApiComponent
 		$aClientChannels = $this->getClientChannels();
 
 		$aClientChannelsList = array();
-		if (isset($aProducts['channel_types']) && isset($aClientChannels)) {
-			foreach ($aClientChannels as $sChannel) {
-				if (isset($aProducts['channel_types'][$sChannel])) {
-					$aClientChannelsList[$sChannel] = $aProducts['channel_types'][$sChannel];
+		if (isset($aProducts['channels']) && isset($aClientChannels)) {
+			foreach ($aClientChannels as $iChannel) {
+				if (isset($aProducts['channels'][$iChannel])) {
+					$aClientChannelsList[$iChannel] = $aProducts['channels'][$iChannel];
 				}
 			}
 		}
@@ -650,17 +650,17 @@ class AdminKreddyApiComponent
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
 				//получаем из продукта каналы, по которым его можно получить
-				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
-					? $aProduct['channel_types']
+				$aProductChannels = (isset($aProduct['channels']) && is_array($aProduct['channels']))
+					? $aProduct['channels']
 					: array();
 				//перебираем каналы, по которым можно получить продукт
-				foreach ($aProductChannels as $sChannel) {
+				foreach ($aProductChannels as $iChannel) {
 					//проверяем, что у канала есть описание
 					//проверяем, что данный канал доступен пользователю
-					if (isset($aChannels[$sChannel])
-						&& in_array($sChannel, $aClientChannels)
+					if (isset($aChannels[$iChannel])
+						&& in_array($iChannel, $aClientChannels)
 					) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . mb_convert_case($aChannels[$sChannel], MB_CASE_LOWER, "UTF-8");
+						$aProductsAndChannels[($aProduct['id'] . '_' . $iChannel)] = $aProduct['name'] . ', ' . mb_convert_case($aChannels[$iChannel], MB_CASE_LOWER, "UTF-8");
 					}
 				}
 			}
@@ -691,15 +691,15 @@ class AdminKreddyApiComponent
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
 				//получаем из продукта каналы, по которым его можно получить
-				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
-					? $aProduct['channel_types']
+				$aProductChannels = (isset($aProduct['channels']) && is_array($aProduct['channels']))
+					? $aProduct['channels']
 					: array();
 				//перебираем каналы, по которым можно получить продукт
-				foreach ($aProductChannels as $sChannel) {
+				foreach ($aProductChannels as $iChannel) {
 					//проверяем, что у канала есть описание
 					//проверяем, что данный канал доступен пользователю
-					if (isset($aChannels[$sChannel])) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = array_merge($aProduct, array('channel_type' => $sChannel));
+					if (isset($aChannels[$iChannel])) {
+						$aProductsAndChannels[($aProduct['id'] . '_' . $iChannel)] = array_merge($aProduct, array('channel_name' => $aChannels[$iChannel]));
 					}
 				}
 			}
@@ -859,15 +859,15 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param        $sChannelType
+	 * @param        $iChannelId
 	 *
 	 *
 	 * @return array|bool
 	 */
-	public function doLoan($sSmsCode, $sChannelType)
+	public function doLoan($sSmsCode, $iChannelId)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_type' => $sChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_id' => $iChannelId));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -933,14 +933,14 @@ class AdminKreddyApiComponent
 	 * @param string $sSmsCode
 	 *
 	 * @param        $iProduct
-	 * @param        $sChannelType
+	 * @param        $iChannelId
 	 *
 	 * @return array|bool
 	 */
-	public function doSubscribe($sSmsCode, $iProduct, $sChannelType)
+	public function doSubscribe($sSmsCode, $iProduct, $iChannelId)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_type' => $sChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -982,11 +982,11 @@ class AdminKreddyApiComponent
 	/**
 	 * Сохранение в сессию выбранного канала получения продукта
 	 *
-	 * @param $sChannel
+	 * @param $iChannel
 	 */
-	public function setLoanSelectedChannel($sChannel)
+	public function setLoanSelectedChannel($iChannel)
 	{
-		Yii::app()->session['loanSelectedChannel'] = $sChannel;
+		Yii::app()->session['loanSelectedChannel'] = $iChannel;
 	}
 
 	/**
@@ -1027,7 +1027,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sType
 	 *
-	 * @return array|mixed
+	 * @return array
 	 */
 
 	private function getData($sType)
@@ -1060,7 +1060,7 @@ class AdminKreddyApiComponent
 	 * @param       $sAction
 	 * @param array $aRequest
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
