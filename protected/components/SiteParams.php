@@ -429,6 +429,38 @@ class SiteParams
 	}
 
 	/**
+	 * Перевод первой буквы строки в верхний регистр (мультибайтовая кодировка)
+	 * @param string $sText
+	 * @param string $sEncoding
+	 *
+	 * @return string
+	 */
+	public static function mb_ucfirst($sText, $sEncoding = 'utf-8')
+	{
+		$iStrLen = mb_strlen($sText, $sEncoding);
+		$sLeft = mb_substr($sText, 1, $iStrLen - 1, $sEncoding);
+		$sFirstChar = mb_substr($sText, 0, 1, $sEncoding);
+
+		return mb_convert_case($sFirstChar, MB_CASE_UPPER, $sEncoding) . $sLeft;
+	}
+
+	/**
+	 * Перевод первой буквы строки в нижний регистр (мультибайтовая кодировка)
+	 * @param string $sText
+	 * @param string $sEncoding
+	 *
+	 * @return string
+	 */
+	public static function mb_lcfirst($sText, $sEncoding = 'utf-8')
+	{
+		$iStrLen = mb_strlen($sText, $sEncoding);
+		$sLeft = mb_substr($sText, 1, $iStrLen - 1, $sEncoding);
+		$sFirstChar = mb_substr($sText, 0, 1, $sEncoding);
+
+		return mb_convert_case($sFirstChar, MB_CASE_LOWER, $sEncoding) . $sLeft;
+	}
+
+	/**
 	 * @param $sCommand
 	 *
 	 * @return string команда для консоли
