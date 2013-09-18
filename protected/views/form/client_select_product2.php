@@ -43,10 +43,10 @@ $aCrumbs = array(
 		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
 		// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 		if (!isset($oClientCreateForm->product)) {
-			$oClientCreateForm->product = reset(array_keys(FormatProductsChannels::getProducts()));
+			$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
 		}
 		?>
-		<?= $form->radioButtonListRow($oClientCreateForm, 'product', FormatProductsChannels::getProducts(), array("class" => "all")); ?>
+		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
 
 	</div>
 

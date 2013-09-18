@@ -1,12 +1,17 @@
 <?php
 /**
- * Class FormatProductsChannels
+ * Компонент ProductsChannelsComponent
  *
  * Отвечает за вывод на сайт списка доступных комбинаций продуктов/каналов, полученных из AdminKreddyApi
  */
 
-class FormatProductsChannels
+class ProductsChannelsComponent
 {
+	public function init()
+	{
+
+	}
+
 	/**
 	 * @return array
 	 */

@@ -39,34 +39,37 @@ $a = array(
 	'theme'          => 'classic',
 
 	'components'     => array(
-		'clientForm'     => array(
+		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
 		),
-		'adminKreddyApi' => array(
+		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
 			'sApiUrl'     => 'https://admin.kreddy.ru:8081/siteApi/',
 			'sTestApiUrl' => 'http://admin.kreddy.topas/siteApi/'
 		),
-		'antiBot'        => array(
+		'antiBot'          => array(
 			'class' => 'application.components.AntiBotComponent',
 		),
-		'siteParams'     => array(
+		'productsChannels' => array(
+			'class' => 'application.components.ProductsChannelsComponent',
+		),
+		'siteParams'       => array(
 			'class' => 'application.components.SiteParams',
 		),
-		'bootstrap'      => array(
+		'bootstrap'        => array(
 			'class'           => 'ext.bootstrap.components.Bootstrap',
 			'tooltipSelector' => '[rel=tooltip]',
 		),
-		'image'          => array(
+		'image'            => array(
 			'class'  => 'application.extensions.image.CImageComponent',
 			'driver' => 'GD',
 		),
-		'user'           => array(
+		'user'             => array(
 			'allowAutoLogin' => true,
 			'loginUrl'       => array('account/login'),
 		),
 
-		'urlManager'     => array(
+		'urlManager'       => array(
 			'urlFormat'      => 'path',
 			'showScriptName' => false,
 			'rules'          => array(
@@ -101,7 +104,7 @@ $a = array(
 			),
 		),
 
-		'db'             => array(
+		'db'               => array(
 			'connectionString' => 'mysql:host=localhost;dbname=kreddy',
 			'emulatePrepare'   => true,
 			'username'         => 'kreddy',
@@ -109,18 +112,18 @@ $a = array(
 			'charset'          => 'utf8',
 		),
 
-		'errorHandler'   => array(
+		'errorHandler'     => array(
 			'errorAction' => 'site/error',
 		),
 
-		'log'            => array(),
+		'log'              => array(),
 
-		'session'        => array(
+		'session'          => array(
 			'timeout'     => 60 * 60 * 2,
 			'sessionName' => 'st',
 		),
 
-		'request'        => array(
+		'request'          => array(
 			'class'                       => 'HttpRequest',
 			'enableCsrfValidation'        => true,
 			'enableCookieValidation'      => true,
