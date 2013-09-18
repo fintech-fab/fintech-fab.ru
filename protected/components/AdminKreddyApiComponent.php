@@ -56,7 +56,6 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array
 	 */
-
 	public function attributeNames()
 	{
 		return array('token' => 'Token');
@@ -65,12 +64,11 @@ class AdminKreddyApiComponent
 	/**
 	 * При инициализации обязательно требуется запросить обновление токена
 	 */
-
 	public function init()
 	{
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
-			//если существует токен, то запрашиваем его обновление
+			//если токен существует, то запрашиваем его обновление
 			$this->updateClientToken();
 		}
 	}
@@ -83,7 +81,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	public function getAuth($sPhone, $sPassword)
 	{
 		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
@@ -106,7 +103,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	public function createClientAndLogIn($aClientData)
 	{
 		$aRequest = array('clientData' => $aClientData);
@@ -127,7 +123,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	protected function updateClientToken()
 	{
 		//отсылаем текущий токен и получаем новый токен в ответ, обновляем его в сессии
@@ -155,7 +150,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	public function getSmsAuth($sSmsPassword)
 	{
 		$aRequest = array('sms_code' => $sSmsPassword);
@@ -173,7 +167,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
 
@@ -187,12 +181,11 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	public function sendSmsPassword($bResend = false)
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('sms_resend' => (int)$bResend));
 
-		if ($aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			//устанавливаем флаг "СМС отправлено" и время отправки
 			Yii::app()->adminKreddyApi->setSmsPassSentAndTime();
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -222,7 +215,7 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_resend' => (int)$bResend));
 		//если результат успешный
-		if ($aResult['code'] == self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] == self::SMS_SEND_OK) {
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			//ставим флаг "смс отправлено" и сохраняем время отправки в сесссию
 			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
 			//сохраняем телефон в сессию
@@ -254,7 +247,7 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_code' => $sSmsCode));
 
-		if ($aResult['sms_status'] == self::SMS_AUTH_OK) {
+		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -274,7 +267,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array|bool
 	 */
-
 	public function getClientInfo()
 	{
 
@@ -301,13 +293,15 @@ class AdminKreddyApiComponent
 				'balance'         => false
 			)
 		);
+
 		if (!empty($this->token)) {
 			//запрос данных по токену
 			$aGetData = $this->getData('info');
 
 			if (is_array($aGetData)) {
-				//если subscription пустой - делаем unset()
-				//это необходимо чтобы массив subscription не был заменен на путой при слиянии массивов
+				// TODO: где subscription ????? непонятные комментарии ниже...
+				// если subscription пустой - делаем unset()
+				// это необходимо, чтобы массив subscription не был заменен на пустой при слиянии массивов
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -319,7 +313,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Получаем массив с каналами, доступными клиенту
-	 * array('kreddy,'mobile')
+	 * array('kreddy','mobile')
 	 *
 	 * @return array
 	 */
@@ -334,11 +328,12 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем имя канала по его id
+	 *
 	 * @param $iChannel
 	 *
-	 * @return bool
+	 * @return string|bool
 	 */
-
 	public function getChannelNameById($iChannel)
 	{
 		$aChannels = $this->getProductsChannels();
@@ -349,7 +344,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение сообщения статуса (активен, в скоринге, ожидает оплаты)
 	 *
-	 * @return bool
+	 * @return string|bool
 	 */
 	public function getStatusMessage()
 	{
@@ -359,6 +354,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение баланса
+	 *
 	 * @return int
 	 */
 	public function getBalance()
@@ -369,6 +366,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение абсолютного значения баланса
+	 *
 	 * @return int|number
 	 */
 	public function getAbsBalance()
@@ -378,11 +377,9 @@ class AdminKreddyApiComponent
 		return ($aClientInfo['active_loan']['balance']) ? abs($aClientInfo['active_loan']['balance']) : 0;
 	}
 
-
 	/**
 	 * @return bool|string
 	 */
-
 	public function getSubscriptionRequest()
 	{
 		$aClientInfo = $this->getClientInfo();
@@ -393,7 +390,6 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool|string
 	 */
-
 	public function getSubscriptionProduct()
 	{
 		$aClientInfo = $this->getClientInfo();
@@ -404,7 +400,6 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool|string
 	 */
-
 	public function getSubscriptionProductId()
 	{
 		$aClientInfo = $this->getClientInfo();
@@ -413,7 +408,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return int|number
+	 * @return string|bool
 	 */
 	public function getSubscriptionActivity()
 	{
@@ -479,6 +474,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получение полного имени клиента
+	 *
 	 * @return string
 	 */
 	public function getClientFullName()
@@ -489,13 +486,15 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Есть ли у клиента задолженность по кредиту
+	 *
 	 * @return bool
 	 */
 	public function getIsDebt()
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['client_data']['is_debt'])) ? (boolean)$aClientInfo['client_data']['is_debt'] : false;
+		return (!empty($aClientInfo['client_data']['is_debt']));
 	}
 
 	/**
@@ -521,7 +520,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return CSort
 	 */
-
 	private function getHistorySort()
 	{
 		$sort = new CSort;
@@ -604,11 +602,10 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Получения списка каналов, доступных клиенту
+	 * Получение списка каналов, доступных клиенту
 	 *
 	 * @return array
 	 */
-
 	public function getClientProductsChannelsList()
 	{
 		$aProducts = $this->getProductsAndChannels();
@@ -632,7 +629,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array|bool
 	 */
-
 	public function getClientProductsAndChannelsList()
 	{
 		//получаем список продуктов
@@ -674,7 +670,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array|bool
 	 */
-
 	public function getClientProductsAndChannelsList4Site()
 	{
 		//получаем список продуктов
@@ -714,7 +709,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-
 	public function getProductNameById($iProductId)
 	{
 		$aProducts = $this->getProducts();
@@ -731,7 +725,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-
 	public function getProductCostById($iProductId)
 	{
 		$aProducts = $this->getProducts();
@@ -748,7 +741,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-
 	public function getProductLifetimeById($iProductId)
 	{
 		$aProducts = $this->getProducts();
@@ -765,7 +757,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-
 	public function getProductLoanAmountById($iProductId)
 	{
 		$aProducts = $this->getProducts();
@@ -782,7 +773,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-
 	public function getProductLoanCountById($iProductId)
 	{
 		$aProducts = $this->getProducts();
@@ -799,7 +789,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-
 	public function getProductLoanLifetimeById($iProductId)
 	{
 		$aProducts = $this->getProducts();
@@ -819,8 +808,7 @@ class AdminKreddyApiComponent
 		if (!isset($this->bIsCanGetLoan)) {
 			$this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('test_code' => 1));
 
-			$this->bIsCanGetLoan = (!$this->getIsNotAllowed()
-				&& !$this->getIsNeedSmsAuth());
+			$this->bIsCanGetLoan = (!$this->getIsNotAllowed() && !$this->getIsNeedSmsAuth());
 		}
 
 		return $this->bIsCanGetLoan;
@@ -859,7 +847,7 @@ class AdminKreddyApiComponent
 	 * @param        $iChannelId
 	 *
 	 *
-	 * @return array|bool
+	 * @return bool
 	 */
 	public function doLoan($sSmsCode, $iChannelId)
 	{
@@ -874,7 +862,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -931,7 +919,7 @@ class AdminKreddyApiComponent
 	 * @param        $iProduct
 	 * @param        $iChannelId
 	 *
-	 * @return array|bool
+	 * @return bool
 	 */
 	public function doSubscribe($sSmsCode, $iProduct, $iChannelId)
 	{
@@ -946,7 +934,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -966,7 +954,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение выбранного продукта из сессии
 	 *
-	 * @return string:bool
+	 * @return string|bool
 	 */
 	public function getSubscribeSelectedProduct()
 	{
@@ -988,9 +976,8 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение выбранного канала из сессии
 	 *
-	 * @return bool
+	 * @return string|bool
 	 */
-
 	public function getLoanSelectedChannel()
 	{
 		return (isset(Yii::app()->session['loanSelectedChannel']))
@@ -1001,7 +988,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение выбранного продукта из сессии
 	 *
-	 * @return string:bool
+	 * @return integer|bool
 	 */
 	public function getSubscribeSelectedProductId()
 	{
@@ -1014,7 +1001,6 @@ class AdminKreddyApiComponent
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -1025,7 +1011,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-
 	private function getData($sType)
 	{
 		//проверяем, какие данные запрошены, и выбираем необходимый экшн и отправляем запрос в API
@@ -1046,7 +1031,6 @@ class AdminKreddyApiComponent
 
 		$aData = $this->requestAdminKreddyApi($sAction);
 
-
 		return $aData;
 	}
 
@@ -1058,12 +1042,10 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
-		$aData = array('code' => self::ERROR_AUTH, 'message' => 'Произошла неизвестная ошибка. Позвоните на горячую линию.');
-
+		$aData = array('code' => self::ERROR_AUTH, 'message' => self::ERROR_MESSAGE_UNKNOWN);
 
 		$ch = curl_init($sApiUrl . $sAction);
 
@@ -1211,6 +1193,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверяем, отправлено ли СМС с паролем аутентификации
+	 *
 	 * @return bool
 	 */
 	public function checkSmsPassSent()
@@ -1282,10 +1265,9 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	public function checkSmsAuthStatus($aResult)
 	{
-		if ($aResult['sms_status'] == self::SMS_AUTH_OK) {
+		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
 			Yii::app()->session['smsAuthDone'] = true;
 
 			return true;
@@ -1301,7 +1283,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getIsSmsAuth()
 	{
-		return (!empty(Yii::app()->session['smsAuthDone'])) ? Yii::app()->session['smsAuthDone'] : false;
+		return (!empty(Yii::app()->session['smsAuthDone']));
 	}
 
 
@@ -1384,7 +1366,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sMessage
 	 */
-
 	public function setLastSmsMessage($sMessage)
 	{
 		$this->sLastSmsMessage = $sMessage;
@@ -1405,7 +1386,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sMessage
 	 */
-
 	public function setLastMessage($sMessage)
 	{
 		$this->sLastMessage = $sMessage;
@@ -1427,7 +1407,6 @@ class AdminKreddyApiComponent
 	 * @param $iCode
 	 *
 	 */
-
 	public function setLastCode($iCode)
 	{
 		$this->iLastCode = $iCode;
