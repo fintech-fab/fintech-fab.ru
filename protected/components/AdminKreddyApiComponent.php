@@ -675,7 +675,7 @@ class AdminKreddyApiComponent
 	 * @return array|bool
 	 */
 
-	public function getClientProductsAndChannelsList4Site()
+	public function getProductsList()
 	{
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
@@ -684,24 +684,14 @@ class AdminKreddyApiComponent
 		//получаем список каналов, доступных клиенту
 		//проверяем, что получили массивы
 		if (is_array($aProducts) && is_array($aChannels)) {
-			$aProductsAndChannels = array();
+			$aProductsList = array();
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
-				//получаем из продукта каналы, по которым его можно получить
-				$aProductChannels = (isset($aProduct['channels']) && is_array($aProduct['channels']))
-					? $aProduct['channels']
-					: array();
-				//перебираем каналы, по которым можно получить продукт
-				foreach ($aProductChannels as $iChannel) {
-					//проверяем, что у канала есть описание
-					//проверяем, что данный канал доступен пользователю
-					if (isset($aChannels[$iChannel])) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $iChannel)] = array_merge($aProduct, array('channel_name' => $aChannels[$iChannel]));
-					}
-				}
+				$aProductsList[$aProduct['id']] = $aProduct;
+
 			}
 
-			return $aProductsAndChannels;
+			return $aProductsList;
 		}
 
 		return false;

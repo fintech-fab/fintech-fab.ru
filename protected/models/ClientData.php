@@ -249,13 +249,6 @@ class ClientData extends CActiveRecord
 		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
 		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
 
-		if (preg_match("/_/", $this->product)) {
-			$aProductAndChannel = explode("_", $this->product);
-			if (count($aProductAndChannel) === 2) {
-				$this->product = $aProductAndChannel[0];
-				$this->channel_id = $aProductAndChannel[1];
-			}
-		}
 		if ($this->product == 0) {
 			$this->channel_id = 0;
 		}

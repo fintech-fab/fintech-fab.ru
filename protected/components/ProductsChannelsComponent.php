@@ -18,10 +18,10 @@ class ProductsChannelsComponent
 	public static function getProducts()
 	{
 		// получаем массив доступных продуктов и каналов
-		$aProducts = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList4Site();
+		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
 
 		// возвращаем форматированный массив
-		return self::formatProductsList4Site($aProducts);
+		return self::formatProductsList($aProducts);
 	}
 
 	/**
@@ -31,7 +31,7 @@ class ProductsChannelsComponent
 	 *
 	 * @return array
 	 */
-	public static function formatProductsList4Site($aProducts)
+	public static function formatProductsList($aProducts)
 	{
 		$aProductsList = array();
 		if (is_array($aProducts)) {
@@ -45,7 +45,7 @@ class ProductsChannelsComponent
 					. "' data-time='" . $iLoanLifetime . "'>"
 					. $aProduct['amount'] . " рублей на "
 					. ($iLoanLifetime == 7 ? 'неделю' : ($iLoanLifetime == 14 ? '2 недели' : $iLoanLifetime . ' дней'))
-					. " " . self::formatChannelName($aProduct['channel_name']) . "</span>";
+					. "</span>";
 			}
 		} else {
 			$aProductsList = array("0" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>Произошла ошибка!</span>",);
