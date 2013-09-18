@@ -895,7 +895,7 @@ class AdminKreddyApiComponent
 		if (!isset($this->bIsCanSubscribe)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
 			//TODO тут и в прочих местах сделать проверку статуса через метод
-			$this->bIsCanSubscribe = (($aResult['code'] !== self::ERROR_NOT_ALLOWED)
+			$this->bIsCanSubscribe = (!Yii::app()->adminKreddyApi->getIsNotAllowed() //(($aResult['code'] !== self::ERROR_NOT_ALLOWED)
 				&& ($aResult['code'] !== self::ERROR_NEED_SMS_AUTH));
 		}
 
@@ -1165,29 +1165,21 @@ class AdminKreddyApiComponent
 	/**
 	 * Проверяем, требует ли ответ API авторизации по СМС
 	 *
-	 * @param $aResult
-	 *
 	 * @return bool
 	 */
-	public function getIsNeedSmsAuth($aResult)
+	public function getIsNeedSmsAuth()
 	{
-		$iStatus = $this->getResultStatus($aResult);
-
-		return ($iStatus === self::ERROR_NEED_SMS_AUTH);
+		return ($this->getLastCode() === self::ERROR_NEED_SMS_AUTH);
 	}
 
 	/**
-	 * Проверяем, требует ли action API подтверждения одноразовым СМС-кодом
-	 *
-	 * @param $aResult
+	 * Проверяем, требует ли последний запрошенный action API подтверждения одноразовым СМС-кодом
 	 *
 	 * @return bool
 	 */
-	public function getIsNeedSmsCode($aResult)
+	public function getIsNeedSmsCode()
 	{
-		$iStatus = $this->getResultStatus($aResult);
-
-		return ($iStatus === self::ERROR_NEED_SMS_CODE);
+		return ($this->getLastCode() === self::ERROR_NEED_SMS_CODE);
 	}
 
 	/**
