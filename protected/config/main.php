@@ -40,9 +40,9 @@ $a = array(
 
 	'components'     => array(
 		'cache'            => array(
-			'class'          => 'CDbCache',
-			'connectionID'   => 'db',
-			'cacheTableName' => 'tbl_cache',
+			'class' => 'CMemCache',
+			//'connectionID'   => 'db',
+			//'cacheTableName' => 'tbl_cache',
 		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
