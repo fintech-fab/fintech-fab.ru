@@ -42,13 +42,7 @@ class FormController extends Controller
 		{
 			$oClientForm->attributes = $aPost; //передаем запрос в форму
 
-			if (isset($oClientForm->go_identification)) {
-				if ($oClientForm->validate()) {
-					Yii::app()->clientForm->goIdentification($oClientForm->go_identification);
-					//$oClientForm = Yii::app()->clientForm->getFormModel();
-					$this->redirect(Yii::app()->createUrl("form"));
-				}
-			} elseif ($oClientForm->validate()) {
+			if ($oClientForm->validate()) {
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
@@ -134,8 +128,8 @@ class FormController extends Controller
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 
-		// если не было POST запроса - перенаправляем на form
-		if (empty($aPostData)) {
+		// если не было POST запроса либо если флага, что SMS отправлялось, нет - перенаправляем на form
+		if (empty($aPostData) || !Yii::app()->clientForm->getFlagSmsSent()) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
