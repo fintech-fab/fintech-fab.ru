@@ -105,12 +105,13 @@ class AdminKreddyApiComponent
 	 */
 	public function createClient($aClientData)
 	{
-		$aRequest = array('clientData' => serialize($aClientData));
+		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
+			Yii::app()->session['smsAuthDone'] = true;
 
 			return true;
 		}
@@ -159,6 +160,7 @@ class AdminKreddyApiComponent
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
+			//TODO вынести в set
 			Yii::app()->session['smsAuthDone'] = true;
 
 			return true;
@@ -1098,7 +1100,7 @@ class AdminKreddyApiComponent
 		// очищаем сессии, связанные с отправкой SMS
 		$this->clearSmsState();
 
-		$this->setSessionToken(null);
+		//$this->setSessionToken(null);
 	}
 
 	/**

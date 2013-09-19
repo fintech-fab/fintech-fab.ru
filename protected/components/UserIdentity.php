@@ -47,4 +47,23 @@ class UserIdentity extends CUserIdentity
 
 		return !$this->errorCode;
 	}
+
+	/**
+	 * Функция для автоматического логина после заполнения анкеты
+	 *
+	 * @return bool
+	 */
+
+	public function autoAuthenticate()
+	{
+		//проверяем, авторизован ли клиент в API (был ли получен и установлен токен при создании клиента)
+		$bAuth = Yii::app()->adminKreddyApi->getIsAuth();
+		if ($bAuth) {
+			$this->errorCode = self::ERROR_NONE;
+		} else {
+			$this->errorCode = self::ERROR_USERNAME_INVALID;
+		}
+
+		return !$this->errorCode;
+	}
 }

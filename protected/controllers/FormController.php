@@ -149,10 +149,11 @@ class FormController extends Controller
 		} else {
 			$aClientData = ClientData::getClientDataById($iClientId);
 			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
-				$oLoginForm = new AccountLoginForm();
+				//автоматический логин юзера в личный кабинет
+				$oLogin = new AutoLoginForm();
+				$oLogin->setAttributes(array('username' => $aClientData['phone']));
 				Yii::app()->user->setStateKeyPrefix('_account');
-				$oLoginForm->setAttributes(array('username' => $aClientData['phone'], 'password' => $aClientData['password']));
-				if ($oLoginForm->validate() && $oLoginForm->login()) {
+				if ($oLogin->validate() && $oLogin->login()) {
 					Yii::app()->clientForm->setFormSent(false);
 					$this->redirect(Yii::app()->createUrl("/account"));
 				}
