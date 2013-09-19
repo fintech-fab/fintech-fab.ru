@@ -558,11 +558,13 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		if (isset($this->aProductsAndChannels)) {
-			return $this->aProductsAndChannels;
+		$aProducts = Yii::app()->cache->get('products_channels');
+		if (!empty($aProducts)) {
+			return $aProducts;
 		}
 		$aProductsAndChannels = $this->getData('products');
-		$this->aProductsAndChannels = $aProductsAndChannels;
+		//сохраняем в кэш с временем хранения 10 минут
+		Yii::app()->cache->set('products_channels', $aProductsAndChannels, 600);
 
 		return $aProductsAndChannels;
 	}
