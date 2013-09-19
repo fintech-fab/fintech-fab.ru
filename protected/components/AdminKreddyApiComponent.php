@@ -571,6 +571,7 @@ class AdminKreddyApiComponent
 			//кэш длительного хранения, на случай отключения API
 			Yii::app()->cache->set('productsLongTime', $aProductsAndChannels);
 		} else {
+			//если вдруг при обращении к API вылезла ошибка, достаем данные из длительного кэша
 			$aProducts = Yii::app()->cache->get('productsLongTime');
 			if (isset($aProducts)) {
 				return $aProducts;
