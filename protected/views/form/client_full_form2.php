@@ -15,12 +15,9 @@ $aCrumbs = array(
 $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 <?php
-// если форма уже была заполнена, регистрируем js-переменную
+// если форма уже была заполнена, надо разблокировать кнопку "Отправить"
 if (Yii::app()->clientForm->getFlagFullFormFilled()) {
-
 	Yii::app()->clientScript->registerScript('scriptFlagFullFormFilled', '
-		bFlagFullFormFilled = true;
-
 		// разблокировали кнопку Отправить
 		$("#submitButton").removeClass("disabled").attr("disabled",false);
 	', CClientScript::POS_READY);
@@ -38,7 +35,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			&&passportDataOk
 			&&addressOk
 			&&jobInfoOk
-			|| (bFlagFullFormFilled === true)
+			||bFlagFullFormFilled
 			){
 				// разблокировали все поля, чтобы они провалидировались
 				$("#jobInfo").find(":input").attr("disabled",false);
@@ -221,7 +218,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>
 
 <?php
-
+$sResultFlagFullFormFilled = (Yii::app()->clientForm->getFlagFullFormFilled()) ? 'true' : 'false';
 Yii::app()->clientScript->registerScript('accordionActions', '
 
 	$(".errorAlert").find(".alert-block").addClass("alert-block-fullform");
@@ -247,6 +244,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	var addressOk = false;
 	var jobInfoOk = false;
 	var sendFormOk = false;
+	var bFlagFullFormFilled = ' . $sResultFlagFullFormFilled . ';
 
 	var formName="' . get_class($oClientCreateForm) . '";
 
@@ -504,7 +502,7 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	}});
 
 
-');
+', CClientScript::POS_READY);
 
 $this->widget('YaMetrikaGoalsWidget', array(
 	'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
