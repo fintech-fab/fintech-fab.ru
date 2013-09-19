@@ -58,7 +58,7 @@ class FormController extends Controller
 		if (Cookie::compareDataInCookie('client', 'client_id', $iClientId)
 			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
-			if (isset($oClientForm) && $oClientForm) {
+			if (!empty($oClientForm)) {
 				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				$oClientForm->setAttributes($sessionClientData);
 			}
@@ -127,6 +127,7 @@ class FormController extends Controller
 	{
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
+		$iClientId = Yii::app()->clientForm->getClientId();
 
 		// если не было POST запроса либо если флага, что SMS отправлялось, нет - перенаправляем на form
 		if (empty($aPostData) || !Yii::app()->clientForm->getFlagSmsSent()) {
@@ -146,9 +147,15 @@ class FormController extends Controller
 			));
 			Yii::app()->end();
 		} else {
-			$iClientId = Yii::app()->clientForm->getClientId();
-			if (Yii::app()->clientForm->sendClientToApi($iClientId)) {
-				$this->redirect(Yii::app()->createUrl("/account"));
+			$aClientData = ClientData::getClientDataById($iClientId);
+			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
+				$oLoginForm = new AccountLoginForm();
+				Yii::app()->user->setStateKeyPrefix('_account');
+				$oLoginForm->setAttributes(array('username' => $aClientData['phone'], 'password' => $aClientData['password']));
+				if ($oLoginForm->validate() && $oLoginForm->login()) {
+					Yii::app()->clientForm->setFormSent(false);
+					$this->redirect(Yii::app()->createUrl("/account"));
+				}
 			}
 		}
 

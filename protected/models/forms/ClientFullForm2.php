@@ -13,6 +13,9 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 	public $product;
 	public $password;
 	public $password_repeat;
+	public $channel_id;
+	public $ip;
+	public $tracking_id;
 
 	/**
 	 * @return array
@@ -100,6 +103,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('password', 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!'),
 				array('password', 'length', 'min' => '8'),
 				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),
+				array('channel_id, ip, tracking_id', 'safe')
 			);
 		$aRules = array_merge($this->getRulesByFields(
 			array(

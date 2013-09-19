@@ -25,7 +25,7 @@ class AdminKreddyApiComponent
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
 
-	const API_ACTION_CREATE_CLIENT = 'siteClient/createClient';
+	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_LOAN = 'siteClient/doLoan';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
@@ -103,9 +103,9 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function createClientAndLogIn($aClientData)
+	public function createClient($aClientData)
 	{
-		$aRequest = array('clientData' => $aClientData);
+		$aRequest = array('clientData' => serialize($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
 		if ($aTokenData['code'] === self::ERROR_NONE) {

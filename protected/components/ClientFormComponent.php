@@ -196,6 +196,7 @@ class ClientFormComponent
 		 * Сохраняем данные формы в сессию
 		 */
 		$aClientFormData = $oClientForm->getAttributes();
+
 		Yii::app()->session[get_class($oClientForm)] = $aClientFormData;
 		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->iClientId;
 
@@ -260,7 +261,7 @@ class ClientFormComponent
 	 *
 	 * @param array $aPostData
 	 *
-	 * @return mixed
+	 * @return string|integer
 	 */
 	public function checkSmsCode($aPostData)
 	{
@@ -314,17 +315,17 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @param $iClientId
+	 * @param $aClientData
+	 *
+	 * @return bool
 	 */
 
-	public function sendClientToApi($iClientId)
+	public function sendClientToApi($aClientData)
 	{
-		$aClientData = ClientData::getClientDataById($iClientId);
-
 		//создаем клиента в admin.kreddy.ru через API
 		//получаем от API авторизацию (сообщение что токен получен)
 		//и логиним юзера
-		return (Yii::app()->adminKreddyApi->createClientAndLogIn($aClientData));
+		return (Yii::app()->adminKreddyApi->createClient($aClientData));
 	}
 
 	/**
@@ -747,10 +748,10 @@ class ClientFormComponent
 
 		$aSessionFormData = Yii::app()->session[get_class($oClientForm)];
 		if (isset($aSessionFormData['password'])) {
-			$aSessionFormData['password'] = '';
+			unset($aSessionFormData['password']);
 		}
 		if (isset($aSessionFormData['password_repeat'])) {
-			$aSessionFormData['password_repeat'] = '';
+			unset($aSessionFormData['password_repeat']);
 		}
 
 		return $aSessionFormData;
