@@ -63,7 +63,7 @@ $aCrumbs = array(
 			)); ?>
 		</div>
 	</div>
-	<?
+	<?php
 
 	$this->endWidget();
 
