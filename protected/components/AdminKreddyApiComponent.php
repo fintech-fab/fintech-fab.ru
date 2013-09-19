@@ -1349,6 +1349,8 @@ class AdminKreddyApiComponent
 
 		if ($sDate) {
 			$sDate = date('d.m.Y H:i', $sDate);
+
+			$sDate .= ' ' . CHtml::link('[?]', "#", array("rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
 		}
 
 		return $sDate;
