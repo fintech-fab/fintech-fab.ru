@@ -560,13 +560,22 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		$aProducts = Yii::app()->cache->get('products_channels');
+		$aProducts = Yii::app()->cache->get('products');
 		if (!empty($aProducts)) {
 			return $aProducts;
 		}
 		$aProductsAndChannels = $this->getData('products');
-		//сохраняем в кэш с временем хранения 10 минут
-		Yii::app()->cache->set('products_channels', $aProductsAndChannels, 600);
+		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
+			//сохраняем в кэш с временем хранения 10 минут
+			Yii::app()->cache->set('products', $aProductsAndChannels, 600);
+			//кэш длительного хранения, на случай отключения API
+			Yii::app()->cache->set('productsLongTime', $aProductsAndChannels);
+		} else {
+			$aProducts = Yii::app()->cache->get('productsLongTime');
+			if (isset($aProducts)) {
+				return $aProducts;
+			}
+		}
 
 		return $aProductsAndChannels;
 	}
