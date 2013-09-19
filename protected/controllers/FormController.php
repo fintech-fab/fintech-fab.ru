@@ -147,7 +147,9 @@ class FormController extends Controller
 			));
 			Yii::app()->end();
 		} else {
+			//если код верный, то берем данные из БД
 			$aClientData = ClientData::getClientDataById($iClientId);
+			//отправляем в API данные клиента, и если клиент успешно создан
 			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
 				//автоматический логин юзера в личный кабинет
 				$oLogin = new AutoLoginForm();
