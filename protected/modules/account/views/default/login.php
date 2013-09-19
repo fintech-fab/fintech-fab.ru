@@ -29,7 +29,7 @@ $this->breadcrumbs = array(
 	</div>
 
 	<div class="row buttons">
-		<? $this->widget('bootstrap.widgets.TbButton', array(
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'id'         => 'submitButton',
 			'buttonType' => 'submit',
 			'type'       => 'primary',
