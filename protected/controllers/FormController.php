@@ -101,8 +101,10 @@ class FormController extends Controller
 	 */
 	public function actionSendSmsCode()
 	{
-		// если в сессии телефона нет - редирект на form
-		if (!Yii::app()->clientForm->getSessionPhone()) {
+		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
+		if (!Yii::app()->clientForm->getSessionPhone()
+			|| (SiteParams::B_FULL_FORM && !Yii::app()->clientForm->getFlagFullFormFilled())
+		) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
@@ -156,8 +158,7 @@ class FormController extends Controller
 				$oLogin->setAttributes(array('username' => $aClientData['phone']));
 				Yii::app()->user->setStateKeyPrefix('_account');
 				if ($oLogin->validate() && $oLogin->login()) {
-					Yii::app()->clientForm->setFormSent(false);
-					$this->redirect(Yii::app()->createUrl("/account"));
+					Yii::app()->clientForm->setFormSent(true);
 				}
 			}
 		}
