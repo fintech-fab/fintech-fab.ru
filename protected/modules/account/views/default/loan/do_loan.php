@@ -21,14 +21,14 @@ $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');
 ?>
 	<div class="alert in alert-block alert-warning span7">
-		Для оформления займа требуется подтверждение одноразовым СМС-кодом
+		Для оформления займа требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Отправить СМС с кодом подтверждения на номер +7' . Yii::app()->user->getId(),
+			'label'      => 'Отправить SMS с кодом подтверждения на номер +7' . Yii::app()->user->getId(),
 		)); ?>
 	</div>
 

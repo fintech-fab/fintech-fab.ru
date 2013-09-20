@@ -9,7 +9,7 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подписки';
+$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подключения';
 
 //подписка есть
 ?>
@@ -24,9 +24,10 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 	Yii::app()->adminKreddyApi->getSubscriptionActivity()
 	: "&mdash;"; ?>
 <br /><strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
-<?php if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
+<?php //TODO: проверять, что есть доступные займы + время убрать
+if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
 	?>
-	<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
+	<strong>Новый займ Вы можете оформить:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
 	<br />
 <?php
 }

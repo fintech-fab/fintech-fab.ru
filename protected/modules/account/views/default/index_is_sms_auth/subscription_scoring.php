@@ -7,7 +7,7 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подписки';
+$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подключения';
 
 // подписка "висит" на скоринге
 ?>
