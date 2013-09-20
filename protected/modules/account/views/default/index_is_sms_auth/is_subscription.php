@@ -26,7 +26,8 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 <br /><strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
 <?php if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
 	?>
-	<strong>Мораторий на получение займа до:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
+	<strong>Новое подключение Вы можете оформить
+		после:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
 	<br />
 <?php
 }
