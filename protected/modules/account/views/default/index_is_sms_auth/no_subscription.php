@@ -2,7 +2,6 @@
 /**
  * @var $this DefaultController
  *
- * Нет подписки
  */
 
 $this->breadcrumbs = array(
@@ -11,13 +10,22 @@ $this->breadcrumbs = array(
 
 $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подключения';
 
-// Если нет пакетов
+// Если нет пакетов и нет запросов
 ?>
 
 <h4>Ваш пакет займов</h4>
 
-<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
+<h5>Нет активных пакетов</h5>
+
 <?php
+// если есть статус, выводим его
+if (Yii::app()->adminKreddyApi->getStatusMessage()) {
+	?>
+	<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
+	<br />
+<?php
+}
+
 // если есть мораторий на подписку, то выводим его
 if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 	?>
