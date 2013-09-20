@@ -24,10 +24,10 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 	Yii::app()->adminKreddyApi->getSubscriptionActivity()
 	: "&mdash;"; ?>
 <br /><strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
-<?php if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
+<?php //TODO: проверять, что есть доступные займы + время убрать
+if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
 	?>
-	<strong>Новое подключение Вы можете оформить
-		после:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
+	<strong>Новый займ Вы можете оформить:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
 	<br />
 <?php
 }
