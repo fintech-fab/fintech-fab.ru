@@ -5,7 +5,7 @@
  */
 class ClientLoanForm extends ClientCreateFormAbstract
 {
-	public $channel_type;
+	public $channel_id;
 
 	/**
 	 * @return array
@@ -13,8 +13,8 @@ class ClientLoanForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 		$aRules = array(
-			array('channel_type', 'required', 'message' => 'Для оформления займа требуется выбрать способ его получения'),
-			array('channel_type', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsChannelsList()), 'message' => 'Для оформления займа требуется выбрать способ его получения'),
+			array('channel_id', 'required', 'message' => 'Для оформления займа требуется выбрать способ его получения'),
+			array('channel_id', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsChannelsList()), 'message' => 'Для оформления займа требуется выбрать способ его получения'),
 		);
 
 		return $aRules;
@@ -28,7 +28,7 @@ class ClientLoanForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('channel_type' => 'Выберите способ получения продукта')
+			array('channel_id' => 'Выберите способ получения продукта')
 		);
 	}
 }
