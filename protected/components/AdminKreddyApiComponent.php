@@ -590,6 +590,7 @@ class AdminKreddyApiComponent
 
 	public function getClientProductsChannelsList()
 	{
+
 		$aProducts = $this->getProductsAndChannels();
 		$aClientChannels = $this->getClientChannels();
 
@@ -601,6 +602,7 @@ class AdminKreddyApiComponent
 				}
 			}
 		}
+
 
 		return $aClientChannelsList;
 	}
@@ -614,6 +616,7 @@ class AdminKreddyApiComponent
 
 	public function getClientProductsAndChannelsList()
 	{
+		return false;
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
 		//получаем список каналов
