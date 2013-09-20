@@ -276,9 +276,14 @@ class AdminKreddyApiComponent
 				'product'         => false,
 				'activity_to'     => false,
 				'available_loans' => false,
-				'moratorium_to'   => false,
 				'balance'         => false
+			),
+			'moratoriums'  => array(
+				'loan'         => false,
+				'subscription' => false,
+				'scoring'      => false,
 			)
+
 		);
 		if (!empty($this->token)) {
 			//запрос данных по токену
@@ -418,12 +423,36 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-	public function getSubscriptionLoanMoratorium()
+	public function getMoratoriumLoan()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sMoratoriumTo = (isset($aClientInfo['subscription']['moratorium_to']))
-			? $aClientInfo['subscription']['moratorium_to']
+		$sMoratoriumTo = (isset($aClientInfo['moratoriums']['loan']))
+			? $aClientInfo['moratoriums']['loan']
 			: null;
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
+
+		return $sMoratoriumTo;
+	}
+
+	/**
+	 * Возвращает дату окончания моратория на займ, если такой мораторий есть
+	 *
+	 * @return bool|string
+	 */
+	public function getMoratoriumSubscription()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
+			? $aClientInfo['moratoriums']['subscription']
+			: null;
+		$sMoratoriumScoring = (isset($aClientInfo['moratoriums']['scoring']))
+			? $aClientInfo['moratoriums']['scoring']
+			: null;
+
+		$sMoratoriumSub = strtotime($sMoratoriumSub);
+		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
+		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
+
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
 
 		return $sMoratoriumTo;
@@ -590,6 +619,7 @@ class AdminKreddyApiComponent
 
 	public function getClientProductsChannelsList()
 	{
+
 		$aProducts = $this->getProductsAndChannels();
 		$aClientChannels = $this->getClientChannels();
 
@@ -601,6 +631,7 @@ class AdminKreddyApiComponent
 				}
 			}
 		}
+
 
 		return $aClientChannelsList;
 	}
