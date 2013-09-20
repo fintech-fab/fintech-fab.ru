@@ -83,6 +83,7 @@ class DefaultController extends Controller
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
+
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()
 				&& !Yii::app()->adminKreddyApi->getSubscriptionRequest()
@@ -94,7 +95,15 @@ class DefaultController extends Controller
 				$sView = 'index_is_sms_auth/is_subscription';
 			}
 		} else {
-			$sView = 'index_not_sms_auth';
+			if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()
+				&& !Yii::app()->adminKreddyApi->getSubscriptionRequest()
+			) { //если нет подписки
+				$sView = 'index_not_sms_auth/no_subscription';
+			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
+				$sView = 'index_not_sms_auth/subscription_scoring';
+			} else { //если подписка есть
+				$sView = 'index_not_sms_auth/is_subscription';
+			}
 		}
 		/**
 		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
