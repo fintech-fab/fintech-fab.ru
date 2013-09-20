@@ -9,10 +9,10 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подписки';
+$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подключения';
 
 ?>
 
-<h4>Состояние подписки</h4>
+<h4>Состояние подключения</h4>
 
-<?= $passFormRender // отображаем форму запроса СМС-пароля?>
+<?= $passFormRender // отображаем форму запроса SMS-пароля?>

@@ -49,7 +49,8 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 		'disabled'   => true,
 	));
 	?>
-	<div id="textUntilResend" class="hide">Повторно запросить SMS можно через: <span id="untilResend"></span></div>
+	<div id="textUntilResend" class="span5 hide" style="margin-left: 0px;">Повторно запросить SMS с паролем можно через:
+		<span id="untilResend"></span></div>
 	<?php
 	$this->endWidget();
 	?>

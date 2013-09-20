@@ -15,7 +15,7 @@
 $this->pageTitle = Yii::app()->name;
 ?>
 <div class="alert in alert-block alert-warning span7">
-	Для доступа к закрытым данным требуется авторизоваться по одноразовому СМС-паролю
+	Для доступа к закрытым данным требуется авторизоваться по одноразовому SMS-паролю
 </div>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
