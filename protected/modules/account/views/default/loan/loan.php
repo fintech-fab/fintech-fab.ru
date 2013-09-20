@@ -15,7 +15,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 ?>
 
-<?= $form->radioButtonListRow($model, 'channel_type', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all")); ?>
+<?= $form->radioButtonListRow($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all")); ?>
 
 
 	<div class="form-actions">

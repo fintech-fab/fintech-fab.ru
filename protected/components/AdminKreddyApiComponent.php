@@ -305,8 +305,8 @@ class AdminKreddyApiComponent
 	public function getClientChannels()
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (isset($aClientInfo['channel_types']) && is_array($aClientInfo['channel_types'])) {
-			return $aClientInfo['channel_types'];
+		if (isset($aClientInfo['channels']) && is_array($aClientInfo['channels'])) {
+			return $aClientInfo['channels'];
 		} else {
 			return array();
 		}
@@ -574,9 +574,9 @@ class AdminKreddyApiComponent
 	{
 		$aProducts = $this->getProductsAndChannels();
 
-		if (isset($aProducts['channel_types'])) {
+		if (isset($aProducts['channels'])) {
 
-			return $aProducts['channel_types'];
+			return $aProducts['channels'];
 		}
 
 		return false;
@@ -594,10 +594,10 @@ class AdminKreddyApiComponent
 		$aClientChannels = $this->getClientChannels();
 
 		$aClientChannelsList = array();
-		if (isset($aProducts['channel_types']) && isset($aClientChannels)) {
+		if (isset($aProducts['channels']) && isset($aClientChannels)) {
 			foreach ($aClientChannels as $sChannel) {
-				if (isset($aProducts['channel_types'][$sChannel])) {
-					$aClientChannelsList[$sChannel] = $aProducts['channel_types'][$sChannel];
+				if (isset($aProducts['channels'][$sChannel])) {
+					$aClientChannelsList[$sChannel] = $aProducts['channels'][$sChannel];
 				}
 			}
 		}
@@ -626,8 +626,8 @@ class AdminKreddyApiComponent
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
 				//получаем из продукта каналы, по которым его можно получить
-				$aProductChannels = (isset($aProduct['channel_types']) && is_array($aProduct['channel_types']))
-					? $aProduct['channel_types']
+				$aProductChannels = (isset($aProduct['channels']) && is_array($aProduct['channels']))
+					? $aProduct['channels']
 					: array();
 				//перебираем каналы, по которым можно получить продукт
 				foreach ($aProductChannels as $sChannel) {
@@ -644,7 +644,7 @@ class AdminKreddyApiComponent
 			return $aProductsAndChannels;
 		}
 
-		return false;
+		return array();
 
 	}
 
@@ -805,7 +805,7 @@ class AdminKreddyApiComponent
 	public function doLoan($sSmsCode, $sChannelType)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_type' => $sChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_id' => $sChannelType));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -878,7 +878,7 @@ class AdminKreddyApiComponent
 	public function doSubscribe($sSmsCode, $iProduct, $sChannelType)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_type' => $sChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $sChannelType));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);

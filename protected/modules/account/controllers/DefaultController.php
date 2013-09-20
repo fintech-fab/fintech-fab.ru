@@ -281,7 +281,7 @@ class DefaultController extends Controller
 
 			if ($oLoanForm->validate()) {
 				//сохраняем в сессию выбранный продукт
-				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_type);
+				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
 				$oForm = new SMSCodeForm('sendRequired');
 				$this->render('loan/do_loan', array('model' => $oForm));
 				Yii::app()->end();
