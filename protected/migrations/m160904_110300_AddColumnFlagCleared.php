@@ -1,5 +1,5 @@
 <?php
-class m130904_173000_FixNumericCodeType extends CDbMigration
+class m160904_110300_AddColumnFlagCleared extends CDbMigration
 {
 	public function up()
 	{
