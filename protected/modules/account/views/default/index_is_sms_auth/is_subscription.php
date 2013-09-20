@@ -25,9 +25,10 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 	: "&mdash;"; ?>
 <br /><strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
 <?php //TODO: проверять, что есть доступные займы + время убрать
-if (Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium()) {
+// если есть мораторий на займ и ещё есть доступные займы, выводим соответствующее сообщение
+if (Yii::app()->adminKreddyApi->getMoratoriumLoan() && Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans() > 0) {
 	?>
-	<strong>Новый займ Вы можете оформить:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanMoratorium() ?>
+	<strong>Новый займ Вы можете оформить после:</strong> <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
 	<br />
 <?php
 }

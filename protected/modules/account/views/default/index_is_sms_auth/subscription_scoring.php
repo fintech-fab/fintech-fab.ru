@@ -16,4 +16,3 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 
 <strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
 <strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />
-
