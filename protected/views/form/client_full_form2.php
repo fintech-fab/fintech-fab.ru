@@ -218,6 +218,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php $this->endWidget('application.components.utils.IkTbActiveForm'); ?>
 
 <?php
+//TODO вынести в .js
 $sResultFlagFullFormFilled = (Yii::app()->clientForm->getFlagFullFormFilled()) ? 'true' : 'false';
 Yii::app()->clientScript->registerScript('accordionActions', '
 
@@ -290,31 +291,6 @@ Yii::app()->clientScript->registerScript('accordionActions', '
 	    $.fn.yiiactiveform.validate(form, function (data) {
 	        $.each(settings.attributes, function () {
 				if(this.id==formName+"_sex"){
-	                $.fn.yiiactiveform.updateInput(this, data, form);
-	                this.afterValidateAttribute();
-	            }
-	        });
-	    });
-	});
-
-	jQuery("#product").find(":input").change(function()
-	{
-		var form=$("#"+formName);
-		var settings = form.data("settings");
-		var regExp = new RegExp("^"+formName+"_product");
-		$.each(settings.attributes, function () {
-			var sID = this.id;
-	        if(sID.match(regExp)){
-	            this.status = 2; // force ajax validation
-	        }
-	    });
-	    form.data("settings", settings);
-
-		// trigger ajax validation
-	    $.fn.yiiactiveform.validate(form, function (data) {
-	        $.each(settings.attributes, function () {
-	            var sID = this.id;
-				if(sID.match(regExp)){
 	                $.fn.yiiactiveform.updateInput(this, data, form);
 	                this.afterValidateAttribute();
 	            }

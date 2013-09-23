@@ -10,10 +10,8 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 {
 
 	public $complete;
-	public $product;
 	public $password;
 	public $password_repeat;
-	public $channel_id;
 	public $ip;
 	public $tracking_id;
 
@@ -63,8 +61,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 			'complete',
 			'secret_question',
 			'secret_answer',
-
-			'product'
 		);
 
 		$aMyRules =
@@ -89,7 +85,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!'),
 
 				array('complete', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных'),
-				array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выберите сумму займа'),
 
 				array('friends_phone', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!'),
 				array('friends_fio', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),
@@ -103,7 +98,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 				array('password', 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!'),
 				array('password', 'length', 'min' => '8'),
 				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),
-				array('channel_id, ip, tracking_id', 'safe')
 			);
 		$aRules = array_merge($this->getRulesByFields(
 			array(

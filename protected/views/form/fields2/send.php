@@ -46,17 +46,7 @@ $productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + arr
 	<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', array('class' => 'span3') + $htmlOptions); ?>
 </div>
 <?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
-<div class="span6" id="product">
-	<?php
-	$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
-	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
-	if (!isset($oClientCreateForm->product)) {
-		$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
-	}
-	?>
-	<div id="product">
-		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all") + $productHtmlOptions); ?>
-	</div>
+<div class="span6">
 	<?= $form->passwordFieldRow($oClientCreateForm, 'password', $htmlOptions); ?>
 	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', $htmlOptions); ?>
 </div>
