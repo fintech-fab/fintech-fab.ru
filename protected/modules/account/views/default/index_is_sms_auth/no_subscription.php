@@ -26,6 +26,20 @@ if (Yii::app()->adminKreddyApi->getStatusMessage()) {
 <?php
 }
 
+$this->widget(
+	'bootstrap.widgets.TbButton',
+	array(
+		'label' => 'Посмотреть историю операций',
+		'size'  => 'small',
+		'icon'  => 'icon-list-alt',
+		'url'   => Yii::app()->createUrl('account/history'),
+	)
+);
+?>
+
+<div class="clearfix"></div>
+
+<?php
 // если есть мораторий на подписку, то выводим его
 if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 	?>
@@ -34,17 +48,23 @@ if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 <?php
 }
 
-// если старая подписка кончилась, действующих займов/подписок нет
-if (Yii::app()->adminKreddyApi->checkSubscribe() || Yii::app()->adminKreddyApi->checkLoan()) {
-	echo CHtml::link('Посмотреть историю операций', Yii::app()->createUrl('account/history'));
+// если можно оформить новый пакет
+if (Yii::app()->adminKreddyApi->checkSubscribe()) {
 
-	if (Yii::app()->adminKreddyApi->checkSubscribe()) {
-		echo " &middot; " . CHtml::link('Оформить пакет займов', Yii::app()->createUrl('account/subscribe'));
-	}
+	echo "<br/>" . CHtml::openTag("div", array("class" => "well")) . "Доступно новое подключение! <br/> <br/> ";
 
-	if (Yii::app()->adminKreddyApi->checkLoan()) {
-		echo " &middot; " . CHtml::link('Оформить займ', Yii::app()->createUrl('account/loan'));
-	}
+	$this->widget(
+		'bootstrap.widgets.TbButton',
+		array(
+			'label' => 'Оформить пакет займов',
+			'icon'  => "icon-ok icon-white",
+			'type'  => 'primary',
+			'size'  => 'small',
+			'url'   => Yii::app()->createUrl('account/subscribe'),
+		)
+	);
+
+	echo CHtml::closeTag("div");
 }
 ?>
 
