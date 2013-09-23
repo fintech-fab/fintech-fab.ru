@@ -35,7 +35,7 @@ if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 }
 
 // если старая подписка кончилась, действующих займов/подписок нет
-if (!Yii::app()->adminKreddyApi->getSubscriptionRequest() && Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans() == 0) {
+if (Yii::app()->adminKreddyApi->checkSubscribe() || Yii::app()->adminKreddyApi->checkLoan()) {
 	echo CHtml::link('Посмотреть историю операций', Yii::app()->createUrl('account/history'));
 
 	if (Yii::app()->adminKreddyApi->checkSubscribe()) {
