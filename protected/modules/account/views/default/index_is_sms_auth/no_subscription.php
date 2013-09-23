@@ -29,8 +29,7 @@ if (Yii::app()->adminKreddyApi->getStatusMessage()) {
 // если есть мораторий на подписку, то выводим его
 if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 	?>
-	<strong>Новый пакет Вы можете оформить
-		после:</strong> <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
+	Вы можете отправить заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
 	<br />
 <?php
 }
