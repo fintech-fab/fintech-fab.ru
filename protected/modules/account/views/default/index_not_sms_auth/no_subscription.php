@@ -13,9 +13,9 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 // Если нет пакетов и нет запросов
 ?>
 
-	<h4>Ваш пакет займов</h4>
+<h4>Ваш пакет займов</h4>
 
-	<h5>Нет активных пакетов</h5>
+<h5>Нет активных пакетов</h5>
 
 <?php
 // если есть статус, выводим его
@@ -29,11 +29,10 @@ if (Yii::app()->adminKreddyApi->getStatusMessage()) {
 // если есть мораторий на подписку, то выводим его
 if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 	?>
-	<strong>Новый пакет Вы можете оформить
-		после:</strong> <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
+	Вы можете отправить заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
 	<br />
 <?php
 }
 ?>
-	<br />
+<br />
 <?= $passFormRender // отображаем форму запроса SMS-пароля?>

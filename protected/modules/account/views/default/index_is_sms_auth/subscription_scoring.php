@@ -14,7 +14,7 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 
 <h4>Ваш пакет займов</h4>
 
-<strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
+<strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
 <?php
 // если есть статус, выводим его
 if (Yii::app()->adminKreddyApi->getStatusMessage()) {

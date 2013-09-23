@@ -16,8 +16,12 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 
 <h4>Ваш пакет займов</h4>
 
-<strong>Баланс:</strong>  <?= Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
-<strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?><br />
+<?php if (Yii::app()->adminKreddyApi->getBalance() != 0) {
+	// выводим сообщение, если баланс не равен 0
+	?>
+	<strong>Баланс:</strong>  <?= Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
+<?php } ?>
+<strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?><br />
 <strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />    <strong>Пакет активен
 	до:</strong>  <?=
 (Yii::app()->adminKreddyApi->getSubscriptionActivity()) ?
@@ -28,7 +32,7 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 // если есть мораторий на займ и ещё есть доступные займы, выводим соответствующее сообщение
 if (Yii::app()->adminKreddyApi->getMoratoriumLoan() && Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans() > 0) {
 	?>
-	<strong>Новый займ Вы можете оформить после:</strong> <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
+	Вы можете отправить заявку <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
 	<br />
 <?php
 }
