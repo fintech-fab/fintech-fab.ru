@@ -39,24 +39,25 @@ class AdminKreddyApiComponent
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение.';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Заявка оформлена. займ поступит в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Заявка оформлена. Займ поступит в течение нескольких минут. ';
 
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
 		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
 		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых пакетов',
+
 		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к пакету',
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
 		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_summ} рублей любым удобным способом', //TODO допилить
+		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом',
 
 		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
-		self::C_LOAN_DEBT                      => 'Задолжность по займу',
+		self::C_LOAN_DEBT                      => 'Задолженность по займу',
 		self::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
 		self::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
 		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
@@ -404,6 +405,12 @@ class AdminKreddyApiComponent
 		$sStatusName = (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
 
 		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
+
+		// если статус - ожидается оплата подключения, то заменяем в шаблоне {sub_pay_sum} на необходимую сумму
+		//TODO: добавить сумму подключения
+		if ($sStatusName === self::C_SUBSCRIPTION_PAYMENT) {
+			$sStatus = Yii::t('app', $this->aAvailableStatuses[self::C_SUBSCRIPTION_PAYMENT], array('{sub_pay_sum}' => 423432));
+		}
 
 		return $sStatus;
 	}
