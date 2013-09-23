@@ -8,13 +8,14 @@
 	?>
 	<ul>
 		<li>Сумма займа:
-			<span class="cost final_price"><?= Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span> рублей
+			<span class="cost final_price"><?= Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
-		<li>Вернуть <span class="cost final_price"><?= Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>
-			рублей до: <span class="cost time">23:50</span>, <span class="cost date"><?= $getDateToPayUntil; ?></span>
+		<li>Вернуть <span class="cost final_price">
+				<?= Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			до:&nbsp;<span class="cost time">23:50</span>, <span class="cost date"><?= $getDateToPayUntil; ?></span>
 		</li>
 		<li>Стоимость подключения:
-			<span class="cost price_count"><?= Dictionaries::$aDataPrices[$this->chosenProduct] ?></span> рублей
+			<span class="cost price_count"><?= Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Срок подключения:
 			<span class="cost price_month"><?= Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span></li>
