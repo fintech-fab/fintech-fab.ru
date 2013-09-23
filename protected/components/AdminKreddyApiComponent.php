@@ -733,7 +733,7 @@ class AdminKreddyApiComponent
 					if (isset($aChannels[$sChannel])
 						&& in_array($sChannel, $aClientChannels)
 					) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . mb_convert_case($aChannels[$sChannel], MB_CASE_LOWER, "UTF-8");
+						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . SiteParams::mb_lcfirst($aChannels[$sChannel]);
 					}
 				}
 			}
