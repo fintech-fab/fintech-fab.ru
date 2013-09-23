@@ -67,7 +67,6 @@ class AdminKreddyApiComponent
 		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
 	);
 
-
 	const ERROR_NONE = 0;
 	const ERROR_UNKNOWN = 1;
 	const ERROR_AUTH = 2;
@@ -406,11 +405,11 @@ class AdminKreddyApiComponent
 
 		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
 
-		// если статус - ожидается оплата подключения, то заменяем в шаблоне {sub_pay_sum} на необходимую сумму
-		//TODO: добавить сумму подключения
-		if ($sStatusName === self::C_SUBSCRIPTION_PAYMENT) {
-			$sStatus = Yii::t('app', $this->aAvailableStatuses[self::C_SUBSCRIPTION_PAYMENT], array('{sub_pay_sum}' => 423432));
-		}
+		$aReplacement = array(
+			'{sub_pay_sum}' => $this->getProductCostById($this->getSubscribeSelectedProductId()),
+		);
+
+		$sStatus = strtr($sStatus, $aReplacement);
 
 		return $sStatus;
 	}
