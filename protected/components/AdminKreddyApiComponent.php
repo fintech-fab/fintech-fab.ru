@@ -50,7 +50,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
 		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере N рублей любым удобным способом', //TODO допилить
+		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_summ} рублей любым удобным способом', //TODO допилить
 
 		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
