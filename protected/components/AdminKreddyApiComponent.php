@@ -6,18 +6,6 @@
 
 class AdminKreddyApiComponent
 {
-	const ERROR_NONE = 0; //нет ошибок
-	const ERROR_UNKNOWN = 1; //неизвестная ошибка
-	const ERROR_AUTH = 2; //ошибка авторизации
-	const ERROR_TOKEN_DATA = 3; //ошибочные данные в токене
-	const ERROR_TOKEN_VERIFY = 4; //ошибка проверки токена
-	const ERROR_TOKEN_EXPIRE = 5; //токен просрочен
-	const ERROR_TOKEN_NOT_EXIST = 6; //токен не существует
-	const CLIENT_NOT_EXIST = 7; //клиент не существует
-	const CLIENT_DATA_NOT_EXIST = 8; //данные клиента не существуют
-	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
-	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
-	const ERROR_NOT_ALLOWED = 11; //действие недоступно
 
 	/**
 	 * Статусы API
@@ -51,24 +39,25 @@ class AdminKreddyApiComponent
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение.';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Заявка оформлена. займ поступит в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Заявка оформлена. Займ поступит в течение нескольких минут. ';
 
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
 		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
 		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых пакетов',
+
 		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к пакету',
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
 		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере N рублей любым удобным способом', //TODO допилить
+		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом',
 
 		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
-		self::C_LOAN_DEBT                      => 'Задолжность по займу',
+		self::C_LOAN_DEBT                      => 'Задолженность по займу',
 		self::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
 		self::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
 		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
@@ -78,13 +67,26 @@ class AdminKreddyApiComponent
 		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
 		self::C_CLIENT_NEW                     => 'Новый клиент',
 	);
-
+	
+	const ERROR_NONE = 0; //нет ошибок
+	const ERROR_UNKNOWN = 1; //неизвестная ошибка
+	const ERROR_AUTH = 2; //ошибка авторизации
+	const ERROR_TOKEN_DATA = 3; //ошибочные данные в токене
+	const ERROR_TOKEN_VERIFY = 4; //ошибка проверки токена
+	const ERROR_TOKEN_EXPIRE = 5; //токен просрочен
+	const ERROR_TOKEN_NOT_EXIST = 6; //токен не существует
+	const CLIENT_NOT_EXIST = 7; //клиент не существует
+	const CLIENT_DATA_NOT_EXIST = 8; //данные клиента не существуют
+	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
+	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
+	const ERROR_NOT_ALLOWED = 11; //действие недоступно
+	
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
-
+	
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_LOAN = 'siteClient/doLoan';
@@ -420,6 +422,12 @@ class AdminKreddyApiComponent
 		$sStatusName = (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
 
 		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
+
+		$aReplacement = array(
+			'{sub_pay_sum}' => $this->getProductCostById($this->getSubscribeSelectedProductId()),
+		);
+
+		$sStatus = strtr($sStatus, $aReplacement);
 
 		return $sStatus;
 	}
