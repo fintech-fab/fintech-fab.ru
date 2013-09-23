@@ -22,7 +22,7 @@ if (Yii::app()->clientForm->getFlagFullFormFilled()) {
 		$("#submitButton").removeClass("disabled").attr("disabled",false);
 	', CClientScript::POS_READY);
 }
-
+//TODO вынести в .js
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
