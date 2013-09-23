@@ -64,6 +64,7 @@ class AdminKreddyApiComponent
 		self::C_LOAN_PAID                      => 'Займ оплачен',
 
 		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
+		self::C_CLIENT_NEW                     => 'Новый клиент',
 	);
 
 
