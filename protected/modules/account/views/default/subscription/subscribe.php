@@ -13,16 +13,20 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/doSubscribe'),
 ));
 
-$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-//проверяем, есть ли продукт в сессии, и есть ли список продуктов
-if ($model->product === false && Yii::app()->adminKreddyApi->getClientProductsAndChannelsList() !== false) {
-	//устанавливаем в качестве выбранного продукта первый в массиве
-	$model->product = reset(array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()));
-}
-?>
+// если есть доступные пакеты для данного пользователя
+if (is_array(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList())) {
+	$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
-<?= $form->radioButtonListRow($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all")); ?>
+	// если пакета в сессии нет
+	if ($model->product === false) {
+		//устанавливаем в качестве выбранного пакета первый из массива доступных
+		$model->product = reset(array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()));
+	}
 
+	echo $form->radioButtonList($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all"));
+	echo $form->error($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all"));
+
+	?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
@@ -34,5 +38,9 @@ if ($model->product === false && Yii::app()->adminKreddyApi->getClientProductsAn
 	</div>
 
 <?php
+
+} else { // если доступных пакетов нет - выводим соответствующее сообщение
+	echo CHtml::tag("div", array("class" => "alert alert-info"), Yii::app()->adminKreddyApi->getClientProductsAndChannelsList());
+}
 
 $this->endWidget();

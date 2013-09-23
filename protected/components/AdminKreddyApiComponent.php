@@ -639,10 +639,10 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение списка продуктов и каналов для данного пользователя.
 	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
+	 * Если нет ничего доступного, выводит соответствующую информацию
 	 *
-	 * @return array|bool
+	 * @return array|string
 	 */
-
 	public function getClientProductsAndChannelsList()
 	{
 		//получаем список продуктов
@@ -675,7 +675,7 @@ class AdminKreddyApiComponent
 			return $aProductsAndChannels;
 		}
 
-		return array();
+		return "Доступные способы перечисления займа отсутствуют.";
 
 	}
 

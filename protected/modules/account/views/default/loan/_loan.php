@@ -9,7 +9,7 @@ $aChannelId = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
 
 <ul>
 	<li>
-		<strong>Продукт:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?>
+		<strong>Пакет:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?>
 	</li>
 	<li><strong>Сумма займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 		&nbsp;рублей
@@ -17,6 +17,6 @@ $aChannelId = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
 	<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanLifetimeById($iProductId) ?>
 		&nbsp;дней
 	</li>
-	<li><strong>Сбособ получения займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($aChannelId) ?>
+	<li><strong>Способ получения займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($aChannelId) ?>
 	</li>
 </ul>
