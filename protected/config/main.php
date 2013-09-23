@@ -127,14 +127,10 @@ $a = array(
 		),
 
 		'request'          => array(
-			'class'                       => 'HttpRequest',
-			'enableCsrfValidation'        => true,
-			'enableCookieValidation'      => true,
-			'aIgnoreCsrfValidationRoutes' => array(
-				'api/clientsNew',
-				'api/markProcessed',
-			),
-			'csrfTokenName'               => 'stcs',
+			'class'                  => 'HttpRequest',
+			'enableCsrfValidation'   => true,
+			'enableCookieValidation' => true,
+			'csrfTokenName'          => 'stcs',
 		),
 	),
 
