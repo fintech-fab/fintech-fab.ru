@@ -104,7 +104,7 @@ class AdminKreddyApiComponent
 
 	private $token;
 	private $aClientInfo;
-	private $aProducts;
+	private $aProductsAndChannels;
 	private $iLastCode;
 	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
