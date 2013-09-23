@@ -1350,7 +1350,8 @@ class AdminKreddyApiComponent
 		if ($sDate) {
 			$sDate = date('d.m.Y H:i', $sDate);
 
-			$sDate .= ' ' . CHtml::link('[?]', "#", array("rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
+			$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
+			$sDate .= CHtml::closeTag('i');
 		}
 
 		return $sDate;
