@@ -65,6 +65,7 @@ class AdminKreddyApiComponent
 		self::C_LOAN_PAID                      => 'Займ оплачен',
 
 		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
+		self::C_CLIENT_NEW                     => 'Новый клиент',
 	);
 
 	const ERROR_NONE = 0;
@@ -104,7 +105,7 @@ class AdminKreddyApiComponent
 
 	private $token;
 	private $aClientInfo;
-	private $aProducts;
+	private $aProductsAndChannels;
 	private $iLastCode;
 	private $sLastMessage = '';
 	private $sLastSmsMessage = '';
