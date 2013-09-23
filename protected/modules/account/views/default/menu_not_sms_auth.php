@@ -21,9 +21,9 @@ $this->menu = array(
 $this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
 
 if (Yii::app()->adminKreddyApi->getIsDebt()) {
-	$sDebtMessage = 'У вас есть задолженность по кредиту.';
+	$sDebtMessage = 'У вас есть задолженность по займу.';
 } elseif (!Yii::app()->adminKreddyApi->getIsDebt()) {
-	$sDebtMessage = 'У вас нет задолженности по кредиту.';
+	$sDebtMessage = 'У вас нет задолженности по займу.';
 }
 ?>
 

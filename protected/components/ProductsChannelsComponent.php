@@ -40,8 +40,8 @@ class ProductsChannelsComponent
 				$iSubscriptionLifetime = (int)($aProduct['subscription_lifetime'] / 3600 / 24);
 				$aProductsList[$key] = "<span data-price='" . $aProduct['subscription_cost']
 					. "' data-final-price='" . $aProduct['amount'] . "' data-price-count='"
-					. $iSubscriptionLifetime
-					. "' data-count='" . $aProduct['loan_count']
+					. $iSubscriptionLifetime . "&nbsp;дней"
+					. "' data-count='" . $aProduct['loan_count'] . "&nbsp;займа"
 					. "' data-time='" . $iLoanLifetime . "'>"
 					. $aProduct['amount'] . " рублей на "
 					. ($iLoanLifetime == 7 ? 'неделю' : ($iLoanLifetime == 14 ? '2 недели' : $iLoanLifetime . ' дней'))

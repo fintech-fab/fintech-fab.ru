@@ -65,11 +65,11 @@ class SiteParams
 	const C_INVOICE_TYPE_LOAN_FINE_PENALTY = 5;
 
 	public static $aTypes = array(
-		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Подписка',
-		self::C_INVOICE_TYPE_LOAN              => 'Займ',
-		self::C_INVOICE_TYPE_LOAN_FINE         => 'Займ и пени',
-		self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Займ и штраф',
-		self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Займ, пени и штраф',
+		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата пакета',
+		self::C_INVOICE_TYPE_LOAN              => 'Возврат займа',
+		self::C_INVOICE_TYPE_LOAN_FINE         => 'Возврат займа и пени',
+		self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Возврат займа и штрафа',
+		self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Возврат займа, пени и штрафа',
 	);
 
 	public static $iTimeNow = null;

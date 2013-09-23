@@ -9,7 +9,7 @@
 class Dictionaries
 {
 
-	const C_ERR_GENERAL = 'Ошибка: обратитесь в горячую линию.';
+	const C_ERR_GENERAL = 'Ошибка: обратитесь на горячую линию.';
 	const C_ERR_SMS_SENT = 'Ошибка: SMS уже отправлено';
 	const C_ERR_SMS_CANT_SEND = "Ошибка при отправке SMS";
 	const C_ERR_SMS_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.';
@@ -234,9 +234,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataPriceCounts = array(
-		"1" => "30 дней",
-		"2" => "60 дней",
-		"3" => "60 дней",
+		"1" => "30&nbsp;дней",
+		"2" => "60&nbsp;дней",
+		"3" => "60&nbsp;дней",
 	);
 
 	/**
@@ -244,9 +244,9 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aDataCounts = array(
-		"1" => "2 займа",
-		"2" => "4 займа",
-		"3" => "2 займа",
+		"1" => "2&nbsp;займа",
+		"2" => "4&nbsp;займа",
+		"3" => "2&nbsp;займа",
 	);
 
 	/**

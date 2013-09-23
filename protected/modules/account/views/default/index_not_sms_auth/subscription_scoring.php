@@ -12,9 +12,9 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 // подписка "висит" на скоринге
 ?>
 
-<h4>Ваш пакет займов</h4>
+	<h4>Ваш пакет займов</h4>
 
-<strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
+	<strong>Продукт:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
 <?php
 // если есть статус, выводим его
 if (Yii::app()->adminKreddyApi->getStatusMessage()) {
@@ -24,3 +24,5 @@ if (Yii::app()->adminKreddyApi->getStatusMessage()) {
 <?php
 }
 ?>
+	<br />
+<?= $passFormRender // отображаем форму запроса SMS-пароля?>
