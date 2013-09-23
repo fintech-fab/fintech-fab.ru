@@ -18,7 +18,7 @@
 		</li>
 		<li>Срок подключения:
 			<span class="cost price_month"><?= Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span></li>
-		<li>Количество займов по подписке:
+		<li>Количество займов по подключению:
 			<span class="cost count_subscribe"><?= Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
 	</ul>
 </div>
