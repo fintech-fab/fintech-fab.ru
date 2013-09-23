@@ -19,6 +19,65 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
 
+	/**
+	 * Статусы API
+	 */
+
+	const C_CLIENT_NEW = 'client_new';
+	const C_CLIENT_ACTIVE = 'client_active';
+
+	const C_CLIENT_MORATORIUM_LOAN = 'client_moratorium_loan';
+	const C_CLIENT_MORATORIUM_SUBSCRIPTION = 'client_moratorium_subscription';
+	const C_CLIENT_MORATORIUM_SCORING = 'client_moratorium_scoring';
+
+	const C_SCORING_PROGRESS = 'scoring_progress';
+	const C_SCORING_CANCEL = 'scoring_cancel';
+	const C_SCORING_ACCEPT = 'scoring_accept';
+
+	const C_SUBSCRIPTION_AVAILABLE = 'subscription_available';
+	const C_SUBSCRIPTION_PAYMENT = 'subscription_payment';
+	const C_SUBSCRIPTION_PAID = 'subscription_paid';
+	const C_SUBSCRIPTION_CANCEL = 'subscription_cancel';
+	const C_SUBSCRIPTION_ACTIVE = 'subscription_active';
+
+	const C_LOAN_AVAILABLE = 'loan_available';
+	const C_LOAN_CREATED = 'loan_created';
+	const C_LOAN_TRANSFER = 'loan_transfer';
+	const C_LOAN_ACTIVE = 'loan_active';
+	const C_LOAN_DEBT = 'loan_debt';
+	const C_LOAN_PAID = 'loan_paid';
+
+	const C_STATUS_ERROR = 'Ошибка!';
+
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение.';
+	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
+	const C_DO_LOAN_MSG = 'Заявка оформлена. займ поступит в течение нескольких минут. ';
+
+	private $aAvailableStatuses = array(
+
+		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
+		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых пакетов',
+		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к пакету',
+		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
+		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
+		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
+		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере N рублей любым удобным способом', //TODO допилить
+
+		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке', //+
+		self::C_SCORING_ACCEPT                 => 'Проверка данных',
+		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
+
+		self::C_LOAN_DEBT                      => 'Задолжность по займу',
+		self::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
+		self::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
+		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
+		self::C_LOAN_CREATED                   => 'Займ перечислен', //+
+		self::C_LOAN_PAID                      => 'Займ оплачен',
+
+		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
+	);
+
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
@@ -48,6 +107,7 @@ class AdminKreddyApiComponent
 	private $sLastSmsMessage = ''; //sms_message из последнего выполненного запроса
 	private $bIsCanSubscribe = null; //клиент может оформить подписку
 	private $bIsCanGetLoan = null; //клиент может взять заём
+	private $bScoringAccepted = null;
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
@@ -298,7 +358,6 @@ class AdminKreddyApiComponent
 				'subscription' => false,
 				'scoring'      => false,
 			)
-
 		);
 
 		if (!empty($this->token)) {
@@ -357,7 +416,11 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return ($aClientInfo['status']['title']) ? $aClientInfo['status']['title'] : false;
+		$sStatusName = (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
+
+		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
+
+		return $sStatus;
 	}
 
 	/**
@@ -651,7 +714,6 @@ class AdminKreddyApiComponent
 	 */
 	public function getClientProductsChannelsList()
 	{
-
 		$aProducts = $this->getProductsAndChannels();
 		$aClientChannels = $this->getClientChannels();
 
@@ -663,7 +725,6 @@ class AdminKreddyApiComponent
 				}
 			}
 		}
-
 
 		return $aClientChannelsList;
 	}
@@ -888,7 +949,7 @@ class AdminKreddyApiComponent
 	public function doLoan($sSmsCode, $iChannelId)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_id' => $sChannelType));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_id' => $iChannelId));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -963,11 +1024,15 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			if (isset($aResult['scoring_accepted'])) {
+				$this->setScoringAccepted($aResult['scoring_accepted']);
+			}
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
 		} else {
 			if (isset($aResult['sms_message'])) {
+				$this->setScoringAccepted(null);
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
@@ -1438,6 +1503,22 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @param $bAccepted
+	 */
+	public function setScoringAccepted($bAccepted)
+	{
+		$this->bScoringAccepted = $bAccepted;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getScoringAccepted()
+	{
+		return $this->bScoringAccepted;
+	}
+
+	/**
 	 * Сохраняем последний полученный код статуса запроса
 	 *
 	 * @param $iCode
@@ -1482,5 +1563,16 @@ class AdminKreddyApiComponent
 		);
 	}
 
-
+	/**
+	 * @return string
+	 */
+	public function getDoSubscribeMessage()
+	{
+		$bScoringAccepted = $this->getScoringAccepted();
+		if (!empty($bScoringAccepted)) {
+			return self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED;
+		} else {
+			return self::C_DO_SUBSCRIBE_MSG;
+		}
+	}
 }

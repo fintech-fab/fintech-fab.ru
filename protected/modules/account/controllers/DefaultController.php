@@ -242,7 +242,7 @@ class DefaultController extends Controller
 			if (count($aProductAndChannel) === 2) {
 				//пробуем оформить подписку
 				if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $aProductAndChannel[0], $aProductAndChannel[1])) {
-					$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
+					$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getDoSubscribeMessage()));
 					Yii::app()->end();
 				}
 			} else {
