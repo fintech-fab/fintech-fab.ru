@@ -26,17 +26,18 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 			'name'  => 'time', 'header' => 'Дата и время',
 			'value' => 'date("d.m.Y H:i",strtotime($data["time"]))',
 		),
-		array(
+		/*array(
 			'name'  => 'type', 'header' => 'Тип операции',
 			'value' => '($data["type"]=="invoice")?"Оплата услуги":"Получение денег"',
-		),
+		),*/
 		array(
 			'name'  => 'type_id', 'header' => 'Операция',
 			'value' => '($data["type"]=="invoice")?SiteParams::$aTypes[$data["type_id"]]:"Получение займа"',
 		),
 		array(
 			'name'  => 'amount', 'header' => 'Сумма',
-			'value' => 'abs($data["amount"])',
+			'type'  => 'raw',
+			'value' => '($data["type"]=="invoice")?"<span>".abs($data["amount"])."</span>":"<span style=\"color: green\">".abs($data["amount"])."</span>"',
 		),
 	),
 ));
