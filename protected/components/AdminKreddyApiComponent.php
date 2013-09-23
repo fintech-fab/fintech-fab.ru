@@ -76,6 +76,7 @@ class AdminKreddyApiComponent
 		self::C_LOAN_PAID                      => 'Займ оплачен',
 
 		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
+		self::C_CLIENT_NEW                     => 'Новый клиент',
 	);
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
