@@ -282,18 +282,6 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
-		//проверяем, нужна ли повторная видеоидентификация
-		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
-			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
-			if ($aGetIdent) {
-				$oIdentify = new VideoIdentifyForm();
-				$oIdentify->setAttributes($aGetIdent);
-				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/loan");
-				$this->render('need_identify', array('model' => $oIdentify));
-				Yii::app()->end();
-			}
-		}
-
 		$oLoanForm = new ClientLoanForm();
 		$this->render('loan/loan', array('model' => $oLoanForm));
 	}
@@ -386,7 +374,7 @@ class DefaultController extends Controller
 			//проверяем, что в массиве 2 значения (ID и канал)
 
 			//пробуем оформить подписку
-			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $sChannelType)) {
+			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
 				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getDoLoanMessage()));
 				Yii::app()->end();
 			} else {
