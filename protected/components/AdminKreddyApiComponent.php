@@ -1581,7 +1581,7 @@ class AdminKreddyApiComponent
 	public function getDoLoanMessage()
 	{
 		$aReplacement = array(
-			'{channel_type}' => $this->getLoanSelectedChannel(),
+			'{channel_type}' => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())),
 		);
 
 		$sMessage = strtr(self::C_DO_LOAN_MSG, $aReplacement);
