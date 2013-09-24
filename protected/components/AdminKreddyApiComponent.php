@@ -51,7 +51,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
 		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом',
+		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
@@ -406,10 +406,21 @@ class AdminKreddyApiComponent
 
 		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
 
+		// берём ID продукта из сессии, если есть
+		$iProductId = $this->getSubscribeSelectedProductId();
+		if (!$iProductId) {
+			// если нет в сессии - из ответа API
+			$iProductId = $this->getSubscriptionProductId();
+		}
+
 		$aReplacement = array(
-			'{sub_pay_sum}'       => $this->getProductCostById($this->getSubscribeSelectedProductId()),
+			'{sub_pay_sum}'       => $this->getProductCostById($iProductId),
 			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
 			'{account_url_end}'   => CHtml::closeTag("a"),
+			'{payment_url_start}' => CHtml::openTag("a", array(
+				"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
+			)),
+			'{payment_url_end}'   => CHtml::closeTag("a"),
 		);
 
 		$sStatus = strtr($sStatus, $aReplacement);
@@ -1054,7 +1065,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение выбранного продукта из сессии
 	 *
-	 * @return string:bool
+	 * @return string|bool
 	 */
 	public function getSubscribeSelectedProductId()
 	{
