@@ -77,10 +77,12 @@ class DefaultController extends Controller
 
 	/**
 	 * Главная страница личного кабинета
+	 * @var CActiveForm $oIdentify
 	 */
 	public function actionIndex()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
+
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
 
@@ -147,6 +149,20 @@ class DefaultController extends Controller
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
+
+
+		//проверяем, нужна ли повторная видеоидентификация
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
+				$this->render('need_identify', array('model' => $oIdentify));
+				Yii::app()->end();
+			}
+		}
+
 
 		$oProductForm = new ClientSubscribeForm();
 		$this->render('subscription/subscribe', array('model' => $oProductForm));
@@ -266,6 +282,18 @@ class DefaultController extends Controller
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkLoan()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		//проверяем, нужна ли повторная видеоидентификация
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/loan");
+				$this->render('need_identify', array('model' => $oIdentify));
+				Yii::app()->end();
+			}
 		}
 
 		$oLoanForm = new ClientLoanForm();

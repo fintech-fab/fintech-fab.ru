@@ -67,7 +67,7 @@ class AdminKreddyApiComponent
 		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
 		self::C_CLIENT_NEW                     => 'Новый клиент',
 	);
-	
+
 	const ERROR_NONE = 0; //нет ошибок
 	const ERROR_UNKNOWN = 1; //неизвестная ошибка
 	const ERROR_AUTH = 2; //ошибка авторизации
@@ -80,13 +80,16 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
-	
+	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
+
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
-	
+
+	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
+	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_LOAN = 'siteClient/doLoan';
@@ -100,7 +103,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
-	const ERROR_MESSAGE_UNKNOWN = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -1053,6 +1056,36 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка, нужна ли видеоидентификация
+	 *
+	 * @return bool
+	 */
+	public function checkIsNeedIdentify()
+	{
+		$this->getData('check_identify');
+
+		return (!$this->getIsError() && $this->getIsNeedIdentify());
+	}
+
+	/**
+	 * @return array|bool
+	 */
+
+	public function getIdentify()
+	{
+		$aResult = $this->getData('identify');
+
+		if (!$this->getIsError()) {
+			unset($aResult['code']);
+			unset($aResult['message']);
+
+			return $aResult;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Сохранение выбранного продукта в сессию
 	 *
 	 * @param $sProduct
@@ -1135,6 +1168,12 @@ class AdminKreddyApiComponent
 			case 'products':
 				$sAction = self::API_ACTION_GET_PRODUCTS;
 				break;
+			case 'identify':
+				$sAction = self::API_ACTION_GET_IDENTIFY;
+				break;
+			case 'check_identify':
+				$sAction = self::API_ACTION_CHECK_IDENTIFY;
+				break;
 			default:
 				$sAction = self::API_ACTION_GET_INFO;
 				break;
@@ -1179,6 +1218,7 @@ class AdminKreddyApiComponent
 			$aGetData = CJSON::decode($response);
 
 			if (is_array($aGetData)) {
+				$aData['message'] = 'Запрос выполнен успешно.';
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -1570,8 +1610,19 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE
 			&& $this->getLastCode() !== self::ERROR_NOT_ALLOWED
+			&& $this->getLastCode() !== self::ERROR_NEED_IDENTIFY
 		);
 	}
+
+	/**
+	 * Проверка, требуется ли видеоидентификация
+	 * @return bool
+	 */
+	public function getIsNeedIdentify()
+	{
+		return ($this->getLastCode() === self::ERROR_NEED_IDENTIFY);
+	}
+
 
 	/**
 	 * @return string
