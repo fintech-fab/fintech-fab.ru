@@ -1,6 +1,6 @@
 <?php
 
-Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+//Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 
 $a = array(
 	'basePath'       => __DIR__ . '/..',

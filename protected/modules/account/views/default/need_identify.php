@@ -5,9 +5,9 @@
 
 $this->pageTitle = Yii::app()->name . " - Оформление пакета";
 ?>
-	<h4>Требуется повторная видеоидентификация</h4>
+	<h4>Требуется идентификация</h4>
 
-	<p>Для продолжения требуется пройти повторную видеоидентификацию.</p>
+	<p>Для продолжения требуется пройти идентификацию.</p>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'login-form',
@@ -32,7 +32,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
 	'buttonType' => 'submit',
 	'type'       => 'primary',
 	'size'       => 'small',
-	'label'      => 'Пройти видеоидентификацию',
+	'label'      => 'Пройти идентификацию',
 ));
 
 $this->endWidget();
