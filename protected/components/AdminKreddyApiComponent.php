@@ -101,7 +101,9 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
-	const ERROR_MESSAGE_UNKNOWN = 'При отправке SMS произошла неизвестная ошибка. Позвоните на горячую линию.';
+	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
+	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
+
 
 	private $token;
 	private $aClientInfo;
@@ -215,7 +217,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
 
@@ -761,8 +763,7 @@ class AdminKreddyApiComponent
 			return $aProductsAndChannels;
 		}
 
-		return "Доступные способы перечисления займа отсутствуют.";
-
+		return false;
 	}
 
 	/**
@@ -932,7 +933,7 @@ class AdminKreddyApiComponent
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -1010,7 +1011,7 @@ class AdminKreddyApiComponent
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
 				$this->setScoringAccepted(null);
-				$this->setLastSmsMessage('Произошла неизвестная ошибка. Позвоните на горячую линию.');
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
 			return false;
@@ -1126,7 +1127,7 @@ class AdminKreddyApiComponent
 	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
-		$aData = array('code' => self::ERROR_AUTH, 'message' => 'Произошла неизвестная ошибка. Позвоните на горячую линию.');
+		$aData = array('code' => self::ERROR_AUTH, 'message' => self::ERROR_MESSAGE_UNKNOWN);
 
 
 		$ch = curl_init($sApiUrl . $sAction);
@@ -1580,5 +1581,13 @@ class AdminKreddyApiComponent
 	public function getDoLoanMessage()
 	{
 		return self::C_DO_LOAN_MSG;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNoAvailableProductsMessage()
+	{
+		return self::C_NO_AVAILABLE_PRODUCTS;
 	}
 }

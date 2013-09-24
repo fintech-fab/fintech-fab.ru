@@ -42,29 +42,22 @@ $this->widget(
 <?php
 // если есть мораторий на подписку, то выводим его
 if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
-	?>
-	Вы можете отправить заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
-	<br />
-<?php
+
+	echo "<br/>" . CHtml::openTag("div", array("class" => "well")) . "Вы можете отправить новую заявку " . Yii::app()->adminKreddyApi->getMoratoriumSubscription() . "<br/>";
+
+	echo CHtml::closeTag("div");
 }
 
 // если можно оформить новый пакет
 if (Yii::app()->adminKreddyApi->checkSubscribe()) {
 
-	echo "<br/>" . CHtml::openTag("div", array("class" => "well")) . "Доступно новое подключение! <br/> <br/> ";
+	echo "<br />" . CHtml::openTag("div", array("class" => "well")) . "Доступно новое подключение! <br /> <br /> ";
 
-	$this->widget(
-		'bootstrap.widgets.TbButton',
-		array(
-			'label' => 'Оформить пакет займов',
-			'icon'  => "icon-ok icon-white",
-			'type'  => 'primary',
-			'size'  => 'small',
-			'url'   => Yii::app()->createUrl('account/subscribe'),
-		)
-	);
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'label' => 'Оформить пакет займов', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
+			->createUrl('account/subscribe'),
+	));
 
 	echo CHtml::closeTag("div");
-}
-?>
+}?>
 

@@ -14,7 +14,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 // если есть доступные пакеты для данного пользователя
-if (is_array(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList())) {
+$aClientProductsAndChannelsList = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList();
+
+if (!empty($aClientProductsAndChannelsList)) {
 	$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
 	// если пакета в сессии нет
@@ -40,7 +42,10 @@ if (is_array(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList())) {
 <?php
 
 } else { // если доступных пакетов нет - выводим соответствующее сообщение
-	echo CHtml::tag("div", array("class" => "alert alert-info"), Yii::app()->adminKreddyApi->getClientProductsAndChannelsList());
-}
+	?>
 
+	<div class="alert alert-info"><?= Yii::app()->adminKreddyApi->getNoAvailableProductsMessage() ?></div>
+
+<?php
+}
 $this->endWidget();
