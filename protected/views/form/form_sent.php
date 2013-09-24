@@ -28,7 +28,7 @@ $this->pageTitle = Yii::app()->name;
 			array(
 				'label' => 'Перейти в личный кабинет »',
 				'type'  => 'primary',
-				'url'   => Yii::app()->createUrl('/account'),
+				'url'   => Yii::app()->createUrl('/account/subscribe'),
 			)
 		); ?>
 	</div>
