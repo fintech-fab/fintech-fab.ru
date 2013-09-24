@@ -1573,4 +1573,12 @@ class AdminKreddyApiComponent
 			return self::C_DO_SUBSCRIBE_MSG;
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getDoLoanMessage()
+	{
+		return self::C_DO_LOAN_MSG;
+	}
 }

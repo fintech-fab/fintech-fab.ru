@@ -361,7 +361,7 @@ class DefaultController extends Controller
 
 			//пробуем оформить подписку
 			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $sChannelType)) {
-				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
+				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getDoLoanMessage()));
 				Yii::app()->end();
 			} else {
 				$oForm->addError('smsCode', AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN);
