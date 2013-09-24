@@ -771,9 +771,10 @@ class AdminKreddyApiComponent
 		$aChannels = $this->getProductsChannels();
 		//получаем список каналов, доступных клиенту
 		$aClientChannels = $this->getClientChannels();
+		$aProductsAndChannels = array();
 		//проверяем, что получили массивы
 		if (is_array($aProducts) && is_array($aChannels) && is_array($aClientChannels)) {
-			$aProductsAndChannels = array();
+
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
 				//получаем из продукта каналы, по которым его можно получить
@@ -791,11 +792,9 @@ class AdminKreddyApiComponent
 					}
 				}
 			}
-
-			return $aProductsAndChannels;
 		}
 
-		return array();
+		return $aProductsAndChannels;
 	}
 
 	/**
