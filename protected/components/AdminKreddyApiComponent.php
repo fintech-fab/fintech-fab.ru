@@ -37,7 +37,7 @@ class AdminKreddyApiComponent
 
 	const C_STATUS_ERROR = 'Ошибка!';
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. <a href="{account_url}">Посмотреть информацию о пакете</a>';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Заявка оформлена. Займ поступит в течение нескольких минут. ';
 
@@ -53,7 +53,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом',
 
-		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке', //+
+		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
@@ -407,7 +407,9 @@ class AdminKreddyApiComponent
 		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
 
 		$aReplacement = array(
-			'{sub_pay_sum}' => $this->getProductCostById($this->getSubscribeSelectedProductId()),
+			'{sub_pay_sum}'       => $this->getProductCostById($this->getSubscribeSelectedProductId()),
+			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+			'{account_url_end}'   => CHtml::closeTag("a"),
 		);
 
 		$sStatus = strtr($sStatus, $aReplacement);
@@ -1549,7 +1551,8 @@ class AdminKreddyApiComponent
 		if (!empty($bScoringAccepted)) {
 
 			$aReplacement = array(
-				'{account_url}' => Yii::app()->createUrl("/account"),
+				'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+				'{account_url_end}'   => CHtml::closeTag("a"),
 			);
 
 			$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $aReplacement);
