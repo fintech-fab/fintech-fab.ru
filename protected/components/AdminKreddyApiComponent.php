@@ -39,21 +39,21 @@ class AdminKreddyApiComponent
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Заявка оформлена. Займ поступит в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит в течение нескольких минут. ';
 
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
 		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
-		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых пакетов',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых Пакетов',
 
-		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к пакету',
-		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
-		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
-		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
+		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
+		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
+		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
+		self::C_SUBSCRIPTION_PAID              => 'Займ доступен', //TODO:Пакет оплачен
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
-		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS               => 'Проверка данных. {account_url_start}Обновить статус{account_url_end}', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
@@ -64,8 +64,8 @@ class AdminKreddyApiComponent
 		self::C_LOAN_CREATED                   => 'Займ перечислен', //+
 		self::C_LOAN_PAID                      => 'Займ оплачен',
 
-		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
-		self::C_CLIENT_NEW                     => 'Новый клиент',
+		self::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
+		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
 	);
 
 	const ERROR_NONE = 0;

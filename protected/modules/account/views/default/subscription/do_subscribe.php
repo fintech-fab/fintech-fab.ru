@@ -3,9 +3,9 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление пакета";
+$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
-	<h4>Оформление пакета</h4>
+	<h4>Подключение Пакета</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -21,7 +21,7 @@ $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');
 ?>
 	<div class="alert in alert-block alert-warning span7">
-		Для оформления пакета требуется подтверждение одноразовым SMS-кодом
+		Для оформления Пакета требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

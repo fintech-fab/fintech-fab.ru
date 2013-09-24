@@ -24,5 +24,5 @@ $iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
 		&nbsp;дней
 	</li>
 	<li><strong>Количество займов в
-			пакете:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId) ?></li>
+			Пакете:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId) ?></li>
 </ul>

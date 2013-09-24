@@ -3,9 +3,9 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление пакета";
+$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
-<h4>Оформление пакета</h4>
+<h4>Подключение Пакета</h4>
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => 'Информация о подключении',

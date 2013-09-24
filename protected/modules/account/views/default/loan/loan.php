@@ -13,22 +13,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/doLoan'),
 ));
 
-?>
-
-<?=
-$form->radioButtonListRow($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all"));
-
-/**
- *
- *
- */
 
 // если есть доступные пакеты для данного пользователя
 $aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChannelsList();
 
 if (!empty($aClientProductsChannelsList)) {
 
-	echo $form->radioButtonListRow($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all"));
+	echo $form->radioButtonList($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all"));
+	echo $form->error($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList());
 
 	?>
 

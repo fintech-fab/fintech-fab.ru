@@ -15,7 +15,7 @@ class ImageController extends CController
 
 	public static $aTypes = array(
 		self::C_TYPE_PHOTO                 => array(
-			'title'       => 'Фотография клиента',
+			'title'       => 'Фотография Клиента',
 			'description' => '',
 		),
 		self::C_TYPE_PASSPORT_FRONT_FIRST  => array(

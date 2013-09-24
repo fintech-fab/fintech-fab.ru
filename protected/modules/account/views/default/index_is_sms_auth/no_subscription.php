@@ -13,9 +13,9 @@ $this->pageTitle = Yii::app()->name . ' - Личный кабинет - Сост
 // Если нет пакетов и нет запросов
 ?>
 
-<h4>Ваш пакет займов</h4>
+<h4>Ваш Пакет займов</h4>
 
-<h5>Нет активных пакетов</h5>
+<h5>Нет активных Пакетов</h5>
 
 <?php
 // если есть статус, выводим его
@@ -51,10 +51,10 @@ if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) {
 // если можно оформить новый пакет
 if (Yii::app()->adminKreddyApi->checkSubscribe()) {
 
-	echo "<br />" . CHtml::openTag("div", array("class" => "well")) . "Доступно новое подключение! <br /> <br /> ";
+	echo "<br />" . CHtml::openTag("div", array("class" => "well"));
 
 	$this->widget('bootstrap.widgets.TbButton', array(
-		'label' => 'Оформить пакет займов', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
+		'label' => 'Подключить Пакет', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
 			->createUrl('account/subscribe'),
 	));
 

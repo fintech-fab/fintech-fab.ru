@@ -3,9 +3,9 @@
 /* @var ClientSubscribeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление пакета";
+$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
-	<h4>Оформление пакета</h4>
+	<h4>Подключение Пакета</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -26,7 +26,7 @@ if (!empty($aClientProductsAndChannelsList)) {
 	}
 
 	echo $form->radioButtonList($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all"));
-	echo $form->error($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all"));
+	echo $form->error($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList());
 
 	?>
 
@@ -35,7 +35,7 @@ if (!empty($aClientProductsAndChannelsList)) {
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Оформить пакет',
+			'label'      => 'Оформить Пакет',
 		)); ?>
 	</div>
 
