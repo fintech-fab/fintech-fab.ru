@@ -96,9 +96,6 @@ $a = array(
 				'account/<controller:\w+>/<action:\w+>/<name:\w+>' => 'account/<controller>/<action>',
 				'account/<controller:\w+>/<action:\w+>'            => 'account/<controller>/<action>',
 
-				'form/identification'                              => 'form/identification',
-				'form/documents'                                   => 'form/documents',
-				'form/ajaxsendsms'                                 => 'form/ajaxsendsms',
 				'form/<step:\d+>'                                  => 'form/step',
 
 				'<controller:\w+>/<action:\w+>/<id:\d+>'           => '<controller>/<action>',
