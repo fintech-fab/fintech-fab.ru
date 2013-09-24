@@ -14,7 +14,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Пакет',
+	'title'   => 'Информация о подключении',
 	'content' => $this->renderPartial('subscription/_product', array(), true)
 ));
 $model->sendSmsCode = 1;

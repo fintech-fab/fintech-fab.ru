@@ -8,7 +8,7 @@ $this->pageTitle = Yii::app()->name . " - Оформление пакета";
 <h4>Оформление пакета</h4>
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Пакет',
+	'title'   => 'Информация о подключении',
 	'content' => $this->renderPartial('subscription/_product', array(), true)
 ));
 ?>

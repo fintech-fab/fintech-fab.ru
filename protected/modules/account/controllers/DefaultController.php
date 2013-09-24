@@ -77,12 +77,10 @@ class DefaultController extends Controller
 
 	/**
 	 * Главная страница личного кабинета
-	 * @var CActiveForm $oIdentify
 	 */
 	public function actionIndex()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
-
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
 
@@ -388,8 +386,8 @@ class DefaultController extends Controller
 			//проверяем, что в массиве 2 значения (ID и канал)
 
 			//пробуем оформить подписку
-			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
-				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getLastMessage()));
+			if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $sChannelType)) {
+				$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getDoLoanMessage()));
 				Yii::app()->end();
 			} else {
 				$oForm->addError('smsCode', AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN);

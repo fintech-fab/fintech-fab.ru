@@ -104,6 +104,8 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
+	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
+
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -759,7 +761,7 @@ class AdminKreddyApiComponent
 	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
 	 * Если нет ничего доступного, выводит соответствующую информацию
 	 *
-	 * @return array|string
+	 * @return array
 	 */
 	public function getClientProductsAndChannelsList()
 	{
@@ -793,7 +795,7 @@ class AdminKreddyApiComponent
 			return $aProductsAndChannels;
 		}
 
-		return "Доступные способы перечисления займа отсутствуют.";
+		return array();
 	}
 
 	/**
@@ -1061,6 +1063,7 @@ class AdminKreddyApiComponent
 				$this->setScoringAccepted(null);
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
+				$this->setScoringAccepted(null);
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
@@ -1656,5 +1659,21 @@ class AdminKreddyApiComponent
 		} else {
 			return self::C_DO_SUBSCRIBE_MSG;
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDoLoanMessage()
+	{
+		return self::C_DO_LOAN_MSG;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getNoAvailableProductsMessage()
+	{
+		return self::C_NO_AVAILABLE_PRODUCTS;
 	}
 }
