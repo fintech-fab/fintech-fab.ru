@@ -15,8 +15,22 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 ?>
 
-<?= $form->radioButtonListRow($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all")); ?>
+<?=
+$form->radioButtonListRow($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all"));
 
+/**
+ *
+ *
+ */
+
+// если есть доступные пакеты для данного пользователя
+$aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChannelsList();
+
+if (!empty($aClientProductsChannelsList)) {
+
+	echo $form->radioButtonListRow($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all"));
+
+	?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
@@ -28,5 +42,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 
 <?php
+
+} else { // если доступных пакетов нет - выводим соответствующее сообщение
+	?>
+	<div class="alert alert-info"><?= Yii::app()->adminKreddyApi->getNoAvailableProductsMessage() ?></div>
+
+<?php
+}
 
 $this->endWidget();
