@@ -37,9 +37,9 @@ class AdminKreddyApiComponent
 
 	const C_STATUS_ERROR = 'Ошибка!';
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
 
 	private $aAvailableStatuses = array(
 
@@ -50,7 +50,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
-		self::C_SUBSCRIPTION_PAID              => 'Займ доступен', //TODO:Пакет оплачен
+		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Проверка данных. {account_url_start}Обновить статус{account_url_end}', //+
@@ -755,7 +755,7 @@ class AdminKreddyApiComponent
 					if (isset($aChannels[$sChannel])
 						&& in_array($sChannel, $aClientChannels)
 					) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ', ' . SiteParams::mb_lcfirst($aChannels[$sChannel]);
+						$aProductsAndChannels[($aProduct['id'] . '_' . $sChannel)] = $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$sChannel]);
 					}
 				}
 			}
@@ -1580,7 +1580,13 @@ class AdminKreddyApiComponent
 	 */
 	public function getDoLoanMessage()
 	{
-		return self::C_DO_LOAN_MSG;
+		$aReplacement = array(
+			'{channel_type}' => $this->getLoanSelectedChannel(),
+		);
+
+		$sMessage = strtr(self::C_DO_LOAN_MSG, $aReplacement);
+
+		return $sMessage;
 	}
 
 	/**

@@ -11,7 +11,7 @@
 $this->pageTitle = Yii::app()->name;
 
 $aCrumbs = array(
-	array('Выбор пакета', 1),
+	array('Выбор Пакета', 1),
 	array('Знакомство', 2),
 	array('Заявка на займ', 5, 3)
 );

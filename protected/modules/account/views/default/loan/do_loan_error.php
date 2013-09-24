@@ -14,7 +14,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Займ',
+	'title'   => 'Информация о займе',
 	'content' => $this->renderPartial('loan/_loan', array(), true)
 ));
 $model->sendSmsCode = 1;

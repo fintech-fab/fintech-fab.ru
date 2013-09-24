@@ -8,7 +8,7 @@ $this->pageTitle = Yii::app()->name . " - Оформление займа";
 <h4>Оформление займа</h4>
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Займ',
+	'title'   => 'Информация о займе',
 	'content' => $this->renderPartial('loan/_loan', array(), true)
 ));
 ?>
