@@ -98,8 +98,7 @@ class DefaultController extends Controller
 				$sView .= 'is_subscription';
 			}
 		} else { // нет подписки
-			if (Yii::app()->adminKreddyApi->getMoratoriumSubscription()
-				|| Yii::app()->adminKreddyApi->getMoratoriumLoan()
+			if (Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan()
 			) { // если есть мораторий на подписку/скоринг или займ
 				$sView .= 'subscription_moratorium';
 			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
