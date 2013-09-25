@@ -476,52 +476,52 @@ class ClientCreateFormAbstract extends CFormModel
 	 *
 	 * @return array
 	 */
-
-	public function getAttributes($aAttributes = null)
-	{
-
-		if (!$aAttributes) {
-			$aAttributes = array();
-			$aRules = $this->rules();
-			foreach ($aRules as $aRule) {
-				if (gettype($aRule[0]) === "string") {
-					//ищем правила, где поля указаны через запятую списком
-					if (preg_match("/,/", $aRule[0])) {
-						$aSubRules = explode(',', $aRule[0]);
-						if (is_array($aSubRules)) {
-							foreach ($aSubRules as $sSubRule) {
-								$aAttributes[] = trim($sSubRule);
+	/* ВЫПИЛЕНО т.к. определены attributeNames в соответствующих классах
+		public function getAttributes($aAttributes = null)
+		{
+			if (!$aAttributes) {
+				$aAttributes = array();
+				$aRules = $this->rules();
+				foreach ($aRules as $aRule) {
+					if (gettype($aRule[0]) === "string") {
+						//ищем правила, где поля указаны через запятую списком
+						if (preg_match("/,/", $aRule[0])) {
+							$aSubRules = explode(',', $aRule[0]);
+							if (is_array($aSubRules)) {
+								foreach ($aSubRules as $sSubRule) {
+									$aAttributes[] = trim($sSubRule);
+								}
 							}
+						} else {
+							$aAttributes[] = $aRule[0];
 						}
-					} else {
-						$aAttributes[] = $aRule[0];
-					}
-				} elseif (gettype($aRule[0]) === "array") {
-					foreach ($aRule[0] as $aSubRule) {
-						if (gettype($aSubRule[0]) === "string") {
-							if (strlen($aSubRule[0]) > 1) {
-								//ищем правила, где поля указаны через запятую списком
-								if (preg_match("/,/", $aSubRule)) {
-									$aSubSubRules = explode(',', $aSubRule);
-									if (is_array($aSubSubRules)) {
-										foreach ($aSubSubRules as $sSubSubRule) {
-											$aAttributes[] = $sSubSubRule;
-										}
+					} elseif (gettype($aRule[0]) === "array") {
+						foreach ($aRule[0] as $aSubRule) {
+							if (gettype($aSubRule[0]) === "string") {
+								if (strlen($aSubRule[0]) > 1) {
+									//ищем правила, где поля указаны через запятую списком
+									if (preg_match("/,/", $aSubRule)) {
+										$aSubSubRules = explode(',', $aSubRule);
+										if (is_array($aSubSubRules)) {
+											foreach ($aSubSubRules as $sSubSubRule) {
+												$aAttributes[] = $sSubSubRule;
+											}
 
+										}
+									} else {
+										$aAttributes[] = $aSubRule[0];
 									}
-								} else {
-									$aAttributes[] = $aSubRule[0];
 								}
 							}
 						}
 					}
 				}
+				$aAttributes = array_unique($aAttributes);
 			}
-			$aAttributes = array_unique($aAttributes);
-		}
 
-		return parent::getAttributes($aAttributes);
-	}
+			return parent::getAttributes($aAttributes);
+		}
+	*/
 
 	/**
 	 * @return array|null

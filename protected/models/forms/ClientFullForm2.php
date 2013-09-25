@@ -268,5 +268,64 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 		$this->asa('FormFieldValidateBehavior')->checkAddressRes($attribute, $param);
 	}
 
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'first_name',
+			'last_name',
+			'third_name',
+
+			'birthday',
+
+			'phone',
+			'email',
+
+			'sex',
+
+			'passport_series',
+			'passport_number',
+			'passport_date',
+			'passport_issued',
+			'passport_code',
+
+			'document',
+			'document_number',
+
+			'address_reg_region',
+			'address_reg_city',
+			'address_reg_address',
+
+			'address_reg_as_res',
+
+			'address_res_region',
+			'address_res_city',
+			'address_res_address',
+
+			'relatives_one_fio',
+			'relatives_one_phone',
+
+			'friends_fio',
+			'friends_phone',
+
+			'job_company',
+			'job_position',
+			'job_phone',
+			'job_time',
+			'job_monthly_income',
+			'job_monthly_outcome',
+			'have_past_credit',
+
+			'numeric_code',
+			'secret_question',
+			'secret_answer',
+			'complete',
+			'password',
+			'password_repeat',
+		);
+	}
+
 }
 
