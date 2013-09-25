@@ -82,29 +82,32 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
-		//выбираем представление в зависимости от статуса СМС-авторизации
-
+		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-			if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()
-				&& !Yii::app()->adminKreddyApi->getSubscriptionRequest()
-			) { //если нет подписки
-				$sView = 'index_is_sms_auth/no_subscription';
-			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
-				$sView = 'index_is_sms_auth/subscription_scoring';
-			} else { //если подписка есть
-				$sView = 'index_is_sms_auth/is_subscription';
-			}
+			$sView = 'index_is_sms_auth/';
 		} else {
-			if (!Yii::app()->adminKreddyApi->getSubscriptionProduct()
-				&& !Yii::app()->adminKreddyApi->getSubscriptionRequest()
-			) { //если нет подписки
-				$sView = 'index_not_sms_auth/no_subscription';
-			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
-				$sView = 'index_not_sms_auth/subscription_scoring';
+			$sView = 'index_not_sms_auth/';
+		}
+
+		// выбираем представление в зависимости от статуса подписки
+		if (Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если подписка есть
+			if (Yii::app()->adminKreddyApi->getMoratoriumLoan()
+			) { // если есть мораторий на займ
+				$sView .= 'loan_moratorium';
 			} else { //если подписка есть
-				$sView = 'index_not_sms_auth/is_subscription';
+				$sView .= 'is_subscription';
+			}
+		} else { // нет подписки
+			if (Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan()
+			) { // если есть мораторий на подписку/скоринг или займ
+				$sView .= 'subscription_moratorium';
+			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
+				$sView .= 'subscription_scoring';
+			} else { // можно оформить новый Пакет
+				$sView .= 'new_subscription_available';
 			}
 		}
+
 		/**
 		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 		 */
@@ -143,9 +146,21 @@ class DefaultController extends Controller
 	 */
 	public function actionSubscribe()
 	{
-		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
-			$this->redirect(Yii::app()->createUrl('/account'));
+		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
+
+		//выбираем представление в зависимости от статуса СМС-авторизации
+		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+
+			//проверяем, возможно ли действие
+			if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+				// если невозможно - выводим сообщение о недоступности
+				$this->render('subscription/subscribe_not_available');
+				Yii::app()->end();
+			}
+
+			$sView = 'subscription/subscribe';
+		} else {
+			$sView = 'subscription/subscribe_not_sms_auth';
 		}
 
 
@@ -163,7 +178,13 @@ class DefaultController extends Controller
 
 
 		$oProductForm = new ClientSubscribeForm();
-		$this->render('subscription/subscribe', array('model' => $oProductForm));
+
+		/**
+		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
+		 */
+		$oSmsPassForm = new SMSPasswordForm('sendRequired');
+		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+		$this->render($sView, array('passFormRender' => $sPassFormRender, 'model' => $oProductForm));
 	}
 
 	/**
@@ -277,13 +298,31 @@ class DefaultController extends Controller
 	 */
 	public function actionLoan()
 	{
-		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkLoan()) {
-			$this->redirect(Yii::app()->createUrl('/account'));
+		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/loan'));
+
+		//выбираем представление в зависимости от статуса СМС-авторизации
+		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+
+			//проверяем, возможно ли действие
+			if (!Yii::app()->adminKreddyApi->checkLoan()) {
+				// если невозможно - выводим сообщение о недоступности
+				$this->render('loan/loan_not_available');
+				Yii::app()->end();
+			}
+
+			$sView = 'loan/loan';
+		} else {
+			$sView = 'loan/loan_not_sms_auth';
 		}
 
 		$oLoanForm = new ClientLoanForm();
-		$this->render('loan/loan', array('model' => $oLoanForm));
+
+		/**
+		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
+		 */
+		$oSmsPassForm = new SMSPasswordForm('sendRequired');
+		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+		$this->render($sView, array('passFormRender' => $sPassFormRender, 'model' => $oLoanForm));
 	}
 
 	/**

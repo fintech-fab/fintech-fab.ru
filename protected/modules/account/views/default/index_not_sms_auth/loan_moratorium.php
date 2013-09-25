@@ -2,6 +2,7 @@
 /**
  * @var $this DefaultController
  * @var $smsState
+ * @var $passFormRender
  */
 
 $this->breadcrumbs = array(
@@ -25,17 +26,14 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
 <strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />
 
-<?php if (Yii::app()->adminKreddyApi->getActiveLoanExpiredTo()) {
-	// если есть займ, выводим дату возврата
-	?>
-	<strong>Возврат займа:</strong> <?= Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() ?><br />
-<?php } ?>
-
 <strong>Пакет активен до:</strong>  <?=
 (Yii::app()->adminKreddyApi->getSubscriptionActivity()) ?
 	Yii::app()->adminKreddyApi->getSubscriptionActivity()
 	: "&mdash;"; ?>
 <br />
 
-<strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
+<strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br /><br />
+
+<br />
+<?= $passFormRender // отображаем форму запроса SMS-пароля ?>
 

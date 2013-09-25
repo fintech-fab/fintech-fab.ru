@@ -3,9 +3,9 @@
 /* @var ClientSubscribeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление пакета";
+$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
-	<h4>Оформление пакета</h4>
+	<h4>Подключение Пакета</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -22,11 +22,11 @@ if (!empty($aClientProductsAndChannelsList)) {
 	// если пакета в сессии нет
 	if ($model->product === false) {
 		//устанавливаем в качестве выбранного пакета первый из массива доступных
-		$model->product = reset(array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()));
+		$model->product = reset(array_keys($aClientProductsAndChannelsList));
 	}
 
-	echo $form->radioButtonList($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all"));
-	echo $form->error($model, 'product', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList(), array("class" => "all"));
+	echo $form->radioButtonList($model, 'product', $aClientProductsAndChannelsList, array("class" => "all"));
+	echo $form->error($model, 'product');
 
 	?>
 
@@ -35,7 +35,7 @@ if (!empty($aClientProductsAndChannelsList)) {
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Оформить пакет',
+			'label'      => 'Подключить Пакет',
 		)); ?>
 	</div>
 

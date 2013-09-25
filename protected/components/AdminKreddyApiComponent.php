@@ -37,23 +37,26 @@ class AdminKreddyApiComponent
 
 	const C_STATUS_ERROR = 'Ошибка!';
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о пакете{account_url_end}';
+	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Заявка оформлена. Займ поступит в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
 
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
 		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
-		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых пакетов',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых Пакетов',
 
-		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к пакету',
-		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к пакету',
-		self::C_SUBSCRIPTION_CANCEL            => 'Оплата продукта просрочена',
-		self::C_SUBSCRIPTION_PAID              => 'Продукт оплачен',
+		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
+		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
+		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
+		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
-		self::C_SCORING_PROGRESS               => 'Ваша заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
@@ -64,8 +67,8 @@ class AdminKreddyApiComponent
 		self::C_LOAN_CREATED                   => 'Займ перечислен', //+
 		self::C_LOAN_PAID                      => 'Займ оплачен',
 
-		self::C_CLIENT_ACTIVE                  => 'Активный клиент',
-		self::C_CLIENT_NEW                     => 'Новый клиент',
+		self::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
+		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
 	);
 
 	const ERROR_NONE = 0; //нет ошибок
@@ -531,7 +534,7 @@ class AdminKreddyApiComponent
 		$sMoratoriumTo = (isset($aClientInfo['moratoriums']['loan']))
 			? $aClientInfo['moratoriums']['loan']
 			: null;
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
 	}
@@ -555,7 +558,38 @@ class AdminKreddyApiComponent
 		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
 		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
 
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
+
+		return $sMoratoriumTo;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getMoratoriumSubscriptionLoan()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
+			? $aClientInfo['moratoriums']['subscription']
+			: null;
+		$sMoratoriumScoring = (isset($aClientInfo['moratoriums']['scoring']))
+			? $aClientInfo['moratoriums']['scoring']
+			: null;
+		$sMoratoriumLoan = (isset($aClientInfo['moratoriums']['loan']))
+			? $aClientInfo['moratoriums']['loan']
+			: null;
+
+		$sMoratoriumSub = strtotime($sMoratoriumSub);
+		$sMoratoriumLoan = strtotime($sMoratoriumLoan);
+		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
+
+		// максимум из sub и scoring
+		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
+
+		// максимум из предыдущих и займа
+		$sMoratoriumTo = ($sMoratoriumTo > $sMoratoriumLoan) ? $sMoratoriumTo : $sMoratoriumLoan;
+
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
 	}
@@ -583,7 +617,7 @@ class AdminKreddyApiComponent
 		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to']))
 			? $aClientInfo['active_loan']['expired_to']
 			: false;
-		$sExpiredTo = $this->formatRusDate($sExpiredTo);
+		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
 	}
@@ -1504,18 +1538,19 @@ class AdminKreddyApiComponent
 	/**
 	 * Форматируем дату в вид 01.01.2013 00:00
 	 *
-	 * @param $sDate
+	 * @param      $sDate
+	 * @param bool $bWithTime выводить ли время
 	 *
 	 * @return bool|string
 	 */
-	public function formatRusDate($sDate)
+	public function formatRusDate($sDate, $bWithTime = true)
 	{
 		if (!is_numeric($sDate)) {
 			$sDate = strtotime($sDate);
 		}
 
 		if ($sDate) {
-			$sDate = date('d.m.Y H:i', $sDate);
+			$sDate = $bWithTime ? date('d.m.Y H:i', $sDate) : date('d.m.Y', $sDate);
 		}
 
 		return $sDate;
@@ -1659,7 +1694,13 @@ class AdminKreddyApiComponent
 	 */
 	public function getDoLoanMessage()
 	{
-		return self::C_DO_LOAN_MSG;
+		$aReplacement = array(
+			'{channel_type}' => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())),
+		);
+
+		$sMessage = strtr(self::C_DO_LOAN_MSG, $aReplacement);
+
+		return $sMessage;
 	}
 
 	/**
@@ -1676,5 +1717,35 @@ class AdminKreddyApiComponent
 	public function setSmsAuthDone($bSmsAuthDone)
 	{
 		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSubscriptionNotAvailableMessage()
+	{
+		$aReplacement = array(
+			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+			'{account_url_end}'   => CHtml::closeTag("a"),
+		);
+
+		$sMessage = strtr(self::C_SUBSCRIPTION_NOT_AVAILABLE, $aReplacement);
+
+		return $sMessage;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLoanNotAvailableMessage()
+	{
+		$aReplacement = array(
+			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+			'{account_url_end}'   => CHtml::closeTag("a"),
+		);
+
+		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $aReplacement);
+
+		return $sMessage;
 	}
 }

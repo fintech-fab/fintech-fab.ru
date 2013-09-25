@@ -5,7 +5,7 @@
 
 $this->menu = array(
 	array(
-		'label'  => 'Ваш пакет займов', 'url' => array(
+		'label'  => 'Ваш Пакет займов', 'url' => array(
 		Yii::app()->createUrl('account')
 	),
 		'active' => (Yii::app()->controller->action->getId() == 'index'),
@@ -16,30 +16,25 @@ $this->menu = array(
 	),
 		'active' => (Yii::app()->controller->action->getId() == 'history'),
 
-	)
-);
-
-if (Yii::app()->adminKreddyApi->checkSubscribe()) {
-	$this->menu[] = array(
-		'label'  => 'Оформление пакета займов', 'url' => array(
-			Yii::app()->createUrl('account/subscribe')
-		),
+	),
+	array(
+		'label'  => 'Подключение Пакета займов', 'url' => array(
+		Yii::app()->createUrl('account/subscribe')
+	),
 		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'subscribe')) !== false)
-	);
-}
-
-if (Yii::app()->adminKreddyApi->checkLoan()) {
-	$this->menu[] = array(
+	),
+	array(
 		'label'  => 'Оформление займа', 'url' => array(
-			Yii::app()->createUrl('account/loan')
-		),
+		Yii::app()->createUrl('account/loan')
+	),
 		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'loan')) !== false)
-	);
-
-}
-
-
-$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
+	),
+	array(
+		'label' => 'Выход', 'url' => array(
+		Yii::app()->createUrl('account/logout')
+	)
+	),
+);
 
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';

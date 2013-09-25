@@ -65,7 +65,7 @@ class SiteParams
 	const C_INVOICE_TYPE_LOAN_FINE_PENALTY = 5;
 
 	public static $aTypes = array(
-		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата пакета',
+		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата Пакета',
 		self::C_INVOICE_TYPE_LOAN              => 'Возврат займа',
 		self::C_INVOICE_TYPE_LOAN_FINE         => 'Возврат займа и пени',
 		self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Возврат займа и штрафа',

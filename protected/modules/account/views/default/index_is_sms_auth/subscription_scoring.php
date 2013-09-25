@@ -7,12 +7,12 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Личный кабинет - Состояние подключения';
+$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
 // подписка "висит" на скоринге
 ?>
 
-<h4>Ваш пакет займов</h4>
+<h4>Ваш Пакет займов</h4>
 
 <strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
 <?php

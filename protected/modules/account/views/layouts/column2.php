@@ -10,7 +10,7 @@
 		</div>
 		<!-- content -->
 		<div class="span4">
-			<?php $this->renderPartial('menu_is_sms_auth'); ?>
+			<?php $this->renderPartial('menu'); ?>
 		</div>
 
 	</div>

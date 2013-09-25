@@ -13,8 +13,8 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 		$aRules = array(
-			array('product', 'required', 'message' => 'Для оформления пакета займов требуется выбрать продукт'),
-			array('product', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()), 'message' => 'Для оформления пакета займов требуется выбрать продукт'),
+			array('product', 'required', 'message' => 'Для оформления Пакета займов требуется выбрать продукт'),
+			array('product', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()), 'message' => 'Для оформления Пакета займов требуется выбрать продукт'),
 		);
 
 		return $aRules;
