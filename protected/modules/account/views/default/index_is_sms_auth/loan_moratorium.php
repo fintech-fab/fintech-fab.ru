@@ -10,7 +10,7 @@ $this->breadcrumbs = array(
 
 $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
-//подписка есть
+// мораторий на займ
 ?>
 
 <h4>Ваш Пакет займов</h4>
@@ -25,17 +25,17 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
 <strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />
 
-<?php if (Yii::app()->adminKreddyApi->getActiveLoanExpiredTo()) {
-	// если есть займ, выводим дату возврата
-	?>
-	<strong>Возврат займа:</strong> <?= Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() ?><br />
-<?php } ?>
-
 <strong>Пакет активен до:</strong>  <?=
 (Yii::app()->adminKreddyApi->getSubscriptionActivity()) ?
 	Yii::app()->adminKreddyApi->getSubscriptionActivity()
 	: "&mdash;"; ?>
 <br />
 
-<strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
+<strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br /><br />
+
+<div class="well">
+	Вы можете оформить займ <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
+	<br />
+</div>
+
 

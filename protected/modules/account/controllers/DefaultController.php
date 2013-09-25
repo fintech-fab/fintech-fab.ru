@@ -91,13 +91,21 @@ class DefaultController extends Controller
 
 		// выбираем представление в зависимости от статуса подписки
 		if (Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если подписка есть
-			$sView .= 'is_subscription';
-		} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
-			$sView .= 'subscription_scoring';
-		} elseif (Yii::app()->adminKreddyApi->getMoratoriumSubscription()) { // если есть мораторий на подписку/скоринг
-			$sView .= 'subscription_moratorium';
-		} else { // можно оформить новый Пакет
-			$sView .= 'new_subscription_available';
+			if (Yii::app()->adminKreddyApi->getMoratoriumLoan()
+			) { // если есть мораторий на займ
+				$sView .= 'loan_moratorium';
+			} else { //если подписка есть
+				$sView .= 'is_subscription';
+			}
+		} else { // нет подписки
+			if (Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan()
+			) { // если есть мораторий на подписку/скоринг или займ
+				$sView .= 'subscription_moratorium';
+			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
+				$sView .= 'subscription_scoring';
+			} else { // можно оформить новый Пакет
+				$sView .= 'new_subscription_available';
+			}
 		}
 
 		/**

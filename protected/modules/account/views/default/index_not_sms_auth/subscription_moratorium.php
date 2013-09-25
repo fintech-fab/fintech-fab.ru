@@ -40,8 +40,4 @@ $this->widget(
 <div class="clearfix"></div>
 
 <br />
-<div class="well">
-	Вы можете отправить новую заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
-	<br />
-</div><br />
 <?= $passFormRender // отображаем форму запроса SMS-пароля ?>
