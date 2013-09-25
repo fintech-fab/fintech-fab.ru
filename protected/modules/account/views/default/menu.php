@@ -16,32 +16,25 @@ $this->menu = array(
 	),
 		'active' => (Yii::app()->controller->action->getId() == 'history'),
 
-	)
-);
-
-// выводим пункт меню, если пользователь не авторизовался по SMS; либо если авторизовался и есть возможность новой подписки
-if (!Yii::app()->adminKreddyApi->getIsSmsAuth() || Yii::app()->adminKreddyApi->checkSubscribe()) {
-	$this->menu[] = array(
+	),
+	array(
 		'label'  => 'Подключение Пакета займов', 'url' => array(
-			Yii::app()->createUrl('account/subscribe')
-		),
+		Yii::app()->createUrl('account/subscribe')
+	),
 		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'subscribe')) !== false)
-	);
-}
-
-// выводим пункт меню, если пользователь не авторизовался по SMS; либо если авторизовался и есть возможность нового займа
-if (!Yii::app()->adminKreddyApi->getIsSmsAuth() || Yii::app()->adminKreddyApi->checkLoan()) {
-	$this->menu[] = array(
+	),
+	array(
 		'label'  => 'Оформление займа', 'url' => array(
-			Yii::app()->createUrl('account/loan')
-		),
+		Yii::app()->createUrl('account/loan')
+	),
 		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'loan')) !== false)
-	);
-
-}
-
-
-$this->menu[] = array('label' => 'Выход', 'url' => array(Yii::app()->createUrl('account/logout')));
+	),
+	array(
+		'label' => 'Выход', 'url' => array(
+		Yii::app()->createUrl('account/logout')
+	)
+	),
+);
 
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';

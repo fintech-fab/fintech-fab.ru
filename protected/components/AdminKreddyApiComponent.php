@@ -37,6 +37,9 @@ class AdminKreddyApiComponent
 
 	const C_STATUS_ERROR = 'Ошибка!';
 
+	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
@@ -1596,5 +1599,35 @@ class AdminKreddyApiComponent
 	public function getNoAvailableProductsMessage()
 	{
 		return self::C_NO_AVAILABLE_PRODUCTS;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSubscriptionNotAvailableMessage()
+	{
+		$aReplacement = array(
+			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+			'{account_url_end}'   => CHtml::closeTag("a"),
+		);
+
+		$sMessage = strtr(self::C_SUBSCRIPTION_NOT_AVAILABLE, $aReplacement);
+
+		return $sMessage;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLoanNotAvailableMessage()
+	{
+		$aReplacement = array(
+			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+			'{account_url_end}'   => CHtml::closeTag("a"),
+		);
+
+		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $aReplacement);
+
+		return $sMessage;
 	}
 }

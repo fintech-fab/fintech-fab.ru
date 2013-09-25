@@ -145,7 +145,9 @@ class DefaultController extends Controller
 
 			//проверяем, возможно ли действие
 			if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
-				$this->redirect(Yii::app()->createUrl('/account'));
+				// если невозможно - выводим сообщение о недоступности
+				$this->render('subscription/subscribe_not_available');
+				Yii::app()->end();
 			}
 
 			$sView = 'subscription/subscribe';
@@ -281,7 +283,9 @@ class DefaultController extends Controller
 
 			//проверяем, возможно ли действие
 			if (!Yii::app()->adminKreddyApi->checkLoan()) {
-				$this->redirect(Yii::app()->createUrl('/account'));
+				// если невозможно - выводим сообщение о недоступности
+				$this->render('loan/loan_not_available');
+				Yii::app()->end();
 			}
 
 			$sView = 'loan/loan';
