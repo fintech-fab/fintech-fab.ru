@@ -651,7 +651,6 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Получение массива с информацией о продуктах и каналах
-	 * TODO: Заменяем на нужные нам
 	 *
 	 * @return array
 	 */
