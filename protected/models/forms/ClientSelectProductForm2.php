@@ -8,6 +8,9 @@ class ClientSelectProductForm2 extends ClientCreateFormAbstract
 {
 	public $product;
 
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 
@@ -31,11 +34,24 @@ class ClientSelectProductForm2 extends ClientCreateFormAbstract
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
 		return array_merge(
 			parent::attributeLabels(),
 			array('product' => 'Сумма займа',)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'product'
 		);
 	}
 }

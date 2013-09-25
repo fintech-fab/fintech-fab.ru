@@ -11,6 +11,9 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 	 */
 	public $sms_code;
 
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 		$aRules = array();
@@ -23,11 +26,22 @@ class ClientConfirmPhoneViaSMSForm extends ClientCreateFormAbstract
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
-		return array_merge(
-			parent::attributeLabels(),
-			array('sms_code' => 'Код подтверждения из SMS',)
+		return array('sms_code' => 'Код подтверждения из SMS');
+
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'sms_code'
 		);
 	}
 }

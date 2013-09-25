@@ -100,9 +100,11 @@ class ClientFormComponent
 				if (empty($aValidFormData['channel_id'])) {
 					$aValidFormData['channel_id'] = $this->getSessionChannelId();
 				}
-				$aValidFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
-				$aValidFormData['ip'] = Yii::app()->request->getUserHostAddress();
-				ClientData::saveClientDataById($aValidFormData, $this->iClientId);
+				$aClientDataForSave = $aValidFormData;
+
+				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
+				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 
 			}
 		} else {
@@ -178,9 +180,11 @@ class ClientFormComponent
 					$aClientFormData['channel_id'] = $this->getSessionChannelId();
 				}
 
-				$aClientFormData['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
-				$aClientFormData['ip'] = Yii::app()->request->getUserHostAddress();
-				ClientData::saveClientDataById($aClientFormData, $this->iClientId);
+				$aClientDataForSave =$aClientFormData;
+
+				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
+				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 
 			}
 

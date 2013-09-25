@@ -27,7 +27,9 @@
  */
 class ClientPersonalDataForm extends ClientCreateFormAbstract
 {
-
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 
@@ -89,6 +91,34 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 		return $aRules;
 
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'phone',
+				'email',
+
+				'first_name',
+				'last_name',
+				'third_name',
+
+				'birthday',
+				'sex',
+
+				'passport_series',
+				'passport_number',
+				'passport_date',
+				'passport_issued',
+				'passport_code',
+
+				'document',
+				'document_number',
+				'condition'
+		);
 	}
 
 	/**

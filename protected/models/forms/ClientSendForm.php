@@ -11,6 +11,9 @@ class ClientSendForm extends ClientCreateFormAbstract
 	 */
 	public $complete;
 
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 		$aRequired = array(
@@ -34,6 +37,9 @@ class ClientSendForm extends ClientCreateFormAbstract
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
 		return array_merge(
@@ -43,6 +49,19 @@ class ClientSendForm extends ClientCreateFormAbstract
 				'secret_question' => 'Секретный вопрос',
 				'secret_answer'   => 'Ответ на секретный вопрос',
 			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'numeric_code',
+			'secret_question',
+			'secret_answer',
+			'complete'
 		);
 	}
 }

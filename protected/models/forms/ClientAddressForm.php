@@ -16,6 +16,9 @@
  */
 class ClientAddressForm extends ClientCreateFormAbstract
 {
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 		$phone = Yii::app()->clientForm->getSessionPhone();
@@ -60,6 +63,9 @@ class ClientAddressForm extends ClientCreateFormAbstract
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
 		return array_merge(
@@ -68,6 +74,24 @@ class ClientAddressForm extends ClientCreateFormAbstract
 				'friends_fio'   => 'ФИО',
 				'friends_phone' => 'Телефон',
 			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'address_reg_region',
+			'address_reg_city',
+			'address_reg_address',
+
+			'relatives_one_fio',
+			'relatives_one_phone',
+
+			'friends_fio',
+			'friends_phone',
 		);
 	}
 

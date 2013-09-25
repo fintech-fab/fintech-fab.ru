@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class SiteController
+ */
 class SiteController extends Controller
 {
 	public $showTopPageWidget = true;

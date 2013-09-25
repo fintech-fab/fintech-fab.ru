@@ -31,11 +31,24 @@ class ClientSelectChannelForm extends ClientCreateFormAbstract
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
 		return array_merge(
 			parent::attributeLabels(),
 			array('channel_id' => 'Способ получения',)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'channel_id'
 		);
 	}
 }

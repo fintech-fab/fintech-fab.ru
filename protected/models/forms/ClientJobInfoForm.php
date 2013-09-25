@@ -18,6 +18,9 @@
  */
 class ClientJobInfoForm extends ClientCreateFormAbstract
 {
+	/**
+	 * @return array
+	 */
 
 	public function rules()
 	{
@@ -51,6 +54,23 @@ class ClientJobInfoForm extends ClientCreateFormAbstract
 
 		return $aRules;
 
+	}
+
+	/**
+	 * @return array
+	 */
+
+	public function attributeNames()
+	{
+		return array(
+			'job_company',
+			'job_position',
+			'job_phone',
+			'job_time',
+			'job_monthly_income',
+			'job_monthly_outcome',
+			'have_past_credit',
+		);
 	}
 
 }

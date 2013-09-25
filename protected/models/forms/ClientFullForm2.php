@@ -12,8 +12,6 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 	public $complete;
 	public $password;
 	public $password_repeat;
-	public $ip;
-	public $tracking_id;
 
 	/**
 	 * @return array
