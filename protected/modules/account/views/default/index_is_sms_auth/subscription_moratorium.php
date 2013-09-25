@@ -41,6 +41,6 @@ $this->widget(
 
 <br />
 <div class="well">
-	Вы можете отправить новую заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscription() ?>
+	Вы можете отправить новую заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan() ?>
 	<br />
 </div>

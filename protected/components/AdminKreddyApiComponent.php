@@ -520,7 +520,7 @@ class AdminKreddyApiComponent
 		$sMoratoriumTo = (isset($aClientInfo['moratoriums']['loan']))
 			? $aClientInfo['moratoriums']['loan']
 			: null;
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
 	}
@@ -543,6 +543,37 @@ class AdminKreddyApiComponent
 		$sMoratoriumSub = strtotime($sMoratoriumSub);
 		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
 		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
+
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
+
+		return $sMoratoriumTo;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getMoratoriumSubscriptionLoan()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
+			? $aClientInfo['moratoriums']['subscription']
+			: null;
+		$sMoratoriumScoring = (isset($aClientInfo['moratoriums']['scoring']))
+			? $aClientInfo['moratoriums']['scoring']
+			: null;
+		$sMoratoriumLoan = (isset($aClientInfo['moratoriums']['loan']))
+			? $aClientInfo['moratoriums']['loan']
+			: null;
+
+		$sMoratoriumSub = strtotime($sMoratoriumSub);
+		$sMoratoriumLoan = strtotime($sMoratoriumLoan);
+		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
+
+		// максимум из sub и scoring
+		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
+
+		// максимум из предыдущих и займа
+		$sMoratoriumTo = ($sMoratoriumTo > $sMoratoriumLoan) ? $sMoratoriumTo : $sMoratoriumLoan;
 
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 

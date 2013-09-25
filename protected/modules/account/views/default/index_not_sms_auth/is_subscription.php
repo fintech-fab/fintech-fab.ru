@@ -40,15 +40,6 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
 <strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
 
-<?php
-// если есть мораторий на займ и ещё есть доступные займы, выводим соответствующее сообщение
-if (Yii::app()->adminKreddyApi->getMoratoriumLoan() && Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans() > 0) {
-	?>
-	Вы можете отправить заявку <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
-	<br />
-<?php
-}
-?>
 <br />
 <?= $passFormRender // отображаем форму запроса SMS-пароля ?>
 
