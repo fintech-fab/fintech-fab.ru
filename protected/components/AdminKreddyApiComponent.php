@@ -109,7 +109,6 @@ class AdminKreddyApiComponent
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
-	private $aProductsAndChannels; //массив с данными о продуктах и каналах получения
 	private $iLastCode; //code из последнего выполненного запроса
 	private $sLastMessage = ''; //message из последнего выполненного запроса
 	private $sLastSmsMessage = ''; //sms_message из последнего выполненного запроса
@@ -165,7 +164,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * TODO реализовать метод
 	 *
 	 * @param $aClientData
 	 *
@@ -179,7 +177,7 @@ class AdminKreddyApiComponent
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
-			Yii::app()->session['smsAuthDone'] = true;
+			$this->setSmsAuthDone(true);
 
 			return true;
 		}
@@ -228,8 +226,7 @@ class AdminKreddyApiComponent
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
-			//TODO вынести в set
-			Yii::app()->session['smsAuthDone'] = true;
+			$this->setSmsAuthDone(true);
 
 			return true;
 		} else {
@@ -373,9 +370,6 @@ class AdminKreddyApiComponent
 			$aGetData = $this->getData('info');
 
 			if (is_array($aGetData)) {
-				// TODO: где subscription ????? непонятные комментарии ниже...
-				// если subscription пустой - делаем unset()
-				// это необходимо, чтобы массив subscription не был заменен на пустой при слиянии массивов
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -1434,7 +1428,7 @@ class AdminKreddyApiComponent
 	public function checkSmsAuthStatus($aResult)
 	{
 		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
-			Yii::app()->session['smsAuthDone'] = true;
+			$this->setSmsAuthDone(true);
 
 			return true;
 		}
@@ -1674,5 +1668,13 @@ class AdminKreddyApiComponent
 	public function getNoAvailableProductsMessage()
 	{
 		return self::C_NO_AVAILABLE_PRODUCTS;
+	}
+
+	/**
+	 * @param $bSmsAuthDone
+	 */
+	public function setSmsAuthDone($bSmsAuthDone)
+	{
+		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
 	}
 }

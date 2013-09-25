@@ -284,7 +284,6 @@ class ClientFormComponent
 				//очищаем сессию (данные формы и прочее)
 				$this->clearClientSession();
 				//ставим флаг "форма отправлена" для отображения представления с сообщением "Форма отправлена"
-				//TODO выпилить
 				$this->setFormSent(true);
 
 				// успешная проверка
@@ -530,33 +529,14 @@ class ClientFormComponent
 		if ($bFullForm) {
 			switch ($this->iCurrentStep) {
 				case 0:
-				{
-					//TODO: заменить на Yii::app()->request->getParam('')
-					if (isset($_POST['ClientSelectProductForm2'])) {
-						return $_POST['ClientSelectProductForm2'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientSelectProductForm2');
 					break;
 				case 1:
-				{
-					if (isset($_POST['ClientFullForm2'])) {
-						return $_POST['ClientFullForm2'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientFullForm2');
 					break;
 				case 2:
 				case 3:
-				{
-					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
-						return $_POST['ClientConfirmPhoneViaSMSForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 					break;
 				default:
 					return null;
@@ -566,69 +546,26 @@ class ClientFormComponent
 		} else {
 			switch ($this->iCurrentStep) {
 				case 0:
-				{
-
-					if (isset($_POST['ClientSelectProductForm'])) {
-						return $_POST['ClientSelectProductForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientSelectProductForm');
 					break;
 				case 1:
-				{
-					if (isset($_POST['ClientSelectChannelForm'])) {
-						return $_POST['ClientSelectChannelForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientSelectChannelForm');
 					break;
 				case 2:
-				{
-					if (isset($_POST['ClientPersonalDataForm'])) {
-						return $_POST['ClientPersonalDataForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientPersonalDataForm');
 					break;
 				case 3:
-				{
-					if (isset($_POST['ClientAddressForm'])) {
-						return $_POST['ClientAddressForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientAddressForm');
 					break;
 				case 4:
-				{
-					if (isset($_POST['ClientJobInfoForm'])) {
-						return $_POST['ClientJobInfoForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientJobInfoForm');
 					break;
 				case 5:
-				{
-					if (isset($_POST['ClientSendForm'])) {
-						return $_POST['ClientSendForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientSendForm');
 					break;
 				case 6:
 				case 7:
-				{
-					if (isset($_POST['ClientConfirmPhoneViaSMSForm'])) {
-						return $_POST['ClientConfirmPhoneViaSMSForm'];
-					}
-
-					return null;
-				}
+					return Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 					break;
 				default:
 					return null;
