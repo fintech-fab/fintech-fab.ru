@@ -19,8 +19,8 @@ $aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChan
 
 if (!empty($aClientProductsChannelsList)) {
 
-	echo $form->radioButtonList($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsChannelsList(), array("class" => "all"));
-	echo $form->error($model, 'channel_id', Yii::app()->adminKreddyApi->getClientProductsAndChannelsList());
+	echo $form->radioButtonList($model, 'channel_id', $aClientProductsChannelsList, array("class" => "all"));
+	echo $form->error($model, 'channel_id');
 
 	?>
 

@@ -53,7 +53,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
-		self::C_SCORING_PROGRESS               => 'Проверка данных. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 		self::C_SCORING_ACCEPT                 => 'Проверка данных',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
@@ -541,7 +541,7 @@ class AdminKreddyApiComponent
 		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
 		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
 
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo);
+		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
 	}
@@ -569,7 +569,7 @@ class AdminKreddyApiComponent
 		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to']))
 			? $aClientInfo['active_loan']['expired_to']
 			: false;
-		$sExpiredTo = $this->formatRusDate($sExpiredTo);
+		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
 	}
@@ -651,6 +651,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Получение массива с информацией о продуктах и каналах
+	 * TODO: Заменяем на нужные нам
 	 *
 	 * @return array
 	 */
@@ -660,6 +661,7 @@ class AdminKreddyApiComponent
 			return $this->aProductsAndChannels;
 		}
 		$aProductsAndChannels = $this->getData('products');
+
 		$this->aProductsAndChannels = $aProductsAndChannels;
 
 		return $aProductsAndChannels;
@@ -719,7 +721,6 @@ class AdminKreddyApiComponent
 				}
 			}
 		}
-
 
 		return $aClientChannelsList;
 	}
@@ -1435,18 +1436,19 @@ class AdminKreddyApiComponent
 	/**
 	 * Форматируем дату в вид 01.01.2013 00:00
 	 *
-	 * @param $sDate
+	 * @param      $sDate
+	 * @param bool $bWithTime выводить ли время
 	 *
 	 * @return bool|string
 	 */
-	public function formatRusDate($sDate)
+	public function formatRusDate($sDate, $bWithTime = true)
 	{
 		if (!is_numeric($sDate)) {
 			$sDate = strtotime($sDate);
 		}
 
 		if ($sDate) {
-			$sDate = date('d.m.Y H:i', $sDate);
+			$sDate = $bWithTime ? date('d.m.Y H:i', $sDate) : date('d.m.Y', $sDate);
 		}
 
 		return $sDate;

@@ -10,7 +10,7 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Личный кабинет - История операций';
+$this->pageTitle = Yii::app()->name . ' - История операций';
 
 ?>
 <h4>История операций</h4>
