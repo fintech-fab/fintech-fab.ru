@@ -218,17 +218,6 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('Укажите пол', $aErrors['sex'][0]);
 	}
 
-	public
-	function testJobIncomeAdd()
-	{
-		$oForm = new ClientFullForm2();
-		$oForm->job_income_add = 56;
-		$oForm->validate(array('job_income_add'));
-		$aErrors = $oForm->getErrors();
-		$this->assertNotEmpty($aErrors['job_income_add']);
-		$this->assertEquals('Выберите значение поля из списка', $aErrors['job_income_add'][0]);
-	}
-
 	/**
 	 * @dataProvider fieldsFormForCheckErrorProvider
 	 */

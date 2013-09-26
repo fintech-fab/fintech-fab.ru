@@ -117,7 +117,6 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 
 				'document',
 				'document_number',
-				'condition'
 		);
 	}
 
