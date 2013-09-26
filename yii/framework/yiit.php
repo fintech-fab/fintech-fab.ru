@@ -17,6 +17,13 @@ defined('YII_ENABLE_ERROR_HANDLER') or define('YII_ENABLE_ERROR_HANDLER',false);
 
 require_once(dirname(__FILE__).'/yii.php');
 
-Yii::import('system.test.CTestCase');
+/*Yii::import('system.test.CTestCase');
+Yii::import('system.test.CDbTestCase');
+Yii::import('system.test.CWebTestCase');*/
+
+Yii::setPathOfAlias('codeceptionsrc',dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..');
+
+Yii::import('codeceptionsrc.plugins.frameworks.yii.test.CTestCase');
+Yii::import('codeceptionsrc.plugins.frameworks.yii.web.*');
 Yii::import('system.test.CDbTestCase');
 Yii::import('system.test.CWebTestCase');

@@ -1,6 +1,7 @@
 <?php
 
-//Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
+Yii::getPathOfAlias('codeceptionsrc');
 
 $a = array(
 	'basePath'       => __DIR__ . '/..',
@@ -124,10 +125,10 @@ $a = array(
 		),
 
 		'request'          => array(
-			'class'                  => 'CHttpRequest',
-			'enableCsrfValidation'   => true,
+			'class'                  => 'CodeceptionHttpRequest',
+			/*'enableCsrfValidation'   => true,
 			'enableCookieValidation' => true,
-			'csrfTokenName'          => 'stcs',
+			'csrfTokenName'          => 'stcs',*/
 		),
 	),
 

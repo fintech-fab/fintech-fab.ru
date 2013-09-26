@@ -8,4 +8,8 @@
 
 class_name: TestGuy
 modules:
-    enabled: [Filesystem, TestHelper]
+    enabled: [Yii1, TestHelper]
+    config:
+        Yii1:
+            appPath: '/var/www/ru.dev.kreddy/public/index-functest.php'
+            url: 'http://test.kreddy.popov/index-functest.php'

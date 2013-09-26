@@ -18,10 +18,5 @@
 <script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
 
 <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
-<?php Yii::app()->bootstrap->registerCoreCss();
-Yii::app()->bootstrap->registerYiiCss();
-Yii::app()->bootstrap->registerCoreScripts();
-?>
-
 
 <link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
