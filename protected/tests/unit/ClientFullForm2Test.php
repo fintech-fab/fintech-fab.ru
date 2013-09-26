@@ -8,7 +8,7 @@
  *
  */
 
-class ClientFullForm2Test extends CTestCase
+class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 {
 
 	public function testClientPassword()
@@ -18,6 +18,7 @@ class ClientFullForm2Test extends CTestCase
 			'password'        => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdgflhsdgfjsdgf',
 			'password_repeat' => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdgflhsdgfjsdgf',
 		);
+
 
 
 		$oForm = new ClientFullForm2();
@@ -218,7 +219,7 @@ class ClientFullForm2Test extends CTestCase
 	}
 
 	public
-	function t1estJobIncomeAdd()
+	function testJobIncomeAdd()
 	{
 		$oForm = new ClientFullForm2();
 		$oForm->job_income_add = 56;

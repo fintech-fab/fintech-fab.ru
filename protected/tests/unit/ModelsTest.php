@@ -1,19 +1,11 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: m.novikov
- * Date: 02.08.13
- * Time: 10:44
- * To change this template use File | Settings | File Templates.
- */
-
-/**
  * Class ModelsTest
  * @method assertEmpty
  * @method assertNotEmpty
  */
 
-class ModelsTest extends CTestCase
+class ModelsTest extends \PHPUnit_Framework_TestCase
 {
 
 
@@ -31,7 +23,6 @@ class ModelsTest extends CTestCase
 		$oForm->validate();
 
 		$this->assertEmpty($oForm->getError('birthday'), print_r($oForm->getError('birthday'), true));
-		//$this->assertNotEmpty($oForm->getErrors()['email']);
 
 	}
 
