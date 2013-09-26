@@ -27,9 +27,11 @@ $I->click('Подключить Пакет');
 $I->see('Подключение Пакета');
 $I->see('Кредди 3000');
 
-$I->selectOption('form input[value=9_3]', 'Кредди 3000');
+$I->seeElement('#products-form input[name="ClientSubscribeForm[product]"]');
+$I->seeElement('#ClientSubscribeForm_product_0');
 
-/*$I->click('#products-form button[type="submit"]');
+
+$I->click('#products-form button[type="submit"]');
 $I->see(' Для подключения Пакета требуется подтверждение одноразовым SMS-кодом ');
 $I->click('#products-form button[type="submit"]');
 $I->see('Код подтверждения операции успешно отправлен');
@@ -44,4 +46,4 @@ $I->amOnPage('/account');
 $I->see('Заявка в обработке.');
 $I->seeLink('Выход');
 $I->click('Выход');
-$I->see('Сколько взял - столько вернул!');*/
+$I->see('Сколько взял - столько вернул!');

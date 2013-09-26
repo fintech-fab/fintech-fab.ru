@@ -25,7 +25,7 @@ if (!empty($aClientProductsAndChannelsList)) {
 		$model->product = reset(array_keys($aClientProductsAndChannelsList));
 	}
 
-	echo $form->radioButtonList($model, 'product', $aClientProductsAndChannelsList, array("class" => "all"));
+	echo $form->radioButtonList($model, 'product', $aClientProductsAndChannelsList, array("class" => "all",'uncheckValue' => $model->product));
 	echo $form->error($model, 'product');
 
 	?>

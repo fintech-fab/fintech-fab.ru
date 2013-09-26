@@ -71,7 +71,7 @@ class AdminKreddyApiComponent
 		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
 	);
 
-	const ERROR_NONE = 0; //нет ошибок
+		const ERROR_NONE = 0; //нет ошибок
 	const ERROR_UNKNOWN = 1; //неизвестная ошибка
 	const ERROR_AUTH = 2; //ошибка авторизации
 	const ERROR_TOKEN_DATA = 3; //ошибочные данные в токене
@@ -816,7 +816,7 @@ class AdminKreddyApiComponent
 					if (isset($aChannels[$iChannel])
 						&& in_array($iChannel, $aClientChannels)
 					) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $iChannel)] = $aProduct['name'] . ', ' . SiteParams::mb_lcfirst($aChannels[$iChannel]);
+						$aProductsAndChannels[($aProduct['id'] . '_' . $iChannel)] = $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$iChannel]);
 					}
 				}
 			}
