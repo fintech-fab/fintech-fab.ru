@@ -23,7 +23,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
 	'emptyText'    => 'История операций пуста',
 	'columns'      => array(
 		array(
-			'name'  => 'time', 'header' => 'Дата и время',
+			'name'  => 'time', 'header' => ('Дата и время ' . CHtml::tag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME))),
 			'value' => 'date("d.m.Y H:i",strtotime($data["time"]))',
 		),
 		/*array(
