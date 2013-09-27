@@ -1,7 +1,8 @@
 <?php
 /**
- * Class SMSPasswordForm
+ * Class AddCardForm
  */
+
 class AddCardForm extends CFormModel
 {
 	/**

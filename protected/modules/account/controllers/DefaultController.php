@@ -141,6 +141,17 @@ class DefaultController extends Controller
 		$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
 
+	public function actionAddCard()
+	{
+		if(!Yii::app()->request->isPostRequest){
+			$oCardForm = new AddCardForm();
+			$this->render('card/add_card',array('model' => $oCardForm));
+			Yii::app()->end();
+		}
+
+		$aPostData = Yii::app()->request->getParam('AddCardForm');
+	}
+
 	/**
 	 * Вывод формы выбора продукта для подписки
 	 */
