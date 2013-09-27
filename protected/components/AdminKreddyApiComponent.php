@@ -40,7 +40,7 @@ class AdminKreddyApiComponent
 	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа оплатите подключение. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо подъехать в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end} и оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
 
@@ -57,7 +57,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-		self::C_SCORING_ACCEPT                 => 'Проверка данных',
+		self::C_SCORING_ACCEPT                 => 'Для получения займа необходимо подъехать в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end}.',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
 		self::C_LOAN_DEBT                      => 'Задолженность по займу',
@@ -419,13 +419,15 @@ class AdminKreddyApiComponent
 		}
 
 		$aReplacement = array(
-			'{sub_pay_sum}'       => $this->getProductCostById($iProductId),
-			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
-			'{account_url_end}'   => CHtml::closeTag("a"),
-			'{payment_url_start}' => CHtml::openTag("a", array(
+			'{sub_pay_sum}'        => $this->getProductCostById($iProductId),
+			'{account_url_start}'  => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+			'{account_url_end}'    => CHtml::closeTag("a"),
+			'{payment_url_start}'  => CHtml::openTag("a", array(
 				"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
 			)),
-			'{payment_url_end}'   => CHtml::closeTag("a"),
+			'{payment_url_end}'    => CHtml::closeTag("a"),
+			'{contacts_url_start}' => CHtml::openTag("a", array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")),
+			'{contacts_url_end}'   => CHtml::closeTag("a"),
 		);
 
 		$sStatus = strtr($sStatus, $aReplacement);
@@ -1597,9 +1599,23 @@ class AdminKreddyApiComponent
 		$bScoringAccepted = $this->getScoringAccepted();
 		if (!empty($bScoringAccepted)) {
 
+			// берём ID продукта из сессии, если есть
+			$iProductId = $this->getSubscribeSelectedProductId();
+			if (!$iProductId) {
+				// если нет в сессии - из ответа API
+				$iProductId = $this->getSubscriptionProductId();
+			}
+
 			$aReplacement = array(
-				'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
-				'{account_url_end}'   => CHtml::closeTag("a"),
+				'{sub_pay_sum}'        => $this->getProductCostById($iProductId),
+				'{account_url_start}'  => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
+				'{account_url_end}'    => CHtml::closeTag("a"),
+				'{payment_url_start}'  => CHtml::openTag("a", array(
+					"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
+				)),
+				'{payment_url_end}'    => CHtml::closeTag("a"),
+				'{contacts_url_start}' => CHtml::openTag("a", array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")),
+				'{contacts_url_end}'   => CHtml::closeTag("a"),
 			);
 
 			$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $aReplacement);
