@@ -117,9 +117,13 @@ class ClientFormComponent
 		$aSessionFormData = $this->getSessionFormData($oClientForm);
 
 		//проверяем, есть ли в сессии уже какие-то данные, и проверяем что они лежат в массиве
-		if (!empty($aSessionFormData) && gettype($aSessionFormData) == "array") {
+		if (!empty($aSessionFormData) && is_array($aSessionFormData)&&is_array($aValidFormData)) {
 			//объединяем данные из сессии с новыми валидными данными
 			$aValidFormData = array_merge($aSessionFormData, $aValidFormData);
+		}elseif(!empty($aSessionFormData) && is_array($aSessionFormData)){
+			$aValidFormData = $aSessionFormData;
+		} else {
+			$aValidFormData = array();
 		}
 		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
 		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->iClientId;
@@ -704,9 +708,13 @@ class ClientFormComponent
 	public function getSessionProduct()
 	{
 		if (!SiteParams::B_FULL_FORM) {
-			return Yii::app()->session['ClientSelectProductForm']['product'];
+			return isset(Yii::app()->session['ClientSelectProductForm']['product'])
+				?Yii::app()->session['ClientSelectProductForm']['product']
+				:false;
 		} else {
-			return Yii::app()->session['ClientSelectProductForm2']['product'];
+			return isset(Yii::app()->session['ClientSelectProductForm2']['product'])
+				?Yii::app()->session['ClientSelectProductForm2']['product']
+				:false;
 		}
 	}
 

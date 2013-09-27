@@ -8,17 +8,13 @@ $I = new WebGuy($scenario);
 $I->wantTo('Test account login');
 $I->amOnPage('/form');
 $I->see('Сумма займа');
-//$I->seeElement('input[name="product"]');
-//$val = $I->grabValueFrom('input[name="product"]');
-//$I->selectOption('input[name="product"]',$val);
-
-/*
-$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
-	'ClientSelectProductForm2[product]' => '9',
-)));
+$I->seeElement('input[name="product"]');
+/*$val = $I->grabValueFrom('input[name="ClientSelectProductForm2[product]"]');
+$I->selectOption('input[name="ClientSelectProductForm2[product]"]',$val);
+$I->click('Далее');
 $I->see('Личные данные');
-
-$I->amOnPage('/account/login');
+*/
+/*$I->amOnPage('/account/login');
 $I->see('Вход в личный кабинет');
 $I->see('Номер телефона');
 $I->fillField('#AccountLoginForm_username','9173330247');
