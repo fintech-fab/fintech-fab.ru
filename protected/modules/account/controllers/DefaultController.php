@@ -148,20 +148,20 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
-		//проверяем, нужна ли повторная видеоидентификация
-		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
-			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
-			if ($aGetIdent) {
-				$oIdentify = new VideoIdentifyForm();
-				$oIdentify->setAttributes($aGetIdent);
-				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
-				$this->render('need_identify', array('model' => $oIdentify));
-				Yii::app()->end();
-			}
-		}
-
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+
+			//проверяем, нужна ли повторная видеоидентификация
+			if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+				$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+				if ($aGetIdent) {
+					$oIdentify = new VideoIdentifyForm();
+					$oIdentify->setAttributes($aGetIdent);
+					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
+					$this->render('need_identify', array('model' => $oIdentify));
+					Yii::app()->end();
+				}
+			}
 
 			//проверяем, возможно ли действие
 			if (!Yii::app()->adminKreddyApi->checkSubscribe()) {

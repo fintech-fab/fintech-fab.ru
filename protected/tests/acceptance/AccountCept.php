@@ -6,6 +6,18 @@
 
 $I = new WebGuy($scenario);
 $I->wantTo('Test account login');
+$I->amOnPage('/form');
+$I->see('Сумма займа');
+//$I->seeElement('input[name="product"]');
+//$val = $I->grabValueFrom('input[name="product"]');
+//$I->selectOption('input[name="product"]',$val);
+
+/*
+$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
+	'ClientSelectProductForm2[product]' => '9',
+)));
+$I->see('Личные данные');
+
 $I->amOnPage('/account/login');
 $I->see('Вход в личный кабинет');
 $I->see('Номер телефона');
@@ -24,16 +36,18 @@ $I->click('#checkSmsPass button[type="submit"]');
 $I->dontSee('Для получения подробной информации и');
 $I->seeLink('Подключить Пакет');
 $I->click('Подключить Пакет');
-$I->see('Подключение Пакета');
-$I->see('Кредди 3000');
 
-$I->seeElement('#products-form input[name="ClientSubscribeForm[product]"]');
-$I->seeElement('#ClientSubscribeForm_product_0');
 
-$I->click('#products-form label[for=ClientSubscribeForm_product_0]');
+
+
+//$I->see('Кредди 3000');
+
+//$I->seeElement('#products-form input[name="ClientSubscribeForm[product]"]');
+//$I->seeElement('#ClientSubscribeForm_product_0');
+
+//$I->click('#products-form label[for=ClientSubscribeForm_product_0]');
 //TODO доделать
-/*$I->click('#products-form button[type="submit"]');
-
+$I->click('#products-form button[type="submit"]');
 $I->see(' Для подключения Пакета требуется подтверждение одноразовым SMS-кодом ');
 $I->click('#products-form button[type="submit"]');
 $I->see('Код подтверждения операции успешно отправлен');
@@ -41,6 +55,8 @@ $I->see('Код из SMS');
 $I->fillField('#SMSCodeForm_smsCode','1111');
 $I->click('#products-form button[type="submit"]');
 $I->see('Ваша заявка принята. Ожидайте решения.');
+
+
 $I->amOnPage('/account/history');
 $I->see('История операций');
 $I->see('Дата и время');
@@ -48,4 +64,5 @@ $I->amOnPage('/account');
 $I->see('Заявка в обработке.');
 $I->seeLink('Выход');
 $I->click('Выход');
-$I->see('Сколько взял - столько вернул!');*/
+$I->see('Сколько взял - столько вернул!');
+*/
