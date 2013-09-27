@@ -143,19 +143,32 @@ class DefaultController extends Controller
 
 	public function actionAddCard()
 	{
-		if(!Yii::app()->request->isPostRequest){
+		if (!Yii::app()->request->isPostRequest) {
 			$oCardForm = new AddCardForm();
-			$this->render('card/add_card',array('model' => $oCardForm));
+			$this->render('card/add_card', array('model' => $oCardForm));
 			Yii::app()->end();
 		}
 
 		$aPostData = Yii::app()->request->getParam('AddCardForm');
 		$oCardForm = new AddCardForm();
 		$oCardForm->setAttributes($aPostData);
-		if($oCardForm->validate()){
-			$this->redirect($this->createUrl('/account/verifyCard'));
+		if ($oCardForm->validate()) {
+			//card_order,
+
+			$sCardOrder = Yii::app()->adminKreddyApi->addClientCard(
+				$oCardForm->sCardPan,
+				$oCardForm->sCardMonth,
+				$oCardForm->sCardYear,
+				$oCardForm->sCardCvc);
+
+			if ($sCardOrder) {
+				$this->redirect($this->createUrl('/account/verifyCard'));
+			} else {
+				Yii::app()->adminKreddyApi->getLastMessage();
+				//TODO тут что-то там рендерим и кидаем туда последнее сообщение
+			}
 		}
-		$this->render('card/add_card',array('model' => $oCardForm));
+		$this->render('card/add_card', array('model' => $oCardForm));
 	}
 
 	/**
@@ -191,9 +204,6 @@ class DefaultController extends Controller
 		} else {
 			$sView = 'subscription/subscribe_not_sms_auth';
 		}
-
-
-
 
 
 		$oProductForm = new ClientSubscribeForm();
