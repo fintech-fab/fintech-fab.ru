@@ -2,6 +2,7 @@
 /**
  * Class VideoIdentifyForm
  *
+ * Форма перехода на видеоидентификацию
  */
 class VideoIdentifyForm extends CFormModel
 {

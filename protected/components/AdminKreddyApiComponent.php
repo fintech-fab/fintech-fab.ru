@@ -1102,6 +1102,16 @@ class AdminKreddyApiComponent
 		}
 	}
 
+	/**
+	 * Привязка пластиковой карты к аккаунту
+	 *
+	 * @param $sCardPan
+	 * @param $sCardMonth
+	 * @param $sCardYear
+	 * @param $sCardCvc
+	 *
+	 * @return bool
+	 */
 	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
 	{
 		$aRequest = array(
@@ -1110,7 +1120,45 @@ class AdminKreddyApiComponent
 			'card_year,,' => $sCardYear,
 			'card_cvc' => $sCardCvc);
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, $aRequest);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
+
+
+		if ($aResult['code'] === self::ERROR_NONE){
+			$this->setLastMessage($aResult['message']);
+
+			return $aResult['card_order'];
+		} else {
+			$this->setLastMessage($aResult['message']);
+
+			return false;
+		}
+	}
+
+	/**
+	 * @param $sCardOrder
+	 * @param $sCardVerifyAmount
+	 *
+	 * @return bool
+	 */
+	public function verifyClientCard($sCardOrder, $sCardVerifyAmount)
+	{
+		$aRequest = array(
+			'card_order,,' => $sCardOrder,
+			'card_verify_amount,' => $sCardVerifyAmount,
+			);
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
+
+
+		if ($aResult['code'] === self::ERROR_NONE){
+			$this->setLastMessage($aResult['message']);
+
+			return true;
+		} else {
+			$this->setLastMessage($aResult['message']);
+
+			return false;
+		}
 	}
 
 	/**
