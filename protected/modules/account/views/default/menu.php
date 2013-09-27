@@ -47,7 +47,6 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 		'stacked'     => true, // whether this is a stacked menu
 		'items'       => $this->menu,
 		'activateItems'=>true,
-		'activeCssClass'=>'active',
 		'htmlOptions' => array('style' => 'margin-bottom: 0;'),
 	));
 	?>

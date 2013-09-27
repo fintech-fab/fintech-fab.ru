@@ -20,10 +20,7 @@
 
 	<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 	<?php Yii::app()->clientScript->registerCoreScript('jquery.ui'); ?>
-	<?php Yii::app()->bootstrap->registerCoreCss();
-	Yii::app()->bootstrap->registerYiiCss();
-	Yii::app()->bootstrap->registerCoreScripts();
-	?>
+
 </head>
 <body class="home">
 
