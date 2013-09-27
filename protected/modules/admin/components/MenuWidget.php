@@ -90,7 +90,7 @@ class MenuWidget extends CWidget
 			),
 			),
 		);
-
+		//TODO переделать
 		foreach ($this->aMenu as &$aTab) {
 			$bIsActiveController = (Yii::app()->controller->id == $aTab['name']);
 			$aTab['active'] = $bIsActiveController;

@@ -107,7 +107,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
 	const API_ACTION_ADD_CARD = 'siteClient/addClientCard';
-	const API_ACTION_CERIFY_CARD = 'siteClient/verifyClientCard';
+	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
 
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
@@ -1149,7 +1149,7 @@ class AdminKreddyApiComponent
 			'card_verify_amount,' => $sCardVerifyAmount,
 			);
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD_CARD, $aRequest);
 
 
 		if ($aResult['code'] === self::ERROR_NONE){
