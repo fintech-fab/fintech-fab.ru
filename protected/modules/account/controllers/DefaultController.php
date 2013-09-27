@@ -150,6 +150,12 @@ class DefaultController extends Controller
 		}
 
 		$aPostData = Yii::app()->request->getParam('AddCardForm');
+		$oCardForm = new AddCardForm();
+		$oCardForm->setAttributes($aPostData);
+		if($oCardForm->validate()){
+			$this->redirect($this->createUrl('/account/verifyCard'));
+		}
+		$this->render('card/add_card',array('model' => $oCardForm));
 	}
 
 	/**
