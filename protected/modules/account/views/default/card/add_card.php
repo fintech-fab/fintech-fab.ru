@@ -15,8 +15,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 
 <?= $form->textFieldRow($model, 'sCardPan'); ?>
-<?= $form->dropDownListRow($model, 'sCardMonth'); ?>
-<?= $form->dropDownListRow($model, 'sCardYear'); ?>
+<?= $form->dropDownListRow($model, 'sCardMonth',Dictionaries::$aMonthsDigital); ?>
+<?= $form->dropDownListRow($model, 'sCardYear',Dictionaries::getYears()); ?>
 <?= $form->textFieldRow($model, 'sCardCvc'); ?>
 
 	<div class="form-actions">

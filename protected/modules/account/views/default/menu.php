@@ -5,34 +5,22 @@
 
 $this->menu = array(
 	array(
-		'label'  => 'Ваш Пакет займов', 'url' => array(
-		Yii::app()->createUrl('account')
-	),
-		'active' => (Yii::app()->controller->action->getId() == 'index'),
+		'label'  => 'Ваш Пакет займов', 'url' => array('/account/default/index')
 	),
 	array(
-		'label'  => 'История операций', 'url' => array(
-		Yii::app()->createUrl('account/history')
-	),
-		'active' => (Yii::app()->controller->action->getId() == 'history'),
-
+		'label'  => 'История операций', 'url' => array('/account/default/history')
 	),
 	array(
-		'label'  => 'Подключение Пакета займов', 'url' => array(
-		Yii::app()->createUrl('account/subscribe')
-	),
-		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'subscribe')) !== false)
+		'label'  => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
 	),
 	array(
-		'label'  => 'Оформление займа', 'url' => array(
-		Yii::app()->createUrl('account/loan')
-	),
-		'active' => ((strpos(strtolower(Yii::app()->controller->action->getId()), 'loan')) !== false)
+		'label'  => 'Оформление займа', 'url' => array('/account/default/loan')
 	),
 	array(
-		'label' => 'Выход', 'url' => array(
-		Yii::app()->createUrl('account/logout')
-	)
+		'label'  => 'Привязка пластиковой карты', 'url' => array('/account/default/addCard')
+	),
+	array(
+		'label' => 'Выход', 'url' => array('/account/default/logout')
 	),
 );
 
@@ -58,6 +46,8 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 		'type'        => 'pills', // '', 'tabs', 'pills' (or 'list')
 		'stacked'     => true, // whether this is a stacked menu
 		'items'       => $this->menu,
+		'activateItems'=>true,
+		'activeCssClass'=>'active',
 		'htmlOptions' => array('style' => 'margin-bottom: 0;'),
 	));
 	?>

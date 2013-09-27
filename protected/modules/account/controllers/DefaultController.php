@@ -34,7 +34,11 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth', 'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode', 'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode'),
+				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
+					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
+					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
+					'addCard','verifyCard'
+				),
 				'users'   => array('@'),
 			),
 			array(
@@ -141,6 +145,10 @@ class DefaultController extends Controller
 		$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
 
+	/**
+	 * Привязка пластиковой карты
+	 *
+	 */
 	public function actionAddCard()
 	{
 		if (!Yii::app()->request->isPostRequest) {
@@ -162,6 +170,7 @@ class DefaultController extends Controller
 				$oCardForm->sCardCvc);
 
 			if ($sCardOrder) {
+				Yii::app()->session['sCardOrder'] = $sCardOrder; //TODO убрать в API
 				$this->redirect($this->createUrl('/account/verifyCard'));
 			} else {
 				Yii::app()->adminKreddyApi->getLastMessage();
@@ -169,6 +178,31 @@ class DefaultController extends Controller
 			}
 		}
 		$this->render('card/add_card', array('model' => $oCardForm));
+	}
+
+	/**
+	 * Верификация пластиковой карты
+	 */
+
+	public function actionVerifyCard()
+	{
+		if (!Yii::app()->request->isPostRequest) {
+			$this->redirect($this->createUrl('/account/addCard'));
+		}
+
+		$sCardOrder = Yii::app()->session['sCardOrder']; //TODO убрать в API
+		$aPostData = Yii::app()->request->getParam('VerifyCardForm');
+		$oVerifyForm = new VerifyCardForm();
+		$oVerifyForm->setAttributes($aPostData);
+		if ($oVerifyForm->validate()) {
+			$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder,$oCardForm->sCardVerifyAmount);
+			if($bVerify){
+				//TODO тут редирект куда-то где сообщение об успешности операции
+			} else {
+				$oCardForm->addError('$sCardVerifyAmount',Yii::app()->adminKreddyApi->getLastMessage());
+			}
+		}
+		$this->render('card/verify_card', array('model' => $oVerifyForm));
 	}
 
 	/**
