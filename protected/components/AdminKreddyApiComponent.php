@@ -106,6 +106,9 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
+	const API_ACTION_ADD_CARD = 'siteClient/addClientCard';
+	const API_ACTION_CERIFY_CARD = 'siteClient/verifyClientCard';
+
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
@@ -1076,7 +1079,8 @@ class AdminKreddyApiComponent
 	public function doSubscribe($sSmsCode, $iProduct, $iChannelId)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE,
+			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			if (isset($aResult['scoring_accepted'])) {
@@ -1096,6 +1100,17 @@ class AdminKreddyApiComponent
 
 			return false;
 		}
+	}
+
+	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	{
+		$aRequest = array(
+			'card_pan,' => $sCardPan,
+			'card_month,' => $sCardMonth,
+			'card_year,,' => $sCardYear,
+			'card_cvc' => $sCardCvc);
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, $aRequest);
 	}
 
 	/**
