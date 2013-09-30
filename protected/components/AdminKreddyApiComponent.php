@@ -95,7 +95,9 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
+	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
+	const API_ACTION_CHECK_LOAN = 'siteClient/checkLoan';
 	const API_ACTION_LOAN = 'siteClient/doLoan';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
@@ -984,9 +986,12 @@ class AdminKreddyApiComponent
 	public function checkLoan()
 	{
 		if (!isset($this->bIsCanGetLoan)) {
-			$this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('test_code' => 1));
+			$this->requestAdminKreddyApi(self::API_ACTION_CHECK_LOAN);
 
-			$this->bIsCanGetLoan = (!$this->getIsNotAllowed() && !$this->getIsNeedSmsAuth());
+			$this->bIsCanGetLoan = (!$this->getIsNotAllowed()
+				&& !$this->getIsNeedSmsAuth()
+				&& !$this->getIsError()
+			);
 		}
 
 		return $this->bIsCanGetLoan;
@@ -1056,7 +1061,7 @@ class AdminKreddyApiComponent
 	public function checkSubscribe()
 	{
 		if (!isset($this->bIsCanSubscribe)) {
-			$this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, array('test_code' => 1));
+			$this->requestAdminKreddyApi(self::API_ACTION_CHECK_SUBSCRIBE);
 			$this->bIsCanSubscribe = (!$this->getIsNotAllowed()
 				&& !$this->getIsNeedSmsAuth());
 		}

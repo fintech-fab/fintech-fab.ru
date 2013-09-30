@@ -195,11 +195,11 @@ class DefaultController extends Controller
 		$oVerifyForm = new VerifyCardForm();
 		$oVerifyForm->setAttributes($aPostData);
 		if ($oVerifyForm->validate()) {
-			$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder,$oCardForm->sCardVerifyAmount);
+			$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder,$oVerifyForm->sCardVerifyAmount);
 			if($bVerify){
 				//TODO тут редирект куда-то где сообщение об успешности операции
 			} else {
-				$oCardForm->addError('$sCardVerifyAmount',Yii::app()->adminKreddyApi->getLastMessage());
+				$oVerifyForm->addError('$sCardVerifyAmount',Yii::app()->adminKreddyApi->getLastMessage());
 			}
 		}
 		$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -215,18 +215,6 @@ class DefaultController extends Controller
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 
-			//проверяем, нужна ли повторная видеоидентификация
-			if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
-				$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
-				if ($aGetIdent) {
-					$oIdentify = new VideoIdentifyForm();
-					$oIdentify->setAttributes($aGetIdent);
-					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
-					$this->render('need_identify', array('model' => $oIdentify));
-					Yii::app()->end();
-				}
-			}
-
 			//проверяем, возможно ли действие
 			if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 				// если невозможно - выводим сообщение о недоступности
@@ -234,10 +222,25 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 
+			//проверяем, нужна ли повторная видеоидентификация
+			if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+				$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+				if ($aGetIdent) {
+					$oIdentify = new VideoIdentifyForm();
+					$oIdentify->setAttributes($aGetIdent);
+					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
+					//выводим форму отправки на идентификацию
+					$this->render('need_identify', array('model' => $oIdentify));
+					Yii::app()->end();
+				}
+			}
+
 			$sView = 'subscription/subscribe';
+
 		} else {
 			$sView = 'subscription/subscribe_not_sms_auth';
 		}
+
 
 
 		$oProductForm = new ClientSubscribeForm();
