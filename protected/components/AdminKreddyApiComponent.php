@@ -1636,10 +1636,14 @@ class AdminKreddyApiComponent
 		}
 
 		if ($sDate) {
-			$sDate = $bWithTime ? date('d.m.Y H:i', $sDate) : date('d.m.Y', $sDate);
+			if ($bWithTime) {
+				$sDate = date('d.m.Y H:i', $sDate);
 
-			$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
-			$sDate .= CHtml::closeTag('i');
+				$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
+				$sDate .= CHtml::closeTag('i');
+			} else {
+				$sDate = date('d.m.Y', $sDate);
+			}
 		}
 
 		return $sDate;
