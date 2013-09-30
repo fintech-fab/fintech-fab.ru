@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class BottomTabsWidget
+ */
 
 class BottomTabsWidget extends CWidget
 {

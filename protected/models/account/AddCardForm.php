@@ -20,6 +20,8 @@ class AddCardForm extends CFormModel
 	{
 		$aRules = array();
 
+		$aRules[] = array('sCardPan, sCardMonth, sCardYear, sCardCvc','required');
+
 		$aRules[] = array('sCardPan, sCardMonth, sCardYear, sCardCvc', 'required');
 		$aRules[] = array(
 			'sCardPan', 'match', 'message' => 'Номер карты должен состоять из 16 цифр',

@@ -173,8 +173,8 @@ class DefaultController extends Controller
 				Yii::app()->session['sCardOrder'] = $sCardOrder; //TODO убрать в API
 				$this->redirect($this->createUrl('/account/verifyCard'));
 			} else {
-				Yii::app()->adminKreddyApi->getLastMessage();
-				//TODO тут что-то там рендерим и кидаем туда последнее сообщение
+				//TODO тут что-то там рендерим и кидаем туда последнее сообщение. Надо переделать.
+				$oCardForm->addError('sCardCvc',Yii::app()->adminKreddyApi->getLastMessage());
 			}
 		}
 		$this->render('card/add_card', array('model' => $oCardForm));
@@ -199,7 +199,7 @@ class DefaultController extends Controller
 			if($bVerify){
 				//TODO тут редирект куда-то где сообщение об успешности операции
 			} else {
-				$oVerifyForm->addError('$sCardVerifyAmount',Yii::app()->adminKreddyApi->getLastMessage());
+				$oVerifyForm->addError('sCardVerifyAmount',Yii::app()->adminKreddyApi->getLastMessage());
 			}
 		}
 		$this->render('card/verify_card', array('model' => $oVerifyForm));
