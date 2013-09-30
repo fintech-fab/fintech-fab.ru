@@ -60,6 +60,9 @@ class FormController extends Controller
 		) {
 			if (!empty($oClientForm)) {
 				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
+				//удаляем лишние данные перед загрузкой в форму (во избежание warning)
+				unset($sessionClientData['product']);
+				unset($sessionClientData['channel_id']);
 				$oClientForm->setAttributes($sessionClientData);
 			}
 		}
