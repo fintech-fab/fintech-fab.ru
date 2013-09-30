@@ -3,7 +3,7 @@
 /* @var VideoIdentifyForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление пакета";
+$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
 	<h4>Требуется идентификация</h4>
 

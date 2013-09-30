@@ -40,7 +40,7 @@ class AdminKreddyApiComponent
 	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо подъехать в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end} и оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо обратиться в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end} и оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
 
@@ -57,7 +57,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-		self::C_SCORING_ACCEPT                 => 'Для получения займа необходимо подъехать в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end}.',
+		self::C_SCORING_ACCEPT                 => 'Для получения займа необходимо обратиться в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end}.',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
 		self::C_LOAN_DEBT                      => 'Задолженность по займу',
@@ -1117,15 +1117,16 @@ class AdminKreddyApiComponent
 	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
 	{
 		$aRequest = array(
-			'card_pan,' => $sCardPan,
+			'card_pan,'   => $sCardPan,
 			'card_month,' => $sCardMonth,
 			'card_year,,' => $sCardYear,
-			'card_cvc' => $sCardCvc);
+			'card_cvc'    => $sCardCvc
+		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
 
 
-		if ($aResult['code'] === self::ERROR_NONE){
+		if ($aResult['code'] === self::ERROR_NONE) {
 			$this->setLastMessage($aResult['message']);
 
 			return $aResult['card_order'];
@@ -1145,14 +1146,14 @@ class AdminKreddyApiComponent
 	public function verifyClientCard($sCardOrder, $sCardVerifyAmount)
 	{
 		$aRequest = array(
-			'card_order,,' => $sCardOrder,
+			'card_order,,'        => $sCardOrder,
 			'card_verify_amount,' => $sCardVerifyAmount,
-			);
+		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD_CARD, $aRequest);
 
 
-		if ($aResult['code'] === self::ERROR_NONE){
+		if ($aResult['code'] === self::ERROR_NONE) {
 			$this->setLastMessage($aResult['message']);
 
 			return true;
