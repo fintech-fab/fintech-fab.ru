@@ -43,7 +43,7 @@ class AdminKreddyApiComponent
 	// TODO: убрать обращение в отделение Кредди после внедрения новой схемы #1153
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо обратиться в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end} и оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} в течение нескольких минут. ';
 
 	private $aAvailableStatuses = array(
 
@@ -55,7 +55,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
 		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
+		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 		// TODO: убрать обращение в отделение Кредди после внедрения новой схемы #1153
@@ -128,6 +128,11 @@ class AdminKreddyApiComponent
 	public $sTestApiUrl = '';
 
 
+	/**
+	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
+	 *
+	 * @return array
+	 */
 	public function formatStatusMessage()
 	{
 		// берём ID продукта из сессии, если есть
@@ -139,16 +144,22 @@ class AdminKreddyApiComponent
 
 		return array(
 			'{sub_pay_sum}'        => $this->getProductCostById($iProductId), // стоимость подключения
+
+			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())), // название канала
+
 			'{account_url_start}'  => CHtml::openTag("a", array(
 				"href" => Yii::app()->createUrl("/account")
 			)), // ссылка на инфо о пакете
 			'{account_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о пакете
-			'{payment_url_start}'  => CHtml::openTag("a", array(
+
+			'{payments_url_start}' => CHtml::openTag("a", array(
 				"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
 			)), // ссылка на инфо о возможных вариантах оплаты
-			'{payment_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о возможных вариантах оплаты
-			'{contacts_url_start}' => CHtml::openTag("a", array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")),
-			'{contacts_url_end}'   => CHtml::closeTag("a"),
+			'{payments_url_end}'   => CHtml::closeTag("a"), // /ссылка на инфо о возможных вариантах оплаты
+
+			'{contacts_url_start}' => CHtml::openTag("a",
+				array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")), // ссылка на инфо об отделении
+			'{contacts_url_end}'   => CHtml::closeTag("a"), // /ссылка на инфо об отделении
 		);
 	}
 
@@ -454,26 +465,7 @@ class AdminKreddyApiComponent
 
 		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
 
-		// берём ID продукта из сессии, если есть
-		$iProductId = $this->getSubscribeSelectedProductId();
-		if (!$iProductId) {
-			// если нет в сессии - из ответа API
-			$iProductId = $this->getSubscriptionProductId();
-		}
-
-		$aReplacement = array(
-			'{sub_pay_sum}'        => $this->getProductCostById($iProductId),
-			'{account_url_start}'  => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
-			'{account_url_end}'    => CHtml::closeTag("a"),
-			'{payment_url_start}'  => CHtml::openTag("a", array(
-				"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
-			)),
-			'{payment_url_end}'    => CHtml::closeTag("a"),
-			'{contacts_url_start}' => CHtml::openTag("a", array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")),
-			'{contacts_url_end}'   => CHtml::closeTag("a"),
-		);
-
-		$sStatus = strtr($sStatus, $aReplacement);
+		$sStatus = strtr($sStatus, $this->formatStatusMessage());
 
 		return $sStatus;
 	}
@@ -571,13 +563,31 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Возвращает дату окончания моратория на займ, если такой мораторий есть
+	 * Сравнивает 2 даты и возвращает timestamp той, что больше
+	 *
+	 * @param $sDate1
+	 * @param $sDate2
+	 *
+	 * @return int
+	 */
+	private function getMaxTimestamp($sDate1, $sDate2)
+	{
+		$sDate1 = strtotime($sDate1);
+		$sDate2 = strtotime($sDate2);
+
+		return ($sDate1 > $sDate2) ? $sDate1 : $sDate2;
+	}
+
+	/**
+	 * Возвращает дату окончания моратория на займ (выбирая максимум между мораториями на подписку и скоринг),
+	 * если такой мораторий есть
 	 *
 	 * @return bool|string
 	 */
 	public function getMoratoriumSubscription()
 	{
 		$aClientInfo = $this->getClientInfo();
+
 		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
 			? $aClientInfo['moratoriums']['subscription']
 			: null;
@@ -585,9 +595,7 @@ class AdminKreddyApiComponent
 			? $aClientInfo['moratoriums']['scoring']
 			: null;
 
-		$sMoratoriumSub = strtotime($sMoratoriumSub);
-		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
-		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
+		$sMoratoriumTo = $this->getMaxTimestamp($sMoratoriumSub, $sMoratoriumScoring);
 
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
@@ -595,30 +603,20 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращает дату окончания моратория на займ (выбирая максимум между мораториями на подписку, скоринг и займ),
+	 * если такой мораторий есть
+	 *
 	 * @return bool|string
 	 */
 	public function getMoratoriumSubscriptionLoan()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
-			? $aClientInfo['moratoriums']['subscription']
-			: null;
-		$sMoratoriumScoring = (isset($aClientInfo['moratoriums']['scoring']))
-			? $aClientInfo['moratoriums']['scoring']
-			: null;
+
 		$sMoratoriumLoan = (isset($aClientInfo['moratoriums']['loan']))
 			? $aClientInfo['moratoriums']['loan']
 			: null;
 
-		$sMoratoriumSub = strtotime($sMoratoriumSub);
-		$sMoratoriumLoan = strtotime($sMoratoriumLoan);
-		$sMoratoriumScoring = strtotime($sMoratoriumScoring);
-
-		// максимум из sub и scoring
-		$sMoratoriumTo = ($sMoratoriumSub > $sMoratoriumScoring) ? $sMoratoriumSub : $sMoratoriumScoring;
-
-		// максимум из предыдущих и займа
-		$sMoratoriumTo = ($sMoratoriumTo > $sMoratoriumLoan) ? $sMoratoriumTo : $sMoratoriumLoan;
+		$sMoratoriumTo = $this->getMaxTimestamp($this->getMoratoriumSubscription(), $sMoratoriumLoan);
 
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
@@ -1176,8 +1174,7 @@ class AdminKreddyApiComponent
 			'card_verify_amount,' => $sCardVerifyAmount,
 		);
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD_CARD, $aRequest);
-
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD, $aRequest);
 
 		if ($aResult['code'] === self::ERROR_NONE) {
 			$this->setLastMessage($aResult['message']);
@@ -1770,27 +1767,7 @@ class AdminKreddyApiComponent
 	{
 		$bScoringAccepted = $this->getScoringAccepted();
 		if (!empty($bScoringAccepted)) {
-
-			// берём ID продукта из сессии, если есть
-			$iProductId = $this->getSubscribeSelectedProductId();
-			if (!$iProductId) {
-				// если нет в сессии - из ответа API
-				$iProductId = $this->getSubscriptionProductId();
-			}
-
-			$aReplacement = array(
-				'{sub_pay_sum}'        => $this->getProductCostById($iProductId),
-				'{account_url_start}'  => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
-				'{account_url_end}'    => CHtml::closeTag("a"),
-				'{payment_url_start}'  => CHtml::openTag("a", array(
-					"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
-				)),
-				'{payment_url_end}'    => CHtml::closeTag("a"),
-				'{contacts_url_start}' => CHtml::openTag("a", array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")),
-				'{contacts_url_end}'   => CHtml::closeTag("a"),
-			);
-
-			$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $aReplacement);
+			$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
 
 			return $sMessage;
 		} else {
@@ -1803,11 +1780,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getDoLoanMessage()
 	{
-		$aReplacement = array(
-			'{channel_type}' => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())),
-		);
-
-		$sMessage = strtr(self::C_DO_LOAN_MSG, $aReplacement);
+		$sMessage = strtr(self::C_DO_LOAN_MSG, $this->formatStatusMessage());
 
 		return $sMessage;
 	}
@@ -1833,12 +1806,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscriptionNotAvailableMessage()
 	{
-		$aReplacement = array(
-			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
-			'{account_url_end}'   => CHtml::closeTag("a"),
-		);
-
-		$sMessage = strtr(self::C_SUBSCRIPTION_NOT_AVAILABLE, $aReplacement);
+		$sMessage = strtr(self::C_SUBSCRIPTION_NOT_AVAILABLE, $this->formatStatusMessage());
 
 		return $sMessage;
 	}
@@ -1848,12 +1816,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getLoanNotAvailableMessage()
 	{
-		$aReplacement = array(
-			'{account_url_start}' => CHtml::openTag("a", array("href" => Yii::app()->createUrl("/account"))),
-			'{account_url_end}'   => CHtml::closeTag("a"),
-		);
-
-		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $aReplacement);
+		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $this->formatStatusMessage());
 
 		return $sMessage;
 	}
