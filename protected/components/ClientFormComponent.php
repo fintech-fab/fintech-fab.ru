@@ -122,9 +122,8 @@ class ClientFormComponent
 			$aValidFormData = array_merge($aSessionFormData, $aValidFormData);
 		}elseif(!empty($aSessionFormData) && is_array($aSessionFormData)){
 			$aValidFormData = $aSessionFormData;
-		} else {
-			$aValidFormData = array();
 		}
+
 		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
 		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->iClientId;
 
