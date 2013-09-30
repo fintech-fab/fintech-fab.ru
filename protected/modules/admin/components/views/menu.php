@@ -13,7 +13,6 @@
 				'stacked' => false, // whether this is a stacked menu
 				'items'   => $aTab['content'],
 				'activateItems'=>true,
-				'activateParents'=>true
 			), true);
 		}
 	}

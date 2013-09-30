@@ -220,6 +220,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php
 //TODO вынести в .js
 $sResultFlagFullFormFilled = (Yii::app()->clientForm->getFlagFullFormFilled()) ? 'true' : 'false';
+//$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/form_script.js';
+
 Yii::app()->clientScript->registerScript('accordionActions', '
 
 	$(".errorAlert").find(".alert-block").addClass("alert-block-fullform");
