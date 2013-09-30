@@ -1150,7 +1150,7 @@ class AdminKreddyApiComponent
 			'card_verify_amount,' => $sCardVerifyAmount,
 		);
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD_CARD, $aRequest);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD, $aRequest);
 
 
 		if ($aResult['code'] === self::ERROR_NONE) {
