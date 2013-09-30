@@ -4,21 +4,19 @@
  * @var $this CheckBrowserWidget
  */
 
-Yii::app()->user->setFlash('error', '<span id="attention_message">' . $this->sMessage . '</span>
-<br/><br/><span id="your_browser"></span>
-<div id="get_browser" style="margin-top:10px;"><a href="/pages/view/browser">Перейти на страницу загрузки поддерживаемого браузера &raquo;</a></div>');
+?>
 
-$this->widget('bootstrap.widgets.TbAlert', array(
-	'block'       => true, // display a larger alert block?
-	'fade'        => false, // use transitions?
-	'closeText'   => '&times;', // close link text - if set to false, no close link is displayed
-	'htmlOptions' => array_merge(
-		array(
-			'id'    => 'browserFormat',
-			'class' => 'hide',
-		), $this->aHtmlOptions
-	),
-));
+	<div class="alert in alert-block alert-error hide" id="browserFormat">
+	<span id="attention_message">
+		<?= $this->sMessage ?>
+	</span> <br /><br /><span id="your_browser"></span>
+
+		<div id="get_browser" style="margin-top:10px;"><a href="<?=
+			Yii::app()
+				->createUrl('/pages/view/browser') ?>" target="_blank">Перейти на страницу загрузки поддерживаемого
+				браузера &raquo;</a></div>
+	</div>
+<?php
 
 Yii::app()->clientScript->registerScript('messageForBrowser', '
 	var sMessage = "' . $this->sMessage . '";
