@@ -40,6 +40,7 @@ class AdminKreddyApiComponent
 	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
+	// TODO: убрать обращение в отделение Кредди после внедрения новой схемы #1153
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо обратиться в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end} и оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_type} в течение нескольких минут. ';
@@ -57,6 +58,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payment_url_start}Подробнее{payment_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		// TODO: убрать обращение в отделение Кредди после внедрения новой схемы #1153
 		self::C_SCORING_ACCEPT                 => 'Для получения займа необходимо обратиться в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end}.',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
@@ -125,6 +127,30 @@ class AdminKreddyApiComponent
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
 
+
+	public function formatStatusMessage()
+	{
+		// берём ID продукта из сессии, если есть
+		$iProductId = $this->getSubscribeSelectedProductId();
+		if (!$iProductId) {
+			// если нет в сессии - из ответа API
+			$iProductId = $this->getSubscriptionProductId();
+		}
+
+		return array(
+			'{sub_pay_sum}'        => $this->getProductCostById($iProductId), // стоимость подключения
+			'{account_url_start}'  => CHtml::openTag("a", array(
+				"href" => Yii::app()->createUrl("/account")
+			)), // ссылка на инфо о пакете
+			'{account_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о пакете
+			'{payment_url_start}'  => CHtml::openTag("a", array(
+				"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
+			)), // ссылка на инфо о возможных вариантах оплаты
+			'{payment_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о возможных вариантах оплаты
+			'{contacts_url_start}' => CHtml::openTag("a", array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")),
+			'{contacts_url_end}'   => CHtml::closeTag("a"),
+		);
+	}
 
 	/**
 	 * @return array
