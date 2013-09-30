@@ -562,19 +562,21 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Сравнивает 2 даты и возвращает timestamp той, что больше
+	 * Сравнивает 2 даты и возвращает бОльшую
 	 *
-	 * @param $sDate1
-	 * @param $sDate2
+	 * @param string $sDate1
+	 * @param string $sDate2
 	 *
-	 * @return int
+	 * @return string
 	 */
-	private function getMaxTimestamp($sDate1, $sDate2)
+	private function getMaxDateInFormat($sDate1, $sDate2)
 	{
-		$sDate1 = strtotime($sDate1);
-		$sDate2 = strtotime($sDate2);
+		$iDate1 = strtotime($sDate1);
+		$iDate2 = strtotime($sDate2);
 
-		return ($sDate1 > $sDate2) ? $sDate1 : $sDate2;
+		$iMaxDate = ($iDate1 > $iDate2) ? $iDate1 : $iDate2;
+
+		return $this->formatRusDate($iMaxDate, false);
 	}
 
 	/**
@@ -594,9 +596,7 @@ class AdminKreddyApiComponent
 			? $aClientInfo['moratoriums']['scoring']
 			: null;
 
-		$sMoratoriumTo = $this->getMaxTimestamp($sMoratoriumSub, $sMoratoriumScoring);
-
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
+		$sMoratoriumTo = $this->getMaxDateInFormat($sMoratoriumSub, $sMoratoriumScoring);
 
 		return $sMoratoriumTo;
 	}
@@ -615,9 +615,7 @@ class AdminKreddyApiComponent
 			? $aClientInfo['moratoriums']['loan']
 			: null;
 
-		$sMoratoriumTo = $this->getMaxTimestamp($this->getMoratoriumSubscription(), $sMoratoriumLoan);
-
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
+		$sMoratoriumTo = $this->getMaxDateInFormat($this->getMoratoriumSubscription(), $sMoratoriumLoan);
 
 		return $sMoratoriumTo;
 	}
