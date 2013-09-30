@@ -20,8 +20,6 @@ $aCrumbs = array(
 
 <div class="row">
 
-	<?php $this->widget('CheckBrowserWidget'); ?>
-
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 	<?php

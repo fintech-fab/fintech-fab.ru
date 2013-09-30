@@ -127,7 +127,11 @@ class AdminKreddyApiComponent
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
 
-
+	/**
+	 * Форматирование сообщения статуса
+	 *
+	 * @return array
+	 */
 	public function formatStatusMessage()
 	{
 		// берём ID продукта из сессии, если есть

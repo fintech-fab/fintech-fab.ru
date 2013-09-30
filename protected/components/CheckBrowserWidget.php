@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class CheckBrowserWidget
+ */
+
 class CheckBrowserWidget extends CWidget
 {
 	/**
