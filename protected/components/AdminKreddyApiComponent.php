@@ -95,7 +95,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
-	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/doSubscribe';
+	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/checkSubscribe';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_CHECK_LOAN = 'siteClient/checkLoan';
 	const API_ACTION_LOAN = 'siteClient/doLoan';

@@ -212,15 +212,16 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
+
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+			// если невозможно - выводим сообщение о недоступности
+			$this->render('subscription/subscribe_not_available');
+			Yii::app()->end();
+		}
+
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-
-			//проверяем, возможно ли действие
-			if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
-				// если невозможно - выводим сообщение о недоступности
-				$this->render('subscription/subscribe_not_available');
-				Yii::app()->end();
-			}
 
 			//проверяем, нужна ли повторная видеоидентификация
 			if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
@@ -366,15 +367,16 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/loan'));
 
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+			// если невозможно - выводим сообщение о недоступности
+			$this->render('loan/loan_not_available');
+			Yii::app()->end();
+		}
+
+
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-
-			//проверяем, возможно ли действие
-			if (!Yii::app()->adminKreddyApi->checkLoan()) {
-				// если невозможно - выводим сообщение о недоступности
-				$this->render('loan/loan_not_available');
-				Yii::app()->end();
-			}
 
 			$sView = 'loan/loan';
 		} else {
