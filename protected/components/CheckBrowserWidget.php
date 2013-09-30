@@ -22,5 +22,3 @@ class CheckBrowserWidget extends CWidget
 		$this->render('check_browser_widget');
 	}
 }
-
-
