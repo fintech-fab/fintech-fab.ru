@@ -9,6 +9,8 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 
 	<p>Для продолжения требуется пройти идентификацию.</p>
 <?php
+$this->widget("CheckBrowserWidget");
+
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'login-form',
 	'action'               => $model->video_url,
