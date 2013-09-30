@@ -12,6 +12,8 @@
 				'type'    => 'pills', // '', 'tabs', 'pills' (or 'list')
 				'stacked' => false, // whether this is a stacked menu
 				'items'   => $aTab['content'],
+				'activateItems'=>true,
+				'activateParents'=>true
 			), true);
 		}
 	}
@@ -20,6 +22,7 @@
 		'type' => 'tabs', // 'tabs' or 'pills'
 		'tabs' => $this->aMenu,
 		'id'   => 'tabsMenu',
+
 	));
 
 	?>

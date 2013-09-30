@@ -22,19 +22,21 @@ class MenuWidget extends CWidget
 				'name' => 'pages', 'label' => 'Страницы', 'content' => array(
 				array(
 					'label' => 'Список страниц',
-					'name'  => 'index',
+					//'name'  => 'index',
+					'url'=>array('/admin/pages/index')
 				),
 				array(
 					'label' => 'Добавить страницу',
-					'name'  => 'create',
+					//'name'  => 'create',
+					'url'=>array('/admin/pages/create')
 				),
 				array(
 					'label' => 'Управление страницами',
-					'name'  => 'admin',
+					'url'  => array('/admin/pages/admin'),
 				),
 				array(
 					'label'   => 'Редактировать текущую страницу',
-					'name'    => (!empty($oPagesModel)) ? 'update/' . $oPagesModel->page_id : null,
+					'url'    => (!empty($oPagesModel)) ? array('/admin/pages/update/'. $oPagesModel->page_id) : null,
 					'visible' => $bViewPage,
 				),
 				array(
@@ -53,15 +55,15 @@ class MenuWidget extends CWidget
 				'name' => 'tabs', 'label' => 'Вкладки', 'content' => array(
 				array(
 					'label' => 'Список вкладок',
-					'name'  => 'index',
+					'url'  => array('/admin/tabs/index'),
 				),
 				array(
 					'label' => 'Добавить вкладку',
-					'name'  => 'create',
+					'url'  => array('/admin/tabs/create'),
 				),
 				array(
 					'label' => 'Управление вкладками',
-					'name'  => 'admin',
+					'url'  => array('/admin/tabs/admin'),
 				),
 			),
 			),
@@ -69,15 +71,15 @@ class MenuWidget extends CWidget
 				'name' => 'footerLinks', 'label' => 'Нижние ссылки', 'content' => array(
 				array(
 					'label' => 'Список ссылок',
-					'name'  => 'index',
+					'url'  => array('/admin/footerLinks/index'),
 				),
 				array(
 					'label' => 'Добавить ссылку',
-					'name'  => 'create',
+					'url'  => array('/admin/footerLinks/create'),
 				),
 				array(
 					'label' => 'Управление ссылками',
-					'name'  => 'admin',
+					'url'  => array('/admin/footerLinks/admin'),
 				),
 			),
 			),
@@ -85,27 +87,15 @@ class MenuWidget extends CWidget
 				'name' => 'files', 'label' => 'Изображения', 'content' => array(
 				array(
 					'label' => 'Управление изображениями',
-					'name'  => 'imagesAdmin',
+					'url'  => array('/admin/files/imagesAdmin'),
 				),
 			),
 			),
 		);
-		//TODO переделать
+
 		foreach ($this->aMenu as &$aTab) {
 			$bIsActiveController = (Yii::app()->controller->id == $aTab['name']);
 			$aTab['active'] = $bIsActiveController;
-
-			// если не пуст контент
-			if (!empty($aTab['content'])) {
-				foreach ($aTab['content'] as &$aLink) {
-					// генерируем ссылку по имени таба-родителя и собственно имени ссылки, если url не прописан явно
-					$aLink['url'] = (empty($aLink['url']))
-						? Yii::app()->createUrl('/admin/' . $aTab['name'] . '/' . $aLink['name'])
-						: $aLink['url'];
-					// ссылка активна, если активен таб-родитель и текущий экшн совпадает с именем ссылки
-					$aLink['active'] = ($bIsActiveController && isset($aLink['name']) && Yii::app()->controller->action->id == $aLink['name']);
-				}
-			}
 		}
 
 		$this->render('menu');
