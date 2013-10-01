@@ -34,10 +34,11 @@ class DefaultController extends Controller
 			),
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions' => array('logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
+				'actions' => array(
+					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard','verifyCard'
+					'addCard', 'verifyCard', 'successCard'
 				),
 				'users'   => array('@'),
 			),
@@ -155,33 +156,33 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-		if (!Yii::app()->request->isPostRequest) {
-			$oCardForm = new AddCardForm();
-			$this->render('card/add_card', array('model' => $oCardForm));
-			Yii::app()->end();
-		}
-
-		$aPostData = Yii::app()->request->getParam('AddCardForm');
 		$oCardForm = new AddCardForm();
-		$oCardForm->setAttributes($aPostData);
-		if ($oCardForm->validate()) {
-			//card_order,
+		$sError = null;
 
-			$sCardOrder = Yii::app()->adminKreddyApi->addClientCard(
-				$oCardForm->sCardPan,
-				$oCardForm->sCardMonth,
-				$oCardForm->sCardYear,
-				$oCardForm->sCardCvc);
+		if (Yii::app()->request->isPostRequest) {
+			$aPostData = Yii::app()->request->getParam('AddCardForm');
+			$oCardForm->setAttributes($aPostData);
 
-			if ($sCardOrder) {
-				Yii::app()->session['sCardOrder'] = $sCardOrder; //TODO убрать в API
-				$this->redirect($this->createUrl('/account/verifyCard'));
-			} else {
-				//TODO тут что-то там рендерим и кидаем туда последнее сообщение. Надо переделать.
-				$oCardForm->addError('sCardCvc',Yii::app()->adminKreddyApi->getLastMessage());
+			if ($oCardForm->validate()) {
+				//card_order,
+
+				$sCardOrder = Yii::app()->adminKreddyApi->addClientCard(
+					$oCardForm->sCardPan,
+					$oCardForm->sCardMonth,
+					$oCardForm->sCardYear,
+					$oCardForm->sCardCvc
+				);
+
+				if ($sCardOrder) {
+					Yii::app()->session['sCardOrder'] = $sCardOrder; //TODO убрать в API
+					$this->redirect($this->createUrl('/account/verifyCard'));
+				} else {
+					$sError = Yii::app()->adminKreddyApi->getLastMessage();
+				}
 			}
 		}
-		$this->render('card/add_card', array('model' => $oCardForm));
+
+		$this->render('card/add_card', array('model' => $oCardForm, 'sError' => $sError));
 	}
 
 	/**
@@ -190,23 +191,40 @@ class DefaultController extends Controller
 
 	public function actionVerifyCard()
 	{
-		if (!Yii::app()->request->isPostRequest) {
+		//TODO: ???? если переходишь с addCard, то обратно перекидывает... ведь с неё нет POST-запроса
+		if (empty(Yii::app()->session['sCardOrder'])) {
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
-		$sCardOrder = Yii::app()->session['sCardOrder']; //TODO убрать в API
-		$aPostData = Yii::app()->request->getParam('VerifyCardForm');
 		$oVerifyForm = new VerifyCardForm();
-		$oVerifyForm->setAttributes($aPostData);
-		if ($oVerifyForm->validate()) {
-			$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder,$oVerifyForm->sCardVerifyAmount);
-			if($bVerify){
-				//TODO тут редирект куда-то где сообщение об успешности операции
-			} else {
-				$oVerifyForm->addError('sCardVerifyAmount',Yii::app()->adminKreddyApi->getLastMessage());
+
+		if (Yii::app()->request->isPostRequest) {
+			$sCardOrder = Yii::app()->session['sCardOrder']; //TODO убрать в API
+			$aPostData = Yii::app()->request->getParam('VerifyCardForm');
+
+			$oVerifyForm->setAttributes($aPostData);
+			if ($oVerifyForm->validate()) {
+				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder, $oVerifyForm->sCardVerifyAmount);
+				if ($bVerify) {
+					$this->redirect($this->createUrl('/account/successCard'));
+				} else {
+					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());
+				}
 			}
 		}
+
 		$this->render('card/verify_card', array('model' => $oVerifyForm));
+	}
+
+	/**
+	 * Карта успешно привязана
+	 */
+
+	public function actionSuccessCard()
+	{
+		$this->render('card/success', array(
+			'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
+		));
 	}
 
 	/**
@@ -245,7 +263,6 @@ class DefaultController extends Controller
 		} else {
 			$sView = 'subscription/subscribe_not_sms_auth';
 		}
-
 
 
 		$oProductForm = new ClientSubscribeForm();
