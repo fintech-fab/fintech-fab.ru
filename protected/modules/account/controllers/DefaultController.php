@@ -86,6 +86,10 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
+		echo '<pre>' . ""; CVarDumper::dump(ids_ipGeoBase::getCityByIP('46.38.98.106')); echo '</pre>';
+		echo '<pre>' . ""; CVarDumper::dump(ids_ipGeoBase::getRegionByIP('46.38.98.106')); echo '</pre>';
+		echo '<pre>' . ""; CVarDumper::dump(ids_ipGeoBase::getDistrictByIP('46.38.98.106')); echo '</pre>';
+
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$sView = 'index_is_sms_auth/';
