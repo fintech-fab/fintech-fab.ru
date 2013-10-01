@@ -2,10 +2,14 @@
 /* @var DefaultController $this */
 /* @var AddCardForm $model */
 /* @var IkTbActiveForm $form */
+/* @var $sError */
 
 $this->pageTitle = Yii::app()->name . " - Привязка пластиковой карты";
 ?>
 	<h4>Привязка пластиковой карты</h4>
+
+<?php if (!empty($sError)) { ?>
+	<div class="alert alert-error"><?= $sError ?></div> <?php } ?>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -15,8 +19,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 
 <?= $form->textFieldRow($model, 'sCardPan'); ?>
-<?= $form->dropDownListRow($model, 'sCardMonth',Dictionaries::$aMonthsDigital); ?>
-<?= $form->dropDownListRow($model, 'sCardYear',Dictionaries::getYears()); ?>
+<?= $form->dropDownListRow($model, 'sCardMonth', Dictionaries::$aMonthsDigital); ?>
+<?= $form->dropDownListRow($model, 'sCardYear', Dictionaries::getYears()); ?>
 <?= $form->textFieldRow($model, 'sCardCvc'); ?>
 
 	<div class="form-actions">

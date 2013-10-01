@@ -115,6 +115,7 @@ class AdminKreddyApiComponent
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
+	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -1151,14 +1152,11 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
 
+		$this->setLastMessage($aResult['message']);
 
 		if ($aResult['code'] === self::ERROR_NONE) {
-			$this->setLastMessage($aResult['message']);
-
 			return $aResult['card_order'];
 		} else {
-			$this->setLastMessage($aResult['message']);
-
 			return false;
 		}
 	}
@@ -1178,15 +1176,9 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD, $aRequest);
 
-		if ($aResult['code'] === self::ERROR_NONE) {
-			$this->setLastMessage($aResult['message']);
+		$this->setLastMessage($aResult['message']);
 
-			return true;
-		} else {
-			$this->setLastMessage($aResult['message']);
-
-			return false;
-		}
+		return ($aResult['code'] === self::ERROR_NONE);
 	}
 
 	/**
