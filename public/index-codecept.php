@@ -2,6 +2,9 @@
 
 date_default_timezone_set('Europe/Moscow');
 
+/**
+ * Для acceptance тестирования в Codeception
+ */
 
 // change the following paths if necessary
 $yii = dirname(__FILE__) . '/../yii/framework/yii.php';

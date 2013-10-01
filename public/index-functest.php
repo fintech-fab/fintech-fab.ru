@@ -2,6 +2,10 @@
 
 date_default_timezone_set('Europe/Moscow');
 
+/**
+ * для функционального тестирования в Codeception, временно не используется из-за проблем с urlManager при
+ * использовании path
+ */
 
 // change the following paths if necessary
 $yii = dirname(__FILE__) . '/../yii/framework/yiit.php';

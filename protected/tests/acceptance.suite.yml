@@ -11,8 +11,8 @@
 class_name: WebGuy
 modules:
     enabled:
-        - PhpBrowser
         - WebHelper
+        - PhpBrowser
     config:
         PhpBrowser:
             url: 'http://test.kreddy.popov/'
