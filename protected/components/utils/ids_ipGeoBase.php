@@ -9,13 +9,6 @@ class ids_ipGeoBase
 	public static $bEncode = false;
 
 	/**
-	 * поля которые нужно получить в ответе на запрос по IP
-	 *
-	 * @var array
-	 */
-	public static $FIELDS = array('city', 'region', 'district');
-
-	/**
 	 * массив для кеширования запросов
 	 *
 	 * @var array
@@ -121,7 +114,11 @@ class ids_ipGeoBase
 
 	}
 
-
+	/**
+	 * @param $sIp
+	 *
+	 * @return array
+	 */
 	private static function request($sIp)
 	{
 		$long_ip = ip2long($sIp);
@@ -144,9 +141,6 @@ class ids_ipGeoBase
 			} else {
 				$aReturn = array(
 					'country'  => $aResult['country'],
-					'city'     => '',
-					'region'   => '',
-					'district' => '',
 				);
 			}
 		}
