@@ -1,2 +1,4 @@
 #!/bin/bash
-mysql -u kreddy --password=159753 < ./../sql/mysql-commands.sql
+php ./../cron.php dbcleaner clearDb
+php ./../cron.php ipgeobaseupdate downloadDb
+php ./../cron.php ipgeobaseupdate updateDb

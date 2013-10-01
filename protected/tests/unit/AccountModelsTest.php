@@ -142,6 +142,31 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider validCardDataProvider
+	 */
+
+	public function testAddCardFormValid($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	{
+		$aPostData = array(
+			'sCardPan' => $sCardPan,
+			'sCardMonth' => $sCardMonth,
+			'sCardYear' => $sCardYear,
+			'sCardCvc' => $sCardCvc,
+		);
+
+		$oForm = new AddCardForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('sCardPan'), print_r($oForm->getError('sCardPan'), true));
+		$this->assertEmpty($oForm->getError('sCardMonth'), print_r($oForm->getError('sCardMonth'), true));
+		$this->assertEmpty($oForm->getError('sCardYear'), print_r($oForm->getError('sCardYear'), true));
+		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
+
+	}
+
+	/**
 	 * @return array
 	 */
 
@@ -168,4 +193,22 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
+	/**
+	 * @return array
+	 */
+
+	public static function validCardDataProvider()
+	{
+		$aYears = Dictionaries::getYears();
+		$aMonths = Dictionaries::$aMonthsDigital;
+
+		return array(
+			array(
+				'sCardPan' =>substr((rand(10000000000000000, 19999999999999999)), 1),
+				'sCardMonth' =>array_rand($aMonths,1),
+				'sCardYear' =>array_rand($aYears,1),
+				'sCardCvc' =>substr((rand(1000,1999)),1),
+			)
+		);
+	}
 }
