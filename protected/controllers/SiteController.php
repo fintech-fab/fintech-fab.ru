@@ -49,6 +49,38 @@ class SiteController extends Controller
 	}
 
 	/**
+	 * Вывод в JSON массива - города и регионы
+	 *
+	 * @param string $sInput
+	 */
+	public function actionGetCitiesAndRegionsListJson($sInput = "")
+	{
+		$aCitiesAndRegions = CitiesRegions::getAllCitiesAndRegions($sInput);
+		echo CJSON::encode($aCitiesAndRegions);
+	}
+
+	/**
+	 * Записывает в куку id города пользователя, переданный по post
+	 */
+	public function actionSetCityIdToCookie()
+	{
+		// берём id из post-запроса
+		$iId = Yii::app()->request->getPost("city_id");
+
+		if (!Yii::app()->request->isPostRequest || empty($iId)) {
+			$this->redirect(Yii::app()->getHomeUrl());
+		}
+
+		// время жизни ставим - 30 суток
+		$aCookieOptions = array(
+			'expire' => time() + 60 * 60 * 24 * 30,
+		);
+
+		// записываем в куку полученный id
+		Yii::app()->request->cookies['city_id'] = new CHttpCookie("city_id", $iId, $aCookieOptions);
+	}
+
+	/**
 	 * This is the action to handle external exceptions.
 	 */
 	public function actionError()
@@ -67,24 +99,23 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
-		$model = new LoginForm;
+		$oModel = new LoginForm;
 
 		// if it is ajax validation request
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-			echo CActiveForm::validate($model);
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oModel);
 			Yii::app()->end();
 		}
 
-		// collect user input data
-		if (isset($_POST['LoginForm'])) {
-			$model->attributes = $_POST['LoginForm'];
-			// validate user input and redirect to the previous page if valid
-			if ($model->validate() && $model->login()) {
-				$this->redirect(Yii::app()->user->returnUrl);
-			}
+		$aPostData = Yii::app()->request->getPost('LoginForm', array());
+		$oModel->setAttributes($aPostData);
+
+		if (Yii::app()->request->isPostRequest && $oModel->validate() && $oModel->login()) {
+			$this->redirect(Yii::app()->user->returnUrl);
 		}
+
 		// display the login form
-		$this->render('login', array('model' => $model));
+		$this->render('login', array('model' => $oModel));
 	}
 
 	/**

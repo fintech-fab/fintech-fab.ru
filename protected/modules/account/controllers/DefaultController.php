@@ -87,9 +87,16 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
-		echo '<pre>' . ""; CVarDumper::dump(ids_ipGeoBase::getCityByIP('46.38.98.106')); echo '</pre>';
-		echo '<pre>' . ""; CVarDumper::dump(ids_ipGeoBase::getRegionByIP('46.38.98.106')); echo '</pre>';
-		echo '<pre>' . ""; CVarDumper::dump(ids_ipGeoBase::getDistrictByIP('46.38.98.106')); echo '</pre>';
+		// TODO: убрать!!!!!
+		echo '<pre>' . "";
+		CVarDumper::dump(ids_ipGeoBase::getCityByIP('46.38.98.106'));
+		echo '</pre>';
+		echo '<pre>' . "";
+		CVarDumper::dump(ids_ipGeoBase::getRegionByIP('46.38.98.106'));
+		echo '</pre>';
+		echo '<pre>' . "";
+		CVarDumper::dump(ids_ipGeoBase::getDistrictByIP('46.38.98.106'));
+		echo '</pre>';
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
@@ -707,24 +714,24 @@ class DefaultController extends Controller
 		$this->layout = '/layouts/column1';
 
 		if (Yii::app()->user->isGuest) {
-			$model = new AccountLoginForm;
+			$oModel = new AccountLoginForm;
 
 			// if it is ajax validation request
-			if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-				echo CActiveForm::validate($model);
+			if (Yii::app()->request->isAjaxRequest) {
+				echo CActiveForm::validate($oModel);
 				Yii::app()->end();
 			}
 
-			// collect user input data
-			if (isset($_POST['AccountLoginForm'])) {
-				$model->attributes = $_POST['AccountLoginForm'];
-				// validate user input and redirect to the previous page if valid
-				if ($model->validate() && $model->login()) {
-					$this->redirect(Yii::app()->createUrl("/account"));
-				}
+			$aPostData = Yii::app()->request->getPost('AccountLoginForm', array());
+			$oModel->setAttributes($aPostData);
+
+			if (Yii::app()->request->isPostRequest && $oModel->validate() && $oModel->login()) {
+				$this->redirect(Yii::app()->createUrl("/account"));
 			}
+
 			// display the login form
-			$this->render('login', array('model' => $model));
+			$this->render('login', array('model' => $oModel));
+
 		} else {
 			$this->redirect(Yii::app()->createUrl("/account"));
 		}
