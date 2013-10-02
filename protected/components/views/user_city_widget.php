@@ -8,7 +8,7 @@ $sCsrfTokenName = Yii::app()->request->csrfTokenName;
 $sCsrfToken = Yii::app()->request->csrfToken;
 
 ?>
-
+<br />
 <div id="userCityWidget">
 	Ваш город:
 

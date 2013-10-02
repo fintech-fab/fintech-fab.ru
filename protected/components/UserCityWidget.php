@@ -7,7 +7,7 @@ class UserCityWidget extends CWidget
 	{
 		$oCityIdCookie = Yii::app()->request->cookies['city_id'];
 
-		if (!empty($oCityIdCookie)) { // если в куках есть город и удалось его восстановить по id, выводим его
+		if (!empty($oCityIdCookie)) { // если в куках есть id города, выводим его
 			$this->sCityName = CitiesRegions::getCityNameById($oCityIdCookie->value);
 		} elseif (ids_ipGeoBase::getCityByIP()) { // если удалось определить город по ip
 			$this->sCityName = ids_ipGeoBase::getCityByIP() . ", " . ids_ipGeoBase::getRegionByIP();
