@@ -44,7 +44,7 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 
 <div class="container">
 	<div class="row">
-		<div class="span12">
+		<div class="span12"><?php $this->widget("UserCityWidget") //TODO: убрать ?>
 			<h2 class="learn-more">Узнай больше о нас!</h2>
 
 			<p class="intro learn-more">Если возникнут вопросы, позвони нам, или

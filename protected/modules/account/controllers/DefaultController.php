@@ -703,24 +703,24 @@ class DefaultController extends Controller
 		$this->layout = '/layouts/column1';
 
 		if (Yii::app()->user->isGuest) {
-			$model = new AccountLoginForm;
+			$oModel = new AccountLoginForm;
 
 			// if it is ajax validation request
-			if (isset($_POST['ajax']) && $_POST['ajax'] === 'login-form') {
-				echo CActiveForm::validate($model);
+			if (Yii::app()->request->isAjaxRequest) {
+				echo CActiveForm::validate($oModel);
 				Yii::app()->end();
 			}
 
-			// collect user input data
-			if (isset($_POST['AccountLoginForm'])) {
-				$model->attributes = $_POST['AccountLoginForm'];
-				// validate user input and redirect to the previous page if valid
-				if ($model->validate() && $model->login()) {
-					$this->redirect(Yii::app()->createUrl("/account"));
-				}
+			$aPostData = Yii::app()->request->getPost('AccountLoginForm', array());
+			$oModel->setAttributes($aPostData);
+
+			if (Yii::app()->request->isPostRequest && $oModel->validate() && $oModel->login()) {
+				$this->redirect(Yii::app()->createUrl("/account"));
 			}
+
 			// display the login form
-			$this->render('login', array('model' => $model));
+			$this->render('login', array('model' => $oModel));
+
 		} else {
 			$this->redirect(Yii::app()->createUrl("/account"));
 		}
