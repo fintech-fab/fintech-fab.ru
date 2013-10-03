@@ -10,6 +10,9 @@ class BottomTabsWidget extends CWidget
 
 	public function run()
 	{
+
+		$this->tabs = Tabs::model()->cache(60)->findAll(array('order' => 'tab_order'));
+
 		$first = 0;
 		if (!empty($this->tabs)) {
 			foreach ($this->tabs as $t) {

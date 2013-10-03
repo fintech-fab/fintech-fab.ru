@@ -7,9 +7,7 @@
 		<div class="span12 footer">
 			<div class="footer">
 				<?php
-				$this->widget('FooterLinksWidget', array(
-					'links' => FooterLinks::model()->findAll(array('order' => 'link_order')),
-				));
+				$this->widget('FooterLinksWidget');
 				?>
 				<p>&copy; <?= SiteParams::copyrightYear() ?> ООО "Финансовые Решения"</p>
 			</div>

@@ -53,9 +53,7 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 
 		<div class="row" style="margin-left: 0;">
 			<?php
-			$this->widget('BottomTabsWidget', array(
-				'tabs' => Tabs::model()->findAll(array('order' => 'tab_order')),
-			));
+			$this->widget('BottomTabsWidget');
 			?>
 		</div>
 	</div>

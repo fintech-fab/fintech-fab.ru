@@ -101,6 +101,10 @@ class Tabs extends CActiveRecord
 		));
 	}
 
+	/**
+	 * @return bool
+	 */
+
 	protected function beforeValidate()
 	{
 		if(parent::beforeValidate())

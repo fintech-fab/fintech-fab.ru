@@ -40,7 +40,7 @@ $aCrumbs = array(
 		<?php
 		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
 		// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
-		if (!isset($oClientCreateForm->product)) {
+		if (empty($oClientCreateForm->product)) {
 			$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
 		}
 		?>
