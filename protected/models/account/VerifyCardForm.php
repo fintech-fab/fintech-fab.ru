@@ -30,7 +30,7 @@ class VerifyCardForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'$sCardVerifyAmount'   => 'Замороженная сумма',
+			'sCardVerifyAmount'   => 'Замороженная сумма',
 		);
 
 	}
@@ -41,7 +41,7 @@ class VerifyCardForm extends CFormModel
 	protected function beforeValidate()
 	{
 		if(isset($this->sCardVerifyAmount)){
-			str_replace(',','.',$this->sCardVerifyAmount);
+			$this->sCardVerifyAmount = str_replace(',','.',$this->sCardVerifyAmount);
 			$this->sCardVerifyAmount = floatval($this->sCardVerifyAmount);
 		}
 		return parent::beforeValidate();

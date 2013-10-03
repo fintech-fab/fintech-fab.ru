@@ -152,6 +152,7 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
+		//TODO сделать проверку checkCanAddCard и добавить сообщение об ошибке
 		$oCardForm = new AddCardForm();
 		$sError = null;
 
@@ -160,7 +161,6 @@ class DefaultController extends Controller
 			$oCardForm->setAttributes($aPostData);
 
 			if ($oCardForm->validate()) {
-				//card_order,
 
 				$sCardOrder = Yii::app()->adminKreddyApi->addClientCard(
 					$oCardForm->sCardPan,
@@ -170,10 +170,17 @@ class DefaultController extends Controller
 				);
 
 				if ($sCardOrder) {
-					Yii::app()->session['sCardOrder'] = $sCardOrder; //TODO убрать в API
-					$this->redirect($this->createUrl('/account/verifyCard'));
+					Yii::app()->adminKreddyApi->setCardOrder($sCardOrder);
+					//отображаем форму проверки карты
+					$oVerifyForm = new VerifyCardForm();
+					$this->render('card/verify_card', array('model' => $oVerifyForm));
+					Yii::app()->end();
+
 				} else {
 					$sError = Yii::app()->adminKreddyApi->getLastMessage();
+					if(empty($sError)){
+						$sError = AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN;
+					}
 				}
 			}
 		}
@@ -187,22 +194,26 @@ class DefaultController extends Controller
 
 	public function actionVerifyCard()
 	{
-		//TODO: ???? если переходишь с addCard, то обратно перекидывает... ведь с неё нет POST-запроса
-		if (empty(Yii::app()->session['sCardOrder'])) {
+		$sCardOrder = Yii::app()->adminKreddyApi->getCardOrder();
+
+		if (empty($sCardOrder)) {
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
 		$oVerifyForm = new VerifyCardForm();
 
 		if (Yii::app()->request->isPostRequest) {
-			$sCardOrder = Yii::app()->session['sCardOrder']; //TODO убрать в API
 			$aPostData = Yii::app()->request->getParam('VerifyCardForm');
 
 			$oVerifyForm->setAttributes($aPostData);
 			if ($oVerifyForm->validate()) {
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder, $oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
-					$this->redirect($this->createUrl('/account/successCard'));
+					$this->render('card/success', array(
+						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
+					));
+					Yii::app()->adminKreddyApi->setCardOrder(null);
+					Yii::app()->end();
 				} else {
 					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());
 				}
@@ -210,17 +221,6 @@ class DefaultController extends Controller
 		}
 
 		$this->render('card/verify_card', array('model' => $oVerifyForm));
-	}
-
-	/**
-	 * Карта успешно привязана
-	 */
-
-	public function actionSuccessCard()
-	{
-		$this->render('card/success', array(
-			'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
-		));
 	}
 
 	/**

@@ -111,8 +111,9 @@ class AdminKreddyApiComponent
 
 	const API_ACTION_ADD_CARD = 'siteClient/addClientCard';
 	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
+	const API_ACTION_CHECK_CAN_ADD_CARD = 'siteClient/checkClientCanVerifyCard';
 
-	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
+const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
@@ -1144,10 +1145,10 @@ class AdminKreddyApiComponent
 	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
 	{
 		$aRequest = array(
-			'card_pan,'   => $sCardPan,
-			'card_month,' => $sCardMonth,
-			'card_year,,' => $sCardYear,
-			'card_cvc'    => $sCardCvc
+			'card_pan'   => $sCardPan,
+			'card_month' => $sCardMonth,
+			'card_year'  => $sCardYear,
+			'card_cvc'   => $sCardCvc
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
@@ -1170,8 +1171,8 @@ class AdminKreddyApiComponent
 	public function verifyClientCard($sCardOrder, $sCardVerifyAmount)
 	{
 		$aRequest = array(
-			'card_order,,'        => $sCardOrder,
-			'card_verify_amount,' => $sCardVerifyAmount,
+			'card_order'         => $sCardOrder,
+			'card_verify_amount' => $sCardVerifyAmount,
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_VERIFY_CARD, $aRequest);
@@ -1179,6 +1180,19 @@ class AdminKreddyApiComponent
 		$this->setLastMessage($aResult['message']);
 
 		return ($aResult['code'] === self::ERROR_NONE);
+	}
+
+	/**
+	 * Проверяет, может ли клиент добавить карту.
+	 *
+	 * @return bool
+	 */
+	public function checkCanAddCard()
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_ADD_CARD);
+		if(!$this->getIsError()){
+			return (!empty($aResult['card_can_verify']));
+		}
 	}
 
 	/**
@@ -1817,5 +1831,22 @@ class AdminKreddyApiComponent
 		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $this->formatStatusMessage());
 
 		return $sMessage;
+	}
+
+	/**
+	 * @param $sCardOrder
+	 */
+	public function setCardOrder($sCardOrder)
+	{
+		//TODO сделать длительное хранение (не менее 30 минут), можно в кукисе
+		Yii::app()->session['sCardOrder'] = $sCardOrder;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCardOrder()
+	{
+		return Yii::app()->session['sCardOrder'];
 	}
 }
