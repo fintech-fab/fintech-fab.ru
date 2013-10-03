@@ -7,7 +7,7 @@ class m131001_115436_AddGeoIpTables extends CDbMigration{	public function up()	{
   `country` varchar(2) NOT NULL,
   `city_id` int(10) NOT NULL,
   KEY `INDEX` (`long_ip1`,`long_ip2`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `tbl_geo__cities` (
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `tbl_geo__cities` (
   `lat` float NOT NULL,
   `lng` float NOT NULL,
   PRIMARY KEY (`city_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 
 
