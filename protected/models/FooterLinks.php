@@ -27,6 +27,15 @@ class FooterLinks extends CActiveRecord
 	}
 
 	/**
+	 * @return CActiveRecord[]
+	 */
+	public static function getAllLinks()
+	{
+		//TODO сделать кэш через зависимости
+		return self::model()->cache(60)->findAll(array('order' => 'link_order'));
+	}
+
+	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()

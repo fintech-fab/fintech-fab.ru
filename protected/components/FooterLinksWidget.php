@@ -10,8 +10,7 @@ class FooterLinksWidget extends CWidget
 
 	public function run()
 	{
-
-		$this->links = FooterLinks::model()->cache(60)->findAll(array('order' => 'link_order'));
+		$this->links = FooterLinks::getAllLinks();
 
 
 		if (!empty($this->links)) {

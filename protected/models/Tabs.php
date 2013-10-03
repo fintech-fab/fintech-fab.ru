@@ -23,6 +23,16 @@ class Tabs extends CActiveRecord
 	}
 
 	/**
+	 * @return CActiveRecord[]
+	 */
+
+	public static function getAllTabs()
+	{
+		//TODO сделать кэш через зависимости
+		return self::model()->cache(60)->findAll(array('order' => 'tab_order'));
+	}
+
+	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
