@@ -1,5 +1,5 @@
 
-jQuery(function ($) {
+jQuery(window).on('load',function() {
 	$(".errorAlert").find(".alert-block").addClass("alert-block-fullform");
 
 	oAddressRes = $("#address_res");
