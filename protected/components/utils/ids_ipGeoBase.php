@@ -4,6 +4,8 @@
  */
 class ids_ipGeoBase
 {
+	public static $aGeoBaseData;
+	public static $aGeoCityData;
 
 	/** @var boolean */
 	public static $bEncode = false;
@@ -121,27 +123,41 @@ class ids_ipGeoBase
 	 */
 	private static function request($sIp)
 	{
-		//TODO подумать насчет сохранения запрошенных данных каким-то иным сопособом
 		$long_ip = ip2long($sIp);
+		//проверяем, запрашивалась ли информация в течение текущего запроса страницы
+		if (empty(self::$aGeoBaseData)) {
+			$sSqlRequest = "SELECT * FROM `tbl_geo__base` WHERE `long_ip1`<='$long_ip' AND `long_ip2`>='$long_ip' LIMIT 1";
 
-		$sSqlRequest = "SELECT * FROM `tbl_geo__base` WHERE `long_ip1`<='$long_ip' AND `long_ip2`>='$long_ip' LIMIT 1";
+			$aResult = Yii::app()->db->cache(600)->createCommand($sSqlRequest)->queryRow();
 
-		$aResult = Yii::app()->db->cache(600)->createCommand($sSqlRequest)->queryRow();
+			self::$aGeoBaseData = $aResult;
+		} else {
+			//если информация уже запрашиваалась, берем ее вместо запроса к БД
+			$aResult = self::$aGeoBaseData;
+		}
 
-		$aReturn = array('error'=>true);
+		$aReturn = array('error' => true);
 
 		if (!empty($aResult)) {
 			if (!empty($aResult['city_id'])) {
-				$sSqlRequest = "SELECT * FROM `tbl_geo__cities` WHERE `city_id`='$aResult[city_id]' LIMIT 1";
-				$aResult2 = Yii::app()->db->cache(600)->createCommand($sSqlRequest)->queryRow();
+				//проверяем, запрашивалась ли информация в течение текущего запроса страницы
+				if (empty(self::$aGeoCityData)) {
+					$sSqlRequest = "SELECT * FROM `tbl_geo__cities` WHERE `city_id`='$aResult[city_id]' LIMIT 1";
+					$aResult2 = Yii::app()->db->cache(600)->createCommand($sSqlRequest)->queryRow();
+					self::$aGeoCityData = $aResult2;
+				} else {
+					//если информация уже запрашиваалась, берем ее вместо запроса к БД
+					$aResult2 = self::$aGeoCityData;
+				}
 				if (!empty($aResult2)) {
 					$aReturn = array('country' => $aResult['country']);
 					$aReturn = array_merge($aReturn, $aResult2);
 				}
 
+
 			} else {
 				$aReturn = array(
-					'country'  => $aResult['country'],
+					'country' => $aResult['country'],
 				);
 			}
 		}
