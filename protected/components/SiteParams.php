@@ -34,6 +34,7 @@ class SiteParams
 	const U_ACTION_TYPE_SMS = 2;
 	const U_ACTION_TYPE_BLOCK_FORM = 8;
 	const U_ACTION_TYPE_BLOCK_SMS = 9;
+	const U_ACTION_TYPE_CARD_VERIFY = 101;
 
 	/**
 	 * Время проверки для антибота, в минутах
@@ -45,6 +46,12 @@ class SiteParams
 	const ANTIBOT_FORM_TIME_SHORT = 10; //время проверки для короткого периода
 	const ANTIBOT_FORM_TIME_LONG = 60; //время проверки длинного периода
 	const ANTIBOT_FORM_TIME_BLOCK = 1440; //время блока
+
+	/**
+	 * Время и число попыток для привязки карты
+	 */
+	const ANTIBOT_CARD_VERIFY_TIME = 60;
+	const ANTIBOT_CARD_VERIFY_COUNT = 10;
 	/**
 	 * Количество СМС за период
 	 */
@@ -63,6 +70,7 @@ class SiteParams
 	const C_INVOICE_TYPE_LOAN_FINE = 3;
 	const C_INVOICE_TYPE_LOAN_PENALTY = 4;
 	const C_INVOICE_TYPE_LOAN_FINE_PENALTY = 5;
+
 
 	public static $aTypes = array(
 		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата Пакета',

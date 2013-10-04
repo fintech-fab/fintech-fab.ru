@@ -44,18 +44,16 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 
 <div class="container">
 	<div class="row">
-		<div class="span12"><?php $this->widget("UserCityWidget") //TODO: убрать ?>
-			<h2 class="learn-more">Узнай больше о нас!</h2>
+		<h2 class="learn-more">Узнай больше о нас!</h2>
 
-			<p class="intro learn-more">Если возникнут вопросы, позвони нам, или
-				<a href="mailto:info@kreddy.ru">напиши</a></p>
-		</div>
+		<p class="intro learn-more">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a>
+		</p>
+	</div>
 
-		<div class="row" style="margin-left: 0;">
-			<?php
-			$this->widget('BottomTabsWidget');
-			?>
-		</div>
+	<div class="row" style="margin-left: 0;">
+		<?php
+		$this->widget('BottomTabsWidget');
+		?>
 	</div>
 </div>
 <!-- footer start-->

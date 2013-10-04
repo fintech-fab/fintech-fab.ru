@@ -67,6 +67,39 @@ class AntiBotComponent
 		}
 	}
 
+	/**
+	 * Добавление в лог записи об ошибке привязки карты
+	 *
+	 * @param $sUserName
+	 *
+	 */
+	public static function addCardVerifyError($sUserName)
+	{
+		UserActionsLog::addNewAction($sUserName, SiteParams::U_ACTION_TYPE_CARD_VERIFY);
+	}
+
+	/**
+	 * Проверка, можно ли еще раз пробовать привязать карту
+	 *
+	 * @param $sUserName
+	 *
+	 * @return bool
+	 */
+
+	public static function checkCardVerifyCanRequest($sUserName)
+	{
+		$iType = SiteParams::U_ACTION_TYPE_CARD_VERIFY;
+		$iTime = SiteParams::ANTIBOT_CARD_VERIFY_TIME;
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sUserName, $iType, $iTime);
+
+		//если количество использованных попыток меньше заданного значения - разрешаем попытку
+		if($iActionCount <= SiteParams::ANTIBOT_CARD_VERIFY_COUNT)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Проверка, может ли пользователь заполнить анкету
@@ -110,6 +143,9 @@ class AntiBotComponent
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function checkIsBanned()
 	{
 
@@ -162,6 +198,9 @@ class AntiBotComponent
 		return Yii::app()->request->getUserHostAddress();
 	}
 
+	/**
+	 * @return bool
+	 */
 	private static function ipInExceptions()
 	{
 		$aIpExceptions = array('46.38.98.106', '46.38.98.107', '46.38.98.108', '192.168.10.136');

@@ -152,31 +152,38 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-		//TODO сделать проверку checkCanAddCard и добавить сообщение об ошибке
+		//TODO сделать проверку антиботом
+		if(Yii::app()->adminKreddyApi->checkCanVerifyCard()){
+			$oVerifyForm = new VerifyCardForm();
+			$this->render('card/verify_card', array('model' => $oVerifyForm));
+			Yii::app()->end();
+		}
+
+
 		$oCardForm = new AddCardForm();
 		$sError = null;
-
+		//если пришел POST-запрос
 		if (Yii::app()->request->isPostRequest) {
 			$aPostData = Yii::app()->request->getParam('AddCardForm');
 			$oCardForm->setAttributes($aPostData);
-
+			//валидируем полученные данные
 			if ($oCardForm->validate()) {
-
-				$sCardOrder = Yii::app()->adminKreddyApi->addClientCard(
+				//отправляем данные в API на проверку
+				$bAddCardOk = Yii::app()->adminKreddyApi->addClientCard(
 					$oCardForm->sCardPan,
 					$oCardForm->sCardMonth,
 					$oCardForm->sCardYear,
 					$oCardForm->sCardCvc
 				);
-
-				if ($sCardOrder) {
-					Yii::app()->adminKreddyApi->setCardOrder($sCardOrder);
-					//отображаем форму проверки карты
+				//если проверка прошла успешно
+				if ($bAddCardOk) {
+					//отображаем форму проверки карты по замороженной сумме денег
 					$oVerifyForm = new VerifyCardForm();
 					$this->render('card/verify_card', array('model' => $oVerifyForm));
 					Yii::app()->end();
 
 				} else {
+					//если проверка не пройдена, ругаемся ошибкой
 					$sError = Yii::app()->adminKreddyApi->getLastMessage();
 					if(empty($sError)){
 						$sError = AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN;
@@ -194,27 +201,31 @@ class DefaultController extends Controller
 
 	public function actionVerifyCard()
 	{
-		$sCardOrder = Yii::app()->adminKreddyApi->getCardOrder();
+		//TODO сделать проверку антиботом
 
-		if (empty($sCardOrder)) {
+		//если нельзя провести верификацию карты то отправляем на форму добавления карты
+		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
 		$oVerifyForm = new VerifyCardForm();
 
+		//если пришел POST-запрос, то пробуем верифицировать карту с полученными данными
 		if (Yii::app()->request->isPostRequest) {
 			$aPostData = Yii::app()->request->getParam('VerifyCardForm');
 
 			$oVerifyForm->setAttributes($aPostData);
+			//валидируем, в процессе валидации проводится преобразование дроби с запятой на точку
 			if ($oVerifyForm->validate()) {
-				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($sCardOrder, $oVerifyForm->sCardVerifyAmount);
+				//если ОК то отправляем в API на проверку
+				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));
-					Yii::app()->adminKreddyApi->setCardOrder(null);
 					Yii::app()->end();
 				} else {
+					//ругаемся ошибкой
 					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());
 				}
 			}

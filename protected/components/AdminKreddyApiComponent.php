@@ -111,7 +111,7 @@ class AdminKreddyApiComponent
 
 	const API_ACTION_ADD_CARD = 'siteClient/addClientCard';
 	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
-	const API_ACTION_CHECK_CAN_ADD_CARD = 'siteClient/checkClientCanVerifyCard';
+	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClient/checkClientCanVerifyCard';
 
 const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Позвоните на горячую линию.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
@@ -1156,7 +1156,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		$this->setLastMessage($aResult['message']);
 
 		if ($aResult['code'] === self::ERROR_NONE) {
-			return $aResult['card_order'];
+			return true;
 		} else {
 			return false;
 		}
@@ -1168,10 +1168,9 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 	 *
 	 * @return bool
 	 */
-	public function verifyClientCard($sCardOrder, $sCardVerifyAmount)
+	public function verifyClientCard($sCardVerifyAmount)
 	{
 		$aRequest = array(
-			'card_order'         => $sCardOrder,
 			'card_verify_amount' => $sCardVerifyAmount,
 		);
 
@@ -1187,12 +1186,13 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 	 *
 	 * @return bool
 	 */
-	public function checkCanAddCard()
+	public function checkCanVerifyCard()
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_ADD_CARD);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
 		if(!$this->getIsError()){
 			return (!empty($aResult['card_can_verify']));
 		}
+		return false;
 	}
 
 	/**
@@ -1836,20 +1836,4 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		return $sMessage;
 	}
 
-	/**
-	 * @param $sCardOrder
-	 */
-	public function setCardOrder($sCardOrder)
-	{
-		//TODO сделать длительное хранение (не менее 30 минут), можно в кукисе
-		Yii::app()->session['sCardOrder'] = $sCardOrder;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCardOrder()
-	{
-		return Yii::app()->session['sCardOrder'];
-	}
 }
