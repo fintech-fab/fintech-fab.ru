@@ -6,6 +6,9 @@
 <div class="container" id="main-content">
 	<div class="row">
 		<div class="span8">
+			<?php if(Yii::app()->user->hasFlash('success')):?>
+			<div class="alert alert-success"><?= Yii::app()->user->getFlash('success'); ?></div>
+			<?php endif; ?>
 			<?= $content; ?>
 		</div>
 		<!-- content -->

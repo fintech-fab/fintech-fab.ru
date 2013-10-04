@@ -289,9 +289,6 @@ class ClientFormComponent
 
 				//очищаем сессию (данные формы и прочее)
 				$this->clearClientSession();
-				//ставим флаг "форма отправлена" для отображения представления с сообщением "Форма отправлена"
-				$this->setFormSent(true);
-
 				// успешная проверка
 				return true;
 			} else {
@@ -441,11 +438,6 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
-		//если в сессии стоит флаг "отобразить form_sent" то передаем это представление
-		if ($this->isFormSent()) {
-			return 'form_sent';
-		}
-
 		$bFullForm = SiteParams::B_FULL_FORM;
 
 		if ($bFullForm) {
@@ -831,25 +823,5 @@ class ClientFormComponent
 		}
 
 		return true;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isFormSent()
-	{
-		Yii::trace('TEST6 IsFormSent: '.!empty(Yii::app()->session['isFormSent']));
-		Yii::trace('TEST7 IsFormSent: '.Yii::app()->session['isFormSent']);
-		return !empty(Yii::app()->session['isFormSent']);
-	}
-
-	/**
-	 * @param $bFormSent
-	 *
-	 */
-	public function setFormSent($bFormSent)
-	{
-		Yii::trace('TEST9 setFormSet: '.$bFormSent);
-		Yii::app()->session['isFormSent'] = $bFormSent;
 	}
 }
