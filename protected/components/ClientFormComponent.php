@@ -152,11 +152,11 @@ class ClientFormComponent
 			if (
 				$aCookieData &&
 				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
-				!empty($aCookieData['client_id'])
+				!empty($aCookieData['client_id']) &&
+				!is_null(ClientData::getClientDataById($aCookieData['client_id']))
 			) {
 				$this->iClientId = $aCookieData['client_id'];
 				$this->setClientId($this->iClientId);
-
 			} else {
 				/**
 				 * функция addClient()ищет клиента в базе по телефону,
@@ -164,7 +164,7 @@ class ClientFormComponent
 				 * либо создает новую запись
 				 */
 
-				$oClientData = ClientData::addClient($oClientForm);
+				$oClientData = ClientData::addClient($oClientForm['phone']);
 				Yii::app()->antiBot->addFormRequest();
 				$this->setClientId($oClientData->client_id);
 
@@ -188,7 +188,6 @@ class ClientFormComponent
 				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
-
 			}
 
 			// ставим флаг, что полная форма заполнена - чтобы при возврате к ней была активна кнопка "Отправить"
@@ -839,7 +838,9 @@ class ClientFormComponent
 	 */
 	public function isFormSent()
 	{
-		return (!empty(Yii::app()->session['isFormSent'])) ? Yii::app()->session['isFormSent'] : false;
+		Yii::trace('TEST6 IsFormSent: '.!empty(Yii::app()->session['isFormSent']));
+		Yii::trace('TEST7 IsFormSent: '.Yii::app()->session['isFormSent']);
+		return !empty(Yii::app()->session['isFormSent']);
 	}
 
 	/**
@@ -848,6 +849,7 @@ class ClientFormComponent
 	 */
 	public function setFormSent($bFormSent)
 	{
+		Yii::trace('TEST9 setFormSet: '.$bFormSent);
 		Yii::app()->session['isFormSent'] = $bFormSent;
 	}
 }

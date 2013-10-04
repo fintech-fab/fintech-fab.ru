@@ -228,6 +228,8 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 
 				'complete'            => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 
+				'passport_number'        => 'Серия/номер',
+
 				'secret_question'     => 'Секретный вопрос',
 				'secret_answer'       => 'Ответ на секретный вопрос',
 

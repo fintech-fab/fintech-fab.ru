@@ -2,7 +2,6 @@
 
 date_default_timezone_set('Europe/Moscow');
 
-
 // change the following paths if necessary
 $yii = dirname(__FILE__) . '/../yii/framework/yii.php';
 $config = dirname(__FILE__) . '/../protected/config/main.php';
@@ -15,3 +14,6 @@ defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL', $debug['debugLevel']);
 
 require_once($yii);
 Yii::createWebApplication($config)->run();
+//TODO УБРАТЬ
+$s = isset($_SESSION) ? $_SESSION : array();
+@file_put_contents(__DIR__ . '/../protected/runtime/trace.log', time().'\n'.$_SERVER['REQUEST_URI'] . "\n" . print_r($s,true),FILE_APPEND);

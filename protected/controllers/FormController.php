@@ -74,6 +74,7 @@ class FormController extends Controller
 
 		//если текущее представление form_sent, то отключаем его отображение при следующей загрузке
 		if ($sView === 'form_sent') {
+			Yii::trace('TEST8');
 			Yii::app()->clientForm->setFormSent(false);
 		}
 
@@ -130,12 +131,14 @@ class FormController extends Controller
 	 */
 	public function actionCheckSmsCode()
 	{
+		//TODO удалить трейсы
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
 		$iClientId = Yii::app()->clientForm->getClientId();
 
 		// если не было POST запроса либо если флага, что SMS отправлялось, нет - перенаправляем на form
 		if (empty($aPostData) || !Yii::app()->clientForm->getFlagSmsSent()) {
+			Yii::trace('TEST1');
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
@@ -150,6 +153,7 @@ class FormController extends Controller
 			$this->render('confirm_phone_full_form2/check_sms_code', array(
 				'oClientCreateForm' => $oClientSmsForm,
 			));
+			Yii::trace('TEST2');
 			Yii::app()->end();
 		} else {
 			//если код верный, то берем данные из БД
@@ -160,12 +164,16 @@ class FormController extends Controller
 				$oLogin = new AutoLoginForm();
 				$oLogin->setAttributes(array('username' => $aClientData['phone']));
 				Yii::app()->user->setStateKeyPrefix('_account');
+				Yii::trace('TEST3');
 				if ($oLogin->validate() && $oLogin->login()) {
 					Yii::app()->clientForm->setFormSent(true);
+					Yii::trace('isFormSent: '.Yii::app()->clientForm->isFormSent());
+					Yii::trace('TEST4');
+
 				}
 			}
 		}
-
+		Yii::trace('TEST5');
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
