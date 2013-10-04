@@ -25,7 +25,7 @@ echo $form->hiddenField($model, 'sendSmsCode');
 
 	<div class="alert in alert-block alert-error span7">
 		При отправке SMS с паролем произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка
-		повторяется, позвоните на горячую линию.
+		повторяется, обратитесь в контактный центр.
 	</div>
 
 	<div class="form-actions">

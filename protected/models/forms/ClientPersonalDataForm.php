@@ -58,7 +58,7 @@ class ClientPersonalDataForm extends ClientCreateFormAbstract
 		$aRules =
 			array(
 				array(
-					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в горячую линию.', 'criteria' => array(
+					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в контактный центр.', 'criteria' => array(
 					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
 				)
 				),

@@ -18,7 +18,7 @@ $this->pageTitle = Yii::app()->name;
 
 <div id="alertSmsSent" class="alert in alert-error span7">
 При отправке SMS с паролем произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка
-	повторяется, позвоните на горячую линию./div>
+	повторяется, обратитесь в контактный центр./div>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'          => 'smsPassAuth',

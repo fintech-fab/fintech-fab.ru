@@ -64,7 +64,7 @@ class ClientFullForm2 extends ClientCreateFormAbstract
 		$aMyRules =
 			array(
 				array(
-					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь на горячую линию.', 'criteria' => array(
+					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в контактный центр.', 'criteria' => array(
 					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
 				)),
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),

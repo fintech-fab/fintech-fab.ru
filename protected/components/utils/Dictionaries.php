@@ -9,10 +9,10 @@
 class Dictionaries
 {
 
-	const C_ERR_GENERAL = 'Ошибка: обратитесь на горячую линию.';
+	const C_ERR_GENERAL = 'Ошибка: обратитесь в контактный центр.';
 	const C_ERR_SMS_SENT = 'Ошибка: SMS уже отправлено';
 	const C_ERR_SMS_CANT_SEND = "Ошибка при отправке SMS";
-	const C_ERR_SMS_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в горячую линию.';
+	const C_ERR_SMS_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в контактный центр.';
 	const C_ERR_SMS_WRONG = 'Неверный код подтверждения!';
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
 
@@ -436,7 +436,6 @@ class Dictionaries
 				'id', 'name'
 			);
 		}
-
 		return self::$aRegions;
 	}
 
