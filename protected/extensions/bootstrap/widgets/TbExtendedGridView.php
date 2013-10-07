@@ -250,7 +250,7 @@ class TbExtendedGridView extends TbGridView
 	{
 		$data = $this->dataProvider->getData();
 		
-		if (!$this->sortableRows || !$this->getAttribute($data[0], (string)$this->sortableAttribute)) {
+		if (!$this->sortableRows || (isset($data[0]) && !$this->getAttribute($data[0], (string)$this->sortableAttribute))) {
 			parent::renderKeys();
 		}
 
@@ -652,8 +652,16 @@ class TbExtendedGridView extends TbGridView
 			}
 
 			$afterSortableUpdate = CJavaScript::encode($afterSortableUpdate);
-			$this->componentsReadyScripts[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate});";
-			$this->componentsAfterAjaxUpdate[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate});";
+			if (Yii::app()->request->enableCsrfValidation)
+			{
+				$csrfTokenName = Yii::app()->request->csrfTokenName;
+				$csrfToken = Yii::app()->request->csrfToken;
+				$csrf = "{'$csrfTokenName':'$csrfToken' }";
+			} else
+				$csrf = '{}';
+
+			$this->componentsReadyScripts[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate}, $csrf);";
+			$this->componentsAfterAjaxUpdate[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate}, $csrf);";
 		}
 
 		if ($this->selectableCells) {

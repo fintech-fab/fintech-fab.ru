@@ -10,6 +10,9 @@
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
 			<a href="<?= Yii::app()->request->baseUrl; ?>/" class="brand">
 				<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
+			<?php
+				$this->widget('UserCityWidget');
+			?>
 
 			<span class="hotline pull-right">
 				<small>
