@@ -65,10 +65,12 @@ class SiteController extends Controller
 	public function actionSetCityIdToCookie()
 	{
 		// берём id из post-запроса
-		$iId = Yii::app()->request->getPost("city_id");
+		//TODO сделать переименование передаваемых параметров из select2
+		//TODO сделать возврат нужного значения обратно в виджет
+		$iId = Yii::app()->request->getParam("value");
 
 		if (!Yii::app()->request->isPostRequest || empty($iId)) {
-			$this->redirect(Yii::app()->getHomeUrl());
+			//$this->redirect(Yii::app()->getHomeUrl());
 		}
 
 		// время жизни ставим - 30 суток
@@ -77,7 +79,7 @@ class SiteController extends Controller
 		);
 
 		// записываем в куку полученный id
-		Yii::app()->request->cookies['city_id'] = new CHttpCookie("city_id", $iId, $aCookieOptions);
+		Yii::app()->request->cookies['cityId'] = new CHttpCookie("cityId", $iId, $aCookieOptions);
 	}
 
 	/**

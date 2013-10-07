@@ -131,7 +131,7 @@ $a = array(
 			'enableCookieValidation' => true,
 			'csrfTokenName'          => 'stcs',
 			'aIgnoreCsrfValidationRoutes' => array(
-				'/site/setCityIdToCookie',
+				'site/setCityIdToCookie',
 			),
 		),
 	),
