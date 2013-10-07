@@ -287,8 +287,6 @@ class ClientFormComponent
 				$aData['flag_sms_confirmed'] = 1;
 				ClientData::saveClientDataById($aData, $iClientId);
 
-				//очищаем сессию (данные формы и прочее)
-				$this->clearClientSession();
 				// успешная проверка
 				return true;
 			} else {

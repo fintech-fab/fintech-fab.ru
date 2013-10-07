@@ -13,7 +13,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 ));
 ?>
 <div class="alert in alert-block alert-success span7">
-	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getId() ?>
+	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
 <div class="alert in alert-block alert-info span7">
 	Для подтверждения операции введите код, отправленный Вам по SMS

@@ -23,7 +23,7 @@ $aCrumbs = array(
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 	<div class="span12">
-		Для завершения регистрации Вам необходимо подтвердить свой телефон. <br /> Ваш телефон:
+		Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефоан:
 		<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
 
 		<?php

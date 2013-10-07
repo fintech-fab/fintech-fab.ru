@@ -68,6 +68,7 @@ $a = array(
 			'driver' => 'GD',
 		),
 		'user'             => array(
+			'class'=>'application.components.User',
 			'allowAutoLogin' => true,
 			'loginUrl'       => array('account/login'),
 		),

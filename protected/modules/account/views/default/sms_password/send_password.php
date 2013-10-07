@@ -37,7 +37,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'type'       => 'primary',
 		'size'       => 'small',
 		'buttonType' => 'submit',
-		'label'      => 'Отправить на +7' . Yii::app()->user->getId() . ' SMS с паролем',
+		'label'      => 'Отправить на +7' . Yii::app()->user->getMaskedId() . ' SMS с паролем',
 	));
 	?>
 </div>

@@ -84,6 +84,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
+	const ERROR_PHONE_ERROR = 15;//ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
@@ -220,7 +221,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
-		if ($aTokenData['code'] === self::ERROR_NONE) {
+		if (!self::getIsError()&&!self::getIsPhoneError()) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 			$this->setSmsAuthDone(true);
@@ -1163,7 +1164,6 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 	}
 
 	/**
-	 * @param $sCardOrder
 	 * @param $sCardVerifyAmount
 	 *
 	 * @return bool
@@ -1763,6 +1763,14 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 			&& $this->getLastCode() !== self::ERROR_NOT_ALLOWED
 			&& $this->getLastCode() !== self::ERROR_NEED_IDENTIFY
 		);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsPhoneError()
+	{
+		return $this->getLastCode() === self::ERROR_PHONE_ERROR;
 	}
 
 	/**

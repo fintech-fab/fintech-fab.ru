@@ -51,7 +51,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'class' => 'accordion',
 	),
 ));?>
-
+<?php if (Yii::app()->session['error']): ?>
+	<div class="alert alert-error"><?= Yii::app()->session['error']; ?></div>
+	<?php Yii::app()->session['error'] = null; ?>
+<?php endif; ?>
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" href="#personalData">

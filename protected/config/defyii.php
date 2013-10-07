@@ -30,6 +30,7 @@
  * @property CDbAuthManager             $authManager
  * @property CDummyCache                $cache
  * @property CLogRouter                 $log
+ * @property User                       $user
  *
  */
 class IdpApplication extends CWebApplication

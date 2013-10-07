@@ -15,7 +15,7 @@ $this->pageTitle = Yii::app()->name;
 	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
 
 	<div class="span12">
-		Для завершения регистрации Вам необходимо подтвердить свой телефон. <br /> Ваш телефон:
+		Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефона:
 		<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
 
 		<?php

@@ -14,7 +14,6 @@ class FormController extends Controller
 		 * @var array                    $aPost
 		 * @var string                   $sView
 		 */
-
 		$iClientId = Yii::app()->clientForm->getClientId();
 
 		/*
@@ -151,14 +150,21 @@ class FormController extends Controller
 			$aClientData = ClientData::getClientDataById($iClientId);
 			//отправляем в API данные клиента, и если клиент успешно создан
 			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
+				//очищаем сессию (данные формы и прочее)
+				Yii::app()->clientForm->clearClientSession();
 				//автоматический логин юзера в личный кабинет
 				$oLogin = new AutoLoginForm();
 				$oLogin->setAttributes(array('username' => $aClientData['phone']));
 				Yii::app()->user->setStateKeyPrefix('_account');
 				if ($oLogin->validate() && $oLogin->login()) {
-					Yii::app()->user->setFlash('success','Вы успешно зарегистрировались в системе.');
+					Yii::app()->user->setFlash('success', 'Вы успешно зарегистрировались в системе.');
 					$this->redirect(Yii::app()->createUrl("/account/subscribe"));
 				}
+			} else {
+				//если не удалось создать нового клиента, то выводим ошибку
+				Yii::app()->session['error'] = 'Ошибка! Обратитесь в контактный центр';
+				Yii::app()->clientForm->setFlagSmsSent(false);//сбрасываем влаг отправленного СМС
+				$this->actionStep(2);//переходим на шаг 2 - анкета пользователя
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));

@@ -33,7 +33,7 @@ echo $form->hiddenField($model, 'sendSmsCode');
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Отправить SMS с кодом подтверждения на номер +7' . Yii::app()->user->getId(),
+			'label'      => 'Отправить SMS с кодом подтверждения на номер +7' . Yii::app()->user->getMaskedId(),
 		)); ?>
 	</div>
 
