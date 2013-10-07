@@ -20,10 +20,10 @@ $I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => 
 /*$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
 	'ClientSelectProductForm2[product]' => '999',
 )));*/
-$I->see('Выберите сумму займа');
+//$I->see('Выберите сумму займа');
 
 
-$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
+/*$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
 	'product' => '',
 )));
 
@@ -33,7 +33,7 @@ $I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => 
 	'product' => '9',
 )));
 $I->see('Личные данные');
-$I->see('Место работы');
+$I->see('Место работы');*/
 /*
 $I->amOnPage('/account/login');
 $I->see('Вход в личный кабинет');
