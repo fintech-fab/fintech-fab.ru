@@ -6,30 +6,24 @@
 
 $sCsrfTokenName = Yii::app()->request->csrfTokenName;
 $sCsrfToken = Yii::app()->request->csrfToken;
-$model = new FakeActiveRecord();
 ?>
-<br />
-<div id="userCityWidget">
+<br/>
+<div id="userCityWidget" class="span2">
 	<?php
 	$model = new FakeActiveRecord;
-	$model->myid = 1;
-	$model->myattr = 'Lorem Ipsum!';
+	$model->cityId = 2097;
+	//$model->myattr = 'Lorem Ipsum!';
 
 	$this->widget('bootstrap.widgets.TbEditableField',
 		array(
 			'type'      => 'select2',
 			'model'     => $model,
-			'attribute' => 'myattr',
-			'source'    => array('Choose', 'your', 'destiny', '.'),
-			'url'       => array('/site'),
+			'attribute' => 'cityId',
+			'url'       => array('/site/setCityIdToCookie'),
 			'placement' => 'bottom',
 			'select2'   => array(
-				'name'           => 'cityId',
-				'asDropDownList' => false,
-				'data'           => null,
-				'options'        => array(
 					'width'               => '400px',
-					'placeholder'         => $this->sCityName,
+
 					'minimumInputLength'  => '2', // минимум введённых символов для начала поиска
 					'ajax'                => array(
 						'url'      => Yii::app()->createUrl("/site/getCitiesAndRegionsListJson"),
@@ -69,7 +63,7 @@ $model = new FakeActiveRecord();
 										return object.city;
 									}',
 				)
-			)
+
 		)
 	);
 

@@ -62,6 +62,7 @@ $a = array(
 		'bootstrap'        => array(
 			'class'           => 'ext.bootstrap.components.Bootstrap',
 			'tooltipSelector' => '[rel=tooltip]',
+			'responsiveCss' => false,
 		),
 		'image'            => array(
 			'class'  => 'application.extensions.image.CImageComponent',
@@ -125,10 +126,13 @@ $a = array(
 		),
 
 		'request'          => array(
-			'class'                  => 'CHttpRequest',
+			'class'                  => 'HttpRequest',
 			'enableCsrfValidation'   => true,
 			'enableCookieValidation' => true,
 			'csrfTokenName'          => 'stcs',
+			'aIgnoreCsrfValidationRoutes' => array(
+				'/site/setCityIdToCookie',
+			),
 		),
 	),
 

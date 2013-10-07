@@ -5,9 +5,9 @@
 class FakeActiveRecord
 {
 	public $isNewRecord = false;
-	public $primaryKey = 'myid';
-	public $myid = 1;
-	public $myattr = 'test';
+	public $primaryKey = 'cityId';
+	public $cityId;
+	public $city;
 
 	/**
 	 * @return bool
