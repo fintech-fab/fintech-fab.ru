@@ -1350,10 +1350,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
-		Yii::beginProfile('ApiTimer');
 		$response = curl_exec($ch);
-		Yii::endProfile('ApiTimer');
-
 
 		if ($response) {
 			//TODO убрать
