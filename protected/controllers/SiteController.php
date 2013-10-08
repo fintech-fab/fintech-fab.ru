@@ -32,6 +32,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 
@@ -67,7 +68,7 @@ class SiteController extends Controller
 		// берём id из post-запроса
 		//TODO сделать переименование передаваемых параметров из select2
 		//TODO сделать возврат нужного значения обратно в виджет
-		$iId = Yii::app()->request->getParam("value");
+		$iId = Yii::app()->request->getParam("cityId");
 
 		if (!Yii::app()->request->isPostRequest || empty($iId)) {
 			//$this->redirect(Yii::app()->getHomeUrl());

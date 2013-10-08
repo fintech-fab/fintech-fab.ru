@@ -9,12 +9,13 @@
 	<div class="alert in alert-block alert-error hide" id="browserFormat">
 	<span id="attention_message">
 		<?= $this->sMessage ?>
-	</span> <br /><br /><span id="your_browser"></span>
+	</span> <br /><br /> <span id="your_browser"></span>
 
 		<div id="get_browser" style="margin-top:10px;"><a href="<?=
 			Yii::app()
 				->createUrl('/pages/view/browser') ?>" target="_blank">Перейти на страницу загрузки поддерживаемого
-				браузера &raquo;</a></div>
+				браузера &raquo;</a>
+		</div>
 	</div>
 <?php
 

@@ -39,7 +39,7 @@ class CitiesRegions
 	 *
 	 * @return bool|string
 	 */
-	public static function getCityNameById($iId)
+	public static function getCityAndRegionById($iId)
 	{
 		$oQuery = Yii::app()->db->createCommand()->select('city, region')
 			->from('tbl_geo__cities')
@@ -53,6 +53,27 @@ class CitiesRegions
 
 		return false;
 	}
+
+	/**
+	 * @param $iId
+	 *
+	 * @return bool|string
+	 */
+	public static function getCityNameById($iId)
+	{
+		$oQuery = Yii::app()->db->createCommand()->select('city, region')
+			->from('tbl_geo__cities')
+			->where("`city_id`=:id", array(":id" => $iId));
+
+		$oElem = $oQuery->queryRow();
+
+		if ($oElem) {
+			return $oElem['city'];
+		}
+
+		return false;
+	}
+
 }
 
 

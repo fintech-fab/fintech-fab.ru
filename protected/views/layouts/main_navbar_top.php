@@ -10,11 +10,13 @@
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
 			<a href="<?= Yii::app()->request->baseUrl; ?>/" class="brand">
 				<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
+			<div class="span2">
 			<?php
 				$this->widget('UserCityWidget');
 			?>
+			</div>
 
-			<span class="hotline pull-right">
+			<span class="hotline pull-right span6">
 				<small>
 					Горячая линия
 				</small>

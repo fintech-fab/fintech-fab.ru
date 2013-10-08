@@ -101,7 +101,7 @@ class ids_ipGeoBase
 		$aResult = self::request($ip);
 
 		if (!$aResult || isset($aResult['error'])) {
-			return '1';
+			return '0';
 		}
 
 		if (isset($aResult['city'])) {
@@ -117,11 +117,38 @@ class ids_ipGeoBase
 	}
 
 	/**
+	 * @param null $ip
+	 *
+	 * @return bool|string
+	 */
+
+	public static function getCityIdByIP($ip = null)
+	{
+
+		if (null === $ip) {
+			$ip = Yii::app()->request->getUserHostAddress();
+		}
+
+		$aResult = self::request($ip);
+
+		if (!$aResult || isset($aResult['error'])) {
+			return '1';
+		}
+
+		if (isset($aResult['city'])) {
+			return $aResult['city_id'];
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * @param $sIp
 	 *
 	 * @return array
 	 */
-	private static function request($sIp)
+	protected static function request($sIp)
 	{
 		$long_ip = ip2long($sIp);
 		//проверяем, запрашивалась ли информация в течение текущего запроса страницы
