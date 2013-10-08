@@ -70,8 +70,6 @@ class SmsGateSender
 			}
 		}
 
-		//Logger::write('sms_gate_send', $sPhone . '/' . $message . '/' . $sResult, 0);
-
 		return true;
 	}
 
