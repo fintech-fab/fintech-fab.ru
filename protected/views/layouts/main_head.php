@@ -9,13 +9,13 @@
 
 <title><?= CHtml::encode($this->pageTitle); ?></title>
 
-<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/main.css" />
-<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/bootstrap-overload.css" />
-<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/form.css" />
-<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/style.css" />
-<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/payment.css" />
+<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/main.css?787646" />
+<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/bootstrap-overload.css?787646" />
+<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/form.css?787646" />
+<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/style.css?787646" />
+<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/payment.css?787646" />
 
-<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js"></script>
+<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?787646"></script>
 
 <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 
