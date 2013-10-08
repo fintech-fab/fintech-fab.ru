@@ -6,7 +6,7 @@ class UserCityWidget extends CWidget
 {
 	public $sCityName = "не определён";
 	public $bCitySelected = false;
-	public $sCityAndRegionName;
+	//public $sCityAndRegionName;
 	public  $sCsrfTokenName;
 	public  $sCsrfToken;
 	public $bUpdate = false;
@@ -143,7 +143,7 @@ class UserCityWidget extends CWidget
 										return "Пожалуйста, введите ещё " + n + " символ" + (n == 1 ? "" : "а") + " для начала поиска";
 									}',
 					'formatResult'        => 'js: function (object) {
-										return object.city;
+										return object.cityAndRegion;
 									}',
 					'formatSelection'     => 'js: function (object) {
 										/*$.post(

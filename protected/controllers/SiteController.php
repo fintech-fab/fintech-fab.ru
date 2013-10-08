@@ -65,9 +65,7 @@ class SiteController extends Controller
 	 */
 	public function actionSetCityToCookie()
 	{
-		// берём id из post-запроса
-		//TODO сделать переименование передаваемых параметров из select2
-		//TODO сделать возврат нужного значения обратно в виджет
+		// берём имя города из post-запроса
 		$sName = Yii::app()->request->getParam("cityName");
 
 		if (!Yii::app()->request->isPostRequest || empty($iId)) {
@@ -84,6 +82,7 @@ class SiteController extends Controller
 			Yii::app()->request->cookies['cityName'] = new CHttpCookie("cityName", $sName, $aCookieOptions);
 			Yii::app()->request->cookies['citySelected'] = new CHttpCookie("citySelected", true, $aCookieOptions);
 		}
+		//обновляем виджет, свойство bUpdate указывает отдавать виджет для обновления, без лишних элементов
 		$this->widget('UserCityWidget',array('bUpdate'=>true));
 		Yii::app()->end();
 	}

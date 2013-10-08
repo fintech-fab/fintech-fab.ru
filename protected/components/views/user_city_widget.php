@@ -6,9 +6,15 @@
  * @var $sModalBody
  */
 ?>
-<?php if(!$this->bUpdate): ?>
+<?php
+/**
+ * Рисуем тэг с ID виджеьа только если виджет не обновляется, а рисуется новый.
+ * Для обновления виджета тэг не нужен - он уже есть на странице и в него грузится обновленный виджет.
+ */
+if (!$this->bUpdate):
+?>
 <div id="userCityWidget">
-<?php endif; ?>
+	<?php endif; ?>
 
 	<?php
 	$this->widget(
@@ -47,14 +53,17 @@
 			userLocation.popover('hide');
 		}
 	</script>
-<?php if(!$this->bUpdate): ?>
+<?php
+//рисуем модальное окно только если виджет не обновляется, а рисуется новый
+if (!$this->bUpdate):
+?>
 </div>
 
-	<?php
-	$this->beginWidget(
-		'bootstrap.widgets.TbModal',
-		array('id' => 'locationModal')
-	); ?>
+<?php
+$this->beginWidget(
+	'bootstrap.widgets.TbModal',
+	array('id' => 'locationModal')
+); ?>
 
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal">&times;</a>
@@ -65,6 +74,6 @@
 		Начните вводить название города, а затем выберите свой город из списка:
 		<?= $sModalBody ?>
 	</div>
-	<?php $this->endWidget(); ?>
+<?php $this->endWidget(); ?>
 
 <?php endif; ?>

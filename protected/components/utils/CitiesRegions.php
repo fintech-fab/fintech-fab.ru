@@ -27,8 +27,11 @@ class CitiesRegions
 		foreach ($aCities as &$oElem) {
 			$oElem['id'] = $oElem['city_id'];
 			unset($oElem['city_id']);
-			$oElem['city'] .= ($oElem['city'] != $oElem['region']) ? (', ' . $oElem['region']) : '';
-			unset($oElem['region']);
+			$oElem['cityName'] = $oElem['city'];
+			$oElem['cityAndRegion'] = $oElem['city'];
+			$oElem['cityAndRegion'] .= ($oElem['city'] != $oElem['region']) ? (', ' . $oElem['region']) : '';
+			unset($oElem['city']);
+			//unset($oElem['region']);
 		}
 
 
