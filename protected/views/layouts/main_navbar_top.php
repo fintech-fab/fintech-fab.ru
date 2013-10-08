@@ -16,6 +16,7 @@
 				<div class="row">
 					8 800 555-75-78
 				</div>
+				<div class="clearfix"></div>
 				<div class="row">
 					<small>
 						(бесплатно по России)
