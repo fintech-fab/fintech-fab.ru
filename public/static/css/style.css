@@ -20,9 +20,9 @@
 
 nav .hotline {
 	color: white;
-	margin-top: 23px;
-	margin-right: 20px;
-	font-size: 16px;
+	margin-top: 10px;
+	margin-right: 10px;
+	font-size: 18px;
 	font-weight: 400;
 	display: inline-block;
 }
@@ -218,6 +218,17 @@ footer, div .footer {
 .alert-block-fullform {
 	margin-bottom: 0px;
 	margin-top: 5px;
+}
+
+
+nav .account {
+	margin-top: 10px;
+	color: #8a2547;
+	display: inline-block;
+}
+
+nav .account .btn {
+	color: #8a2547;
 }
 
 .select2-drop{

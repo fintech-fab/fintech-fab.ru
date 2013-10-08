@@ -17,16 +17,35 @@
 					?>
 				</div>
 
-			<span class="hotline pull-right span5">
-				<small>
-					Горячая линия
-				</small>
-				8 800 555-75-78
-				<small>
-					(бесплатно по России)
-				</small>
+			<span class="hotline span3">
+				<div class="row">
+					8 800 555-75-78
+				</div>
+				<div class="clearfix"></div>
+				<div class="row">
+					<small>
+						(бесплатно по России)
+					</small>
+				</div>
 			</span>
-			</div>
+			<span class="account span2">
+				<?php
+				if (Yii::app()->user->isGuest) {
+					$this->widget('bootstrap.widgets.TbButton', array(
+							'label' => 'Личный кабинет',
+							'url'   => Yii::app()->createAbsoluteUrl('/account/login'),
+						)
+					);
+				} else {
+					$this->widget('bootstrap.widgets.TbButton', array(
+							'label' => 'Выход',
+							'icon'=>'icon-off',
+							'url'   => Yii::app()->createAbsoluteUrl('/account/logout'),
+						)
+					);
+				}
+				?>
+			</span>
 		</div>
 	</div>
 </nav>

@@ -38,7 +38,8 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard', 'verifyCard', 'successCard'
+					/*'addCard', 'verifyCard',*/
+					'successCard'
 				),
 				'users'   => array('@'),
 			),

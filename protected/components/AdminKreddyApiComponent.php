@@ -1346,7 +1346,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 
 		//TODO убрать
-		Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
+		//Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
 
@@ -1354,7 +1354,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 
 		if ($response) {
 			//TODO убрать
-			Yii::trace("Action: " . $sAction . " - Response: " . $response);
+			//Yii::trace("Action: " . $sAction . " - Response: " . $response);
 			$aGetData = CJSON::decode($response);
 
 			if (is_array($aGetData)) {
