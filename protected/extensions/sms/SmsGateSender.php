@@ -64,6 +64,10 @@ class SmsGateSender
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $aPostQuery);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$sResult = trim(curl_exec($ch));
+
+			if(empty($sResult)){
+				return false;
+			}
 		}
 
 		//Logger::write('sms_gate_send', $sPhone . '/' . $message . '/' . $sResult, 0);

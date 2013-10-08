@@ -117,10 +117,10 @@ class ClientFormComponent
 		$aSessionFormData = $this->getSessionFormData($oClientForm);
 
 		//проверяем, есть ли в сессии уже какие-то данные, и проверяем что они лежат в массиве
-		if (!empty($aSessionFormData) && is_array($aSessionFormData)&&is_array($aValidFormData)) {
+		if (!empty($aSessionFormData) && is_array($aSessionFormData) && is_array($aValidFormData)) {
 			//объединяем данные из сессии с новыми валидными данными
 			$aValidFormData = array_merge($aSessionFormData, $aValidFormData);
-		}elseif(!empty($aSessionFormData) && is_array($aSessionFormData)){
+		} elseif (!empty($aSessionFormData) && is_array($aSessionFormData)) {
 			$aValidFormData = $aSessionFormData;
 		}
 
@@ -183,7 +183,7 @@ class ClientFormComponent
 					$aClientFormData['channel_id'] = $this->getSessionChannelId();
 				}
 
-				$aClientDataForSave =$aClientFormData;
+				$aClientDataForSave = $aClientFormData;
 
 				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
@@ -243,22 +243,27 @@ class ClientFormComponent
 
 		//отправляем СМС
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
-		SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
-		//добавляем в лог запрос sms с этого ip
-		Yii::app()->antiBot->addSmsRequest();
+		$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
-		$aClientForm['sms_code'] = $sSmsCode;
-		// если не удалось записать в БД - общая ошибка
-		if (!ClientData::saveClientDataById($aClientForm, $iClientId)) {
-			return Dictionaries::C_ERR_GENERAL;
+		if ($bSmsSentOk) {
+
+			//добавляем в лог запрос sms с этого ip
+			Yii::app()->antiBot->addSmsRequest();
+
+			$aClientForm['sms_code'] = $sSmsCode;
+			// если не удалось записать в БД - общая ошибка
+			if (!ClientData::saveClientDataById($aClientForm, $iClientId)) {
+				return Dictionaries::C_ERR_GENERAL;
+			}
+
+			// ставим флаг успешной отправки
+			$this->setFlagSmsSent(true);
+
+			// возвращаем true
+			return true;
 		}
-
-		// ставим флаг успешной отправки
-		$this->setFlagSmsSent(true);
-
-		// возвращаем true
-		return true;
+		return Dictionaries::C_ERR_SMS_CANT_SEND;
 	}
 
 
@@ -697,12 +702,12 @@ class ClientFormComponent
 	{
 		if (!SiteParams::B_FULL_FORM) {
 			return isset(Yii::app()->session['ClientSelectProductForm']['product'])
-				?Yii::app()->session['ClientSelectProductForm']['product']
-				:false;
+				? Yii::app()->session['ClientSelectProductForm']['product']
+				: false;
 		} else {
 			return isset(Yii::app()->session['ClientSelectProductForm2']['product'])
-				?Yii::app()->session['ClientSelectProductForm2']['product']
-				:false;
+				? Yii::app()->session['ClientSelectProductForm2']['product']
+				: false;
 		}
 	}
 
