@@ -149,7 +149,7 @@ class UserCityWidget extends CWidget
 										/*$.post(
                                             "' . Yii::app()->createUrl("/site/setCityToCookie") . '",
                                             {
-                                                cityName: object.city,
+                                                cityName: object.cityAndRegion,
                                                 ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
                                             }
 										);*/
@@ -162,7 +162,7 @@ class UserCityWidget extends CWidget
 											cache: false,
 											dataType: "html",
 											data: ({
-                                                cityName: object.city,
+                                                cityName: object.cityAndRegion,
                                                 ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
                                             }),
 											success: function(html){

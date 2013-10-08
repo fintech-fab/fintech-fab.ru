@@ -17,7 +17,7 @@
 					?>
 				</div>
 
-			<span class="hotline span3">
+			<div class="hotline span3">
 				<div class="row">
 					8 800 555-75-78
 				</div>
@@ -27,7 +27,7 @@
 						(бесплатно по России)
 					</small>
 				</div>
-			</span>
+			</div>
 			<span class="account span2">
 				<?php
 				if (Yii::app()->user->isGuest) {
@@ -39,13 +39,14 @@
 				} else {
 					$this->widget('bootstrap.widgets.TbButton', array(
 							'label' => 'Выход',
-							'icon'=>'icon-off',
+							'icon'  => 'icon-off',
 							'url'   => Yii::app()->createAbsoluteUrl('/account/logout'),
 						)
 					);
 				}
 				?>
 			</span>
+			</div>
 		</div>
 	</div>
 </nav>
