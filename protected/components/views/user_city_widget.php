@@ -6,15 +6,18 @@
  * @var $sModalBody
  */
 ?>
+<?php if(!$this->bUpdate): ?>
 <div id="userCityWidget">
+<?php endif; ?>
+
 	<?php
 	$this->widget(
 		'bootstrap.widgets.TbButton',
 		array(
 			'id'          => 'userLocation',
-			'label'       => $this->sCityName.'<i class="caret-white"></i>',
+			'label'       => $this->sCityName . '<i class="caret-white"></i>',
 			'type'        => 'link',
-			'encodeLabel'=>false,
+			'encodeLabel' => false,
 			'htmlOptions' => array(
 				'class' => 'location' //TODO сделать свой класс для отображения названия города
 			)
@@ -26,15 +29,31 @@
 		userLocation.popover({
 			'selector': '',
 			'placement': 'bottom',
-			'content': '<?= $sDataContent ?>',
+			'content': '<?= $sDataContent; ?>',
 			'html': 'true'
 		});
+		<?php if(!$this->bCitySelected): ?>
 		userLocation.popover('show');
+		<?php endif ?>
+
+		function confirmCity() {
+			$.post(
+				"<?= Yii::app()->createUrl("/site/setCityToCookie") ?>",
+				{
+					'cityName': '<?= $this->sCityName ?>',
+					'<?= $this->sCsrfTokenName ?>': "<?= $this->sCsrfToken ?>"
+				}
+			);
+			userLocation.popover('hide');
+		}
 	</script>
+<?php if(!$this->bUpdate): ?>
+</div>
+
 	<?php
 	$this->beginWidget(
 		'bootstrap.widgets.TbModal',
-		array('id' => 'myModal')
+		array('id' => 'locationModal')
 	); ?>
 
 	<div class="modal-header">
@@ -47,4 +66,5 @@
 		<?= $sModalBody ?>
 	</div>
 	<?php $this->endWidget(); ?>
-</div>
+
+<?php endif; ?>

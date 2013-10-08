@@ -31,6 +31,7 @@ class CitiesRegions
 			unset($oElem['region']);
 		}
 
+
 		return $aCities;
 	}
 

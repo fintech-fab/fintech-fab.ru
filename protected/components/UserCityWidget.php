@@ -5,14 +5,23 @@
 class UserCityWidget extends CWidget
 {
 	public $sCityName = "не определён";
+	public $bCitySelected = false;
+	public $sCityAndRegionName;
+	public  $sCsrfTokenName;
+	public  $sCsrfToken;
+	public $bUpdate = false;
 
 	public function run()
 	{
-		$sCsrfTokenName = Yii::app()->request->csrfTokenName;
-		$sCsrfToken = Yii::app()->request->csrfToken;
+		$this->sCsrfTokenName = Yii::app()->request->csrfTokenName;
+		$this->sCsrfToken = Yii::app()->request->csrfToken;
 
+		$oCityNameCookie = Yii::app()->request->cookies['cityName'];
+		$oCitySelectedCookie = Yii::app()->request->cookies['citySelected'];
 
-		$oCityIdCookie = Yii::app()->request->cookies['cityId'];
+		if (!empty($oCitySelectedCookie->value)) {
+			$this->bCitySelected = true;
+		}
 
 		/**
 		 * TODO прочитать комментарий ниже
@@ -22,55 +31,91 @@ class UserCityWidget extends CWidget
 		 * но читать данные ИЗ КУКИ, а не БД
 		 */
 
-		if (!empty($oCityIdCookie)) { // если в куках есть id города, выводим его
-			$this->sCityName = CitiesRegions::getCityNameById($oCityIdCookie->value);
-		} elseif (ids_ipGeoBase::getCityByIP()) { // если удалось определить город по ip
-			$this->sCityName = ids_ipGeoBase::getCityByIP();
-			$this->sCityAndRegionName = ids_ipGeoBase::getCityByIP() . ", " . ids_ipGeoBase::getRegionByIP();
+		if ($oCityNameCookie) { // если в куках есть город, выводим его
+			$this->sCityName = $oCityNameCookie->value;
+		} elseif (ids_ipGeoBase::getCityByIP('46.38.98.106')) { // если удалось определить город по ip
+			$this->sCityName = ids_ipGeoBase::getCityByIP('46.38.98.106');
+			$this->sCityAndRegionName = ids_ipGeoBase::getCityByIP('46.38.98.106') . ", " . ids_ipGeoBase::getRegionByIP('46.38.98.106');
+		} else {
+			$this->sCityName = false;
 		}
 
 		//$sCityName = ids_ipGeoBase::getCityByIP('46.38.98.106');
-
-		$sDataContent = 'Мы автоматически определили ваш город: ';
-		$sDataContent .= '<strong>' . $this->sCityName . '</strong>';
-		$sDataContent .= '<br/> Правильно? <br>';
-		$sDataContent .= $this->widget(
-			'bootstrap.widgets.TbButton',
-			array(
-				'label'       => 'Да, правильно',
-				'type'        => 'primary',
-				'size'        => 'small',
-				'htmlOptions' => array(
-					'data-toggle' => 'modal',
-					'onclick'     => '$("#userLocation").popover("hide");'
-				),
-			),
-			true
-		);
-		$sDataContent .= '&nbsp;' . $this->widget(
+		//TODO вынести в отдельные представления
+		if (!$oCityNameCookie && $this->sCityName) {
+			$sDataContent = 'Мы автоматически определили ваш город: ';
+			$sDataContent .= '<strong>' . $this->sCityName . '</strong>';
+			$sDataContent .= '<br/> Правильно? <br/>';
+			$sDataContent .= $this->widget(
 				'bootstrap.widgets.TbButton',
 				array(
-					'label'       => 'Нет, изменить город',
+					'label'       => 'Да, правильно',
 					'type'        => 'primary',
 					'size'        => 'small',
 					'htmlOptions' => array(
 						'data-toggle' => 'modal',
-						'data-target' => '#myModal',
+
+						'onclick'     => 'js: confirmCity()'
 					),
 				),
 				true
 			);
+			$sDataContent .= '&nbsp;' . $this->widget(
+					'bootstrap.widgets.TbButton',
+					array(
+						'label'       => 'Нет, изменить город',
+						'type'        => 'primary',
+						'size'        => 'small',
+						'htmlOptions' => array(
+							'data-toggle' => 'modal',
+							'data-target' => '#locationModal',
+						),
+					),
+					true
+				);
+		} elseif ($this->sCityName) {
+			$sDataContent = 'Ваш город: ';
+			$sDataContent .= '<strong>' . $this->sCityName . '</strong><br/>';
+			$sDataContent .= '&nbsp;' . $this->widget(
+					'bootstrap.widgets.TbButton',
+					array(
+						'label'       => 'Изменить город',
+						'type'        => 'primary',
+						'size'        => 'small',
+						'htmlOptions' => array(
+							'data-toggle' => 'modal',
+							'data-target' => '#locationModal',
+						),
+					),
+					true
+				);
+		} else {
+			$sDataContent = 'Ваш город не удалось определить. Укажите город самостоятельно. ';
+			$sDataContent .= '&nbsp;' . $this->widget(
+					'bootstrap.widgets.TbButton',
+					array(
+						'label'       => 'Указать город',
+						'type'        => 'primary',
+						'size'        => 'small',
+						'htmlOptions' => array(
+							'data-toggle' => 'modal',
+							'data-target' => '#locationModal',
+						),
+					),
+					true
+				);
+		}
 
 		//TODO сделать автоматическое обновление города в виджете
 		$sModalBody = $this->widget(
 			'bootstrap.widgets.TbSelect2',
 			array(
-				'name'           => 'cityId',
+				'name'           => 'cityName',
 				'asDropDownList' => false,
 				'data'           => null,
 				'options'        => array(
 					'width'               => '400px',
-					'style' => 'z-index: 110000',
+					'style'               => 'z-index: 110000',
 					'placeholder'         => $this->sCityName,
 					'minimumInputLength'  => '2', // минимум введённых символов для начала поиска
 					'ajax'                => array(
@@ -101,14 +146,30 @@ class UserCityWidget extends CWidget
 										return object.city;
 									}',
 					'formatSelection'     => 'js: function (object) {
-										$.post(
-                                            "' . Yii::app()->createUrl("/site/setCityIdToCookie") . '",
+										/*$.post(
+                                            "' . Yii::app()->createUrl("/site/setCityToCookie") . '",
                                             {
-                                                cityId: object.id,
-                                                ' . $sCsrfTokenName . ': "' . $sCsrfToken . '"
+                                                cityName: object.city,
+                                                ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
                                             }
-										);
-										$("#myModal").modal("hide");
+										);*/
+										$("#locationModal").modal("hide");
+										$("#userLocation").popover("hide");
+
+										$.ajax({
+											url: \''.Yii::app()->createUrl("/site/setCityToCookie").'\',
+											type: "POST",
+											cache: false,
+											dataType: "html",
+											data: ({
+                                                cityName: object.city,
+                                                ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
+                                            }),
+											success: function(html){
+												$("#userCityWidget").html(html);
+											}
+										});
+
 										return object.city;
 									}',
 				)
