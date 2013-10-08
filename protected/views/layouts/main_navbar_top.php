@@ -11,14 +11,34 @@
 			<a href="<?= Yii::app()->request->baseUrl; ?>/" class="brand">
 				<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
 
-			<span class="hotline pull-right">
-				<small>
-					Горячая линия
-				</small>
-				8 800 555-75-78
-				<small>
-					(бесплатно по России)
-				</small>
+			<div class="span3">&nbsp;</div>
+			<span class="hotline span3">
+				<div class="row">
+					8 800 555-75-78
+				</div>
+				<div class="row">
+					<small>
+						(бесплатно по России)
+					</small>
+				</div>
+			</span>
+			<span class="account span2">
+				<?php
+				if (Yii::app()->user->isGuest) {
+					$this->widget('bootstrap.widgets.TbButton', array(
+							'label' => 'Личный кабинет',
+							'url'   => Yii::app()->createAbsoluteUrl('/account/login'),
+						)
+					);
+				} else {
+					$this->widget('bootstrap.widgets.TbButton', array(
+							'label' => 'Выход',
+							'icon'=>'icon-off',
+							'url'   => Yii::app()->createAbsoluteUrl('/account/logout'),
+						)
+					);
+				}
+				?>
 			</span>
 		</div>
 	</div>
