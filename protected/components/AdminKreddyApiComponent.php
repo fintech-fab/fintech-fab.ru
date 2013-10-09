@@ -1841,4 +1841,50 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		return $sMessage;
 	}
 
+	/**
+	 *
+	 */
+	public function increaseSmsPassTries()
+	{
+		Yii::app()->session['iSmsPassTries'] = (Yii::app()->session['iSmsPassTries'])
+			?(Yii::app()->session['iSmsPassTries']+1)
+			:1;
+	}
+
+	/**
+	 * TODO сделать константу для значения
+	 * @return bool
+	 */
+	public function getIsSmsPassTriesExceed()
+	{
+		return (Yii::app()->session['iSmsPassTries']>5);
+	}
+
+	public function resetSmsPassTries()
+	{
+		Yii::app()->session['iSmsPassTries']=0;
+	}
+
+	/**
+	 *
+	 */
+	public function increaseSmsCodeTries()
+	{
+		//TODO доделать!!!!!!
+		Yii::app()->session['iSmsCodeTries'] = Yii::app()->session['iSmsCodeTries']+1;
+	}
+
+	/**
+	 * TODO сделать константу для значения
+	 * @return bool
+	 */
+	public function getIsSmsCodeTriesExceed()
+	{
+		return (Yii::app()->session['iSmsCodeTries']>5);
+	}
+
+	public function resetSmsCodeTries()
+	{
+		Yii::app()->session['iSmsCodeTries']=0;
+	}
 }

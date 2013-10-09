@@ -26,7 +26,7 @@ class SiteParams
 	/**
 	 *  Количество минут до возможности повторной отправки и текст ошибка
 	 */
-	const API_MINUTES_UNTIL_RESEND = 1;
+	const API_MINUTES_UNTIL_RESEND = 3;
 	const API_MINUTES_RESEND_ERROR = "Должна пройти минута до следующей отправки SMS";
 
 

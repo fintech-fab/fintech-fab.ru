@@ -154,7 +154,7 @@ class DefaultController extends Controller
 	public function actionAddCard()
 	{
 		//TODO сделать проверку антиботом
-		if(Yii::app()->adminKreddyApi->checkCanVerifyCard()){
+		if (Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			$oVerifyForm = new VerifyCardForm();
 			$this->render('card/verify_card', array('model' => $oVerifyForm));
 			Yii::app()->end();
@@ -186,7 +186,7 @@ class DefaultController extends Controller
 				} else {
 					//если проверка не пройдена, ругаемся ошибкой
 					$sError = Yii::app()->adminKreddyApi->getLastMessage();
-					if(empty($sError)){
+					if (empty($sError)) {
 						$sError = AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN;
 					}
 				}
@@ -352,6 +352,7 @@ class DefaultController extends Controller
 	 */
 	public function actionDoSubscribeCheckSmsCode()
 	{
+		Yii::app()->adminKreddyApi->resetSmsCodeTries();
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
@@ -365,15 +366,28 @@ class DefaultController extends Controller
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
 
 		$oForm->setAttributes($aPost);
+		//валидируем
 		if ($oForm->validate()) {
 			$sProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 			//получаем массив, содержащий ID продукта и тип канала получения
 			$aProductAndChannel = explode('_', $sProduct);
 			//проверяем, что в массиве 2 значения (ID и канал)
 			if (count($aProductAndChannel) === 2) {
-				//пробуем оформить подписку
-				if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $aProductAndChannel[0], $aProductAndChannel[1])) {
+				//увеличиваем счетчик попыток
+				Yii::app()->adminKreddyApi->increaseSmsCodeTries();
+				//проверяем, не кончились ли попытки
+				$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
+				echo '<pre>' . ""; CVarDumper::dump(Yii::app()->session['iSmsCodeTries']); echo '</pre>';
+				//если попытки не кончились, пробуем оформить подписку
+				if (!$bTriesExceed && Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $aProductAndChannel[0], $aProductAndChannel[1])) {
+					//сбрасываем счетчик попыток ввода кода
+					Yii::app()->adminKreddyApi->resetSmsCodeTries();
 					$this->render('subscription/subscribe_complete', array('message' => Yii::app()->adminKreddyApi->getDoSubscribeMessage()));
+					Yii::app()->end();
+				} elseif ($bTriesExceed) {
+					//устанвливаем сообщение об ошибке
+					$oForm->addError('smsCode', Dictionaries::C_ERR_SMS_TRIES);
+					$this->render('subscription/do_subscribe_check_sms_code', array('model' => $oForm));
 					Yii::app()->end();
 				}
 			} else {
@@ -570,10 +584,21 @@ class DefaultController extends Controller
 		if ($aPost) { //если передан POST-запрос, т.е. отправлен СМС-пароль на проверку
 			$oSmsPassForm->setAttributes($aPost);
 			if ($oSmsPassForm->validate()) {
-				//проверяем, удалось ли авторизоваться с этим паролем
-				if (Yii::app()->adminKreddyApi->getSmsAuth($oSmsPassForm->smsPassword)) {
+				//увеличиваем счетчик попыток
+				Yii::app()->adminKreddyApi->increaseSmsPassTries();
+				//проверяем, не кончились ли попытки
+				$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsPassTriesExceed();
+
+				//если попытки не исчерпаны, проверяем, удалось ли авторизоваться с этим паролем
+				if (!$bTriesExceed && Yii::app()->adminKreddyApi->getSmsAuth($oSmsPassForm->smsPassword)) {
+					//сбрасываем счетчик попыток ввода кода
+					Yii::app()->adminKreddyApi->resetSmsPassTries();
 					$this->redirect(Yii::app()->user->getReturnUrl());
 				} else {
+					//если попытки кончились, задаем другое сообщение, вместо ответа API
+					if ($bTriesExceed) {
+						Yii::app()->adminKreddyApi->setLastSmsMessage(Dictionaries::C_ERR_SMS_PASS_TRIES);
+					}
 					$oSmsPassForm->addError('smsPassword', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				}
 			}
