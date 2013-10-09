@@ -32,4 +32,14 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 			array('channel_id' => 'Выберите способ получения продукта')
 		);
 	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'product'
+		);
+	}
 }

@@ -243,7 +243,7 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
-
+		Yii::app()->adminKreddyApi->checkIsNeedIdentify();
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			// если невозможно - выводим сообщение о недоступности
