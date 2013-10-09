@@ -66,7 +66,8 @@ class SiteController extends Controller
 	public function actionSetCityToCookie()
 	{
 		// берём имя города из post-запроса
-		$sName = Yii::app()->request->getParam("cityName");
+		$sCityName = Yii::app()->request->getParam("cityName");
+		$sCityAndRegion = Yii::app()->request->getParam("cityAndRegion");
 
 		if (!Yii::app()->request->isPostRequest || empty($iId)) {
 			//$this->redirect(Yii::app()->getHomeUrl());
@@ -77,9 +78,10 @@ class SiteController extends Controller
 			'expire' => time() + 60 * 60 * 24 * 30,
 		);
 
-		if (!empty($sName)) {
+		if (!empty($sCityName)) {
 			// записываем в куку полученный id
-			Yii::app()->request->cookies['cityName'] = new CHttpCookie("cityName", $sName, $aCookieOptions);
+			Yii::app()->request->cookies['cityName'] = new CHttpCookie("cityName", $sCityName, $aCookieOptions);
+			Yii::app()->request->cookies['cityAndRegion'] = new CHttpCookie("cityAndRegion", $sCityAndRegion, $aCookieOptions);
 			Yii::app()->request->cookies['citySelected'] = new CHttpCookie("citySelected", true, $aCookieOptions);
 		}
 		//обновляем виджет, свойство bUpdate указывает отдавать виджет для обновления, без лишних элементов

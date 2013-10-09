@@ -6,7 +6,7 @@ class UserCityWidget extends CWidget
 {
 	public $sCityName = "не определён";
 	public $bCitySelected = false;
-	//public $sCityAndRegionName;
+	public $sCityAndRegion;
 	public  $sCsrfTokenName;
 	public  $sCsrfToken;
 	public $bUpdate = false;
@@ -17,6 +17,7 @@ class UserCityWidget extends CWidget
 		$this->sCsrfToken = Yii::app()->request->csrfToken;
 
 		$oCityNameCookie = Yii::app()->request->cookies['cityName'];
+		$oCityAndRegionCookie = Yii::app()->request->cookies['cityAndRegion'];
 		$oCitySelectedCookie = Yii::app()->request->cookies['citySelected'];
 
 		if (!empty($oCitySelectedCookie->value)) {
@@ -33,9 +34,10 @@ class UserCityWidget extends CWidget
 
 		if ($oCityNameCookie) { // если в куках есть город, выводим его
 			$this->sCityName = $oCityNameCookie->value;
+			$this->sCityAndRegion = $oCityAndRegionCookie->value;
 		} elseif (ids_ipGeoBase::getCityByIP('46.38.98.106')) { // если удалось определить город по ip
 			$this->sCityName = ids_ipGeoBase::getCityByIP('46.38.98.106');
-			$this->sCityAndRegionName = ids_ipGeoBase::getCityByIP('46.38.98.106') . ", " . ids_ipGeoBase::getRegionByIP('46.38.98.106');
+			$this->sCityAndRegion = ids_ipGeoBase::getCityByIP('46.38.98.106') . ", " . ids_ipGeoBase::getRegionByIP('46.38.98.106');
 		} else {
 			$this->sCityName = false;
 		}
@@ -75,7 +77,7 @@ class UserCityWidget extends CWidget
 				);
 		} elseif ($this->sCityName) {
 			$sDataContent = 'Ваш город: ';
-			$sDataContent .= '<strong>' . $this->sCityName . '</strong><br/>';
+			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong><br/>';
 			$sDataContent .= '&nbsp;' . $this->widget(
 					'bootstrap.widgets.TbButton',
 					array(
@@ -146,13 +148,6 @@ class UserCityWidget extends CWidget
 										return object.cityAndRegion;
 									}',
 					'formatSelection'     => 'js: function (object) {
-										/*$.post(
-                                            "' . Yii::app()->createUrl("/site/setCityToCookie") . '",
-                                            {
-                                                cityName: object.cityAndRegion,
-                                                ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
-                                            }
-										);*/
 										$("#locationModal").modal("hide");
 										$("#userLocation").popover("hide");
 
@@ -162,7 +157,8 @@ class UserCityWidget extends CWidget
 											cache: false,
 											dataType: "html",
 											data: ({
-                                                cityName: object.cityAndRegion,
+                                                cityName: object.cityName,
+                                                cityAndRegion: object.cityAndRegion,
                                                 ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
                                             }),
 											success: function(html){
