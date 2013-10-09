@@ -535,7 +535,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? $aClientInfo['subscription']['activity_to'] : false;
-		$sActivityTo = $this->formatRusDate($sActivityTo);
+		$sActivityTo = $this->formatRusDate($sActivityTo,false);
 
 		return $sActivityTo;
 	}
