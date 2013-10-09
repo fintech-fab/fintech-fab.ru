@@ -130,9 +130,9 @@ $a = array(
 			'enableCsrfValidation'   => true,
 			'enableCookieValidation' => true,
 			'csrfTokenName'          => 'stcs',
-			'aIgnoreCsrfValidationRoutes' => array(
+			/*'aIgnoreCsrfValidationRoutes' => array(
 				'site/setCityIdToCookie',
-			),
+			),*/
 		),
 	),
 

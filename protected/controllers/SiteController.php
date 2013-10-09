@@ -61,16 +61,18 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * Записывает в куку id города пользователя, переданный по post
+	 * Записывает в куку город и регион пользователя, переданный по post
+	 * Отдает AJAX-запросы перерисованный виджет
 	 */
 	public function actionSetCityToCookie()
 	{
 		// берём имя города из post-запроса
 		$sCityName = Yii::app()->request->getParam("cityName");
+		//берем имя города и регион из post-запроса
 		$sCityAndRegion = Yii::app()->request->getParam("cityAndRegion");
 
-		if (!Yii::app()->request->isPostRequest || empty($iId)) {
-			//$this->redirect(Yii::app()->getHomeUrl());
+		if (!Yii::app()->request->isPostRequest || empty($sCityName)||empty($sCityAndRegion)) {
+			Yii::app()->end();
 		}
 
 		// время жизни ставим - 30 суток
@@ -79,7 +81,7 @@ class SiteController extends Controller
 		);
 
 		if (!empty($sCityName)) {
-			// записываем в куку полученный id
+			// записываем в куки полученные данные
 			Yii::app()->request->cookies['cityName'] = new CHttpCookie("cityName", $sCityName, $aCookieOptions);
 			Yii::app()->request->cookies['cityAndRegion'] = new CHttpCookie("cityAndRegion", $sCityAndRegion, $aCookieOptions);
 			Yii::app()->request->cookies['citySelected'] = new CHttpCookie("citySelected", true, $aCookieOptions);

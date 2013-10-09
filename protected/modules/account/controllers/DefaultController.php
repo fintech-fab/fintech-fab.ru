@@ -38,7 +38,7 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					/*'addCard', 'verifyCard',*/
+					'addCard', 'verifyCard',
 					'successCard'
 				),
 				'users'   => array('@'),
@@ -83,6 +83,7 @@ class DefaultController extends Controller
 
 	/**
 	 * Главная страница личного кабинета
+	 * TODO показывать время моратория без подтверждения по СМС
 	 */
 	public function actionIndex()
 	{

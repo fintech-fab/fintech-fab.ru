@@ -11,6 +11,11 @@ class UserCityWidget extends CWidget
 	public  $sCsrfToken;
 	public $bUpdate = false;
 
+	/**
+	 * TODO причесать тут весь код, плюс код представления
+	 * TODO сделать чистку и валидацию того, что шлет юзер
+	 */
+
 	public function run()
 	{
 		$this->sCsrfTokenName = Yii::app()->request->csrfTokenName;
@@ -24,20 +29,16 @@ class UserCityWidget extends CWidget
 			$this->bCitySelected = true;
 		}
 
-		/**
-		 * TODO прочитать комментарий ниже
-		 * в куки писать ВСЮ инфу, в т.ч. название города и региона, и когда в куке инфа есть - не читать из БД!
-		 * после первого считывания инфы из БД СРАЗУ ее писать в куку, ставить флаг "клиент подтвердил местоположение"
-		 * если не подтвердил - предлагать подтвердить либо поменять город
-		 * но читать данные ИЗ КУКИ, а не БД
-		 */
-
+		$sCity = ids_ipGeoBase::getCityByIP();
 		if ($oCityNameCookie) { // если в куках есть город, выводим его
 			$this->sCityName = $oCityNameCookie->value;
 			$this->sCityAndRegion = $oCityAndRegionCookie->value;
-		} elseif (ids_ipGeoBase::getCityByIP('46.38.98.106')) { // если удалось определить город по ip
-			$this->sCityName = ids_ipGeoBase::getCityByIP('46.38.98.106');
-			$this->sCityAndRegion = ids_ipGeoBase::getCityByIP('46.38.98.106') . ", " . ids_ipGeoBase::getRegionByIP('46.38.98.106');
+		} elseif ($sCity) { // если удалось определить город по ip
+			$this->sCityName = $sCity;
+			//$this->sCityAndRegion = ids_ipGeoBase::getCityByIP('46.38.98.106') . ", " . ids_ipGeoBase::getRegionByIP('46.38.98.106');
+			$sRegion = ids_ipGeoBase::getRegionByIP();
+			$this->sCityAndRegion = $sCity;
+			$this->sCityAndRegion .= ($sCity != $sRegion) ? (', ' . $sRegion) : '';
 		} else {
 			$this->sCityName = false;
 		}
@@ -46,7 +47,7 @@ class UserCityWidget extends CWidget
 		//TODO вынести в отдельные представления
 		if (!$oCityNameCookie && $this->sCityName) {
 			$sDataContent = 'Мы автоматически определили ваш город: ';
-			$sDataContent .= '<strong>' . $this->sCityName . '</strong>';
+			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong>';
 			$sDataContent .= '<br/> Правильно? <br/>';
 			$sDataContent .= $this->widget(
 				'bootstrap.widgets.TbButton',

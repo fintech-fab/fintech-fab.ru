@@ -43,20 +43,27 @@ if (!$this->bUpdate):
 		<?php endif ?>
 
 		function confirmCity() {
-			$.post(
-				"<?= Yii::app()->createUrl("/site/setCityToCookie") ?>",
-				{
+			$.ajax({
+				url: "<?= Yii::app()->createUrl('/site/setCityToCookie') ?>",
+				type: "POST",
+				cache: false,
+				dataType: "html",
+				data: ({
 					'cityName': '<?= $this->sCityName ?>',
+					'cityAndRegion': '<?= $this->sCityAndRegion ?>',
 					'<?= $this->sCsrfTokenName ?>': "<?= $this->sCsrfToken ?>"
+				}),
+				success: function (html) {
+					$("#userCityWidget").html(html);
 				}
-			);
+			});
 			userLocation.popover('hide');
 		}
 	</script>
-<?php
-//рисуем модальное окно только если виджет не обновляется, а рисуется новый
-if (!$this->bUpdate):
-?>
+	<?php
+	//рисуем модальное окно только если виджет не обновляется, а рисуется новый
+	if (!$this->bUpdate):
+	?>
 </div>
 
 <?php
