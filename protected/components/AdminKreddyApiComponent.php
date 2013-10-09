@@ -57,8 +57,8 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-		// TODO: убрать обращение в отделение Кредди после внедрения новой схемы #1153
-		self::C_SCORING_ACCEPT                 => 'Для получения займа необходимо обратиться в отделение Кредди по адресу: {contacts_url_start}Москва, шоссе Энтузиастов 12, корп. 2, ТЦ Город{contacts_url_end}.',
+
+		self::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
 		self::C_LOAN_DEBT                      => 'Задолженность по займу',
