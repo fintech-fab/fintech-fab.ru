@@ -155,7 +155,7 @@ class DefaultController extends Controller
 	public function actionAddCard()
 	{
 		//TODO сделать проверку антиботом
-		if(Yii::app()->adminKreddyApi->checkCanVerifyCard()){
+		if (Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			$oVerifyForm = new VerifyCardForm();
 			$this->render('card/verify_card', array('model' => $oVerifyForm));
 			Yii::app()->end();
@@ -187,7 +187,7 @@ class DefaultController extends Controller
 				} else {
 					//если проверка не пройдена, ругаемся ошибкой
 					$sError = Yii::app()->adminKreddyApi->getLastMessage();
-					if(empty($sError)){
+					if (empty($sError)) {
 						$sError = AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN;
 					}
 				}
