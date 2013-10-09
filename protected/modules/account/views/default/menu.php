@@ -16,9 +16,9 @@ $this->menu = array(
 	array(
 		'label' => 'Оформление займа', 'url' => array('/account/default/loan')
 	),
-	/*array(
-		'label' => 'Привязка пластиковой карты', 'url' => array('/account/default/addCard')
-	),*/
+	array(
+		'label' => 'Привязка банковской карты', 'url' => array('/account/default/addCard')
+	),
 	array(
 		'label' => 'Выход', 'url' => array('/account/default/logout')
 	),

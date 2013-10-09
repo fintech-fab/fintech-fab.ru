@@ -4,9 +4,9 @@
 /* @var IkTbActiveForm $form */
 /* @var $sError */
 
-$this->pageTitle = Yii::app()->name . " - Привязка пластиковой карты";
+$this->pageTitle = Yii::app()->name . " - Привязка банковской карты";
 ?>
-	<h4>Привязка пластиковой карты</h4>
+	<h4>Привязка банковской карты</h4>
 
 <?php if (!empty($sError)) { ?>
 	<div class="alert alert-error"><?= $sError ?></div> <?php } ?>

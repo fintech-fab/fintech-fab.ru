@@ -149,7 +149,7 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Привязка пластиковой карты
+	 * Привязка банковской карты
 	 *
 	 */
 	public function actionAddCard()
@@ -198,7 +198,7 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Верификация пластиковой карты
+	 * Верификация банковской карты
 	 */
 
 	public function actionVerifyCard()

@@ -3,8 +3,8 @@
  * @var $sMessage
  */
 
-$this->pageTitle = Yii::app()->name . " - Привязка пластиковой карты";
+$this->pageTitle = Yii::app()->name . " - Привязка банковской карты";
 ?>
-<h4>Привязка пластиковой карты</h4>
+<h4>Привязка банковской карты</h4>
 
 <div class="alert alert-success in block"><?= $sMessage ?></div>
