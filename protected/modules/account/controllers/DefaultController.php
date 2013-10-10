@@ -242,13 +242,13 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
-		$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+		/*$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
 		$oIdentify = new VideoIdentifyForm();
 		$oIdentify->setAttributes($aGetIdent);
 		$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
 		//выводим форму отправки на идентификацию
 		$this->render('need_identify', array('model' => $oIdentify));
-		Yii::app()->end();
+		Yii::app()->end();*/
 
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
