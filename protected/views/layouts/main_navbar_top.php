@@ -11,7 +11,7 @@
 				<a href="<?= Yii::app()->request->baseUrl; ?>/" class="brand">
 					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/logo-slogan.png" alt="Kreddy" /> </a>
 
-				<div class="span4">
+				<div class="span4" style="margin-top: 13px; margin-left: 20px;">
 					<?php
 					$this->widget('UserCityWidget');
 					?>
