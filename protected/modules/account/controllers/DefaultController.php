@@ -219,6 +219,8 @@ class DefaultController extends Controller
 			$oVerifyForm->setAttributes($aPostData);
 			//валидируем, в процессе валидации проводится преобразование дроби с запятой на точку
 			if ($oVerifyForm->validate()) {
+				//проверяем, сколько раз этот клиент пытался верифицироваться
+				$bIsCardVerifyCanRequest = AntiBotComponent::getIsCardVerifyCanRequest(Yii::app()->user->getId());
 				//если ОК то отправляем в API на проверку
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
@@ -227,6 +229,8 @@ class DefaultController extends Controller
 					));
 					Yii::app()->end();
 				} else {
+					//передаем антиботу ошибку
+					AntiBotComponent::addCardVerifyError(Yii::app()->user->getId());
 					//ругаемся ошибкой
 					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());
 				}

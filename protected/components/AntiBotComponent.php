@@ -86,7 +86,7 @@ class AntiBotComponent
 	 * @return bool
 	 */
 
-	public static function checkCardVerifyCanRequest($sUserName)
+	public static function getIsCardVerifyCanRequest($sUserName)
 	{
 		$iType = SiteParams::U_ACTION_TYPE_CARD_VERIFY;
 		$iTime = SiteParams::ANTIBOT_CARD_VERIFY_TIME;
