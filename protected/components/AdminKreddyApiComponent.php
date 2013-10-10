@@ -444,6 +444,30 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем массив с каналами, доступными клиенту по данной подписке
+	 * array('kreddy','mobile')
+	 *
+	 * @return array
+	 */
+	public function getClientSubscriptionChannels()
+	{
+		$aClientInfo = $this->getClientInfo();
+		//проверяем что все данные есть, и они в нужном формате
+		if (isset($aClientInfo['channels'])
+			&& is_array($aClientInfo['channels'])
+			&& isset($aClientInfo['subscription']['product_info']['channels'])
+			&& is_array($aClientInfo['subscription']['product_info']['channels'])
+		) {
+			//находим пересечение массивов, т.е. каналы, которые доступны пользователю, и при этом доступные для текущей подписки
+			$aChannels = array_intersect($aClientInfo['subscription']['product_info']['channels'], $aClientInfo['channels']);
+
+			return $aChannels;
+		} else {
+			return array();
+		}
+	}
+
+	/**
 	 * Получаем имя канала по его id
 	 *
 	 * @param $iChannel
@@ -517,6 +541,26 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (!empty($aClientInfo['subscription']['product'])) ? $aClientInfo['subscription']['product'] : false;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getSubscriptionLoanAmount()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription']['product_info']['loan_amount'])) ? $aClientInfo['subscription']['product_info']['loan_amount'] : false;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getSubscriptionLoanLifetime()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription']['product_info']['loan_lifetime'])) ? $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24 : false;
 	}
 
 	/**
@@ -802,12 +846,17 @@ class AdminKreddyApiComponent
 	public function getClientProductsChannelsList()
 	{
 		$aProducts = $this->getProductsAndChannels();
-		$aClientChannels = $this->getClientChannels();
+		//получаем каналы, доступные клиенту по данной подписке
+		$aClientChannels = $this->getClientSubscriptionChannels();
 
 		$aClientChannelsList = array();
+
 		if (isset($aProducts['channels']) && isset($aClientChannels)) {
 			foreach ($aClientChannels as $iChannel) {
-				if (isset($aProducts['channels'][$iChannel])) {
+				//если канал присутствует в списке каналов
+				//и находится в списке доступных для данной подписки каналов
+				if (isset($aProducts['channels'][$iChannel])
+				) {
 					$aClientChannelsList[$iChannel] = $aProducts['channels'][$iChannel];
 				}
 			}
@@ -1880,6 +1929,7 @@ class AdminKreddyApiComponent
 	{
 		//увеличиваем счетчик попыток
 		$this->increaseSmsPassTries();
+
 		//проверяем, не кончились ли попытки
 		return (Yii::app()->session['iSmsPassTries'] > 5);
 	}
@@ -1892,7 +1942,7 @@ class AdminKreddyApiComponent
 	/**
 	 *
 	 */
-	protected  function increaseSmsCodeTries()
+	protected function increaseSmsCodeTries()
 	{
 		Yii::app()->session['iSmsCodeTries'] = (Yii::app()->session['iSmsCodeTries'])
 			? (Yii::app()->session['iSmsCodeTries'] + 1)
@@ -1908,6 +1958,7 @@ class AdminKreddyApiComponent
 	{
 		//увеличиваем счетчик попыток
 		$this->increaseSmsCodeTries();
+
 		//проверяем, не кончились ли попытки
 		return (Yii::app()->session['iSmsCodeTries'] > 3);
 	}
