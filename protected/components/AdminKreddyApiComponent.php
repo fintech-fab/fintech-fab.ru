@@ -84,7 +84,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
-	const ERROR_PHONE_ERROR = 15;//ошибка номера телефона (такой номер уже есть)
+	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
@@ -114,7 +114,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
 	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClient/checkClientCanVerifyCard';
 
-const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Обратитесь в контактный центр.';
+	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Обратитесь в контактный центр.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
@@ -221,7 +221,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
-		if (!self::getIsError()&&!self::getIsPhoneError()) {
+		if (!self::getIsError() && !self::getIsPhoneError()) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 			$this->setSmsAuthDone(true);
@@ -535,7 +535,7 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? $aClientInfo['subscription']['activity_to'] : false;
-		$sActivityTo = $this->formatRusDate($sActivityTo,false);
+		$sActivityTo = $this->formatRusDate($sActivityTo, false);
 
 		return $sActivityTo;
 	}
@@ -1189,9 +1189,10 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 	public function checkCanVerifyCard()
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
-		if(!$this->getIsError()){
+		if (!$this->getIsError()) {
 			return (!empty($aResult['card_can_verify']));
 		}
+
 		return false;
 	}
 
@@ -1841,4 +1842,59 @@ const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная оши�
 		return $sMessage;
 	}
 
+	/**
+	 *
+	 */
+	public function increaseSmsPassTries()
+	{
+		Yii::app()->session['iSmsPassTries'] = (Yii::app()->session['iSmsPassTries'])
+			? (Yii::app()->session['iSmsPassTries'] + 1)
+			: 1;
+	}
+
+	/**
+	 * TODO сделать константу для значения
+	 *
+	 * @return bool
+	 */
+	public function getIsSmsPassTriesExceed()
+	{
+		//увеличиваем счетчик попыток
+		$this->increaseSmsPassTries();
+		//проверяем, не кончились ли попытки
+		return (Yii::app()->session['iSmsPassTries'] > 5);
+	}
+
+	public function resetSmsPassTries()
+	{
+		Yii::app()->session['iSmsPassTries'] = 0;
+	}
+
+	/**
+	 *
+	 */
+	protected  function increaseSmsCodeTries()
+	{
+		Yii::app()->session['iSmsCodeTries'] = (Yii::app()->session['iSmsCodeTries'])
+			? (Yii::app()->session['iSmsCodeTries'] + 1)
+			: 1;
+	}
+
+	/**
+	 * TODO сделать константу для значения
+	 *
+	 * @return bool
+	 */
+	public function getIsSmsCodeTriesExceed()
+	{
+		//увеличиваем счетчик попыток
+		$this->increaseSmsCodeTries();
+		//проверяем, не кончились ли попытки
+		return (Yii::app()->session['iSmsCodeTries'] > 5);
+	}
+
+	public function resetSmsCodeTries()
+	{
+		Yii::app()->session['iSmsCodeTries'] = 0;
+	}
 }
