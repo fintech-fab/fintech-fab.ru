@@ -27,8 +27,17 @@ class ClientLoanForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array_merge(
-			parent::attributeLabels(),
 			array('channel_id' => 'Выберите способ получения продукта')
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'channel_id'
 		);
 	}
 }
