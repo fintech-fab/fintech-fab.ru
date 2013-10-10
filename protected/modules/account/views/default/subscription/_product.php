@@ -3,6 +3,7 @@
 /* @var ClientSubscribeForm $model */
 
 $iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
+$iChannelId = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId();
 
 ?>
 
@@ -15,6 +16,9 @@ $iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
 	</li>
 	<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanLifetimeById($iProductId) ?>
 		&nbsp;дней
+	</li>
+	<li>
+		<strong>Способ получения займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
 	</li>
 	<li><strong>Стоимость подключения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId) ?>
 		&nbsp;рублей

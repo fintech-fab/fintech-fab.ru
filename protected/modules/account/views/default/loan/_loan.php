@@ -2,7 +2,7 @@
 //* @var DefaultController $this */
 /* @var ClientSubscribeForm $model */
 
-$iProductId = Yii::app()->adminKreddyApi->getSubscriptionProductId();
+$iProductId = 16;//Yii::app()->adminKreddyApi->getSubscriptionProductId();
 $aChannelId = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
 
 ?>

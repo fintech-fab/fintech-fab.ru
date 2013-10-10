@@ -34,7 +34,7 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 <strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br /><br />
 
 <div class="well">
-	Вы можете оформить займ <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
+	Вы можете оформить заём <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
 	<br />
 </div>
 

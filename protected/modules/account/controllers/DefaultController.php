@@ -99,14 +99,14 @@ class DefaultController extends Controller
 		// выбираем представление в зависимости от статуса подписки
 		if (Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если подписка есть
 			if (Yii::app()->adminKreddyApi->getMoratoriumLoan()
-			) { // если есть мораторий на займ
+			) { // если есть мораторий на заём
 				$sView .= 'loan_moratorium';
 			} else { //если подписка есть
 				$sView .= 'is_subscription';
 			}
 		} else { // нет подписки
 			if (Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan()
-			) { // если есть мораторий на подписку/скоринг или займ
+			) { // если есть мораторий на подписку/скоринг или заём
 				$sView .= 'subscription_moratorium';
 			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
 				$sView .= 'subscription_scoring';
@@ -257,7 +257,7 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
-		Yii::app()->adminKreddyApi->checkIsNeedIdentify();
+
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			// если невозможно - выводим сообщение о недоступности
@@ -544,7 +544,7 @@ class DefaultController extends Controller
 			//проверяем, что в массиве 2 значения (ID и канал)
 			//проверяем, не кончились ли попытки
 			$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
-			//если попытки не кончились, пробуем оформить займ
+			//если попытки не кончились, пробуем оформить заём
 			if (!$bTriesExceed) {
 				if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
 					//сбрасываем счетчик попыток ввода кода
