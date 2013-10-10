@@ -242,6 +242,7 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
+		//TODO выпилить
 		/*$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
 		$oIdentify = new VideoIdentifyForm();
 		$oIdentify->setAttributes($aGetIdent);
