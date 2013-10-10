@@ -50,8 +50,8 @@ class SiteParams
 	/**
 	 * Время и число попыток для привязки карты
 	 */
-	const ANTIBOT_CARD_VERIFY_TIME = 60;
-	const ANTIBOT_CARD_VERIFY_COUNT = 10;
+	const ANTIBOT_CARD_ADD_TIME = 60; //время, в течение которого доступно соответствующее число попыток
+	const ANTIBOT_CARD_ADD_COUNT = 15; //число попыток
 	/**
 	 * Количество СМС за период
 	 */

@@ -118,6 +118,7 @@ class AdminKreddyApiComponent
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
+	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -1154,7 +1155,7 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
 
-		$this->setLastMessage($aResult['message']);
+		//$this->setLastMessage($aResult['message']);
 
 		if ($aResult['code'] === self::ERROR_NONE) {
 			return true;
@@ -1359,7 +1360,7 @@ class AdminKreddyApiComponent
 			$aGetData = CJSON::decode($response);
 
 			if (is_array($aGetData)) {
-				$aData['message'] = 'Запрос выполнен успешно.';
+				$aData['message'] = '';//в случае если сервер ответил, но не передал message,
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -1890,7 +1891,7 @@ class AdminKreddyApiComponent
 		//увеличиваем счетчик попыток
 		$this->increaseSmsCodeTries();
 		//проверяем, не кончились ли попытки
-		return (Yii::app()->session['iSmsCodeTries'] > 5);
+		return (Yii::app()->session['iSmsCodeTries'] > 3);
 	}
 
 	public function resetSmsCodeTries()

@@ -27,12 +27,13 @@ class AntiBotComponent
 		$iTypeSms = SiteParams::U_ACTION_TYPE_SMS;
 		$iTypeBlock = SiteParams::U_ACTION_TYPE_BLOCK_SMS;
 
-		$iTimeShort = SiteParams::ANTIBOT_SMS_TIME_SHORT;
-		$iTimeLong = SiteParams::ANTIBOT_SMS_TIME_LONG;
-		$iTimeBlock = SiteParams::ANTIBOT_SMS_TIME_BLOCK;
+		//время задается в минутах
+		$iTimeShort = SiteParams::ANTIBOT_SMS_TIME_SHORT; //короткий период
+		$iTimeLong = SiteParams::ANTIBOT_SMS_TIME_LONG; //длительный период
+		$iTimeBlock = SiteParams::ANTIBOT_SMS_TIME_BLOCK; //время блокировки
 
-		$iSmsInShort = SiteParams::ANTIBOT_SMS_IN_SHORT;
-		$iSmsInLong = SiteParams::ANTIBOT_SMS_IN_LONG;
+		$iSmsInShort = SiteParams::ANTIBOT_SMS_IN_SHORT; //допустимое число СМС за короткий период
+		$iSmsInLong = SiteParams::ANTIBOT_SMS_IN_LONG; //допустимое число СМС за длительный период
 
 		//запрашиваем наличие блокировки за сутки
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
@@ -68,33 +69,35 @@ class AntiBotComponent
 	}
 
 	/**
-	 * Добавление в лог записи об ошибке привязки карты
+	 * Добавление в лог записи об ошибке при попытке привязки карты
 	 *
 	 * @param $sUserName
 	 *
 	 */
-	public static function addCardVerifyError($sUserName)
+	public static function addCardError($sUserName)
 	{
 		UserActionsLog::addNewAction($sUserName, SiteParams::U_ACTION_TYPE_CARD_VERIFY);
 	}
 
 	/**
 	 * Проверка, можно ли еще раз пробовать привязать карту
+	 * Проверяет число попыток с текущего момента и на указанное число минут назад,
+	 * если число попыток менее заданного - разрешает попытку.
 	 *
 	 * @param $sUserName
 	 *
 	 * @return bool
 	 */
 
-	public static function getIsCardVerifyCanRequest($sUserName)
+	public static function getIsAddCardCanRequest($sUserName)
 	{
 		$iType = SiteParams::U_ACTION_TYPE_CARD_VERIFY;
-		$iTime = SiteParams::ANTIBOT_CARD_VERIFY_TIME;
+		$iTime = SiteParams::ANTIBOT_CARD_ADD_TIME;
 
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sUserName, $iType, $iTime);
 
 		//если количество использованных попыток меньше заданного значения - разрешаем попытку
-		if($iActionCount <= SiteParams::ANTIBOT_CARD_VERIFY_COUNT)
+		if($iActionCount <= SiteParams::ANTIBOT_CARD_ADD_COUNT)
 		{
 			return true;
 		}

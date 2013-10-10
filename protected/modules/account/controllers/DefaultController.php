@@ -154,7 +154,19 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-		//TODO сделать проверку антиботом
+
+		$oCardForm = new AddCardForm();
+		$sError = null;
+
+		//проверяем, может ли клиент сделать еще одну попытку привязки карты
+		if(!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId()))
+		{
+			$sError = AdminKreddyApiComponent::C_CARD_ADD_TRIES_EXCEED;
+			$this->render('card/add_card', array('model' => $oCardForm, 'sError' => $sError));
+			Yii::app()->end();
+		}
+
+		//проверяем, не находится ли карта на верификации, если да - выводим форму ввода проверочной суммы
 		if (Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			$oVerifyForm = new VerifyCardForm();
 			$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -162,8 +174,6 @@ class DefaultController extends Controller
 		}
 
 
-		$oCardForm = new AddCardForm();
-		$sError = null;
 		//если пришел POST-запрос
 		if (Yii::app()->request->isPostRequest) {
 			$aPostData = Yii::app()->request->getParam('AddCardForm');
@@ -185,7 +195,10 @@ class DefaultController extends Controller
 					Yii::app()->end();
 
 				} else {
-					//если проверка не пройдена, ругаемся ошибкой
+					//если проверка не пройдена
+					//записываем ошибку в антибот
+					AntiBotComponent::addCardError(Yii::app()->user->getId());
+					//ругаемся ошибкой
 					$sError = Yii::app()->adminKreddyApi->getLastMessage();
 					if (empty($sError)) {
 						$sError = AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN;
@@ -219,8 +232,6 @@ class DefaultController extends Controller
 			$oVerifyForm->setAttributes($aPostData);
 			//валидируем, в процессе валидации проводится преобразование дроби с запятой на точку
 			if ($oVerifyForm->validate()) {
-				//проверяем, сколько раз этот клиент пытался верифицироваться
-				$bIsCardVerifyCanRequest = AntiBotComponent::getIsCardVerifyCanRequest(Yii::app()->user->getId());
 				//если ОК то отправляем в API на проверку
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
@@ -229,11 +240,10 @@ class DefaultController extends Controller
 					));
 					Yii::app()->end();
 				} else {
-					//передаем антиботу ошибку
-					AntiBotComponent::addCardVerifyError(Yii::app()->user->getId());
 					//ругаемся ошибкой
 					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());
 				}
+
 			}
 		}
 
