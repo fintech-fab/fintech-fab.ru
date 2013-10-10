@@ -1,6 +1,6 @@
 <?php
 /* @var DefaultController $this */
-/* @var ClientSubscribeForm $model */
+/* @var ClientLoanForm $model */
 /* @var IkTbActiveForm $form */
 
 $this->pageTitle = Yii::app()->name . " - Оформление займа";
@@ -18,6 +18,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 $aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChannelsList();
 
 if (!empty($aClientProductsChannelsList)) {
+
+	$model->channel_id = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
+
+	// если канада в сессии нет
+	if ($model->channel_id === false) {
+		//устанавливаем в качестве выбранного пакета первый из массива доступных
+		$model->channel_id = reset(array_keys($aClientProductsChannelsList));
+	}
 
 	echo $form->radioButtonList($model, 'channel_id', $aClientProductsChannelsList, array("class" => "all"));
 	echo $form->error($model, 'channel_id');
