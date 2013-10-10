@@ -10,6 +10,7 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 	<div class="alert in alert-block alert-warning span7">
 		<h4>Для отправки анкеты на рассмотрение, необходимо пройти идентификацию.</h4>
 	</div>
+<div class="clearfix"></div>
 <?php
 $this->widget("CheckBrowserWidget");
 
