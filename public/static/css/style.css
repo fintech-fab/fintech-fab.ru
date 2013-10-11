@@ -282,3 +282,22 @@ nav .account .btn {
 	border-left: 4px solid transparent;
 	content: "";
 }
+
+.dotted {
+	border-bottom: 1px dotted;
+	text-decoration: none;
+}
+
+.dotted:hover{
+	text-decoration: none;
+}
+
+
+.dashed {
+	border-bottom: 1px dashed;
+	text-decoration: none;
+}
+
+.dashed:hover{
+	text-decoration: none;
+}

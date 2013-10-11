@@ -91,6 +91,12 @@ class SiteController extends Controller
 		Yii::app()->end();
 	}
 
+	public function actionGetFooterLinks()
+	{
+		$this->widget('FooterLinksWidget');
+		Yii::app()->end();
+	}
+
 	/**
 	 * This is the action to handle external exceptions.
 	 */
