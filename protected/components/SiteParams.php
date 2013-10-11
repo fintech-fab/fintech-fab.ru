@@ -538,7 +538,7 @@ class SiteParams
 
 	public static function copyrightYear()
 	{
-		$copyYear = 2012;
+		$copyYear = 2011;
 		$curYear = date('Y');
 		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
 	}
