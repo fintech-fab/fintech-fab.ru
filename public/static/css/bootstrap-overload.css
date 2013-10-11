@@ -218,3 +218,7 @@ label, input, button, select, textarea {
 .control-group.error .select2-container .select2-choice div {
 	border-left: 1px solid #b94a48;
 }
+
+.ui-slider .ui-slider-handle {
+	outline: medium none;
+}
