@@ -2,6 +2,7 @@
 /* @var CWidget $this */
 /* @var LoginForm $model */
 /* @var IkTbActiveForm $form */
+/* @var $aSelectValues */
 ?>
 
 <div class="row">
@@ -21,7 +22,7 @@
 	$model = new LoginForm();
 
 
-	echo $form->dropDownList($model,'username',Yii::app()->adminKreddyApi->getFlexibleProduct());
+	echo $form->dropDownList($model, 'username', $aSelectValues, array('class'=>'hide'));
 
 	/*$this->widget('zii.widgets.jui.CJuiSlider', array(
 		'id'             => 'slider',
@@ -48,8 +49,27 @@
 	?>
 	<script type="text/javascript">
 		/*jQuery(window).on('load',function() {
-			$("#slider .ui-slider-handle").tooltip({title: 'test', placement: 'bottom', trigger: 'manual', container: '#slider .ui-slider-handle'}).tooltip('show');
-		});*/
+		 $("#slider .ui-slider-handle").tooltip({title: 'test', placement: 'bottom', trigger: 'manual', container: '#slider .ui-slider-handle'}).tooltip('show');
+		 });*/
+
+		$(function () {
+			var oSelect = $('select');
+			oSelect.selectToUISlider({
+				labels: 7
+			});
+
+
+			oSelect.change(function () {
+				$(".cost.final_price").html(this.value);
+				var n = 7;
+				if (this.value >= 5000) n = 14;
+
+				$(".cost.date").html(getDateToPayUntil(n));
+			});
+
+
+		})
+		;
 	</script>
 
 

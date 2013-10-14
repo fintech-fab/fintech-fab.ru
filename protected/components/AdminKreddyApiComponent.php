@@ -1968,10 +1968,15 @@ class AdminKreddyApiComponent
 		Yii::app()->session['iSmsCodeTries'] = 0;
 	}
 
+	/**
+	 * Временное решение, заглушка для метода, получающего данные от API и выдающего соответствующий массив
+	 * @return array
+	 */
+
 	public function getFlexibleProduct()
 	{
 		$iMin = 1000; //минимальная сумма
-		$iMax = 10000; //максимальная сумма
+		$iMax =  10000; //максимальная сумма
 		$iStep = 500; //шаг изменения суммы
 
 		$aFlexProduct = array();
@@ -1980,7 +1985,7 @@ class AdminKreddyApiComponent
 			$aFlexProduct[$iCurrent] = $iCurrent; //помещаем в массив текущую сумму
 			$iCurrent += $iStep; //увеличиваем текущую сумму на шаг
 			if($iCurrent >= $iMax) { //если сумма превысила максимальную, либо равна ей
-				$aFlexProduct[$iCurrent] = $iMax; //помещаем в массив максимальную сумму
+				$aFlexProduct[$iMax] = $iMax; //помещаем в массив максимальную сумму
 			}
 		} while ($iCurrent < $iMax);//прерываемся когда текущая сумма стала больше либо равна максимальной
 
