@@ -30,7 +30,8 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 			'validateOnSubmit' => true,
 		),
 		'htmlOptions'            => array(
-			'class' => "span4",
+			'class'        => "span4",
+			'autocomplete' => 'off',
 		),
 		'action'                 => Yii::app()
 			->createUrl('/account/resetPasswordResendSmsCode'),

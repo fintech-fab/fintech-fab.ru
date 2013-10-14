@@ -66,7 +66,8 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 		'id'                     => "checkSmsPass",
 		'enableClientValidation' => true,
 		'htmlOptions'            => array(
-			'class' => "span4",
+			'class'        => "span4",
+			'autocomplete' => 'off',
 		),
 		'clientOptions'          => array(
 			'validateOnChange' => true,

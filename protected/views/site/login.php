@@ -16,6 +16,9 @@ $this->breadcrumbs = array(
 		'clientOptions'          => array(
 			'validateOnSubmit' => true,
 		),
+		'htmlOptions'          => array(
+			'autocomplete' => 'off',
+		)
 	)); ?>
 
 	<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
