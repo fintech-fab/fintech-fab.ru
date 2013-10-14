@@ -22,8 +22,6 @@ $aCrumbs = array(
 
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
-	<?php $this->widget('SliderWidget'); ?>
-
 	<?php
 
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
