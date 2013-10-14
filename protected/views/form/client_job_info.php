@@ -40,7 +40,7 @@ $this->pageTitle = Yii::app()->name;
 		<?php require dirname(__FILE__) . '/fields/job.php' ?>
 	</div>
 
-	<?php $this->widget('ChosenConditionsWidget', array(
+	<?php $this->widget('SelectedProductWidget', array(
 		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
 	)); ?>
 

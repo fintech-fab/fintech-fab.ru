@@ -18,6 +18,8 @@ function getDateToPayUntil(n) {
 function showConditions(obj) {
 	$('.price_count').html(obj.attr('data-price'));
 	$('.price_month').html(obj.attr('data-price-count'));
+	var packetSize = parseInt(obj.attr('data-int-count')) * parseInt(obj.attr('data-final-price'));
+	$('.packet_size').html(packetSize);
 	$('.count_subscribe').html(obj.attr('data-count'));
 	var n = obj.attr('data-time');
 	$('.date').html(getDateToPayUntil(n));
