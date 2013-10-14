@@ -1967,4 +1967,24 @@ class AdminKreddyApiComponent
 	{
 		Yii::app()->session['iSmsCodeTries'] = 0;
 	}
+
+	public function getFlexibleProduct()
+	{
+		$iMin = 1000; //минимальная сумма
+		$iMax = 10000; //максимальная сумма
+		$iStep = 500; //шаг изменения суммы
+
+		$aFlexProduct = array();
+		$iCurrent = $iMin; //текущая сумма для цикла
+		do{
+			$aFlexProduct[$iCurrent] = $iCurrent; //помещаем в массив текущую сумму
+			$iCurrent += $iStep; //увеличиваем текущую сумму на шаг
+			if($iCurrent >= $iMax) { //если сумма превысила максимальную, либо равна ей
+				$aFlexProduct[$iCurrent] = $iMax; //помещаем в массив максимальную сумму
+			}
+		} while ($iCurrent < $iMax);//прерываемся когда текущая сумма стала больше либо равна максимальной
+
+
+		return $aFlexProduct;
+	}
 }

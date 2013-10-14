@@ -21,7 +21,9 @@
 	$model = new LoginForm();
 
 
-	$this->widget('zii.widgets.jui.CJuiSlider', array(
+	echo $form->dropDownList($model,'username',Yii::app()->adminKreddyApi->getFlexibleProduct());
+
+	/*$this->widget('zii.widgets.jui.CJuiSlider', array(
 		'id'             => 'slider',
 		'value'          => 50, 'options' => array(
 			'min'   => 1000,
@@ -41,13 +43,13 @@
 		), 'htmlOptions' => array(
 			'style' => 'height:12px;',
 		),
-	));
+	));*/
 
 	?>
 	<script type="text/javascript">
-		jQuery(window).on('load',function() {
+		/*jQuery(window).on('load',function() {
 			$("#slider .ui-slider-handle").tooltip({title: 'test', placement: 'bottom', trigger: 'manual', container: '#slider .ui-slider-handle'}).tooltip('show');
-		});
+		});*/
 	</script>
 
 

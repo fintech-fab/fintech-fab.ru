@@ -7,7 +7,7 @@
 $I = new WebGuy($scenario);
 $I->wantTo('Test account login');
 $I->amOnPage('/form');
-$I->see('Сумма займа');
+$I->see('Выберите Пакет займов');
 //$I->seeElement('input[name="product"]');
 //$val = $I->grabValueFrom('input[name="product"]');
 //$I->selectOption('input[name="product"]',$val);
