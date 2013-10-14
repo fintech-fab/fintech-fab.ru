@@ -24,28 +24,6 @@
 
 	echo $form->dropDownList($model, 'username', $aSelectValues, array('class'=>'hide'));
 
-	/*$this->widget('zii.widgets.jui.CJuiSlider', array(
-		'id'             => 'slider',
-		'value'          => 50, 'options' => array(
-			'min'   => 1000,
-			'max'   => 10000,
-			'step'  => 500,
-			'slide' => 'js:function(event, ui) {
-			    $("#TextBoxId").val(ui.value);
-			    $("#slider .ui-slider-handle").find(".tooltip-inner").html(ui.value);
-			    $(".cost.final_price").html(ui.value);
-
-			    var n = 7;
-			    if(ui.value>=5000) n = 14;
-
-				$(".cost.date").html(getDateToPayUntil(n));
-
-			 }'
-		), 'htmlOptions' => array(
-			'style' => 'height:12px;',
-		),
-	));*/
-
 	?>
 	<script type="text/javascript">
 		/*jQuery(window).on('load',function() {
@@ -55,7 +33,8 @@
 		$(function () {
 			var oSelect = $('select');
 			oSelect.selectToUISlider({
-				labels: 7
+				labels: 7,
+				tooltip: false
 			});
 
 

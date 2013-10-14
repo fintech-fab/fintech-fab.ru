@@ -15,6 +15,7 @@ class SliderWidget extends CWidget
 		Yii::app()->clientScript->registerScriptFile($sAssetsPath.'/js/selectToUISlider.jQuery.js', CClientScript::POS_HEAD);
 
 		Yii::app()->clientScript->registerCssFile($sAssetsPath.'/css/ui.slider.extras.css');
+		Yii::app()->clientScript->registerCssFile($sAssetsPath.'/css/redmond/jquery-ui-1.7.1.custom.css');
 
 		$this->render('slider_widget', array('aSelectValues'=>Yii::app()->adminKreddyApi->getFlexibleProduct()));
 	}
