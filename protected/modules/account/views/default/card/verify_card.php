@@ -11,6 +11,9 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'add-card',
 	'action' => Yii::app()->createUrl('/account/verifyCard'),
+	'htmlOptions'          => array(
+		'autocomplete' => 'off',
+	)
 ));
 ?>
 

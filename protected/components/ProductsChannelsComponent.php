@@ -42,13 +42,13 @@ class ProductsChannelsComponent
 					. "' data-final-price='" . $aProduct['amount'] . "' data-price-count='"
 					. $iSubscriptionLifetime . "&nbsp;дней"
 					. "' data-count='" . $aProduct['loan_count'] . "&nbsp;займа"
+					. "' data-int-count='" . $aProduct['loan_count']
 					. "' data-time='" . $iLoanLifetime . "'>"
-					. $aProduct['amount'] . " рублей на "
-					. ($iLoanLifetime == 7 ? 'неделю' : ($iLoanLifetime == 14 ? '2 недели' : $iLoanLifetime . ' дней'))
+					. $aProduct['name']
 					. "</span>";
 			}
 		} else {
-			$aProductsList = array("0" => "<span data-price='350' data-final-price='3000' data-price-count='30 дней' data-count='2 займа' data-time='7'>Произошла ошибка!</span>",);
+			$aProductsList = array("0" => "<span data-price='0' data-final-price='0' data-price-count='0 дней' data-count='0 займов' data-int-count='0' data-time='0'>Произошла ошибка!</span>",);
 		}
 
 		return $aProductsList;

@@ -25,6 +25,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 		'action'      => Yii::app()->createUrl('/account/doLoanCheckSmsCode'),
 		'htmlOptions' => array(
 			'class' => "span4",
+			'autocomplete' => 'off',
 		),
 	));
 

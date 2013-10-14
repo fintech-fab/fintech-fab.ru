@@ -38,7 +38,6 @@ $aCrumbs = array(
 
 	?>
 	<div class="row span6">
-		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/01T.png" />
 		<?php
 		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
 		// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
@@ -50,7 +49,7 @@ $aCrumbs = array(
 
 	</div>
 
-	<?php $this->widget('ChosenConditionsWidget', array(
+	<?php $this->widget('SelectedProductWidget', array(
 		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
 	)); ?>
 

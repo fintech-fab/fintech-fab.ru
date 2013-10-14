@@ -16,6 +16,9 @@ $this->breadcrumbs = array(
 		'clientOptions'        => array(
 			'validateOnSubmit' => false,
 		),
+		'htmlOptions'          => array(
+			'autocomplete' => 'off',
+		)
 	)); ?>
 
 	<p class="note">Для входа в личный кабинет введите номер телефона, указанный в Анкете, и пароль</p>

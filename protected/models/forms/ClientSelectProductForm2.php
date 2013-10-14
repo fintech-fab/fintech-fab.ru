@@ -41,7 +41,7 @@ class ClientSelectProductForm2 extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('product' => 'Сумма займа',)
+			array('product' => 'Выберите Пакет займов',)
 		);
 	}
 

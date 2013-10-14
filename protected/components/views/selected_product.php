@@ -1,26 +1,31 @@
 <div class="row span4 conditions">
-	<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/00T.png" />
+	<strong>Выбранные условия:</strong>
 	<?php
 	$n = Dictionaries::$aDataTimes[$this->chosenProduct];
 	$d = new DateTime('now');
 	$d->add(new DateInterval('P' . $n . 'D'));
 	$getDateToPayUntil = Dictionaries::$aDays[$d->format('w')] . ", " . $d->format('j') . " " . Dictionaries::$aMonths[$d->format('n')] . " " . $d->format('Y');
+
+	//TODO сделать формирование данных для виджета на основе данных из API
 	?>
 	<ul>
-		<li>Сумма займа:
-			<span class="cost final_price"><?= Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+		<li>Размер займа:
+			<span class="cost final_price"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Вернуть <span class="cost final_price">
-				<?= Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-			до:&nbsp;<span class="cost time">23:50</span>, <span class="cost date"><?= $getDateToPayUntil; ?></span>
+				<?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			до:&nbsp;<span class="cost time">23:50</span>, <span class="cost date"><?= "";//$getDateToPayUntil; ?></span>
 		</li>
 		<li>Стоимость подключения:
-			<span class="cost price_count"><?= Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			<span class="cost price_count"><?= "";//Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Срок подключения:
-			<span class="cost price_month"><?= Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span></li>
-		<li>Количество займов по подключению:
-			<span class="cost count_subscribe"><?= Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
+			<span class="cost price_month"><?= "";//Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span></li>
+		<li>Размер Пакета:
+			<span class="cost packet_size"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>
+		</li>
+		<li>Количество займов в Пакете:
+			<span class="cost count_subscribe"><?= "";//Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
 	</ul>
 </div>
 
@@ -30,7 +35,7 @@
 
 <?php
 if ($this->curStep == 1) {
-	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/conditions.js';
+	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/products.js';
 	Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
 
 	$sFormName = SiteParams::B_FULL_FORM ? 'ClientSelectProductForm2' : 'ClientSelectProductForm';
@@ -59,6 +64,12 @@ if ($this->curStep == 1) {
 		});
 
 		showConditions(jQuery("#' . $sFormName . ' .radio:first label > span"));
+
+		jQuery( function ($){
+			//заставляем отработать скрипт обновления состояния для выбранного радиобаттона
+			jQuery("#' . $sFormName . ' .radio :checked").click();
+		});
+
 	', CClientScript::POS_READY);
 }
 ?>

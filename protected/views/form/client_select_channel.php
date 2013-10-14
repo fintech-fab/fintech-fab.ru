@@ -41,7 +41,7 @@ $this->pageTitle = Yii::app()->name;
 		?>
 	</div>
 
-	<?php $this->widget('ChosenConditionsWidget', array(
+	<?php $this->widget('SelectedProductWidget', array(
 		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
 	)); ?>
 

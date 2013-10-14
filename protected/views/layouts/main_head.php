@@ -1,6 +1,6 @@
 <?php /* @var $this Controller */ ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="language" content="en" />
+<meta name="language" content="Russian" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="КРЕДДИ - ты всегда при деньгах. Как просто получить и вернуть заём? Простая и удобная услуга займов. Сколько взял – столько вернул!" />

@@ -22,6 +22,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 		'id'          => 'resetPasswordForm',
 		'htmlOptions' => array(
 			'class' => "span10",
+			'autocomplete' => 'off',
 		),
 		'action'      => Yii::app()->createUrl('/account/resetPassword'),
 	));

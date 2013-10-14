@@ -1,13 +1,12 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head><!-- head start -->
 	<?php $this->beginContent('//layouts/main_head');
 	echo $content;
 	$this->endContent();
 	?>
-</head>
-<!-- head end --><!-- ClickTale Bottom part -->
+<!-- ClickTale Bottom part -->
 
 <script type="text/javascript">
 	if (document.location.protocol != 'https:')
@@ -23,7 +22,8 @@
 	var WRInitTime = (new Date()).getTime();
 </script>
 <!-- ClickTale end of Top part -->
-
+</head>
+<!-- head end -->
 
 <body class="home">
 <div id="ClickTaleDiv" style="display: none;"></div>

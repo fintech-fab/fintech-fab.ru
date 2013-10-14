@@ -24,7 +24,8 @@ $this->widget('bootstrap.widgets.TbBox', array(
 		'id'          => 'products-form',
 		'action'      => Yii::app()->createUrl('/account/doSubscribeCheckSmsCode'),
 		'htmlOptions' => array(
-			'class' => "span4",
+			'class'        => "span4",
+			'autocomplete' => 'off',
 		),
 	));
 
