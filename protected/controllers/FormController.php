@@ -8,7 +8,7 @@
  */
 class FormController extends Controller
 {
-	public $showTopPageWidget = true;
+	public $showTopPageWidget = false;
 
 	public function actionIndex()
 	{
@@ -73,6 +73,11 @@ class FormController extends Controller
 		 * Рендер представления
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
+
+		if($sView === 'client_select_product'||$sView === 'client_select_product2'){
+			$this->showTopPageWidget = true;
+		}
+
 
 		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}

@@ -55,6 +55,31 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<div class="alert alert-error"><?= Yii::app()->session['error']; ?></div>
 	<?php Yii::app()->session['error'] = null; ?>
 <?php endif; ?>
+	<div class="alert in alert-block alert-info" style="color: #000000;">
+		<strong>Всего несколько шагов и Вы получите решение по займу:</strong>
+
+		<ol>
+			<li>Выберите удобный Пакет займов и канал получения (на мобильный телефон или на карту Кредди).</li>
+			<li>Заполните анкету</li>
+			<li>Убедитесь в наличие работающей веб-камеры и используйте один из перечисленных браузеров: Chrome или
+				Firefox последних версий.
+			</li>
+			<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span> для демонстрации в
+				вэб-камеру при прохождении идентификации (подтверждение личности).
+			</li<
+			<li>Ознакомьтесь с Офертой <a href="#fl-distance" class="dotted" data-toggle="modal" data-target="#fl-distance">здесь.</a>
+			</li>
+		</ol>
+	</div>
+	<script type="text/javascript">
+		$('#second-document-popover').popover({
+			html: true,
+			trigger: 'hover',
+			content: 'Заграничный паспорт<br/>Водительское удостоверение<br/>'
+					+'Пенсионное удостоверение<br/>Военный билет<br/>Свидетельство ИНН<br/>'
+					+'Страховое свидетельство государственного пенсионного страхования'
+		});
+	</script>
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" href="#personalData">

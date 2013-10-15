@@ -233,3 +233,22 @@ nav .account {
 nav .account .btn {
 	color: #8a2547;
 }
+
+.dotted {
+	border-bottom: 1px dotted;
+	text-decoration: none;
+}
+
+.dotted:hover{
+	text-decoration: none;
+}
+
+
+.dashed {
+	border-bottom: 1px dashed;
+	text-decoration: none;
+}
+
+.dashed:hover{
+	text-decoration: none;
+}
