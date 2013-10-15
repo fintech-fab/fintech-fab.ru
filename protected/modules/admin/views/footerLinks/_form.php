@@ -25,7 +25,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 	<div class="row">
 		<?php echo $form->labelEx($model, 'link_title'); ?>
-		<?php echo $form->textField($model, 'link_title', array('size' => 30, 'maxlength' => 30)); ?>
+		<?php echo $form->textField($model, 'link_title', array('size' => 50, 'maxlength' => 50)); ?>
 		<?php echo $form->error($model, 'link_title'); ?>
 	</div>
 
