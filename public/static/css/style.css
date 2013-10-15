@@ -91,13 +91,12 @@ section .intro, div .intro {
 	padding: 30px 60px 60px 0px;
 }
 
-.hero-unit h1 {
-	font-size: 40px;
-	font-weight: 400;
+.hero-unit p.intro {
+	font-size: 18px;
 }
 
 .hero-unit li{
-	font-size: 17px;
+	font-size: 16px;
 }
 
 .page-divider {
