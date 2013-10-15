@@ -257,7 +257,7 @@ class ClientFormComponent
 		if ($bSmsSentOk) {
 			//добавляем в лог запрос sms с этого ip
 			Yii::app()->antiBot->addSmsRequest();
-			$this->setSmsSentPhone(); //записываем, на какой номер было отправлено СМС
+			$this->setSmsSentPhone($sPhone); //записываем, на какой номер было отправлено СМС
 
 			$aClientForm['sms_code'] = $sSmsCode;
 			// если не удалось записать в БД - общая ошибка
@@ -763,9 +763,12 @@ class ClientFormComponent
 		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
 	}
 
-	public function setSmsSentPhone()
+	/**
+	 * @param $sPhone
+	 */
+	public function setSmsSentPhone($sPhone)
 	{
-		Yii::app()->session['sSmsSentPhone'] = self::getSessionPhone();
+		Yii::app()->session['sSmsSentPhone'] = $sPhone;
 	}
 
 	/**
