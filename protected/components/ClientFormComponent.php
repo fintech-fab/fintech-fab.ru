@@ -190,6 +190,15 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 			}
 
+			/**
+			 * если номер, на который отправлялось СМС, не совпадает с введенным,
+			 * т.е. клиент вернулся на анкету и ввел другой номер,
+			 * то позволяем снова отправить СМС с кодом водтверждения
+			 */
+			if(!$this->compareSessionAndSentPhones()){
+				$this->setFlagSmsSent(false);
+			}
+
 			// ставим флаг, что полная форма заполнена - чтобы при возврате к ней была активна кнопка "Отправить"
 			$this->setFlagFullFormFilled(true);
 		} else {
@@ -225,9 +234,8 @@ class ClientFormComponent
 		$aClientForm = ClientData::getClientDataById($iClientId);
 
 		// если код уже есть в базе, ставим флаг и вовзращаем true
-		if (!empty($aClientForm['sms_code'])) {
+		if (!empty($aClientForm['sms_code'])&&$this->compareSessionAndSentPhones()) {
 			$this->setFlagSmsSent(true);
-
 			return true;
 		}
 
@@ -247,9 +255,9 @@ class ClientFormComponent
 		$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 		if ($bSmsSentOk) {
-
 			//добавляем в лог запрос sms с этого ip
 			Yii::app()->antiBot->addSmsRequest();
+			$this->setSmsSentPhone(); //записываем, на какой номер было отправлено СМС
 
 			$aClientForm['sms_code'] = $sSmsCode;
 			// если не удалось записать в БД - общая ошибка
@@ -755,6 +763,19 @@ class ClientFormComponent
 		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
 	}
 
+	public function setSmsSentPhone()
+	{
+		Yii::app()->session['sSmsSentPhone'] = self::getSessionPhone();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSmsSentPhone()
+	{
+		return Yii::app()->session['sSmsSentPhone'];
+	}
+
 	public function clearClientSession()
 	{
 		//сбрасываем шаги заполнения анкеты в 0
@@ -826,5 +847,13 @@ class ClientFormComponent
 		}
 
 		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function compareSessionAndSentPhones()
+	{
+		return (Yii::app()->clientForm->getSmsSentPhone()===Yii::app()->clientForm->getSessionPhone());
 	}
 }

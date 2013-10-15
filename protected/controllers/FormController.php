@@ -2,6 +2,9 @@
 
 /**
  * Class FormController
+ *
+ * Контроллер заполнения анкеты клиента
+ *
  */
 class FormController extends Controller
 {
@@ -163,8 +166,8 @@ class FormController extends Controller
 			} else {
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'Ошибка! Обратитесь в контактный центр';
-				Yii::app()->clientForm->setFlagSmsSent(false);//сбрасываем влаг отправленного СМС
-				$this->actionStep(2);//переходим на шаг 2 - анкета пользователя
+				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
+				$this->actionStep(2); //переходим на шаг 2 - анкета пользователя
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
