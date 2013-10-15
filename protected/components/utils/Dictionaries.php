@@ -17,8 +17,10 @@ class Dictionaries
 	const C_ERR_SMS_WRONG = 'Неверный код подтверждения!';
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
 
+	const C_SMS_SUCCESS_NUM = 'SMS с кодом успешно отправлено на номер';
 	const C_SMS_SUCCESS = 'SMS с кодом успешно отправлено';
 	const C_SMS_PASS_SUCCESS = 'SMS с паролем успешно отправлено';
+	const C_SMS_RESET_PASSWORD_SUCCESS = "SMS с паролем отправлено на указанный Вами номер";
 
 	const C_INFO_MOSCOWTIME = "Указано московское время";
 
