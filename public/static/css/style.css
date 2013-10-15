@@ -85,15 +85,19 @@ section .intro, div .intro {
 .hero-unit {
 	background: none;
 	width: 400px;
-	height: 120px;
+	height: 160px;
 	margin-left: 0px;
 	margin-top: 0px;
-	padding-left: 0px;
+	padding: 30px 60px 60px 0px;
 }
 
 .hero-unit h1 {
 	font-size: 40px;
 	font-weight: 400;
+}
+
+.hero-unit li{
+	font-size: 17px;
 }
 
 .page-divider {
