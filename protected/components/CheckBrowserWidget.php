@@ -11,6 +11,8 @@ class CheckBrowserWidget extends CWidget
 	 */
 	public $sMobileMessage = " <strong>Внимание!</strong> Идентификация работает только <strong>на компьютере</strong>, в браузерах Chrome и Firefox последних версий.";
 
+	public $bShowBrowsersLink = true;
+
 	public $aHtmlOptions = array();
 
 	public function run()

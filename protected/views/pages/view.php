@@ -11,7 +11,7 @@ $this->breadcrumbs = array(
 $this->showTopPageWidget = true;
 
 if($bShowBrowserWidget){
-	$this->widget('CheckBrowserWidget');
+	$this->widget('CheckBrowserWidget',array('bShowBrowsersLink'=>false));
 }
 
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
