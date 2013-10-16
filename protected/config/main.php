@@ -77,6 +77,8 @@ $a = array(
 			'urlFormat'      => 'path',
 			'showScriptName' => false,
 			'rules'          => array(
+				'contact'                                          => 'site/contact',
+
 				'gii'                                              => 'gii',
 				'gii/<controller:\w+>'                             => 'gii/<controller>',
 				'gii/<controller:\w+>/<action:\w+>'                => 'gii/<controller>/<action>',
@@ -99,12 +101,10 @@ $a = array(
 
 				'form/<step:\d+>'                                  => 'form/step',
 
+
 				'<controller:\w+>/<action:\w+>/<id:\d+>'           => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'         => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'                    => '<controller>/<action>',
-
-				'<action:\w+>'                                     => 'site/<action>',
-				'<action:\w+>/<id:\d+>'                            => 'site/<action>',
 			),
 		),
 
