@@ -31,3 +31,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php
 
 $this->endWidget();
+
+Yii::app()->clientScript->registerScript('pageReload', '
+	$(document).ready(function(){
+
+            setInterval("window.location.href=\''.Yii::app()->createAbsoluteUrl(Yii::app()->request->requestUri).'\'",10000);
+        });
+', CClientScript::POS_HEAD);
