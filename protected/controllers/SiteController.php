@@ -112,6 +112,14 @@ class SiteController extends Controller
 	}
 
 	/**
+	 *
+	 */
+	public function actionContact()
+	{
+		$this->render('contact');
+	}
+
+	/**
 	 * Displays the login page
 	 */
 	public function actionLogin()

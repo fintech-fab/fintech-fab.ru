@@ -2,10 +2,13 @@
 
 /**
  * Class FormController
+ *
+ * Контроллер заполнения анкеты клиента
+ *
  */
 class FormController extends Controller
 {
-	public $showTopPageWidget = true;
+	public $showTopPageWidget = false;
 
 	public function actionIndex()
 	{
@@ -70,6 +73,11 @@ class FormController extends Controller
 		 * Рендер представления
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
+
+		if($sView === 'client_select_product'||$sView === 'client_select_product2'){
+			$this->showTopPageWidget = true;
+		}
+
 
 		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
@@ -163,8 +171,8 @@ class FormController extends Controller
 			} else {
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'Ошибка! Обратитесь в контактный центр';
-				Yii::app()->clientForm->setFlagSmsSent(false);//сбрасываем влаг отправленного СМС
-				$this->actionStep(2);//переходим на шаг 2 - анкета пользователя
+				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
+				$this->actionStep(2); //переходим на шаг 2 - анкета пользователя
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));

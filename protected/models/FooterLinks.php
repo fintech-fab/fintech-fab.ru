@@ -56,7 +56,7 @@ class FooterLinks extends CActiveRecord
 			array('link_name', 'length', 'max' => 20),
 			array('link_name', 'match', 'pattern' => '/^[a-z][a-z0-9_]+$/ui', 'message' => 'Имя может содержать только цифры, латинские символы и символ подчёркивания, первым символом должна быть буква'),
 			array('link_name', 'unique', 'message' => 'Ссылка должна иметь уникальное имя'),
-			array('link_title', 'length', 'max' => 30),
+			array('link_title', 'length', 'max' => 50),
 			array('link_title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('link_url', 'length', 'max' => 255),
 			array('link_url', 'match', 'pattern' => '#^((https?|ftp)://[а-яё\w\.\-]+\.([a-zа-яё]{2,6}\.?))?/[\#&;:?=\w\.\-\/]*$#ui', 'message' => 'Неверный URL, примеры верных URL: абсолютный - http://site.ru, относительный - /pages/view (обязательно должен начинаться со слэша)'),

@@ -69,7 +69,7 @@ $a = array(
 			'driver' => 'GD',
 		),
 		'user'             => array(
-			'class'=>'application.components.User',
+			'class'          => 'application.components.User',
 			'allowAutoLogin' => true,
 			'loginUrl'       => array('account/login'),
 		),
@@ -103,6 +103,9 @@ $a = array(
 				'<controller:\w+>/<action:\w+>/<id:\d+>'           => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'         => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'                    => '<controller>/<action>',
+
+				'<action:\w+>'                                     => 'site/<action>',
+				'<action:\w+>/<id:\d+>'                            => 'site/<action>',
 			),
 		),
 
