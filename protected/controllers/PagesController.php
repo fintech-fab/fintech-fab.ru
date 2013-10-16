@@ -48,8 +48,12 @@ class PagesController extends Controller
 	public function actionView($name)
 	{
 		$this->layout = '//layouts/column1';
+
+		$bShowBrowserWidget = ($name === 'browser');
+
 		$this->render('view', array(
 			'model' => $this->loadModelByName($name),
+			'bShowBrowserWidget'=>$bShowBrowserWidget
 		));
 	}
 

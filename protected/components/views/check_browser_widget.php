@@ -11,11 +11,13 @@
 		<?= $this->sMessage ?>
 	</span> <br /><br /> <span id="your_browser"></span>
 
+		<?php if($this->bShowBrowsersLink): ?>
 		<div id="get_browser" style="margin-top:10px;"><a href="<?=
 			Yii::app()
 				->createUrl('/pages/view/browser') ?>" target="_blank">Перейти на страницу загрузки поддерживаемого
 				браузера &raquo;</a>
 		</div>
+		<?php endif; ?>
 	</div>
 <?php
 
