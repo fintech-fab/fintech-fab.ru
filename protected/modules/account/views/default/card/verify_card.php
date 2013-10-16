@@ -31,10 +31,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php
 
 $this->endWidget();
-
+//обновление страницы
 Yii::app()->clientScript->registerScript('pageReload', '
 	$(document).ready(function(){
 
-            setInterval("window.location.href=\''.Yii::app()->createAbsoluteUrl(Yii::app()->request->requestUri).'\'",10000);
+            setInterval(function(){window.location.href=\''.Yii::app()->createAbsoluteUrl(Yii::app()->request->requestUri).'\';},60000);
+
         });
 ', CClientScript::POS_HEAD);

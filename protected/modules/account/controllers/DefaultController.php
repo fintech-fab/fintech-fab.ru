@@ -189,8 +189,9 @@ class DefaultController extends Controller
 					$oCardForm->sCardYear,
 					$oCardForm->sCardCvc
 				);
-				//если проверка прошла успешно
+				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
+					//TODO записать в куки информацию, что карта отправлена
 					//отображаем форму проверки карты по замороженной сумме денег
 					$oVerifyForm = new VerifyCardForm();
 					$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -222,6 +223,11 @@ class DefaultController extends Controller
 
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
 		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
+			/**
+			 * TODO если в куках написано, что карта отправлена на верификацию
+			 * API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
+			 * и удаляем куку
+			 */
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
@@ -237,6 +243,7 @@ class DefaultController extends Controller
 				//если ОК то отправляем в API на проверку
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
+					//TODO удаляем куку "карта отправлена на верификацию"
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));
