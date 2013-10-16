@@ -101,10 +101,10 @@ $a = array(
 
 				'form/<step:\d+>'                                  => 'form/step',
 
-
 				'<controller:\w+>/<action:\w+>/<id:\d+>'           => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'         => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'                    => '<controller>/<action>',
+				'<controller:\w+>'                                 => '<controller>',
 			),
 		),
 
