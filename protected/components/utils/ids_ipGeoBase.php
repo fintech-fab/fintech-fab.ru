@@ -126,6 +126,7 @@ class ids_ipGeoBase
 		$long_ip = ip2long($sIp);
 		//проверяем, запрашивалась ли информация в течение текущего запроса страницы
 		if (empty(self::$aGeoBaseData)) {
+			//TODO переделать SQL
 			$sSqlRequest = "SELECT * FROM `tbl_geo__base` WHERE `long_ip1`<='$long_ip' AND `long_ip2`>='$long_ip' LIMIT 1";
 
 			$aResult = Yii::app()->db->cache(600)->createCommand($sSqlRequest)->queryRow();
@@ -142,6 +143,7 @@ class ids_ipGeoBase
 			if (!empty($aResult['city_id'])) {
 				//проверяем, запрашивалась ли информация в течение текущего запроса страницы
 				if (empty(self::$aGeoCityData)) {
+					//TODO переделать SQL
 					$sSqlRequest = "SELECT * FROM `tbl_geo__cities` WHERE `city_id`='$aResult[city_id]' LIMIT 1";
 					$aResult2 = Yii::app()->db->cache(600)->createCommand($sSqlRequest)->queryRow();
 					self::$aGeoCityData = $aResult2;
