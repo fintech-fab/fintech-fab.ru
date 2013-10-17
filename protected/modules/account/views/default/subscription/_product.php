@@ -5,11 +5,16 @@
 $iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
 $iChannelId = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId();
 
+$iPacketSize = Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) *
+	Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId);
 ?>
 
 <ul>
 	<li>
 		<strong>Пакет:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?>
+	</li>
+	<li>
+		<strong>Размер пакета:</strong>&nbsp;<?= $iPacketSize; ?>&nbsp;рублей
 	</li>
 	<li><strong>Сумма займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 		&nbsp;рублей

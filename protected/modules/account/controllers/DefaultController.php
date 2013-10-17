@@ -39,7 +39,7 @@ class DefaultController extends Controller
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					/*'addCard', 'verifyCard',*/
-					'successCard'
+					'successCard','refresh'
 				),
 				'users'   => array('@'),
 			),
@@ -80,7 +80,13 @@ class DefaultController extends Controller
 		return parent::beforeAction($aAction);
 	}
 
-
+	/**
+	 *
+	 */
+	public function actionRefresh()
+	{
+		Yii::app()->end();
+	}
 	/**
 	 * Главная страница личного кабинета
 	 */

@@ -42,8 +42,16 @@ class IpGeoBaseUpdateCommand extends CConsoleCommand
 				$row = iconv('windows-1251', 'utf-8', $row);
 				if(preg_match($pattern, $row, $out))
 				{
-					$sSqlQuery = "INSERT INTO `tbl_geo__cities` (`city_id`, `city`, `region`, `district`, `lat`, `lng`) VALUES('$out[1]', '$out[2]', '$out[3]', '$out[4]', '$out[5]', '$out[6]');";
-					Yii::app()->db->createCommand($sSqlQuery)->execute();
+					$sSqlQuery = "INSERT INTO `tbl_geo__cities` (`city_id`, `city`, `region`, `district`, `lat`, `lng`) VALUES(:out1, :out2, :out3, :out4, :out5, :out6);";
+
+					$oCommand = Yii::app()->db->createCommand($sSqlQuery);
+					$oCommand->bindParam(":out1",$out[1],PDO::PARAM_INT);
+					$oCommand->bindParam(":out2",$out[2],PDO::PARAM_STR);
+					$oCommand->bindParam(":out3",$out[3],PDO::PARAM_STR);
+					$oCommand->bindParam(":out4",$out[4],PDO::PARAM_STR);
+					$oCommand->bindParam(":out5",$out[5],PDO::PARAM_STR);
+					$oCommand->bindParam(":out6",$out[6],PDO::PARAM_STR);
+					$oCommand->execute();
 				}
 
 			}
@@ -64,8 +72,16 @@ class IpGeoBaseUpdateCommand extends CConsoleCommand
 			{
 				if(preg_match($pattern, $row, $out))
 				{
-					$sSqlQuery = "INSERT INTO `tbl_geo__base` (`long_ip1`, `long_ip2`, `ip1`, `ip2`, `country`, `city_id`) VALUES('$out[1]', '$out[2]', '$out[3]', '$out[4]', '$out[5]', '$out[6]');";
-					Yii::app()->db->createCommand($sSqlQuery)->execute();
+					$sSqlQuery = "INSERT INTO `tbl_geo__base` (`long_ip1`, `long_ip2`, `ip1`, `ip2`, `country`, `city_id`) VALUES(:out1, :out2, :out3, :out4, :out5, :out6);";
+
+					$oCommand = Yii::app()->db->createCommand($sSqlQuery);
+					$oCommand->bindParam(":out1",$out[1],PDO::PARAM_INT);
+					$oCommand->bindParam(":out2",$out[2],PDO::PARAM_STR);
+					$oCommand->bindParam(":out3",$out[3],PDO::PARAM_STR);
+					$oCommand->bindParam(":out4",$out[4],PDO::PARAM_STR);
+					$oCommand->bindParam(":out5",$out[5],PDO::PARAM_STR);
+					$oCommand->bindParam(":out6",$out[6],PDO::PARAM_STR);
+					$oCommand->execute();
 				}
 			}
 
@@ -75,8 +91,8 @@ class IpGeoBaseUpdateCommand extends CConsoleCommand
 		}
 
 
-		unlink('cidr_optim.txt');
-		unlink('cities.txt');
+		//unlink('cidr_optim.txt');
+		//unlink('cities.txt');
 
 	}
 }
