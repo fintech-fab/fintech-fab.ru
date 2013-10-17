@@ -30,7 +30,7 @@
 					<tbody>
 					<tr>
 						<td id="jivo-label-status"></td>
-						<td id="jivo-label-text" onclick="javascript: window.open('<?= Yii::app()->createAbsoluteUrl("/contact"); ?>');" style="font-weight: bold; font-style: normal; font-size: 13px; font-family: Arial; color: rgb(255, 255, 255); text-shadow: 0px -1px rgb(16, 16, 16);">Отправьте нам сообщение</td>
+						<td id="jivo-label-text" onclick="javascript: window.open('<?= Yii::app()->createAbsoluteUrl("/site/contact"); ?>');" style="font-weight: bold; font-style: normal; font-size: 13px; font-family: Arial; color: rgb(255, 255, 255); text-shadow: 0px -1px rgb(16, 16, 16);">Отправьте нам сообщение</td>
 						<td id="jivo-label-copyright">
 					</tr>
 					</tbody>

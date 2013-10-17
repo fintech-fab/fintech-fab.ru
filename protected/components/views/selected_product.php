@@ -26,6 +26,8 @@
 		</li>
 		<li>Количество займов в Пакете:
 			<span class="cost count_subscribe"><?= "";//Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
+		<li>Канал получения:&nbsp;
+			<span class="cost">на мобильный телефон</span></li>
 	</ul>
 </div>
 
