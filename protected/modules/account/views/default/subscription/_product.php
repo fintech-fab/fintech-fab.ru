@@ -13,11 +13,13 @@ $iPacketSize = Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId)
 	<li>
 		<strong>Пакет:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?>
 	</li>
-	<li>
-		<strong>Размер пакета:</strong>&nbsp;<?= $iPacketSize; ?>&nbsp;рублей
-	</li>
 	<li><strong>Сумма займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 		&nbsp;рублей
+	</li>
+	<li><strong>Количество займов в
+			Пакете:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId) ?></li>
+	<li>
+		<strong>Размер пакета:</strong>&nbsp;<?= $iPacketSize; ?>&nbsp;рублей
 	</li>
 	<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanLifetimeById($iProductId) ?>
 		&nbsp;дней
@@ -32,6 +34,4 @@ $iPacketSize = Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId)
 			подключения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
 		&nbsp;дней
 	</li>
-	<li><strong>Количество займов в
-			Пакете:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId) ?></li>
 </ul>
