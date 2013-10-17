@@ -156,7 +156,6 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-
 		$oCardForm = new AddCardForm();
 		$sError = null;
 
@@ -191,7 +190,8 @@ class DefaultController extends Controller
 				);
 				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
-					//TODO записать в куки информацию, что карта отправлена
+					//пишем в куки информацию, что карта отправлена на верификацию
+					Cookie::saveDataToCookie('cardVerify',array('onVerify'=>true));
 					//отображаем форму проверки карты по замороженной сумме денег
 					$oVerifyForm = new VerifyCardForm();
 					$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -219,15 +219,17 @@ class DefaultController extends Controller
 
 	public function actionVerifyCard()
 	{
-		//TODO сделать проверку антиботом
-
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
 		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			/**
-			 * TODO если в куках написано, что карта отправлена на верификацию
-			 * API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
+			 * если в куках написано, что карта отправлена на верификацию,
+			 * но API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
 			 * и удаляем куку
 			 */
+			Cookie::compareDataInCookie('cardVerify','onVerify',true);
+			Yii::app()->user->setFlash('error',AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
+			Cookie::saveDataToCookie('cardVerify',array('onVerify'=>false));
+
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
@@ -243,7 +245,8 @@ class DefaultController extends Controller
 				//если ОК то отправляем в API на проверку
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
-					//TODO удаляем куку "карта отправлена на верификацию"
+					//удаляем куку "карта отправлена на верификацию"
+					Cookie::saveDataToCookie('cardVerify',array('onVerify'=>false));
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));

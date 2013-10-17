@@ -119,6 +119,7 @@ class AdminKreddyApiComponent
 
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
+	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
