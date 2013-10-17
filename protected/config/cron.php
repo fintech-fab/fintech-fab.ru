@@ -28,6 +28,7 @@ $a = array(
 
 	'params'         => array(),
 
+
 	'components'     => array(
 		'db'               => array(
 			'connectionString' => 'mysql:host=localhost;dbname=kreddy',
@@ -35,6 +36,11 @@ $a = array(
 			'username'         => 'kreddy',
 			'password'         => '159753',
 			'charset'          => 'utf8',
+		),
+		'assetManager' => array(
+			'class'    => 'CAssetManager',
+			'basePath' => realpath(__DIR__ . '/../../public/assets'),
+			'baseUrl'  => '/assets',
 		),
 	),
 

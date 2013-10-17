@@ -3,34 +3,36 @@
 // This is the configuration for yiic console application.
 // Any writable CConsoleApplication properties can be configured here.
 $a = array(
-	'basePath'   => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-	'name'       => 'My Console Application',
+	'basePath'       => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
+	'name'           => 'My Console Application',
+
+	'sourceLanguage' => 'ru',
+	'language'       => 'ru',
 
 	// preloading 'log' component
-	'preload'    => array('log'),
+	'preload'        => array(
+		'log'
+	),
 
 
-	'modules'    => array(),
+	'modules'        => array(),
 
-	'import'     => array(
+	'import'         => array(
 		'application.extensions.image.*',
 	),
 
 	// application components
-	'components' => array(
-		'db'           => array(
-			'connectionString' => 'sqlite:' . dirname(__FILE__) . '/../data/testdrive.db',
-		),
+	'components'     => array(
 		// uncomment the following to use a MySQL database
-		/*
-		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=testdrive',
-			'emulatePrepare' => true,
-			'username' => 'root',
-			'password' => '',
-			'charset' => 'utf8',
+
+		'db'           => array(
+			'connectionString' => 'mysql:host=localhost;dbname=kreddy',
+			'emulatePrepare'   => true,
+			'username'         => 'kreddy',
+			'password'         => '159753',
+			'charset'          => 'utf8',
 		),
-		*/
+
 		'assetManager' => array(
 			'class'    => 'CAssetManager',
 			'basePath' => realpath(__DIR__ . '/../../public/assets'),
