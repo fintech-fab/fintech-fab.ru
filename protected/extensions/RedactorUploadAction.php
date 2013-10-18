@@ -31,11 +31,17 @@ class RedactorUploadAction extends CAction
 	private $_validator = array( // default options
 	);
 
+	/**
+	 * @return array
+	 */
 	public function getValidator()
 	{
 		return $this->_validator;
 	}
 
+	/**
+	 * @param $v
+	 */
 	public function setValidator($v)
 	{
 		$this->_validator = array_merge($this->_validator, $v);
@@ -150,6 +156,9 @@ class RedactorUploadAction extends CAction
 	}
 }
 
+/**
+ * Class UploadedImage
+ */
 class UploadedImage extends CModel
 {
 	protected $validator;
@@ -169,11 +178,17 @@ class UploadedImage extends CModel
 		);
 	}
 
+	/**
+	 * @param array $validator
+	 */
 	function __construct($validator = array())
 	{
 		$this->validator = $validator;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function rules()
 	{
 		$validator = array('file', 'file') + $this->validator;

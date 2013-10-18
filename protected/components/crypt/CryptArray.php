@@ -3,7 +3,6 @@
 class CryptArray
 {
 
-	const SALT = '1UVoiYYOYWdrjpvkge9n';
 	const NAME_ALGORITHM = MCRYPT_RIJNDAEL_256;
 	const MCRYPT_MODE = MCRYPT_MODE_CBC;
 
@@ -12,6 +11,7 @@ class CryptArray
 	{
 
 		$sSource = self::serialize($array);
+
 		return self::encryptVal($sSource, $salt);
 
 	}
@@ -20,6 +20,7 @@ class CryptArray
 	{
 
 		$decrypted = self::decryptVal($string, $salt);
+
 		return self::deserialize(trim($decrypted));
 
 	}
@@ -42,6 +43,7 @@ class CryptArray
 
 		$iv_size = mcrypt_get_iv_size(self::NAME_ALGORITHM, self::MCRYPT_MODE);
 		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+
 		return file_put_contents(self::getIvPath($salt), $iv);
 
 	}
@@ -61,24 +63,27 @@ class CryptArray
 				$iv = file_get_contents(self::getIvPath($salt));
 			}
 		}
+
 		return $iv;
 	}
 
 
 	public static function encryptVal($string, $salt = null)
 	{
-		$salt = ($salt)? $salt : self::SALT;
+		$salt = ($salt) ? $salt : self::getSalt();
 		$encrypted = mcrypt_encrypt(self::NAME_ALGORITHM, $salt, $string, self::MCRYPT_MODE, self::getIv($salt));
+
 		return self::_base64_url_encode($encrypted);
 
 	}
 
 	public static function decryptVal($string, $salt = null)
 	{
-		$salt = ($salt)? $salt : self::SALT;
+		$salt = ($salt) ? $salt : self::getSalt();
 		$string = str_replace('%2C', ',', $string);
 		$string = self::_base64_url_decode($string);
 		$decrypted = mcrypt_decrypt(self::NAME_ALGORITHM, $salt, $string, self::MCRYPT_MODE, self::getIv($salt));
+
 		return trim($decrypted);
 
 	}
@@ -92,8 +97,17 @@ class CryptArray
 	{
 
 		$input = str_replace('%2C', ',', $input);
+
 		return base64_decode(strtr($input, '-_,', '+/='));
 
+	}
+
+	protected function getSalt()
+	{
+		$salt = (!empty(Yii::app()->params['cryptSalt']))
+			? Yii::app()->params['cryptSalt']
+			: 'fkf4a7h0853k6nxlsg84';
+		return $salt;
 	}
 
 }
