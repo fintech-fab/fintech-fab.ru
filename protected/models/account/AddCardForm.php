@@ -53,9 +53,9 @@ class AddCardForm extends CFormModel
 	{
 		return array(
 			'sCardPan'   => 'Номер карты',
-			'sCardMonth' => 'Месяц',
+			'sCardMonth' => 'Срок окончания',
 			'sCardYear'  => 'Год',
-			'sCardCvc'   => 'CVC',
+			'sCardCvc'   => 'Код CVC',
 			'bConfirm'   => 'Я подтверждаю согласие на блокировку случайной суммы на указанной банковской карте.'
 		);
 

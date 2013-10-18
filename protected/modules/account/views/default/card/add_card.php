@@ -25,8 +25,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<ul>
 			<li>При привязке новой банковской карты, данные старой карты удаляются.</li>
 			<li>
-				Сейчас перечисление займов доступно только на карты Master
-				Card. В ближайшем времени перечисления станут доступны и на карты Visa. Благодарим за понимание!
+				Сейчас перечисление займов доступно только на карты Master Card. В ближайшем времени перечисления станут
+				доступны и на карты Visa. Благодарим за понимание!
 			</li>
 			<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
 				карте должно быть не менее 10 рублей.
@@ -35,10 +35,21 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<?= $form->checkBoxRow($model, 'bConfirm'); ?>
 	</div>
 
-<?= $form->textFieldRow($model, 'sCardPan'); ?>
-<?= $form->dropDownListRow($model, 'sCardMonth', Dictionaries::$aMonthsDigital); ?>
-<?= $form->dropDownListRow($model, 'sCardYear', Dictionaries::getYears()); ?>
-<?= $form->textFieldRow($model, 'sCardCvc'); ?>
+<?= $form->textFieldRow($model, 'sCardPan',array('size' => '16', 'maxlength' => '16')); ?>
+
+
+	<?= $form->labelEx($model, 'sCardMonth', array('class' => 'control-label')); ?>
+
+	<div class="controls">
+		<?= $form->dropDownList($model, 'sCardMonth', Dictionaries::$aMonthsDigital, array('style' => 'width: 60px;')); ?>
+		<span style="font-size: 14pt;">/</span>
+		<?= $form->dropDownList($model, 'sCardYear', Dictionaries::getYears(), array('style' => 'width: 80px;')); ?>
+	</div>
+
+<?= $form->error($model, 'sCardMonth'); ?>
+<?= $form->error($model, 'sCardYear'); ?>
+
+<?= $form->textFieldRow($model, 'sCardCvc', array('style' => 'width: 60px;', 'size' => '3', 'maxlength' => '3')); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
