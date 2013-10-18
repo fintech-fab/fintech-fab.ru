@@ -80,6 +80,13 @@ class DefaultController extends Controller
 		return parent::beforeAction($aAction);
 	}
 
+	/**
+	 *
+	 */
+	public function actionRefresh()
+	{
+		Yii::app()->end();
+	}
 
 	/**
 	 * Главная страница личного кабинета
@@ -87,6 +94,8 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
+
+
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
@@ -148,12 +157,23 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Привязка пластиковой карты
+	 * Привязка банковской карты
 	 *
 	 */
 	public function actionAddCard()
 	{
-		//TODO сделать проверку антиботом
+		$oCardForm = new AddCardForm();
+		$sError = null;
+
+		//проверяем, может ли клиент сделать еще одну попытку привязки карты
+		if(!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId()))
+		{
+			$sError = AdminKreddyApiComponent::C_CARD_ADD_TRIES_EXCEED;
+			$this->render('card/add_card', array('model' => $oCardForm, 'sError' => $sError));
+			Yii::app()->end();
+		}
+
+		//проверяем, не находится ли карта на верификации, если да - выводим форму ввода проверочной суммы
 		if (Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			$oVerifyForm = new VerifyCardForm();
 			$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -161,8 +181,6 @@ class DefaultController extends Controller
 		}
 
 
-		$oCardForm = new AddCardForm();
-		$sError = null;
 		//если пришел POST-запрос
 		if (Yii::app()->request->isPostRequest) {
 			$aPostData = Yii::app()->request->getParam('AddCardForm');
@@ -176,15 +194,20 @@ class DefaultController extends Controller
 					$oCardForm->sCardYear,
 					$oCardForm->sCardCvc
 				);
-				//если проверка прошла успешно
+				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
+					//пишем в куки информацию, что карта отправлена на верификацию
+					Cookie::saveDataToCookie('cardVerify',array('onVerify'=>true));
 					//отображаем форму проверки карты по замороженной сумме денег
 					$oVerifyForm = new VerifyCardForm();
 					$this->render('card/verify_card', array('model' => $oVerifyForm));
 					Yii::app()->end();
 
 				} else {
-					//если проверка не пройдена, ругаемся ошибкой
+					//если проверка не пройдена
+					//записываем ошибку в антибот
+					AntiBotComponent::addCardError(Yii::app()->user->getId());
+					//ругаемся ошибкой
 					$sError = Yii::app()->adminKreddyApi->getLastMessage();
 					if (empty($sError)) {
 						$sError = AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN;
@@ -197,15 +220,22 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Верификация пластиковой карты
+	 * Верификация банковской карты
 	 */
 
 	public function actionVerifyCard()
 	{
-		//TODO сделать проверку антиботом
-
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
 		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
+			/**
+			 * если в куках написано, что карта отправлена на верификацию,
+			 * но API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
+			 * и удаляем куку
+			 */
+			Cookie::compareDataInCookie('cardVerify','onVerify',true);
+			Yii::app()->user->setFlash('error',AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
+			Cookie::saveDataToCookie('cardVerify',array('onVerify'=>false));
+
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
@@ -221,6 +251,8 @@ class DefaultController extends Controller
 				//если ОК то отправляем в API на проверку
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
+					//удаляем куку "карта отправлена на верификацию"
+					Cookie::saveDataToCookie('cardVerify',array('onVerify'=>false));
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));
@@ -229,6 +261,7 @@ class DefaultController extends Controller
 					//ругаемся ошибкой
 					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());
 				}
+
 			}
 		}
 
@@ -242,14 +275,6 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
-		//TODO выпилить
-		/*$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
-		$oIdentify = new VideoIdentifyForm();
-		$oIdentify->setAttributes($aGetIdent);
-		$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
-		//выводим форму отправки на идентификацию
-		$this->render('need_identify', array('model' => $oIdentify));
-		Yii::app()->end();*/
 
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
