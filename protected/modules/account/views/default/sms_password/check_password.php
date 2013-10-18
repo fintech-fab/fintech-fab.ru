@@ -17,7 +17,7 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 <div id="alertSmsSent" class="alert in alert-success span7"><?= Dictionaries::C_SMS_PASS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
-	Ваш телефон: +7<?= Yii::app()->user->getMaskedId(); ?>
+	Ваш номер телефона: +7<?= Yii::app()->user->getMaskedId(); ?>
 </div>
 <div class="clearfix"></div>
 <div class="form" id="activeForm">

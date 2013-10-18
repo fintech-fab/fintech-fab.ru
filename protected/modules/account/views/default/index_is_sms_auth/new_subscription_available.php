@@ -37,14 +37,14 @@ $this->widget(
 );
 ?>
 
-<div class="clearfix"></div>
+<?php if (Yii::app()->adminKreddyApi->checkSubscribe()): ?>
+	<div class="clearfix"></div>
 
-<br />
-
-<div class="well">
-	<?php    $this->widget('bootstrap.widgets.TbButton', array(
-		'label' => 'Подключить Пакет', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
-			->createUrl('account/subscribe'),
-	));?>
-
-</div>
+	<br />
+	<div class="well">
+		<?php    $this->widget('bootstrap.widgets.TbButton', array(
+			'label' => 'Подключить Пакет', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
+				->createUrl('account/subscribe'),
+		));?>
+	</div>
+<?php endif; ?>

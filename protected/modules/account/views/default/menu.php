@@ -10,19 +10,31 @@ $this->menu = array(
 	array(
 		'label' => 'История операций', 'url' => array('/account/default/history')
 	),
-	array(
-		'label' => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
-	),
-	array(
-		'label' => 'Оформление займа', 'url' => array('/account/default/loan')
-	),
-	array(
-		'label' => 'Привязка банковской карты', 'url' => array('/account/default/addCard')
-	),
-	array(
-		'label' => 'Выход', 'url' => array('/account/default/logout')
-	),
 );
+
+if (Yii::app()->adminKreddyApi->checkSubscribe()) {
+
+	$this->menu[] = array(
+		'label' => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
+	);
+}
+if (Yii::app()->adminKreddyApi->checkLoan()) {
+	$this->menu[] = array(
+		'label' => 'Оформление займа', 'url' => array('/account/default/loan')
+	);
+}
+if (Yii::app()->adminKreddyApi->getBalance() < 0) {
+	$this->menu[] = array(
+		'label' => 'Оплатить задолженность', 'url' =>'https://pay.kreddy.ru/'
+	);
+}
+$this->menu[] = array(
+	'label' => 'Привязка пластиковой карты', 'url' => array('/account/default/addCard')
+);
+$this->menu[] = array(
+	'label' => 'Выход', 'url' => array('/account/default/logout')
+);
+
 
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';

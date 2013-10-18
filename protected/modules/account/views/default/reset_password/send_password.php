@@ -17,7 +17,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 <div id="alertSmsSent" class="alert in alert-success span7"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
-	Ваш телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
+	Ваш номер телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
 </div>
 <div class="clearfix"></div>
 <div class="form" id="activeForm">
