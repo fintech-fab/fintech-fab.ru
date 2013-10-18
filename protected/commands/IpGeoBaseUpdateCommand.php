@@ -91,8 +91,8 @@ class IpGeoBaseUpdateCommand extends CConsoleCommand
 		}
 
 
-		//unlink('cidr_optim.txt');
-		//unlink('cities.txt');
+		unlink('cidr_optim.txt');
+		unlink('cities.txt');
 
 	}
 }
