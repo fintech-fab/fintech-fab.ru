@@ -1,6 +1,6 @@
 <?php
 /**
- * Class ClientFullForm2Test
+ * Class ClientFullFormTest
  * @method assertEmpty
  * @method assertNotEmpty
  * @method assertTrue
@@ -8,7 +8,7 @@
  *
  */
 
-class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
+class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 {
 
 	public function testClientPassword()
@@ -21,7 +21,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 
 
 
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 		$oForm->setAttributes($aPostData);
 
 		$oForm->validate();
@@ -44,7 +44,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 
 	public function testValidateFormEmail()
 	{
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 
 		$oForm->email = 'asdasdasd';
 		$oForm->validate();
@@ -60,7 +60,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 
 	public function testValidateAddress()
 	{
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 
 		$aPostData = array();
 		$aPostData[] = array(
@@ -179,7 +179,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 	public
 	function testValidateJobFields()
 	{
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 
 		$validate_fields = array(
 			'job_company',
@@ -210,7 +210,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 	public
 	function testSex()
 	{
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 		$oForm->sex = 5;
 		$oForm->validate(array('sex'));
 		$aErrors = $oForm->getErrors();
@@ -224,7 +224,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 	public
 	function  testCheckFieldsOnError($field, $value, $method)
 	{
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 
 		$oForm->$field = $value;
 		$oForm->validate();
@@ -238,7 +238,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 	public
 	function  testCheckFieldsOnSuccess($field, $strRowValue, $strCleanValue)
 	{
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 
 		$oForm->$field = $strRowValue;
 		$oForm->validate();
@@ -483,7 +483,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 			'friends_fio'   => $sFriendsFio
 		);
 
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 		$oForm->setAttributes($aPostData);
 
 		$oForm->validate();
@@ -500,7 +500,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 			'friends_fio'   => $sFriendsFio
 		);
 
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 		$oForm->setAttributes($aPostData);
 
 		$oForm->validate();
@@ -525,7 +525,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 		);
 
 
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 		$oForm->setAttributes($aPostData);
 
 		$oForm->validate();
@@ -548,7 +548,7 @@ class ClientFullForm2Test extends \PHPUnit_Framework_TestCase
 		);
 
 
-		$oForm = new ClientFullForm2();
+		$oForm = new ClientFullForm();
 		$oForm->setAttributes($aPostData);
 
 		$oForm->validate();

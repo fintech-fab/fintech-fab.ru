@@ -12,24 +12,24 @@ $I->see('Выберите Пакет займов');
 //$val = $I->grabValueFrom('input[name="product"]');
 //$I->selectOption('input[name="product"]',$val);
 
-$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
+$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
 	'product' => '99999',
 )));
 
 
-/*$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
-	'ClientSelectProductForm2[product]' => '999',
+/*$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
+	'ClientSelectProductForm[product]' => '999',
 )));*/
 //$I->see('Выберите сумму займа');
 
 
-/*$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
+/*$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
 	'product' => '',
 )));
 
 $I->see('Необходимо заполнить поле');
 
-$I->submitForm('#ClientSelectProductForm2', array('ClientSelectProductForm2' => array(
+$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
 	'product' => '9',
 )));
 $I->see('Личные данные');

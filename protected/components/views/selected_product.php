@@ -41,7 +41,7 @@ if ($this->curStep == 1) {
 	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/products.js';
 	Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
 
-	$sFormName = SiteParams::B_FULL_FORM ? 'ClientSelectProductForm2' : 'ClientSelectProductForm';
+	$sFormName = 'ClientSelectProductForm';
 	Yii::app()->clientScript->registerScript('myConditions', '
 		jQuery("#' . $sFormName . ' .radio").click(function () {
 			showConditions(jQuery(this).find("label > span"));

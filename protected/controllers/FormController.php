@@ -74,7 +74,7 @@ class FormController extends Controller
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 
-		if($sView === 'client_select_product'||$sView === 'client_select_product2'){
+		if($sView === 'client_select_product'){
 			$this->showTopPageWidget = true;
 		}
 
@@ -108,7 +108,7 @@ class FormController extends Controller
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()
-			|| (SiteParams::B_FULL_FORM && !Yii::app()->clientForm->getFlagFullFormFilled())
+			|| (!Yii::app()->clientForm->getFlagFullFormFilled())
 		) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
@@ -118,7 +118,7 @@ class FormController extends Controller
 
 		// если были ошибки при отправке, то выводим их в представлении
 		if ($oAnswer !== true) {
-			$this->render('confirm_phone_full_form2/send_sms_code_error', array(
+			$this->render('confirm_phone_full_form/send_sms_code_error', array(
 					'sErrorMessage' => $oAnswer,
 				)
 			);
@@ -149,7 +149,7 @@ class FormController extends Controller
 			$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
 			$oClientSmsForm->setAttributes($aPostData);
 			$oClientSmsForm->addError('sms_code', $mAnswer);
-			$this->render('confirm_phone_full_form2/check_sms_code', array(
+			$this->render('confirm_phone_full_form/check_sms_code', array(
 				'oClientCreateForm' => $oClientSmsForm,
 			));
 			Yii::app()->end();

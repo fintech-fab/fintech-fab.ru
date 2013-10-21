@@ -6,7 +6,7 @@
  *
  */
 
-class ClientFullForm2 extends ClientCreateFormAbstract
+class ClientFullForm extends ClientCreateFormAbstract
 {
 
 	public $complete;

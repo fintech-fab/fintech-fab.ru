@@ -88,7 +88,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="personalData" class="accordion-body collapse in">
 			<div class="accordion-inner">
 				<div class="row">
-					<?php require dirname(__FILE__) . '/fields2/personal_data.php' ?>
+					<?php require dirname(__FILE__) . '/fields/personal_data.php' ?>
 				</div>
 			</div>
 		</div>
@@ -101,7 +101,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="passportData" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<?php require dirname(__FILE__) . '/fields2/passport_data.php' ?>
+					<?php require dirname(__FILE__) . '/fields/passport_data.php' ?>
 				</div>
 			</div>
 		</div>
@@ -114,7 +114,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="address" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<?php require dirname(__FILE__) . '/fields2/address_reg.php' ?>
+					<?php require dirname(__FILE__) . '/fields/address_reg.php' ?>
 				</div>
 			</div>
 		</div>
@@ -127,7 +127,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="jobInfo" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<?php require dirname(__FILE__) . '/fields2/job_info.php' ?>
+					<?php require dirname(__FILE__) . '/fields/job_info.php' ?>
 				</div>
 			</div>
 		</div>
@@ -140,7 +140,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<div id="sendForm" class="accordion-body collapse">
 			<div class="accordion-inner">
 				<div class="row">
-					<?php require dirname(__FILE__) . '/fields2/send.php' ?>
+					<?php require dirname(__FILE__) . '/fields/send.php' ?>
 				</div>
 			</div>
 		</div>
