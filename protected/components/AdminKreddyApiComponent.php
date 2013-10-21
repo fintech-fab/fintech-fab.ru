@@ -106,6 +106,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
 	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
+	const API_ACTION_CHANGE_PASSPORT = 'siteClient/changePassport';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -1177,6 +1178,72 @@ class AdminKreddyApiComponent
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
 				$this->setScoringAccepted(null);
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Проверка возможности подписки
+	 *
+	 * @return bool
+	 */
+	public function checkChangePassport()
+	{
+		//TODO сделать проверку, можно ли сменить паспортные данные
+		return true;
+	}
+
+	/**
+	 * Отправка СМС с кодом подтверждения смены паспорта
+	 *
+	 * @return bool
+	 */
+	public function sendSmsChangePassport()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Заява на смену паспортных данных, подписанная СМС-кодом
+	 *
+	 * @param string $sSmsCode
+	 *
+	 * @param        $aPassportData
+	 *
+	 * @return bool
+	 */
+	public function changePassport($sSmsCode, $aPassportData)
+	{
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
+			array('sms_code' => $sSmsCode, 'passportData'=>$aPassportData));
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 

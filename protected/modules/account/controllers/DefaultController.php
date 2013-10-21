@@ -270,6 +270,18 @@ class DefaultController extends Controller
 	 */
 	public function actionChangePassport()
 	{
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changePassport'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_passport_data/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
 		$oChangePassportForm = new ChangePassportDataForm();
 
 		if (Yii::app()->request->isAjaxRequest) {
@@ -301,8 +313,9 @@ class DefaultController extends Controller
 			$aPost = Yii::app()->request->getParam('SMSCodeForm');
 			$oSmsCodeForm->setAttributes($aPost);
 			if ($oSmsCodeForm->validate()) {
-				//TODO тут запросить в API СМС-код
-				if (true) {//если СМС отправлено успешно
+				//запрашиваем СМС-код для подтверждения
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangePassport();
+				if ($bSendSms) { //если СМС отправлено успешно
 					unset($oSmsCodeForm);
 					$oSmsCodeForm = new SMSCodeForm('codeRequired');
 					$this->render('change_passport_data/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
@@ -326,19 +339,22 @@ class DefaultController extends Controller
 			$aPost = Yii::app()->request->getParam('SMSCodeForm');
 			$oSmsCodeForm->setAttributes($aPost);
 			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
 				$aPassportData = Yii::app()->adminKreddyApi->getPassportData();
-				//TODO тут отправить данные в API
-				if (true) {//если нет ошибок
+				//отправляем данные в API
+				$bChangePassport = Yii::app()->adminKreddyApi->changePassport($oSmsCodeForm->smsCode, $aPassportData);
+				if ($bChangePassport) { //если нет ошибок
 					$this->render('change_passport_data/success');
 					Yii::app()->end();
 				} else {
-					$oSmsCodeForm->addError('smsCode','Ошибка из API');//сунуть сюда ошибку из API
+					$oSmsCodeForm->addError('smsCode', 'Ошибка из API'); //сунуть сюда ошибку из API
 				}
 			}
 		}
 
 		$this->render('change_passport_data/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
 	}
+
 	/**
 	 * Вывод формы выбора продукта для подписки
 	 */
