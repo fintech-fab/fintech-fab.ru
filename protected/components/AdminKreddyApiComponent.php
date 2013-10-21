@@ -1192,8 +1192,11 @@ class AdminKreddyApiComponent
 	 */
 	public function checkChangePassport()
 	{
-		//TODO сделать проверку, можно ли сменить паспортные данные
-		return true;
+		//запрашиваем статус
+		$this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT, array('getStatus' => 1));
+		//если ошибка, то возвращаем false
+		//в setLastMessage при этом после запроса записалось сообщение с причиной отказа
+		return (!$this->getIsError());
 	}
 
 	/**
@@ -1234,7 +1237,7 @@ class AdminKreddyApiComponent
 	{
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
-			array('sms_code' => $sSmsCode, 'passportData'=>$aPassportData));
+			array('sms_code' => $sSmsCode, 'passportData' => $aPassportData));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1495,7 +1498,7 @@ class AdminKreddyApiComponent
 			$aGetData = CJSON::decode($response);
 
 			if (is_array($aGetData)) {
-				$aData['message'] = '';//в случае если сервер ответил, но не передал message,
+				$aData['message'] = ''; //в случае если сервер ответил, но не передал message,
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -2038,24 +2041,27 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Временное решение, заглушка для метода, получающего данные от API и выдающего соответствующий массив
+	 *
 	 * @return array
 	 */
 
 	public function getFlexibleProduct()
 	{
 		$iMin = 1000; //минимальная сумма
-		$iMax =  10000; //максимальная сумма
+		$iMax = 10000; //максимальная сумма
 		$iStep = 500; //шаг изменения суммы
 
 		$aFlexProduct = array();
 		$iCurrent = $iMin; //текущая сумма для цикла
-		do{
+		do {
 			$aFlexProduct[$iCurrent] = $iCurrent; //помещаем в массив текущую сумму
 			$iCurrent += $iStep; //увеличиваем текущую сумму на шаг
-			if($iCurrent >= $iMax) { //если сумма превысила максимальную, либо равна ей
+			if ($iCurrent >= $iMax) { //если сумма превысила максимальную, либо равна ей
 				$aFlexProduct[$iMax] = $iMax; //помещаем в массив максимальную сумму
 			}
-		} while ($iCurrent < $iMax);//прерываемся когда текущая сумма стала больше либо равна максимальной
+		} while ($iCurrent < $iMax);
+
+		//прерываемся когда текущая сумма стала больше либо равна максимальной
 
 
 		return $aFlexProduct;
@@ -2067,14 +2073,14 @@ class AdminKreddyApiComponent
 	public function getFlexibleProductTime()
 	{
 		$aDays = array(
-			'7'=>'7',
-			'8'=>'8',
-			'9'=>'9',
-			'10'=>'10',
-			'11'=>'11',
-			'12'=>'12',
-			'13'=>'13',
-			'14'=>'14',
+			'7'  => '7',
+			'8'  => '8',
+			'9'  => '9',
+			'10' => '10',
+			'11' => '11',
+			'12' => '12',
+			'13' => '13',
+			'14' => '14',
 		);
 
 		return $aDays;
@@ -2104,7 +2110,7 @@ class AdminKreddyApiComponent
 	public function getPassportDataField($sField)
 	{
 		return (!empty(Yii::app()->session['aPassportData'][$sField]))
-			?Yii::app()->session['aPassportData'][$sField]
-			:false;
+			? Yii::app()->session['aPassportData'][$sField]
+			: false;
 	}
 }

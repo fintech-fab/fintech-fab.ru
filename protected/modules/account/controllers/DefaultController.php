@@ -270,6 +270,15 @@ class DefaultController extends Controller
 	 */
 	public function actionChangePassport()
 	{
+		//проверяем статус смены паспорта
+		//если сменить нельзя, то выводим сообщение о статусе
+		if(!Yii::app()->adminKreddyApi->checkChangePassport())
+		{
+			$sMessage = Yii::app()->adminKreddyApi->getLastMessage();
+			$this->render('change_passport_data/change_status', array('sMessage'=>$sMessage));
+			Yii::app()->end();
+		}
+
 		//проверяем, авторизован ли клиент по СМС-паролю
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$oSmsPassForm = new SMSPasswordForm();
