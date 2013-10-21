@@ -66,7 +66,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 				array(
 					'phone', 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в контактный центр.', 'criteria' => array(
 					'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
-				)),
+				)
+				),
 				array('relatives_one_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 				array('friends_phone', 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!'),
 
@@ -85,6 +86,12 @@ class ClientFullForm extends ClientCreateFormAbstract
 
 				array('friends_phone', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!'),
 				array('friends_fio', 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!'),
+				array(
+					'passport_date', 'checkValidPassportDate', 'birthDate'            => 'birthday',
+					                                           'message'              => 'Введите корректное значение даты выдачи паспорта',
+					                                           'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
+					                                           'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
+				),
 
 				array('address_res_region', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Выберите регион из списка!'),
 				array('address_res_city', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
@@ -228,7 +235,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 
 				'complete'            => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
 
-				'passport_number'        => 'Серия/номер',
+				'passport_number'     => 'Серия/номер',
+				'passport_series'     => 'Серия/номер',
 
 				'secret_question'     => 'Секретный вопрос',
 				'secret_answer'       => 'Ответ на секретный вопрос',

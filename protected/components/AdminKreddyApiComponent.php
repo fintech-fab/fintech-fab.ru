@@ -1994,6 +1994,9 @@ class AdminKreddyApiComponent
 		return $aFlexProduct;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getFlexibleProductTime()
 	{
 		$aDays = array(
@@ -2008,5 +2011,33 @@ class AdminKreddyApiComponent
 		);
 
 		return $aDays;
+	}
+
+	/**
+	 * @param array $aPassportData
+	 */
+	public function setPassportData(array $aPassportData)
+	{
+		Yii::app()->session['aPassportData'] = $aPassportData;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPassportData()
+	{
+		return Yii::app()->session['aPassportData'];
+	}
+
+	/**
+	 * @param $sField
+	 *
+	 * @return string|bool
+	 */
+	public function getPassportDataField($sField)
+	{
+		return (!empty(Yii::app()->session['aPassportData'][$sField]))
+			?Yii::app()->session['aPassportData'][$sField]
+			:false;
 	}
 }

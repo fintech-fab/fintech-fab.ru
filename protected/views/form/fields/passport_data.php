@@ -48,7 +48,6 @@ $htmlOptions = array(
 );
 ?>
 <div class="span5">
-	<?php // echo $form->fieldPassportOneFieldRow($oClientCreateForm, array('passport_series','passport_number'), array('passport_number'=>array('class' => 'span2', 'mask' => '999999', 'size'=>'6', 'maxlength'=>'6'),'passport_series'=>array('class' => 'span1', 'mask' => '9999', 'size'=>'4', 'maxlength'=>'4')));?>
 	<div class="control-group">
 		<div class="row">
 			<div class="span5">

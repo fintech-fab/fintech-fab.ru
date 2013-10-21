@@ -38,8 +38,7 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard', 'verifyCard',
-					'successCard','refresh'
+					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport'
 				),
 				'users'   => array('@'),
 			),
@@ -94,7 +93,6 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
-
 
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
@@ -166,8 +164,7 @@ class DefaultController extends Controller
 		$sError = null;
 
 		//проверяем, может ли клиент сделать еще одну попытку привязки карты
-		if(!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId()))
-		{
+		if (!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId())) {
 			$sError = AdminKreddyApiComponent::C_CARD_ADD_TRIES_EXCEED;
 			$this->render('card/add_card', array('model' => $oCardForm, 'sError' => $sError));
 			Yii::app()->end();
@@ -197,7 +194,7 @@ class DefaultController extends Controller
 				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
 					//пишем в куки информацию, что карта отправлена на верификацию
-					Cookie::saveDataToCookie('cardVerify',array('onVerify'=>true));
+					Cookie::saveDataToCookie('cardVerify', array('onVerify' => true));
 					//отображаем форму проверки карты по замороженной сумме денег
 					$oVerifyForm = new VerifyCardForm();
 					$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -232,9 +229,9 @@ class DefaultController extends Controller
 			 * но API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
 			 * и удаляем куку
 			 */
-			Cookie::compareDataInCookie('cardVerify','onVerify',true);
-			Yii::app()->user->setFlash('error',AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
-			Cookie::saveDataToCookie('cardVerify',array('onVerify'=>false));
+			Cookie::compareDataInCookie('cardVerify', 'onVerify', true);
+			Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
+			Cookie::saveDataToCookie('cardVerify', array('onVerify' => false));
 
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
@@ -252,7 +249,7 @@ class DefaultController extends Controller
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
 					//удаляем куку "карта отправлена на верификацию"
-					Cookie::saveDataToCookie('cardVerify',array('onVerify'=>false));
+					Cookie::saveDataToCookie('cardVerify', array('onVerify' => false));
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));
@@ -268,6 +265,80 @@ class DefaultController extends Controller
 		$this->render('card/verify_card', array('model' => $oVerifyForm));
 	}
 
+	/**
+	 * Смена данных паспорта, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangePassport()
+	{
+		$oChangePassportForm = new ChangePassportDataForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangePassportForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangePassportDataForm');
+			$oChangePassportForm->setAttributes($aPost);
+			if ($oChangePassportForm->validate()) {
+				Yii::app()->adminKreddyApi->setPassportData($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('change_passport_data/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_passport_data/passport_form', array('oChangePassportForm' => $oChangePassportForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangePassportSendSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//TODO тут запросить в API СМС-код
+				if (true) {//если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_passport_data/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_passport_data/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_passport_data/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены паспортных данных
+	 */
+
+	public function actionChangePassportCheckSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				$aPassportData = Yii::app()->adminKreddyApi->getPassportData();
+				//TODO тут отправить данные в API
+				if (true) {//если нет ошибок
+					$this->render('change_passport_data/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode','Ошибка из API');//сунуть сюда ошибку из API
+				}
+			}
+		}
+
+		$this->render('change_passport_data/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
 	/**
 	 * Вывод формы выбора продукта для подписки
 	 */
