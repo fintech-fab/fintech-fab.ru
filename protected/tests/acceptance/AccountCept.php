@@ -9,9 +9,9 @@ $I->wantTo('Test account login');
 $I->amOnPage('/form');
 $I->see('Выберите Пакет займов');
 //$I->seeElement('input[name="product"]');
-//$val = $I->grabValueFrom('input[name="product"]');
-//$I->selectOption('input[name="product"]',$val);
-
+//$val = $I->grabValueFrom('input[name="ClientSelectProductForm[product]"]');
+//$I->selectOption('input[name="ClientSelectProductForm[product]"]','Покупки');
+//л$I->click('input [@id="#ClientSelectProductForm_product_2"');
 $I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
 	'product' => '99999',
 )));
@@ -20,7 +20,7 @@ $I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => ar
 /*$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
 	'ClientSelectProductForm[product]' => '999',
 )));*/
-//$I->see('Выберите сумму займа');
+$I->see('Выберите Пакет займов');
 
 
 /*$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
