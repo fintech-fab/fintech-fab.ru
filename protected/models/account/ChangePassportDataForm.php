@@ -10,6 +10,7 @@ class ChangePassportDataForm extends ClientFullForm
 
 	public $old_passport_series;
 	public $old_passport_number;
+	public $statement;
 
 	/**
 	 * @return array
@@ -20,6 +21,8 @@ class ChangePassportDataForm extends ClientFullForm
 		$aRequired = array(
 			'old_passport_series',
 			'old_passport_number',
+			'statement',
+
 			'first_name',
 			'last_name',
 			'third_name',
@@ -29,12 +32,20 @@ class ChangePassportDataForm extends ClientFullForm
 			'passport_date',
 			'passport_issued',
 			'passport_code',
+
+			'document',
+			'document_number',
+
+			'address_reg_region',
+			'address_reg_city',
+			'address_reg_address',
 		);
 
 		$aMyRules =
 			array(
 				array('old_passport_series', 'match', 'message' => 'Серия паспорта должна состоять из четырех цифр', 'pattern' => '/^\d{' . SiteParams::C_PASSPORT_S_LENGTH . '}$/'),
 				array('old_passport_number', 'match', 'message' => 'Номер паспорта должен состоять из шести цифр', 'pattern' => '/^\d{' . SiteParams::C_PASSPORT_N_LENGTH . '}$/'),
+				array('statement', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Номер заявления должен быть числом.')
 			);
 		$aRules = array_merge($this->getRulesByFields(
 			array(
@@ -48,14 +59,14 @@ class ChangePassportDataForm extends ClientFullForm
 				'passport_issued',
 				'passport_code',
 
-				//'document',
-				//'document_number',
+				'document',
+				'document_number',
 
-				/*'address_reg_region',
+				'address_reg_region',
 				'address_reg_city',
 				'address_reg_address',
 
-				'address_reg_as_res',
+				/*'address_reg_as_res',
 
 				'address_res_region',
 				'address_res_city',
@@ -82,7 +93,8 @@ class ChangePassportDataForm extends ClientFullForm
 				'passport_number'     => 'Серия/номер',
 
 				'old_passport_number' => 'Серия/номер',
-				'old_passport_series' => 'Серия/номер'
+				'old_passport_series' => 'Серия/номер',
+				'statement'           => 'Номер заявления о смене паспорта'
 
 			)
 		);
@@ -100,6 +112,7 @@ class ChangePassportDataForm extends ClientFullForm
 
 			'old_passport_series',
 			'old_passport_number',
+			'statement',
 
 			'passport_series',
 			'passport_number',
@@ -107,14 +120,14 @@ class ChangePassportDataForm extends ClientFullForm
 			'passport_issued',
 			'passport_code',
 
-			//'document',
-			//'document_number',
+			'document',
+			'document_number',
 
-			/*'address_reg_region',
+			'address_reg_region',
 			'address_reg_city',
 			'address_reg_address',
 
-			'address_reg_as_res',
+			/*'address_reg_as_res',
 
 			'address_res_region',
 			'address_res_city',

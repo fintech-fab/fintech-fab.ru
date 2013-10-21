@@ -1193,10 +1193,11 @@ class AdminKreddyApiComponent
 	public function checkChangePassport()
 	{
 		//запрашиваем статус
-		$this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT, array('getStatus' => 1));
+		//$this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT, array('getStatus' => 1));
 		//если ошибка, то возвращаем false
 		//в setLastMessage при этом после запроса записалось сообщение с причиной отказа
-		return (!$this->getIsError());
+		//return (!$this->getIsError());
+		return true;
 	}
 
 	/**
