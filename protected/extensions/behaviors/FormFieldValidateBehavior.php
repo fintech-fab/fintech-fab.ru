@@ -545,4 +545,23 @@ class FormFieldValidateBehavior extends CBehavior
 
 	}
 
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkOldPassport($attribute, $param)
+	{
+		$sPassportNoChanged = $this->owner->$param['passport_not_changed'];
+
+		if (!$sPassportNoChanged) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+
+		return;
+
+	}
+
+
 }

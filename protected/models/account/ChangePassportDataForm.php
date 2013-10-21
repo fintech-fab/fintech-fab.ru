@@ -10,6 +10,7 @@ class ChangePassportDataForm extends ClientFullForm
 
 	public $old_passport_series;
 	public $old_passport_number;
+	public $passport_not_changed;
 	public $statement;
 
 	/**
@@ -19,10 +20,6 @@ class ChangePassportDataForm extends ClientFullForm
 	{
 		// всегда обязательные поля
 		$aRequired = array(
-			'old_passport_series',
-			'old_passport_number',
-			'statement',
-
 			'first_name',
 			'last_name',
 			'third_name',
@@ -45,7 +42,11 @@ class ChangePassportDataForm extends ClientFullForm
 			array(
 				array('old_passport_series', 'match', 'message' => 'Серия паспорта должна состоять из четырех цифр', 'pattern' => '/^\d{' . SiteParams::C_PASSPORT_S_LENGTH . '}$/'),
 				array('old_passport_number', 'match', 'message' => 'Номер паспорта должен состоять из шести цифр', 'pattern' => '/^\d{' . SiteParams::C_PASSPORT_N_LENGTH . '}$/'),
-				array('statement', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Номер заявления должен быть числом.')
+				array('statement', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Номер заявления должен быть числом.'),
+				array('old_passport_series', 'checkOldPassport','passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо заполнить поле "Серия паспорта"'),
+				array('old_passport_number', 'checkOldPassport','passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо заполнить поле "Номер паспорта"'),
+				array('statement', 'checkOldPassport', 'passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо заполнить поле "Номер заявления о смене паспорта"'),
+				array('passport_not_changed', 'numerical'),
 			);
 		$aRules = array_merge($this->getRulesByFields(
 			array(
@@ -94,7 +95,8 @@ class ChangePassportDataForm extends ClientFullForm
 
 				'old_passport_number' => 'Серия/номер',
 				'old_passport_series' => 'Серия/номер',
-				'statement'           => 'Номер заявления о смене паспорта'
+				'statement'           => 'Номер заявления о смене паспорта',
+				'passport_not_changed' => 'Паспорт не менялся на новый'
 
 			)
 		);
@@ -113,6 +115,7 @@ class ChangePassportDataForm extends ClientFullForm
 			'old_passport_series',
 			'old_passport_number',
 			'statement',
+			'passport_not_changed',
 
 			'passport_series',
 			'passport_number',
@@ -135,5 +138,14 @@ class ChangePassportDataForm extends ClientFullForm
 		);
 	}
 
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+
+	public function checkOldPassport($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkOldPassport($attribute, $param);
+	}
 }
 
