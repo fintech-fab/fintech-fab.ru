@@ -12,6 +12,9 @@
 			<?php if(Yii::app()->user->hasFlash('error')):?>
 				<div class="alert alert-error"><?= Yii::app()->user->getFlash('error'); ?></div>
 			<?php endif; ?>
+			<?php if(Yii::app()->user->hasFlash('warning')):?>
+				<div class="alert alert-warning"><?= Yii::app()->user->getFlash('warning'); ?></div>
+			<?php endif; ?>
 			<?= $content; ?>
 		</div>
 		<!-- content -->

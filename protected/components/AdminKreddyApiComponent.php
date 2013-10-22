@@ -44,6 +44,7 @@ class AdminKreddyApiComponent
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Заём поступит {channel_name} в течение нескольких минут. ';
 
+
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
@@ -86,6 +87,7 @@ class AdminKreddyApiComponent
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
 	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
+	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
@@ -106,7 +108,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
 	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
-	const API_ACTION_CHANGE_PASSPORT = 'siteClient/changePassport';
+	const API_ACTION_CHANGE_PERSONAL_DATA = 'siteClient/doChangePersonalData';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -121,6 +123,8 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
+
+	const C_NEED_PASSPORT_DATA = "Вы прошли идентификацию, но не заполнили форму подтверждения документов. {passport_url_start}Заполнить форму.{passport_url_end}";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -171,6 +175,26 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Форматирование сообщения по шаблону
+	 *
+	 * @param $sMessage
+	 *
+	 * @return string
+	 */
+
+	public function formatMessage($sMessage)
+	{
+		$aReplace = array(
+			'{passport_url_start}' => CHtml::openTag("a", array(
+				"href" => Yii::app()->createUrl("/account/changePassport"),
+			)), // ссылка на форму изменения паспорта
+			'{passport_url_end}'   => CHtml::closeTag("a")
+		);
+
+		return strtr($sMessage, $aReplace);
+	}
+
+	/**
 	 * @return array
 	 */
 	public function attributeNames()
@@ -191,7 +215,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Авторизация в API, получаем токен и сохраняем в сессию
+	 * Авторизация в API по логину и паролю, получаем токен и сохраняем в сессию
 	 *
 	 * @param $sPhone
 	 * @param $sPassword
@@ -206,6 +230,10 @@ class AdminKreddyApiComponent
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
+
+			if ($this->checkIsNeedPassportData()) {
+				Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
+			}
 
 			return true;
 		}
@@ -425,6 +453,13 @@ class AdminKreddyApiComponent
 		}
 
 		$this->aClientInfo = $aData;
+
+		$bClientOnIdentify = $this->getClientOnIdentify();
+		//если клиент ушел на идентификацию
+		//проверяем, требуется ли заново ввести паспортные данные
+		if ($bClientOnIdentify&&$this->checkIsNeedPassportData()) {
+			Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
+		}
 
 		return $aData;
 	}
@@ -1186,21 +1221,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Проверка возможности подписки
-	 *
-	 * @return bool
-	 */
-	public function checkChangePassport()
-	{
-		//запрашиваем статус
-		//$this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT, array('getStatus' => 1));
-		//если ошибка, то возвращаем false
-		//в setLastMessage при этом после запроса записалось сообщение с причиной отказа
-		//return (!$this->getIsError());
-		return true;
-	}
-
-	/**
 	 * Отправка СМС с кодом подтверждения смены паспорта
 	 *
 	 * @return bool
@@ -1208,7 +1228,7 @@ class AdminKreddyApiComponent
 	public function sendSmsChangePassport()
 	{
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1237,8 +1257,8 @@ class AdminKreddyApiComponent
 	public function changePassport($sSmsCode, $aPassportData)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
-			array('sms_code' => $sSmsCode, 'passportData' => $aPassportData));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
+			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1328,6 +1348,18 @@ class AdminKreddyApiComponent
 		$this->getData('check_identify');
 
 		return (!$this->getIsError() && $this->getIsNeedIdentify());
+	}
+
+	/**
+	 * Проверка, нужно ли ввести паспортные данные
+	 *
+	 * @return bool
+	 */
+	public function checkIsNeedPassportData()
+	{
+		$this->getData('check_identify');
+
+		return (!$this->getIsError() && $this->getIsNeedPassportData());
 	}
 
 	/**
@@ -1920,6 +1952,15 @@ class AdminKreddyApiComponent
 		return ($this->getLastCode() === self::ERROR_NEED_IDENTIFY);
 	}
 
+	/**
+	 * Проверка, требуется ли подтверждение/изменение паспортных данных
+	 * @return bool
+	 */
+	public function getIsNeedPassportData()
+	{
+		return ($this->getLastCode() === self::ERROR_NEED_PASSPORT_DATA);
+	}
+
 
 	/**
 	 * @return string
@@ -2113,5 +2154,21 @@ class AdminKreddyApiComponent
 		return (!empty(Yii::app()->session['aPassportData'][$sField]))
 			? Yii::app()->session['aPassportData'][$sField]
 			: false;
+	}
+
+	/**
+	 * @param $bState
+	 */
+	public function setClientOnIdentify($bClientIsOnIdentify)
+	{
+		Yii::app()->session['bClientOnIdentify'] = $bClientIsOnIdentify;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getClientOnIdentify()
+	{
+		return (!empty(Yii::app()->session['bClientOnIdentify']));
 	}
 }

@@ -32,6 +32,9 @@ $this->menu[] = array(
 	'label' => 'Привязка пластиковой карты', 'url' => array('/account/default/addCard')
 );
 $this->menu[] = array(
+	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
+);
+$this->menu[] = array(
 	'label' => 'Выход', 'url' => array('/account/default/logout')
 );
 

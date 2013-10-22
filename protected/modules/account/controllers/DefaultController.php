@@ -38,7 +38,7 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport'
+					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport','goIdentify'
 				),
 				'users'   => array('@'),
 			),
@@ -272,12 +272,13 @@ class DefaultController extends Controller
 	{
 		//проверяем статус смены паспорта
 		//если сменить нельзя, то выводим сообщение о статусе
-		if(!Yii::app()->adminKreddyApi->checkChangePassport())
+		/** TODO если не нужно, то выпилить
+		 * if(!Yii::app()->adminKreddyApi->checkChangePassport())
 		{
 			$sMessage = Yii::app()->adminKreddyApi->getLastMessage();
 			$this->render('change_passport_data/change_status', array('sMessage'=>$sMessage));
 			Yii::app()->end();
-		}
+		}*/
 
 		//проверяем, авторизован ли клиент по СМС-паролю
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
@@ -290,6 +291,27 @@ class DefaultController extends Controller
 			$this->render('change_passport_data/need_sms_auth', array('passFormRender' => $sPassFormRender));
 			Yii::app()->end();
 		}
+
+		//проверяем, прошел ли клиент идентификацию, прежде чем менять паспортные данные
+		$bIsNeedPassportData = true;// Yii::app()->adminKreddyApi->checkIsNeedPassportData();
+		if(!$bIsNeedPassportData)//если нет
+		{
+			//получаем данные для отправки на идентификацию
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
+				//выводим форму отправки на идентификацию
+				$this->render('change_passport_data/need_identify', array('model' => $oIdentify));
+				Yii::app()->end();
+			}
+		} //иначе идем дальше, рисуем форму
+		/**
+		 * Требование $bIsNeedPassportData создается после прохождения идентификации, т.е. после прохождения
+		 * идентификации метод checkIsNeedPassportData() вернет true,
+		 * потому когда он возвращает false, мы просто предлагаем пройти идентификацию
+		 */
 
 		$oChangePassportForm = new ChangePassportDataForm();
 
@@ -365,6 +387,14 @@ class DefaultController extends Controller
 	}
 
 	/**
+	 * Экшен получает эвент нажатия кнопки видеоидентификации
+	 */
+	public function actionGoIdentify()
+	{
+		Yii::app()->adminKreddyApi->setClientOnIdentify(true);
+		Yii::app()->end();
+	}
+	/**
 	 * Вывод формы выбора продукта для подписки
 	 */
 	public function actionSubscribe()
@@ -388,7 +418,7 @@ class DefaultController extends Controller
 				if ($aGetIdent) {
 					$oIdentify = new VideoIdentifyForm();
 					$oIdentify->setAttributes($aGetIdent);
-					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
+					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
 					//выводим форму отправки на идентификацию
 					$this->render('need_identify', array('model' => $oIdentify));
 					Yii::app()->end();

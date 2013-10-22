@@ -4,6 +4,7 @@
  */
 
 ?>
+<?php if(Yii::app()->adminKreddyApi->getPassportDataField('old_passport_series')): ?>
 <strong>Старый паспорт:</strong>
 <ul>
 	<li>
@@ -12,8 +13,9 @@
 	</li>
 
 </ul>
+<?php endif; ?>
 
-<strong>Новый паспорт:</strong>
+<strong>Паспорт:</strong>
 <ul>
 	<li>
 		<strong>Фамилия:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('last_name') ?>

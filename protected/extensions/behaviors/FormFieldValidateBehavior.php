@@ -551,9 +551,10 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	public function checkOldPassport($attribute, $param)
 	{
-		$sPassportNoChanged = $this->owner->$param['passport_not_changed'];
+		$sPassportNotChanged = $this->owner->$param['passport_not_changed'];
 
-		if (!$sPassportNoChanged) {
+
+		if (!$sPassportNotChanged) {
 			if (empty($this->owner->$attribute)) {
 				$this->owner->addError($attribute, $param['message']);
 			}
@@ -563,5 +564,20 @@ class FormFieldValidateBehavior extends CBehavior
 
 	}
 
+	/**
+	 * проверка, что содержит только русские буквы и знаки препинания
+	 * @param string $attribute
+	 * @param array  $param
+	 */
+	public function checkValidRus($attribute, $param)
+	{
+		if ($this->owner->$attribute) {
+			if (!preg_match('#^[а-яё0-9,\-./() ]+$#ui', $this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} else {
+				$this->formatName($this->owner->$attribute);
+			}
+		}
+	}
 
 }
