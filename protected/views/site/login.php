@@ -1,7 +1,7 @@
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
-/* @var $form CActiveForm */
+/* @var $form TbActiveForm */
 
 $this->pageTitle = Yii::app()->name . ' - Вход';
 $this->breadcrumbs = array(
