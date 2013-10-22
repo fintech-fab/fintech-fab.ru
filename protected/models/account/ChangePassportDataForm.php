@@ -11,9 +11,9 @@ class ChangePassportDataForm extends ClientFullForm
 	public $old_passport_series;
 	public $old_passport_number;
 	public $passport_not_changed;
-	public $change_passport_ticket;
-	public $change_passport_reason;
-	public $change_passport_department;
+	public $passport_change_ticket;
+	public $passport_change_reason;
+	public $passport_change_department;
 	public $confirm;
 
 	/**
@@ -40,7 +40,8 @@ class ChangePassportDataForm extends ClientFullForm
 			'address_reg_city',
 			'address_reg_address',
 		);
-
+		//TODO написать тесты на весь этот код
+		//TODO проверить все правила на вероятность XSS
 		$aMyRules =
 			array(
 				array('old_passport_series', 'match', 'message' => 'Серия паспорта должна состоять из четырех цифр', 'pattern' => '/^\d{' . SiteParams::C_PASSPORT_S_LENGTH . '}$/'),
@@ -50,17 +51,17 @@ class ChangePassportDataForm extends ClientFullForm
 
 				array('old_passport_series', 'checkOldPassport','passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо указать серию паспорта'),
 				array('old_passport_number', 'checkOldPassport','passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо указать номер паспорта'),
-				array('change_passport_reason', 'checkOldPassport','passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо указать номер паспорта'),
+				array('passport_change_reason', 'checkOldPassport','passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо указать номер паспорта'),
 
-				array('change_passport_reason','in','range'=>array_keys(Dictionaries::$aChangePassportReasons)),
+				array('passport_change_reason','in','range'=>array_keys(Dictionaries::$aChangePassportReasons)),
 
-				array('change_passport_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Номер заявления должен быть числом'),
+				array('passport_change_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Номер заявления должен быть числом'),
 
-				//TODO сделать отдельное правило проверки
-				array('change_passport_ticket', 'checkOldPassport', 'passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо указать номер талона-уведомления, полученного при подаче заявления об утере или краже паспорта'),
-				array('change_passport_department', 'checkOldPassport', 'passport_not_changed'=>'passport_not_changed', 'message' => 'Необходимо указать наименование и адрес отделения МВД, принявшего заявление об утере или краже паспорта'),
 
-				array('change_passport_department','checkValidRus','message'=>'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
+				array('passport_change_ticket', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать номер талона-уведомления, полученного при подаче заявления об утере или краже паспорта'),
+				array('passport_change_department', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать наименование и адрес отделения МВД, принявшего заявление об утере или краже паспорта'),
+
+				array('passport_change_department','checkValidRus','message'=>'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
 
 				array('passport_not_changed', 'numerical'),
 
@@ -113,10 +114,10 @@ class ChangePassportDataForm extends ClientFullForm
 
 				'old_passport_number' => 'Серия/номер',
 				'old_passport_series' => 'Серия/номер',
-				'change_passport_ticket'           => 'Номер талона-уведомления',
+				'passport_change_ticket'           => 'Номер талона-уведомления',
 				'passport_not_changed' => 'Паспорт не менялся на новый',
-				'change_passport_reason'=>'Причина смены паспорта',
-				'change_passport_department'=>'Отделеление МВД России, принявшее заявление'
+				'passport_change_reason'=>'Причина смены паспорта',
+				'passport_change_department'=>'Отделеление МВД России, принявшее заявление'
 
 			)
 		);
@@ -134,10 +135,10 @@ class ChangePassportDataForm extends ClientFullForm
 
 			'old_passport_series',
 			'old_passport_number',
-			'change_passport_ticket',
-			'change_passport_department',
+			'passport_change_ticket',
+			'passport_change_department',
 			'passport_not_changed',
-			'change_passport_reason',
+			'passport_change_reason',
 
 			'passport_series',
 			'passport_number',
@@ -162,6 +163,8 @@ class ChangePassportDataForm extends ClientFullForm
 	}
 
 	/**
+	 * Проверка полей старого паспорта на required, если стоит чекбокс - то не required
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -169,6 +172,17 @@ class ChangePassportDataForm extends ClientFullForm
 	public function checkOldPassport($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkOldPassport($attribute, $param);
+	}
+
+	/**
+	 * Проверка required дополнительных полей в случае если паспорт утерян или украден
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkPassportLostStolen($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkPassportLostStolen($attribute, $param);
 	}
 
 	/**

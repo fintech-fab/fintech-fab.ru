@@ -11,6 +11,15 @@
 		<strong>Серия и номер:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('old_passport_series'); ?>
 		&nbsp;/&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('old_passport_number'); ?>
 	</li>
+	<li>
+		<strong>Причина смены паспорта:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_change_reason'); ?>
+	</li>
+	<li>
+		<strong>Номер талона-уведомления:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_change_ticket'); ?>
+	</li>
+	<li>
+		<strong>Отделеление МВД России, принявшее заявление:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_change_department'); ?>
+	</li>
 
 </ul>
 <?php endif; ?>

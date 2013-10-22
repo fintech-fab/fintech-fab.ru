@@ -12,28 +12,46 @@ $this->pageTitle = Yii::app()->name . " - Изменение паспортны�
 <?php
 Yii::app()->clientScript->registerScript('formName', '
 var oOldPassportData = $("#oldPassportData");
-//после загрузки страницы прячем форму ввода данных старого паспорта, если стоит чекбокс
-if ($("#passport_not_changed").find("input[type=checkbox]").prop("checked")) {
-		oOldPassportData.find(":input").attr("disabled", "disabled").addClass("disabled").val("").parents(".control-group").removeClass("error").addClass("success").find(".help-inline").hide();
-		oOldPassportData.hide();
-	}
 
-$("#passport_not_changed").find("input[type=checkbox]").change(function () {
+var passportNotChanged = $("#passport_not_changed").find("input[type=checkbox]");
+passportNotChanged.change(function () {
 	/*
 	 * Проверяем, установлен или снят чекбокс, и либо убираем и дизейблим, либо наоборот соответствующие части формы
 	 * Обязательно убираем класс error/success и очищаем поля при этом
 	 */
 
-	if (!$("#passport_not_changed").find("input[type=checkbox]").prop("checked")) {
+	if (!passportNotChanged.prop("checked")) {
 		oOldPassportData.find(":input").attr("disabled", false).removeClass("disabled").parents(".control-group").removeClass("error success");
 		oOldPassportData.show();
 	} else {
 		oOldPassportData.find(":input").attr("disabled", "disabled").addClass("disabled").val("").parents(".control-group").removeClass("error").addClass("success").find(".help-inline").hide();
 		oOldPassportData.hide();
 	}
-
-
+	changeReason.change();
 });
+
+	var changeReason = jQuery("#' . get_class($oChangePassportForm) . '_passport_change_reason");
+	var changePassAdditionalFields = $("#changePassportTicketDepartment");
+	changeReason.change(function()
+	{
+
+		//если причина смены ==2 (утеря или кража)
+		if(changeReason.find(":selected").val()==2){
+			//отображаем дополнительные поля
+			changePassAdditionalFields.find(":input").attr("disabled", false).removeClass("disabled").parents(".control-group").removeClass("error success");
+			changePassAdditionalFields.show();
+
+		} else {
+			//прячем дополнительные поля
+				changePassAdditionalFields.find(":input").attr("disabled", "disabled").addClass("disabled").val("").parents(".control-group").removeClass("error").addClass("success").find(".help-inline").hide();
+				changePassAdditionalFields.hide();
+		}
+
+	});
+
+	//после загрузки страницы прячем форму ввода данных старого паспорта, если стоит чекбокс
+	passportNotChanged.change();
+	changeReason.change();//вызываем сразу после загрузки страницы
 ', CClientScript::POS_LOAD);
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -74,9 +92,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<div class="row">
 		<div class="span5">
 			<div>
-				<?= $form->dropDownListRow($oChangePassportForm,'change_passport_reason',Dictionaries::$aChangePassportReasons); ?>
-				<?= $form->textFieldRow($oChangePassportForm, 'change_passport_ticket'); ?>
-				<?= $form->textFieldRow($oChangePassportForm, 'change_passport_department'); ?>
+				<?= $form->dropDownListRow($oChangePassportForm, 'passport_change_reason', Dictionaries::$aChangePassportReasons); ?>
+				<div id="changePassportTicketDepartment">
+					<?= $form->textFieldRow($oChangePassportForm, 'passport_change_ticket'); ?>
+					<?= $form->textFieldRow($oChangePassportForm, 'passport_change_department'); ?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -156,6 +176,7 @@ $this->endWidget();
 //при изменении типа документа заново валидировать поле с номером документа.
 
 Yii::app()->clientScript->registerScript('validate_document_number', '
+
 	jQuery("#' . get_class($oChangePassportForm) . '_document").change(function()
 	{
 		var form=$("#' . get_class($oChangePassportForm) . '");
@@ -177,7 +198,7 @@ Yii::app()->clientScript->registerScript('validate_document_number', '
 	        });
 	    });
 	});
-');
+', CClientScript::POS_LOAD);
 
 ?>
 

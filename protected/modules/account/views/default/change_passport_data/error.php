@@ -10,7 +10,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение паспортны�
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
-	'action' => Yii::app()->createUrl('/account/changePassportConfirm'),
+	'action' => Yii::app()->createUrl('/account/changePassportSendSmsCode'),
 ));
 
 //TODO тут выводить паспортные данные

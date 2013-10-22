@@ -1521,7 +1521,7 @@ class AdminKreddyApiComponent
 		//TODO убрать
 		Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
 
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
 
 		$response = curl_exec($ch);
 
@@ -2151,6 +2151,12 @@ class AdminKreddyApiComponent
 	 */
 	public function getPassportDataField($sField)
 	{
+		if($sField==='passport_change_reason'&&!empty(Yii::app()->session['aPassportData'][$sField])){
+			return (!empty(Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]))
+				?Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]
+				:false;
+		}
+
 		return (!empty(Yii::app()->session['aPassportData'][$sField]))
 			? Yii::app()->session['aPassportData'][$sField]
 			: false;

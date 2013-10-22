@@ -38,7 +38,8 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport','goIdentify'
+					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport','goIdentify',
+					'ChangePassportSendSmsCode','ChangePassportCheckSmsCode'
 				),
 				'users'   => array('@'),
 			),
@@ -378,7 +379,7 @@ class DefaultController extends Controller
 					$this->render('change_passport_data/success');
 					Yii::app()->end();
 				} else {
-					$oSmsCodeForm->addError('smsCode', 'Ошибка из API'); //сунуть сюда ошибку из API
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage()); //сунуть сюда ошибку из API
 				}
 			}
 		}

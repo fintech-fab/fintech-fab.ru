@@ -580,4 +580,20 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
+	/**
+	 * Проверка required дополнительных полей в случае если паспорт утерян или украден
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkPassportLostStolen($attribute, $param)
+	{
+		//2=>'Утеря или кража',
+		$bPassportLostStolen = ($this->owner->$param['passport_change_reason']==2);
+		if($bPassportLostStolen&&empty($this->owner->$attribute)){
+			$this->owner->addError($attribute, $param['message']);
+		}
+
+	}
+
 }
