@@ -26,7 +26,7 @@ $this->pageTitle = Yii::app()->name . ' - Вход в личный кабине�
 
 	<div class="row">
 		<?= $form->labelEx($model, 'password'); ?>
-		<?= $form->passwordField($model, 'password'); ?>
+		<?= $form->passwordField($model, 'password','autocomplete' => 'off'); ?>
 		<?= $form->error($model, 'password'); ?>
 	</div>
 

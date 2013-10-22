@@ -47,6 +47,6 @@ $productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + arr
 </div>
 <?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
 <div class="span6">
-	<?= $form->passwordFieldRow($oClientCreateForm, 'password', $htmlOptions); ?>
-	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', $htmlOptions); ?>
+	<?= $form->passwordFieldRow($oClientCreateForm, 'password', $htmlOptions+array('autocomplete' => 'off')); ?>
+	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', $htmlOptions+array('autocomplete' => 'off')); ?>
 </div>

@@ -31,7 +31,7 @@ $this->breadcrumbs = array(
 
 	<div class="row">
 		<?= $form->labelEx($model, 'password'); ?>
-		<?= $form->passwordField($model, 'password'); ?>
+		<?= $form->passwordField($model, 'password',array('autocomplete' => 'off')); ?>
 		<?= $form->error($model, 'password'); ?>
 	</div>
 

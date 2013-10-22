@@ -78,7 +78,7 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 	?>
 
 	<label>Введите пароль из SMS:</label>
-	<?= $form->textField($model, 'smsPassword', array('class' => 'span4')); ?>
+	<?= $form->textField($model, 'smsPassword', array('class' => 'span4','autocomplete' => 'off')); ?>
 	<?= $form->error($model, 'smsPassword'); ?>
 
 	<div class="clearfix"></div>

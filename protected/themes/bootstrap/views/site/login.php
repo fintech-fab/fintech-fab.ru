@@ -30,7 +30,7 @@ $this->breadcrumbs = array(
 
 	<?php echo $form->passwordFieldRow($model, 'password', array(
 		'hint' => 'Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>',
-	)); ?>
+		'autocomplete' => 'off')); ?>
 
 	<?php echo $form->checkBoxRow($model, 'rememberMe'); ?>
 
