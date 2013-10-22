@@ -28,7 +28,7 @@ $this->breadcrumbs = array(
 	</div>
 
 	<div class="row">
-		<?= $form->passwordFieldRow($model, 'password'); ?>
+		<?= $form->passwordFieldRow($model, 'password',array('autocomplete' => 'off')); ?>
 	</div>
 
 	<div class="row buttons">
