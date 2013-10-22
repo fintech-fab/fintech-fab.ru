@@ -294,7 +294,7 @@ class DefaultController extends Controller
 		}
 
 		//проверяем, прошел ли клиент идентификацию, прежде чем менять паспортные данные
-		$bIsNeedPassportData = true;// Yii::app()->adminKreddyApi->checkIsNeedPassportData();
+		$bIsNeedPassportData = Yii::app()->adminKreddyApi->checkIsNeedPassportData();
 		if(!$bIsNeedPassportData)//если нет
 		{
 			//получаем данные для отправки на идентификацию
@@ -395,6 +395,7 @@ class DefaultController extends Controller
 		Yii::app()->adminKreddyApi->setClientOnIdentify(true);
 		Yii::app()->end();
 	}
+
 	/**
 	 * Вывод формы выбора продукта для подписки
 	 */

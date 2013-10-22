@@ -1345,6 +1345,7 @@ class AdminKreddyApiComponent
 	 */
 	public function checkIsNeedIdentify()
 	{
+		//todo кеширование
 		$this->getData('check_identify');
 
 		return (!$this->getIsError() && $this->getIsNeedIdentify());
@@ -1357,6 +1358,7 @@ class AdminKreddyApiComponent
 	 */
 	public function checkIsNeedPassportData()
 	{
+		//todo кеширование
 		$this->getData('check_identify');
 
 		return (!$this->getIsError() && $this->getIsNeedPassportData());
@@ -1932,6 +1934,7 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_CODE
 			&& $this->getLastCode() !== self::ERROR_NOT_ALLOWED
 			&& $this->getLastCode() !== self::ERROR_NEED_IDENTIFY
+			&& $this->getLastCode() !== self::ERROR_NEED_PASSPORT_DATA
 		);
 	}
 
