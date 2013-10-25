@@ -30,12 +30,39 @@ class FooterLinks extends CActiveRecord
 	}
 
 	/**
+	 * @param $iSite
+	 *
 	 * @return CActiveRecord[]
 	 */
-	public static function getAllLinks()
+	public static function getSiteLinks($iSite)
 	{
-		//TODO сделать кэш через зависимости
-		return self::model()->cache(60)->findAll(array('order' => 'link_order'));
+
+		return self::model()->cache(60)->scopeSiteLinks($iSite)->findAll(array('order' => 'link_order'));
+	}
+
+	/**
+	 * @param $iSite
+	 *
+	 * @return $this
+	 */
+	private function scopeSiteLinks($iSite)
+	{
+		$oCriteria = new CDbCriteria();
+		if ($iSite === 1) {
+			$oCriteria->addColumnCondition(array(
+				'show_site1' => '1',
+			));
+		} elseif($iSite === 2) {
+			$oCriteria->addColumnCondition(array(
+				'show_site2' => '1',
+			));
+		}
+
+		$oCriteria->order = 'link_order ASC';
+
+		$this->setDbCriteria($oCriteria);
+
+		return $this;
 	}
 
 	/**
