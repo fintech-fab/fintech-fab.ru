@@ -2335,12 +2335,4 @@ class AdminKreddyApiComponent
 	{
 		return (!empty(Yii::app()->session['bClientOnIdentify']));
 	}
-
-	/**
-	 * Отправляем в API эвент - клиент ушел на идентификацию
-	 */
-	public function goIdentify()
-	{
-		$this->requestAdminKreddyApi(self::API_ACTION_GO_IDENTIFY);
-	}
 }

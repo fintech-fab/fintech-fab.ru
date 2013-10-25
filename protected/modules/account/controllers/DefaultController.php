@@ -569,10 +569,7 @@ class DefaultController extends Controller
 	public function actionGoIdentify()
 	{
 		//ставим флаг "клиент ушел на идентификацию"
-		//TODO вынести в API goidentify()
 		Yii::app()->adminKreddyApi->setClientOnIdentify(true);
-		//посылаем в API эвент "клиент ушел на идентификацию"
-		Yii::app()->adminKreddyApi->goIdentify();
 		Yii::app()->end();
 	}
 
