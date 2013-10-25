@@ -39,7 +39,7 @@ class DefaultController extends Controller
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					/*'addCard', 'verifyCard',*/
-					'successCard','refresh'
+					'successCard', 'refresh'
 				),
 				'users'   => array('@'),
 			),
@@ -87,6 +87,7 @@ class DefaultController extends Controller
 	{
 		Yii::app()->end();
 	}
+
 	/**
 	 * Главная страница личного кабинета
 	 */
@@ -120,12 +121,27 @@ class DefaultController extends Controller
 			}
 		}
 
+		$sIdentifyRender = '';
+
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/");
+				//выводим форму отправки на идентификацию
+				$sIdentifyRender = $this->renderPartial('index_need_identify', array('model' => $oIdentify), true);
+			}
+		}
+
 		/**
 		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
-		$this->render($sView, array('passFormRender' => $sPassFormRender));
+
+		$this->render($sView, array('passFormRender' => $sPassFormRender, 'sIdentifyRender' => $sIdentifyRender));
+
 	}
 
 	/**

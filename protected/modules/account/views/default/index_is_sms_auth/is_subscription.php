@@ -39,3 +39,4 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
 <strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br />
 
+<?= $sIdentifyRender ?>

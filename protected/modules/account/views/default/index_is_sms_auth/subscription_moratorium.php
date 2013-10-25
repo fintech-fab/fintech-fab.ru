@@ -44,3 +44,5 @@ $this->widget(
 	Вы можете отправить новую заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan() ?>
 	<br />
 </div>
+
+<?= $sIdentifyRender ?>
