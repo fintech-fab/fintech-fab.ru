@@ -7,10 +7,11 @@ class BottomTabsWidget extends CWidget
 {
 	public $tabs;
 	public $tabsArray;
+	public $iSite = 1;
 
 	public function run()
 	{
-		$this->tabs = Tabs::getAllTabs();
+		$this->tabs = Tabs::getSiteTabs($this->iSite);
 
 		$first = 0;
 		if (!empty($this->tabs)) {

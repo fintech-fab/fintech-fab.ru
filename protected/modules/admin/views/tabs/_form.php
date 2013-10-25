@@ -1,14 +1,14 @@
 <?php
 /* @var $this TabsController */
 /* @var $model Tabs */
-/* @var $form CActiveForm */
+/* @var $form TbActiveForm */
 
 Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
 
 <div class="form">
 
-	<?php $form = $this->beginWidget('CActiveForm', array(
+	<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		'id'                   => 'tabs-form',
 		'enableAjaxValidation' => false,
 	)); ?>
@@ -27,6 +27,11 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		<?php echo $form->labelEx($model, 'tab_title'); ?>
 		<?php echo $form->textField($model, 'tab_title', array('size' => 20, 'maxlength' => 30)); ?>
 		<?php echo $form->error($model, 'tab_title'); ?>
+	</div>
+
+	<div class="row">
+		<?= $form->checkBoxRow($model,'show_site1'); ?>
+		<?= $form->checkBoxRow($model,'show_site2'); ?>
 	</div>
 
 	<?php

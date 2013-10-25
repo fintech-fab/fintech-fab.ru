@@ -11,6 +11,9 @@
  * @property string  $link_title
  * @property string  $link_url
  * @property string  $link_content
+ * @property integer $show_site1
+ * @property integer $show_site2
+ * @method FooterLinks cache()
  */
 class FooterLinks extends CActiveRecord
 {
@@ -61,9 +64,10 @@ class FooterLinks extends CActiveRecord
 			array('link_url', 'length', 'max' => 255),
 			array('link_url', 'match', 'pattern' => '#^((https?|ftp)://[а-яё\w\.\-]+\.([a-zа-яё]{2,6}\.?))?/[\#&;:?=\w\.\-\/]*$#ui', 'message' => 'Неверный URL, примеры верных URL: абсолютный - http://site.ru, относительный - /pages/view (обязательно должен начинаться со слэша)'),
 			array('link_content', 'safe'),
+			array('show_site1, show_site2', 'numerical', 'integerOnly' => true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('link_id, link_order, link_name, link_title, link_url, link_content', 'safe', 'on' => 'search'),
+			array('link_id, link_order, link_name, link_title, link_url, link_content, show_site1, show_site2', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -89,6 +93,8 @@ class FooterLinks extends CActiveRecord
 			'link_title'   => 'Заголовок ссылки',
 			'link_url'     => 'URL ссылки',
 			'link_content' => 'Содержимое ссылки',
+			'show_site1'   => 'Показывать на kreddy.ru',
+			'show_site2'   => 'Показывать на ivanovo.kreddy.ru'
 		);
 	}
 
@@ -110,6 +116,8 @@ class FooterLinks extends CActiveRecord
 		$criteria->compare('link_title', $this->link_title, true);
 		$criteria->compare('link_url', $this->link_url, true);
 		$criteria->compare('link_content', $this->link_content, true);
+		$criteria->compare('show_site1', $this->show_site1);
+		$criteria->compare('show_site2', $this->show_site2);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
@@ -118,6 +126,10 @@ class FooterLinks extends CActiveRecord
 			)
 		));
 	}
+
+	/**
+	 * @return bool
+	 */
 
 	protected function beforeValidate()
 	{
