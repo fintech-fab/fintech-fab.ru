@@ -19,7 +19,7 @@ Yii::app()->clientScript->registerScript('goIdentify', '
 	//по нажатию кнопки отправляем эвент ajax-ом, затем сабмитим форму
 	function goIdentify()
 	{
-		$.ajax({url: "http://dev.kreddy.popov/account/goIdentify"}).done(function() {
+		$.ajax({url: "/account/goIdentify"}).done(function() {
 			$("#identify-form").submit();
 		});
 	}
