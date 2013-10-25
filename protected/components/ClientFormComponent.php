@@ -605,6 +605,21 @@ class ClientFormComponent
 			: false;
 	}
 
+	public function goShopping()
+	{
+		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
+		foreach ($aProducts as $i => $aProduct) {
+			if (array_search('Покупки', $aProduct)) {
+				$aShoppingProduct = $i;
+			}
+		}
+		if (isset($aShoppingProduct)) {
+			//TODO сменить при переходе на новую версию
+			Yii::app()->session['ClientSelectProductForm2'] = array('product'=> $aShoppingProduct);
+		}
+		$this->nextStep();
+	}
+
 	/**
 	 * @return int номер выбранного спссоба
 	 */
