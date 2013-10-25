@@ -39,11 +39,6 @@ $aCrumbs = array(
 	?>
 	<div id="alertsmssent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS_NUM; ?>&nbsp;+7<?= Yii::app()->clientForm->getSmsSentPhone(); ?></div>
 
-	<div class="clearfix"></div>
-
-	<div class="alert in alert-warning">
-		После ввода кода из SMS-сообщения необходимо пройти идентификацию для завершения регистрации.
-	</div>
 
 	<div class="clearfix"></div>
 	<label>Введите код из SMS:</label>
@@ -65,6 +60,12 @@ $aCrumbs = array(
 	<?php
 	$this->endWidget();
 	?>
+
+	<div class="clearfix"></div>
+
+	<div class="alert in alert-warning" style="font-size: 12pt;">
+		После ввода кода из SMS-сообщения необходимо пройти идентификацию для завершения регистрации.
+	</div>
 
 	<?php $this->widget('YaMetrikaGoalsWidget', array(
 		'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
