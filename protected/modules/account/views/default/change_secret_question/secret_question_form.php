@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение секретног�
 ?>
 <h4>Изменение секретного вопроса</h4>
 
-<?php$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'secret-question-form',
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',

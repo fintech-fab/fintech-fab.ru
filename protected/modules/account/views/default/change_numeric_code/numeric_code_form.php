@@ -9,7 +9,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение цифрового 
 
 
 
-<?php$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'numeric-code-form',
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',

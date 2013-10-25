@@ -507,7 +507,7 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 		}
-		$this->render('change_secret_question/numeric_code_form', array('oChangeSecretQuestionForm' => $oChangeSecretQuestionForm));
+		$this->render('change_secret_question/secret_question_form', array('oChangeSecretQuestionForm' => $oChangeSecretQuestionForm));
 	}
 
 	/**
