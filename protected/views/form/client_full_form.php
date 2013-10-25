@@ -71,9 +71,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			</li>
 		</ol>
 	</div>
-	<!--div class="row">
-	<?php //$this->widget('SelectedProductWidget'); ?>
-	</div-->
+
 	<div class="clearfix"></div>
 	<script type="text/javascript">
 		$('#second-document-popover').popover({
