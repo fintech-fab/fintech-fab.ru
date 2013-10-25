@@ -11,7 +11,7 @@ class SelectedProductWidget extends CWidget {
 
     public function run() {
 	    //TODO выпилить при переходе на новую версию
-		$this->chosenProduct=(isset(Yii::app()->session['ClientSelectProductForm']['product']))?Yii::app()->session['ClientSelectProductForm']['product']:1;
+		$this->chosenProduct=Yii::app()->clientForm->getSessionProduct();
 		$this->render('selected_product');
     }
 }
