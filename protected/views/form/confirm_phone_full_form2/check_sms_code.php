@@ -14,7 +14,8 @@ $this->pageTitle = Yii::app()->name;
 $aCrumbs = array(
 	array('Выбор пакета', 1),
 	array('Заявка на займ', 2),
-	array('Подтверждение номера телефона', 3)
+	array('Подтверждение номера телефона', 3),
+	array('Идентификация', 4)
 );
 ?>
 
@@ -40,6 +41,11 @@ $aCrumbs = array(
 
 	<div class="clearfix"></div>
 
+	<div class="alert in alert-warning">
+		После ввода кода из SMS-сообщения необходимо пройти идентификацию для завершения регистрации.
+	</div>
+
+	<div class="clearfix"></div>
 	<label>Введите код из SMS:</label>
 	<?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
 	<?= $form->error($oClientCreateForm, 'sms_code'); ?>
@@ -54,6 +60,7 @@ $aCrumbs = array(
 			'label'      => 'Далее →',
 		)); ?>
 	</div>
+
 
 	<?php
 	$this->endWidget();
