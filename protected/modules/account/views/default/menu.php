@@ -35,6 +35,12 @@ $this->menu[] = array(
 	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
 );
 $this->menu[] = array(
+	'label' => 'Изменение секретного вопроса', 'url' => array('/account/default/changeSecretQuestion')
+);
+$this->menu[] = array(
+	'label' => 'Изменение цифрового кода', 'url' => array('/account/default/changeNumericCode')
+);
+$this->menu[] = array(
 	'label' => 'Выход', 'url' => array('/account/default/logout')
 );
 

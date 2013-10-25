@@ -3,8 +3,8 @@
 /* @var IkTbActiveForm $form */
 /* @var $passFormRender */
 
-$this->pageTitle = Yii::app()->name . " - Изменение паспортных данных";
+$this->pageTitle = Yii::app()->name . " - Изменение цифрового кода";
 ?>
-<h4>Изменение паспортных данных</h4>
+<h4>Изменение цифрового кода</h4>
 
 <?= $passFormRender // отображаем форму запроса SMS-пароля ?>

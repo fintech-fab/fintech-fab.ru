@@ -97,6 +97,7 @@ class AdminKreddyApiComponent
 
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
+	const API_ACTION_GO_IDENTIFY = 'video/goIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
 	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/checkSubscribe';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
@@ -109,6 +110,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
 	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
 	const API_ACTION_CHANGE_PERSONAL_DATA = 'siteClient/doChangePersonalData';
+
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -124,7 +126,7 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
-	const C_NEED_PASSPORT_DATA = "Вы прошли идентификацию, но не заполнили форму подтверждения документов. {passport_url_start}Заполнить форму.{passport_url_end}";
+	const C_NEED_PASSPORT_DATA = "Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -134,6 +136,7 @@ class AdminKreddyApiComponent
 	private $bIsCanSubscribe = null; //клиент может оформить подписку
 	private $bIsCanGetLoan = null; //клиент может взять заём
 	private $bScoringAccepted = null;
+	private $aCheckIdentify;
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
@@ -457,7 +460,7 @@ class AdminKreddyApiComponent
 		$bClientOnIdentify = $this->getClientOnIdentify();
 		//если клиент ушел на идентификацию
 		//проверяем, требуется ли заново ввести паспортные данные
-		if ($bClientOnIdentify&&$this->checkIsNeedPassportData()) {
+		if ($bClientOnIdentify && $this->checkIsNeedPassportData()) {
 			Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
 		}
 
@@ -1220,6 +1223,37 @@ class AdminKreddyApiComponent
 		}
 	}
 
+
+	/**
+	 * Заявка на смену паспортных данных, подписанная СМС-кодом
+	 *
+	 * @param string $sSmsCode
+	 *
+	 * @param        $aPassportData
+	 *
+	 * @return bool
+	 */
+	public function changePassport($sSmsCode, $aPassportData)
+	{
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
+			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
 	/**
 	 * Отправка СМС с кодом подтверждения смены паспорта
 	 *
@@ -1246,21 +1280,103 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Заява на смену паспортных данных, подписанная СМС-кодом
+	 * Заявка на смену цифрового, подписанная СМС-кодом
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param        $aPassportData
+	 * @param        $aNumericCode
+	 *
 	 *
 	 * @return bool
 	 */
-	public function changePassport($sSmsCode, $aPassportData)
+	public function changeNumericCode($sSmsCode, $aNumericCode)
 	{
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
-			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
+			array('sms_code' => $sSmsCode, 'ChangeNumericCodeForm' => $aNumericCode));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Отправка СМС с кодом подтверждения смены паспорта
+	 *
+	 * @return bool
+	 */
+	public function sendSmsChangeNumericCode()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Заявка на смену цифрового, подписанная СМС-кодом
+	 *
+	 * @param string $sSmsCode
+	 *
+	 * @param        $aNumericCode
+	 *
+	 *
+	 * @return bool
+	 */
+	public function changeSecretQuestion($sSmsCode, $aSecretQuestion)
+	{
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
+			array('sms_code' => $sSmsCode, 'ChangeSecretQuestionForm' => $aSecretQuestion));
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Отправка СМС с кодом подтверждения смены паспорта
+	 *
+	 * @return bool
+	 */
+	public function sendSmsChangeSecretQuestion()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -1345,7 +1461,6 @@ class AdminKreddyApiComponent
 	 */
 	public function checkIsNeedIdentify()
 	{
-		//todo кеширование
 		$this->getData('check_identify');
 
 		return (!$this->getIsError() && $this->getIsNeedIdentify());
@@ -1358,7 +1473,6 @@ class AdminKreddyApiComponent
 	 */
 	public function checkIsNeedPassportData()
 	{
-		//todo кеширование
 		$this->getData('check_identify');
 
 		return (!$this->getIsError() && $this->getIsNeedPassportData());
@@ -1494,7 +1608,15 @@ class AdminKreddyApiComponent
 				break;
 		}
 
+		if ($sAction === 'check_identify' && !empty($this->aCheckIdentify)) {
+			$aData = $this->aCheckIdentify;
+		}
+
 		$aData = $this->requestAdminKreddyApi($sAction);
+
+		if ($sAction === 'check_identify'){
+			$this->aCheckIdentify = $aData;
+		}
 
 		return $aData;
 	}
@@ -2148,16 +2270,48 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @param array $aNumericCode
+	 */
+	public function setNumericCode(array $aNumericCode)
+	{
+		Yii::app()->session['aNumericCode'] = $aNumericCode;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getNumericCode()
+	{
+		return Yii::app()->session['aNumericCode'];
+	}
+
+	/**
+	 * @param array $aSecretQuestion
+	 */
+	public function setSecretQuestion(array $aSecretQuestion)
+	{
+		Yii::app()->session['aSecretQuestion'] = $aSecretQuestion;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSecretQuestion()
+	{
+		return Yii::app()->session['aSecretQuestion'];
+	}
+
+	/**
 	 * @param $sField
 	 *
 	 * @return string|bool
 	 */
 	public function getPassportDataField($sField)
 	{
-		if($sField==='passport_change_reason'&&!empty(Yii::app()->session['aPassportData'][$sField])){
+		if ($sField === 'passport_change_reason' && !empty(Yii::app()->session['aPassportData'][$sField])) {
 			return (!empty(Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]))
-				?Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]
-				:false;
+				? Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]
+				: false;
 		}
 
 		return (!empty(Yii::app()->session['aPassportData'][$sField]))
@@ -2166,7 +2320,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $bState
+	 * @param $bClientIsOnIdentify
+	 *
 	 */
 	public function setClientOnIdentify($bClientIsOnIdentify)
 	{
@@ -2179,5 +2334,13 @@ class AdminKreddyApiComponent
 	public function getClientOnIdentify()
 	{
 		return (!empty(Yii::app()->session['bClientOnIdentify']));
+	}
+
+	/**
+	 * Отправляем в API эвент - клиент ушел на идентификацию
+	 */
+	public function goIdentify()
+	{
+		$this->requestAdminKreddyApi(self::API_ACTION_GO_IDENTIFY);
 	}
 }

@@ -55,7 +55,7 @@ passportNotChanged.change(function () {
 ', CClientScript::POS_LOAD);
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                   => 'products-form',
+	'id'                   => 'passport-form',
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(

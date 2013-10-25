@@ -38,8 +38,10 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport','goIdentify',
-					'ChangePassportSendSmsCode','ChangePassportCheckSmsCode'
+					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
+					'changePassportSendSmsCode', 'changePassportCheckSmsCode', 'goIdentify',
+					'changeNumericCode','changeNumericCodeSendSmsCode','changeNumericCodeCheckSmsCode',
+					'changeSecretQuestion','changeSecretQuestionSendSmsCode','changeSecretQuestionCheckSmsCode'
 				),
 				'users'   => array('@'),
 			),
@@ -271,15 +273,6 @@ class DefaultController extends Controller
 	 */
 	public function actionChangePassport()
 	{
-		//проверяем статус смены паспорта
-		//если сменить нельзя, то выводим сообщение о статусе
-		/** TODO если не нужно, то выпилить
-		 * if(!Yii::app()->adminKreddyApi->checkChangePassport())
-		{
-			$sMessage = Yii::app()->adminKreddyApi->getLastMessage();
-			$this->render('change_passport_data/change_status', array('sMessage'=>$sMessage));
-			Yii::app()->end();
-		}*/
 
 		//проверяем, авторизован ли клиент по СМС-паролю
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
@@ -295,7 +288,7 @@ class DefaultController extends Controller
 
 		//проверяем, прошел ли клиент идентификацию, прежде чем менять паспортные данные
 		$bIsNeedPassportData = Yii::app()->adminKreddyApi->checkIsNeedPassportData();
-		if(!$bIsNeedPassportData)//если нет
+		if (!$bIsNeedPassportData) //если нет
 		{
 			//получаем данные для отправки на идентификацию
 			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
@@ -325,6 +318,7 @@ class DefaultController extends Controller
 			$aPost = Yii::app()->request->getParam('ChangePassportDataForm');
 			$oChangePassportForm->setAttributes($aPost);
 			if ($oChangePassportForm->validate()) {
+				//сохраняе в сессию введенные данные
 				Yii::app()->adminKreddyApi->setPassportData($aPost);
 				$oSmsCodeForm = new SMSCodeForm('sendRequired');
 				$this->render('change_passport_data/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
@@ -379,7 +373,7 @@ class DefaultController extends Controller
 					$this->render('change_passport_data/success');
 					Yii::app()->end();
 				} else {
-					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage()); //сунуть сюда ошибку из API
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				}
 			}
 		}
@@ -388,11 +382,197 @@ class DefaultController extends Controller
 	}
 
 	/**
+	 * Смена цифрового кода, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeNumericCode()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changeNumericCode'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_numeric_code/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
+		$oChangeNumericCodeForm = new ChangeNumericCodeForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangeNumericCodeForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangeNumericCodeForm');
+			$oChangeNumericCodeForm->setAttributes($aPost);
+			if ($oChangeNumericCodeForm->validate()) {
+				Yii::app()->adminKreddyApi->setNumericCode($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('change_numeric_code/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_numeric_code/numeric_code_form', array('oChangeNumericCodeForm' => $oChangeNumericCodeForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeNumericCodeSendSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//запрашиваем СМС-код для подтверждения
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangeNumericCode();
+				if ($bSendSms) { //если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_numeric_code/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_numeric_code/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_numeric_code/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены цифрового кода
+	 */
+
+	public function actionChangeNumericCodeCheckSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
+				$aNumericCode = Yii::app()->adminKreddyApi->getNumericCode();
+				//отправляем данные в API
+				$bChangePassport = Yii::app()->adminKreddyApi->changeNumericCode($oSmsCodeForm->smsCode, $aNumericCode);
+				if ($bChangePassport) { //если нет ошибок
+					$this->render('change_numeric_code/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				}
+			}
+		}
+
+		$this->render('change_numeric_code/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Смена секретного вопроса, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeSecretQuestion()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changeSecretQuestion'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_secret_question/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
+		$oChangeSecretQuestionForm = new ChangeSecretQuestionForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangeSecretQuestionForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangeSecretQuestionForm');
+			$oChangeSecretQuestionForm->setAttributes($aPost);
+			if ($oChangeSecretQuestionForm->validate()) {
+				Yii::app()->adminKreddyApi->setSecretQuestion($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('change_secret_question/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_secret_question/numeric_code_form', array('oChangeSecretQuestionForm' => $oChangeSecretQuestionForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeSecretQuestionSendSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//запрашиваем СМС-код для подтверждения
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangeSecretQuestion();
+				if ($bSendSms) { //если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_secret_question/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_secret_question/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_secret_question/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены паспортных данных
+	 */
+
+	public function actionChangeSecretQuestionCheckSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
+				$aSecretQuestion = Yii::app()->adminKreddyApi->getSecretQuestion();
+				//отправляем данные в API
+				$bChangePassport = Yii::app()->adminKreddyApi->changeNumericCode($oSmsCodeForm->smsCode, $aSecretQuestion);
+				if ($bChangePassport) { //если нет ошибок
+					$this->render('change_secret_question/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				}
+			}
+		}
+
+		$this->render('change_secret_question/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
 	 * Экшен получает эвент нажатия кнопки видеоидентификации
 	 */
 	public function actionGoIdentify()
 	{
+		//ставим флаг "клиент ушел на идентификацию"
+		//TODO вынести в API goidentify()
 		Yii::app()->adminKreddyApi->setClientOnIdentify(true);
+		//посылаем в API эвент "клиент ушел на идентификацию"
+		Yii::app()->adminKreddyApi->goIdentify();
 		Yii::app()->end();
 	}
 
@@ -425,6 +605,13 @@ class DefaultController extends Controller
 					$this->render('need_identify', array('model' => $oIdentify));
 					Yii::app()->end();
 				}
+			} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
+				if (Yii::app()->user->hasFlash('warning')) {
+					Yii::app()->user->getFlash('warning');
+				}
+				Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
+
+				$this->redirect('/account/changePassport');
 			}
 
 			$sView = 'subscription/subscribe';
