@@ -71,7 +71,14 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 		'link_name',
 		'link_title',
 		'link_url',
-		//'link_content',
+		array(
+			'name'=>'show_site1',
+			'value'=> '($data["show_site1"])?"Да":"Нет"'
+		),
+		array(
+			'name'=>'show_site2',
+			'value'=> '($data["show_site2"])?"Да":"Нет"'
+		),
 		array(
 			'class' => 'bootstrap.widgets.TbButtonColumn',
 		),

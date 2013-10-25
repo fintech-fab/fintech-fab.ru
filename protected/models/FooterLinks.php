@@ -37,7 +37,7 @@ class FooterLinks extends CActiveRecord
 	public static function getSiteLinks($iSite)
 	{
 
-		return self::model()->cache(60)->scopeSiteLinks($iSite)->findAll(array('order' => 'link_order'));
+		return self::model()->cache(60)->scopeSiteLinks($iSite)->findAll();
 	}
 
 	/**
