@@ -1,11 +1,11 @@
 <div class="row span4 conditions">
 	<strong>Выбранные условия:</strong>
 	<?php
-	$n = Dictionaries::$aDataTimes[$this->chosenProduct];
+	/*$n = Dictionaries::$aDataTimes[$this->chosenProduct];
 	$d = new DateTime('now');
 	$d->add(new DateInterval('P' . $n . 'D'));
 	$getDateToPayUntil = Dictionaries::$aDays[$d->format('w')] . ", " . $d->format('j') . " " . Dictionaries::$aMonths[$d->format('n')] . " " . $d->format('Y');
-
+*/
 	//TODO сделать формирование данных для виджета на основе данных из API
 	?>
 	<ul>

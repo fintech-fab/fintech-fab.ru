@@ -21,22 +21,20 @@
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-01.jpg'),
 							'label' => 'Быстро! Удобно! Дистанционно!',
-							'url'=> 'javascript: alert(document.cookie);'
 						),
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-02.jpg'),
 							'label' => 'Мобильный нужен не только для разговоров',
-							'url'=> '/form'
+							'url'=> '/pages/view/test'
 						),
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-03.jpg'),
 							'label' => 'Не отказывай себе в маленьких радостях!',
-							'url'=> '/form'
+							'url'=> '/form/shopping'
 						),
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-04.jpg'),
 							'label' => 'Выбери свой пакет займов!',
-							'url'=> '/form'
 						),
 					),
 				)

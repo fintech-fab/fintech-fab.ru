@@ -195,7 +195,7 @@ class ClientFormComponent
 			 * т.е. клиент вернулся на анкету и ввел другой номер,
 			 * то позволяем снова отправить СМС с кодом водтверждения
 			 */
-			if(!$this->compareSessionAndSentPhones()){
+			if (!$this->compareSessionAndSentPhones()) {
 				$this->setFlagSmsSent(false);
 			}
 
@@ -234,8 +234,9 @@ class ClientFormComponent
 		$aClientForm = ClientData::getClientDataById($iClientId);
 
 		// если код уже есть в базе, ставим флаг и вовзращаем true
-		if (!empty($aClientForm['sms_code'])&&$this->compareSessionAndSentPhones()) {
+		if (!empty($aClientForm['sms_code']) && $this->compareSessionAndSentPhones()) {
 			$this->setFlagSmsSent(true);
+
 			return true;
 		}
 
@@ -271,6 +272,7 @@ class ClientFormComponent
 			// возвращаем true
 			return true;
 		}
+
 		return Dictionaries::C_ERR_SMS_CANT_SEND;
 	}
 
@@ -719,6 +721,21 @@ class ClientFormComponent
 		}
 	}
 
+	public function goShopping()
+	{
+		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
+		foreach ($aProducts as $i => $aProduct) {
+			if (array_search('Покупки', $aProduct)) {
+				$aShoppingProduct = $i;
+			}
+		}
+		if (isset($aShoppingProduct)) {
+			Yii::app()->session['ClientSelectProductForm'] = array('product'=> $aShoppingProduct);
+			Yii::app()->session['ClientSelectProductForm2'] = array('product'=> $aShoppingProduct);
+		}
+		$this->nextStep();
+	}
+
 	/**
 	 * @return int номер выбранного спссоба
 	 */
@@ -857,6 +874,6 @@ class ClientFormComponent
 	 */
 	public function compareSessionAndSentPhones()
 	{
-		return (Yii::app()->clientForm->getSmsSentPhone()===Yii::app()->clientForm->getSessionPhone());
+		return (Yii::app()->clientForm->getSmsSentPhone() === Yii::app()->clientForm->getSessionPhone());
 	}
 }

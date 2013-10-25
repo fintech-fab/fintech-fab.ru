@@ -82,6 +82,12 @@ class FormController extends Controller
 		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
+	public function actionShopping()
+	{
+		Yii::app()->clientForm->goShopping();
+		$this->redirect('/form');
+	}
+
 	/**
 	 *  Переход на шаг $step
 	 * @param int $step

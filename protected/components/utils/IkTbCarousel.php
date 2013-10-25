@@ -111,10 +111,15 @@ class IkTbCarousel extends TbCarousel
 			}
 
 			echo CHtml::openTag('div', $item['itemOptions']);
-			$this->beginWidget('CHtmlPurifier');
+			$this->beginWidget('CHtmlPurifier', array(
+				'options'=>array('URI.AllowedSchemes' => array(
+					'http'  => true,
+					'https' => true
+				))
+			));
 
 			if (!empty($item['url'])) {
-				echo '<a href="'.CHtml::normalizeUrl($item['url']).'">';
+				echo '<a href="' . CHtml::normalizeUrl($item['url']) . '">';
 
 			}
 
@@ -156,6 +161,7 @@ class IkTbCarousel extends TbCarousel
 			if (!empty($item['url'])) {
 				echo '</a>';
 			}
+			$this->endWidget();
 			echo '</div>';
 		}
 	}
