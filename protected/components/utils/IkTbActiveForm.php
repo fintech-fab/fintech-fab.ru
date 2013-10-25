@@ -2,6 +2,9 @@
 
 Yii::import('bootstrap.widgets.TbActiveForm');
 
+/**
+ * Class IkTbActiveForm
+ */
 class IkTbActiveForm extends TbActiveForm
 {
 
@@ -34,7 +37,13 @@ class IkTbActiveForm extends TbActiveForm
 
 	}
 
-
+	/**
+	 * @param CModel $oForm
+	 * @param        $aAttributes
+	 * @param array  $aHtmlOptions
+	 *
+	 * @return string
+	 */
 	public function fieldPassportRow(CModel $oForm, $aAttributes, $aHtmlOptions = array())
 	{
 
@@ -155,6 +164,13 @@ class IkTbActiveForm extends TbActiveForm
 
 	}
 
+	/**
+	 * @param CModel $oForm
+	 * @param        $sAttribute
+	 * @param array  $aHtmlOptions
+	 *
+	 * @return string
+	 */
 	public function dateFieldRow(CModel $oForm, $sAttribute, $aHtmlOptions = array())
 	{
 		$sReturn = '';
@@ -182,7 +198,14 @@ class IkTbActiveForm extends TbActiveForm
 
 	}
 
-
+	/**
+	 * @param CModel $oForm
+	 * @param        $sAttribute
+	 * @param        $sLabel
+	 * @param array  $aHtmlOptions
+	 *
+	 * @return string
+	 */
 	public function fieldCombineDaysHours(CModel $oForm, $sAttribute, $sLabel, $aHtmlOptions = array())
 	{
 

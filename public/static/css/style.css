@@ -2,9 +2,9 @@
 	padding-top: 0px;
 }
 
-.toppage {
+/*.toppage {
 	background: url('../img/bg-title.jpg') center 0px no-repeat white;
-}
+}*/
 
 .navbar-top div.navbar-inner-main {
 	background: url('../img/kreddy_bg.png');
@@ -82,14 +82,47 @@ section .intro, div .intro {
 	color: #777;
 }
 
-.hero-unit {
+.top_page .hero-unit {
 	background: none;
-	width: 400px;
-	height: 160px;
-	margin-left: 0px;
-	margin-top: 0px;
-	padding: 30px 60px 60px 0px;
+	/*width: 400px;*/
+	/*height: 160px;*/
+	margin-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0 0 0 0;
 }
+
+.navbar-top
+{
+	margin-bottom: 10px;
+}
+
+.top_page .carousel {
+	margin-bottom: 0;
+}
+
+.carousel-indicators {
+	left: 25px;
+	top: 250px;
+}
+
+.carousel-control {
+	left: 0;
+}
+
+.carousel-control.right {
+	right: 0;
+}
+
+.carousel-indicators li
+{
+	background-color: #9999FF;
+}
+
+.carousel-indicators .active {
+	background-color: #555555;
+}
+
 
 .hero-unit p.intro {
 	font-size: 18px;
