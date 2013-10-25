@@ -14,9 +14,7 @@
 				'application.components.utils.IkTbCarousel',
 				array(
 					'slide'   => true,
-					'options' => array(
-						'indicate'=>true,
-					),
+					'displayPrevAndNext'=>false,
 					'items'   => array(
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-01.jpg'),

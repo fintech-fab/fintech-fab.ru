@@ -132,7 +132,7 @@ section .intro, div .intro {
 }
 
 .carousel-indicators li {
-	background-color: #9999FF;
+	background-color: #CCCCCC;
 }
 
 .carousel-indicators .active {

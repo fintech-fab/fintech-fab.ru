@@ -33,7 +33,9 @@ class IkTbCarousel extends TbCarousel
 		$id = $this->htmlOptions['id'];
 
 		echo CHtml::openTag('div', $this->htmlOptions);
-		$this->renderIndicators($this->items);
+		if($this->indicators){
+			$this->renderIndicators($this->items);
+		}
 		echo '<div class="carousel-inner">';
 		$this->renderItems($this->items);
 		echo '</div>';
