@@ -730,7 +730,7 @@ class ClientFormComponent
 			}
 		}
 		if (isset($aShoppingProduct)) {
-			Yii::app()->session['ClientSelectProductForm'] = array('product'=> $aShoppingProduct);
+			//TODO сменить при переходе на новую версию
 			Yii::app()->session['ClientSelectProductForm2'] = array('product'=> $aShoppingProduct);
 		}
 		$this->nextStep();

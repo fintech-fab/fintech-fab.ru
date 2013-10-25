@@ -10,7 +10,8 @@ class SelectedProductWidget extends CWidget {
 	public $chosenProduct; // индекс выбранного продукта
 
     public function run() {
-		$this->chosenProduct=Yii::app()->clientForm->getSessionProduct();
+	    //TODO выпилить при переходе на новую версию
+		$this->chosenProduct=(isset(Yii::app()->session['ClientSelectProductForm']['product']))?Yii::app()->session['ClientSelectProductForm']['product']:1;
 		$this->render('selected_product');
     }
 }

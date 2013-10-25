@@ -92,8 +92,7 @@ section .intro, div .intro {
 	padding: 0 0 0 0;
 }
 
-.navbar-top
-{
+.navbar-top {
 	margin-bottom: 10px;
 }
 
@@ -108,14 +107,31 @@ section .intro, div .intro {
 
 .carousel-control {
 	left: 0;
+
+}
+
+.carousel a:focus{
+	outline: none;
+}
+
+.carousel a:active{
+	outline: none;
+}
+
+
+.carousel-control:focus {
+	outline: none;
+}
+
+.carousel-control:active {
+	outline: none;
 }
 
 .carousel-control.right {
 	right: 0;
 }
 
-.carousel-indicators li
-{
+.carousel-indicators li {
 	background-color: #9999FF;
 }
 
@@ -123,12 +139,11 @@ section .intro, div .intro {
 	background-color: #555555;
 }
 
-
 .hero-unit p.intro {
 	font-size: 18px;
 }
 
-.hero-unit li{
+.hero-unit li {
 	font-size: 16px;
 }
 
@@ -228,7 +243,7 @@ section .intro, div .intro {
 
 .btn-info:active,
 .btn-info.active {
-	background-color: #24748c    \9;
+	background-color: #24748c     \9;
 }
 
 #case {
@@ -256,7 +271,6 @@ footer, div .footer {
 	margin-top: 5px;
 }
 
-
 nav .account {
 	margin-top: 10px;
 	color: #8a2547;
@@ -272,16 +286,15 @@ nav .account .btn {
 	text-decoration: none;
 }
 
-.dotted:hover{
+.dotted:hover {
 	text-decoration: none;
 }
-
 
 .dashed {
 	border-bottom: 1px dashed;
 	text-decoration: none;
 }
 
-.dashed:hover{
+.dashed:hover {
 	text-decoration: none;
 }
