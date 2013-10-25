@@ -23,7 +23,7 @@
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-02.jpg'),
 							'label' => 'Мобильный нужен не только для разговоров',
-							'url'=> '/pages/view/test'
+							'url'=> '/pages/view/check'
 						),
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-03.jpg'),
