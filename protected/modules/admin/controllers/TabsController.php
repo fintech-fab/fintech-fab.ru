@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class TabsController
+ */
 
 class TabsController extends Controller
 {

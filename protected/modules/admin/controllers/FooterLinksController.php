@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class FooterLinksController
+ */
 class FooterLinksController extends Controller
 {
 	/**
@@ -19,6 +21,9 @@ class FooterLinksController extends Controller
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function actions()
 	{
 		return array(
