@@ -42,7 +42,7 @@ class AdminKreddyApiComponent
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Заём поступит {channel_name} в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} в течение нескольких минут. ';
 
 
 	private $aAvailableStatuses = array(
@@ -54,7 +54,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
 		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
-		self::C_SUBSCRIPTION_PAID              => 'Заём доступен',
+		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
 		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
 		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
@@ -63,11 +63,11 @@ class AdminKreddyApiComponent
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
 		self::C_LOAN_DEBT                      => 'Задолженность по займу',
-		self::C_LOAN_ACTIVE                    => 'Заём перечислен', //+
-		self::C_LOAN_TRANSFER                  => 'Заём перечислен', //+
-		self::C_LOAN_AVAILABLE                 => 'Заём доступен',
-		self::C_LOAN_CREATED                   => 'Заём перечислен', //+
-		self::C_LOAN_PAID                      => 'Заём оплачен',
+		self::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
+		self::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
+		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
+		self::C_LOAN_CREATED                   => 'Займ перечислен', //+
+		self::C_LOAN_PAID                      => 'Займ оплачен',
 
 		self::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
 		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',

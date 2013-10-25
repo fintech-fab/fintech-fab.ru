@@ -8,7 +8,7 @@ $this->pageTitle = Yii::app()->name;
 
 $aCrumbs = array(
 	array('Выбор пакета', 1),
-	array('Заявка на заём', 2),
+	array('Заявка на займ', 2),
 	array('Подтверждение номера телефона', 3)
 );
 
@@ -71,6 +71,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			</li>
 		</ol>
 	</div>
+	<!--div class="row">
+	<?php //$this->widget('SelectedProductWidget'); ?>
+	</div-->
+	<div class="clearfix"></div>
 	<script type="text/javascript">
 		$('#second-document-popover').popover({
 			html: true,
