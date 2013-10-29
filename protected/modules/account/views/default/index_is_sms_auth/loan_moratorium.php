@@ -39,4 +39,4 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 	<br />
 </div>
 
-
+<?= $sIdentifyRender  ?>

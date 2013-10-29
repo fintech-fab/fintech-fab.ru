@@ -6,6 +6,9 @@
 				array(
 					'slide'   => true,
 					'displayPrevAndNext'=>false,
+					'options'=>array(
+						'interval'=>5000
+					),
 					'items'   => array(
 						array(
 							'image' => CHtml::encode('/static/img/carousel/kreddy-web-01.jpg'),

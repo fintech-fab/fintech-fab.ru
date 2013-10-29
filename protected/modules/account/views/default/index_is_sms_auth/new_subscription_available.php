@@ -48,3 +48,5 @@ $this->widget(
 		));?>
 	</div>
 <?php endif; ?>
+
+<?= $sIdentifyRender ?>

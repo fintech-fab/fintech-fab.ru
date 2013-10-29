@@ -24,3 +24,4 @@ if (Yii::app()->adminKreddyApi->getStatusMessage()) {
 <?php
 }
 ?>
+<?= $sIdentifyRender ?>
