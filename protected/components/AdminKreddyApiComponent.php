@@ -111,6 +111,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_PASSPORT = 'siteClient/doChangePassport';
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
+	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -163,17 +164,17 @@ class AdminKreddyApiComponent
 			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())), // название канала
 
 			'{account_url_start}'  => CHtml::openTag("a", array(
-				"href" => Yii::app()->createUrl("/account")
-			)), // ссылка на инфо о пакете
+					"href" => Yii::app()->createUrl("/account")
+				)), // ссылка на инфо о пакете
 			'{account_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о пакете
 
 			'{payments_url_start}' => CHtml::openTag("a", array(
-				"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
-			)), // ссылка на инфо о возможных вариантах оплаты
+					"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
+				)), // ссылка на инфо о возможных вариантах оплаты
 			'{payments_url_end}'   => CHtml::closeTag("a"), // /ссылка на инфо о возможных вариантах оплаты
 
 			'{contacts_url_start}' => CHtml::openTag("a",
-				array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")), // ссылка на инфо об отделении
+					array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")), // ссылка на инфо об отделении
 			'{contacts_url_end}'   => CHtml::closeTag("a"), // /ссылка на инфо об отделении
 		);
 	}
@@ -190,8 +191,8 @@ class AdminKreddyApiComponent
 	{
 		$aReplace = array(
 			'{passport_url_start}' => CHtml::openTag("a", array(
-				"href" => Yii::app()->createUrl("/account/changePassport"),
-			)), // ссылка на форму изменения паспорта
+					"href" => Yii::app()->createUrl("/account/changePassport"),
+				)), // ссылка на форму изменения паспорта
 			'{passport_url_end}'   => CHtml::closeTag("a")
 		);
 
@@ -1280,7 +1281,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Заявка на смену цифрового, подписанная СМС-кодом
+	 * Заявка на смену цифрового кода, подписанная СМС-кодом
 	 *
 	 * @param string $sSmsCode
 	 *
@@ -1311,7 +1312,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС с кодом подтверждения смены паспорта
+	 * Отправка СМС с кодом подтверждения смены цифрового кода
 	 *
 	 * @return bool
 	 */
@@ -1336,7 +1337,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Заявка на смену цифрового, подписанная СМС-кодом
+	 * Заявка на смену секретного вопроса, подписанная СМС-кодом
 	 *
 	 * @param string $sSmsCode
 	 *
@@ -1366,7 +1367,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС с кодом подтверждения смены паспорта
+	 * Отправка СМС с кодом подтверждения смены секретного вопроса
 	 *
 	 * @return bool
 	 */
@@ -1374,6 +1375,59 @@ class AdminKreddyApiComponent
 	{
 		//отправляем СМС с кодом
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Заявка на смену пароля, подписанная СМС-кодом
+	 *
+	 * @param $aData
+	 *
+	 *
+	 * @return bool
+	 */
+	public function changePassword($aData)
+	{
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData);
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Отправка СМС с кодом подтверждения смены пароля
+	 *
+	 * @return bool
+	 */
+	public function sendSmsChangePassword()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1609,13 +1663,14 @@ class AdminKreddyApiComponent
 
 		if ($sAction === 'check_identify' && !empty($this->aCheckIdentify)) {
 			$aData = $this->aCheckIdentify;
+		} else {
+			$aData = $this->requestAdminKreddyApi($sAction);
+			if ($sAction === 'check_identify') {
+				$this->aCheckIdentify = $aData;
+			}
 		}
 
-		$aData = $this->requestAdminKreddyApi($sAction);
 
-		if ($sAction === 'check_identify'){
-			$this->aCheckIdentify = $aData;
-		}
 
 		return $aData;
 	}
@@ -2341,6 +2396,22 @@ class AdminKreddyApiComponent
 	{
 		$aData = $this->getResetPassData();
 
-		return (!empty($aData['phone']))?$aData['phone']:false;
+		return (!empty($aData['phone'])) ? $aData['phone'] : false;
+	}
+
+	/**
+	 * @param array $aPassword
+	 */
+	public function setPassword(array $aPassword)
+	{
+		Yii::app()->session['aPassword'] = $aPassword;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPassword()
+	{
+		return Yii::app()->session['aPassword'];
 	}
 }

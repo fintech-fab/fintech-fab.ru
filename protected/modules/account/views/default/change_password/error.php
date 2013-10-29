@@ -3,14 +3,14 @@
 /* @var SMSCodeForm $oSmsCodeForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Изменение секретного вопроса";
+$this->pageTitle = Yii::app()->name . " - Изменение пароля";
 ?>
-	<h4>Изменение секретного вопроса</h4>
+	<h4>Изменение пароляа</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
-	'action' => Yii::app()->createUrl('/account/changeSecretQuestionSendSmsCode'),
+	'action' => Yii::app()->createUrl('/account/changePasswordSendSmsCode'),
 ));
 
 $oSmsCodeForm->sendSmsCode = 1;

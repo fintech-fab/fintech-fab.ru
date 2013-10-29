@@ -31,6 +31,7 @@ if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 $this->menu[] = array(
 	'label' => 'Привязка пластиковой карты', 'url' => array('/account/default/addCard')
 );
+$this->menu[] =  '';
 $this->menu[] = array(
 	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
 );
@@ -40,6 +41,10 @@ $this->menu[] = array(
 $this->menu[] = array(
 	'label' => 'Изменение цифрового кода', 'url' => array('/account/default/changeNumericCode')
 );
+$this->menu[] = array(
+	'label' => 'Изменение пароля', 'url' => array('/account/default/changePassword')
+);
+$this->menu[] =  '';
 $this->menu[] = array(
 	'label' => 'Выход', 'url' => array('/account/default/logout')
 );
@@ -64,7 +69,7 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 	<?php
 
 	$this->beginWidget('bootstrap.widgets.TbMenu', array(
-		'type'          => 'pills', // '', 'tabs', 'pills' (or 'list')
+		'type'          => 'list', // '', 'tabs', 'pills' (or 'list')
 		'stacked'       => true, // whether this is a stacked menu
 		'items'         => $this->menu,
 		'activateItems' => true,

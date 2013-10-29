@@ -55,13 +55,13 @@ class ChangePassportDataForm extends ClientFullForm
 
 				array('passport_change_reason','in','range'=>array_keys(Dictionaries::$aChangePassportReasons)),
 
-				array('passport_change_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Номер заявления должен быть числом'),
+				array('passport_change_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Необходимо указать номер (цифрами) талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
 
 
-				array('passport_change_ticket', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать номер талона-уведомления, полученного при подаче заявления об утере или краже паспорта'),
-				array('passport_change_department', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать наименование и адрес отделения МВД, принявшего заявление об утере или краже паспорта'),
+				array('passport_change_ticket', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать номер талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
+				array('passport_change_department', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать наименование (номер) или адрес отделения МВД, принявшего заявление об утере или краже паспорта'),
 
-				array('passport_change_department','checkValidRus','message'=>'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
+				array('passport_change_department','checkValidRus','message'=>'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания. Необходимо указать наименование (номер) или адрес отделения МВД, принявшего заявление об утере или краже паспорта'),
 
 				array('passport_not_changed', 'numerical'),
 
@@ -117,7 +117,7 @@ class ChangePassportDataForm extends ClientFullForm
 				'passport_change_ticket'           => 'Номер талона-уведомления',
 				'passport_not_changed' => 'Паспорт не менялся на новый',
 				'passport_change_reason'=>'Причина смены паспорта',
-				'passport_change_department'=>'Отделеление МВД России, принявшее заявление'
+				'passport_change_department'=>'Отделеление МВД России, принявшее заявление (номер или адрес)'
 
 			)
 		);
