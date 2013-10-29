@@ -1016,7 +1016,7 @@ class DefaultController extends Controller
 			//проверяем телефон на валидность и если введён новый телефон и не удалось отправить на него SMS, то выдаём соответствующее сообщение
 			if ($oForm->validate()) {
 				if (Yii::app()->adminKreddyApi->getResetPassPhone() !== $oForm->phone
-					&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, false)
+					&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($aPost, false)
 				) {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				} else {

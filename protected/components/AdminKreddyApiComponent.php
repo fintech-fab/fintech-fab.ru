@@ -108,7 +108,9 @@ class AdminKreddyApiComponent
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
 	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
-	const API_ACTION_CHANGE_PERSONAL_DATA = 'siteClient/doChangePersonalData';
+	const API_ACTION_CHANGE_PASSPORT = 'siteClient/doChangePassport';
+	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
+	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -353,20 +355,20 @@ class AdminKreddyApiComponent
 	/**
 	 * Запрос от API СМС-кода для подтверждения восстановления пароля
 	 *
-	 * @param      $sPhone
-	 * @param bool $bResend
+	 * @param array $aData
+	 * @param bool  $bResend
 	 *
 	 * @return bool
 	 */
-	public function resetPasswordSendSms($sPhone, $bResend = false)
+	public function resetPasswordSendSms(array $aData, $bResend = false)
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_resend' => (int)$bResend));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, $aData + array('sms_resend' => (int)$bResend));
 		//если результат успешный
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			//ставим флаг "смс отправлено" и сохраняем время отправки в сесссию
 			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
 			//сохраняем телефон в сессию
-			Yii::app()->adminKreddyApi->setResetPassPhone($sPhone);
+			Yii::app()->adminKreddyApi->setResetPassPhone($aData['phone']);
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -1235,7 +1237,8 @@ class AdminKreddyApiComponent
 	public function changePassport($sSmsCode, $aPassportData)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
+			//TODO изменить
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -1261,7 +1264,7 @@ class AdminKreddyApiComponent
 	public function sendSmsChangePassport()
 	{
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1291,7 +1294,8 @@ class AdminKreddyApiComponent
 	public function changeNumericCode($sSmsCode, $aNumericCode)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_NUMERIC_CODE,
+			//TODO изменить
 			array('sms_code' => $sSmsCode, 'ChangeNumericCodeForm' => $aNumericCode));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -1317,7 +1321,7 @@ class AdminKreddyApiComponent
 	public function sendSmsChangeNumericCode()
 	{
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_NUMERIC_CODE);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1347,7 +1351,8 @@ class AdminKreddyApiComponent
 	public function changeSecretQuestion($sSmsCode, $aSecretQuestion)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA,
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION,
+			//TODO изменить
 			array('sms_code' => $sSmsCode, 'ChangeSecretQuestionForm' => $aSecretQuestion));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -1373,7 +1378,7 @@ class AdminKreddyApiComponent
 	public function sendSmsChangeSecretQuestion()
 	{
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PERSONAL_DATA);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
