@@ -48,14 +48,14 @@ class IkTbCarousel extends TbCarousel
 		echo '</div>';
 
 		/** @var CClientScript $cs */
-		/*$cs = Yii::app()->getClientScript();
+		$cs = Yii::app()->getClientScript();
 		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
 		$cs->registerScript(__CLASS__ . '#' . $id, "jQuery('#{$id}').carousel({$options});");
 
 		foreach ($this->events as $name => $handler) {
 			$handler = CJavaScript::encode($handler);
 			$cs->registerScript(__CLASS__ . '#' . $id . '_' . $name, "jQuery('#{$id}').on('{$name}', {$handler});");
-		}*/
+		}
 	}
 
 	/**
