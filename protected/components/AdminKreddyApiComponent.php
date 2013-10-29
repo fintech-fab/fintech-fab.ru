@@ -1394,15 +1394,15 @@ class AdminKreddyApiComponent
 	/**
 	 * Заявка на смену пароля, подписанная СМС-кодом
 	 *
+	 * @param $sSmsCode
 	 * @param $aData
-	 *
 	 *
 	 * @return bool
 	 */
-	public function changePassword($aData)
+	public function changePassword($sSmsCode, $aData)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code'=>$sSmsCode));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1422,12 +1422,14 @@ class AdminKreddyApiComponent
 	/**
 	 * Отправка СМС с кодом подтверждения смены пароля
 	 *
+	 * @param array $aData
+	 *
 	 * @return bool
 	 */
-	public function sendSmsChangePassword()
+	public function sendSmsChangePassword(array $aData)
 	{
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD);
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -2412,6 +2414,6 @@ class AdminKreddyApiComponent
 	 */
 	public function getPassword()
 	{
-		return Yii::app()->session['aPassword'];
+		return (!empty(Yii::app()->session['aPassword']))?Yii::app()->session['aPassword']:array();
 	}
 }

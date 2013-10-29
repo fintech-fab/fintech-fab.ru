@@ -634,7 +634,8 @@ class DefaultController extends Controller
 			$oSmsCodeForm->setAttributes($aPost);
 			if ($oSmsCodeForm->validate()) {
 				//запрашиваем СМС-код для подтверждения
-				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangePassword();
+				$aData = Yii::app()->adminKreddyApi->getPassword();
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangePassword($aData);
 				if ($bSendSms) { //если СМС отправлено успешно
 					unset($oSmsCodeForm);
 					$oSmsCodeForm = new SMSCodeForm('codeRequired');

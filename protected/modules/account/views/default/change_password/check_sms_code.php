@@ -23,7 +23,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение пароля";
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'          => 'check-sms-form',
-		'action'      => Yii::app()->createUrl('/account/changePaswordCheckSmsCode'),
+		'action'      => Yii::app()->createUrl('/account/changePasswordCheckSmsCode'),
 		'htmlOptions' => array(
 			'class'        => "span4",
 			'autocomplete' => 'off',

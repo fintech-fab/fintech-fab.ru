@@ -117,7 +117,7 @@ class ChangePassportDataForm extends ClientFullForm
 				'passport_change_ticket'           => 'Номер талона-уведомления',
 				'passport_not_changed' => 'Паспорт не менялся на новый',
 				'passport_change_reason'=>'Причина смены паспорта',
-				'passport_change_department'=>'Отделеление МВД России, принявшее заявление (номер или адрес)'
+				'passport_change_department'=>'Отделение МВД России, принявшее заявление (номер или адрес)'
 
 			)
 		);

@@ -5,7 +5,7 @@
 
 $this->pageTitle = Yii::app()->name . " - Изменение пароля";
 ?>
-	<h4>Изменение пароляа</h4>
+	<h4>Изменение пароля</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -20,19 +20,10 @@ echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 
 	<?php //TODO вынести сообщения в константы ?>
 	<div class="alert in alert-block alert-error span7">
-		При отправке SMS с кодом произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка
+		При попытке изменения пароля произошла ошибка. Возможно, неверно указан старый пароль.<br/>
+		Попробуйте снова запросить пароль.<br />В случае, если ошибка
 		повторяется, обратитесь в контактный центр.
 	</div>
-
-	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType' => 'submit',
-			'type'       => 'primary',
-			'size'       => 'small',
-			'label'      => 'Отправить SMS с кодом подтверждения на номер +7' . Yii::app()->user->getMaskedId(),
-		)); ?>
-	</div>
-
 <?php
 
 $this->endWidget();
