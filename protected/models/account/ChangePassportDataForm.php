@@ -55,7 +55,7 @@ class ChangePassportDataForm extends ClientFullForm
 
 				array('passport_change_reason','in','range'=>array_keys(Dictionaries::$aChangePassportReasons)),
 
-				array('passport_change_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Необходимо указать номер (цифрами) талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
+				array('passport_change_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'message' => 'Необходимо указать номер (цифрами) талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
 
 
 				array('passport_change_ticket', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать номер талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
