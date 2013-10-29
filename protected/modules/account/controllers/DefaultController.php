@@ -40,8 +40,8 @@ class DefaultController extends Controller
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
 					'changePassportSendSmsCode', 'changePassportCheckSmsCode', 'goIdentify',
-					'changeNumericCode','changeNumericCodeSendSmsCode','changeNumericCodeCheckSmsCode',
-					'changeSecretQuestion','changeSecretQuestionSendSmsCode','changeSecretQuestionCheckSmsCode'
+					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
+					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode'
 				),
 				'users'   => array('@'),
 			),
@@ -348,6 +348,8 @@ class DefaultController extends Controller
 	 */
 	public function actionChangePassportSendSmsCode()
 	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
 		$oSmsCodeForm = new SMSCodeForm('sendRequired');
 		if (Yii::app()->request->getIsPostRequest()) {
 
@@ -375,6 +377,8 @@ class DefaultController extends Controller
 
 	public function actionChangePassportCheckSmsCode()
 	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
 		$oSmsCodeForm = new SMSCodeForm('codeRequired');
 		if (Yii::app()->request->getIsPostRequest()) {
 			$aPost = Yii::app()->request->getParam('SMSCodeForm');
@@ -565,7 +569,7 @@ class DefaultController extends Controller
 				//забираем сохраненные в сессию данные нового паспорта
 				$aSecretQuestion = Yii::app()->adminKreddyApi->getSecretQuestion();
 				//отправляем данные в API
-				$bChangePassport = Yii::app()->adminKreddyApi->changeNumericCode($oSmsCodeForm->smsCode, $aSecretQuestion);
+				$bChangePassport = Yii::app()->adminKreddyApi->changeSecretQuestion($oSmsCodeForm->smsCode, $aSecretQuestion);
 				if ($bChangePassport) { //если нет ошибок
 					$this->render('change_secret_question/success');
 					Yii::app()->end();
@@ -880,7 +884,7 @@ class DefaultController extends Controller
 
 		$oForm = new SMSCodeForm('codeRequired');
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
-		$bTriesExceed = false;
+
 
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
@@ -998,8 +1002,7 @@ class DefaultController extends Controller
 	/**
 	 *  Форма восстановления пароля, необходимого для входа в личный кабинет
 	 */
-	public
-	function actionResetPassword()
+	public function actionResetPassword()
 	{
 		$this->layout = '/layouts/column1';
 
@@ -1015,8 +1018,12 @@ class DefaultController extends Controller
 			$oForm->setAttributes($aPost);
 			//проверяем телефон на валидность и если введён новый телефон и не удалось отправить на него SMS, то выдаём соответствующее сообщение
 			if ($oForm->validate()) {
-				if (Yii::app()->adminKreddyApi->getResetPassPhone() !== $oForm->phone
-					&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($aPost, false)
+				$aData = Yii::app()->adminKreddyApi->getResetPassData();
+				if(empty($aData['phone'])){
+					$aData['phone'] = '';
+				}
+				if ($aData['phone'] !== $oForm->phone
+					&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->getAttributes(), false)
 				) {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				} else {
@@ -1042,10 +1049,12 @@ class DefaultController extends Controller
 				$this->redirect(Yii::app()->createUrl('account/resetPassSendPass'));
 			}
 			//загружаем в форму телефон, сохраненный в сессии
-			$oForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
+
+			$aData = Yii::app()->adminKreddyApi->getResetPassData();
+			$oForm->setAttributes($aData);
 			if ($oForm->validate()) {
 				//делаем запрос на повторную отправку смс
-				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, true)) {
+				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->getAttributes(), true)) {
 					$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
 				} else {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
@@ -1075,16 +1084,19 @@ class DefaultController extends Controller
 
 		if ($aPost) {
 			$oCodeForm->setAttributes($aPost);
-			$oCodeForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
+			$sSmsCode = $oCodeForm->sms_code;//временно сохраняем sms-код
+			$aData = Yii::app()->adminKreddyApi->getResetPassData();
+			$oCodeForm->setAttributes($aData);//загружаем в модель данные из сессии
+			$oCodeForm->sms_code = $sSmsCode; //возвращаем смс-код
 			if ($oCodeForm->validate()) {
-				$bResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($oCodeForm->phone, $oCodeForm->smsCode);
+				$bResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($oCodeForm->getAttributes());
 				//проверяем, удалось ли отправить смс
 				if ($bResult) {
 					//переходим на страницу "успешно"
 					$this->redirect(Yii::app()->createUrl("/account/resetPassSmsSentSuccess"));
 				} else {
 					//добавляем ошибку перед выводом формы
-					$oCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+					$oCodeForm->addError('sms_code', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				}
 			}
 		}
@@ -1132,6 +1144,7 @@ class DefaultController extends Controller
 			}
 
 			// display the login form
+			$oModel->password = '';//удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
 			$this->render('login', array('model' => $oModel));
 
 		} else {

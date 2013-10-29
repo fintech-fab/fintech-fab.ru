@@ -368,7 +368,7 @@ class AdminKreddyApiComponent
 			//ставим флаг "смс отправлено" и сохраняем время отправки в сесссию
 			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
 			//сохраняем телефон в сессию
-			Yii::app()->adminKreddyApi->setResetPassPhone($aData['phone']);
+			Yii::app()->adminKreddyApi->setResetPassData($aData);
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -387,14 +387,13 @@ class AdminKreddyApiComponent
 	/**
 	 * Проверка СМС-кода для подтверждения восстановления пароля
 	 *
-	 * @param $sPhone
-	 * @param $sSmsCode
+	 * @param array $aData
 	 *
 	 * @return string|bool
 	 */
-	public function resetPasswordCheckSms($sPhone, $sSmsCode)
+	public function resetPasswordCheckSms(array $aData)
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, array('phone' => $sPhone, 'sms_code' => $sSmsCode));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, $aData);
 
 		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1238,7 +1237,6 @@ class AdminKreddyApiComponent
 	{
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
-			//TODO изменить
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -1295,7 +1293,6 @@ class AdminKreddyApiComponent
 	{
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_NUMERIC_CODE,
-			//TODO изменить
 			array('sms_code' => $sSmsCode, 'ChangeNumericCodeForm' => $aNumericCode));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -1343,8 +1340,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param        $aNumericCode
-	 *
+	 * @param        $aSecretQuestion
 	 *
 	 * @return bool
 	 */
@@ -1352,7 +1348,6 @@ class AdminKreddyApiComponent
 	{
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION,
-			//TODO изменить
 			array('sms_code' => $sSmsCode, 'ChangeSecretQuestionForm' => $aSecretQuestion));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -1646,7 +1641,6 @@ class AdminKreddyApiComponent
 
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
 
-		//TODO убрать
 		Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
@@ -1654,7 +1648,6 @@ class AdminKreddyApiComponent
 		$response = curl_exec($ch);
 
 		if ($response) {
-			//TODO убрать
 			Yii::trace("Action: " . $sAction . " - Response: " . $response);
 			$aGetData = CJSON::decode($response);
 
@@ -1769,7 +1762,7 @@ class AdminKreddyApiComponent
 		Yii::app()->session['resetPassSmsCodeSent'] = null;
 		Yii::app()->session['resetPassSmsCodeSentTime'] = null;
 		Yii::app()->session['resetPassSmsCodeLeftTime'] = null;
-		Yii::app()->session['resetPasswordPhone'] = null;
+		Yii::app()->session['resetPasswordData'] = null;
 	}
 
 	/**
@@ -1823,11 +1816,12 @@ class AdminKreddyApiComponent
 	/**
 	 * Сохраняем в сессию телефон, на который запрошено восстановление пароля
 	 *
-	 * @param $sPhone string
+	 * @param array $aData
+	 *
 	 */
-	public function setResetPassPhone($sPhone)
+	public function setResetPassData(array $aData)
 	{
-		Yii::app()->session['resetPasswordPhone'] = $sPhone;
+		Yii::app()->session['resetPasswordData'] = $aData;
 	}
 
 	/**
@@ -1835,9 +1829,9 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string
 	 */
-	public function getResetPassPhone()
+	public function getResetPassData()
 	{
-		return (!empty(Yii::app()->session['resetPasswordPhone'])) ? Yii::app()->session['resetPasswordPhone'] : '';
+		return (!empty(Yii::app()->session['resetPasswordData'])) ? Yii::app()->session['resetPasswordData'] : '';
 	}
 
 	/**
@@ -1846,7 +1840,7 @@ class AdminKreddyApiComponent
 	 */
 	public function checkResetPassPhone()
 	{
-		return (!empty(Yii::app()->session['resetPasswordPhone']));
+		return (!empty(Yii::app()->session['resetPasswordData']['phone']));
 	}
 
 	/**
@@ -2338,5 +2332,15 @@ class AdminKreddyApiComponent
 	public function getClientOnIdentify()
 	{
 		return (!empty(Yii::app()->session['bClientOnIdentify']));
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getResetPassPhone()
+	{
+		$aData = $this->getResetPassData();
+
+		return (!empty($aData['phone']))?$aData['phone']:false;
 	}
 }
