@@ -21,16 +21,15 @@ class ChangePasswordForm extends ClientFullForm
 		);
 		$aMyRules =
 			array(
-				array('old_password', 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!'),
 			);
 		$aRules = array_merge($this->getRulesByFields(
 			array(
+				'old_password',
 				'password',
 				'password_repeat',
 			),
 			$aRequired
 		), $aMyRules);
-
 		return $aRules;
 
 	}
