@@ -626,9 +626,7 @@ class ClientCreateFormAbstract extends CFormModel
 		);
 		$aAttributes = $this->getAttributes();
 		foreach ($aAttributes as $sName =>&$sAttribute) {
-			if ($sName == 'password' || $sName == 'old_password' || $sName == 'password_repeat') {
-
-			} else {
+			if ($sName !== 'password' && $sName !== 'old_password' && $sName !== 'password_repeat') {
 				$sAttribute = $oPurifier->purify($sAttribute);
 			}
 		}
