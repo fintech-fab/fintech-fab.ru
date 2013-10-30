@@ -41,7 +41,6 @@ class ChangePassportDataForm extends ClientFullForm
 			'address_reg_address',
 		);
 		//TODO написать тесты на весь этот код
-		//TODO проверить все правила на вероятность XSS
 		$aMyRules =
 			array(
 				array('old_passport_series', 'match', 'message' => 'Серия паспорта должна состоять из четырех цифр', 'pattern' => '/^\d{' . SiteParams::C_PASSPORT_S_LENGTH . '}$/'),
