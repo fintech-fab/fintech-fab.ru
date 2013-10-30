@@ -329,8 +329,9 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 				case 'password':
 					$aRules[] = array($sFieldName, 'length', 'min' => '8');
-					$aRules[] = array($sFieldName, 'length', 'max' => '20');
-					$aRules[] = array($sFieldName, 'match', 'pattern' =>'/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!@#$%]+$/','message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры! Также допустимы символы: !@#$%');
+
+					//$aRules[] = array($sFieldName, 'match', 'pattern' =>'/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!@#$%]+$/','message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры! Также допустимы символы: !@#$%');
+					$aRules[] = array($sFieldName, 'match', 'pattern' => '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[^А-Яа-яёЁ]+$/', 'message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры!');
 					$aRules[] = array($sFieldName, 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!');
 					break;
 				default:
@@ -624,8 +625,12 @@ class ClientCreateFormAbstract extends CFormModel
 			'HTML.Allowed' => '',
 		);
 		$aAttributes = $this->getAttributes();
-		foreach ($aAttributes as &$sAttribute) {
-			$sAttribute = $oPurifier->purify($sAttribute);
+		foreach ($aAttributes as $sName =>&$sAttribute) {
+			if ($sName == 'password' || $sName == 'old_password' || $sName == 'password_repeat') {
+
+			} else {
+				$sAttribute = $oPurifier->purify($sAttribute);
+			}
 		}
 		$this->setAttributes($aAttributes);
 
