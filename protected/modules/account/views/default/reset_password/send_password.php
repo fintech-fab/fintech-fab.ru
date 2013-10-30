@@ -73,8 +73,8 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	?>
 
 	<label>Введите код из SMS:</label>
-	<?= $form->textField($model, 'smsCode', array('class' => 'span4')); ?>
-	<?= $form->error($model, 'smsCode'); ?>
+	<?= $form->textField($model, 'sms_code', array('class' => 'span4')); ?>
+	<?= $form->error($model, 'sms_code'); ?>
 
 	<div class="clearfix"></div>
 

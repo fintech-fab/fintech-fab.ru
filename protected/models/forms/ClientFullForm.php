@@ -59,6 +59,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'complete',
 			'secret_question',
 			'secret_answer',
+			'password',
+			'password_repeat',
 		);
 
 		$aMyRules =
@@ -98,10 +100,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 				array('address_res_address', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания'),
 				array('address_reg_as_res', 'in', 'message' => 'Может принимать только значения 0 или 1', 'range' => array(0, 1)),
 
-				array('password, password_repeat', 'required'),
-				array('password', 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!'),
-				array('password', 'length', 'min' => '8'),
-				array('password_repeat', 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!'),
 			);
 		$aRules = array_merge($this->getRulesByFields(
 			array(
@@ -152,6 +150,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'numeric_code',
 				'secret_question',
 				'secret_answer',
+				'password',
+				'password_repeat'
 			),
 			$aRequired
 		), $aMyRules);

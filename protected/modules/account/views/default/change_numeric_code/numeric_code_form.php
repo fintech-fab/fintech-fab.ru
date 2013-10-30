@@ -31,7 +31,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение цифрового 
 		'buttonType' => 'submit',
 		'type'       => 'primary',
 		'size'       => 'small',
-		'label'      => 'Отправить заявку',
+		'label'      => 'Отправить',
 	)); ?>
 </div>
 

@@ -3,27 +3,22 @@
 /* @var SMSCodeForm $oSmsCodeForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Изменение цифрового кода";
+$this->pageTitle = Yii::app()->name . " - Изменение пароля";
 ?>
-	<h4>Изменение цифрового кода</h4>
+	<h4>Изменение пароля</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'     => 'products-form',
-	'action' => Yii::app()->createUrl('/account/changeNumericCodeSendSmsCode'),
+	'id'     => 'send-sms-form',
+	'action' => Yii::app()->createUrl('/account/changePasswordSendSmsCode'),
 ));
 
 $oSmsCodeForm->sendSmsCode = 1;
 echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 ?>
-
-
-	<?php //TODO вынести сообщения в константы ?>
-	<div class="alert in alert-block alert-error span7">
-		При отправке SMS с кодом произошла ошибка. Попробуйте снова запросить код.<br />В случае, если ошибка
-		повторяется, обратитесь в контактный центр.
+	<div class="alert in alert-block alert-warning span7">
+		Для изменения пароля требуется подтверждение одноразовым SMS-кодом
 	</div>
-
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',

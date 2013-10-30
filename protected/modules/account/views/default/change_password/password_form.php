@@ -1,27 +1,29 @@
 <?php
 /* @var DefaultController $this */
-/* @var ChangeSecretQuestionForm $oChangeSecretQuestionForm */
+/* @var ChangePasswordForm $oChangePasswordForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Изменение секретного вопроса";
+$this->pageTitle = Yii::app()->name . " - Изменение пароля";
 ?>
-<h4>Изменение секретного вопроса</h4>
+<h4>Изменение пароля</h4>
+
+
 
 <?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                   => 'secret-question-form',
+	'id'                   => 'password-form',
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 	),
-	'action'               => Yii::app()->createUrl('/account/changeSecretQuestion'),
+	'action'               => Yii::app()->createUrl('/account/changePassword'),
 ));
 ?>
-
 <div class="row">
 	<div class="span5">
-		<?= $form->dropDownListRow($oChangeSecretQuestionForm, 'secret_question',Dictionaries::$aSecretQuestions);  ?>
-		<?= $form->textFieldRow($oChangeSecretQuestionForm, 'secret_answer');  ?>
+		<?= $form->passwordFieldRow($oChangePasswordForm, 'old_password'); ?>
+		<?= $form->passwordFieldRow($oChangePasswordForm, 'password'); ?>
+		<?= $form->passwordFieldRow($oChangePasswordForm, 'password_repeat'); ?>
 	</div>
 </div>
 

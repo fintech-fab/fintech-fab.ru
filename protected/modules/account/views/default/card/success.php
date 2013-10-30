@@ -22,7 +22,7 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 <?php if(Yii::app()->adminKreddyApi->checkLoan()): ?>
 	<div class="well">
 		<?php    $this->widget('bootstrap.widgets.TbButton', array(
-			'label' => 'Получить заём', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
+			'label' => 'Получить займ', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
 				->createUrl('account/loan'),
 		));?>
 	</div>

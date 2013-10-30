@@ -158,7 +158,7 @@ class FormFieldValidateBehavior extends CBehavior
 	public function checkValidPassportIssued($attribute, $param)
 	{
 		$this->owner->$attribute = trim($this->owner->$attribute);
-		if (!preg_match('#^[а-яё0-9,\-. ]+$#ui', $this->owner->$attribute)) {
+		if (!preg_match('#^[а-яё0-9,\-.№ ]+$#ui', $this->owner->$attribute)) {
 			$this->owner->addError($attribute, $param['message']);
 		}
 	}
