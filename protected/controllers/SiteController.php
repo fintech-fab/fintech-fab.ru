@@ -63,9 +63,9 @@ class SiteController extends Controller
 	public function actionSetCityToCookie()
 	{
 		// берём имя города из post-запроса
-		$sCityName = Yii::app()->request->getParam("cityName");
+		$sCityName = CHtml::encode(Yii::app()->request->getParam("cityName"));
 		//берем имя города и регион из post-запроса
-		$sCityAndRegion = Yii::app()->request->getParam("cityAndRegion");
+		$sCityAndRegion = CHtml::encode(Yii::app()->request->getParam("cityAndRegion"));
 
 		if (!Yii::app()->request->isPostRequest || empty($sCityName) || empty($sCityAndRegion)) {
 			Yii::app()->end();

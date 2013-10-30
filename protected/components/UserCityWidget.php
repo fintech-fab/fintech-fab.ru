@@ -4,8 +4,8 @@
  */
 class UserCityWidget extends CWidget
 {
-	public $sCityName = "не определён";
-	public $bCitySelected = false;
+	public $sCityName;
+	public $bCitySelected = false; //город выбран
 	public $sCityAndRegion;
 	public  $sCsrfTokenName;
 	public  $sCsrfToken;
@@ -93,6 +93,7 @@ class UserCityWidget extends CWidget
 					true
 				);
 		} else {
+			$this->sCityName = "город не определён";
 			$sDataContent = 'Ваш город не удалось определить. Укажите город самостоятельно. ';
 			$sDataContent .= '&nbsp;' . $this->widget(
 					'bootstrap.widgets.TbButton',
@@ -109,7 +110,7 @@ class UserCityWidget extends CWidget
 				);
 		}
 
-		//TODO сделать автоматическое обновление города в виджете
+
 		$sModalBody = $this->widget(
 			'bootstrap.widgets.TbSelect2',
 			array(
@@ -151,7 +152,7 @@ class UserCityWidget extends CWidget
 					'formatSelection'     => 'js: function (object) {
 										$("#locationModal").modal("hide");
 										$("#userLocation").popover("hide");
-
+										//шлем инфу на сервер и обновляем виджет через ajax
 										$.ajax({
 											url: \''.Yii::app()->createUrl("/site/setCityToCookie").'\',
 											type: "POST",

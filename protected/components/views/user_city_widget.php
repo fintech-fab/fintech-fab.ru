@@ -25,7 +25,7 @@ if (!$this->bUpdate):
 			'type'        => 'link',
 			'encodeLabel' => false,
 			'htmlOptions' => array(
-				'class' => 'location' //TODO сделать свой класс для отображения названия города
+				'class' => 'location'
 			)
 		)
 	);
