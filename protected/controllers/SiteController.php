@@ -40,13 +40,9 @@ class SiteController extends Controller
 		Yii::app()->clientForm->setCurrentStep(0);
 
 
-		if ($bFullForm = SiteParams::B_FULL_FORM) {
-			$oClientForm = new ClientSelectProductForm2();
-			$this->render('../form/client_select_product2', array('oClientCreateForm' => $oClientForm));
-		} else {
-			$oClientForm = new ClientSelectProductForm();
-			$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
-		}
+		$oClientForm = new ClientSelectProductForm();
+		$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
+
 	}
 
 	/**
@@ -67,11 +63,11 @@ class SiteController extends Controller
 	public function actionSetCityToCookie()
 	{
 		// берём имя города из post-запроса
-		$sCityName = Yii::app()->request->getParam("cityName");
+		$sCityName = CHtml::encode(Yii::app()->request->getParam("cityName"));
 		//берем имя города и регион из post-запроса
-		$sCityAndRegion = Yii::app()->request->getParam("cityAndRegion");
+		$sCityAndRegion = CHtml::encode(Yii::app()->request->getParam("cityAndRegion"));
 
-		if (!Yii::app()->request->isPostRequest || empty($sCityName)||empty($sCityAndRegion)) {
+		if (!Yii::app()->request->isPostRequest || empty($sCityName) || empty($sCityAndRegion)) {
 			Yii::app()->end();
 		}
 
@@ -87,7 +83,7 @@ class SiteController extends Controller
 			Yii::app()->request->cookies['citySelected'] = new CHttpCookie("citySelected", true, $aCookieOptions);
 		}
 		//обновляем виджет, свойство bUpdate указывает отдавать виджет для обновления, без лишних элементов
-		$this->widget('UserCityWidget',array('bUpdate'=>true));
+		$this->widget('UserCityWidget', array('bUpdate' => true));
 		Yii::app()->end();
 	}
 
@@ -109,6 +105,14 @@ class SiteController extends Controller
 				$this->render('error', $error);
 			}
 		}
+	}
+
+	/**
+	 *
+	 */
+	public function actionContact()
+	{
+		$this->render('contact');
 	}
 
 	/**

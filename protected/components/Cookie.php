@@ -14,7 +14,7 @@ class Cookie
 	 *
 	 * @param $cookieName string
 	 * @param $attributeName string
-	 * @param $checkValue string
+	 * @param $checkValue mixed
 	 *
 	 * @return bool
 	 */

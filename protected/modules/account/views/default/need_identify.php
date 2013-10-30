@@ -14,8 +14,18 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 <?php
 $this->widget("CheckBrowserWidget");
 
+Yii::app()->clientScript->registerScript('goIdentify', '
+	//по нажатию кнопки отправляем эвент ajax-ом, затем сабмитим форму
+	function goIdentify()
+	{
+		$.ajax({url: "/account/goIdentify"}).done(function() {
+			$("#identify-form").submit();
+		});
+	}
+	', CClientScript::POS_HEAD);
+
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                   => 'login-form',
+	'id'                   => 'identify-form',
 	'action'               => $model->video_url,
 	'method'               => 'post',
 	'enableAjaxValidation' => false,
@@ -34,13 +44,16 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php
 $this->widget('bootstrap.widgets.TbButton', array(
 	'id'         => 'submitButton',
-	'buttonType' => 'submit',
 	'type'       => 'primary',
 	'size'       => 'large',
 	'label'      => 'Пройти идентификацию',
+	'htmlOptions'=>array(
+		'onclick'=>'js: goIdentify()'
+	)
 ));
 ?>
 </div>
 <?php
+
 
 $this->endWidget();

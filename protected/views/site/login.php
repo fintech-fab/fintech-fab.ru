@@ -1,7 +1,7 @@
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
-/* @var $form CActiveForm */
+/* @var $form TbActiveForm */
 
 $this->pageTitle = Yii::app()->name . ' - Вход';
 $this->breadcrumbs = array(
@@ -31,7 +31,7 @@ $this->breadcrumbs = array(
 
 	<div class="row">
 		<?= $form->labelEx($model, 'password'); ?>
-		<?= $form->passwordField($model, 'password'); ?>
+		<?= $form->passwordField($model, 'password',array('autocomplete' => 'off')); ?>
 		<?= $form->error($model, 'password'); ?>
 	</div>
 

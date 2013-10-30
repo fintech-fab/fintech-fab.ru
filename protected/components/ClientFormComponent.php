@@ -56,7 +56,7 @@ class ClientFormComponent
 
 		$aValidFormData = $oClientForm->getValidAttributes();
 
-		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm2') {
+		if (get_class($oClientForm) === 'ClientFullForm') {
 			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
@@ -133,12 +133,12 @@ class ClientFormComponent
 	/**
 	 * Выполняет обработку данных формы после проверки.
 	 *
-	 * @param ClientCreateFormAbstract|ClientSelectProductForm|ClientSelectChannelForm|ClientPersonalDataForm $oClientForm
+	 * @param ClientCreateFormAbstract|ClientSelectChannelForm $oClientForm
 	 *
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === 'ClientPersonalDataForm' || get_class($oClientForm) === 'ClientFullForm2') {
+		if (get_class($oClientForm) === 'ClientFullForm') {
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
@@ -190,6 +190,15 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 			}
 
+			/**
+			 * если номер, на который отправлялось СМС, не совпадает с введенным,
+			 * т.е. клиент вернулся на анкету и ввел другой номер,
+			 * то позволяем снова отправить СМС с кодом водтверждения
+			 */
+			if (!$this->compareSessionAndSentPhones()) {
+				$this->setFlagSmsSent(false);
+			}
+
 			// ставим флаг, что полная форма заполнена - чтобы при возврате к ней была активна кнопка "Отправить"
 			$this->setFlagFullFormFilled(true);
 		} else {
@@ -225,7 +234,7 @@ class ClientFormComponent
 		$aClientForm = ClientData::getClientDataById($iClientId);
 
 		// если код уже есть в базе, ставим флаг и вовзращаем true
-		if (!empty($aClientForm['sms_code'])) {
+		if (!empty($aClientForm['sms_code']) && $this->compareSessionAndSentPhones()) {
 			$this->setFlagSmsSent(true);
 
 			return true;
@@ -247,9 +256,9 @@ class ClientFormComponent
 		$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 		if ($bSmsSentOk) {
-
 			//добавляем в лог запрос sms с этого ip
 			Yii::app()->antiBot->addSmsRequest();
+			$this->setSmsSentPhone($sPhone); //записываем, на какой номер было отправлено СМС
 
 			$aClientForm['sms_code'] = $sSmsCode;
 			// если не удалось записать в БД - общая ошибка
@@ -263,6 +272,7 @@ class ClientFormComponent
 			// возвращаем true
 			return true;
 		}
+
 		return Dictionaries::C_ERR_SMS_CANT_SEND;
 	}
 
@@ -383,55 +393,24 @@ class ClientFormComponent
 
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-		$bFullForm = SiteParams::B_FULL_FORM;
 
-		if ($bFullForm) {
-			switch ($this->iCurrentStep) {
-				case 0:
-					return new ClientSelectProductForm2();
-					break;
-				case 1:
-					return new ClientFullForm2();
-					break;
-				case 2:
-				case 3:
-					return new ClientConfirmPhoneViaSMSForm();
-					break;
-				default:
-					return new ClientSelectProductForm2();
-					break;
-			}
-		} else {
 
-			switch ($this->iCurrentStep) {
-				case 0:
-					return new ClientSelectProductForm();
-					break;
-				case 1:
-					return new ClientSelectChannelForm();
-					break;
-				case 2:
-					return new ClientPersonalDataForm();
-					break;
-				case 3:
-					return new ClientAddressForm();
-					break;
-				case 4:
-					return new ClientJobInfoForm();
-					break;
-				case 5:
-					return new ClientSendForm();
-					break;
-				case 6:
-				case 7:
-					return new ClientConfirmPhoneViaSMSForm();
-					break;
-				default:
-					return new ClientSelectProductForm();
-					break;
-			}
-
+		switch ($this->iCurrentStep) {
+			case 0:
+				return new ClientSelectProductForm();
+				break;
+			case 1:
+				return new ClientFullForm();
+				break;
+			case 2:
+			case 3:
+				return new ClientConfirmPhoneViaSMSForm();
+				break;
+			default:
+				return new ClientSelectProductForm();
+				break;
 		}
+
 	}
 
 	/**
@@ -441,79 +420,33 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
-		$bFullForm = SiteParams::B_FULL_FORM;
 
-		if ($bFullForm) {
+		switch ($this->iCurrentStep) {
+			case 0:
+				return 'client_select_product';
+				break;
+			case 1:
+				return 'client_full_form';
+				break;
+			case 2:
+				// если SMS уже отправлялось, рендер формы проверки
+				if ($this->getFlagSmsSent()) {
+					return 'confirm_phone_full_form/check_sms_code';
+				}
 
-			switch ($this->iCurrentStep) {
-				case 0:
-					return 'client_select_product2';
-					break;
-				case 1:
-					return 'client_full_form2';
-					break;
-				case 2:
-					// если SMS уже отправлялось, рендер формы проверки
-					if ($this->getFlagSmsSent()) {
-						return 'confirm_phone_full_form2/check_sms_code';
-					}
+				return 'confirm_phone_full_form/send_sms_code';
+				break;
+			case 3:
+				// если SMS ещё не отправлялось, рендер формы отправки
+				if (!$this->getFlagSmsSent()) {
+					return 'confirm_phone_full_form/send_sms_code';
+				}
 
-					return 'confirm_phone_full_form2/send_sms_code';
-					break;
-				case 3:
-					// если SMS ещё не отправлялось, рендер формы отправки
-					if (!$this->getFlagSmsSent()) {
-						return 'confirm_phone_full_form2/send_sms_code';
-					}
-
-					return 'confirm_phone_full_form2/check_sms_code';
-					break;
-				default:
-					return 'client_select_product2';
-					break;
-			}
-		} else {
-
-
-			switch ($this->iCurrentStep) {
-				case 0:
-					return 'client_select_product';
-					break;
-				case 1:
-					return 'client_select_channel';
-					break;
-				case 2:
-					return 'client_personal_data';
-					break;
-				case 3:
-					return 'client_address';
-					break;
-				case 4:
-					return 'client_job_info';
-					break;
-				case 5:
-					return 'client_send';
-					break;
-				case 6:
-					// если SMS уже отправлялось, рендер формы проверки
-					if ($this->getFlagSmsSent()) {
-						return 'confirm_phone/check_sms_code';
-					}
-
-					return 'confirm_phone/send_sms_code';
-					break;
-				case 7:
-					// если SMS ещё не отправлялось, рендер формы отправки
-					if (!$this->getFlagSmsSent()) {
-						return 'confirm_phone/send_sms_code';
-					}
-
-					return 'confirm_phone/check_sms_code';
-					break;
-				default:
-					return 'client_select_product';
-					break;
-			}
+				return 'confirm_phone_full_form/check_sms_code';
+				break;
+			default:
+				return 'client_select_product';
+				break;
 		}
 	}
 
@@ -525,54 +458,22 @@ class ClientFormComponent
 	public function getPostData()
 	{
 
-		$bFullForm = SiteParams::B_FULL_FORM;
 
-		if ($bFullForm) {
-			switch ($this->iCurrentStep) {
-				case 0:
-					return Yii::app()->request->getParam('ClientSelectProductForm2');
-					break;
-				case 1:
-					return Yii::app()->request->getParam('ClientFullForm2');
-					break;
-				case 2:
-				case 3:
-					return Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
-					break;
-				default:
-					return null;
-					break;
+		switch ($this->iCurrentStep) {
+			case 0:
+				return Yii::app()->request->getParam('ClientSelectProductForm');
+				break;
+			case 1:
+				return Yii::app()->request->getParam('ClientFullForm');
+				break;
+			case 2:
+			case 3:
+				return Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
+				break;
+			default:
+				return null;
+				break;
 
-			}
-		} else {
-			switch ($this->iCurrentStep) {
-				case 0:
-					return Yii::app()->request->getParam('ClientSelectProductForm');
-					break;
-				case 1:
-					return Yii::app()->request->getParam('ClientSelectChannelForm');
-					break;
-				case 2:
-					return Yii::app()->request->getParam('ClientPersonalDataForm');
-					break;
-				case 3:
-					return Yii::app()->request->getParam('ClientAddressForm');
-					break;
-				case 4:
-					return Yii::app()->request->getParam('ClientJobInfoForm');
-					break;
-				case 5:
-					return Yii::app()->request->getParam('ClientSendForm');
-					break;
-				case 6:
-				case 7:
-					return Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
-					break;
-				default:
-					return null;
-					break;
-
-			}
 		}
 	}
 
@@ -599,10 +500,8 @@ class ClientFormComponent
 	 */
 	public function getSessionPhone()
 	{
-		if (!SiteParams::B_FULL_FORM && isset(Yii::app()->session['ClientPersonalDataForm']['phone'])) {
-			$sPhone = Yii::app()->session['ClientPersonalDataForm']['phone'];
-		} elseif (isset(Yii::app()->session['ClientFullForm2']['phone'])) {
-			$sPhone = Yii::app()->session['ClientFullForm2']['phone'];
+		if (isset(Yii::app()->session['ClientFullForm']['phone'])) {
+			$sPhone = Yii::app()->session['ClientFullForm']['phone'];
 		} else {
 			$sPhone = false;
 		}
@@ -615,7 +514,7 @@ class ClientFormComponent
 	 */
 	public function setFlagFullFormFilled($bFullFormFilled)
 	{
-		Yii::app()->session['flagClientFullForm2Filled'] = $bFullFormFilled;
+		Yii::app()->session['flagClientFullFormFilled'] = $bFullFormFilled;
 	}
 
 	/**
@@ -625,7 +524,7 @@ class ClientFormComponent
 	 */
 	public function getFlagFullFormFilled()
 	{
-		return !empty(Yii::app()->session['flagClientFullForm2Filled']);
+		return !empty(Yii::app()->session['flagClientFullFormFilled']);
 	}
 
 	/**
@@ -700,14 +599,25 @@ class ClientFormComponent
 	 */
 	public function getSessionProduct()
 	{
-		if (!SiteParams::B_FULL_FORM) {
-			return isset(Yii::app()->session['ClientSelectProductForm']['product'])
-				? Yii::app()->session['ClientSelectProductForm']['product']
-				: false;
-		} else {
-			return isset(Yii::app()->session['ClientSelectProductForm2']['product'])
-				? Yii::app()->session['ClientSelectProductForm2']['product']
-				: false;
+
+		return isset(Yii::app()->session['ClientSelectProductForm']['product'])
+			? Yii::app()->session['ClientSelectProductForm']['product']
+			: false;
+	}
+
+	public function goShopping()
+	{
+		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
+		foreach ($aProducts as $i => $aProduct) {
+			if (array_search('Покупки', $aProduct)) {
+				$aShoppingProduct = $i;
+			}
+		}
+		if (isset($aShoppingProduct)) {
+			Yii::app()->session['ClientSelectProductForm'] = array('product'=> $aShoppingProduct);
+
+			Yii::app()->session['goShopping'] = true;
+			$this->nextStep();
 		}
 	}
 
@@ -755,6 +665,22 @@ class ClientFormComponent
 		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
 	}
 
+	/**
+	 * @param $sPhone
+	 */
+	public function setSmsSentPhone($sPhone)
+	{
+		Yii::app()->session['sSmsSentPhone'] = $sPhone;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSmsSentPhone()
+	{
+		return Yii::app()->session['sSmsSentPhone'];
+	}
+
 	public function clearClientSession()
 	{
 		//сбрасываем шаги заполнения анкеты в 0
@@ -774,8 +700,8 @@ class ClientFormComponent
 		Yii::app()->session['ClientSendForm'] = null;
 		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = null;
 
-		Yii::app()->session['ClientSelectProductForm2'] = null;
-		Yii::app()->session['ClientFullForm2'] = null;
+		Yii::app()->session['ClientSelectProductForm'] = null;
+		Yii::app()->session['ClientFullForm'] = null;
 
 		$this->setFlagFullFormFilled(false);
 	}
@@ -826,5 +752,13 @@ class ClientFormComponent
 		}
 
 		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function compareSessionAndSentPhones()
+	{
+		return (Yii::app()->clientForm->getSmsSentPhone() === Yii::app()->clientForm->getSessionPhone());
 	}
 }

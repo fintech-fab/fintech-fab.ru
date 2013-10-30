@@ -226,12 +226,6 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'passport_date':
 					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
-					$aRules[] = array(
-						$sFieldName, 'checkValidPassportDate', 'birthDate'            => 'birthday',
-						                                       'message'              => 'Введите корректное значение даты выдачи паспорта',
-						                                       'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
-						                                       'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
-					);
 					break;
 
 				case 'passport_series':
@@ -327,6 +321,18 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажите корректное значение для ежемесячного дополнительного расхода.', 'range' => array_keys(Dictionaries::$aLiabilities));
 					break;
 
+				case 'password_repeat':
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '==', 'compareAttribute' => 'password', 'message' => 'Подтверждение пароля не соответствует паролю!');
+					break;
+				case 'old_password':
+					$aRules[] = array($sFieldName, 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!');
+					break;
+				case 'password':
+					$aRules[] = array($sFieldName, 'length', 'min' => '8');
+					$aRules[] = array($sFieldName, 'length', 'max' => '20');
+					$aRules[] = array($sFieldName, 'match', 'pattern' =>'/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!@#$%]+$/','message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры! Также допустимы символы: !@#$%');
+					$aRules[] = array($sFieldName, 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!');
+					break;
 				default:
 					$aRules[] = array($sFieldName, 'safe');
 

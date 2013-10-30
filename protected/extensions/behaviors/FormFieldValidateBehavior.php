@@ -158,7 +158,7 @@ class FormFieldValidateBehavior extends CBehavior
 	public function checkValidPassportIssued($attribute, $param)
 	{
 		$this->owner->$attribute = trim($this->owner->$attribute);
-		if (!preg_match('#^[а-яё0-9,\-. ]+$#ui', $this->owner->$attribute)) {
+		if (!preg_match('#^[а-яё0-9,\-.№ ]+$#ui', $this->owner->$attribute)) {
 			$this->owner->addError($attribute, $param['message']);
 		}
 	}
@@ -542,6 +542,57 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 
 		return;
+
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkOldPassport($attribute, $param)
+	{
+		$sPassportNotChanged = $this->owner->$param['passport_not_changed'];
+
+
+		if (!$sPassportNotChanged) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+
+		return;
+
+	}
+
+	/**
+	 * проверка, что содержит только русские буквы и знаки препинания
+	 * @param string $attribute
+	 * @param array  $param
+	 */
+	public function checkValidRus($attribute, $param)
+	{
+		if ($this->owner->$attribute) {
+			if (!preg_match('#^[а-яё0-9,\-./() ]+$#ui', $this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} else {
+				$this->formatName($this->owner->$attribute);
+			}
+		}
+	}
+
+	/**
+	 * Проверка required дополнительных полей в случае если паспорт утерян или украден
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkPassportLostStolen($attribute, $param)
+	{
+		//2=>'Утеря или кража',
+		$bPassportLostStolen = ($this->owner->$param['passport_change_reason']==2);
+		if($bPassportLostStolen&&empty($this->owner->$attribute)){
+			$this->owner->addError($attribute, $param['message']);
+		}
 
 	}
 

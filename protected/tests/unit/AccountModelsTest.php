@@ -167,6 +167,281 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider fieldsPassportFormForCheckSuccessProvider
+	 */
+	public
+	function  testCheckPassportFieldsOnSuccess($field, $strRowValue, $strCleanValue)
+	{
+		$oForm = new ChangePassportDataForm();
+
+		$oForm->$field = $strRowValue;
+		$oForm->validate();
+		$aErrors = $oForm->getErrors();
+		$this->assertTrue(!isset($aErrors[$field]));
+		$this->assertEquals($strCleanValue, $oForm->$field);
+	}
+
+	/**
+	 * @dataProvider fieldsPassportFormForCheckErrorProvider
+	 */
+	public
+	function  testCheckPassportFieldsOnError($field, $value, $method)
+	{
+		$oForm = new ChangePassportDataForm();
+
+		$oForm->$field = $value;
+		$oForm->validate();
+		$aErrors = $oForm->getErrors();
+		$this->$method($aErrors[$field]);
+	}
+
+	/**
+	 * @return array
+	 */
+
+	public static function fieldsPassportFormForCheckSuccessProvider()
+	{
+		return array(
+			array(
+				'field'         => 'last_name',
+				'strRowValue'   => ' иванов  ',
+				'strCleanValue' => 'Иванов',
+			),
+			array(
+				'field'         => 'last_name',
+				'strRowValue'   => ' пеТров -  водКИН ',
+				'strCleanValue' => 'Петров-Водкин',
+			),
+			array(
+				'field'         => 'last_name',
+				'strRowValue'   => ' простО ГраЦИоти  --- райСкая   ',
+				'strCleanValue' => 'Просто Грациоти-Райская',
+			),
+
+			array(
+				'field'         => 'last_name',
+				'strRowValue'   => ' иВ Сен    лОРАН  ',
+				'strCleanValue' => 'Ив Сен Лоран',
+			),
+
+			array(
+				'field'         => 'first_name',
+				'strRowValue'   => 'ирина',
+				'strCleanValue' => 'Ирина',
+			),
+			array(
+				'field'         => 'first_name',
+				'strRowValue'   => ' владимир ',
+				'strCleanValue' => 'Владимир',
+			),
+
+			array(
+				'field'         => 'third_name',
+				'strRowValue'   => ' ивановна ',
+				'strCleanValue' => 'Ивановна',
+			),
+
+			array(
+				'field'         => 'third_name',
+				'strRowValue'   => ' сергеевич ',
+				'strCleanValue' => 'Сергеевич',
+			),
+
+			array(
+				'field'         => 'passport_series',
+				'strRowValue'   => '2345',
+				'strCleanValue' => '2345',
+			),
+
+			array(
+				'field'         => 'passport_number',
+				'strRowValue'   => '234985',
+				'strCleanValue' => '234985',
+			),
+
+			array(
+				'field'         => 'old_passport_series',
+				'strRowValue'   => '7431',
+				'strCleanValue' => '7431',
+			),
+
+			array(
+				'field'         => 'old_passport_number',
+				'strRowValue'   => '958366',
+				'strCleanValue' => '958366',
+			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public
+	static function fieldsPassportFormForCheckErrorProvider()
+	{
+		return array(
+			array(
+				'field'  => 'last_name',
+				'value'  => 'Petrov-Водkin1',
+				'method' => 'assertNotEmpty',
+			),
+			array(
+				'field'  => 'last_name',
+				'value'  => 'Петров Воdkin',
+				'method' => 'assertNotEmpty',
+			),
+			array(
+				'field'  => 'last_name',
+				'value'  => '  123G46-Вод89кин  ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'last_name',
+				'value'  => '7778555 88966 667  ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'first_name',
+				'value'  => 'Helen',
+				'method' => 'assertNotEmpty',
+			),
+			array(
+				'field'  => 'first_name',
+				'value'  => 'Анna Mария',
+				'method' => 'assertNotEmpty',
+			),
+			array(
+				'field'  => 'first_name',
+				'value'  => '  123G4 6&82!!!) ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'first_name',
+				'value'  => '7778555 88966 667  ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'third_name',
+				'value'  => '4564 5654 32234',
+				'method' => 'assertNotEmpty',
+			),
+			array(
+				'field'  => 'third_name',
+				'value'  => 'dfgdf  **#$#$ 2454',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'third_name',
+				'value'  => 'Fksdgflgk',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_series',
+				'value'  => '      ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_series',
+				'value'  => ' 7',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_series',
+				'value'  => 'ук87',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_series',
+				'value'  => '---777щщз',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_number',
+				'value'  => '      ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_number',
+				'value'  => '   1  ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_number',
+				'value'  => 'ук8754',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'passport_number',
+				'value'  => '---777щщз',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_series',
+				'value'  => '      ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_series',
+				'value'  => ' 7',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_series',
+				'value'  => 'ук87',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_series',
+				'value'  => '---777щщз',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_number',
+				'value'  => '      ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_number',
+				'value'  => '   1  ',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_number',
+				'value'  => 'ук8754',
+				'method' => 'assertNotEmpty',
+			),
+
+			array(
+				'field'  => 'old_passport_number',
+				'value'  => '---777щщз',
+				'method' => 'assertNotEmpty',
+			),
+
+
+		);
+	}
+
+	/**
 	 * @return array
 	 */
 

@@ -15,9 +15,9 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRequired =array(
-				'product',
-			);
+		$aRequired = array(
+			'product',
+		);
 
 
 		$aRules = $this->getRulesByFields(
@@ -27,7 +27,7 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		$aRules[]=array('product', 'in', 'range' => array_keys(Dictionaries::$aProducts),'message' => 'Выберите сумму займа');
+		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выберите сумму займа');
 
 
 		return $aRules;
@@ -41,7 +41,7 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('product' => 'Сумма займа',)
+			array('product' => 'Выберите Пакет займов',)
 		);
 	}
 

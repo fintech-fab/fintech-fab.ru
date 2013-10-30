@@ -7,12 +7,6 @@
 class SiteParams
 {
 
-	/**
-	 * параметр включает "полную" форму, содержащую всю анкету
-	 * в выключенном состоянии отображается многошаговая анкета
-	 */
-	const B_FULL_FORM = true;
-
 	const CTIME_HOUR = 3600;
 	const CTIME_DAY = 86400;
 	const CTIME_WEEK = 604800;

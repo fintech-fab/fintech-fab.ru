@@ -34,6 +34,12 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 
 <strong>Доступно займов:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans(); ?><br /><br />
 
+<div class="clearfix"></div>
+<div class="well">
+	Вы можете оформить займ <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
+	<br />
+</div>
+<div class="clearfix"></div>
 <br />
 <?= $passFormRender // отображаем форму запроса SMS-пароля ?>
 

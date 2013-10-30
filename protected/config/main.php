@@ -48,7 +48,7 @@ $a = array(
 		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
 			'sApiUrl'     => 'https://admin.kreddy.ru:8081/siteApi/',
-			'sTestApiUrl' => 'http://admin.kreddy.topas/siteApi/'
+			'sTestApiUrl' => 'http://admin-master.kreddy.topas/siteApi/'
 		),
 		'antiBot'          => array(
 			'class' => 'application.components.AntiBotComponent',
@@ -69,7 +69,7 @@ $a = array(
 			'driver' => 'GD',
 		),
 		'user'             => array(
-			'class'=>'application.components.User',
+			'class'          => 'application.components.User',
 			'allowAutoLogin' => true,
 			'loginUrl'       => array('account/login'),
 		),
@@ -78,6 +78,8 @@ $a = array(
 			'urlFormat'      => 'path',
 			'showScriptName' => false,
 			'rules'          => array(
+				'contact'                                          => 'site/contact',
+
 				'gii'                                              => 'gii',
 				'gii/<controller:\w+>'                             => 'gii/<controller>',
 				'gii/<controller:\w+>/<action:\w+>'                => 'gii/<controller>/<action>',
@@ -103,6 +105,7 @@ $a = array(
 				'<controller:\w+>/<action:\w+>/<id:\d+>'           => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'         => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'                    => '<controller>/<action>',
+				'<controller:\w+>'                                 => '<controller>',
 			),
 		),
 

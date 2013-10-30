@@ -12,6 +12,7 @@ class AddCardForm extends CFormModel
 	public $sCardMonth;
 	public $sCardYear;
 	public $sCardCvc;
+	public $bConfirm;
 
 	/**
 	 * @return array
@@ -20,9 +21,10 @@ class AddCardForm extends CFormModel
 	{
 		$aRules = array();
 
-		$aRules[] = array('sCardPan, sCardMonth, sCardYear, sCardCvc','required');
-
 		$aRules[] = array('sCardPan, sCardMonth, sCardYear, sCardCvc', 'required');
+
+		$aRules[] = array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.');
+
 		$aRules[] = array(
 			'sCardPan', 'match', 'message' => 'Номер карты должен состоять из 16 цифр',
 			                     'pattern' => '/^\d{16}$/'
@@ -51,10 +53,24 @@ class AddCardForm extends CFormModel
 	{
 		return array(
 			'sCardPan'   => 'Номер карты',
-			'sCardMonth' => 'Месяц',
+			'sCardMonth' => 'Срок окончания',
 			'sCardYear'  => 'Год',
-			'sCardCvc'   => 'CVC'
+			'sCardCvc'   => 'Код CVC',
+			'bConfirm'   => 'Я подтверждаю согласие на блокировку случайной суммы на указанной банковской карте.'
 		);
 
+	}
+
+	/**
+	 * @return array
+	 */
+	public function attributeNames()
+	{
+		return array(
+			'sCardPan',
+			'sCardMonth',
+			'sCardYear',
+			'sCardCvc'
+		);
 	}
 }

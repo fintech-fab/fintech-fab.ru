@@ -37,7 +37,7 @@ if (!empty($aClientProductsChannelsList)) {
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Оформить заём',
+			'label'      => 'Оформить займ',
 		)); ?>
 	</div>
 

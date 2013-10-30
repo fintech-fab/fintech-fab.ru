@@ -10,11 +10,17 @@
 
 $this->pageTitle = Yii::app()->name;
 
+$aCrumbs = array(
+	array('Выбор пакета', 1),
+	array('Заявка на займ', 2),
+	array('Подтверждение номера телефона', 3)
+);
+
 ?>
 
 <div class="row">
 
-	<?php $this->widget('StepsBreadCrumbsWidget'); ?>
+	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 
 	<?php
 
@@ -30,13 +36,14 @@ $this->pageTitle = Yii::app()->name;
 
 	?>
 	<div class="row span6">
-		<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/01T.png" />
 		<?php
-		if (!($oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct())) {
-			$oClientCreateForm->product = "1";
+		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+		// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+		if (empty($oClientCreateForm->product)) {
+			$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
 		}
 		?>
-		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Dictionaries::$aProducts, array("class" => "all")); ?>
+		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
 
 	</div>
 
@@ -54,7 +61,7 @@ $this->pageTitle = Yii::app()->name;
 			)); ?>
 		</div>
 	</div>
-	<?
+	<?php
 
 	$this->endWidget();
 

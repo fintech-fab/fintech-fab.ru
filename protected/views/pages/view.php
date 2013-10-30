@@ -1,6 +1,7 @@
 <?php
 /* @var $this PagesController */
 /* @var $model Pages */
+/* @var $bShowBrowserWidget */
 
 $this->breadcrumbs = array(
 	'Pages' => array('index'),
@@ -9,17 +10,9 @@ $this->breadcrumbs = array(
 
 $this->showTopPageWidget = true;
 
-
-/*$this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
-		'page_id',
-		'page_name',
-		'page_title',
-		'page_content',
-	),
-));*/
-
+if($bShowBrowserWidget){
+	$this->widget('CheckBrowserWidget',array('bShowBrowsersLink'=>false));
+}
 
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
 

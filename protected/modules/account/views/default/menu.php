@@ -10,19 +10,45 @@ $this->menu = array(
 	array(
 		'label' => 'История операций', 'url' => array('/account/default/history')
 	),
-	array(
-		'label' => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
-	),
-	array(
-		'label' => 'Оформление займа', 'url' => array('/account/default/loan')
-	),
-	array(
-		'label' => 'Привязка банковской карты', 'url' => array('/account/default/addCard')
-	),
-	array(
-		'label' => 'Выход', 'url' => array('/account/default/logout')
-	),
 );
+
+if (Yii::app()->adminKreddyApi->checkSubscribe()) {
+
+	$this->menu[] = array(
+		'label' => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
+	);
+}
+if (Yii::app()->adminKreddyApi->checkLoan()) {
+	$this->menu[] = array(
+		'label' => 'Оформление займа', 'url' => array('/account/default/loan')
+	);
+}
+if (Yii::app()->adminKreddyApi->getBalance() < 0) {
+	$this->menu[] = array(
+		'label' => 'Оплатить задолженность', 'url' =>'https://pay.kreddy.ru/'
+	);
+}
+$this->menu[] = array(
+	'label' => 'Привязка пластиковой карты', 'url' => array('/account/default/addCard')
+);
+$this->menu[] =  '';
+$this->menu[] = array(
+	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
+);
+$this->menu[] = array(
+	'label' => 'Изменение секретного вопроса', 'url' => array('/account/default/changeSecretQuestion')
+);
+$this->menu[] = array(
+	'label' => 'Изменение цифрового кода', 'url' => array('/account/default/changeNumericCode')
+);
+$this->menu[] = array(
+	'label' => 'Изменение пароля', 'url' => array('/account/default/changePassword')
+);
+$this->menu[] =  '';
+$this->menu[] = array(
+	'label' => 'Выход', 'url' => array('/account/default/logout')
+);
+
 
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$sBalanceMessage = '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
@@ -43,7 +69,7 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 	<?php
 
 	$this->beginWidget('bootstrap.widgets.TbMenu', array(
-		'type'          => 'pills', // '', 'tabs', 'pills' (or 'list')
+		'type'          => 'list', // '', 'tabs', 'pills' (or 'list')
 		'stacked'       => true, // whether this is a stacked menu
 		'items'         => $this->menu,
 		'activateItems' => true,

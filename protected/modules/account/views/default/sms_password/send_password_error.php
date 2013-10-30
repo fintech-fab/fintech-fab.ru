@@ -25,7 +25,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'htmlOptions' => array(
 		'class' => "span10",
 	),
-	'action'      => Yii::app()->createUrl('/account/smsPassAuth'),
+	'action'      => Yii::app()->createUrl('/account/sendSmsPass'),
 ));
 ?>
 <div class="row">

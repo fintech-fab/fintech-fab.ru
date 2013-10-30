@@ -1,16 +1,22 @@
 <div class="row span4 conditions">
 	<strong>Выбранные условия:</strong>
 	<?php
-	$n = Dictionaries::$aDataTimes[$this->chosenProduct];
+	/*$n = Dictionaries::$aDataTimes[$this->chosenProduct];
 	$d = new DateTime('now');
 	$d->add(new DateInterval('P' . $n . 'D'));
 	$getDateToPayUntil = Dictionaries::$aDays[$d->format('w')] . ", " . $d->format('j') . " " . Dictionaries::$aMonths[$d->format('n')] . " " . $d->format('Y');
+	*/
 
 	//TODO сделать формирование данных для виджета на основе данных из API
 	?>
 	<ul>
 		<li>Размер займа:
 			<span class="cost final_price"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+		</li>
+		<li>Количество займов в Пакете:
+			<span class="cost count_subscribe"><?= "";//Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
+		<li>Размер Пакета:
+			<span class="cost packet_size"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Вернуть <span class="cost final_price">
 				<?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
@@ -20,12 +26,10 @@
 			<span class="cost price_count"><?= "";//Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Срок подключения:
-			<span class="cost price_month"><?= "";//Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span></li>
-		<li>Размер Пакета:
-			<span class="cost packet_size"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>
+			<span class="cost price_month"><?= "";//Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
 		</li>
-		<li>Количество займов в Пакете:
-			<span class="cost count_subscribe"><?= "";//Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
+		<li>Канал получения:&nbsp;
+			<span class="cost">на мобильный телефон</span></li>
 	</ul>
 </div>
 
@@ -38,7 +42,7 @@ if ($this->curStep == 1) {
 	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/products.js';
 	Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
 
-	$sFormName = SiteParams::B_FULL_FORM ? 'ClientSelectProductForm2' : 'ClientSelectProductForm';
+	$sFormName = 'ClientSelectProductForm';
 	Yii::app()->clientScript->registerScript('myConditions', '
 		jQuery("#' . $sFormName . ' .radio").click(function () {
 			showConditions(jQuery(this).find("label > span"));

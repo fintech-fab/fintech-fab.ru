@@ -1,0 +1,47 @@
+<?php
+/**
+ * @var array $aPassportData
+ */
+
+?>
+<?php if(Yii::app()->adminKreddyApi->getPassportDataField('old_passport_series')): ?>
+<strong>Старый паспорт:</strong>
+<ul>
+	<li>
+		<strong>Серия и номер:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('old_passport_series'); ?>
+		&nbsp;/&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('old_passport_number'); ?>
+	</li>
+	<li>
+		<strong>Причина смены паспорта:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_change_reason'); ?>
+	</li>
+	<li>
+		<strong>Номер талона-уведомления:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_change_ticket'); ?>
+	</li>
+	<li>
+		<strong>Отделеление МВД России, принявшее заявление:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_change_department'); ?>
+	</li>
+
+</ul>
+<?php endif; ?>
+
+<strong>Паспорт:</strong>
+<ul>
+	<li>
+		<strong>Фамилия:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('last_name') ?>
+	</li>
+	<li><strong>Имя:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getPassportDataField('first_name') ?>
+	</li>
+	<li><strong>Отчество:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('third_name') ?></li>
+	<li>
+		<strong>Серия и номер:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_series'); ?>
+		&nbsp;/&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_number'); ?>
+	</li>
+	<li><strong>Дата выдачи:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_date') ?>
+	</li>
+	<li>
+		<strong>Код подразделения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_code') ?>
+	</li>
+	<li>
+		<strong>Выдан:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPassportDataField('passport_issued') ?>
+	</li>
+</ul>

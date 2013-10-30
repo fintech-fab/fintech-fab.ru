@@ -2,9 +2,9 @@
 	padding-top: 0px;
 }
 
-.toppage {
+/*.toppage {
 	background: url('../img/bg-title.jpg') center 0px no-repeat white;
-}
+}*/
 
 .navbar-top div.navbar-inner-main {
 	background: url('../img/kreddy_bg.png');
@@ -82,18 +82,69 @@ section .intro, div .intro {
 	color: #777;
 }
 
-.hero-unit {
+.top_page .hero-unit {
 	background: none;
-	width: 400px;
-	height: 120px;
-	margin-left: 0px;
-	margin-top: 0px;
-	padding-left: 0px;
+	/*width: 400px;*/
+	/*height: 160px;*/
+	margin-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0 0 0 0;
 }
 
-.hero-unit h1 {
-	font-size: 40px;
-	font-weight: 400;
+.navbar-top {
+	margin-bottom: 10px;
+}
+
+.top_page .carousel {
+	margin-bottom: 0;
+}
+
+.carousel-indicators {
+	left: 25px;
+	top: 250px;
+}
+
+.carousel-control {
+	left: 0;
+
+}
+
+.carousel a:focus{
+	outline: none;
+}
+
+.carousel a:active{
+	outline: none;
+}
+
+
+.carousel-control:focus {
+	outline: none;
+}
+
+.carousel-control:active {
+	outline: none;
+}
+
+.carousel-control.right {
+	right: 0;
+}
+
+.carousel-indicators li {
+	background-color: #CCCCCC;
+}
+
+.carousel-indicators .active {
+	background-color: #555555;
+}
+
+.hero-unit p.intro {
+	font-size: 18px;
+}
+
+.hero-unit li {
+	font-size: 16px;
 }
 
 .page-divider {
@@ -192,7 +243,7 @@ section .intro, div .intro {
 
 .btn-info:active,
 .btn-info.active {
-	background-color: #24748c    \9;
+	background-color: #24748c     \9;
 }
 
 #case {
@@ -219,7 +270,6 @@ footer, div .footer {
 	margin-bottom: 0px;
 	margin-top: 5px;
 }
-
 
 nav .account {
 	margin-top: 10px;
@@ -288,16 +338,15 @@ nav .account .btn {
 	text-decoration: none;
 }
 
-.dotted:hover{
+.dotted:hover {
 	text-decoration: none;
 }
-
 
 .dashed {
 	border-bottom: 1px dashed;
 	text-decoration: none;
 }
 
-.dashed:hover{
+.dashed:hover {
 	text-decoration: none;
 }

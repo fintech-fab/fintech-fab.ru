@@ -38,8 +38,11 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					'addCard', 'verifyCard',
-					'successCard'
+					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
+					'changePassportSendSmsCode', 'changePassportCheckSmsCode', 'goIdentify',
+					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
+					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
+					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
 				),
 				'users'   => array('@'),
 			),
@@ -80,15 +83,20 @@ class DefaultController extends Controller
 		return parent::beforeAction($aAction);
 	}
 
+	/**
+	 *
+	 */
+	public function actionRefresh()
+	{
+		Yii::app()->end();
+	}
 
 	/**
 	 * Главная страница личного кабинета
-	 * TODO показывать время моратория без подтверждения по СМС
 	 */
 	public function actionIndex()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
-
 
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
@@ -117,12 +125,27 @@ class DefaultController extends Controller
 			}
 		}
 
+		$sIdentifyRender = '';
+
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/");
+				//выводим форму отправки на идентификацию
+				$sIdentifyRender = $this->renderPartial('index_need_identify', array('model' => $oIdentify), true);
+			}
+		}
+
 		/**
 		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
-		$this->render($sView, array('passFormRender' => $sPassFormRender));
+
+		$this->render($sView, array('passFormRender' => $sPassFormRender, 'sIdentifyRender' => $sIdentifyRender));
+
 	}
 
 	/**
@@ -156,13 +179,11 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-
 		$oCardForm = new AddCardForm();
 		$sError = null;
 
 		//проверяем, может ли клиент сделать еще одну попытку привязки карты
-		if(!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId()))
-		{
+		if (!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId())) {
 			$sError = AdminKreddyApiComponent::C_CARD_ADD_TRIES_EXCEED;
 			$this->render('card/add_card', array('model' => $oCardForm, 'sError' => $sError));
 			Yii::app()->end();
@@ -189,8 +210,10 @@ class DefaultController extends Controller
 					$oCardForm->sCardYear,
 					$oCardForm->sCardCvc
 				);
-				//если проверка прошла успешно
+				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
+					//пишем в куки информацию, что карта отправлена на верификацию
+					Cookie::saveDataToCookie('cardVerify', array('onVerify' => true));
 					//отображаем форму проверки карты по замороженной сумме денег
 					$oVerifyForm = new VerifyCardForm();
 					$this->render('card/verify_card', array('model' => $oVerifyForm));
@@ -218,10 +241,17 @@ class DefaultController extends Controller
 
 	public function actionVerifyCard()
 	{
-		//TODO сделать проверку антиботом
-
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
 		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
+			/**
+			 * если в куках написано, что карта отправлена на верификацию,
+			 * но API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
+			 * и удаляем куку
+			 */
+			Cookie::compareDataInCookie('cardVerify', 'onVerify', true);
+			Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
+			Cookie::saveDataToCookie('cardVerify', array('onVerify' => false));
+
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
@@ -237,6 +267,8 @@ class DefaultController extends Controller
 				//если ОК то отправляем в API на проверку
 				$bVerify = Yii::app()->adminKreddyApi->verifyClientCard($oVerifyForm->sCardVerifyAmount);
 				if ($bVerify) {
+					//удаляем куку "карта отправлена на верификацию"
+					Cookie::saveDataToCookie('cardVerify', array('onVerify' => false));
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));
@@ -250,6 +282,409 @@ class DefaultController extends Controller
 		}
 
 		$this->render('card/verify_card', array('model' => $oVerifyForm));
+	}
+
+	/**
+	 * Смена данных паспорта, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangePassport()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changePassport'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_passport_data/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
+		//проверяем, прошел ли клиент идентификацию, прежде чем менять паспортные данные
+		$bIsNeedPassportData = Yii::app()->adminKreddyApi->checkIsNeedPassportData();
+		if (!$bIsNeedPassportData) //если нет
+		{
+			//получаем данные для отправки на идентификацию
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
+				//выводим форму отправки на идентификацию
+				$this->render('change_passport_data/need_identify', array('model' => $oIdentify));
+				Yii::app()->end();
+			}
+		} //иначе идем дальше, рисуем форму
+		/**
+		 * Требование $bIsNeedPassportData создается после прохождения идентификации, т.е. после прохождения
+		 * идентификации метод checkIsNeedPassportData() вернет true,
+		 * потому когда он возвращает false, мы просто предлагаем пройти идентификацию
+		 */
+
+		$oChangePassportForm = new ChangePassportDataForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangePassportForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangePassportDataForm');
+			$oChangePassportForm->setAttributes($aPost);
+			if ($oChangePassportForm->validate()) {
+				//сохраняе в сессию введенные данные
+				Yii::app()->adminKreddyApi->setPassportData($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				Yii::app()->user->getFlash('warning'); //удаляем warning
+				$this->render('change_passport_data/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_passport_data/passport_form', array('oChangePassportForm' => $oChangePassportForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangePassportSendSmsCode()
+	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//запрашиваем СМС-код для подтверждения
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangePassport();
+				if ($bSendSms) { //если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_passport_data/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_passport_data/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_passport_data/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены паспортных данных
+	 */
+
+	public function actionChangePassportCheckSmsCode()
+	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
+				$aPassportData = Yii::app()->adminKreddyApi->getPassportData();
+				//отправляем данные в API
+				$bChangePassport = Yii::app()->adminKreddyApi->changePassport($oSmsCodeForm->smsCode, $aPassportData);
+				if ($bChangePassport) { //если нет ошибок
+					$this->render('change_passport_data/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				}
+			}
+		}
+
+		$this->render('change_passport_data/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Смена цифрового кода, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeNumericCode()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changeNumericCode'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_numeric_code/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
+		$oChangeNumericCodeForm = new ChangeNumericCodeForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangeNumericCodeForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangeNumericCodeForm');
+			$oChangeNumericCodeForm->setAttributes($aPost);
+			if ($oChangeNumericCodeForm->validate()) {
+				Yii::app()->adminKreddyApi->setNumericCode($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('change_numeric_code/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_numeric_code/numeric_code_form', array('oChangeNumericCodeForm' => $oChangeNumericCodeForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeNumericCodeSendSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//запрашиваем СМС-код для подтверждения
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangeNumericCode();
+				if ($bSendSms) { //если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_numeric_code/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_numeric_code/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_numeric_code/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены цифрового кода
+	 */
+
+	public function actionChangeNumericCodeCheckSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
+				$aNumericCode = Yii::app()->adminKreddyApi->getNumericCode();
+				//отправляем данные в API
+				$bChangeNumCode = Yii::app()->adminKreddyApi->changeNumericCode($oSmsCodeForm->smsCode, $aNumericCode);
+				if ($bChangeNumCode) { //если нет ошибок
+					$this->render('change_numeric_code/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				}
+			}
+		}
+
+		$this->render('change_numeric_code/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Смена секретного вопроса, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeSecretQuestion()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changeSecretQuestion'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_secret_question/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
+		$oChangeSecretQuestionForm = new ChangeSecretQuestionForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangeSecretQuestionForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangeSecretQuestionForm');
+			$oChangeSecretQuestionForm->setAttributes($aPost);
+			if ($oChangeSecretQuestionForm->validate()) {
+				Yii::app()->adminKreddyApi->setSecretQuestion($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('change_secret_question/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_secret_question/secret_question_form', array('oChangeSecretQuestionForm' => $oChangeSecretQuestionForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeSecretQuestionSendSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//запрашиваем СМС-код для подтверждения
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangeSecretQuestion();
+				if ($bSendSms) { //если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_secret_question/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_secret_question/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_secret_question/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены паспортных данных
+	 */
+
+	public function actionChangeSecretQuestionCheckSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
+				$aSecretQuestion = Yii::app()->adminKreddyApi->getSecretQuestion();
+				//отправляем данные в API
+				$bChangeSecret = Yii::app()->adminKreddyApi->changeSecretQuestion($oSmsCodeForm->smsCode, $aSecretQuestion);
+				if ($bChangeSecret) { //если нет ошибок
+					$this->render('change_secret_question/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				}
+			}
+		}
+
+		$this->render('change_secret_question/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Смена пароля, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangePassword()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$oSmsPassForm = new SMSPasswordForm();
+			//устанавливаем, куда вернуть клиента после авторизации
+			Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/changePassword'));
+			//рендерим форму запроса СМС-пароля
+			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
+			//рендерим страницу с требованием пройти СМС-авторизацию
+			$this->render('change_numeric_code/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			Yii::app()->end();
+		}
+
+		$oChangePasswordForm = new ChangePasswordForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oChangePasswordForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('ChangePasswordForm');
+			$oChangePasswordForm->setAttributes($aPost);
+			if ($oChangePasswordForm->validate()) {
+				Yii::app()->adminKreddyApi->setPassword($aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('change_password/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_password/password_form', array('oChangePasswordForm' => $oChangePasswordForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangePasswordSendSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('sendRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//запрашиваем СМС-код для подтверждения
+				$aData = Yii::app()->adminKreddyApi->getPassword();
+				$bSendSms = Yii::app()->adminKreddyApi->sendSmsChangePassword($aData);
+				if ($bSendSms) { //если СМС отправлено успешно
+					unset($oSmsCodeForm);
+					$oSmsCodeForm = new SMSCodeForm('codeRequired');
+					$this->render('change_password/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				} else {
+					$this->render('change_password/error', array('oSmsCodeForm' => $oSmsCodeForm));
+				}
+				Yii::app()->end();
+			}
+		}
+		$this->render('change_password/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Проверка СМС-кода для смены цифрового кода
+	 */
+
+	public function actionChangePasswordCheckSmsCode()
+	{
+		$oSmsCodeForm = new SMSCodeForm('codeRequired');
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam('SMSCodeForm');
+			$oSmsCodeForm->setAttributes($aPost);
+			if ($oSmsCodeForm->validate()) {
+				//забираем сохраненные в сессию данные нового паспорта
+				$aPassword = Yii::app()->adminKreddyApi->getPassword();
+				unset($aPassword['password_repeat']);
+				//отправляем данные в API
+				$bChangePassword = Yii::app()->adminKreddyApi->changePassword($oSmsCodeForm->smsCode, $aPassword);
+				if ($bChangePassword) { //если нет ошибок
+					$this->render('change_password/success');
+					Yii::app()->end();
+				} else {
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+				}
+			}
+		}
+
+		$this->render('change_password/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+	}
+
+	/**
+	 * Экшен получает эвент нажатия кнопки видеоидентификации
+	 */
+	public function actionGoIdentify()
+	{
+		//ставим флаг "клиент ушел на идентификацию"
+		Yii::app()->adminKreddyApi->setClientOnIdentify(true);
+		Yii::app()->end();
 	}
 
 	/**
@@ -276,11 +711,18 @@ class DefaultController extends Controller
 				if ($aGetIdent) {
 					$oIdentify = new VideoIdentifyForm();
 					$oIdentify->setAttributes($aGetIdent);
-					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
+					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
 					//выводим форму отправки на идентификацию
 					$this->render('need_identify', array('model' => $oIdentify));
 					Yii::app()->end();
 				}
+			} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
+				if (Yii::app()->user->hasFlash('warning')) {
+					Yii::app()->user->getFlash('warning');
+				}
+				Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
+
+				$this->redirect('/account/changePassport');
 			}
 
 			$sView = 'subscription/subscribe';
@@ -537,7 +979,7 @@ class DefaultController extends Controller
 
 		$oForm = new SMSCodeForm('codeRequired');
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
-		$bTriesExceed = false;
+
 
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
@@ -655,8 +1097,7 @@ class DefaultController extends Controller
 	/**
 	 *  Форма восстановления пароля, необходимого для входа в личный кабинет
 	 */
-	public
-	function actionResetPassword()
+	public function actionResetPassword()
 	{
 		$this->layout = '/layouts/column1';
 
@@ -672,8 +1113,12 @@ class DefaultController extends Controller
 			$oForm->setAttributes($aPost);
 			//проверяем телефон на валидность и если введён новый телефон и не удалось отправить на него SMS, то выдаём соответствующее сообщение
 			if ($oForm->validate()) {
-				if (Yii::app()->adminKreddyApi->getResetPassPhone() !== $oForm->phone
-					&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, false)
+				$aData = Yii::app()->adminKreddyApi->getResetPassData();
+				if(empty($aData['phone'])){
+					$aData['phone'] = '';
+				}
+				if ($aData['phone'] !== $oForm->phone
+					&& !Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->getAttributes(), false)
 				) {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				} else {
@@ -699,10 +1144,12 @@ class DefaultController extends Controller
 				$this->redirect(Yii::app()->createUrl('account/resetPassSendPass'));
 			}
 			//загружаем в форму телефон, сохраненный в сессии
-			$oForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
+
+			$aData = Yii::app()->adminKreddyApi->getResetPassData();
+			$oForm->setAttributes($aData);
 			if ($oForm->validate()) {
 				//делаем запрос на повторную отправку смс
-				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->phone, true)) {
+				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->getAttributes(), true)) {
 					$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
 				} else {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
@@ -732,16 +1179,19 @@ class DefaultController extends Controller
 
 		if ($aPost) {
 			$oCodeForm->setAttributes($aPost);
-			$oCodeForm->phone = Yii::app()->adminKreddyApi->getResetPassPhone();
+			$sSmsCode = $oCodeForm->sms_code;//временно сохраняем sms-код
+			$aData = Yii::app()->adminKreddyApi->getResetPassData();
+			$oCodeForm->setAttributes($aData);//загружаем в модель данные из сессии
+			$oCodeForm->sms_code = $sSmsCode; //возвращаем смс-код
 			if ($oCodeForm->validate()) {
-				$bResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($oCodeForm->phone, $oCodeForm->smsCode);
+				$bResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($oCodeForm->getAttributes());
 				//проверяем, удалось ли отправить смс
 				if ($bResult) {
 					//переходим на страницу "успешно"
 					$this->redirect(Yii::app()->createUrl("/account/resetPassSmsSentSuccess"));
 				} else {
 					//добавляем ошибку перед выводом формы
-					$oCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+					$oCodeForm->addError('sms_code', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				}
 			}
 		}
@@ -789,6 +1239,7 @@ class DefaultController extends Controller
 			}
 
 			// display the login form
+			$oModel->password = '';//удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
 			$this->render('login', array('model' => $oModel));
 
 		} else {

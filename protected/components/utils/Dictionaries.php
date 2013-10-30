@@ -17,8 +17,10 @@ class Dictionaries
 	const C_ERR_SMS_WRONG = 'Неверный код подтверждения!';
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
 
+	const C_SMS_SUCCESS_NUM = 'SMS с кодом успешно отправлено на номер';
 	const C_SMS_SUCCESS = 'SMS с кодом успешно отправлено';
 	const C_SMS_PASS_SUCCESS = 'SMS с паролем успешно отправлено';
+	const C_SMS_RESET_PASSWORD_SUCCESS = "SMS с паролем отправлено на указанный Вами номер";
 
 	const C_INFO_MOSCOWTIME = "Указано московское время";
 
@@ -203,15 +205,15 @@ class Dictionaries
 	);
 
 	public static $aMonthsDigital = array(
-		'01'  => '01',
-		'02'  => '02',
-		'03'  => '03',
-		'04'  => '04',
-		'05'  => '05',
-		'06'  => '06',
-		'07'  => '07',
-		'08'  => '08',
-		'09'  => '09',
+		'01' => '01',
+		'02' => '02',
+		'03' => '03',
+		'04' => '04',
+		'05' => '05',
+		'06' => '06',
+		'07' => '07',
+		'08' => '08',
+		'09' => '09',
 		'10' => '10',
 		'11' => '11',
 		'12' => '12',
@@ -224,10 +226,10 @@ class Dictionaries
 	public static function getYears()
 	{
 		$curYear = (int)date('y');
-		$endYear = $curYear+10;
+		$endYear = $curYear + 10;
 		$aYears = array();
-		for($i = $curYear;$i<=$endYear;$i++){
-			$aYears[$i] = $i+2000;
+		for ($i = $curYear; $i <= $endYear; $i++) {
+			$aYears[$i] = $i + 2000;
 		}
 
 		return $aYears;
@@ -291,6 +293,14 @@ class Dictionaries
 		"1" => "7",
 		"2" => "7",
 		"3" => "14",
+	);
+
+	public static $aChangePassportReasons = array(
+		1=>'Замена в связи с окончанием срока действия (достижение 20, 45 лет)',
+		2=>'Утеря или кража',
+		3=>'Замена в связи с изменением ФИО, даты, места рождения, пола или внешности',
+		4=>'Замена в связи с непригодностью паспорта для дальнейшего использования (износ, повреждения и др.)',
+		5=>'Замена в связи с обнаружением неточности или ошибочности произведенных в паспорте записей'
 	);
 
 	/**
@@ -437,6 +447,7 @@ class Dictionaries
 				'id', 'name'
 			);
 		}
+
 		return self::$aRegions;
 	}
 
@@ -527,4 +538,5 @@ class Dictionaries
 			return true; //если не удалось узнать регион, считаем что московский
 		}
 	}
+
 }

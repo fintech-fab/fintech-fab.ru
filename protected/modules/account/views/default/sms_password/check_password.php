@@ -17,7 +17,7 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 <div id="alertSmsSent" class="alert in alert-success span7"><?= Dictionaries::C_SMS_PASS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
-	Ваш телефон: +7<?= Yii::app()->user->getMaskedId(); ?>
+	Ваш номер телефона: +7<?= Yii::app()->user->getMaskedId(); ?>
 </div>
 <div class="clearfix"></div>
 <div class="form" id="activeForm">
@@ -78,7 +78,7 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 	?>
 
 	<label>Введите пароль из SMS:</label>
-	<?= $form->textField($model, 'smsPassword', array('class' => 'span4')); ?>
+	<?= $form->textField($model, 'smsPassword', array('class' => 'span4','autocomplete' => 'off')); ?>
 	<?= $form->error($model, 'smsPassword'); ?>
 
 	<div class="clearfix"></div>
