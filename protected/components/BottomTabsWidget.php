@@ -11,6 +11,9 @@ class BottomTabsWidget extends CWidget
 
 	public function run()
 	{
+		if(SiteParams::getIsIvanovoSite()) {
+			$this->iSite = 2;
+		}
 		$this->tabs = Tabs::getSiteTabs($this->iSite);
 
 		$first = 0;

@@ -11,6 +11,10 @@ class FooterLinksWidget extends CWidget
 
 	public function run()
 	{
+		if(SiteParams::getIsIvanovoSite()) {
+			$this->iSite = 2;
+		}
+
 		$this->links = FooterLinks::getSiteLinks($this->iSite);
 
 

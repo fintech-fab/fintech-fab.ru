@@ -45,8 +45,9 @@ class Tabs extends CActiveRecord
 	 */
 	public static function getSiteTabs($iSite)
 	{
+		$aResult = self::model()->cache(60)->scopeSiteTabs($iSite)->findAll();
 
-		return self::model()->cache(60)->scopeSiteTabs($iSite)->findAll();
+		return $aResult;
 	}
 
 	/**

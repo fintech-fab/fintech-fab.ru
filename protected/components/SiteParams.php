@@ -163,6 +163,16 @@ class SiteParams
 		45,
 	);
 
+	/**
+	 * Возвращает значение константы
+	 *
+	 * @return bool
+	 */
+	public static function getIsIvanovoSite()
+	{
+		return (defined('SITE_IVANOVO'))?SITE_IVANOVO:false;
+	}
+
 
 	public function getAbsLink($sLocalLink = null)
 	{
