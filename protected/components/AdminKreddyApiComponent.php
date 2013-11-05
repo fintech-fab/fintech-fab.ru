@@ -1001,15 +1001,28 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $iProductId
 	 *
+	 * @param $iChannelId
+	 *
 	 * @return bool|string
 	 */
-	public function getProductCostById($iProductId)
+	public function getProductCostById($iProductId,$iChannelId)
 	{
 		$aProducts = $this->getProducts();
 
-		return (isset($aProducts[$iProductId]['subscription_cost']))
-			? $aProducts[$iProductId]['subscription_cost']
-			: false;
+		echo '<pre>' . ""; CVarDumper::dump($iProductId); echo '</pre>';
+		echo '<pre>' . ""; CVarDumper::dump($iChannelId); echo '</pre>';
+		echo '<pre>' . ""; CVarDumper::dump($aProducts[$iProductId]['channels'][$iChannelId]); echo '</pre>';
+		$iSubscriptionCost = 0;
+
+		if(isset($aProducts[$iProductId]['subscription_cost'])){
+			$iSubscriptionCost += $aProducts[$iProductId]['subscription_cost'];
+		}
+		if(isset($aProducts[$iProductId]['channels'][$iChannelId]['additional_cost']))
+		{
+			$iSubscriptionCost += $aProducts[$iProductId]['channels'][$iChannelId]['additional_cost'];
+		}
+
+		return $iSubscriptionCost;
 	}
 
 	/**
@@ -1033,11 +1046,9 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $iProductId
 	 *
-	 * @param $iChannelId
-	 *
 	 * @return bool|string
 	 */
-	public function getProductLoanAmountById($iProductId,$iChannelId)
+	public function getProductLoanAmountById($iProductId)
 	{
 		$aProducts = $this->getProducts();
 
