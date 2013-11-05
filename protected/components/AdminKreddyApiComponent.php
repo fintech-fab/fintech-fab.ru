@@ -159,7 +159,7 @@ class AdminKreddyApiComponent
 		}
 
 		return array(
-			'{sub_pay_sum}'        => $this->getProductCostById($iProductId), // стоимость подключения
+			'{sub_pay_sum}'        => $this->getSubscriptionCost(), // стоимость подключения
 
 			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())), // название канала
 
@@ -582,6 +582,20 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (!empty($aClientInfo['subscription']['product'])) ? $aClientInfo['subscription']['product'] : false;
+	}
+
+	/**
+	 * Стоимость текущей подписки клиента из getInfo
+	 *
+	 * @return bool
+	 *
+	 */
+	public function getSubscriptionCost()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['subscription']['product_info']['subscription_cost'])) ? $aClientInfo['subscription']['product_info']['subscription_cost'] : false;
+
 	}
 
 	/**
@@ -1009,9 +1023,6 @@ class AdminKreddyApiComponent
 	{
 		$aProducts = $this->getProducts();
 
-		echo '<pre>' . ""; CVarDumper::dump($iProductId); echo '</pre>';
-		echo '<pre>' . ""; CVarDumper::dump($iChannelId); echo '</pre>';
-		echo '<pre>' . ""; CVarDumper::dump($aProducts[$iProductId]['channels'][$iChannelId]); echo '</pre>';
 		$iSubscriptionCost = 0;
 
 		if(isset($aProducts[$iProductId]['subscription_cost'])){
@@ -2433,4 +2444,5 @@ class AdminKreddyApiComponent
 	{
 		return (!empty(Yii::app()->session['aPassword']))?Yii::app()->session['aPassword']:array();
 	}
+
 }
