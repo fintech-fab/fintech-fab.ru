@@ -824,19 +824,20 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		$aProducts = Yii::app()->cache->get('products');
+		//TODO включить кэш
+		//$aProducts = Yii::app()->cache->get('productsAndChannels');
 		if (!empty($aProducts)) {
 			return $aProducts;
 		}
-		$aProductsAndChannels = $this->getData('products');
+		$aProductsAndChannels = $this->getData('products_and_channels');
 		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
 			//сохраняем в кэш с временем хранения 10 минут
-			Yii::app()->cache->set('products', $aProductsAndChannels, 600);
+			Yii::app()->cache->set('productsAndChannels', $aProductsAndChannels, 600);
 			//кэш длительного хранения, на случай отключения API
-			Yii::app()->cache->set('productsLongTime', $aProductsAndChannels);
+			Yii::app()->cache->set('productsAndChannelsLongTime', $aProductsAndChannels);
 		} else {
 			//если вдруг при обращении к API вылезла ошибка, достаем данные из длительного кэша
-			$aProducts = Yii::app()->cache->get('productsLongTime');
+			$aProducts = Yii::app()->cache->get('productsAndChannelsLongTime');
 			if (isset($aProducts)) {
 				return $aProducts;
 			}
@@ -932,13 +933,14 @@ class AdminKreddyApiComponent
 					? $aProduct['channels']
 					: array();
 				//перебираем каналы, по которым можно получить продукт
-				foreach ($aProductChannels as $iChannel) {
+
+				foreach ($aProductChannels as $iKey => $aChannel) {
 					//проверяем, что у канала есть описание
 					//проверяем, что данный канал доступен пользователю
-					if (isset($aChannels[$iChannel])
-						&& in_array($iChannel, $aClientChannels)
+					if (isset($aChannels[$iKey])
+						&& in_array($iKey, $aClientChannels)
 					) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $iChannel)] = $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$iChannel]);
+						$aProductsAndChannels[($aProduct['id'] . '_' . $iKey)] = $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$iKey]);
 					}
 				}
 			}
@@ -951,6 +953,8 @@ class AdminKreddyApiComponent
 	 * Получение списка продуктов и каналов для данного пользователя.
 	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
 	 *
+ 	 * TODO найти причину оставить эту функцию, или выпилить её
+	 *
 	 * @return array|bool
 	 */
 
@@ -959,10 +963,10 @@ class AdminKreddyApiComponent
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
 		//получаем список каналов
-		$aChannels = $this->getProductsChannels();
-		//получаем список каналов, доступных клиенту
+		//$aChannels = $this->getProductsChannels();
+		//получаем список каналов, доступных для данного продукта
 		//проверяем, что получили массивы
-		if (is_array($aProducts) && is_array($aChannels)) {
+		/*if (is_array($aProducts) && is_array($aChannels)) {
 			$aProductsList = array();
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
@@ -971,9 +975,9 @@ class AdminKreddyApiComponent
 			}
 
 			return $aProductsList;
-		}
+		}*/
 
-		return false;
+		return $aProducts;
 	}
 
 	/**
@@ -1029,9 +1033,11 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $iProductId
 	 *
+	 * @param $iChannelId
+	 *
 	 * @return bool|string
 	 */
-	public function getProductLoanAmountById($iProductId)
+	public function getProductLoanAmountById($iProductId,$iChannelId)
 	{
 		$aProducts = $this->getProducts();
 
@@ -1649,7 +1655,7 @@ class AdminKreddyApiComponent
 			case 'history':
 				$sAction = self::API_ACTION_GET_HISTORY;
 				break;
-			case 'products':
+			case 'products_and_channels':
 				$sAction = self::API_ACTION_GET_PRODUCTS;
 				break;
 			case 'identify':

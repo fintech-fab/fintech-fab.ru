@@ -607,7 +607,7 @@ class ClientFormComponent
 
 	public function goShopping()
 	{
-		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
+		$aProducts = Yii::app()->adminKreddyApi->getProducts();
 		foreach ($aProducts as $i => $aProduct) {
 			if (array_search('Покупки', $aProduct)) {
 				$aShoppingProduct = $i;

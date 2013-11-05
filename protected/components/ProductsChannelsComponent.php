@@ -17,15 +17,15 @@ class ProductsChannelsComponent
 	 */
 	public static function getProducts()
 	{
-		// получаем массив доступных продуктов и каналов
-		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
+		// получаем массив доступных продуктов
+		$aProducts = Yii::app()->adminKreddyApi->getProducts();
 
 		// возвращаем форматированный массив
 		return self::formatProductsList($aProducts);
 	}
 
 	/**
-	 * Формирует массив "продукт_канал" => "описание продукта с учётом канала"
+	 * Формирует массив со списком продуктов
 	 *
 	 * @param $aProducts
 	 *
@@ -48,7 +48,7 @@ class ProductsChannelsComponent
 					. "</span>";
 			}
 		} else {
-			$aProductsList = array("0" => "<span data-price='0' data-final-price='0' data-price-count='0 дней' data-count='0 займов' data-int-count='0' data-time='0'>Произошла ошибка!</span>",);
+			$aProductsList = array("0" => "<span data-price='0' data-final-price='0' data-price-count='0 дней' data-count='0 займов' data-int-count='0' data-time='0'>Произошла ошибка! Попробуйте перезагрузить страницу через минуту.</span>",);
 		}
 
 		return $aProductsList;
@@ -66,5 +66,6 @@ class ProductsChannelsComponent
 		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный (МТС, Билайн, Мегафон)';
 		}
+		return false;
 	}
 }
