@@ -98,12 +98,12 @@ class ProductsChannelsComponent
 				}
 				$sMobileChannels .= $iKey;
 				$sMobileChannelName = $sChannelName;
-			} else {
+			} elseif(!strpos($sChannelName, 'Кредди')) {
 				$aChannelsList[$iKey] = '<span data-card="1">' . $sChannelName . '</span>';
 			}
 		}
 		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
-			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . self::formatChannelName($sMobileChannelName) . '</span>';
+			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
 		}
 
 		return $aChannelsList;
