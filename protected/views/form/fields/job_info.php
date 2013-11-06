@@ -46,7 +46,7 @@ $htmlOptions = array(
 	)
 );
 //отдельно задаем свойства для радиокнопок, для корректной отработки валидации и сопутствующих JS
-$pastCreditHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + array('id' => get_class($oClientCreateForm) . '_have_past_credit'));
+$pastCreditHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions']);
 ?>
 <div class="span5">
 	<?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3') + $htmlOptions); ?>

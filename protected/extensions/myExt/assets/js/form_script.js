@@ -46,57 +46,6 @@ jQuery(window).on('load',function() {
 
 	});
 
-	/**
-	 * вешаем на радиобаттоны "Пол" обработчик, чтобы по смене сразу валидировать (почему-то в TbActiveForm нет
-	 * валидации radioButtonListRow без подобных плясок с бубном)
-	 */
-	jQuery("#sex").find(":input").change(function () {
-		var form = $("#" + formName);
-		var settings = form.data("settings");
-		var regExp = new RegExp(formName + "_sex");
-		$.each(settings.attributes, function () {
-			var sID = this.id;
-			if (sID.match(regExp)) {
-				this.status = 2; // force ajax validation
-			}
-		});
-		form.data("settings", settings);
-
-		// trigger ajax validation
-		$.fn.yiiactiveform.validate(form, function (data) {
-			$.each(settings.attributes, function () {
-				if (this.id == formName + "_sex") {
-					$.fn.yiiactiveform.updateInput(this, data, form);
-					this.afterValidateAttribute();
-				}
-			});
-		});
-	});
-
-	jQuery("#have_past_credit").find(":input").change(function () {
-		var form = $("#" + formName);
-		var settings = form.data("settings");
-		var regExp = new RegExp("^" + formName + "_have_past_credit");
-		$.each(settings.attributes, function () {
-			var sID = this.id;
-			if (sID.match(regExp)) {
-				this.status = 2; // force ajax validation
-			}
-		});
-		form.data("settings", settings);
-
-		// trigger ajax validation
-		$.fn.yiiactiveform.validate(form, function (data) {
-			$.each(settings.attributes, function () {
-				var sID = this.id;
-				if (sID.match(regExp)) {
-					$.fn.yiiactiveform.updateInput(this, data, form);
-					this.afterValidateAttribute();
-				}
-			});
-		});
-
-	});
 
 //по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
 	jQuery("#passportDataHeading").click(function () {
