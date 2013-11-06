@@ -35,11 +35,22 @@ class ProductsChannelsComponent
 	{
 		$aProductsList = array();
 		if (is_array($aProducts)) {
+
 			foreach ($aProducts as $key => $aProduct) {
 				$iLoanLifetime = (int)($aProduct['loan_lifetime'] / 3600 / 24);
 				$iSubscriptionLifetime = (int)($aProduct['subscription_lifetime'] / 3600 / 24);
+				$iCardPrice = 0;
+				if (isset($aProduct['channels'])&&is_array($aProduct['channels'])) {
+					foreach ($aProduct['channels'] as $aChannel) {
+						if (!empty($aChannel['additional_cost'])) {
+							$iCardPrice = $aChannel['additional_cost'];
+						}
+					}
+				}
+
 				$aProductsList[$key] = "<span data-price='" . $aProduct['subscription_cost']
-					. "' data-final-price='" . $aProduct['amount'] . "' data-price-count='"
+					. "' data-final-price='" . $aProduct['amount']
+					. "' data-card='" . $iCardPrice. "' data-price-count='"
 					. $iSubscriptionLifetime . "&nbsp;дней"
 					. "' data-count='" . $aProduct['loan_count'] . "&nbsp;займа"
 					. "' data-int-count='" . $aProduct['loan_count']
@@ -48,7 +59,7 @@ class ProductsChannelsComponent
 					. "</span>";
 			}
 		} else {
-			$aProductsList = array("0" => "<span data-price='0' data-final-price='0' data-price-count='0 дней' data-count='0 займов' data-int-count='0' data-time='0'>Произошла ошибка! Попробуйте перезагрузить страницу через минуту.</span>",);
+			$aProductsList = array('0' => '<span data-price="0" data-final-price="0" data-price-count="0 дней" data-count="0 займов" data-int-count="0" data-time="0">Произошла ошибка! Попробуйте перезагрузить страницу через минуту.</span>',);
 		}
 
 		return $aProductsList;
@@ -66,6 +77,35 @@ class ProductsChannelsComponent
 		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный (МТС, Билайн, Мегафон)';
 		}
+
 		return false;
+	}
+
+	/**
+	 * Получение списка каналов, с объединением мобильных каналов в один
+	 *
+	 */
+
+	public function getChannels()
+	{
+		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
+		$aChannelsList = array();
+		$sMobileChannels = '';
+		foreach ($aChannels as $iKey => $sChannelName) {
+			if (strpos($sChannelName, 'мобильный')) {
+				if (!empty($sMobileChannels)) {
+					$sMobileChannels .= '_';
+				}
+				$sMobileChannels .= $iKey;
+				$sMobileChannelName = $sChannelName;
+			} else {
+				$aChannelsList[$iKey] = '<span data-card="1">' . $sChannelName . '</span>';
+			}
+		}
+		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
+			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . self::formatChannelName($sMobileChannelName) . '</span>';
+		}
+
+		return $aChannelsList;
 	}
 }

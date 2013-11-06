@@ -595,13 +595,23 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return int номер выбранного продукта
+	 * @return int|bool номер выбранного продукта
 	 */
 	public function getSessionProduct()
 	{
 
 		return isset(Yii::app()->session['ClientSelectProductForm']['product'])
 			? Yii::app()->session['ClientSelectProductForm']['product']
+			: false;
+	}
+
+	/**
+	 * @return string|bool
+	 */
+	public function getSessionChannel()
+	{
+		return isset(Yii::app()->session['ClientSelectProductForm']['channel_id'])
+			? Yii::app()->session['ClientSelectProductForm']['channel_id']
 			: false;
 	}
 
