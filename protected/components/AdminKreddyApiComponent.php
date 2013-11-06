@@ -2416,4 +2416,24 @@ class AdminKreddyApiComponent
 	{
 		return (!empty(Yii::app()->session['aPassword']))?Yii::app()->session['aPassword']:array();
 	}
+
+	/**
+	 * Отправка СМС сообщения через API (для регистрации)
+	 *
+	 * @param $sPhone
+	 * @param $sMessage
+	 *
+	 * @return bool
+	 */
+	public function sendSms($sPhone, $sMessage)
+	{
+		$this->requestAdminKreddyApi('siteClient/sendSms', array(
+			'number'  => $sPhone,
+			'message' => $sMessage,
+		));
+		if($this->getIsError()){
+			return false;
+		}
+		return true;
+	}
 }
