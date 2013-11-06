@@ -15,7 +15,7 @@
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/style.css?v=1" />
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/payment.css?v=1" />
 
-<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=1"></script>
+<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=2"></script>
 
 <?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 
