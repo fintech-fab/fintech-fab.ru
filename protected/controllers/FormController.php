@@ -80,6 +80,7 @@ class FormController extends Controller
 
 		if($sView === 'client_select_product'){
 			$this->showTopPageWidget = true;
+			$sView = 'client_flexible_product';
 		}
 
 
