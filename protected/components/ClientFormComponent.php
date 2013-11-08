@@ -255,6 +255,7 @@ class ClientFormComponent
 
 		//$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
+		//отправляем СМС через API
 		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone,$sMessage);
 
 		if ($bSmsSentOk) {
