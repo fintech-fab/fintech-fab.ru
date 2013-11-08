@@ -838,8 +838,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		//TODO включить кэш
-		//$aProducts = Yii::app()->cache->get('productsAndChannels');
+		$aProducts = Yii::app()->cache->get('productsAndChannels');
 		if (!empty($aProducts)) {
 			return $aProducts;
 		}
