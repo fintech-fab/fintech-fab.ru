@@ -105,7 +105,7 @@ class CryptArray
 	protected function getSalt()
 	{
 		$salt = (!empty(Yii::app()->params['cryptSalt']))
-			? Yii::app()->params['cryptSalt']
+			? substr(Yii::app()->params['cryptSalt'],0,32)
 			: 'fkf4a7h0853k6nxlsg84';
 		return $salt;
 	}
