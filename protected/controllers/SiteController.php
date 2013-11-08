@@ -40,8 +40,8 @@ class SiteController extends Controller
 		Yii::app()->clientForm->setCurrentStep(0);
 
 
-		$oClientForm = new ClientSelectProductForm();
-		$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
+		$oClientForm = new ClientFlexibleProductForm();
+		$this->render('../form/client_flexible_product', array('oClientCreateForm' => $oClientForm));
 
 	}
 
