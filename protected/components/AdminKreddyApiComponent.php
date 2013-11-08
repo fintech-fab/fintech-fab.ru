@@ -594,7 +594,15 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_info']['subscription_cost'])) ? $aClientInfo['subscription']['product_info']['subscription_cost'] : false;
+		$iSubscriptionCost = (!empty($aClientInfo['subscription']['balance'])) ? $aClientInfo['subscription']['balance'] : 0;
+
+		if($iSubscriptionCost>0){
+			$iSubscriptionCost = 0;
+		} elseif($iSubscriptionCost<0){
+			$iSubscriptionCost *= -1;
+		}
+
+		return $iSubscriptionCost;
 
 	}
 
