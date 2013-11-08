@@ -253,7 +253,10 @@ class ClientFormComponent
 		//отправляем СМС
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 
-		$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+		//$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
+
+		//отправляем СМС через API
+		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone,$sMessage);
 
 		if ($bSmsSentOk) {
 			//добавляем в лог запрос sms с этого ip

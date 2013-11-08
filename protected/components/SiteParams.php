@@ -68,10 +68,10 @@ class SiteParams
 
 	public static $aTypes = array(
 		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата Пакета',
-		self::C_INVOICE_TYPE_LOAN              => 'Возврат займа',
-		self::C_INVOICE_TYPE_LOAN_FINE         => 'Возврат займа и пени',
-		self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Возврат займа и штрафа',
-		self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Возврат займа, пени и штрафа',
+		self::C_INVOICE_TYPE_LOAN              => 'Погашение займа',
+		self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, займ)',
+		self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, займ)',
+		self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, займ)',
 	);
 
 	public static $iTimeNow = null;

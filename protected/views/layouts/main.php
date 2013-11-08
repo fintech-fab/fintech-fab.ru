@@ -6,27 +6,10 @@
 	echo $content;
 	$this->endContent();
 	?>
-<!-- ClickTale Bottom part -->
-
-<script type="text/javascript">
-	if (document.location.protocol != 'https:')
-		document.write(unescape("%3Cscript%20src='http://s.clicktale.net/WRe0.js'%20type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-	if (typeof ClickTale == 'function') ClickTale(7143, 1, "www08");
-</script>
-<!-- ClickTale end of Bottom part -->
-
-<!-- ClickTale Top part -->
-<script type="text/javascript">
-	var WRInitTime = (new Date()).getTime();
-</script>
-<!-- ClickTale end of Top part -->
 </head>
 <!-- head end -->
 
 <body class="home">
-<div id="ClickTaleDiv" style="display: none;"></div>
 <!--  header navbar start -->
 <?php $this->beginContent('//layouts/main_navbar_top');
 echo $content;

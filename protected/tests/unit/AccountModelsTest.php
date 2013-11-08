@@ -108,7 +108,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	public function testResetPasswordCodeNoValid()
 	{
 		$aPostData = array(
-			'smsCode' => '',
+			'sms_code' => '',
 		);
 
 
@@ -117,7 +117,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		$oForm->validate();
 
-		$this->assertNotEmpty($oForm->getError('smsCode'));
+		$this->assertNotEmpty($oForm->getError('sms_code'));
 	}
 
 	public function testAddCardFormNoValid()
