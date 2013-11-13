@@ -35,7 +35,7 @@ $aCrumbs = array(
 	));
 
 	$oClientCreateForm->channel_id = Yii::app()->clientForm->getSessionChannel();
-	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+	// если в сессии канала нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 	if (empty($oClientCreateForm->channel_id)) {
 		$oClientCreateForm->channel_id = reset(array_keys(Yii::app()->productsChannels->getChannelsForButtons()));
 	}
@@ -47,7 +47,7 @@ $aCrumbs = array(
 	}
 
 	$oClientCreateForm->time = Yii::app()->clientForm->getSessionFlexibleProductTime();
-	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+	// если в сессии времени нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 	if (empty($oClientCreateForm->time)) {
 		$oClientCreateForm->time = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()));
 	}
@@ -104,12 +104,14 @@ $aCrumbs = array(
 
 </div>
 <?php
+//эта функция предназначена для обработки нажатий на кнопки-переключатели, выбирающие канал
 Yii::app()->clientScript->registerScript('radioButtonsTrigger', '
-$("#ClientFlexibleProductForm_channel_id").on("change",function(){
+ var oChannelId = $("#' . get_class($oClientCreateForm) . '_channel_id");
+ oChannelId.on("change",function(){
 
-		var sChannel = $("#ClientFlexibleProductForm").find("button[value*=" + this.value + "]").html();
+		var sChannel = $("#' . get_class($oClientCreateForm) . '").find("button[value*=" + this.value + "]").html();
 		$(".cost.channel").html(sChannel);
 	});
-$("#ClientFlexibleProductForm_channel_id").change();
+oChannelId.change();
 ', CClientScript::POS_LOAD);
 ?>

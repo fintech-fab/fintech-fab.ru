@@ -143,6 +143,7 @@ class AdminKreddyApiComponent
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
+	public $aProducts;
 
 
 	/**
@@ -153,11 +154,11 @@ class AdminKreddyApiComponent
 	public function formatStatusMessage()
 	{
 		// берём ID продукта из сессии, если есть
-		$iProductId = $this->getSubscribeSelectedProductId();
+		/*$iProductId = $this->getSubscribeSelectedProductId();
 		if (!$iProductId) {
 			// если нет в сессии - из ответа API
 			$iProductId = $this->getSubscriptionProductId();
-		}
+		}*/
 
 		return array(
 			'{sub_pay_sum}'        => $this->getSubscriptionCost(), // стоимость подключения
@@ -847,8 +848,8 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-
-		$aProducts = Yii::app()->cache->get('productsAndChannels');
+		//TODO сделать хранение в кэше с учетом разных точек входа
+		$aProducts = $this->aProducts; //Yii::app()->cache->get('productsAndChannels');
 		if (!empty($aProducts)) {
 			return $aProducts;
 		}
@@ -2318,7 +2319,7 @@ class AdminKreddyApiComponent
 
 		$aFlexProduct = array();
 		if (is_array($aProducts)) {
-			foreach ($aProducts as $iKey => $aProduct) {
+			foreach ($aProducts as $aProduct) {
 				$iAmount = (!empty($aProduct['amount'])) ? $aProduct['amount'] : 0;
 				$aFlexProduct[$iAmount] = $iAmount;
 			}
