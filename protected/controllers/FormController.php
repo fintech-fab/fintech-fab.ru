@@ -40,11 +40,15 @@ class FormController extends Controller
 		 * Обработка POST запроса
 		 */
 
-		if ($aPost = Yii::app()->clientForm->getPostData()) //проверяем, был ли POST запрос
+		$aPost = Yii::app()->clientForm->getPostData();
+
+		if ($aPost) //проверяем, был ли POST запрос
 		{
+
 			$oClientForm->attributes = $aPost; //передаем запрос в форму
 
 			if ($oClientForm->validate()) {
+
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
@@ -75,11 +79,8 @@ class FormController extends Controller
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 		//TODO сделать выбор согласно локации клиента
 
-		if($sView === 'client_select_product'){
+		if ($sView === 'client_select_product' || $sView === 'client_flexible_product') {
 			$this->showTopPageWidget = true;
-			if (SiteParams::getIsIvanovoSite()) {
-				$sView = 'client_flexible_product';
-			}
 		}
 
 

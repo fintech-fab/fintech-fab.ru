@@ -1,6 +1,5 @@
 <?php
 /* @var FormController $this */
-/* @var ClientSelectProductForm $model */
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
@@ -10,61 +9,76 @@
 
 $this->pageTitle = Yii::app()->name;
 
+
 $aCrumbs = array(
 	array('Выбор пакета', 1),
-	array('Заявка на заём', 2),
-	array('Подтверждение номера телефона', 3)
+	array('Заявка на займ', 2),
+	array('Подтверждение номера телефона', 3),
+	array('Идентификация', 4)
 );
-
-$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/products.js';
-Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
 
 ?>
 
 <div class="row">
 
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
-	<?php
 
+	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                   => get_class($oClientCreateForm),
 		'enableAjaxValidation' => true,
 		'clientOptions'        => array(
-			'validateOnChange' => true,
+			'validateOnChange' => false,
 			'validateOnSubmit' => true,
 		),
 		'action'               => Yii::app()->createUrl('/form/'),
 	));
 
+	$oClientCreateForm->channel_id = Yii::app()->clientForm->getSessionChannel();
+	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+	if (empty($oClientCreateForm->channel_id)) {
+		$oClientCreateForm->channel_id = reset(array_keys(Yii::app()->productsChannels->getChannelsForButtons()));
+	}
+
+	$oClientCreateForm->amount = Yii::app()->clientForm->getSessionFlexibleProductAmount();
+	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+	if (empty($oClientCreateForm->amount)) {
+		$oClientCreateForm->amount = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProduct()));
+	}
+
+	$oClientCreateForm->time = Yii::app()->clientForm->getSessionFlexibleProductTime();
+	// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+	if (empty($oClientCreateForm->time)) {
+		$oClientCreateForm->time = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()));
+	}
+
+
+	$form->radioButtonGroupsList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary'));
 	?>
 	<div class="row span7">
-		<?php $this->widget('SliderWidget',array('form'=>$form)); ?>
+		<?php $this->widget('SliderWidget', array('form' => $form, 'model' => $oClientCreateForm)); ?>
 	</div>
 
 	<div class="row offset1 span4 conditions">
-		<h5 class="pay_legend">Выбранные условия</h5>
-		<?php
+
+		<div class="alert alert-success" style="margin-top: 20pt;">
+			<h5 class="pay_legend">Выбранные условия</h5>
+			<?php
 
 		?>
 		<ul>
 			<li>Размер займа:
-				<span class="cost final_price"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+				<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 			</li>
-			<li>Вернуть <span class="cost final_price">
-				<?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-				до:&nbsp;<span class="cost time">23:50</span>, <span class="cost date"><?= "";//$getDateToPayUntil; ?></span>
+			<li>Канал получения: <span class="cost channel"></span>
 			</li>
-			<li>Стоимость подключения:
-				<span class="cost price_count"><?= "";//Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			<li>Дата возврата займа: &nbsp;<span class="cost date"></span>
 			</li>
-			<li>Срок подключения:
-				<span class="cost price_month"><?= "";//Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span></li>
-			<li>Размер Пакета:
-				<span class="cost packet_size"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>
+			<li>Необходимо вернуть:
+				<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 			</li>
-			<li>Количество займов в Пакете:
-				<span class="cost count_subscribe"><?= "";//Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
 		</ul>
+		</div>
 	</div>
 
 	<div class="clearfix"></div>
@@ -73,7 +87,8 @@ Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type'       => 'primary',
-				'label'      => 'Далее →',
+				'size'  => 'large',
+				'label' => 'Оформить сейчас!',
 			)); ?>
 		</div>
 	</div>
@@ -88,3 +103,13 @@ Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
 	)); ?>
 
 </div>
+<?php
+Yii::app()->clientScript->registerScript('radioButtonsTrigger', '
+$("#ClientFlexibleProductForm_channel_id").on("change",function(){
+
+		var sChannel = $("#ClientFlexibleProductForm").find("button[value*=" + this.value + "]").html();
+		$(".cost.channel").html(sChannel);
+	});
+$("#ClientFlexibleProductForm_channel_id").change();
+', CClientScript::POS_LOAD);
+?>

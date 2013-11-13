@@ -400,6 +400,10 @@ class ClientFormComponent
 
 		switch ($this->iCurrentStep) {
 			case 0:
+				if (SiteParams::getIsIvanovoSite()) {
+					return new ClientFlexibleProductForm();
+				}
+
 				return new ClientSelectProductForm();
 				break;
 			case 1:
@@ -426,6 +430,10 @@ class ClientFormComponent
 
 		switch ($this->iCurrentStep) {
 			case 0:
+				if (SiteParams::getIsIvanovoSite()) {
+					return 'client_flexible_product';
+				}
+
 				return 'client_select_product';
 				break;
 			case 1:
@@ -464,6 +472,10 @@ class ClientFormComponent
 
 		switch ($this->iCurrentStep) {
 			case 0:
+				if (SiteParams::getIsIvanovoSite()) {
+					return Yii::app()->request->getParam('ClientFlexibleProductForm');
+				}
+
 				return Yii::app()->request->getParam('ClientSelectProductForm');
 				break;
 			case 1:
@@ -602,9 +614,33 @@ class ClientFormComponent
 	 */
 	public function getSessionProduct()
 	{
-
 		return isset(Yii::app()->session['ClientSelectProductForm']['product'])
 			? Yii::app()->session['ClientSelectProductForm']['product']
+			: false;
+	}
+
+	/**
+	 * Получение из сессии суммы выбранного "гибкого" займа
+	 *
+	 * @return bool
+	 */
+	public function getSessionFlexibleProductAmount()
+	{
+
+		return isset(Yii::app()->session['ClientFlexibleProductForm']['amount'])
+			? Yii::app()->session['ClientFlexibleProductForm']['amount']
+			: false;
+	}
+
+	/**
+	 * Получение из сессии времени выбранного "гибкого" займа
+	 * @return bool
+	 */
+	public function getSessionFlexibleProductTime()
+	{
+
+		return isset(Yii::app()->session['ClientFlexibleProductForm']['time'])
+			? Yii::app()->session['ClientFlexibleProductForm']['time']
 			: false;
 	}
 
@@ -613,6 +649,12 @@ class ClientFormComponent
 	 */
 	public function getSessionChannel()
 	{
+		if (SiteParams::getIsIvanovoSite()) {
+			return isset(Yii::app()->session['ClientFlexibleProductForm']['channel_id'])
+				? Yii::app()->session['ClientFlexibleProductForm']['channel_id']
+				: false;
+		}
+
 		return isset(Yii::app()->session['ClientSelectProductForm']['channel_id'])
 			? Yii::app()->session['ClientSelectProductForm']['channel_id']
 			: false;

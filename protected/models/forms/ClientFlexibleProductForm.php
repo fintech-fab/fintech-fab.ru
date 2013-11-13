@@ -3,10 +3,11 @@
  * Class ClientFlexibleProductForm
  *
  */
-class ClientFlexibleProductForm extends CFormModel
+class ClientFlexibleProductForm extends ClientCreateFormAbstract
 {
 	public $amount;
 	public $time;
+	public $channel_id;
 
 	/**
 	 * @return array
@@ -14,9 +15,10 @@ class ClientFlexibleProductForm extends CFormModel
 	public function rules()
 	{
 		$aRules = array(
-			array('amount, time','required'),
+			array('amount, time,channel_id', 'required'),
 			array('amount', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getFlexibleProduct()), 'message' => 'Выберите сумму займа'),
-			array('time', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()), 'message' => 'Выберите период займа')
+			array('time', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()), 'message' => 'Выберите период займа'),
+			array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выберите правильный способ получения займа')
 		);
 
 		return $aRules;
@@ -43,6 +45,7 @@ class ClientFlexibleProductForm extends CFormModel
 		return array(
 			'amount',
 			'time',
+			'channel_id'
 		);
 	}
 }

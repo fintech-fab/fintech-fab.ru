@@ -847,11 +847,11 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		//TODO вернуть кэш
-		//$aProducts = Yii::app()->cache->get(productsAndChannels);
-		//if (!empty($aProducts)) {
-		//return $aProducts;
-		//}
+
+		$aProducts = Yii::app()->cache->get('productsAndChannels');
+		if (!empty($aProducts)) {
+			return $aProducts;
+		}
 		$aProductsAndChannels = $this->getData('products_and_channels');
 
 		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {

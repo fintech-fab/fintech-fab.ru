@@ -40,7 +40,7 @@ class ProductsChannelsComponent
 				$iLoanLifetime = (int)($aProduct['loan_lifetime'] / 3600 / 24);
 				$iSubscriptionLifetime = (int)($aProduct['subscription_lifetime'] / 3600 / 24);
 				$iCardPrice = 0;
-				if (isset($aProduct['channels'])&&is_array($aProduct['channels'])) {
+				if (isset($aProduct['channels']) && is_array($aProduct['channels'])) {
 					foreach ($aProduct['channels'] as $aChannel) {
 						if (!empty($aChannel['additional_cost'])) {
 							$iCardPrice = $aChannel['additional_cost'];
@@ -50,7 +50,7 @@ class ProductsChannelsComponent
 
 				$aProductsList[$key] = "<span data-price='" . $aProduct['subscription_cost']
 					. "' data-final-price='" . $aProduct['amount']
-					. "' data-card='" . $iCardPrice. "' data-price-count='"
+					. "' data-card='" . $iCardPrice . "' data-price-count='"
 					. $iSubscriptionLifetime . "&nbsp;дней"
 					. "' data-count='" . $aProduct['loan_count'] . "&nbsp;займа"
 					. "' data-int-count='" . $aProduct['loan_count']
@@ -98,12 +98,38 @@ class ProductsChannelsComponent
 				}
 				$sMobileChannels .= $iKey;
 				$sMobileChannelName = $sChannelName;
-			} elseif(!strpos($sChannelName, 'Кредди')) {
+			} elseif (!strpos($sChannelName, 'Кредди')) {
 				$aChannelsList[$iKey] = '<span data-card="1">' . $sChannelName . '</span>';
 			}
 		}
 		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
 			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
+		}
+
+		return $aChannelsList;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getChannelsForButtons()
+	{
+		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
+		$aChannelsList = array();
+		$sMobileChannels = '';
+		foreach ($aChannels as $iKey => $sChannelName) {
+			if (strpos($sChannelName, 'мобильный')) {
+				if (!empty($sMobileChannels)) {
+					$sMobileChannels .= '_';
+				}
+				$sMobileChannels .= $iKey;
+				$sMobileChannelName = $sChannelName;
+			} elseif (!strpos($sChannelName, 'Кредди')) {
+				$aChannelsList[$iKey] = $sChannelName;
+			}
+		}
+		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
+			$aChannelsList[$sMobileChannels] = SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName));
 		}
 
 		return $aChannelsList;

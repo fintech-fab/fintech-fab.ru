@@ -127,7 +127,7 @@ $a = array(
 			'timeout'     => 60 * 60 * 2,
 			'sessionName' => 'st',
 			'cookieParams' => array(
-				'domain' => '.dev.kreddy.popov'
+				'domain' => '.dev.kreddy.popov' //TODO вынести в custom!!!
 			)
 		),
 
