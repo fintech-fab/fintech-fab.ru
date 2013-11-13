@@ -88,6 +88,7 @@ class AdminKreddyApiComponent
 	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
+	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
@@ -824,10 +825,10 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		$aProducts = Yii::app()->cache->get('products');
-		if (!empty($aProducts)) {
-			return $aProducts;
-		}
+		//$aProducts = Yii::app()->cache->get('products');
+		//if (!empty($aProducts)) {
+		//return $aProducts;
+		//}
 		$aProductsAndChannels = $this->getData('products');
 		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
 			//сохраняем в кэш с временем хранения 10 минут
@@ -1402,7 +1403,7 @@ class AdminKreddyApiComponent
 	public function changePassword($sSmsCode, $aData)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code'=>$sSmsCode));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code' => $sSmsCode));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -1673,7 +1674,6 @@ class AdminKreddyApiComponent
 		}
 
 
-
 		return $aData;
 	}
 
@@ -1696,7 +1696,13 @@ class AdminKreddyApiComponent
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
-		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken()));
+		if (SiteParams::getIsIvanovoSite()) {
+			$iEntryPoint = 8;
+		} else {
+			$iEntryPoint = 1;
+		}
+
+		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint));
 
 		Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
 
@@ -1779,7 +1785,7 @@ class AdminKreddyApiComponent
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
 
-		return ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE);
+		return ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE || $iStatus === self::ERROR_NEED_REDIRECT);
 	}
 
 	/**
@@ -2112,6 +2118,7 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NOT_ALLOWED
 			&& $this->getLastCode() !== self::ERROR_NEED_IDENTIFY
 			&& $this->getLastCode() !== self::ERROR_NEED_PASSPORT_DATA
+			&& $this->getLastCode() !== self::ERROR_NEED_REDIRECT
 		);
 	}
 
@@ -2262,50 +2269,65 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Временное решение, заглушка для метода, получающего данные от API и выдающего соответствующий массив
+	 * Получаем данные от API и выдаем соответствующий массив для создания виджета гибкого займа
 	 *
 	 * @return array
 	 */
 
 	public function getFlexibleProduct()
 	{
-		$iMin = 1000; //минимальная сумма
-		$iMax = 10000; //максимальная сумма
-		$iStep = 500; //шаг изменения суммы
+		$aProducts = $this->getProducts();
+
 
 		$aFlexProduct = array();
-		$iCurrent = $iMin; //текущая сумма для цикла
-		do {
-			$aFlexProduct[$iCurrent] = $iCurrent; //помещаем в массив текущую сумму
-			$iCurrent += $iStep; //увеличиваем текущую сумму на шаг
-			if ($iCurrent >= $iMax) { //если сумма превысила максимальную, либо равна ей
-				$aFlexProduct[$iMax] = $iMax; //помещаем в массив максимальную сумму
+		if (is_array($aProducts)) {
+			foreach ($aProducts as $iKey => $aProduct) {
+				$iAmount = (!empty($aProduct['amount'])) ? $aProduct['amount'] : 0;
+				$aFlexProduct[$iAmount] = $iAmount;
 			}
-		} while ($iCurrent < $iMax);
-
-		//прерываемся когда текущая сумма стала больше либо равна максимальной
+		}
 
 
 		return $aFlexProduct;
 	}
 
 	/**
-	 * @return array
+	 * @return array|bool
 	 */
 	public function getFlexibleProductTime()
 	{
-		$aDays = array(
-			'7'  => '7',
-			'8'  => '8',
-			'9'  => '9',
-			'10' => '10',
-			'11' => '11',
-			'12' => '12',
-			'13' => '13',
-			'14' => '14',
-		);
+		$aProducts = $this->getProducts();
+
+		$aDays = array();
+		if (is_array($aProducts)) {
+			$aProduct = reset($aProducts);
+			if (is_array($aProduct) && is_array($aProduct['percentage'])) {
+				foreach ($aProduct['percentage'] as $iKey => $aDayPercent) {
+					$aDays[$iKey] = $iKey;
+				}
+			}
+		}
 
 		return $aDays;
+	}
+
+	/**
+	 *
+	 * @return array|bool
+	 */
+	public function getFlexibleProductPercentage()
+	{
+		$aProducts = $this->getProducts();
+
+		$aFlexProductPercentage = array();
+		if (is_array($aProducts)) {
+			foreach ($aProducts as $aProduct) {
+				$iAmount = (!empty($aProduct['amount'])) ? $aProduct['amount'] : 0;
+				$aFlexProductPercentage[$iAmount] = $aProduct['percentage'];
+			}
+		}
+
+		return $aFlexProductPercentage;
 	}
 
 	/**
@@ -2414,7 +2436,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getPassword()
 	{
-		return (!empty(Yii::app()->session['aPassword']))?Yii::app()->session['aPassword']:array();
+		return (!empty(Yii::app()->session['aPassword'])) ? Yii::app()->session['aPassword'] : array();
 	}
 
 	/**
@@ -2431,9 +2453,18 @@ class AdminKreddyApiComponent
 			'number'  => $sPhone,
 			'message' => $sMessage,
 		));
-		if($this->getIsError()){
+		if ($this->getIsError()) {
 			return false;
 		}
+
 		return true;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsNeedRedirect()
+	{
+		return ($this->getLastCode() == self::ERROR_NEED_REDIRECT);
 	}
 }

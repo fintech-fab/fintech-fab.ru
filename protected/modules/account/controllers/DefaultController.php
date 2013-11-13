@@ -38,7 +38,8 @@ class DefaultController extends Controller
 					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
-					/*'addCard', 'verifyCard', 'successCard',*/ 'refresh', 'changePassport',
+					/*'addCard', 'verifyCard', 'successCard',*/
+					'refresh', 'changePassport',
 					'changePassportSendSmsCode', 'changePassportCheckSmsCode', 'goIdentify',
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
@@ -73,11 +74,14 @@ class DefaultController extends Controller
 
 		//если действие не в списке не требующих авторизации, то проверяем статус авторизации
 		// проверка авторизации, логаут в случае если не авторизован
-		if (!in_array($sActionId, $aActionsNotNeedAuth) &&
-			!Yii::app()->adminKreddyApi->getIsAuth()
-		) {
-			Yii::app()->user->logout();
-			$this->redirect(Yii::app()->user->loginUrl);
+		if (!in_array($sActionId, $aActionsNotNeedAuth)) {
+			if (!Yii::app()->adminKreddyApi->getIsAuth()) {
+				Yii::app()->user->logout();
+				$this->redirect(Yii::app()->user->loginUrl);
+			} elseif (Yii::app()->adminKreddyApi->getIsNeedRedirect()) {
+				//TODO брать имя домена верхнего уровня из текущего адреса
+				$this->redirect('http://dev.kreddy.popov/account');
+			}
 		}
 
 		return parent::beforeAction($aAction);
@@ -97,7 +101,6 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
-
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
@@ -1114,7 +1117,7 @@ class DefaultController extends Controller
 			//проверяем телефон на валидность и если введён новый телефон и не удалось отправить на него SMS, то выдаём соответствующее сообщение
 			if ($oForm->validate()) {
 				$aData = Yii::app()->adminKreddyApi->getResetPassData();
-				if(empty($aData['phone'])){
+				if (empty($aData['phone'])) {
 					$aData['phone'] = '';
 				}
 				if ($aData['phone'] !== $oForm->phone
@@ -1179,9 +1182,9 @@ class DefaultController extends Controller
 
 		if ($aPost) {
 			$oCodeForm->setAttributes($aPost);
-			$sSmsCode = $oCodeForm->sms_code;//временно сохраняем sms-код
+			$sSmsCode = $oCodeForm->sms_code; //временно сохраняем sms-код
 			$aData = Yii::app()->adminKreddyApi->getResetPassData();
-			$oCodeForm->setAttributes($aData);//загружаем в модель данные из сессии
+			$oCodeForm->setAttributes($aData); //загружаем в модель данные из сессии
 			$oCodeForm->sms_code = $sSmsCode; //возвращаем смс-код
 			if ($oCodeForm->validate()) {
 				$bResult = Yii::app()->adminKreddyApi->resetPasswordCheckSms($oCodeForm->getAttributes());
@@ -1239,7 +1242,7 @@ class DefaultController extends Controller
 			}
 
 			// display the login form
-			$oModel->password = '';//удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
+			$oModel->password = ''; //удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
 			$this->render('login', array('model' => $oModel));
 
 		} else {

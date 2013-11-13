@@ -12,26 +12,25 @@ class Cookie
 	/**
 	 * Сравнивает атрибут $attributeName из зашифрованной и сериализованной куки $cookieName со значением $checkValue
 	 *
-	 * @param $cookieName string
+	 * @param $cookieName    string
 	 * @param $attributeName string
-	 * @param $checkValue mixed
+	 * @param $checkValue    mixed
 	 *
 	 * @return bool
 	 */
-	public static function compareDataInCookie($cookieName,$attributeName,$checkValue)
+	public static function compareDataInCookie($cookieName, $attributeName, $checkValue)
 	{
 		$dataInCookie = false;
-		if(isset(Yii::app()->request->cookies[$cookieName]))
-		{
+		if (isset(Yii::app()->request->cookies[$cookieName])) {
 			$cookie = Yii::app()->request->cookies[$cookieName];
 
-			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-			$aDecrypt= @unserialize($sDecrypt);
-			if(($aDecrypt && $aDecrypt[$attributeName]) && ($checkValue == $aDecrypt[$attributeName]))
-			{
-				$dataInCookie=true;
+			$sDecrypt = CryptArray::decryptVal($cookie); //декриптим куку
+			$aDecrypt = @unserialize($sDecrypt);
+			if (($aDecrypt && $aDecrypt[$attributeName]) && ($checkValue == $aDecrypt[$attributeName])) {
+				$dataInCookie = true;
 			}
 		}
+
 		return $dataInCookie;
 	}
 
@@ -45,14 +44,15 @@ class Cookie
 	 */
 	public static function getDataFromCookie($cookieName)
 	{
-		if(isset(Yii::app()->request->cookies[$cookieName]))
-		{
+		if (isset(Yii::app()->request->cookies[$cookieName])) {
 			$cookie = Yii::app()->request->cookies[$cookieName];
 
-			$sDecrypt=CryptArray::decryptVal($cookie);//декриптим куку
-			$aDecrypt= @unserialize($sDecrypt);
+			$sDecrypt = CryptArray::decryptVal($cookie); //декриптим куку
+			$aDecrypt = @unserialize($sDecrypt);
+
 			return $aDecrypt;
 		}
+
 		return false;
 	}
 
@@ -60,15 +60,26 @@ class Cookie
 	 * Шифрует и сериализует массив $data и записывает в куку $cookieName
 	 *
 	 * @param $cookieName string
-	 * @param $data array
+	 * @param $data       array
 	 */
-	public static function saveDataToCookie($cookieName,$data)
+	public static function saveDataToCookie($cookieName, $data)
 	{
 		$sEncrypt = serialize($data);
 		$cookieData = CryptArray::encryptVal($sEncrypt);
 
-		$cookie = new CHttpCookie($cookieName, $cookieData);
-		$cookie->expire = time()+60*60*24;
+		$aCookieOptions = Yii::app()->session->getCookieParams();
+		if (!empty($aCookieOptions['domain'])) {
+			$aCookieOptions = array(
+				'domain' => $aCookieOptions['domain']
+			);
+		} else {
+			$aCookieOptions = array(
+				'expire' => time() + 60 * 60 * 24
+			);
+		}
+
+		$cookie = new CHttpCookie($cookieName, $cookieData, $aCookieOptions);
+
 		Yii::app()->request->cookies[$cookieName] = $cookie;
 	}
 }

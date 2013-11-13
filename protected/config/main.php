@@ -126,6 +126,9 @@ $a = array(
 		'session'          => array(
 			'timeout'     => 60 * 60 * 2,
 			'sessionName' => 'st',
+			'cookieParams' => array(
+				'domain' => '.dev.kreddy.popov'
+			)
 		),
 
 		'request'          => array(

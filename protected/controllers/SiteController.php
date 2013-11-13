@@ -36,9 +36,13 @@ class SiteController extends Controller
 		Yii::app()->clientForm->setCurrentStep(0);
 
 
-		$oClientForm = new ClientFlexibleProductForm();
-		$this->render('../form/client_flexible_product', array('oClientCreateForm' => $oClientForm));
-
+		if (SiteParams::getIsIvanovoSite()) {
+			$oClientForm = new ClientFlexibleProductForm();
+			$this->render('../form/client_flexible_product', array('oClientCreateForm' => $oClientForm));
+		} else {
+			$oClientForm = new ClientSelectProductForm();
+			$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
+		}
 	}
 
 	/**
@@ -68,9 +72,17 @@ class SiteController extends Controller
 		}
 
 		// время жизни ставим - 30 суток
-		$aCookieOptions = array(
-			'expire' => time() + 60 * 60 * 24 * 30,
-		);
+		$aCookieOptions = Yii::app()->session->getCookieParams();
+		if (!empty($aCookieOptions['domain'])) {
+			$aCookieOptions = array(
+				'expire' => time() + 60 * 60 * 24 * 30,
+				'domain' => $aCookieOptions['domain']
+			);
+		} else {
+			$aCookieOptions = array(
+				'expire' => time() + 60 * 60 * 24 * 30,
+			);
+		}
 
 		if (!empty($sCityName)) {
 			// записываем в куки полученные данные

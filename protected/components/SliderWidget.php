@@ -24,7 +24,8 @@ class SliderWidget extends CWidget
 			'model'         => $model,
 			'aAmountValues' => Yii::app()->adminKreddyApi->getFlexibleProduct(),
 			'aTimeValues'   => Yii::app()->adminKreddyApi->getFlexibleProductTime(),
-			'form'=>$this->form
+			'aPercentage'   => Yii::app()->adminKreddyApi->getFlexibleProductPercentage(),
+			'form'          => $this->form
 		));
 	}
 
