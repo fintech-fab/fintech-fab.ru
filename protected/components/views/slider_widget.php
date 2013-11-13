@@ -145,12 +145,17 @@ Yii::app()->clientScript->registerScript('sliderWidget', '
 
 
 			oAmount.change(function () {
-				$(".cost.final_price").html(this.value);
-				$(".cost.price_count").html(parseInt(this.value)+aPercentage[]);
+				$(".cost.final_price").html(oAmount.attr("value"));
+				var percents = aPercentage[oAmount.attr("value")];
+				var percent = parseInt(percents[oTime.attr("value")]);
+				$(".cost.price_count").html(parseInt(oAmount.attr("value"))+percent);
 
 			});
 			oTime.change(function () {
-				$(".cost.date").html(getDateToPayUntil(this.value));
+				$(".cost.date").html(getDateToPayUntil(oTime.attr("value")));
+				var percents = aPercentage[oAmount.attr("value")];
+				var percent = parseInt(percents[oTime.attr("value")]);
+				$(".cost.price_count").html(parseInt(oAmount.attr("value"))+percent);
 			});
 
 

@@ -848,11 +848,12 @@ class AdminKreddyApiComponent
 	public function getProductsAndChannels()
 	{
 		//TODO вернуть кэш
-		//$aProducts = Yii::app()->cache->get('products');
+		//$aProducts = Yii::app()->cache->get(productsAndChannels);
 		//if (!empty($aProducts)) {
 		//return $aProducts;
 		//}
-		$aProductsAndChannels = $this->getData('products');
+		$aProductsAndChannels = $this->getData('products_and_channels');
+
 		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
 			//сохраняем в кэш с временем хранения 10 минут
 			Yii::app()->cache->set('productsAndChannels', $aProductsAndChannels, 600);
@@ -2323,7 +2324,6 @@ class AdminKreddyApiComponent
 			}
 		}
 
-
 		return $aFlexProduct;
 	}
 
@@ -2337,7 +2337,7 @@ class AdminKreddyApiComponent
 		$aDays = array();
 		if (is_array($aProducts)) {
 			$aProduct = reset($aProducts);
-			if (is_array($aProduct) && is_array($aProduct['percentage'])) {
+			if (is_array($aProduct) && isset($aProduct['percentage']) && is_array($aProduct['percentage'])) {
 				foreach ($aProduct['percentage'] as $iKey => $aDayPercent) {
 					$aDays[$iKey] = $iKey;
 				}
@@ -2359,7 +2359,7 @@ class AdminKreddyApiComponent
 		if (is_array($aProducts)) {
 			foreach ($aProducts as $aProduct) {
 				$iAmount = (!empty($aProduct['amount'])) ? $aProduct['amount'] : 0;
-				$aFlexProductPercentage[$iAmount] = $aProduct['percentage'];
+				$aFlexProductPercentage[$iAmount] = isset($aProduct['percentage']) ? $aProduct['percentage'] : array();
 			}
 		}
 
