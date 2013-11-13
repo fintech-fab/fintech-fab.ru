@@ -73,9 +73,14 @@ class FormController extends Controller
 		 * Рендер представления
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
+		//TODO сделать выбор согласно локации клиента
+		if($sView === 'client_select_product2'){
+			$sView = 'client_flexible_product';
+		}
 
 		if($sView === 'client_select_product'){
 			$this->showTopPageWidget = true;
+			$sView = 'client_flexible_product';
 		}
 
 

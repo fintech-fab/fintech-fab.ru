@@ -15,8 +15,8 @@ class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 	{
 
 		$aPostData = array(
-			'password'        => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdgflhsdgfjsdgf',
-			'password_repeat' => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdgflhsdgfjsdgf',
+			'password'        => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdAzDFgflhsdgfjsdgf,.-+\/<>}{',
+			'password_repeat' => '$*!%()*@#&*(^*(@#^()*)@3498724ksjdAzDFgflhsdgfjsdgf,.-+\/<>}{',
 		);
 
 

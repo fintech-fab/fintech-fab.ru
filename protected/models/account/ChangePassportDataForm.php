@@ -57,7 +57,7 @@ class ChangePassportDataForm extends ClientFullForm
 				array('passport_change_ticket', 'numerical', 'integerOnly' => true, 'min' => 1, 'message' => 'Необходимо указать номер (цифрами) талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
 
 
-				array('passport_change_ticket', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать номер талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
+				//array('passport_change_ticket', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать номер талона-уведомления, полученного в отделении полиции при подаче заявления об утере или краже паспорта'),
 				array('passport_change_department', 'checkPassportLostStolen', 'passport_change_reason'=>'passport_change_reason', 'message' => 'Необходимо указать наименование (номер) или адрес отделения МВД, принявшего заявление об утере или краже паспорта'),
 
 				array('passport_change_department','checkValidRus','message'=>'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания. Необходимо указать наименование (номер) или адрес отделения МВД, принявшего заявление об утере или краже паспорта'),

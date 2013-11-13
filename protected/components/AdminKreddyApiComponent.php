@@ -121,7 +121,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
 	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClient/checkClientCanVerifyCard';
 
-	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Обратитесь в контактный центр.';
+	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
@@ -2415,5 +2415,25 @@ class AdminKreddyApiComponent
 	public function getPassword()
 	{
 		return (!empty(Yii::app()->session['aPassword']))?Yii::app()->session['aPassword']:array();
+	}
+
+	/**
+	 * Отправка СМС сообщения через API (для регистрации)
+	 *
+	 * @param $sPhone
+	 * @param $sMessage
+	 *
+	 * @return bool
+	 */
+	public function sendSms($sPhone, $sMessage)
+	{
+		$this->requestAdminKreddyApi('siteClient/sendSms', array(
+			'number'  => $sPhone,
+			'message' => $sMessage,
+		));
+		if($this->getIsError()){
+			return false;
+		}
+		return true;
 	}
 }

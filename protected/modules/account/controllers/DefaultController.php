@@ -598,7 +598,7 @@ class DefaultController extends Controller
 			//рендерим форму запроса СМС-пароля
 			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 			//рендерим страницу с требованием пройти СМС-авторизацию
-			$this->render('change_numeric_code/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			$this->render('change_password/need_sms_auth', array('passFormRender' => $sPassFormRender));
 			Yii::app()->end();
 		}
 

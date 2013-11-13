@@ -197,3 +197,9 @@ div.search-form {
 .operations li a:hover {
 	background: #80CFFF;
 }
+
+
+.nav-tabs > li > a, .nav-pills > li > a {
+	padding-left: 10px;
+	padding-right: 10px;
+}
