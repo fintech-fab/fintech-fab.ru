@@ -5,6 +5,7 @@
 /* @var $aAmountValues */
 /* @var $aTimeValues */
 /* @var $aPercentage */
+/* @var $aChannelCosts */
 ?>
 
 	<h5 class="pay_legend">Выберите займ</h5>
@@ -15,6 +16,7 @@
 <?php
 Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 	var aPercentage = ' . CJSON::encode($aPercentage) . ';
+	var aChannelCosts = ' . CJSON::encode($aChannelCosts) . ';
 
 	function checkTime(i) {
 		if (i < 10) {
@@ -35,27 +37,43 @@ Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 	', CClientScript::POS_BEGIN);
 ?>
 <?php
+//TODO сделать получение количества labels из API
 Yii::app()->clientScript->registerScript('sliderWidget', '
+			var oChannelId = $("#' . get_class($model) . '_channel_id");
 			var oAmount = $("#amount");
 			var oTime = $("#time");
 			oAmount.selectToUISlider({
-				labels: 7,
+				labels: 5,
 				tooltip: false
 			});
 
-
 			oAmount.change(function () {
-				$(".cost.final_price").html(oAmount.attr("value"));
-				var percents = aPercentage[oAmount.attr("value")];
-				var percent = parseInt(percents[oTime.attr("value")]);
-				$(".cost.price_count").html(parseInt(oAmount.attr("value"))+percent);
+				var iAmount = parseInt(oAmount.attr("value"));
+				var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
+				if(typeof iAddCost === "undefined"){
+					iAddCost=0;
+				} else {
+					iAddCost = parseInt(iAddCost);
+				}
+				$(".cost.final_price").html(iAmount);
+				var aPercents = aPercentage[iAmount];
+				var iPercent = parseInt(aPercents[oTime.attr("value")]);
+				$(".cost.price_count").html(iAmount+iPercent+iAddCost);
 
 			});
 			oTime.change(function () {
+				var iAmount = parseInt(oAmount.attr("value"));
+				var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
+				if(typeof iAddCost === "undefined"){
+					iAddCost=0;
+				} else {
+					iAddCost = parseInt(iAddCost);
+				}
 				$(".cost.date").html(getDateToPayUntil(oTime.attr("value")));
-				var percents = aPercentage[oAmount.attr("value")];
-				var percent = parseInt(percents[oTime.attr("value")]);
-				$(".cost.price_count").html(parseInt(oAmount.attr("value"))+percent);
+				var aPercents = aPercentage[iAmount];
+				var iPercent = parseInt(aPercents[oTime.attr("value")]);
+				$(".cost.price_count").html(iAmount+iPercent+iAddCost);
+
 			});
 
 

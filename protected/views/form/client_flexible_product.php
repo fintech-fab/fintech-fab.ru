@@ -111,7 +111,9 @@ Yii::app()->clientScript->registerScript('radioButtonsTrigger', '
 
 		var sChannel = $("#' . get_class($oClientCreateForm) . '").find("button[value*=" + this.value + "]").html();
 		$(".cost.channel").html(sChannel);
+		$("#amount").change();
+		$("#time").change();
 	});
 oChannelId.change();
-', CClientScript::POS_LOAD);
+', CClientScript::POS_READY);
 ?>

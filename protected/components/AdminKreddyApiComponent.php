@@ -598,9 +598,9 @@ class AdminKreddyApiComponent
 
 		$iSubscriptionCost = (!empty($aClientInfo['subscription']['balance'])) ? $aClientInfo['subscription']['balance'] : 0;
 
-		if($iSubscriptionCost>0){
+		if ($iSubscriptionCost > 0) {
 			$iSubscriptionCost = 0;
-		} elseif($iSubscriptionCost<0){
+		} elseif ($iSubscriptionCost < 0) {
 			$iSubscriptionCost *= -1;
 		}
 
@@ -978,7 +978,7 @@ class AdminKreddyApiComponent
 	 * Получение списка продуктов и каналов для данного пользователя.
 	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
 	 *
- 	 * TODO найти причину оставить эту функцию, или выпилить её
+	 * TODO найти причину оставить эту функцию, или выпилить её
 	 *
 	 * @return array|bool
 	 */
@@ -987,6 +987,7 @@ class AdminKreddyApiComponent
 	{
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
+
 		//получаем список каналов
 		//$aChannels = $this->getProductsChannels();
 		//получаем список каналов, доступных для данного продукта
@@ -1030,17 +1031,16 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-	public function getProductCostById($iProductId,$iChannelId)
+	public function getProductCostById($iProductId, $iChannelId)
 	{
 		$aProducts = $this->getProducts();
 
 		$iSubscriptionCost = 0;
 
-		if(isset($aProducts[$iProductId]['subscription_cost'])){
+		if (isset($aProducts[$iProductId]['subscription_cost'])) {
 			$iSubscriptionCost += $aProducts[$iProductId]['subscription_cost'];
 		}
-		if(isset($aProducts[$iProductId]['channels'][$iChannelId]['additional_cost']))
-		{
+		if (isset($aProducts[$iProductId]['channels'][$iChannelId]['additional_cost'])) {
 			$iSubscriptionCost += $aProducts[$iProductId]['channels'][$iChannelId]['additional_cost'];
 		}
 
@@ -2329,6 +2329,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем список дней (сроков займа) для "гибкого" продукта
+	 *
 	 * @return array|bool
 	 */
 	public function getFlexibleProductTime()
@@ -2349,6 +2351,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получаем процентную сетку для "гибкого" продукта
 	 *
 	 * @return array|bool
 	 */
@@ -2365,6 +2368,38 @@ class AdminKreddyApiComponent
 		}
 
 		return $aFlexProductPercentage;
+	}
+
+	/**
+	 * Получаем стоимости каналов для "гибких" продуктов
+	 *
+	 * @return array
+	 */
+	public function getFlexibleProductChannelCosts()
+	{
+		$aProducts = $this->getProducts();
+
+
+		$aFlexChannelCosts = array();
+		if (is_array($aProducts)) {
+			foreach ($aProducts as $aProduct) {
+				if (isset($aProduct['amount']) && isset($aProduct['channels']) && is_array($aProduct['channels'])) {
+					foreach ($aProduct['channels'] as $iKey => $aChannel) {
+						if (isset($aChannel['additional_cost']) && ($aChannel['additional_cost'] > 0)) {
+							if (!empty($aFlexChannelCosts[$aProduct['amount']])) {
+								$aFlexChannelCosts[$aProduct['amount']] += array($iKey => $aChannel['additional_cost']);
+							} else {
+								$aFlexChannelCosts[$aProduct['amount']] = array($iKey => $aChannel['additional_cost']);
+							}
+						}
+					}
+				}
+
+
+			}
+		}
+
+		return $aFlexChannelCosts;
 	}
 
 	/**
