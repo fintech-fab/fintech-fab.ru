@@ -28,9 +28,9 @@ if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 		'label' => 'Оплатить задолженность', 'url' =>'https://pay.kreddy.ru/'
 	);
 }
-/*$this->menu[] = array(
+$this->menu[] = array(
 	'label' => 'Привязка банковской карты', 'url' => array('/account/default/addCard')
-);*/
+);
 $this->menu[] =  '';
 $this->menu[] = array(
 	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')

@@ -36,40 +36,52 @@ $aCrumbs = array(
 	));
 
 	?>
-	<div class="row span6">
-		<?php
-		$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
-		// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
-		if (empty($oClientCreateForm->product)) {
-			$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
-		}
-		?>
-		<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
+	<div class="span6">
+		<div class="row">
 
-	</div>
-
-	<?php $this->widget('SelectedProductWidget', array(
-		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
-	)); ?>
-
-	<div class="clearfix"></div>
-	<div class="row span11">
-		<div class="form-actions">
-			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'buttonType' => 'submit',
-				'type'       => 'primary',
-				'label'      => 'Далее →',
-			)); ?>
+			<?php
+			$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+			// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+			if (empty($oClientCreateForm->product)) {
+				$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
+			}
+			?>
+			<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
+		</div>
+		<br/>
+		<div class="row">
+			<?php
+			$oClientCreateForm->channel_id = Yii::app()->clientForm->getSessionChannel();
+			// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+			if (empty($oClientCreateForm->channel_id)) {
+				$oClientCreateForm->channel_id = reset(array_keys(Yii::app()->productsChannels->getChannels()));
+			}
+			?>
+			<?= $form->radioButtonListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 		</div>
 	</div>
-	<?php
+		<?php $this->widget('SelectedProductWidget', array(
+			'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
+		)); ?>
 
-	$this->endWidget();
+		<div class="clearfix"></div>
+		<div class="row span11">
+			<div class="form-actions">
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
+					'buttonType' => 'submit',
+					'type'       => 'primary',
+					'label'      => 'Далее →',
+				)); ?>
+			</div>
+		</div>
+		<?php
 
-	?>
+		$this->endWidget();
 
-	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
-	)); ?>
+		?>
 
-</div>
+		<?php $this->widget('YaMetrikaGoalsWidget', array(
+			'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
+		)); ?>
+
+	</div>

@@ -598,7 +598,7 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @return int номер выбранного продукта
+	 * @return int|bool номер выбранного продукта
 	 */
 	public function getSessionProduct()
 	{
@@ -608,9 +608,19 @@ class ClientFormComponent
 			: false;
 	}
 
+	/**
+	 * @return string|bool
+	 */
+	public function getSessionChannel()
+	{
+		return isset(Yii::app()->session['ClientSelectProductForm']['channel_id'])
+			? Yii::app()->session['ClientSelectProductForm']['channel_id']
+			: false;
+	}
+
 	public function goShopping()
 	{
-		$aProducts = Yii::app()->adminKreddyApi->getProductsList();
+		$aProducts = Yii::app()->adminKreddyApi->getProducts();
 		foreach ($aProducts as $i => $aProduct) {
 			if (array_search('Покупки', $aProduct)) {
 				$aShoppingProduct = $i;

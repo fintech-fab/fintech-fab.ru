@@ -27,7 +27,7 @@ $iPacketSize = Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId)
 	<li>
 		<strong>Способ получения займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
 	</li>
-	<li><strong>Стоимость подключения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId) ?>
+	<li><strong>Стоимость подключения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId,$iChannelId) ?>
 		&nbsp;рублей
 	</li>
 	<li><strong>Срок действия

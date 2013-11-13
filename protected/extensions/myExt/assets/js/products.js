@@ -15,13 +15,20 @@ function getDateToPayUntil(n) {
 	return dayarray[d.getDay()] + ", " + d.getDate() + " " + montharray[d.getMonth()] + " " + checkTime(d.getFullYear());
 }
 
-function showConditions(obj) {
-	$('.price_count').html(obj.attr('data-price'));
-	$('.price_month').html(obj.attr('data-price-count'));
-	var packetSize = parseInt(obj.attr('data-int-count')) * parseInt(obj.attr('data-final-price'));
+function showConditions(products, channels) {
+	var final_price = parseInt(products.attr('data-price'));
+	var card = parseInt(channels.find('input:checked').parent().find("label > span").attr('data-card'));
+	if(card == 1){
+		final_price += parseInt(products.attr('data-card'));
+	}
+
+
+	$('.price_count').html(final_price);
+	$('.price_month').html(products.attr('data-price-count'));
+	var packetSize = parseInt(products.attr('data-int-count')) * parseInt(products.attr('data-final-price'));
 	$('.packet_size').html(packetSize);
-	$('.count_subscribe').html(obj.attr('data-count'));
-	var n = obj.attr('data-time');
+	$('.count_subscribe').html(products.attr('data-count'));
+	var n = products.attr('data-time');
 	$('.date').html(getDateToPayUntil(n));
-	$('.final_price').html(obj.attr('data-final-price'));
+	$('.final_price').html(products.attr('data-final-price'));
 }

@@ -1,14 +1,5 @@
 <div class="row span4 conditions">
 	<strong>Выбранные условия:</strong>
-	<?php
-	/*$n = Dictionaries::$aDataTimes[$this->chosenProduct];
-	$d = new DateTime('now');
-	$d->add(new DateInterval('P' . $n . 'D'));
-	$getDateToPayUntil = Dictionaries::$aDays[$d->format('w')] . ", " . $d->format('j') . " " . Dictionaries::$aMonths[$d->format('n')] . " " . $d->format('Y');
-	*/
-
-	//TODO сделать формирование данных для виджета на основе данных из API
-	?>
 	<ul>
 		<li>Размер займа:
 			<span class="cost final_price"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
@@ -44,34 +35,28 @@ if ($this->curStep == 1) {
 
 	$sFormName = 'ClientSelectProductForm';
 	Yii::app()->clientScript->registerScript('myConditions', '
-		jQuery("#' . $sFormName . ' .radio").click(function () {
-			showConditions(jQuery(this).find("label > span"));
+		var products = jQuery("#' . $sFormName . '_product");
+		var channels = jQuery("#' . $sFormName . '_channel_id");
+		products.find(".radio").click(function () {
+			showConditions(jQuery(this).find("label > span"), channels);
 			jQuery(".conditions").show();
 			jQuery("#conditions-img").show();
 			;
-			if (jQuery(this).find("input:checked").attr("value") == 0) {
-				jQuery(".conditions").hide();
-				jQuery("#conditions-img").hide();
-				;
-			}
 		});
 
-		jQuery("#' . $sFormName . ' .radio").each(function () {
+		channels.click(function(){
+			showConditions(products.find("input:checked").parent().find("label > span"), channels);
+		});
+
+		products.find(".radio").each(function () {
 			if ((jQuery(this).find("input:checked").attr("value")) !== undefined) {
-				showConditions(jQuery(this).find("label > span"));
-				if (jQuery(this).find("input:checked").attr("value") == 0) {
-					jQuery(".conditions").hide();
-					jQuery("#conditions-img").hide();
-					;
-				}
+				showConditions(jQuery(this).find("label > span"), channels);
 			}
 		});
-
-		showConditions(jQuery("#' . $sFormName . ' .radio:first label > span"));
 
 		jQuery( function ($){
 			//заставляем отработать скрипт обновления состояния для выбранного радиобаттона
-			jQuery("#' . $sFormName . ' .radio :checked").click();
+			jQuery("#' . $sFormName . '_product .radio :checked").click();
 		});
 
 	', CClientScript::POS_READY);
