@@ -2539,4 +2539,9 @@ class AdminKreddyApiComponent
 	{
 		return ($this->getLastCode() == self::ERROR_NEED_REDIRECT);
 	}
+
+	public function setSubscribeFlexAmount($iAmount)
+	{
+		Yii::app()->session['subscribeFlexAmount'] = $iAmount;
+	}
 }

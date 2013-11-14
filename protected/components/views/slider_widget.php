@@ -38,6 +38,7 @@ Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 ?>
 <?php
 //TODO сделать получение количества labels из API
+//TODO сделать разбор номера канала из вида 8_9_10 в массив и поиск канала по нему
 Yii::app()->clientScript->registerScript('sliderWidget', '
 			var oChannelId = $("#' . get_class($model) . '_channel_id");
 			var oAmount = $("#amount");

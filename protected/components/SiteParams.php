@@ -170,7 +170,8 @@ class SiteParams
 	 */
 	public static function getIsIvanovoSite()
 	{
-		return (defined('SITE_IVANOVO'))?SITE_IVANOVO:false;
+		//TODO вернуть
+		return (defined('SITE_IVANOVO')) ? !SITE_IVANOVO : !false;
 	}
 
 
