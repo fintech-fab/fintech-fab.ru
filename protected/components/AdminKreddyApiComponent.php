@@ -857,6 +857,7 @@ class AdminKreddyApiComponent
 
 		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
 			//сохраняем в кэш с временем хранения 10 минут
+			$this->aProducts = $aProductsAndChannels; //TODO выпилить после включения кэша
 			Yii::app()->cache->set('productsAndChannels', $aProductsAndChannels, 600);
 			//кэш длительного хранения, на случай отключения API
 			Yii::app()->cache->set('productsAndChannelsLongTime', $aProductsAndChannels);
@@ -958,7 +959,6 @@ class AdminKreddyApiComponent
 					? $aProduct['channels']
 					: array();
 				//перебираем каналы, по которым можно получить продукт
-
 				foreach ($aProductChannels as $iKey => $aChannel) {
 					//проверяем, что у канала есть описание
 					//проверяем, что данный канал доступен пользователю
@@ -972,38 +972,6 @@ class AdminKreddyApiComponent
 		}
 
 		return $aProductsAndChannels;
-	}
-
-	/**
-	 * Получение списка продуктов и каналов для данного пользователя.
-	 * Проверяет, какие каналы получения денег доступны клиенту, и возвращает только допустимые продукты и каналы
-	 *
-	 * TODO найти причину оставить эту функцию, или выпилить её
-	 *
-	 * @return array|bool
-	 */
-
-	public function getProductsList()
-	{
-		//получаем список продуктов
-		$aProducts = $this->getProducts();
-
-		//получаем список каналов
-		//$aChannels = $this->getProductsChannels();
-		//получаем список каналов, доступных для данного продукта
-		//проверяем, что получили массивы
-		/*if (is_array($aProducts) && is_array($aChannels)) {
-			$aProductsList = array();
-			//перебираем все продукты
-			foreach ($aProducts as $aProduct) {
-				$aProductsList[$aProduct['id']] = $aProduct;
-
-			}
-
-			return $aProductsList;
-		}*/
-
-		return $aProducts;
 	}
 
 	/**
@@ -1242,6 +1210,40 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE,
 			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			if (isset($aResult['scoring_accepted'])) {
+				$this->setScoringAccepted($aResult['scoring_accepted']);
+			}
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setScoringAccepted(null);
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setScoringAccepted(null);
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * @param $sSmsCode
+	 * @param $iProduct
+	 * @param $iChannelId
+	 * @param $iAmount
+	 * @param $iTime
+	 *
+	 * @return bool
+	 */
+	public function doSubscribeFlexible($sSmsCode, $iProduct, $iChannelId, $iAmount, $iTime)
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE,
+			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId, 'custom_option' => array('loan_amount' => $iAmount, 'loan_lifetime' => $iTime)));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			if (isset($aResult['scoring_accepted'])) {
@@ -2140,7 +2142,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getIsNotAllowed()
 	{
-		return ($this->getLastCode() === self::ERROR_NOT_ALLOWED);
+		return ($this->getLastCode() === self::ERROR_NOT_ALLOWED || $this->getLastCode() === self::ERROR_NEED_REDIRECT);
 	}
 
 	/**
@@ -2521,12 +2523,15 @@ class AdminKreddyApiComponent
 	 */
 	public function sendSms($sPhone, $sMessage)
 	{
-		$this->requestAdminKreddyApi('siteClient/sendSms', array(
-			'number'  => $sPhone,
-			'message' => $sMessage,
-		));
-		if ($this->getIsError()) {
-			return false;
+		if (!Yii::app()->params['bSmsGateIsOff']) {
+
+			$this->requestAdminKreddyApi('siteClient/sendSms', array(
+				'number'  => $sPhone,
+				'message' => $sMessage,
+			));
+			if ($this->getIsError()) {
+				return false;
+			}
 		}
 
 		return true;
@@ -2540,8 +2545,113 @@ class AdminKreddyApiComponent
 		return ($this->getLastCode() == self::ERROR_NEED_REDIRECT);
 	}
 
+	/**
+	 * @param $iAmount
+	 */
 	public function setSubscribeFlexAmount($iAmount)
 	{
 		Yii::app()->session['subscribeFlexAmount'] = $iAmount;
+	}
+
+	/**
+	 *
+	 */
+	public function getSubscribeFlexAmount()
+	{
+		return (isset(Yii::app()->session['subscribeFlexAmount']))
+			? Yii::app()->session['subscribeFlexAmount']
+			: false;
+	}
+
+	/**
+	 * @param $iChannelId
+	 */
+	public function setSubscribeFlexChannelId($iChannelId)
+	{
+		Yii::app()->session['subscribeFlexChannelId'] = $iChannelId;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getSubscribeFlexChannelId()
+	{
+		//TODO сделать разбор explode() и выбирать только канал, доступный клиенту
+		echo '<pre>' . "";
+		CVarDumper::dump($this->getClientChannels());
+		echo '</pre>';
+
+		return (isset(Yii::app()->session['subscribeFlexChannelId']))
+			? Yii::app()->session['subscribeFlexChannelId']
+			: false;
+	}
+
+	/**
+	 * @param $iTime
+	 */
+	public function setSubscribeFlexTime($iTime)
+	{
+		Yii::app()->session['subscribeFlexTime'] = $iTime;
+	}
+
+	/**
+	 * @return bool
+	 */
+
+	public function getSubscribeFlexTime()
+	{
+
+		$iFlexTime = (isset(Yii::app()->session['subscribeFlexTime']))
+			? Yii::app()->session['subscribeFlexTime']
+			: 0;
+		$iFlexTimeTo = time() + ($iFlexTime * 60 * 60 * 24);
+		$this->formatRusDate($iFlexTimeTo, false);
+
+		return ($iFlexTime) ? $this->formatRusDate($iFlexTimeTo, false) : false;
+	}
+
+	/**
+	 * Считаем стоимость с учетом процентов и стоимости использования канала
+	 */
+	public function getSubscribeFlexCost()
+	{
+		$iAmount = $this->getSubscribeFlexAmount();
+		$iTime = $this->getSubscribeFlexTime();
+		$iChannelId = $this->getSubscribeFlexChannelId();
+		$aPercentage = $this->getFlexibleProductPercentage();
+		$aChannelCosts = $this->getFlexibleProductChannelCosts();
+
+		// получаем стоимость выбранного канала
+		$iChannelCost = (!empty($aChannelCosts[$iChannelId]['additional_cost']))
+			? $aChannelCosts[$iChannelId]['additional_cost']
+			: 0;
+		$iPercent = (!empty($aPercentage[$iAmount][$iTime]))
+			? $aPercentage[$iAmount][$iTime] :
+			0;
+
+		return $iAmount + $iChannelCost + $iPercent;
+	}
+
+	/**
+	 * Получаем ID продукта по его amount'у
+	 *
+	 * @return int
+	 */
+
+	public function getSubscribeFlexProductId()
+	{
+		$aProducts = $this->getProducts();
+		$iAmount = (int)$this->getSubscribeFlexAmount();
+
+		$iProductId = 0;
+		if (is_array($aProducts)) {
+			foreach ($aProducts as $aProduct) {
+				if (!empty($aProduct['amount']) && $aProduct['amount'] === $iAmount) {
+					$iProductId = $aProduct['id'];
+				}
+			}
+		}
+
+		return $iProductId;
 	}
 }

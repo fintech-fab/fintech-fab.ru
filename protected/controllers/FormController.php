@@ -69,6 +69,9 @@ class FormController extends Controller
 				//удаляем лишние данные перед загрузкой в форму (во избежание warning)
 				unset($sessionClientData['product']);
 				unset($sessionClientData['channel_id']);
+				unset($sessionClientData['entry_point']);
+				unset($sessionClientData['flex_amount']);
+				unset($sessionClientData['flex_time']);
 				$oClientForm->setAttributes($sessionClientData);
 			}
 		}
@@ -77,7 +80,6 @@ class FormController extends Controller
 		 * Рендер представления
 		 */
 		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
-		//TODO сделать выбор согласно локации клиента
 
 		if ($sView === 'client_select_product' || $sView === 'client_flexible_product') {
 			$this->showTopPageWidget = true;
@@ -169,16 +171,31 @@ class FormController extends Controller
 			$aClientData = ClientData::getClientDataById($iClientId);
 			//отправляем в API данные клиента, и если клиент успешно создан
 			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
-				//очищаем сессию (данные формы и прочее)
-				Yii::app()->clientForm->clearClientSession();
+
 				//автоматический логин юзера в личный кабинет
-				$oLogin = new AutoLoginForm();
-				$oLogin->setAttributes(array('username' => $aClientData['phone']));
-				Yii::app()->user->setStateKeyPrefix('_account');
+				$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
+				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
+				Yii::app()->user->setStateKeyPrefix('_account'); //префикс для модуля account
 				if ($oLogin->validate() && $oLogin->login()) {
 					Yii::app()->user->setFlash('success', 'Вы успешно зарегистрировались в системе.');
-					$this->redirect(Yii::app()->createUrl("/account/subscribe"));
+					//сохраняем данные перед редиректом в ЛК
+					if (!empty($aClientData['product'])) {
+						Yii::app()->user->setState('product', $aClientData['product']);
+					}
+					if (!empty($aClientData['channel_id'])) {
+						Yii::app()->user->setState('channel_id', $aClientData['channel_id']);
+					}
+					if (!empty($aClientData['flex_amount'])) {
+						Yii::app()->user->setState('flex_amount', $aClientData['flex_amount']);
+					}
+					if (!empty($aClientData['flex_time'])) {
+						Yii::app()->user->setState('flex_time', $aClientData['flex_time']);
+					}
+
+					$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
 				}
+				//очищаем сессию (данные формы и прочее)
+				Yii::app()->clientForm->clearClientSession();
 			} else {
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'Ошибка! Обратитесь в контактный центр';

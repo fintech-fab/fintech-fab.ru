@@ -132,6 +132,33 @@ class ProductsChannelsComponent
 			$aChannelsList[$sMobileChannels] = SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName));
 		}
 
+		/**
+		 * Получение каналов для текущего клиента, если он залогинен в ЛК
+		 */
+		//если текущий модуль account
+		if (Yii::app()->controller->getModule() && Yii::app()->controller->getModule()->getName() === 'account') {
+			//получаем каналы, доступные клиенту
+			$aClientChannels = Yii::app()->adminKreddyApi->getClientChannels();
+			if (!empty($aClientChannels)) {
+				echo '<pre>' . "";
+				CVarDumper::dump($aClientChannels);
+				echo '</pre>';
+				echo '<pre>' . "";
+				CVarDumper::dump($aChannelsList);
+				echo '</pre>';
+
+				$aClientChannelsList = array();
+				//перебираем все каналы
+				foreach ($aChannelsList as $iKey => $sChannel) {
+					//проверяем, что данный канал доступен пользователю
+					if (in_array($iKey, $aClientChannels)) {
+						$aClientChannelsList[$iKey] = $sChannel; //формируем массив каналов, доступных пользователю
+					}
+				}
+				$aChannelsList = $aClientChannelsList;
+			}
+		}
+
 		return $aChannelsList;
 	}
 }

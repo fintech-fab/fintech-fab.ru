@@ -79,8 +79,9 @@ class DefaultController extends Controller
 				$this->redirect(Yii::app()->user->loginUrl);
 			} elseif (Yii::app()->adminKreddyApi->getIsNeedRedirect()) {
 				//TODO брать имя домена верхнего уровня из текущего адреса
-				//TODo вернуть!
-				//$this->redirect('http://dev.kreddy.popov/account');
+
+
+				$this->redirect('http://dev.kreddy.popov/account');
 			}
 		}
 
@@ -697,7 +698,6 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/subscribe'));
 
-
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			// если невозможно - выводим сообщение о недоступности
@@ -728,6 +728,7 @@ class DefaultController extends Controller
 				$this->redirect('/account/changePassport');
 			}
 
+
 			$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
 		} else {
 			$sView = 'subscription/subscribe_not_sms_auth';
@@ -755,12 +756,89 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
-		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientFlexibleProductForm() : new ClientSubscribeForm();
-		if (Yii::app()->request->getIsPostRequest()) {
-			$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
-			$oProductForm->setAttributes($aPost);
+		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/doSubscribe'));
 
+		//проверяем, нужна ли повторная видеоидентификация
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
+				//выводим форму отправки на идентификацию
+				$this->render('need_identify', array('model' => $oIdentify));
+				Yii::app()->end();
+			}
+		} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) { //проверяем, нужно ли обновить паспортные данные
+
+			if (Yii::app()->user->hasFlash('warning')) {
+				Yii::app()->user->getFlash('warning');
+			}
+			Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
+
+			$this->redirect('/account/changePassport');
+		}
+
+		$iProduct = Yii::app()->user->getState('product');
+		$sChannelsId = Yii::app()->user->getState('channel_id');
+
+		//список каналов из сессии (выбранный при регистрации канал/список каналов) разбиваем на массив каналов (если пришел в виде "1_2_3")
+		$aChannelsId = explode('_', $sChannelsId);
+		//получаем список каналов, доступных клиенту
+		$aClientChannels = Yii::app()->adminKreddyApi->getClientChannels();
+		$iChannelId = 0;
+		//если есть канал из сессии и список каналов клиента не пуст
+		if (!empty($aClientChannels) && !empty($aChannelsId) > 0) {
+			//перебираем список каналов клиента
+			foreach ($aClientChannels as $iKey => $aClientChannel) {
+				//если текущий канал есть в массиве каналов из сессии, то его номер устанавливаем в $iChannelId
+				if (in_array($iKey, $aChannelsId)) {
+					$iChannelId = $iKey;
+				}
+			}
+		}
+
+		//если выбранный канал равен 0, т.е. выбранный канал отсутствовал в списке доступных клиенту
+		//то нужно его отправить на привязку карты, с сообщением об этом
+		if ($iChannelId === 0) {
+			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на банковскую карту,
+			 но у вас не привязано ни одной карты. Пройдите, пожалуйста,
+			  процедеру привязки банковской карты и затем вернитесь к получению займа.');
+			//TODO сменить месседж и поместить в const
+			$this->redirect('/account/addCard');
+
+			//TODO сделать редирект обратно с привязки карты на подписку
+		}
+
+
+		$iFlexAmount = Yii::app()->user->getState('flex_amount');
+		$iFlexTime = Yii::app()->user->getState('flex_time');
+
+		if (!empty($iProduct) && !empty($iChannelId)) {
+			$bIsRedirect = true;
+			$aData = array('product' => $iProduct, 'channel_id' => $iChannelId);
+		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($iChannelId)) {
+			$bIsRedirect = true;
+			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
+		} else {
+			$bIsRedirect = false;
+			$aData = array();
+		}
+
+		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientFlexibleProductForm() : new ClientSubscribeForm();
+		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
+
+			if (!$bIsRedirect) {
+				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
+			} else {
+				$aPost = $aData;
+			}
+
+
+			$oProductForm->setAttributes($aPost);
+			//echo '<pre>' . ""; CVarDumper::dump(CActiveForm::validate($oProductForm)); echo '</pre>';
 			if ($oProductForm->validate()) {
+
 				//сохраняем в сессию выбранный продукт
 				$oForm = new SMSCodeForm('sendRequired');
 				if (SiteParams::getIsIvanovoSite()) {
@@ -845,22 +923,35 @@ class DefaultController extends Controller
 		$oForm->setAttributes($aPost);
 		//валидируем
 		if ($oForm->validate()) {
-			//TODO тут сделать разную обработку для разных точек входа
-			$sProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-			//получаем массив, содержащий ID продукта и тип канала получения
-			$aProductAndChannel = explode('_', $sProduct);
-			//проверяем, что в массиве 2 значения (ID и канал)
-			if (count($aProductAndChannel) === 2) {
+			//если точка входа не ivanovo.kreddy.ru
+			if (!SiteParams::getIsIvanovoSite()) {
+				$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
+				$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId();
+				$iAmount = false;
+				$iTime = false;
+			} else {
+				$iProduct = Yii::app()->adminKreddyApi->getSubscribeFlexProductId();
+				$iAmount = Yii::app()->adminKreddyApi->getSubscribeFlexAmount();
+				$iChannel = Yii::app()->adminKreddyApi->getSubscribeFlexChannelId();
+				$iTime = Yii::app()->adminKreddyApi->getSubscribeFlexTime();
+			}
+
+			if (($iProduct && $iChannel) || ($iProduct && $iAmount && $iChannel && $iTime)) {
 				//проверяем, не кончились ли попытки
 				$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
 				//если попытки не кончились, пробуем оформить подписку
 				if (!$bTriesExceed) {
-					if (Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $aProductAndChannel[0], $aProductAndChannel[1])) {
+					//проверяем точку входа, делаем подписку согласно точке входа
+					if (SiteParams::getIsIvanovoSite()) {
+						$bSubscribe = Yii::app()->adminKreddyApi->doSubscribeFlexible($oForm->smsCode, $iProduct, $iChannel, $iAmount, $iTime);
+						$sView = 'flex_subscription/subscribe_complete';
+					} else {
+						$bSubscribe = Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, $iChannel);
+						$sView = 'subscription/subscribe_complete';
+					}
+					if ($bSubscribe) {
 						//сбрасываем счетчик попыток ввода кода
 						Yii::app()->adminKreddyApi->resetSmsCodeTries();
-						$sView = (SiteParams::getIsIvanovoSite())
-							? 'flex_subscription/subscribe_complete'
-							: 'subscription/subscribe_complete';
 						$this->render($sView, array('message' => Yii::app()->adminKreddyApi->getDoSubscribeMessage()));
 						Yii::app()->end();
 					}
@@ -872,6 +963,7 @@ class DefaultController extends Controller
 			} else {
 				$oForm->addError('smsCode', AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN);
 			}
+
 
 			if (!Yii::app()->adminKreddyApi->getIsNotAllowed() && !Yii::app()->adminKreddyApi->getIsError()) {
 				$oForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());

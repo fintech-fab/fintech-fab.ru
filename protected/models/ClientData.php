@@ -5,7 +5,8 @@
  * The followings are the available columns in table 'tbl_client':
  *
  * @property string  $client_id
- * @property string  $ip             ;
+ * @property string  $ip
+ * @property string  $entry_point
  * @property string  $tracking_id
  * @property string  $phone
  * @property string  $password
@@ -45,7 +46,9 @@
  * @property integer $numeric_code
  * @property integer $sms_code
  * @property integer $product
- * @property integer $channel_id
+ * @property string  $channel_id
+ * @property string  $flex_amount
+ * @property string  $flex_time
  * @property integer $complete
  * @property string  $dt_add
  * @property string  $dt_update
@@ -102,7 +105,7 @@ class ClientData extends CActiveRecord
 			array('birthday, dt_add, dt_update', 'safe'),*/
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('client_id, ip, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_id, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived', 'safe'),
+			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived', 'safe'),
 
 		);
 	}
@@ -249,10 +252,6 @@ class ClientData extends CActiveRecord
 		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
 		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
 
-		if ($this->product == 0) {
-			$this->channel_id = 0;
-		}
-
 		return parent::beforeSave();
 	}
 
@@ -274,6 +273,7 @@ class ClientData extends CActiveRecord
 		return array(
 			'client_id'           => 'Client',
 			'ip'                  => 'IP',
+			'entry_point'         => 'Entry point',
 			'tracking_id'         => 'Tracking ID',
 			'phone'               => 'Phone',
 			'password'            => 'Password',
@@ -313,7 +313,7 @@ class ClientData extends CActiveRecord
 			'numeric_code'        => 'Numeric Code',
 			'sms_code'            => 'SMS Code',
 			'product'             => 'Product',
-			'channel_id'          => 'Get Way',
+			'channel_id'          => 'Channel ID',
 			'complete'            => 'Complete',
 			'dt_add'              => 'Dt Add',
 			'dt_update'           => 'Dt Update',
@@ -335,10 +335,11 @@ class ClientData extends CActiveRecord
 		$criteria = new CDbCriteria;
 
 		$criteria->compare('client_id', $this->client_id, true);
-		$criteria->compare('ip', $this->client_id, true);
-		$criteria->compare('tracking_id', $this->client_id, true);
+		$criteria->compare('ip', $this->ip, true);
+		$criteria->compare('entry_point', $this->entry_point, true);
+		$criteria->compare('tracking_id', $this->tracking_id, true);
 		$criteria->compare('phone', $this->phone, true);
-		$criteria->compare('password', $this->phone, true);
+		$criteria->compare('password', $this->password, true);
 		$criteria->compare('job_phone', $this->job_phone, true);
 		$criteria->compare('first_name', $this->first_name, true);
 		$criteria->compare('last_name', $this->last_name, true);
@@ -376,6 +377,8 @@ class ClientData extends CActiveRecord
 		$criteria->compare('sms_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
 		$criteria->compare('channel_id', $this->channel_id);
+		$criteria->compare('flex_amount', $this->flex_amount);
+		$criteria->compare('flex_time', $this->flex_time);
 		$criteria->compare('complete', $this->complete);
 		$criteria->compare('dt_add', $this->dt_add, true);
 		$criteria->compare('dt_update', $this->dt_update, true);

@@ -6,7 +6,9 @@ class m131114_095300_AddFieldsFlexProduct extends CDbMigration
 		$this->execute("ALTER TABLE `tbl_client` ADD `entry_point` TINYINT( 1 ) NOT NULL COMMENT 'Точка входа' AFTER `ip`;
 
 ALTER TABLE `tbl_client` ADD `flex_amount` INT NOT NULL COMMENT 'Сумма гибкого займа' AFTER `channel_id` ,
-ADD `flex_time` TINYINT( 2 ) NOT NULL COMMENT 'Время гибкого займа (в днях)' AFTER `flex_amount` ;");
+ADD `flex_time` TINYINT( 2 ) NOT NULL COMMENT 'Время гибкого займа (в днях)' AFTER `flex_amount` ;
+ALTER TABLE `tbl_client` CHANGE `channel_id` `channel_id` VARCHAR( 20 ) NOT NULL COMMENT 'Способ получения'
+");
 
 		if (Yii::app()->hasComponent('cache')) {
 			Yii::app()->getComponent('cache')->flush();

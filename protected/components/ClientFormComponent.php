@@ -98,8 +98,19 @@ class ClientFormComponent
 					$aValidFormData['product'] = $this->getSessionProduct();
 				}
 				if (empty($aValidFormData['channel_id'])) {
-					$aValidFormData['channel_id'] = $this->getSessionChannelId();
+					$aValidFormData['channel_id'] = $this->getSessionChannel();
 				}
+
+				if (empty($aValidFormData['flex_amount'])) {
+					$aValidFormData['flex_amount'] = $this->getSessionFlexibleProductAmount();
+				}
+				if (empty($aValidFormData['flex_time'])) {
+					$aValidFormData['flex_time'] = $this->getSessionFlexibleProductTime();
+				}
+				if (SiteParams::getIsIvanovoSite()) {
+					$aValidFormData['entry_point'] = 8;
+				}
+
 				$aClientDataForSave = $aValidFormData;
 
 				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
@@ -180,7 +191,16 @@ class ClientFormComponent
 					$aClientFormData['product'] = $this->getSessionProduct();
 				}
 				if (empty($aClientFormData['channel_id'])) {
-					$aClientFormData['channel_id'] = $this->getSessionChannelId();
+					$aClientFormData['channel_id'] = $this->getSessionChannel();
+				}
+				if (empty($aClientFormData['flex_amount'])) {
+					$aClientFormData['flex_amount'] = $this->getSessionFlexibleProductAmount();
+				}
+				if (empty($aClientFormData['flex_time'])) {
+					$aClientFormData['flex_time'] = $this->getSessionFlexibleProductTime();
+				}
+				if (SiteParams::getIsIvanovoSite()) {
+					$aClientFormData['entry_point'] = 8;
 				}
 
 				$aClientDataForSave = $aClientFormData;
@@ -674,14 +694,6 @@ class ClientFormComponent
 			Yii::app()->session['goShopping'] = true;
 			$this->nextStep();
 		}
-	}
-
-	/**
-	 * @return int номер выбранного спссоба
-	 */
-	public function getSessionChannelId()
-	{
-		return Yii::app()->session['ClientSelectChannelForm']['channel_id'];
 	}
 
 	/**

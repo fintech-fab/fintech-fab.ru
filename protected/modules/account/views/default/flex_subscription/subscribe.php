@@ -15,19 +15,19 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/doSubscribe'),
 ));
 
-//$oClientSubscribeForm->channel_id = $iChannelId;
+$model->channel_id = $iChannelId;
 // если в сессии канала нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 if (empty($model->channel_id)) {
 	$model->channel_id = reset(array_keys(Yii::app()->productsChannels->getChannelsForButtons()));
 }
 
-//$oClientSubscribeForm->amount = Yii::app()->adminKreddyApi->getSubscriptionFlexProductAmount();
+$model->amount = Yii::app()->adminKreddyApi->getSubscribeFlexAmount();
 // если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 if (empty($model->amount)) {
 	$model->amount = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProduct()));
 }
 
-//$oClientSubscribeForm->time = Yii::app()->adminKreddyApi->getSubscriptionFlexProductTime();
+$model->time = Yii::app()->adminKreddyApi->getSubscribeFlexTime();
 // если в сессии времени нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 if (empty($model->time)) {
 	$model->time = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()));
