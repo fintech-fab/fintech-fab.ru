@@ -2,8 +2,7 @@
 //* @var DefaultController $this */
 /* @var ClientSubscribeForm $model */
 
-$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
-$iChannelId = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId();
+$iChannelId = Yii::app()->adminKreddyApi->getSubscribeFlexChannelId();
 
 $iPacketSize = Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) *
 	Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId);
