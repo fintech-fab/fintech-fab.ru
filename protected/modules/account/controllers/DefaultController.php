@@ -80,7 +80,6 @@ class DefaultController extends Controller
 			} elseif (Yii::app()->adminKreddyApi->getIsNeedRedirect()) {
 				//TODO брать имя домена верхнего уровня из текущего адреса
 
-
 				$this->redirect(Yii::app()->params['mainUrl']);
 			}
 		}
@@ -1354,7 +1353,6 @@ class DefaultController extends Controller
 			if (Yii::app()->request->isPostRequest && $oModel->validate() && $oModel->login()) {
 				$this->redirect(Yii::app()->createUrl("/account"));
 			}
-
 			// display the login form
 			$oModel->password = ''; //удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
 			$this->render('login', array('model' => $oModel));
@@ -1363,6 +1361,7 @@ class DefaultController extends Controller
 			if (Yii::app()->user->getState('new_client')) {
 				$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
 			}
+
 			$this->redirect(Yii::app()->createUrl("/account/"));
 		}
 	}
