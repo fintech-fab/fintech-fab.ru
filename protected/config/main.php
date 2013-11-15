@@ -124,11 +124,8 @@ $a = array(
 		'log'              => array(),
 
 		'session'          => array(
-			'timeout'      => 60 * 60 * 2,
-			'sessionName'  => 'st',
-			'cookieParams' => array(
-				'domain' => '.dev.kreddy.popov' //TODO вынести в custom!!!
-			)
+			'timeout'     => 60 * 60 * 2,
+			'sessionName' => 'st',
 		),
 
 		'request'          => array(
