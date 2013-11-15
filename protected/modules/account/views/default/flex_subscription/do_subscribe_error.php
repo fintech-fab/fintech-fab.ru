@@ -15,7 +15,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => 'Информация о подключении',
-	'content' => $this->renderPartial('subscription/_product', array(), true)
+	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');

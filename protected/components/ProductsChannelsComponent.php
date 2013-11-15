@@ -66,7 +66,9 @@ class ProductsChannelsComponent
 	}
 
 	/**
-	 * @param $sName
+	 * @param      $sName
+	 *
+	 * @internal param bool $bNoOperatorNames
 	 *
 	 * @return string
 	 */
@@ -76,6 +78,20 @@ class ProductsChannelsComponent
 			return 'на карту Кредди';
 		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный (МТС, Билайн, Мегафон)';
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $sName
+	 *
+	 * @return bool|string
+	 */
+	public static function formatMobileChannelNameNoOperators($sName)
+	{
+		if (preg_match("/мобил/", $sName)) {
+			return 'на мобильный телефон';
 		}
 
 		return false;
@@ -140,19 +156,15 @@ class ProductsChannelsComponent
 			//получаем каналы, доступные клиенту
 			$aClientChannels = Yii::app()->adminKreddyApi->getClientChannels();
 			if (!empty($aClientChannels)) {
-				echo '<pre>' . "";
-				CVarDumper::dump($aClientChannels);
-				echo '</pre>';
-				echo '<pre>' . "";
-				CVarDumper::dump($aChannelsList);
-				echo '</pre>';
-
 				$aClientChannelsList = array();
 				//перебираем все каналы
 				foreach ($aChannelsList as $iKey => $sChannel) {
 					//проверяем, что данный канал доступен пользователю
 					if (in_array($iKey, $aClientChannels)) {
-						$aClientChannelsList[$iKey] = $sChannel; //формируем массив каналов, доступных пользователю
+						//TODO тут сейчас берется 1 канал, найденный в каналах пользователя и имеющийся в списке каналов в формате 1_2_3
+						//TODO надо сделать чтобы можно было и больше каналов можно было получить в массиве
+						$iKey = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($iKey);
+						$aClientChannelsList[$iKey] = SiteParams::mb_ucfirst(self::formatMobileChannelNameNoOperators($sChannel)); //формируем массив каналов, доступных пользователю
 					}
 				}
 				$aChannelsList = $aClientChannelsList;

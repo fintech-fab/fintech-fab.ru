@@ -89,6 +89,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
 	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
+	const ERROR_NEED_CARD = 18; //требуется привязать банковскую карту
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
@@ -2146,6 +2147,16 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Требуется привязать банковскую карту
+	 *
+	 * @return bool
+	 */
+	public function getIsNeedCard()
+	{
+		return ($this->getLastCode() === self::ERROR_NEED_CARD);
+	}
+
+	/**
 	 * Проверка, вернул ли последний выполненный запрос ошибку (коды 0, 9 и 10 - не являются кодами ошибок)
 	 *
 	 * @return bool
@@ -2583,6 +2594,34 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 *
+	 *
+	 */
+	public function getClientSelectedChannelByIdString($sChannelsId)
+	{
+		//список каналов из сессии (выбранный при регистрации канал/список каналов) разбиваем на массив каналов (если пришел в виде "1_2_3")
+		$aChannelsId = explode('_', $sChannelsId);
+
+		//получаем список каналов, доступных клиен
+		$aClientChannels = Yii::app()->adminKreddyApi->getClientChannels();
+
+		$iChannelId = 0;
+		//если есть канал из сессии и список каналов клиента не пуст
+		if (!empty($aClientChannels) && !empty($aChannelsId) > 0) {
+			//перебираем список каналов клиента
+			foreach ($aClientChannels as $iClientChannel) {
+				//если текущий канал есть в массиве каналов из сессии, то его номер устанавливаем в $iChannelId
+				if (in_array($iClientChannel, $aChannelsId)) {
+					$iChannelId = $iClientChannel;
+
+				}
+			}
+		}
+
+		return $iChannelId;
+	}
+
+	/**
 	 * @param $iTime
 	 */
 	public function setSubscribeFlexTime($iTime)
@@ -2591,19 +2630,27 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @param bool $bFormat
+	 *
 	 * @return bool
 	 */
 
-	public function getSubscribeFlexTime()
+	public function getSubscribeFlexTime($bFormat = false)
 	{
 
 		$iFlexTime = (isset(Yii::app()->session['subscribeFlexTime']))
 			? Yii::app()->session['subscribeFlexTime']
-			: 0;
-		$iFlexTimeTo = time() + ($iFlexTime * 60 * 60 * 24);
-		$this->formatRusDate($iFlexTimeTo, false);
+			: false;
+		if ($bFormat) {
 
-		return ($iFlexTime) ? $this->formatRusDate($iFlexTimeTo, false) : false;
+			$iFlexTimeTo = time() + ($iFlexTime * 60 * 60 * 24);
+			$this->formatRusDate($iFlexTimeTo, false);
+
+
+			return ($iFlexTime) ? $this->formatRusDate($iFlexTimeTo, false) : false;
+		}
+
+		return $iFlexTime;
 	}
 
 	/**
@@ -2642,11 +2689,14 @@ class AdminKreddyApiComponent
 		$iProductId = 0;
 		if (is_array($aProducts)) {
 			foreach ($aProducts as $aProduct) {
-				if (!empty($aProduct['amount']) && $aProduct['amount'] === $iAmount) {
+				if (!empty($aProduct['amount']) && (int)$aProduct['amount'] === $iAmount) {
 					$iProductId = $aProduct['id'];
 				}
 			}
 		}
+		echo '<pre>' . "";
+		CVarDumper::dump($iProductId);
+		echo '</pre>';
 
 		return $iProductId;
 	}

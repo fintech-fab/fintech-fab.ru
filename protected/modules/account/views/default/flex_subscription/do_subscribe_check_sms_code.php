@@ -9,7 +9,7 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => 'Информация о подключении',
-	'content' => $this->renderPartial('subscription/_product', array(), true)
+	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 ?>
 <div class="alert in alert-block alert-success span7">

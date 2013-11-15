@@ -193,7 +193,7 @@ class FormController extends Controller
 					}
 					Yii::app()->user->setState('new_client', true);
 					//очищаем сессию (данные формы и прочее)
-					//Yii::app()->clientForm->clearClientSession();
+					Yii::app()->clientForm->clearClientSession();
 
 					$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
 				}
