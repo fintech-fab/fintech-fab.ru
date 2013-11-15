@@ -2577,10 +2577,6 @@ class AdminKreddyApiComponent
 	public function getSubscribeFlexChannelId()
 	{
 		//TODO сделать разбор explode() и выбирать только канал, доступный клиенту
-		echo '<pre>' . "";
-		CVarDumper::dump($this->getClientChannels());
-		echo '</pre>';
-
 		return (isset(Yii::app()->session['subscribeFlexChannelId']))
 			? Yii::app()->session['subscribeFlexChannelId']
 			: false;

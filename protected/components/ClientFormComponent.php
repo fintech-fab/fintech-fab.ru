@@ -768,6 +768,7 @@ class ClientFormComponent
 		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = null;
 
 		Yii::app()->session['ClientSelectProductForm'] = null;
+		Yii::app()->session['ClientFlexibleProductForm'] = null;
 		Yii::app()->session['ClientFullForm'] = null;
 
 		$this->setFlagFullFormFilled(false);

@@ -714,7 +714,7 @@ class DefaultController extends Controller
 				if ($aGetIdent) {
 					$oIdentify = new VideoIdentifyForm();
 					$oIdentify->setAttributes($aGetIdent);
-					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
+					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
 					//выводим форму отправки на идентификацию
 					$this->render('need_identify', array('model' => $oIdentify));
 					Yii::app()->end();
@@ -752,9 +752,9 @@ class DefaultController extends Controller
 	public function actionDoSubscribe()
 	{
 		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
-			$this->redirect(Yii::app()->createUrl('/account'));
-		}
+		/*if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+			$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
+		}*/
 
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/doSubscribe'));
 
@@ -764,7 +764,7 @@ class DefaultController extends Controller
 			if ($aGetIdent) {
 				$oIdentify = new VideoIdentifyForm();
 				$oIdentify->setAttributes($aGetIdent);
-				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/changePassport");
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/doSubscribe");
 				//выводим форму отправки на идентификацию
 				$this->render('need_identify', array('model' => $oIdentify));
 				Yii::app()->end();
@@ -781,11 +781,15 @@ class DefaultController extends Controller
 
 		$iProduct = Yii::app()->user->getState('product');
 		$sChannelsId = Yii::app()->user->getState('channel_id');
+		$iFlexAmount = Yii::app()->user->getState('flex_amount');
+		$iFlexTime = Yii::app()->user->getState('flex_time');
+
 
 		//список каналов из сессии (выбранный при регистрации канал/список каналов) разбиваем на массив каналов (если пришел в виде "1_2_3")
 		$aChannelsId = explode('_', $sChannelsId);
 		//получаем список каналов, доступных клиенту
 		$aClientChannels = Yii::app()->adminKreddyApi->getClientChannels();
+
 		$iChannelId = 0;
 		//если есть канал из сессии и список каналов клиента не пуст
 		if (!empty($aClientChannels) && !empty($aChannelsId) > 0) {
@@ -801,33 +805,31 @@ class DefaultController extends Controller
 		//если выбранный канал равен 0, т.е. выбранный канал отсутствовал в списке доступных клиенту
 		//то нужно его отправить на привязку карты, с сообщением об этом
 		if ($iChannelId === 0) {
-			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на банковскую карту,
-			 но у вас не привязано ни одной карты. Пройдите, пожалуйста,
-			  процедеру привязки банковской карты и затем вернитесь к получению займа.');
+			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения. Пройдите, пожалуйста,
+			  процедеру привязки банковской карты, для получения займа на неё, и затем вернитесь к получению займа.');
 			//TODO сменить месседж и поместить в const
 			$this->redirect('/account/addCard');
 
 			//TODO сделать редирект обратно с привязки карты на подписку
 		}
 
-
-		$iFlexAmount = Yii::app()->user->getState('flex_amount');
-		$iFlexTime = Yii::app()->user->getState('flex_time');
-
+		//если есть сохраненные данные в getState, то их переносим в массивы
 		if (!empty($iProduct) && !empty($iChannelId)) {
-			$bIsRedirect = true;
+			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('product' => $iProduct, 'channel_id' => $iChannelId);
 		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($iChannelId)) {
-			$bIsRedirect = true;
+			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
 		} else {
 			$bIsRedirect = false;
 			$aData = array();
 		}
 
+		//выбираем нужную модель
 		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientFlexibleProductForm() : new ClientSubscribeForm();
+		//если есть POST-запрос или были данные в getState перед редиректом
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
-
+			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
 			if (!$bIsRedirect) {
 				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
 			} else {
@@ -1333,10 +1335,15 @@ class DefaultController extends Controller
 		$this->render('reset_password/pass_sent_success');
 	}
 
+	/**
+	 * id позволяет после проверки авторизации (есть пользователь уже авторизован) сразу сделать редирект
+	 *
+	 * @param string $id
+	 */
 
-	public
-	function actionLogin()
+	public function actionLogin($id = '')
 	{
+
 		$this->layout = '/layouts/column1';
 
 		if (Yii::app()->user->isGuest) {
@@ -1360,15 +1367,17 @@ class DefaultController extends Controller
 			$this->render('login', array('model' => $oModel));
 
 		} else {
-			$this->redirect(Yii::app()->createUrl("/account"));
+			if (Yii::app()->user->getState('new_client')) {
+				$this->redirect(Yii::app()->createUrl("/account/doSubscribe" . $id));
+			}
+			$this->redirect(Yii::app()->createUrl("/account/" . $id));
 		}
 	}
 
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */
-	public
-	function actionLogout()
+	public function actionLogout()
 	{
 		Yii::app()->adminKreddyApi->logout();
 		Yii::app()->user->logout();

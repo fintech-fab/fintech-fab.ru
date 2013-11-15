@@ -94,6 +94,7 @@ $a = array(
 
 
 				'account'                                          => 'account',
+				'account/login/<id:\w+>' => 'account/default/login',
 				'account/<action:\w+>'                             => 'account/default/<action>',
 				'account/<controller:\w+>'                         => 'account/<controller>',
 				'account/<controller:\w+>/<action:\w+>/<id:\d+>'   => 'account/<controller>/<action>',

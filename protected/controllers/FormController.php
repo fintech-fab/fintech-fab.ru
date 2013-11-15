@@ -191,14 +191,17 @@ class FormController extends Controller
 					if (!empty($aClientData['flex_time'])) {
 						Yii::app()->user->setState('flex_time', $aClientData['flex_time']);
 					}
+					Yii::app()->user->setState('new_client', true);
+					//очищаем сессию (данные формы и прочее)
+					//Yii::app()->clientForm->clearClientSession();
 
-					$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
+					$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
 				}
-				//очищаем сессию (данные формы и прочее)
-				Yii::app()->clientForm->clearClientSession();
+
+
 			} else {
 				//если не удалось создать нового клиента, то выводим ошибку
-				Yii::app()->session['error'] = 'Ошибка! Обратитесь в контактный центр';
+				Yii::app()->session['error'] = 'Ошибка! Проверьте правильность введенных данных.';
 				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
 				$this->actionStep(2); //переходим на шаг 2 - анкета пользователя
 			}

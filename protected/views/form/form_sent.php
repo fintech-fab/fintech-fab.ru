@@ -1,6 +1,5 @@
 <?php
 /* @var FormController $this */
-/* @var ClientSendForm $model */
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 
