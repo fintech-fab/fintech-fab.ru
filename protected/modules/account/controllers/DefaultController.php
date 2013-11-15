@@ -791,7 +791,7 @@ class DefaultController extends Controller
 		//если есть сохраненные данные в getState, то их переносим в массивы
 		if (!empty($iProduct) && !empty($sChannelsId)) {
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct, 'channel_id' => $sChannelsId);
+			$aData = array('product' => $iProduct . '_' . $sChannelsId);
 		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) {
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $sChannelsId);
