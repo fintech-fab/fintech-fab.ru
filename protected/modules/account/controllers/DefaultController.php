@@ -81,7 +81,7 @@ class DefaultController extends Controller
 				//TODO брать имя домена верхнего уровня из текущего адреса
 
 
-				$this->redirect('http://dev.kreddy.popov/account');
+				$this->redirect(Yii::app()->params['mainUrl']);
 			}
 		}
 
@@ -1333,12 +1333,6 @@ class DefaultController extends Controller
 		Yii::app()->adminKreddyApi->clearResetPassSmsCodeState();
 		$this->render('reset_password/pass_sent_success');
 	}
-
-	/**
-	 * id позволяет после проверки авторизации (есть пользователь уже авторизован) сразу сделать редирект
-	 *
-	 * @param string $id
-	 */
 
 	public function actionLogin()
 	{
