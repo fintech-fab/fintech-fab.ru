@@ -752,9 +752,9 @@ class DefaultController extends Controller
 	public function actionDoSubscribe()
 	{
 		//проверяем, возможно ли действие
-		/*if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
-		}*/
+		}
 
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/doSubscribe'));
 
@@ -838,7 +838,6 @@ class DefaultController extends Controller
 
 
 			$oProductForm->setAttributes($aPost);
-			//echo '<pre>' . ""; CVarDumper::dump(CActiveForm::validate($oProductForm)); echo '</pre>';
 			if ($oProductForm->validate()) {
 
 				//сохраняем в сессию выбранный продукт
