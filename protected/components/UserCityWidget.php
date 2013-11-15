@@ -35,7 +35,7 @@ class UserCityWidget extends CWidget
 			$this->sCityAndRegion = $oCityAndRegionCookie->value;
 		} elseif ($sCity) { // если удалось определить город по ip
 			$this->sCityName = $sCity;
-			//$this->sCityAndRegion = ids_ipGeoBase::getCityByIP('46.38.98.106') . ", " . ids_ipGeoBase::getRegionByIP('46.38.98.106');
+			//$this->sCityAndRegion = ids_ipGeoBase::getCityByIP('46.160.10.10') . ", " . ids_ipGeoBase::getRegionByIP('46.160.10.10');
 			$sRegion = ids_ipGeoBase::getRegionByIP();
 			$this->sCityAndRegion = $sCity;
 			$this->sCityAndRegion .= ($sCity != $sRegion) ? (', ' . $sRegion) : '';

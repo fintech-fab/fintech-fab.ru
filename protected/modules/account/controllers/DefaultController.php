@@ -806,7 +806,6 @@ class DefaultController extends Controller
 		//если выбранный канал равен 0, т.е. выбранный канал отсутствовал в списке доступных клиенту
 		//то нужно его отправить на привязку карты, с сообщением об этом
 		$bIsNeedCard = Yii::app()->adminKreddyApi->getIsNeedCard();
-		//TODO тут возможно не проверять канал, только редирект и нужна ли карта
 		if ($bIsRedirect && $iChannelId === 0 && $bIsNeedCard) {
 			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения. Пройдите, пожалуйста,
 			  процедеру привязки банковской карты, для получения займа на неё, и затем вернитесь к получению займа.');
@@ -836,6 +835,8 @@ class DefaultController extends Controller
 				if (SiteParams::getIsIvanovoSite()) {
 					Yii::app()->adminKreddyApi->setSubscribeFlexAmount($oProductForm->amount);
 					Yii::app()->adminKreddyApi->setSubscribeFlexTime($oProductForm->time);
+					// ID канала преобразуем, т.к. он может прийти в виде 1_2_3_4
+					//данная функция из списка 1_2_3_4 вернет только ID канала, что есть у клиента (для мобильных каналов!)
 					$oProductForm->channel_id = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($oProductForm->channel_id);
 					Yii::app()->adminKreddyApi->setSubscribeFlexChannelId($oProductForm->channel_id);
 					$sView = 'flex_subscription/do_subscribe';

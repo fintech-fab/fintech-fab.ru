@@ -43,20 +43,30 @@ if (!$this->bUpdate):
 		<?php endif ?>
 
 		function confirmCity() {
+			var cityName = '<?= $this->sCityName ?>';
+			var cityAndRegion = '<?= $this->sCityAndRegion ?>';
 			$.ajax({
 				url: "<?= Yii::app()->createUrl('/site/setCityToCookie') ?>",
 				type: "POST",
 				cache: false,
 				dataType: "html",
 				data: ({
-					'cityName': '<?= $this->sCityName ?>',
-					'cityAndRegion': '<?= $this->sCityAndRegion ?>',
+					'cityName': cityName,
+					'cityAndRegion': cityAndRegion,
 					'<?= $this->sCsrfTokenName ?>': "<?= $this->sCsrfToken ?>"
 				}),
 				success: function (html) {
 					$("#userCityWidget").html(html);
 				}
-			});
+			}).done(function () {
+					var host = $(location).attr("hostname");
+					if (cityAndRegion.match(/Ивановская область/i) && !host.match(/ivanovo/i)) {
+						window.location.href = "<?= Yii::app()->params['ivanovoUrl'] ?>";
+					}
+					if (!cityAndRegion.match(/Ивановская область/i) && host.match(/ivanovo/i)) {
+						window.location.href = "<?= Yii::app()->params['mainUrl'] ?>";
+					}
+				});
 			userLocation.popover('hide');
 		}
 	</script>
