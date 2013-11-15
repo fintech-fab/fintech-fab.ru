@@ -1340,7 +1340,7 @@ class DefaultController extends Controller
 	 * @param string $id
 	 */
 
-	public function actionLogin($id = '')
+	public function actionLogin()
 	{
 
 		$this->layout = '/layouts/column1';
@@ -1367,9 +1367,9 @@ class DefaultController extends Controller
 
 		} else {
 			if (Yii::app()->user->getState('new_client')) {
-				$this->redirect(Yii::app()->createUrl("/account/doSubscribe" . $id));
+				$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
 			}
-			$this->redirect(Yii::app()->createUrl("/account/" . $id));
+			$this->redirect(Yii::app()->createUrl("/account/"));
 		}
 	}
 

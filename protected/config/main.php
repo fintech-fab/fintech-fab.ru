@@ -62,7 +62,7 @@ $a = array(
 		'bootstrap'        => array(
 			'class'           => 'ext.bootstrap.components.Bootstrap',
 			'tooltipSelector' => '[rel=tooltip]',
-			'responsiveCss' => false,
+			'responsiveCss'   => false,
 		),
 		'image'            => array(
 			'class'  => 'application.extensions.image.CImageComponent',
@@ -94,7 +94,6 @@ $a = array(
 
 
 				'account'                                          => 'account',
-				'account/login/<id:\w+>' => 'account/default/login',
 				'account/<action:\w+>'                             => 'account/default/<action>',
 				'account/<controller:\w+>'                         => 'account/<controller>',
 				'account/<controller:\w+>/<action:\w+>/<id:\d+>'   => 'account/<controller>/<action>',
@@ -125,8 +124,8 @@ $a = array(
 		'log'              => array(),
 
 		'session'          => array(
-			'timeout'     => 60 * 60 * 2,
-			'sessionName' => 'st',
+			'timeout'      => 60 * 60 * 2,
+			'sessionName'  => 'st',
 			'cookieParams' => array(
 				'domain' => '.dev.kreddy.popov' //TODO вынести в custom!!!
 			)
