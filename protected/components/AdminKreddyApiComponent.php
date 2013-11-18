@@ -1753,9 +1753,8 @@ class AdminKreddyApiComponent
 
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint));
 
-		$sMaskedRequest = preg_replace('/(\d{4})\d{8}(\d{4})/', '\\1****\\2', CJSON::encode($aRequest));
-
-		Yii::trace("Action: " . $sAction . " - Request: " . $sMaskedRequest);
+		//трейс с чисткой 16-цифровых значений для маскировки номеров карт
+		Yii::trace("Action: " . $sAction . " - Request: " . preg_replace('/(\d{4})\d{8}(\d{4})/', '\\1****\\2', CJSON::encode($aRequest)));
 
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
@@ -2594,19 +2593,20 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return bool
+	 * @return string|bool
 	 */
 	public function getSubscribeFlexChannelId()
 	{
-		//TODO сделать разбор explode() и выбирать только канал, доступный клиенту
 		return (isset(Yii::app()->session['subscribeFlexChannelId']))
 			? Yii::app()->session['subscribeFlexChannelId']
 			: false;
 	}
 
 	/**
+	 * Функция получает список каналов в виде строки "1_2_3", и выбирает из списка каналов один, доступный клиенту
+	 * @param $sChannelsId
 	 *
-	 *
+	 * @return int
 	 */
 	public function getClientSelectedChannelByIdString($sChannelsId)
 	{
@@ -2623,7 +2623,7 @@ class AdminKreddyApiComponent
 			foreach ($aClientChannels as $iClientChannel) {
 				//если текущий канал есть в массиве каналов из сессии, то его номер устанавливаем в $iChannelId
 				if (in_array($iClientChannel, $aChannelsId)) {
-					$iChannelId = $iClientChannel;
+					$iChannelId = (int)$iClientChannel;
 
 				}
 			}

@@ -728,9 +728,6 @@ class DefaultController extends Controller
 					Yii::app()->end();
 				}
 			} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
-				if (Yii::app()->user->hasFlash('warning')) {
-					Yii::app()->user->getFlash('warning');
-				}
 				Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
 
 				$this->redirect('/account/changePassport');
@@ -756,6 +753,9 @@ class DefaultController extends Controller
 	/**
 	 * Обработка данных от формы, переданной из /account/subscribe
 	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
+	 *
+	 * Сюда возможен редирект сразу после регистрации! В этом случае POST-запрос заменяется сохраненными
+	 * в setState данными, и эти данные загружаются в форму
 	 */
 	public function actionDoSubscribe()
 	{
@@ -778,27 +778,27 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 		} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) { //проверяем, нужно ли обновить паспортные данные
-
-			if (Yii::app()->user->hasFlash('warning')) {
-				Yii::app()->user->getFlash('warning');
-			}
+			//устанавливаем warning
 			Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
-
+			//отправляем на изменение паспортных данных
 			$this->redirect('/account/changePassport');
 		}
 
+		//получаем сохраненные при регистрации данные займа (если есть)
+		//TODO возможно, делать это только если есть state new_client
 		$iProduct = Yii::app()->user->getState('product');
 		$sChannelsId = Yii::app()->user->getState('channel_id');
 		$iFlexAmount = Yii::app()->user->getState('flex_amount');
 		$iFlexTime = Yii::app()->user->getState('flex_time');
 
+		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
 		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
 
-		//если есть сохраненные данные в getState, то их переносим в массивы
-		if (!empty($iProduct) && !empty($sChannelsId)) {
+		//если есть сохраненные данные в getState, то их переносим в массив $aData
+		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('product' => $iProduct . '_' . $iChannelId);
-		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($iChannelId)) {
+		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
 		} else {
@@ -806,13 +806,14 @@ class DefaultController extends Controller
 			$aData = array();
 		}
 
-
-		//если выбранный канал равен 0, т.е. выбранный канал отсутствовал в списке доступных клиенту
-		//то нужно его отправить на привязку карты, с сообщением об этом
-		$bIsNeedCard = Yii::app()->adminKreddyApi->getIsNeedCard();
-		if ($bIsRedirect && $iChannelId === 0 && $bIsNeedCard) {
-			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения. Пройдите, пожалуйста,
-			  процедеру привязки банковской карты, для получения займа на неё, и затем вернитесь к получению займа.');
+		/* если был редирект с сохранением данных, но выбранный канал равен 0,
+		 * т.е. выбранный канал отсутствовал в списке доступных клиенту
+		 * то нужно его отправить на привязку карты, с сообщением об этом
+		 */
+		if ($bIsRedirect && $iChannelId === 0) {
+			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения.
+			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
+			  и затем вернитесь к получению займа.');
 			//TODO сменить месседж и поместить в const
 			$this->redirect('/account/addCard');//после привязки редирект вернет клиента обратно
 		}
@@ -845,7 +846,8 @@ class DefaultController extends Controller
 					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
 					$sView = 'subscription/do_subscribe';
 				}
-				//удаляем сохраненные при регистрации данные
+
+				//удаляем сохраненные при регистрации данные продукта
 				Yii::app()->user->setState('product', null);
 				Yii::app()->user->setState('flex_time', null);
 				Yii::app()->user->setState('flex_amount', null);
