@@ -1845,7 +1845,9 @@ class AdminKreddyApiComponent
 	public function getIsAuth()
 	{
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
+		Yii::trace("Test1 = " . CJSON::encode($aInfo));
 		$iStatus = $this->getResultStatus($aInfo);
+		Yii::trace("Test2 = " . $iStatus);
 
 		return ($iStatus === self::ERROR_NONE || $iStatus === self::ERROR_NEED_SMS_AUTH || $iStatus === self::ERROR_NEED_SMS_CODE || $iStatus === self::ERROR_NEED_REDIRECT);
 	}

@@ -24,7 +24,7 @@ class DefaultController extends Controller
 	 *
 	 * @return array access control rules
 	 */
-	public function accessRules()
+	/*public function accessRules()
 	{
 		return array(
 			array(
@@ -1366,7 +1366,6 @@ class DefaultController extends Controller
 				$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
 			}
 			$this->redirect(Yii::app()->createUrl("/account"));
-			Yii::app()->end();
 		}
 	}
 
