@@ -50,9 +50,13 @@ Yii::app()->clientScript->registerScript('sliderWidget', '
 
 			oAmount.change(function () {
 				var iAmount = parseInt(oAmount.attr("value"));
+
 				if(iAmount >= 4000){
+					$("button#submitNow").attr("disabled","disabled");
 					$(".ui-slider #handle_amount").append(\'<span class="ui-slider-tooltip ui-widget-content ui-corner-all">Доступно постоянным клиентам.</span>\');
+
 				} else {
+					$("button#submitNow").attr("disabled",false);
 					$(".ui-slider #handle_amount .ui-slider-tooltip").remove();
 				}
 

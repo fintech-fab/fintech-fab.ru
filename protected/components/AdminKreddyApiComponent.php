@@ -1753,8 +1753,19 @@ class AdminKreddyApiComponent
 
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint));
 
-		//трейс с чисткой 16-цифровых значений для маскировки номеров карт
-		Yii::trace("Action: " . $sAction . " - Request: " . preg_replace('/(\d{4})\d{8}(\d{4})/', '\\1****\\2', CJSON::encode($aRequest)));
+		//если включен debug то делаем чистку данных и trace
+		if (defined('YII_DEBUG') && YII_DEBUG) {
+			$aTraceData = $aRequest;
+			//если есть card_cvc то удаляем его
+			if (isset($aTraceData['card_cvc'])) {
+				$aTraceData['card_cvc'] = '***';
+			}
+			if (isset($aTraceData['card_pan'])) {
+				$aTraceData['card_pan'] = substr_replace($aTraceData['card_pan'], '********', 4, 8);
+			}
+			//трейс с чисткой 16-цифровых значений для маскировки номеров карт
+			Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aTraceData));
+		}
 
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));

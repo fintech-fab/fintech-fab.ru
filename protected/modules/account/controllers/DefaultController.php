@@ -1355,17 +1355,18 @@ class DefaultController extends Controller
 
 			if (Yii::app()->request->isPostRequest && $oModel->validate() && $oModel->login()) {
 				$this->redirect(Yii::app()->createUrl("/account"));
+				Yii::app()->end();
 			}
 			// display the login form
 			$oModel->password = ''; //удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
 			$this->render('login', array('model' => $oModel));
-
+			Yii::trace(Yii::app()->adminKreddyApi->getIsAuth());
 		} else {
 			if (Yii::app()->user->getState('new_client')) {
 				$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
 			}
-
-			$this->redirect(Yii::app()->createUrl("/account/"));
+			$this->redirect(Yii::app()->createUrl("/account"));
+			Yii::app()->end();
 		}
 	}
 

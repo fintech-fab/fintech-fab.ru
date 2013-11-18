@@ -80,6 +80,7 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 	<div class="row span11">
 		<div class="form-actions">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'id'    => 'submitNow',
 				'buttonType' => 'submit',
 				'type'       => 'primary',
 				'size'  => 'large',
