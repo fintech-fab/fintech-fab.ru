@@ -31,4 +31,5 @@ function showConditions(products, channels) {
 	var n = products.attr('data-time');
 	$('.date').html(getDateToPayUntil(n));
 	$('.final_price').html(products.attr('data-final-price'));
+	$('.channel').html(channels.find('input:checked').parent().find("label > span").html());
 }

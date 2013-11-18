@@ -19,7 +19,7 @@
 		<li>Срок подключения:
 			<span class="cost price_month"><?= "";//Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
 		</li>
-		<li>Канал получения:&nbsp; <span class="cost">на мобильный телефон (МТС, Билайн, Мегафон)</span></li>
+		<li>Канал получения:&nbsp; <span class="cost channel">на мобильный телефон (МТС, Билайн, Мегафон)</span></li>
 	</ul>
 </div>
 

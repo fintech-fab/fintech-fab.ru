@@ -24,6 +24,10 @@ if (Yii::app()->clientForm->getFlagFullFormFilled()) {
 $sJsPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/form-validate.js';
 Yii::app()->clientScript->registerScriptFile($sJsPath);
 
+/*
+ * На форму, до и после валидации, вешаются функции, которые обеспечивают автоматическое
+ * открытие/закрытие коллапсов
+ */
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
