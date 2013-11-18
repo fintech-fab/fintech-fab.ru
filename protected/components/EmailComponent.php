@@ -23,7 +23,7 @@ class EmailComponent extends CComponent
 		$headers = array(
 			'MIME-Version: 1.0',
 			'Content-type: text/plain; charset=UTF-8',
-			'From: '.$sFrom,
+			'From: ' . $sFrom,
 		);
 
 		$sSubject = '=?UTF-8?B?' . base64_encode($sSubject) . '?=';
