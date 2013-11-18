@@ -1745,7 +1745,10 @@ class AdminKreddyApiComponent
 
 		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint));
 
-		Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aRequest));
+		$sMaskedRequest = preg_replace('/(\d{4})\d{8}(\d{4})/', '\\1****\\2', CJSON::encode($aRequest));
+
+		Yii::trace("Action: " . $sAction . " - Request: " . $sMaskedRequest);
+
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
 

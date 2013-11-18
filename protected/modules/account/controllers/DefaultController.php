@@ -704,6 +704,11 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
+		//проверяем ответ checkSubscribe, не нужно ли привязать карту
+		if (Yii::app()->adminKreddyApi->getIsNeedCard()) {
+			//TODO выводить предложение привязать карту
+		}
+
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 
@@ -787,21 +792,20 @@ class DefaultController extends Controller
 		$iFlexTime = Yii::app()->user->getState('flex_time');
 		Yii::app()->user->setState('flex_time', null);
 
+		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
 
 		//если есть сохраненные данные в getState, то их переносим в массивы
 		if (!empty($iProduct) && !empty($sChannelsId)) {
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct . '_' . $sChannelsId);
-		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) {
+			$aData = array('product' => $iProduct . '_' . $iChannelId);
+		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($iChannelId)) {
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $sChannelsId);
+			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
 		} else {
 			$bIsRedirect = false;
 			$aData = array();
 		}
 
-
-		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
 
 		//если выбранный канал равен 0, т.е. выбранный канал отсутствовал в списке доступных клиенту
 		//то нужно его отправить на привязку карты, с сообщением об этом
@@ -837,7 +841,6 @@ class DefaultController extends Controller
 					Yii::app()->adminKreddyApi->setSubscribeFlexTime($oProductForm->time);
 					// ID канала преобразуем, т.к. он может прийти в виде 1_2_3_4
 					//данная функция из списка 1_2_3_4 вернет только ID канала, что есть у клиента (для мобильных каналов!)
-					$oProductForm->channel_id = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($oProductForm->channel_id);
 					Yii::app()->adminKreddyApi->setSubscribeFlexChannelId($oProductForm->channel_id);
 					$sView = 'flex_subscription/do_subscribe';
 				} else {

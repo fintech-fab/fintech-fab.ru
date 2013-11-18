@@ -206,7 +206,7 @@ class AntiBotComponent
 	 */
 	private static function ipInExceptions()
 	{
-		$aIpExceptions = array('46.38.98.106', '46.38.98.107', '46.38.98.108', '192.168.10.136');
+		$aIpExceptions = array('46.38.98.106', '46.38.98.107', '46.38.98.108', '192.168.10.136', '192.168.10.160');
 		if (in_array(self::getUserIP(), $aIpExceptions)) {
 			return true;
 		}

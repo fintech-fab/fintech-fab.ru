@@ -168,11 +168,11 @@ class UserCityWidget extends CWidget
 											}
 										}).done(function(){
 										var host = $(location).attr("hostname");
-										if(object.cityAndRegion.match(/Ивановская область/i)&&!host.match(/ivanovo/i))
+										if(object.cityAndRegion&&object.cityAndRegion.match(/Ивановская область/i)&&!host.match(/ivanovo/i))
 										{
 											window.location.href = "' . Yii::app()->params['ivanovoUrl'] . '";
 										}
-										if(!object.cityAndRegion.match(/Ивановская область/i)&&host.match(/ivanovo/i))
+										if(object.cityAndRegion&&!object.cityAndRegion.match(/Ивановская область/i)&&host.match(/ivanovo/i))
 										{
 											window.location.href = "' . Yii::app()->params['mainUrl'] . '";
 										}
