@@ -68,7 +68,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span> для демонстрации в
 				вэб-камеру при прохождении идентификации (подтверждение личности).
 			</li<
-			<li>Ознакомьтесь с Офертой <a href="#fl-distance" class="dotted" data-toggle="modal" data-target="#fl-distance">здесь.</a>
+			<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?= Yii::app()
+					->createAbsoluteUrl('/footerLinks/view/distance'); ?>', 'Оферта на дистанционный займ');">здесь.</a>
 			</li>
 		</ol>
 	</div>
