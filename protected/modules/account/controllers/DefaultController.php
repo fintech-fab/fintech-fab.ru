@@ -24,7 +24,7 @@ class DefaultController extends Controller
 	 *
 	 * @return array access control rules
 	 */
-	/*public function accessRules()
+	public function accessRules()
 	{
 		return array(
 			array(
@@ -1360,7 +1360,6 @@ class DefaultController extends Controller
 			// display the login form
 			$oModel->password = ''; //удаляем пароль из формы, на случай ошибки (чтобы не передавать его в форму)
 			$this->render('login', array('model' => $oModel));
-			Yii::trace(Yii::app()->adminKreddyApi->getIsAuth());
 		} else {
 			if (Yii::app()->user->getState('new_client')) {
 				$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
