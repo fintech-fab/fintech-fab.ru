@@ -37,7 +37,8 @@ $aCrumbs = array(
 		'action'                 => Yii::app()->createUrl('/form/checkSmsCode'),
 	));
 	?>
-	<div id="alertsmssent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS_NUM; ?>&nbsp;+7<?= Yii::app()->clientForm->getSmsSentPhone(); ?></div>
+	<div id="alertsmssent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS_NUM; ?>
+		&nbsp;+7<?= Yii::app()->clientForm->getSmsSentPhone(); ?></div>
 
 
 	<div class="clearfix"></div>
@@ -68,7 +69,6 @@ $aCrumbs = array(
 	</div>
 
 	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
-		'iSkippedSteps' => 2,
+		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
 	)); ?>
 </div>
