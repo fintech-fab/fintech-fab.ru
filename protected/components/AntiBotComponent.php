@@ -91,16 +91,20 @@ class AntiBotComponent
 
 	public static function getIsAddCardCanRequest($sUserName)
 	{
+		if (self::ipInExceptions()) {
+			return true;
+		}
+
 		$iType = SiteParams::U_ACTION_TYPE_CARD_VERIFY;
 		$iTime = SiteParams::ANTIBOT_CARD_ADD_TIME;
 
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sUserName, $iType, $iTime);
 
 		//если количество использованных попыток меньше заданного значения - разрешаем попытку
-		if($iActionCount <= SiteParams::ANTIBOT_CARD_ADD_COUNT)
-		{
+		if ($iActionCount <= SiteParams::ANTIBOT_CARD_ADD_COUNT) {
 			return true;
 		}
+
 		return false;
 	}
 

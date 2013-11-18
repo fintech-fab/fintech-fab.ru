@@ -38,7 +38,7 @@ Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 ?>
 <?php
 //TODO сделать получение количества labels из API
-//TODO сделать разбор номера канала из вида 8_9_10 в массив и поиск канала по нему
+//TODO сделать разбор номера канала из вида 8_9_10 в массив и поиск канала по нему (для iAddCost)
 Yii::app()->clientScript->registerScript('sliderWidget', '
 			var oChannelId = $("#' . get_class($model) . '_channel_id");
 			var oAmount = $("#amount");
@@ -50,6 +50,12 @@ Yii::app()->clientScript->registerScript('sliderWidget', '
 
 			oAmount.change(function () {
 				var iAmount = parseInt(oAmount.attr("value"));
+				if(iAmount >= 4000){
+					$(".ui-slider #handle_amount").append(\'<span class="ui-slider-tooltip ui-widget-content ui-corner-all">Доступно постоянным клиентам.</span>\');
+				} else {
+					$(".ui-slider #handle_amount .ui-slider-tooltip").remove();
+				}
+
 				var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
 				if(typeof iAddCost === "undefined"){
 					iAddCost=0;
