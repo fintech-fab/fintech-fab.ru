@@ -6,12 +6,7 @@
 $this->pageTitle = Yii::app()->name;
 
 
-$aCrumbs = array(
-	array('Выбор пакета', 1),
-	array('Заявка на займ', 2),
-	array('Подтверждение номера телефона', 3),
-	array('Идентификация', 4)
-);
+$aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 
 $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 

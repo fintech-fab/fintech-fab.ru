@@ -10,12 +10,7 @@
 $this->pageTitle = Yii::app()->name;
 
 
-$aCrumbs = array(
-	array('Выбор пакета', 1),
-	array('Заявка на займ', 2),
-	array('Подтверждение номера телефона', 3),
-	array('Идентификация', 4)
-);
+$aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 
 ?>
 
@@ -65,19 +60,19 @@ $aCrumbs = array(
 			<h5 class="pay_legend">Выбранные условия</h5>
 			<?php
 
-		?>
-		<ul>
-			<li>Размер займа:
-				<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-			</li>
-			<li>Канал получения: <span class="cost channel"></span>
-			</li>
-			<li>Дата возврата займа: &nbsp;<span class="cost date"></span>
-			</li>
-			<li>Необходимо вернуть:
-				<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-			</li>
-		</ul>
+			?>
+			<ul>
+				<li>Размер займа:
+					<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+				</li>
+				<li>Канал получения: <span class="cost channel"></span>
+				</li>
+				<li>Дата возврата займа: &nbsp;<span class="cost date"></span>
+				</li>
+				<li>Необходимо вернуть:
+					<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+				</li>
+			</ul>
 		</div>
 	</div>
 

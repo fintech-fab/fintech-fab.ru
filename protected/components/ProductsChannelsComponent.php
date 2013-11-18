@@ -164,7 +164,9 @@ class ProductsChannelsComponent
 						//TODO тут сейчас берется 1 канал, найденный в каналах пользователя и имеющийся в списке каналов в формате 1_2_3
 						//TODO надо сделать чтобы можно было и больше каналов можно было получить в массиве
 						$iKey = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($iKey);
-						$aClientChannelsList[$iKey] = SiteParams::mb_ucfirst(self::formatMobileChannelNameNoOperators($sChannel)); //формируем массив каналов, доступных пользователю
+						$aClientChannelsList[$iKey] = (strpos($sChannel, 'мобильный'))
+							? SiteParams::mb_ucfirst(self::formatMobileChannelNameNoOperators($sChannel)) //убираем названия операторов
+							: $sChannel; //формируем массив каналов, доступных пользователю
 					}
 				}
 				$aChannelsList = $aClientChannelsList;

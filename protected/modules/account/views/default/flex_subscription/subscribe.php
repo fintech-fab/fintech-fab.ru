@@ -32,7 +32,6 @@ $model->time = Yii::app()->adminKreddyApi->getSubscribeFlexTime();
 if (empty($model->time)) {
 	$model->time = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()));
 }
-
 $form->radioButtonGroupsList($model, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary'));
 ?>
 <div class="row">

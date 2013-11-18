@@ -829,4 +829,14 @@ class ClientFormComponent
 	{
 		return (Yii::app()->clientForm->getSmsSentPhone() === Yii::app()->clientForm->getSessionPhone());
 	}
+
+	/**
+	 * Метод для получения breadcrumbs для страниц формы
+	 *
+	 * @return array
+	 */
+	public function getBreadCrumbs()
+	{
+		return (SiteParams::getIsIvanovoSite()) ? SiteParams::$aIvanovoBreadCrumbs : SiteParams::$aMainBreadCrumbs;
+	}
 }

@@ -1252,7 +1252,7 @@ class AdminKreddyApiComponent
 	public function doSubscribeFlexible($sSmsCode, $iProduct, $iChannelId, $iAmount, $iTime)
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE,
-			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId, 'custom_option' => array('loan_amount' => $iAmount, 'loan_lifetime' => $iTime)));
+			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId, 'custom_options' => array('loan_amount' => $iAmount, 'loan_lifetime' => $iTime)));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			if (isset($aResult['scoring_accepted'])) {

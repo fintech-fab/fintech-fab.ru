@@ -65,7 +65,6 @@ class SiteParams
 	const C_INVOICE_TYPE_LOAN_PENALTY = 4;
 	const C_INVOICE_TYPE_LOAN_FINE_PENALTY = 5;
 
-
 	public static $aTypes = array(
 		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата Пакета',
 		self::C_INVOICE_TYPE_LOAN              => 'Погашение займа',
@@ -76,6 +75,19 @@ class SiteParams
 
 	public static $iTimeNow = null;
 
+	public static $aMainBreadCrumbs = array(
+		array('Выбор пакета', 1),
+		array('Заявка на займ', 2),
+		array('Подтверждение номера телефона', 3),
+		array('Идентификация', 4)
+	);
+
+	public static $aIvanovoBreadCrumbs = array(
+		array('Выбор займа', 1),
+		array('Заявка на займ', 2),
+		array('Подтверждение номера телефона', 3),
+		array('Идентификация', 4)
+	);
 
 	/**
 	 * игнорирование выгрузки данных в буфер 1С
