@@ -849,22 +849,30 @@ class AdminKreddyApiComponent
 	 */
 	public function getProductsAndChannels()
 	{
-		//TODO сделать хранение в кэше с учетом разных точек входа
-		$aProducts = $this->aProducts; //Yii::app()->cache->get('productsAndChannels');
+		if (SiteParams::getIsIvanovoSite()) {
+			$sCacheName = 'productsAndChannelsIvanovo';
+		} else {
+			$sCacheName = 'productsAndChannels';
+		}
+
+
+		$aProducts = Yii::app()->cache->get($sCacheName);
+
 		if (!empty($aProducts)) {
 			return $aProducts;
 		}
+
 		$aProductsAndChannels = $this->getData('products_and_channels');
 
 		if ($aProductsAndChannels['code'] === self::ERROR_NONE) {
 			//сохраняем в кэш с временем хранения 10 минут
-			$this->aProducts = $aProductsAndChannels; //TODO выпилить после включения кэша
-			Yii::app()->cache->set('productsAndChannels', $aProductsAndChannels, 600);
+			Yii::app()->cache->set($sCacheName, $aProductsAndChannels, 600);
 			//кэш длительного хранения, на случай отключения API
-			Yii::app()->cache->set('productsAndChannelsLongTime', $aProductsAndChannels);
+			Yii::app()->cache->set($sCacheName . 'LongTime', $aProductsAndChannels);
 		} else {
 			//если вдруг при обращении к API вылезла ошибка, достаем данные из длительного кэша
-			$aProducts = Yii::app()->cache->get('productsAndChannelsLongTime');
+
+			$aProducts = Yii::app()->cache->get($sCacheName . 'LongTime');
 			if (isset($aProducts)) {
 				return $aProducts;
 			}
@@ -2665,11 +2673,12 @@ class AdminKreddyApiComponent
 		$iTime = $this->getSubscribeFlexTime();
 		$iChannelId = $this->getSubscribeFlexChannelId();
 		$aPercentage = $this->getFlexibleProductPercentage();
+
 		$aChannelCosts = $this->getFlexibleProductChannelCosts();
 
 		// получаем стоимость выбранного канала
-		$iChannelCost = (!empty($aChannelCosts[$iChannelId]['additional_cost']))
-			? $aChannelCosts[$iChannelId]['additional_cost']
+		$iChannelCost = (!empty($aChannelCosts[$iAmount][$iChannelId]))
+			? $aChannelCosts[$iAmount][$iChannelId]
 			: 0;
 		$iPercent = (!empty($aPercentage[$iAmount][$iTime]))
 			? $aPercentage[$iAmount][$iTime] :
@@ -2697,9 +2706,6 @@ class AdminKreddyApiComponent
 				}
 			}
 		}
-		echo '<pre>' . "";
-		CVarDumper::dump($iProductId);
-		echo '</pre>';
 
 		return $iProductId;
 	}

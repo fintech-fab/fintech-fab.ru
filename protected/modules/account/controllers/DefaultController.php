@@ -78,8 +78,6 @@ class DefaultController extends Controller
 				Yii::app()->user->logout();
 				$this->redirect(Yii::app()->user->loginUrl);
 			} elseif (Yii::app()->adminKreddyApi->getIsNeedRedirect()) {
-				//TODO брать имя домена верхнего уровня из текущего адреса
-
 				$this->redirect(Yii::app()->params['mainUrl']);
 			}
 		}
@@ -272,6 +270,12 @@ class DefaultController extends Controller
 				if ($bVerify) {
 					//удаляем куку "карта отправлена на верификацию"
 					Cookie::saveDataToCookie('cardVerify', array('onVerify' => false));
+
+					if (Yii::app()->user->getState('new_client')) {
+						Yii::app()->user->setFlash('success', AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED);
+						$this->redirect(Yii::app()->user->getReturnUrl());
+					}
+
 					$this->render('card/success', array(
 						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 					));
@@ -784,13 +788,9 @@ class DefaultController extends Controller
 		}
 
 		$iProduct = Yii::app()->user->getState('product');
-		Yii::app()->user->setState('product', null);
 		$sChannelsId = Yii::app()->user->getState('channel_id');
-		Yii::app()->user->setState('channel_id', null);
 		$iFlexAmount = Yii::app()->user->getState('flex_amount');
-		Yii::app()->user->setState('flex_amount', null);
 		$iFlexTime = Yii::app()->user->getState('flex_time');
-		Yii::app()->user->setState('flex_time', null);
 
 		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
 
@@ -814,9 +814,7 @@ class DefaultController extends Controller
 			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения. Пройдите, пожалуйста,
 			  процедеру привязки банковской карты, для получения займа на неё, и затем вернитесь к получению займа.');
 			//TODO сменить месседж и поместить в const
-			$this->redirect('/account/addCard');
-
-			//TODO сделать редирект обратно с привязки карты на подписку
+			$this->redirect('/account/addCard');//после привязки редирект вернет клиента обратно
 		}
 
 		//выбираем нужную модель
@@ -847,6 +845,12 @@ class DefaultController extends Controller
 					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
 					$sView = 'subscription/do_subscribe';
 				}
+				//удаляем сохраненные при регистрации данные
+				Yii::app()->user->setState('product', null);
+				Yii::app()->user->setState('flex_time', null);
+				Yii::app()->user->setState('flex_amount', null);
+				Yii::app()->user->setState('channel_id', null);
+
 				$this->render($sView, array('model' => $oForm));
 				Yii::app()->end();
 			}
