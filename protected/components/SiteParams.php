@@ -90,13 +90,6 @@ class SiteParams
 	);
 
 	/**
-	 * игнорирование выгрузки данных в буфер 1С
-	 * @var bool
-	 */
-	private $_bIgnore1cBuffer = false;
-
-
-	/**
 	 * количество цифр в номере телефона
 	 */
 	const C_PHONE_LENGTH = 10;
@@ -185,7 +178,11 @@ class SiteParams
 		return (defined('SITE_IVANOVO')) ? SITE_IVANOVO : false;
 	}
 
-
+	/**
+	 * @param null $sLocalLink
+	 *
+	 * @return string
+	 */
 	public function getAbsLink($sLocalLink = null)
 	{
 
@@ -193,6 +190,11 @@ class SiteParams
 
 	}
 
+	/**
+	 * @param $key
+	 *
+	 * @return string
+	 */
 	public function getCKeyLink($key)
 	{
 
@@ -200,6 +202,9 @@ class SiteParams
 
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHttpHost()
 	{
 
@@ -211,6 +216,9 @@ class SiteParams
 
 	}
 
+	/**
+	 * @param CController $controller
+	 */
 	public function redirectReturnUrl(CController $controller)
 	{
 
@@ -234,6 +242,9 @@ class SiteParams
 
 	}
 
+	/**
+	 * @param null $url
+	 */
 	public function setRedirectUrl($url = null)
 	{
 		if (null === $url) {
@@ -243,29 +254,12 @@ class SiteParams
 	}
 
 
-	/*public function getGravatarHtml($size, SiteAdminUser $oUser = null)
-	{
-
-		$src = '/i/gravatar.jpg';
-
-		if (Yii::app()->user->getIsGuest()) {
-			$name = 'пакман';
-		} else {
-			$oUser = ($oUser)
-				? $oUser
-				: Yii::app()->user->getModel();
-			$name = $oUser->getName();
-		}
-
-		return CHtml::image($src, $name, array(
-			'width' => $size,
-			'height' => $size,
-			'class' => 'img-polaroid gravatar-icon',
-		));
-
-	}*/
-
-
+	/**
+	 * @param      $url
+	 * @param bool $bStrong
+	 *
+	 * @return bool
+	 */
 	public function isCurrentUrl($url, $bStrong = false)
 	{
 
@@ -277,6 +271,9 @@ class SiteParams
 
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isIndexPage()
 	{
 
@@ -289,6 +286,9 @@ class SiteParams
 
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isConsole()
 	{
 
@@ -296,6 +296,9 @@ class SiteParams
 
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isLocalServer()
 	{
 
@@ -310,7 +313,11 @@ class SiteParams
 
 	}
 
-
+	/**
+	 * @param $sDirPath
+	 *
+	 * @return bool
+	 */
 	public function doCreateDir($sDirPath)
 	{
 
@@ -568,6 +575,9 @@ class SiteParamValue
 	public $hostname;
 	public $link;
 
+	/**
+	 * @param $aAttributes
+	 */
 	public function __construct($aAttributes)
 	{
 		foreach ($aAttributes as $key => $value) {
@@ -575,11 +585,21 @@ class SiteParamValue
 		}
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return null
+	 */
 	public function __get($name)
 	{
 		return $this->p($name);
 	}
 
+	/**
+	 * @param $var
+	 *
+	 * @return null
+	 */
 	private function p($var)
 	{
 
