@@ -93,7 +93,7 @@ $a = array(
 				'admin/<controller:\w+>/<action:\w+>'              => 'admin/<controller>/<action>',
 
 
-				'account'                                          => 'account',
+				'account'                                          => 'account/default/index',
 				'account/<action:\w+>'                             => 'account/default/<action>',
 				'account/<controller:\w+>'                         => 'account/<controller>',
 				'account/<controller:\w+>/<action:\w+>/<id:\d+>'   => 'account/<controller>/<action>',

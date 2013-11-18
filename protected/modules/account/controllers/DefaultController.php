@@ -78,7 +78,7 @@ class DefaultController extends Controller
 				Yii::app()->user->logout();
 				$this->redirect(Yii::app()->user->loginUrl);
 			} elseif (Yii::app()->adminKreddyApi->getIsNeedRedirect()) {
-				$this->redirect(Yii::app()->params['mainUrl']);
+				$this->redirect(Yii::app()->params['mainUrl'] . "/account");
 			}
 		}
 

@@ -195,6 +195,5 @@ $sJsPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.asse
 Yii::app()->clientScript->registerScriptFile($sJsPath, CClientScript::POS_HEAD);
 
 $this->widget('YaMetrikaGoalsWidget', array(
-	'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
-	'iSkippedSteps' => 2,
+	'iDoneSteps' => Yii::app()->clientForm->getCurrentStep()
 ));

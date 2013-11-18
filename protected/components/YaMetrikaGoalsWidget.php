@@ -6,7 +6,6 @@ class YaMetrikaGoalsWidget extends CWidget
 	 * @var integer сделано шагов на данный момент
 	 */
 	public $iDoneSteps;
-
 	/**
 	 * @var integer вычесть из числа шагов (засчёт видеоидентификации)
 	 */

@@ -45,7 +45,6 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 	</div>
 
 	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps'    => Yii::app()->clientForm->getCurrentStep(),
-		'iSkippedSteps' => 2,
+		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
 	)); ?>
 </div>
