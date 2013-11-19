@@ -48,7 +48,7 @@ $a = array(
 		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
 			'sApiUrl'     => 'https://admin.kreddy.ru:8081/siteApi/',
-			'sTestApiUrl' => 'http://admin-master.kreddy.topas/siteApi/'
+			'sTestApiUrl' => 'http://admin.kreddy.new/siteApi/'
 		),
 		'antiBot'          => array(
 			'class' => 'application.components.AntiBotComponent',
@@ -79,6 +79,7 @@ $a = array(
 			'showScriptName' => false,
 			'rules'          => array(
 				'contact'                                          => 'site/contact',
+				'contactUs' => 'site/contactUs',
 
 				'gii'                                              => 'gii',
 				'gii/<controller:\w+>'                             => 'gii/<controller>',
