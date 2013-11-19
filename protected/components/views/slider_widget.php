@@ -14,7 +14,6 @@
 <?= $form->dropDownList($model, 'time', $aTimeValues, array('class' => 'hide', 'id' => 'time')); ?>
 
 <?php
-$aChannelCosts = array();
 Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 	var aPercentage = ' . CJSON::encode($aPercentage) . ';
 	var aChannelCosts = ' . CJSON::encode($aChannelCosts) . ';
