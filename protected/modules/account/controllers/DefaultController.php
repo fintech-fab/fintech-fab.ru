@@ -180,8 +180,6 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-		Yii::app()->user->getFlash('warning'); //удаляем warning
-
 		$oCardForm = new AddCardForm();
 		$sError = null;
 
@@ -851,10 +849,11 @@ class DefaultController extends Controller
 				}
 
 				//удаляем сохраненные при регистрации данные продукта
-				Yii::app()->user->setState('product', null);
+				//TODO вынести в другое место, либо вовсе не стирать
+				/*Yii::app()->user->setState('product', null);
 				Yii::app()->user->setState('flex_time', null);
 				Yii::app()->user->setState('flex_amount', null);
-				Yii::app()->user->setState('channel_id', null);
+				Yii::app()->user->setState('channel_id', null);*/
 
 				$this->render($sView, array('model' => $oForm));
 				Yii::app()->end();

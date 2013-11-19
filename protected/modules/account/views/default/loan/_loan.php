@@ -18,4 +18,6 @@ $aChannelId = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
 	</li>
 	<li><strong>Способ получения займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($aChannelId) ?>
 	</li>
+	<li><strong>Время перечисления займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
+	</li>
 </ul>
