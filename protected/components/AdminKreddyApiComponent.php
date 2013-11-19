@@ -467,6 +467,12 @@ class AdminKreddyApiComponent
 			Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
 		}
 
+		if (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === false) {
+			Yii::app()->user->setFlash('warning', 'У Вас нет привязанной банковской карты.
+			Для получения займов на банковскую карту пройдите процедуру привязки карты.');
+			//TODO вынести сообщение в const
+		}
+
 		return $aData;
 	}
 
@@ -484,6 +490,32 @@ class AdminKreddyApiComponent
 		} else {
 			return array();
 		}
+	}
+
+	/**
+	 * @param $iChannelId
+	 *
+	 * @return bool
+	 */
+	public function getIsSlowChannel($iChannelId)
+	{
+		$aClientInfo = $this->getClientInfo();
+		if (isset($aClientInfo['slow_channels']) && is_array($aClientInfo['slow_channels'])) {
+			return in_array($iChannelId, $aClientInfo['slow_channels']);
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $iChannelId
+	 *
+	 * @return string
+	 */
+	public function getChannelSpeed($iChannelId)
+	{
+		//TODO тут надо уточнять, что время обусловлено скоростью канала
+		return ($this->getIsSlowChannel($iChannelId)) ? "до 3 дней" : "несколько минут";
 	}
 
 	/**

@@ -180,6 +180,8 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
 		$oCardForm = new AddCardForm();
 		$sError = null;
 
@@ -242,6 +244,8 @@ class DefaultController extends Controller
 
 	public function actionVerifyCard()
 	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
 		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			/**
@@ -296,7 +300,6 @@ class DefaultController extends Controller
 	 */
 	public function actionChangePassport()
 	{
-
 		//проверяем, авторизован ли клиент по СМС-паролю
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$oSmsPassForm = new SMSPasswordForm();
