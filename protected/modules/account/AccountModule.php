@@ -10,7 +10,7 @@ class AccountModule extends CWebModule
 		// you may place code here to customize the module or the application
 
 		Yii::app()->user->loginUrl = Yii::app()->createUrl('account/login');
-		Yii::app()->user->setStateKeyPrefix('_account');
+		//Yii::app()->user->setStateKeyPrefix('_account');
 
 		// import the module-level models and components
 		$this->setImport(array(

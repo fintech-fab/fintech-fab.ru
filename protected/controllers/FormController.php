@@ -175,7 +175,7 @@ class FormController extends Controller
 				//автоматический логин юзера в личный кабинет
 				$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
-				Yii::app()->user->setStateKeyPrefix('_account'); //префикс для модуля account
+				//Yii::app()->user->setStateKeyPrefix('_account'); //префикс для модуля account
 				if ($oLogin->validate() && $oLogin->login()) {
 					Yii::app()->user->setFlash('success', 'Вы успешно зарегистрировались в системе.');
 					//сохраняем данные перед редиректом в ЛК

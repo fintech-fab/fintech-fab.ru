@@ -1341,7 +1341,7 @@ class DefaultController extends Controller
 
 		$this->layout = '/layouts/column1';
 
-		if (Yii::app()->user->isGuest) {
+		if (Yii::app()->user->getIsGuest()) {
 			$oModel = new AccountLoginForm;
 
 			// if it is ajax validation request

@@ -215,7 +215,7 @@ class AdminKreddyApiComponent
 	 */
 	public function init()
 	{
-		$this->token = $this->getSessionToken(); //TODO сделать запрос токена перед getInfo
+		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
 			//если токен существует, то запрашиваем его обновление
 			$this->updateClientToken();
@@ -421,7 +421,6 @@ class AdminKreddyApiComponent
 	 */
 	public function getClientInfo()
 	{
-
 		if (isset($this->aClientInfo)) {
 			return $this->aClientInfo;
 		}
@@ -449,7 +448,7 @@ class AdminKreddyApiComponent
 				'scoring'      => false,
 			)
 		);
-
+		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
 			//запрос данных по токену
 			$aGetData = $this->getData('info');
