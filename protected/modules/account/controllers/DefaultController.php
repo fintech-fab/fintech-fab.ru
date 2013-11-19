@@ -200,6 +200,8 @@ class DefaultController extends Controller
 
 		//если пришел POST-запрос
 		if (Yii::app()->request->isPostRequest) {
+			Yii::app()->user->getFlash('warning'); //удаляем warning
+
 			$aPostData = Yii::app()->request->getParam('AddCardForm');
 			$oCardForm->setAttributes($aPostData);
 			//валидируем полученные данные
