@@ -14,6 +14,7 @@
 <?= $form->dropDownList($model, 'time', $aTimeValues, array('class' => 'hide', 'id' => 'time')); ?>
 
 <?php
+$aChannelCosts = array();
 Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 	var aPercentage = ' . CJSON::encode($aPercentage) . ';
 	var aChannelCosts = ' . CJSON::encode($aChannelCosts) . ';
@@ -60,7 +61,10 @@ Yii::app()->clientScript->registerScript('sliderWidget', '
 					$(".ui-slider #handle_amount .ui-slider-tooltip").remove();
 				}
 
-				var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
+				if(typeof aChannelCosts[iAmount] !== "undefined"){
+					var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
+				}
+
 				if(typeof iAddCost === "undefined"){
 					iAddCost=0;
 				} else {
@@ -74,7 +78,10 @@ Yii::app()->clientScript->registerScript('sliderWidget', '
 			});
 			oTime.change(function () {
 				var iAmount = parseInt(oAmount.attr("value"));
-				var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
+
+				if(typeof aChannelCosts[iAmount] !== "undefined"){
+					var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];
+				}
 				if(typeof iAddCost === "undefined"){
 					iAddCost=0;
 				} else {
