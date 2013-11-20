@@ -1,4 +1,6 @@
-<?php /* @var $this Controller */ ?>
+<?php /* @var $this Controller */
+/* @var $content */
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +14,7 @@
 
 <body class="home">
 <!--  header navbar start -->
-<?php $this->beginContent('//layouts/main_navbar_top');
+<?php $this->beginContent('/layouts/main_navbar_top');
 echo $content;
 $this->endContent();
 ?>

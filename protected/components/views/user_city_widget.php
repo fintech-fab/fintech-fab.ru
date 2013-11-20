@@ -61,10 +61,10 @@ if (!$this->bUpdate):
 			}).done(function () {
 					var host = $(location).attr("hostname");
 					if (cityAndRegion.match(/Ивановская область/i) && !host.match(/ivanovo/i)) {
-						window.location.href = "<?= Yii::app()->params['ivanovoUrl'] ?>";
+						window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('ivanovoUrl') ?>";
 					}
 					if (!cityAndRegion.match(/Ивановская область/i) && host.match(/ivanovo/i)) {
-						window.location.href = "<?= Yii::app()->params['mainUrl'] ?>";
+						window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('mainUrl') ?>";
 					}
 				});
 			userLocation.popover('hide');

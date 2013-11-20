@@ -6,7 +6,7 @@
  */
 class SiteParams
 {
-
+	const DEFAULT_URL = 'https://kreddy.ru';
 	const CTIME_HOUR = 3600;
 	const CTIME_DAY = 86400;
 	const CTIME_WEEK = 604800;
@@ -565,6 +565,43 @@ class SiteParams
 		$curYear = date('Y');
 		echo $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '');
 	}
+
+	/**
+	 * Для виджета CityWidget возвращает URL из params
+	 *
+	 * @param $sUrlName
+	 *
+	 * @return mixed|string
+	 */
+	public static function getCurrentRedirectUrlForCityWidget($sUrlName)
+	{
+		$sUrl = Yii::app()->params[$sUrlName];
+		if (Yii::app()->controller->getModule()) {
+			$sModuleId = Yii::app()->controller->getModule()->getId();
+			if ($sModuleId && $sUrl) {
+				$sUrl .= "/" . $sModuleId;
+			}
+		}
+
+		$sUrl = preg_replace('|([^:])//|', '\1/', $sUrl);
+
+		return ($sUrl) ? $sUrl : self::DEFAULT_URL; //если вдруг параметр не передан, возвращаем значение по-умолчанию
+	}
+
+	/**
+	 * URL для редиректа при логине в ЛК (если нужен редирект на главный сайт)
+	 *
+	 * @param $sUrlName
+	 *
+	 * @return mixed|string
+	 */
+	public static function getRedirectUrlForAccount($sUrlName)
+	{
+		$sUrl = Yii::app()->params[$sUrlName] . "/account";
+		$sUrl = preg_replace('|([^:])//|', '\1/', $sUrl);
+
+		return ($sUrl) ? $sUrl : self::DEFAULT_URL; //если вдруг параметр не передан, возвращаем значение по-умолчанию
+	}
 }
 
 /**
@@ -617,5 +654,4 @@ class SiteParamValue
 			: null;
 
 	}
-
 }

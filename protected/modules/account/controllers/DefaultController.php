@@ -78,7 +78,7 @@ class DefaultController extends Controller
 				Yii::app()->user->logout();
 				$this->redirect(Yii::app()->user->loginUrl);
 			} elseif (Yii::app()->adminKreddyApi->getIsNeedRedirect()) {
-				$this->redirect(Yii::app()->params['mainUrl'] . "/account");
+				$this->redirect(SiteParams::getRedirectUrlForAccount('mainUrl'));
 			}
 		}
 
@@ -215,13 +215,7 @@ class DefaultController extends Controller
 				);
 				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
-					//пишем в куки информацию, что карта отправлена на верификацию
-					Cookie::saveDataToCookie('cardVerify', array('onVerify' => true));
-					//отображаем форму проверки карты по замороженной сумме денег
-					$oVerifyForm = new VerifyCardForm();
-					$this->render('card/verify_card', array('model' => $oVerifyForm));
-					Yii::app()->end();
-
+					$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
 				} else {
 					//если проверка не пройдена
 					//записываем ошибку в антибот
@@ -246,12 +240,12 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->getFlash('warning'); //удаляем warning
 
-		//если есть статус "добавление карты успешно" то рендерим соответствующее представление
-		if (Yii::app()->user->getState('addCardSuccess')) {
+		//если есть статус "верификация карты успешно выполнена" то рендерим соответствующее представление
+		if (Yii::app()->user->getState('verifyCardSuccess')) {
 			$this->render('card/success', array(
 				'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
 			));
-			Yii::app()->user->setState('addCardSuccess', null);
+			Yii::app()->user->setState('verifyCardSuccess', null);
 			Yii::app()->end();
 		}
 
@@ -289,8 +283,8 @@ class DefaultController extends Controller
 						$this->redirect(Yii::app()->user->getReturnUrl());
 					}
 
-					//ставим статус успешного добавления карты
-					Yii::app()->user->setState('addCardSuccess', true);
+					//ставим статус успешной верификации карты
+					Yii::app()->user->setState('verifyCardSuccess', true);
 					//обновляем страницу
 					$this->refresh();
 				} else {
@@ -827,7 +821,7 @@ class DefaultController extends Controller
 			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
 			  и затем вернитесь к получению займа.');
 			//TODO сменить месседж и поместить в const
-			$this->redirect('/account/addCard');//после привязки редирект вернет клиента обратно
+			$this->redirect('/account/addCard'); //после привязки редирект вернет клиента обратно
 		}
 
 		//выбираем нужную модель
