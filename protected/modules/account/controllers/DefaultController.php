@@ -98,6 +98,10 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
+
+		//Yii::app()->user->getFlash('warning');
+		Yii::app()->user->setFlash('warning', Yii::app()->adminKreddyApi->formatMessage(AdminKreddyApiComponent::C_NEED_PASSPORT_DATA));
+
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
@@ -710,7 +714,11 @@ class DefaultController extends Controller
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			// если невозможно - выводим сообщение о недоступности
-			$this->render('subscription/subscribe_not_available');
+			if (SiteParams::getIsIvanovoSite()) {
+				$this->render('flex_subscription/subscribe_not_available');
+			} else {
+				$this->render('subscription/subscribe_not_available');
+			}
 			Yii::app()->end();
 		}
 
@@ -730,11 +738,14 @@ class DefaultController extends Controller
 					$oIdentify->setAttributes($aGetIdent);
 					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
 					//выводим форму отправки на идентификацию
-					$this->render('need_identify', array('model' => $oIdentify));
+					$sView = (SiteParams::getIsIvanovoSite())
+						? 'flex_subscription/need_identify'
+						: 'subscription/need_identify';
+					$this->render($sView, array('model' => $oIdentify));
 					Yii::app()->end();
 				}
 			} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
-				Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
+				Yii::app()->user->setFlash('warning', Yii::app()->adminKreddyApi->formatMessage(AdminKreddyApiComponent::C_NEED_PASSPORT_DATA));
 
 				$this->redirect('/account/changePassport');
 			}
@@ -742,7 +753,9 @@ class DefaultController extends Controller
 
 			$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
 		} else {
-			$sView = 'subscription/subscribe_not_sms_auth';
+			$sView = (SiteParams::getIsIvanovoSite())
+				? 'flex_subscription/subscribe_not_sms_auth'
+				: 'subscription/subscribe_not_sms_auth';
 		}
 
 
@@ -780,12 +793,15 @@ class DefaultController extends Controller
 				$oIdentify->setAttributes($aGetIdent);
 				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/doSubscribe");
 				//выводим форму отправки на идентификацию
-				$this->render('need_identify', array('model' => $oIdentify));
+				$sView = (SiteParams::getIsIvanovoSite())
+					? 'flex_subscription/need_identify'
+					: 'subscription/need_identify';
+				$this->render($sView, array('model' => $oIdentify));
 				Yii::app()->end();
 			}
 		} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) { //проверяем, нужно ли обновить паспортные данные
 			//устанавливаем warning
-			Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_NEED_PASSPORT_DATA);
+			Yii::app()->user->setFlash('warning', Yii::app()->adminKreddyApi->formatMessage(AdminKreddyApiComponent::C_NEED_PASSPORT_DATA));
 			//отправляем на изменение паспортных данных
 			$this->redirect('/account/changePassport');
 		}

@@ -130,7 +130,7 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
-	const C_NEED_PASSPORT_DATA = "Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
+	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -469,7 +469,7 @@ class AdminKreddyApiComponent
 
 		//если нет привязанной карты и не установлен другой warning, то уведомляем о необходимости привязки карты
 		if (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === false && !Yii::app()->user->hasFlash('warning')) {
-			Yii::app()->user->setFlash('warning', 'У Вас нет привязанной банковской карты.
+			Yii::app()->user->setFlash('warning', 'ВНИМАНИЕ! У Вас нет привязанной банковской карты.
 			Для получения займов на банковскую карту пройдите процедуру привязки карты.');
 			//TODO вынести сообщение в const
 		}
