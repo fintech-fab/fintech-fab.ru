@@ -3,9 +3,9 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
+$this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
-	<h4>Подключение Пакета</h4>
+	<h4>Оформление займа</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -14,7 +14,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Информация о подключении',
+	'title' => 'Информация о займе',
 	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 $model->sendSmsCode = 1;
@@ -24,8 +24,8 @@ echo $form->hiddenField($model, 'sendSmsCode');
 
 <?php //TODO вынести сообщения в константы ?>
 	<div class="alert in alert-block alert-error span7">
-		При отправке SMS с паролем произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка
-		повторяется, обратитесь в контактный центр.
+		При отправке SMS с кодом подтверждения произошла ошибка. Попробуйте снова запросить код подтверждения.<br />В
+		случае, если ошибка повторяется, обратитесь в контактный центр.
 	</div>
 
 	<div class="form-actions">

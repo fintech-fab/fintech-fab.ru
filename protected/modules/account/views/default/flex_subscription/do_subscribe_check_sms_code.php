@@ -3,12 +3,12 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
+$this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
-<h4>Подключение Пакета</h4>
+<h4>Оформление займа</h4>
 <?php
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Информация о подключении',
+	'title' => 'Информация о займе',
 	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 ?>

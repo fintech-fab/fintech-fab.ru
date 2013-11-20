@@ -962,6 +962,7 @@ class DefaultController extends Controller
 					if ($bSubscribe) {
 						//сбрасываем счетчик попыток ввода кода
 						Yii::app()->adminKreddyApi->resetSmsCodeTries();
+						//TODO сменить сообщение для Иваново
 						$this->render($sView, array('message' => Yii::app()->adminKreddyApi->getDoSubscribeMessage()));
 						Yii::app()->end();
 					}

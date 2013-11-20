@@ -15,7 +15,12 @@ $this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
 $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 ?>
 
+<?php if (SiteParams::getIsIvanovoSite()): ?>
+	<h4>Статус займа</h4>
+<?php endif; ?>
+<?php if (!SiteParams::getIsIvanovoSite()): ?>
 	<h4>Ваш Пакет займов</h4>
+<?php endif; ?>
 
 <?php if (Yii::app()->adminKreddyApi->getBalance() != 0) {
 	// выводим сообщение, если баланс не равен 0

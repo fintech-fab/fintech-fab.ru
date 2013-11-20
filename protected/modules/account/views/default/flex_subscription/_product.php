@@ -8,7 +8,7 @@ $iChannelId = Yii::app()->adminKreddyApi->getSubscribeFlexChannelId();
 
 <ul>
 	<li>
-		<strong>Размер займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getSubscribeFlexAmount() ?>
+		<strong>Сумма займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getSubscribeFlexAmount() ?>
 		&nbsp;рублей
 	</li>
 	<li>
@@ -20,6 +20,6 @@ $iChannelId = Yii::app()->adminKreddyApi->getSubscribeFlexChannelId();
 	<li><strong>Необходимо вернуть:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscribeFlexCost($iChannelId) ?>
 		&nbsp;рублей
 	</li>
-	<li><strong>Время перечисления займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
+	<li><strong>Время зачисления займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
 	</li>
 </ul>

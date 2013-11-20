@@ -4,8 +4,8 @@
 /* @var IkTbActiveForm $form */
 /* @var $passFormRender */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
+$this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
-<h4>Подключение Пакета</h4>
+<h4>Оформление займа</h4>
 
 <?= $passFormRender // отображаем форму запроса SMS-пароля ?>

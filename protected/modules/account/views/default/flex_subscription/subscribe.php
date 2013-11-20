@@ -3,11 +3,11 @@
 /* @var ClientSubscribeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
+$this->pageTitle = Yii::app()->name . " - Оформление займа";
 
 $iChannelId = Yii::app()->adminKreddyApi->getSubscribeFlexChannelId();
 ?>
-<h4>Подключение Пакета</h4>
+<h4>Оформление займа</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(

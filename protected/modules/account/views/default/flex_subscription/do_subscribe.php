@@ -3,9 +3,9 @@
 /* @var SMSCodeForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
+$this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
-	<h4>Подключение Пакета</h4>
+	<h4>Оформление займа</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -14,14 +14,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Информация о подключении',
+	'title' => 'Информация о займе',
 	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');
 ?>
 	<div class="alert in alert-block alert-warning span7">
-		Для подключения Пакета требуется подтверждение одноразовым SMS-кодом
+		Для получения займа требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
