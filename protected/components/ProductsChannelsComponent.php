@@ -3,6 +3,7 @@
  * Компонент ProductsChannelsComponent
  *
  * Отвечает за вывод на сайт списка доступных комбинаций продуктов/каналов, полученных из AdminKreddyApi
+ * TODO возможно стоит вернуть все функции в AdminKreddyApiComponent
  */
 
 class ProductsChannelsComponent
@@ -74,7 +75,7 @@ class ProductsChannelsComponent
 	 */
 	public static function formatChannelName($sName)
 	{
-		if (preg_match("/карт/", $sName)) {
+		if (preg_match("/Кредди/", $sName)) {
 			return 'на карту Кредди';
 		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный телефон (МТС, Билайн, Мегафон)';
@@ -94,7 +95,7 @@ class ProductsChannelsComponent
 			return 'на мобильный телефон';
 		}
 
-		return false;
+		return $sName;
 	}
 
 	/**
@@ -164,9 +165,8 @@ class ProductsChannelsComponent
 						//TODO тут сейчас берется 1 канал, найденный в каналах пользователя и имеющийся в списке каналов в формате 1_2_3
 						//TODO надо сделать чтобы можно было и больше каналов можно было получить в массиве
 						$iKey = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($iKey);
-						$aClientChannelsList[$iKey] = (strpos($sChannel, 'мобильный'))
-							? SiteParams::mb_ucfirst(self::formatMobileChannelNameNoOperators($sChannel)) //убираем названия операторов
-							: $sChannel; //формируем массив каналов, доступных пользователю
+						$aClientChannelsList[$iKey] = SiteParams::mb_ucfirst(self::formatMobileChannelNameNoOperators($sChannel)); //убираем названия операторов
+
 					}
 				}
 				$aChannelsList = $aClientChannelsList;

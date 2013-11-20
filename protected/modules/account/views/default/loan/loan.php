@@ -14,9 +14,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 
-// если есть доступные пакеты для данного пользователя
-$aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChannelsList();
+//получаем список каналов
+$aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChannelListWithAmounts();
 
+//если есть доступные каналы
 if (!empty($aClientProductsChannelsList)) {
 
 	$model->channel_id = Yii::app()->adminKreddyApi->getLoanSelectedChannel();

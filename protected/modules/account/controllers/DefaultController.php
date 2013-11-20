@@ -98,10 +98,6 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
-
-		//Yii::app()->user->getFlash('warning');
-		Yii::app()->user->setFlash('warning', Yii::app()->adminKreddyApi->formatMessage(AdminKreddyApiComponent::C_NEED_PASSPORT_DATA));
-
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 		//выбираем папку представления в зависимости от статуса СМС-авторизации

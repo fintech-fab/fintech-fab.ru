@@ -86,7 +86,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
 	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
-	const ERROR_NEED_IDENTIFY = 16; //действие недоступно
+	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
 	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
 	const ERROR_NEED_CARD = 18; //требуется привязать банковскую карту
@@ -967,6 +967,31 @@ class AdminKreddyApiComponent
 				if (isset($aProducts['channels'][$iChannel])
 				) {
 					$aClientChannelsList[$iChannel] = $aProducts['channels'][$iChannel];
+				}
+			}
+		}
+
+		return $aClientChannelsList;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getClientProductsChannelListWithAmounts()
+	{
+		$aProducts = $this->getProductsAndChannels();
+		//получаем каналы, доступные клиенту по данной подписке
+		$aClientChannels = $this->getClientSubscriptionChannels();
+
+		$aClientChannelsList = array();
+
+		if (isset($aProducts['channels']) && isset($aClientChannels)) {
+			foreach ($aClientChannels as $iChannel) {
+				//если канал присутствует в списке каналов
+				//и находится в списке доступных для данной подписки каналов
+				if (isset($aProducts['channels'][$iChannel])
+				) {
+					$aClientChannelsList[$iChannel] = $this->getSubscriptionLoanAmount() . " рублей, " . SiteParams::mb_lcfirst($aProducts['channels'][$iChannel]);
 				}
 			}
 		}
