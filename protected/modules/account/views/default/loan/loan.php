@@ -13,7 +13,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/doLoan'),
 ));
 
-
 //получаем список каналов
 $aClientProductsChannelsList = Yii::app()->adminKreddyApi->getClientProductsChannelListWithAmounts();
 

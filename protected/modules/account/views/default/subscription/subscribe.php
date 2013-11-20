@@ -13,9 +13,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/doSubscribe'),
 ));
 
-// если есть доступные пакеты для данного пользователя
+
 $aClientProductsAndChannelsList = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList();
 
+// если есть доступные пакеты для данного пользователя
 if (!empty($aClientProductsAndChannelsList)) {
 	$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 

@@ -10,7 +10,7 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 	<div class="alert alert-success in block"><?= $sMessage ?></div>
 	<div class="clearfix"></div>
 
-<?php if (Yii::app()->adminKreddyApi->checkSubscribe() || !SiteParams::getIsIvanovoSite()): ?>
+<?php if (Yii::app()->adminKreddyApi->checkSubscribe() && !SiteParams::getIsIvanovoSite()): ?>
 	<div class="well">
 		<?php    $this->widget('bootstrap.widgets.TbButton', array(
 			'label' => 'Подключить Пакет', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
@@ -19,7 +19,7 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 	</div>
 <?php endif; ?>
 
-<?php if (Yii::app()->adminKreddyApi->checkSubscribe() || SiteParams::getIsIvanovoSite()): ?>
+<?php if (Yii::app()->adminKreddyApi->checkSubscribe() && SiteParams::getIsIvanovoSite()): ?>
 	<div class="well">
 		<?php    $this->widget('bootstrap.widgets.TbButton', array(
 			'label' => 'Оформить займ', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()

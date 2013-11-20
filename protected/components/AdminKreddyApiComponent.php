@@ -42,7 +42,7 @@ class AdminKreddyApiComponent
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} в течение нескольких минут. ';
+	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
 
 
 	private $aAvailableStatuses = array(
@@ -179,6 +179,7 @@ class AdminKreddyApiComponent
 			'{contacts_url_start}' => CHtml::openTag("a",
 					array("href" => "#fl-contacts", "data-target" => "#fl-contacts", "data-toggle" => "modal")), // ссылка на инфо об отделении
 			'{contacts_url_end}'   => CHtml::closeTag("a"), // /ссылка на инфо об отделении
+			'{loan_transfer_time}' => $this->getLoanChannelSpeed($this->getLoanSelectedChannel())
 		);
 	}
 
@@ -517,6 +518,19 @@ class AdminKreddyApiComponent
 	{
 		//TODO тут надо уточнять, что время обусловлено скоростью канала
 		return ($this->getIsSlowChannel($iChannelId)) ? "до 3 дней" : "несколько минут";
+	}
+
+	/**
+	 * То же, что и выше, для сообщения об успешном получении займа
+	 *
+	 * @param $iChannelId
+	 *
+	 * @return string
+	 */
+	public function getLoanChannelSpeed($iChannelId)
+	{
+		//TODO тут надо уточнять, что время обусловлено скоростью канала
+		return ($this->getIsSlowChannel($iChannelId)) ? "в течение 3 дней." : "в течение нескольких минут.";
 	}
 
 	/**
@@ -991,7 +1005,10 @@ class AdminKreddyApiComponent
 				//и находится в списке доступных для данной подписки каналов
 				if (isset($aProducts['channels'][$iChannel])
 				) {
-					$aClientChannelsList[$iChannel] = $this->getSubscriptionLoanAmount() . " рублей, " . SiteParams::mb_lcfirst($aProducts['channels'][$iChannel]);
+					$aClientChannelsList[$iChannel] = $this->getSubscriptionLoanAmount() . " рублей " .
+						SiteParams::mb_lcfirst(
+							ProductsChannelsComponent::formatMobileChannelNameNoOperators($aProducts['channels'][$iChannel])
+						);
 				}
 			}
 		}
@@ -2294,6 +2311,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 *
 	 * @return string
 	 */
 	public function getDoLoanMessage()
