@@ -32,7 +32,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Потдвердить',
+			'label'      => 'Подтвердить',
 		)); ?>
 	</div>
 

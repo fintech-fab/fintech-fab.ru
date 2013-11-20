@@ -23,7 +23,13 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 	<strong>Баланс:</strong>  <?= Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
 <?php } ?>
 
+<?php if (!SiteParams::getIsIvanovoSite()): ?>
 	<strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?><br />
+<?php endif; ?>
+
+<?php if (SiteParams::getIsIvanovoSite()): ?>
+	<strong>Сумма займа:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?><br />
+<?php endif; ?>
 
 	<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />
 

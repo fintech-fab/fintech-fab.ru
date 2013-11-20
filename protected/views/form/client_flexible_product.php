@@ -80,11 +80,11 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 	<div class="row span11">
 		<div class="form-actions">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'    => 'submitNow',
+				'id'         => 'submitNow',
 				'buttonType' => 'submit',
 				'type'       => 'primary',
-				'size'  => 'large',
-				'label' => 'Оформить сейчас!',
+				'size'       => 'large',
+				'label'      => 'Оформить сейчас!',
 			)); ?>
 		</div>
 	</div>
@@ -111,5 +111,8 @@ Yii::app()->clientScript->registerScript('radioButtonsTrigger', '
 		$("#time").change();
 	});
 oChannelId.change();
+
+	//разные цвета кнопок
+	$(".btn-group .btn.btn-primary").first().next().removeClass("btn-primary").addClass("btn-danger").next().removeClass("btn-primary").addClass("btn-warning").next().removeClass("btn-primary").addClass("btn-success");
 ', CClientScript::POS_READY);
 ?>

@@ -246,6 +246,15 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->getFlash('warning'); //удаляем warning
 
+		//если есть статус "добавление карты успешно" то рендерим соответствующее представление
+		if (Yii::app()->user->getState('addCardSuccess')) {
+			$this->render('card/success', array(
+				'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
+			));
+			Yii::app()->user->setState('addCardSuccess', null);
+			Yii::app()->end();
+		}
+
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
 		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
 			/**
@@ -280,10 +289,10 @@ class DefaultController extends Controller
 						$this->redirect(Yii::app()->user->getReturnUrl());
 					}
 
-					$this->render('card/success', array(
-						'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
-					));
-					Yii::app()->end();
+					//ставим статус успешного добавления карты
+					Yii::app()->user->setState('addCardSuccess', true);
+					//обновляем страницу
+					$this->refresh();
 				} else {
 					//ругаемся ошибкой
 					$oVerifyForm->addError('sCardVerifyAmount', Yii::app()->adminKreddyApi->getLastMessage());

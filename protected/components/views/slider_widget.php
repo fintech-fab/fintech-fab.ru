@@ -8,9 +8,10 @@
 /* @var $aChannelCosts */
 ?>
 
-	<h5 class="pay_legend">Выберите займ</h5>
+	<h5 class="pay_legend">Выберите сумму займа</h5>
 <?= $form->dropDownList($model, 'amount', $aAmountValues, array('class' => 'hide', 'id' => 'amount')); ?>
-	<br />    <br />    <br />    <h5 class="pay_legend">Выберите срок займа</h5>
+	<br />    <br />    <br />
+	<h5 class="pay_legend">Выберите срок предоставления займа</h5>
 <?= $form->dropDownList($model, 'time', $aTimeValues, array('class' => 'hide', 'id' => 'time')); ?>
 
 <?php

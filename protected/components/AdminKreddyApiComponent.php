@@ -467,7 +467,8 @@ class AdminKreddyApiComponent
 			Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
 		}
 
-		if (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === false) {
+		//если нет привязанной карты и не установлен другой warning, то уведомляем о необходимости привязки карты
+		if (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === false && !Yii::app()->user->hasFlash('warning')) {
 			Yii::app()->user->setFlash('warning', 'У Вас нет привязанной банковской карты.
 			Для получения займов на банковскую карту пройдите процедуру привязки карты.');
 			//TODO вынести сообщение в const
