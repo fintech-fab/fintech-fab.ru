@@ -174,7 +174,7 @@ class UserCityWidget extends CWidget
 										}
 										if(object.cityAndRegion&&!object.cityAndRegion.match(/Ивановская область/i)&&host.match(/ivanovo/i))
 										{
-											window.location.href = "' . SiteParams::getCurrentRedirectUrlForCityWidget('ivanovoUrl') . '";
+											window.location.href = "' . SiteParams::getCurrentRedirectUrlForCityWidget('mainUrl') . '";
 										}
 										});
 										return object.city;

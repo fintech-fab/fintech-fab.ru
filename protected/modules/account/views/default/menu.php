@@ -3,20 +3,36 @@
  * @var $this Controller
  */
 
-$this->menu = array(
-	array(
-		'label' => 'Ваш Пакет займов', 'url' => array('/account/default/index')
-	),
-	array(
-		'label' => 'История операций', 'url' => array('/account/default/history')
-	),
+
+if (SiteParams::getIsIvanovoSite()) {
+	$this->menu = array(
+		array(
+			'label' => 'Статус займа', 'url' => array('/account/default/index'),
+		)
+	);
+} else {
+	$this->menu = array(
+		array(
+			'label' => 'Ваш Пакет займов', 'url' => array('/account/default/index'),
+		)
+	);
+}
+
+$this->menu[] = array(
+	'label' => 'История операций', 'url' => array('/account/default/history')
 );
 
-if (Yii::app()->adminKreddyApi->checkSubscribe()) {
 
-	$this->menu[] = array(
-		'label' => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
-	);
+if (Yii::app()->adminKreddyApi->checkSubscribe()) {
+	if (SiteParams::getIsIvanovoSite()) {
+		$this->menu[] = array(
+			'label' => 'Оформление займа', 'url' => array('/account/default/subscribe'),
+		);
+	} else {
+		$this->menu[] = array(
+			'label' => 'Подключение Пакета займов', 'url' => array('/account/default/subscribe'),
+		);
+	}
 }
 if (Yii::app()->adminKreddyApi->checkLoan()) {
 	$this->menu[] = array(
@@ -25,13 +41,13 @@ if (Yii::app()->adminKreddyApi->checkLoan()) {
 }
 if (Yii::app()->adminKreddyApi->getBalance() < 0) {
 	$this->menu[] = array(
-		'label' => 'Оплатить задолженность', 'url' =>'https://pay.kreddy.ru/'
+		'label' => 'Оплатить задолженность', 'url' => 'https://pay.kreddy.ru/'
 	);
 }
 $this->menu[] = array(
 	'label' => 'Привязка банковской карты', 'url' => array('/account/default/addCard')
 );
-$this->menu[] =  '';
+$this->menu[] = '';
 $this->menu[] = array(
 	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
 );
@@ -44,7 +60,7 @@ $this->menu[] = array(
 $this->menu[] = array(
 	'label' => 'Изменение пароля', 'url' => array('/account/default/changePassword')
 );
-$this->menu[] =  '';
+$this->menu[] = '';
 $this->menu[] = array(
 	'label' => 'Выход', 'url' => array('/account/default/logout')
 );
