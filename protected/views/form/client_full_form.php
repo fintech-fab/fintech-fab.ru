@@ -64,10 +64,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<li>Убедитесь в наличие работающей веб-камеры и используйте один из перечисленных браузеров: Chrome или
 				Firefox последних версий.
 			</li>
-			<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span> для демонстрации в
-				вэб-камеру при прохождении идентификации (подтверждение личности).
+			<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span> для
+				демонстрации в вэб-камеру при прохождении идентификации (подтверждение личности).
 			</li<
-			<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?= Yii::app()
+			<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?=
+				Yii::app()
 					->createAbsoluteUrl('/footerLinks/view/distance'); ?>', 'Оферта на дистанционный займ');">здесь.</a>
 			</li>
 		</ol>
@@ -79,8 +80,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			html: true,
 			trigger: 'hover',
 			content: 'Заграничный паспорт<br/>Водительское удостоверение<br/>'
-					+'Пенсионное удостоверение<br/>Военный билет<br/>Свидетельство ИНН<br/>'
-					+'Страховое свидетельство государственного пенсионного страхования'
+				+ 'Пенсионное удостоверение<br/>Военный билет<br/>Свидетельство ИНН<br/>'
+				+ 'Страховое свидетельство государственного пенсионного страхования'
 		});
 	</script>
 	<div class="accordion-group">

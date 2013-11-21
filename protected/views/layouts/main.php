@@ -71,8 +71,6 @@ $this->endContent();
 		(w[c] = w[c] || []).push(function () {
 			try {
 				w.yaCounter21390544 = new Ya.Metrika({id: 21390544,
-					webvisor: true,
-					clickmap: true,
 					trackLinks: true,
 					accurateTrackBounce: true,
 					trackHash: true, params: window.yaParams || { }});
