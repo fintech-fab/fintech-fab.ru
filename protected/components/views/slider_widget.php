@@ -6,6 +6,7 @@
 /* @var $aTimeValues */
 /* @var $aPercentage */
 /* @var $aChannelCosts */
+/* @var $bIsNeedNewClientAlert */
 ?>
 
 	<h5 class="pay_legend">Выберите сумму займа</h5>
@@ -40,6 +41,21 @@ Yii::app()->clientScript->registerScript('sliderWidgetVars', '
 <?php
 //TODO сделать получение количества labels из API
 //TODO сделать разбор номера канала из вида 8_9_10 в массив и поиск канала по нему (для iAddCost)
+
+//показывать ли предупреждение, что сумма доступна только постоянным клиентам
+//вшито в JS
+if ($bIsNeedNewClientAlert) {
+	$sNewClientAlert = 'if(iAmount >= 4000){
+					$("button#submitNow").attr("disabled","disabled");
+					$(".ui-slider #handle_amount").append(\'<span class="ui-slider-tooltip ui-widget-content ui-corner-all">Доступно постоянным клиентам.</span>\');
+				} else {
+					$("button#submitNow").attr("disabled",false);
+					$(".ui-slider #handle_amount .ui-slider-tooltip").remove();
+				}';
+} else {
+	$sNewClientAlert = '';
+}
+
 Yii::app()->clientScript->registerScript('sliderWidget', '
 			var oChannelId = $("#' . get_class($model) . '_channel_id");
 			var oAmount = $("#amount");
@@ -52,14 +68,7 @@ Yii::app()->clientScript->registerScript('sliderWidget', '
 			oAmount.change(function () {
 				var iAmount = parseInt(oAmount.attr("value"));
 
-				if(iAmount >= 4000){
-					$("button#submitNow").attr("disabled","disabled");
-					$(".ui-slider #handle_amount").append(\'<span class="ui-slider-tooltip ui-widget-content ui-corner-all">Доступно постоянным клиентам.</span>\');
-
-				} else {
-					$("button#submitNow").attr("disabled",false);
-					$(".ui-slider #handle_amount .ui-slider-tooltip").remove();
-				}
+			' . $sNewClientAlert . '
 
 				if(typeof aChannelCosts[iAmount] !== "undefined"){
 					var iAddCost = aChannelCosts[iAmount][oChannelId.attr("value")];

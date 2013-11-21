@@ -171,11 +171,10 @@ class AdminKreddyApiComponent
 	private $bIsCanGetLoan = null; //клиент может взять заём
 	private $bScoringAccepted = null;
 	private $aCheckIdentify;
+	private $bIsNeedCard;
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
-	public $aProducts;
-	public $bIsNeedCard;
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -507,6 +506,16 @@ class AdminKreddyApiComponent
 		}
 
 		return $aData;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsNewClient()
+	{
+		$aData = $this->getClientInfo();
+
+		return (isset($aData['client_data']['client_new'])) ? $aData['client_data']['client_new'] : true;
 	}
 
 	/**

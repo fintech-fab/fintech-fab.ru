@@ -7,6 +7,7 @@ class SliderWidget extends CWidget
 {
 	public $form;
 	public $model;
+	public $bIsNeedNewClientAlert = true; //показывать ли предупреждение, что сумма доступна только постоянным клиентам
 
 	public function run()
 	{
@@ -26,6 +27,7 @@ class SliderWidget extends CWidget
 			'aTimeValues'   => Yii::app()->adminKreddyApi->getFlexibleProductTime(),
 			'aPercentage'   => Yii::app()->adminKreddyApi->getFlexibleProductPercentage(),
 			'aChannelCosts' => Yii::app()->adminKreddyApi->getFlexibleProductChannelCosts(),
+			'bIsNeedNewClientAlert' => $this->bIsNeedNewClientAlert,
 			'form'          => $this->form
 		));
 	}

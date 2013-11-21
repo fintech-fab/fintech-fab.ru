@@ -36,7 +36,11 @@ $form->radioButtonGroupsList($model, 'channel_id', Yii::app()->productsChannels-
 ?>
 <div class="row">
 	<div class="span7">
-		<?php $this->widget('SliderWidget', array('form' => $form, 'model' => $model)); ?>
+		<?php $this->widget('SliderWidget', array(
+			'form'                  => $form,
+			'model'                 => $model,
+			'bIsNeedNewClientAlert' => Yii::app()->adminKreddyApi->getIsNewClient(),
+		)); ?>
 	</div>
 </div>
 <div class="row">
@@ -61,6 +65,7 @@ $form->radioButtonGroupsList($model, 'channel_id', Yii::app()->productsChannels-
 <div class="clearfix"></div>
 <div class="form-actions">
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
+		'id' => 'submitNow',
 		'buttonType' => 'submit',
 		'type'       => 'primary',
 		//'size'       => 'small',
