@@ -37,7 +37,7 @@ function afterValidate(form) {
 	if (oPassportData.find("div").hasClass("error")) {
 		personalDataOk = true;
 		hasError = true;
-		$("#passportDataHeading").attr("data-href", "#passportData");
+		$("#passportDataHeading").attr("data-target", "#passportData");
 		if (!oPassportData.hasClass("in")) {
 			oPassportData.collapse("show");
 		}
@@ -46,8 +46,8 @@ function afterValidate(form) {
 		personalDataOk = true;
 		passportDataOk = true;
 		hasError = true;
-		$("#passportDataHeading").attr("data-href", "#passportData");
-		$("#addressHeading").attr("data-href", "#address");
+		$("#passportDataHeading").attr("data-target", "#passportData");
+		$("#addressHeading").attr("data-target", "#address");
 		if (!oAddress.hasClass("in")) {
 			oAddress.collapse("show");
 		}
@@ -57,9 +57,9 @@ function afterValidate(form) {
 		passportDataOk = true;
 		addressOk = true;
 		hasError = true;
-		$("#passportDataHeading").attr("data-href", "#passportData");
-		$("#addressHeading").attr("data-href", "#address");
-		$("#jobInfoHeading").attr("data-href", "#jobInfo");
+		$("#passportDataHeading").attr("data-target", "#passportData");
+		$("#addressHeading").attr("data-target", "#address");
+		$("#jobInfoHeading").attr("data-target", "#jobInfo");
 		if (!oJobInfo.hasClass("in")) {
 			oJobInfo.collapse("show");
 		}
@@ -70,10 +70,10 @@ function afterValidate(form) {
 		addressOk = true;
 		jobInfoOk = true;
 		hasError = true;
-		$("#passportDataHeading").attr("data-href", "#passportData");
-		$("#addressHeading").attr("data-href", "#address");
-		$("#jobInfoHeading").attr("data-href", "#jobInfo");
-		$("#sendFormHeading").attr("data-href", "#sendForm");
+		$("#passportDataHeading").attr("data-target", "#passportData");
+		$("#addressHeading").attr("data-target", "#address");
+		$("#jobInfoHeading").attr("data-target", "#jobInfo");
+		$("#sendFormHeading").attr("data-target", "#sendForm");
 		if (!oSendForm.hasClass("in")) {
 			oSendForm.collapse("show");
 		}

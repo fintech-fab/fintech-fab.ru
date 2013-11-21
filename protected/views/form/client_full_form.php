@@ -92,8 +92,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</script>
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" href="#personalData">
-				Личные данные</h4>
+			<h4 id="personalDataHeading" class="accordion-toggle" data-toggle="collapse" data-target="#personalData">
+			Личные данные</h4>
 		</div>
 		<div id="personalData" class="accordion-body collapse in">
 			<div class="accordion-inner">

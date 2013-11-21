@@ -48,7 +48,7 @@ jQuery(window).on('load', function () {
 
 //по нажатии на "Паспортные данные" делаем force валидацию предыдущей части формы
 	jQuery("#passportDataHeading").click(function () {
-		if ($("#passportDataHeading").attr("data-href") == "#passportData") {
+		if ($("#passportDataHeading").attr("data-target") == "#passportData") {
 			return;
 		}
 
@@ -90,7 +90,7 @@ jQuery(window).on('load', function () {
 //по нажатии на "Постоянную регистрацию" делаем force валидацию предыдущей части формы
 	jQuery("#addressHeading").click(function () {
 
-		if (personalDataOk && $("#addressHeading").attr("data-href") != "#address") {
+		if (personalDataOk && $("#addressHeading").attr("data-target") != "#address") {
 			var form = $("#" + formName);
 			var settings = form.data("settings");
 
@@ -126,7 +126,7 @@ jQuery(window).on('load', function () {
 //по нажатии на "Место работы" делаем force валидацию предыдущей части формы
 	jQuery("#jobInfoHeading").click(function () {
 
-		if (personalDataOk && passportDataOk && $("#jobInfoHeading").attr("data-href") != "#jobInfo") {
+		if (personalDataOk && passportDataOk && $("#jobInfoHeading").attr("data-target") != "#jobInfo") {
 			var form = $("#" + formName);
 			var settings = form.data("settings");
 
@@ -165,7 +165,7 @@ jQuery(window).on('load', function () {
 //по нажатии на "Отправка" делаем force валидацию предыдущей части формы
 	jQuery("#sendHeading").click(function () {
 
-		if (personalDataOk && passportDataOk && addressOk && $("#sendHeading").attr("data-href") != "#sendForm") {
+		if (personalDataOk && passportDataOk && addressOk && $("#sendHeading").attr("data-target") != "#sendForm") {
 			var form = $("#" + formName);
 			var settings = form.data("settings");
 
