@@ -79,6 +79,7 @@ $a = array(
 			'showScriptName' => false,
 			'rules'          => array(
 				'contact'                                          => 'site/contact',
+				'contactUs' => 'site/contactUs',
 
 				'gii'                                              => 'gii',
 				'gii/<controller:\w+>'                             => 'gii/<controller>',
