@@ -36,6 +36,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				карте должно быть не менее 10 рублей.
 			</li>
 		</ul>
+		<p>
+			<strong>Будьте внимательны! Количество попыток ввода данных строго ограничено.</strong>
+		</p>
 		<?= $form->checkBoxRow($model, 'bConfirm'); ?>
 	</div>
 

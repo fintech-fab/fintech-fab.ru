@@ -8,14 +8,29 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+if (SiteParams::getIsIvanovoSite()) {
+	$this->pageTitle = Yii::app()->name . ' - Статус займа';
+} else {
+	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+}
+
 
 // Если есть мораторий на подписку
 ?>
 
-<h4>Ваш Пакет займов</h4>
+<?php if (SiteParams::getIsIvanovoSite()): ?>
+	<h4>Статус займа</h4>
+<?php endif; ?>
+<?php if (!SiteParams::getIsIvanovoSite()): ?>
+	<h4>Ваш Пакет займов</h4>
+<?php endif; ?>
 
-<h5>Нет активных Пакетов</h5>
+<?php if (SiteParams::getIsIvanovoSite()): ?>
+	<h5>Нет активных займов</h5>
+<?php endif; ?>
+<?php if (!SiteParams::getIsIvanovoSite()): ?>
+	<h5>Нет активных Пакетов</h5>
+<?php endif; ?>
 
 <?php
 // если есть статус, выводим его

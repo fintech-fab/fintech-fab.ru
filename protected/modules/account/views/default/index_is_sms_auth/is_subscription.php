@@ -9,9 +9,13 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+if (SiteParams::getIsIvanovoSite()) {
+	$this->pageTitle = Yii::app()->name . ' - Статус займа';
+} else {
+	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+}
 
-//подписка есть
+//количество доступных займов
 $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 ?>
 

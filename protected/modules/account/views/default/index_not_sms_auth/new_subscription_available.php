@@ -8,7 +8,12 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+if (SiteParams::getIsIvanovoSite()) {
+	$this->pageTitle = Yii::app()->name . ' - Статус займа';
+} else {
+	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+}
+
 
 // если можно оформить новый пакет
 ?>

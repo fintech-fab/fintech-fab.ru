@@ -73,6 +73,35 @@ class AdminKreddyApiComponent
 		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
 	);
 
+	private $aAvailableStatusesIvanovo = array(
+
+		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
+		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно получение новых займов',
+
+		self::C_SUBSCRIPTION_ACTIVE            => 'Займ оформлен',
+		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно оформление займа',
+		self::C_SUBSCRIPTION_CANCEL            => '', //для Иваново не должно использоваться
+		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
+
+		self::C_SUBSCRIPTION_PAYMENT           => '', //для Иваново не должно использоваться
+
+		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+
+		self::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
+		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
+
+		self::C_LOAN_DEBT                      => 'Задолженность по займу',
+		self::C_LOAN_ACTIVE                    => 'Займ перечислен',
+		self::C_LOAN_TRANSFER                  => 'Займ перечислен',
+		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
+		self::C_LOAN_CREATED                   => 'Займ перечислен',
+		self::C_LOAN_PAID                      => 'Займ оплачен',
+
+		self::C_CLIENT_ACTIVE                  => 'Доступно оформление займа',
+		self::C_CLIENT_NEW                     => 'Выберите займ',
+	);
+
 	const ERROR_NONE = 0; //нет ошибок
 	const ERROR_UNKNOWN = 1; //неизвестная ошибка
 	const ERROR_AUTH = 2; //ошибка авторизации
@@ -149,6 +178,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
+	 * TODO найти все использования не для статусов, сделать для них отдельный форматтер
 	 *
 	 * @return array
 	 */
@@ -582,7 +612,11 @@ class AdminKreddyApiComponent
 
 		$sStatusName = (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
 
-		$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
+		if (!SiteParams::getIsIvanovoSite()) {
+			$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
+		} else {
+			$sStatus = (!empty($this->aAvailableStatusesIvanovo[$sStatusName])) ? $this->aAvailableStatusesIvanovo[$sStatusName] : self::C_STATUS_ERROR;
+		}
 
 		$sStatus = strtr($sStatus, $this->formatStatusMessage());
 
@@ -621,6 +655,21 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+	}
+
+	/**
+	 * Получаем сумму из имени пакета, не работает для пакетов типа "Покупки", использовать только для Иваново
+	 *
+	 * @return bool|string
+	 */
+	public function getSubscriptionRequestLoan()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		$sProduct = (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+		$iProductLoan = preg_replace('/[^\d]+/', '', $sProduct);
+
+		return ($iProductLoan) ? $iProductLoan : false;
 	}
 
 	/**

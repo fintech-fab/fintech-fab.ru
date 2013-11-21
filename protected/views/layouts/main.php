@@ -1,4 +1,7 @@
-<?php /* @var $this Controller */ ?>
+<?php
+/* @var $this Controller */
+/* @var $content */
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head><!-- head start -->

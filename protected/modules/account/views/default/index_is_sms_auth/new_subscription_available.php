@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $this DefaultController
+ * @var $sIdentifyRender
  *
  */
 
@@ -8,14 +9,30 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+if (SiteParams::getIsIvanovoSite()) {
+	$this->pageTitle = Yii::app()->name . ' - Статус займа';
+} else {
+	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
+}
+
 
 // если можно оформить новый пакет
 ?>
 
-<h4>Ваш Пакет займов</h4>
+<?php if (SiteParams::getIsIvanovoSite()): ?>
+	<h4>Статус займа</h4>
+<?php endif; ?>
+<?php if (!SiteParams::getIsIvanovoSite()): ?>
+	<h4>Ваш Пакет займов</h4>
+<?php endif; ?>
 
-<h5>Нет активных Пакетов</h5>
+
+<?php if (SiteParams::getIsIvanovoSite()): ?>
+	<h5>Нет активных займов</h5>
+<?php endif; ?>
+<?php if (!SiteParams::getIsIvanovoSite()): ?>
+	<h5>Нет активных Пакетов</h5>
+<?php endif; ?>
 
 <?php
 // если есть статус, выводим его
@@ -42,10 +59,17 @@ $this->widget(
 
 	<br />
 	<div class="well">
-		<?php    $this->widget('bootstrap.widgets.TbButton', array(
-			'label' => 'Подключить Пакет', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
-				->createUrl('account/subscribe'),
-		));?>
+		<?php
+		if (!SiteParams::getIsIvanovoSite()) {
+			$sLabel = 'Подключить Пакет';
+		} else {
+			$sLabel = 'Оформить займ';
+		}
+		$this->widget('bootstrap.widgets.TbButton', array(
+			'label' => $sLabel, 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
+					->createUrl('account/subscribe'),
+		));
+		?>
 	</div>
 <?php endif; ?>
 
