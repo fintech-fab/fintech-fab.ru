@@ -3,7 +3,7 @@
  * @var $this Controller
  */
 
-
+//для точки входа ivanovo.* меняем пункт меню
 if (SiteParams::getIsIvanovoSite()) {
 	$this->menu = array(
 		array(
@@ -24,6 +24,7 @@ $this->menu[] = array(
 
 
 if (Yii::app()->adminKreddyApi->checkSubscribe()) {
+	//для точки входа ivanovo.* меняем пункт меню
 	if (SiteParams::getIsIvanovoSite()) {
 		$this->menu[] = array(
 			'label' => 'Оформление займа', 'url' => array('/account/default/subscribe'),

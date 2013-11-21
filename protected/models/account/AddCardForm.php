@@ -2,6 +2,7 @@
 /**
  * Class AddCardForm
  */
+/* @method FormFieldValidateBehavior asa() */
 
 class AddCardForm extends CFormModel
 {
@@ -13,33 +14,42 @@ class AddCardForm extends CFormModel
 	public $sCardYear;
 	public $sCardCvc;
 	public $bConfirm;
+	public $iCardType;
 
 	/**
 	 * @return array
 	 */
 	public function rules()
 	{
-		$aRules = array();
+		$aRules = array(
+			array('sCardPan, sCardMonth, sCardYear, sCardCvc, iCardType', 'required'),
+			array('iCardType', 'required', 'message' => 'Выберите тип карты Mastercard либо Maestro'),
 
-		$aRules[] = array('sCardPan, sCardMonth, sCardYear, sCardCvc', 'required');
+			array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.'),
 
-		$aRules[] = array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.');
+			array(
+				'sCardPan', 'match', 'message' => 'Номер карты должен содержать от 16 до 20 цифр',
+				                     'pattern' => '/^\d{16,20}$/'
+			),
+			array(
+				'sCardPan', 'checkValidCardPan', 'iCardType' => 'iCardType', 'message' => 'Номер карты неправильный. Проверьте тип выбранной карты и ее номер.',
+			),
+			array(
+				'sCardMonth', 'in', 'range'   => array_keys(Dictionaries::$aMonthsDigital),
+				                    'message' => 'Выберите месяц из списка'
+			),
+			array(
+				'sCardYear', 'in', 'range'   => array_keys(Dictionaries::getYears()),
+				                   'message' => 'Выберите год из списка'
+			),
+			array(
+				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
+				                     'pattern' => '/^\d{3}$/'
+			),
 
-		$aRules[] = array(
-			'sCardPan', 'match', 'message' => 'Номер карты должен состоять из 16 цифр',
-			                     'pattern' => '/^\d{16}$/'
-		);
-		$aRules[] = array(
-			'sCardMonth', 'in', 'range'   => array_keys(Dictionaries::$aMonthsDigital),
-			                    'message' => 'Выберите месяц из списка'
-		);
-		$aRules[] = array(
-			'sCardYear', 'in', 'range'   => array_keys(Dictionaries::getYears()),
-			                   'message' => 'Выберите год из списка'
-		);
-		$aRules[] = array(
-			'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
-			                     'pattern' => '/^\d{3}$/'
+			array(
+				'iCardType', 'in', 'range' => array_keys(Dictionaries::$aCardTypes), 'message' => 'Выберите тип карты Mastercard либо Maestro'
+			),
 		);
 
 		return $aRules;
@@ -56,7 +66,8 @@ class AddCardForm extends CFormModel
 			'sCardMonth' => 'Срок окончания',
 			'sCardYear'  => 'Год',
 			'sCardCvc'   => 'Код CVC',
-			'bConfirm'   => 'Я подтверждаю согласие на блокировку случайной суммы на указанной банковской карте.'
+			'bConfirm'  => 'Я подтверждаю согласие на блокировку случайной суммы на указанной банковской карте.',
+			'iCardType' => 'Тип банковской карты',
 		);
 
 	}
@@ -70,7 +81,33 @@ class AddCardForm extends CFormModel
 			'sCardPan',
 			'sCardMonth',
 			'sCardYear',
-			'sCardCvc'
+			'sCardCvc',
+			'iCardType',
 		);
 	}
+
+	/**
+	 * проверка PAN карты
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidCardPan($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidCardPan($attribute, $param);
+	}
+
+	/**
+	 * подключаем общий помощник по валидации разных данных
+	 * @return array
+	 */
+	public function behaviors()
+	{
+		return array(
+			'FormFieldValidateBehavior' => array(
+				'class' => 'application.extensions.behaviors.FormFieldValidateBehavior',
+			),
+		);
+	}
+
 }

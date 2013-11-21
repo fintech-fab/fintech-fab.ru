@@ -23,7 +23,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 	<div class="alert alert-warning"><h4>Уважаемый Клиент, обращаем Ваше внимание:</h4>
 		<ul>
-			<li>При привязке новой банковской карты, данные старой карты удаляются.</li>
+			<?php
+			//если карта уже привязана, то выдаем предупреждение
+			if (Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
+				<li>При привязке новой банковской карты, данные старой карты удаляются.</li>
+			<?php endif; ?>
 			<li>
 				Сейчас перечисление займов доступно только на карты Master Card. В ближайшем времени перечисления станут
 				доступны и на карты Visa. Благодарим за понимание!
@@ -35,10 +39,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<?= $form->checkBoxRow($model, 'bConfirm'); ?>
 	</div>
 
-<?= $form->textFieldRow($model, 'sCardPan',array('size' => '16', 'maxlength' => '16')); ?>
+<?= $form->radioButtonListRow($model, 'iCardType', Dictionaries::$aCardTypes) ?>
+<?= $form->textFieldRow($model, 'sCardPan', array('size' => '20', 'maxlength' => '20')); ?>
 
 
-	<?= $form->labelEx($model, 'sCardMonth', array('class' => 'control-label')); ?>
+<?= $form->labelEx($model, 'sCardMonth', array('class' => 'control-label')); ?>
 
 	<div class="controls">
 		<?= $form->dropDownList($model, 'sCardMonth', Dictionaries::$aMonthsDigital, array('style' => 'width: 60px;')); ?>

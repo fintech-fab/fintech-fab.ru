@@ -596,4 +596,16 @@ class FormFieldValidateBehavior extends CBehavior
 
 	}
 
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidCardPan($attribute, $param)
+	{
+		$iCardType = $this->owner->$param['iCardType'];
+		if (isset(Dictionaries::$aCardTypesRegexp[$iCardType]) && !preg_match(Dictionaries::$aCardTypesRegexp[$iCardType], $this->owner->$attribute)) {
+			$this->owner->addError($attribute, $param['message']);
+		}
+	}
+
 }

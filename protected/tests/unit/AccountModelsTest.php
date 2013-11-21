@@ -3,6 +3,7 @@
  * Class ModelsTest
  * @method assertEmpty
  * @method assertNotEmpty
+ *
  * @package \Codeception\TestCase\Test
  */
 
@@ -123,10 +124,11 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	public function testAddCardFormNoValid()
 	{
 		$aPostData = array(
-			'sCardPan' => '',
+			'sCardPan'   => '',
+			'iCardType'  => '',
 			'sCardMonth' => '',
-			'sCardYear' => '',
-			'sCardCvc' => '',
+			'sCardYear'  => '',
+			'sCardCvc'   => '',
 		);
 
 
@@ -136,22 +138,24 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$oForm->validate();
 
 		$this->assertNotEmpty($oForm->getError('sCardPan'));
+		$this->assertNotEmpty($oForm->getError('iCardType'));
 		$this->assertNotEmpty($oForm->getError('sCardMonth'));
 		$this->assertNotEmpty($oForm->getError('sCardYear'));
 		$this->assertNotEmpty($oForm->getError('sCardCvc'));
 	}
 
 	/**
-	 * @dataProvider validCardDataProvider
+	 * @dataProvider validMastercardCardDataProvider
 	 */
 
-	public function testAddCardFormValid($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	public function testAddMastercardFormValid($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
 	{
 		$aPostData = array(
-			'sCardPan' => $sCardPan,
+			'sCardPan'   => $sCardPan,
+			'iCardType'  => 1,
 			'sCardMonth' => $sCardMonth,
-			'sCardYear' => $sCardYear,
-			'sCardCvc' => $sCardCvc,
+			'sCardYear'  => $sCardYear,
+			'sCardCvc'   => $sCardCvc,
 		);
 
 		$oForm = new AddCardForm();
@@ -160,6 +164,34 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$oForm->validate();
 
 		$this->assertEmpty($oForm->getError('sCardPan'), print_r($oForm->getError('sCardPan'), true));
+		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
+		$this->assertEmpty($oForm->getError('sCardMonth'), print_r($oForm->getError('sCardMonth'), true));
+		$this->assertEmpty($oForm->getError('sCardYear'), print_r($oForm->getError('sCardYear'), true));
+		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
+
+	}
+
+	/**
+	 * @dataProvider validMaestroCardDataProvider
+	 */
+
+	public function testAddMaestroFormValid($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	{
+		$aPostData = array(
+			'sCardPan'   => $sCardPan,
+			'iCardType'  => 2,
+			'sCardMonth' => $sCardMonth,
+			'sCardYear'  => $sCardYear,
+			'sCardCvc'   => $sCardCvc,
+		);
+
+		$oForm = new AddCardForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('sCardPan'), print_r($oForm->getError('sCardPan'), true));
+		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
 		$this->assertEmpty($oForm->getError('sCardMonth'), print_r($oForm->getError('sCardMonth'), true));
 		$this->assertEmpty($oForm->getError('sCardYear'), print_r($oForm->getError('sCardYear'), true));
 		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
@@ -447,9 +479,9 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 	public static function validPhoneProvider()
 	{
-		 return array(
-			 array('phone'=>'9' . substr((rand(1000000000, 1999999999)), 1))
-		 );
+		return array(
+			array('phone' => '9' . substr((rand(1000000000, 1999999999)), 1))
+		);
 	}
 
 	/**
@@ -461,10 +493,10 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		return array(
 			array('phone' => rand(0, 8) . substr((rand(1000000000, 1999999999)), 1)),
 			array('phone' => substr((rand(00, 1999999999)), 1)),
-			array('phone'=>'dslklskdjg'),
-			array('phone'=>'дпжплврпдп'),
-			array('phone'=>'df897dfg79'),
-			array('phone'=>'вапап35345'),
+			array('phone' => 'dslklskdjg'),
+			array('phone' => 'дпжплврпдп'),
+			array('phone' => 'df897dfg79'),
+			array('phone' => 'вапап35345'),
 		);
 	}
 
@@ -472,17 +504,40 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	 * @return array
 	 */
 
-	public static function validCardDataProvider()
+	public static function validMastercardCardDataProvider()
 	{
 		$aYears = Dictionaries::getYears();
 		$aMonths = Dictionaries::$aMonthsDigital;
 
 		return array(
 			array(
-				'sCardPan' =>substr((rand(10000000000000000, 19999999999999999)), 1),
-				'sCardMonth' =>array_rand($aMonths,1),
-				'sCardYear' =>array_rand($aYears,1),
-				'sCardCvc' =>substr((rand(1000,1999)),1),
+				'sCardPan'   => substr((rand(15000000000000000, 15599999999999999)), 1),
+				'sCardMonth' => array_rand($aMonths, 1),
+				'sCardYear'  => array_rand($aYears, 1),
+				'sCardCvc'   => substr((rand(1000, 1999)), 1),
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+
+	public static function validMaestroCardDataProvider()
+	{
+		$aYears = Dictionaries::getYears();
+		$aMonths = Dictionaries::$aMonthsDigital;
+
+		$sCardPan = (rand(1, 100) > 50)
+			? rand(15600000000000000, 15699999999999999)
+			: rand(16700000000000000, 16799999999999999);
+
+		return array(
+			array(
+				'sCardPan'   => substr($sCardPan, 1),
+				'sCardMonth' => array_rand($aMonths, 1),
+				'sCardYear'  => array_rand($aYears, 1),
+				'sCardCvc'   => substr((rand(1000, 1999)), 1),
 			)
 		);
 	}

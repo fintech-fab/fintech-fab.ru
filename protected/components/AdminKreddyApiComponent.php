@@ -2243,8 +2243,9 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Требуется привязать банковскую карту
+	 * Запускать только после checkSubscribe для проверки результата
 	 *
-	 * @return bool
+*@return bool
 	 */
 	public function getIsNeedCard()
 	{
@@ -2794,5 +2795,15 @@ class AdminKreddyApiComponent
 		}
 
 		return $iProductId;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsClientCardExists()
+	{
+		$aData = $this->getClientInfo();
+
+		return (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === true);
 	}
 }

@@ -7,8 +7,8 @@ class UserCityWidget extends CWidget
 	public $sCityName;
 	public $bCitySelected = false; //город выбран
 	public $sCityAndRegion;
-	public  $sCsrfTokenName;
-	public  $sCsrfToken;
+	public $sCsrfTokenName;
+	public $sCsrfToken;
 	public $bUpdate = false;
 
 	/**
@@ -44,7 +44,7 @@ class UserCityWidget extends CWidget
 		}
 
 		//$sCityName = ids_ipGeoBase::getCityByIP('46.38.98.106');
-		//TODO вынести в отдельные представления
+		//TODO возможно, вынести в отдельные представления
 		if (!$oCityNameCookie && $this->sCityName) {
 			$sDataContent = 'Мы автоматически определили ваш город: ';
 			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong>';
@@ -154,7 +154,7 @@ class UserCityWidget extends CWidget
 										$("#userLocation").popover("hide");
 										//шлем инфу на сервер и обновляем виджет через ajax
 										$.ajax({
-											url: \''.Yii::app()->createUrl("/site/setCityToCookie").'\',
+											url: \'' . Yii::app()->createUrl("/site/setCityToCookie") . '\',
 											type: "POST",
 											cache: false,
 											dataType: "html",
