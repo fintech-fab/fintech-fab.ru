@@ -175,7 +175,7 @@ class AdminKreddyApiComponent
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
 	public $aProducts;
-
+	public $bIsNeedCard;
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -1294,14 +1294,29 @@ class AdminKreddyApiComponent
 	 */
 	public function checkSubscribe()
 	{
-		if (!isset($this->bIsCanSubscribe)) {
+		if (!isset($this->bIsCanSubscribe) || !isset($this->bIsNeedCard)) {
 			$this->requestAdminKreddyApi(self::API_ACTION_CHECK_SUBSCRIBE);
 			$this->bIsCanSubscribe = (!$this->getIsNotAllowed()
 				&& !$this->getIsNeedSmsAuth());
+
+			$this->bIsNeedCard = $this->getIsNeedCard();
 		}
 
 		return $this->bIsCanSubscribe;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function checkSubscribeNeedCard()
+	{
+		if (!isset($this->bIsNeedCard)) {
+			$this->checkSubscribe();
+		}
+
+		return $this->bIsNeedCard;
+	}
+
 
 	/**
 	 * Отправка СМС с кодом подтверждения подписки
@@ -2292,12 +2307,11 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Требуется привязать банковскую карту
-	 * Запускать только после checkSubscribe для проверки результата
+	 * Проверка ответа checkSubscribe, требуется ли привязать банковскую карту
 	 *
-*@return bool
+	 * @return bool
 	 */
-	public function getIsNeedCard()
+	private function getIsNeedCard()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_CARD);
 	}

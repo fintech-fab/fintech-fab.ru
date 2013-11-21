@@ -719,8 +719,13 @@ class DefaultController extends Controller
 		}
 
 		//проверяем ответ checkSubscribe, не нужно ли привязать карту
-		if (Yii::app()->adminKreddyApi->getIsNeedCard()) {
-			//TODO выводить предложение привязать карту
+		if (Yii::app()->adminKreddyApi->checkSubscribeNeedCard()) {
+			if (SiteParams::getIsIvanovoSite()) {
+				$this->render('flex_subscription/need_card');
+			} else {
+				$this->render('subscription/need_card');
+			}
+			Yii::app()->end();
 		}
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
