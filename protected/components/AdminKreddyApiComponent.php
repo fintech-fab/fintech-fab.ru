@@ -38,6 +38,7 @@ class AdminKreddyApiComponent
 	const C_STATUS_ERROR = 'Ошибка!';
 
 	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+	const C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о статусе займа{account_url_end}";
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
@@ -2392,7 +2393,13 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscriptionNotAvailableMessage()
 	{
-		$sMessage = strtr(self::C_SUBSCRIPTION_NOT_AVAILABLE, $this->formatStatusMessage());
+		if (SiteParams::getIsIvanovoSite()) {
+			$sMessage = self::C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO;
+		} else {
+			$sMessage = self::C_SUBSCRIPTION_NOT_AVAILABLE;
+		}
+
+		$sMessage = strtr($sMessage, $this->formatStatusMessage());
 
 		return $sMessage;
 	}

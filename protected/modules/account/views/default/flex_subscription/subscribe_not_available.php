@@ -9,5 +9,4 @@ $this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
 <h4>Оформление займа</h4>
 
-<?php //TODO сменить сообщение для иваново ?>
 <div class="alert alert-error"><?= Yii::app()->adminKreddyApi->getSubscriptionNotAvailableMessage() ?></div>
