@@ -115,7 +115,7 @@ class SiteController extends Controller
 		$this->render('contact');
 	}
 
-	public function actionContactUs()
+	/*public function actionContactUs()
 	{
 		$model = new ContactForm;
 		$aPost = Yii::app()->request->getParam('ContactForm');
@@ -131,18 +131,18 @@ class SiteController extends Controller
 					"Content-type: text/plain; charset=UTF-8";
 
 				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);*/
-				$sEmail = 'i.popov@fintech-fab.ru';
-				$sSubject = $model->subject;
-				$sMessage = $model->body;
+	/*$sEmail = 'i.popov@fintech-fab.ru';
+	$sSubject = $model->subject;
+	$sMessage = $model->body;
 
-				EmailComponent::sendEmail($sEmail, $sSubject, $sMessage);
+	EmailComponent::sendEmail($sEmail, $sSubject, $sMessage);
 
-				Yii::app()->user->setFlash('contact', 'Thank you for contacting us. We will respond to you as soon as possible.');
-				$this->refresh();
-			}
-		}
-		$this->render('contact_us', array('model' => $model));
-	}
+	Yii::app()->user->setFlash('contact', 'Thank you for contacting us. We will respond to you as soon as possible.');
+	$this->refresh();
+}
+}
+$this->render('contact_us', array('model' => $model));
+}*/
 
 	/**
 	 * Displays the login page
