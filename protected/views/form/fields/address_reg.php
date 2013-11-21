@@ -47,12 +47,27 @@ $htmlOptions = array(
 		}'
 	)
 );
+//TODO перенести сообщения куда-нибудь, минимизировать использование JS
+if (SiteParams::getIsIvanovoSite()) {
+	$select2Js = array(
+		'onchange' => 'js: if($(this).find(":selected").attr("value")!=37){'
+			. '$("#region-error").html('
+			. '"Внимание! Вы выбрали не Ивановскую область, и после заполнения заявки не сможете оформить займ,'
+			. ' выбранный на первом шаге! В личном кабинете Вам будут доступны стандартные пакеты займов КРЕДДИ.").show();'
+			. '} else {'
+			. '$("#region-error").html("").hide();'
+			. '}'
+	);
+} else {
+	$select2Js = array();
+}
 
 ?>
 <div class="span5">
 	<h5>Адрес регистрации</h5>
 
-	<?= $form->select2Row($oClientCreateForm, 'address_reg_region', array('empty' => '', 'data' => Dictionaries::getRegions()) + $htmlOptions); ?>
+	<?= $form->select2Row($oClientCreateForm, 'address_reg_region', array('empty' => '', 'data' => Dictionaries::getRegions()) + $htmlOptions + $select2Js); ?>
+	<div id="region-error" class="alert alert-error" style="display: none;"></div>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', $htmlOptions); ?>
 	<div id="reg_as_res">
