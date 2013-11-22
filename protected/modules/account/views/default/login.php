@@ -40,7 +40,7 @@ $this->breadcrumbs = array(
 			'label'      => 'Войти',
 		)); ?>
 		<?=
-		CHtml::link('Восстановить пароль', Yii::app()
+		CHtml::link('Получить пароль', Yii::app()
 			->createUrl('/account/resetPassword'), array("style" => "margin-left: 50px;")); ?>
 	</div>
 
