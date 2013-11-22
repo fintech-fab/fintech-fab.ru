@@ -2441,7 +2441,7 @@ class AdminKreddyApiComponent
 	public function getDoSubscribeMessage()
 	{
 		$bScoringAccepted = $this->getScoringAccepted();
-		if (!empty($bScoringAccepted)) {
+		if (!empty($bScoringAccepted) && !SiteParams::getIsIvanovoSite()) {
 			$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
 
 			return $sMessage;
