@@ -49,19 +49,26 @@ $this->menu[] = array(
 	'label' => 'Привязка банковской карты', 'url' => array('/account/default/addCard')
 );
 $this->menu[] = '';
+
 $this->menu[] = array(
-	'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
-);
-$this->menu[] = array(
-	'label' => 'Изменение секретного вопроса', 'url' => array('/account/default/changeSecretQuestion')
-);
-$this->menu[] = array(
-	'label' => 'Изменение цифрового кода', 'url' => array('/account/default/changeNumericCode')
-);
-$this->menu[] = array(
-	'label' => 'Изменение пароля', 'url' => array('/account/default/changePassword')
+	'label' => 'Изменение личных данных',
+	'items' => array(
+		array(
+			'label' => 'Изменение паспортных данных', 'url' => array('/account/default/changePassport')
+		),
+		array(
+			'label' => 'Изменение секретного вопроса', 'url' => array('/account/default/changeSecretQuestion')
+		),
+		array(
+			'label' => 'Изменение цифрового кода', 'url' => array('/account/default/changeNumericCode')
+		),
+		array(
+			'label' => 'Изменение пароля', 'url' => array('/account/default/changePassword')
+		),
+	),
 );
 $this->menu[] = '';
+
 $this->menu[] = array(
 	'label' => 'Выход', 'url' => array('/account/default/logout')
 );
