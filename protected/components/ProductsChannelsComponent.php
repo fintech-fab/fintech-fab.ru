@@ -89,13 +89,33 @@ class ProductsChannelsComponent
 	 *
 	 * @return bool|string
 	 */
-	public static function formatMobileChannelNameNoOperators($sName)
+	public static function formatChannelNameNoOperators($sName)
 	{
-		if (preg_match("/мобил/", $sName)) {
+		if (preg_match("/Кредди/", $sName)) {
+			return 'на карту Кредди';
+		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный телефон';
 		}
 
-		return $sName;
+		return SiteParams::mb_lcfirst($sName);
+	}
+
+	/**
+	 * @param $sName
+	 *
+	 * @return bool|string
+	 */
+	public static function formatChannelNameForStatus($sName)
+	{
+		if (preg_match("/Кредди/", $sName)) {
+			return 'на карту Кредди';
+		} elseif (preg_match("/мобил/", $sName)) {
+			return 'на мобильный телефон';
+		} elseif (preg_match("/карту/", $sName)) {
+			return 'на банковскую карту';
+		}
+
+		return SiteParams::mb_lcfirst($sName);
 	}
 
 	/**
@@ -165,7 +185,7 @@ class ProductsChannelsComponent
 						//TODO тут сейчас берется 1 канал, найденный в каналах пользователя и имеющийся в списке каналов в формате 1_2_3
 						//TODO надо сделать чтобы можно было и больше каналов можно было получить в массиве
 						$iKey = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($iKey);
-						$aClientChannelsList[$iKey] = SiteParams::mb_ucfirst(self::formatMobileChannelNameNoOperators($sChannel)); //убираем названия операторов
+						$aClientChannelsList[$iKey] = SiteParams::mb_ucfirst(self::formatChannelNameNoOperators($sChannel)); //убираем названия операторов
 
 					}
 				}

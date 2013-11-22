@@ -42,7 +42,9 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 	<strong>Сумма займа:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?><br />
 <?php endif; ?>
 
-<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?><br />
+<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
+&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameForStatus(); ?>
+<br />
 
 <?php if (Yii::app()->adminKreddyApi->getActiveLoanExpiredTo()) {
 	// если есть займ, выводим дату возврата

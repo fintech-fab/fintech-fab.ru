@@ -119,7 +119,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
 	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
-	const ERROR_NEED_CARD = 18; //требуется привязать банковскую карту
+	const ERROR_NEED_CARD = 202; //требуется привязать банковскую карту
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
@@ -172,6 +172,8 @@ class AdminKreddyApiComponent
 	private $bScoringAccepted = null;
 	private $aCheckIdentify;
 	private $bIsNeedCard;
+	private $bCardCanVerify;
+	private $bCardVerifyExists;
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
@@ -513,9 +515,9 @@ class AdminKreddyApiComponent
 	 */
 	public function getIsNewClient()
 	{
-		$aData = $this->getClientInfo();
+		$aClientInfo = $this->getClientInfo();
 
-		return (isset($aData['client_data']['client_new'])) ? $aData['client_data']['client_new'] : true;
+		return (isset($aClientInfo['client_data']['client_new'])) ? $aClientInfo['client_data']['client_new'] : true;
 	}
 
 	/**
@@ -612,15 +614,39 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Отдает имя канала для статуса, в случае если статусное сообщение - "Займ перечислен"
+	 *
+	 * @return bool|string
+	 */
+	public function getChannelNameForStatus()
+	{
+		$sStatusName = $this->getClientStatus();
+		$aStatuses = array(
+			self::C_LOAN_ACTIVE,
+			self::C_LOAN_TRANSFER,
+			self::C_LOAN_CREATED,
+		);
+		//проверяем, что текущий статус находится в списке статусов, для которых нужно выдать имя канала
+		if (in_array($sStatusName, $aStatuses)) {
+			$iActiveLoanChannelId = 20; //Yii::app()->adminKreddyApi->getSubscriptionActiveLoanChannelId();
+			$sChannelName = Yii::app()->productsChannels->formatChannelNameForStatus(Yii::app()->adminKreddyApi->getChannelNameById($iActiveLoanChannelId));
+
+		} else {
+			$sChannelName = '';
+		}
+
+		return $sChannelName;
+	}
+
+	/**
 	 * Получение сообщения статуса (активен, в скоринге, ожидает оплаты)
 	 *
 	 * @return string|bool
 	 */
 	public function getStatusMessage()
 	{
-		$aClientInfo = $this->getClientInfo();
 
-		$sStatusName = (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
+		$sStatusName = $this->getClientStatus();
 
 		if (!SiteParams::getIsIvanovoSite()) {
 			$sStatus = (!empty($this->aAvailableStatuses[$sStatusName])) ? $this->aAvailableStatuses[$sStatusName] : self::C_STATUS_ERROR;
@@ -631,6 +657,18 @@ class AdminKreddyApiComponent
 		$sStatus = strtr($sStatus, $this->formatStatusMessage());
 
 		return $sStatus;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getClientStatus()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
+
+
 	}
 
 	/**
@@ -680,6 +718,18 @@ class AdminKreddyApiComponent
 		$iProductLoan = preg_replace('/[^\d]+/', '', $sProduct);
 
 		return ($iProductLoan) ? $iProductLoan : false;
+	}
+
+	/**
+	 * ID канала текущей подписки
+	 *
+	 * @return bool
+	 */
+	public function getSubscriptionActiveLoanChannelId()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (isset($aClientInfo['active_loan']['channel_id'])) ? $aClientInfo['active_loan']['channel_id'] : false;
 	}
 
 	/**
@@ -1066,7 +1116,7 @@ class AdminKreddyApiComponent
 				) {
 					$aClientChannelsList[$iChannel] = $this->getSubscriptionLoanAmount() . " рублей " .
 						SiteParams::mb_lcfirst(
-							ProductsChannelsComponent::formatMobileChannelNameNoOperators($aProducts['channels'][$iChannel])
+							ProductsChannelsComponent::formatChannelNameNoOperators($aProducts['channels'][$iChannel])
 						);
 				}
 			}
@@ -1693,18 +1743,34 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Проверяет, может ли клиент добавить карту.
+	 * Проверяет, требуется ли клиенту пройти верификацию карты
+	 * 0 - не может, нужно сначала добавить карту
 	 *
 	 * @return bool
 	 */
 	public function checkCanVerifyCard()
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
-		if (!$this->getIsError()) {
-			return (!empty($aResult['card_can_verify']));
+
+		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
+			$this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
 		}
 
-		return false;
+		if (!$this->getIsError()) {
+			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));
+
+			$this->bCardVerifyExists = (!empty($aResult['verify_exists']));
+		}
+
+		return $this->bCardCanVerify;
+	}
+
+	public function checkCardVerifyExists()
+	{
+		if (!isset($this->bCardVerifyExists)) {
+			$this->checkCanVerifyCard();
+		}
+
+		return $this->bCardVerifyExists;
 	}
 
 	/**
@@ -2881,8 +2947,8 @@ class AdminKreddyApiComponent
 	 */
 	public function getIsClientCardExists()
 	{
-		$aData = $this->getClientInfo();
+		$aClientInfo = $this->getClientInfo();
 
-		return (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === true);
+		return (isset($aClientInfo['bank_card_exists']) && $aClientInfo['bank_card_exists'] === true);
 	}
 }

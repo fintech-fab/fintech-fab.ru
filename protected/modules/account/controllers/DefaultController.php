@@ -215,7 +215,16 @@ class DefaultController extends Controller
 				);
 				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
-					$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
+					//проверяем, включена ли верификация в admin.kreddy
+					if (Yii::app()->adminKreddyApi->checkCardVerifyExists()) {
+						//если да - отправляем юзера на страницу верификации карты для ввода заблокированной суммы
+						$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
+					} else {
+						//иначе ставим флаг "успешно верифицирована" и отправляем туда же для получения сообщение
+						//об успешной привязке
+						Yii::app()->user->setState('verifyCardSuccess', true);
+						$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
+					}
 				} else {
 					//если проверка не пройдена
 					//записываем ошибку в антибот
