@@ -53,6 +53,7 @@ class SiteController extends Controller
 	public function actionGetCitiesAndRegionsListJson($sInput = "")
 	{
 		$aCitiesAndRegions = CitiesRegions::getAllCitiesAndRegions($sInput);
+		sleep(1);
 		echo CJSON::encode($aCitiesAndRegions);
 	}
 

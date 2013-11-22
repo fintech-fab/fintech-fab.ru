@@ -87,5 +87,9 @@ Yii::app()->clientScript->registerScript('radioButtonsTrigger', '
 		$("#time").change();
 	});
 oChannelId.change();
+
+//разные цвета кнопок
+$(".btn-group .btn.btn-primary").first().next().removeClass("btn-primary").addClass("btn-danger").next().removeClass("btn-primary").addClass("btn-warning").next().removeClass("btn-primary").addClass("btn-success");
 ', CClientScript::POS_READY);
 ?>
+

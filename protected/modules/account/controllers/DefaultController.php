@@ -751,6 +751,15 @@ class DefaultController extends Controller
 				$this->redirect('/account/changePassport');
 			}
 
+			//удаляем сохраненные при регистрации данные продукта
+			//делается для того, чтобы в случае перехода на "ручной" выбор продукта после регистрации
+			//клиент смог выбрать новый продукт и оформить именно его, а не выбранный ранее
+			//(сделано дополнительно к приоритету POST-запроса в doSubscribe)
+			Yii::app()->user->setState('new_client', null);
+			Yii::app()->user->setState('product', null);
+			Yii::app()->user->setState('flex_time', null);
+			Yii::app()->user->setState('flex_amount', null);
+			Yii::app()->user->setState('channel_id', null);
 
 			$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
 		} else {
@@ -846,7 +855,7 @@ class DefaultController extends Controller
 		//если есть POST-запрос или были данные в getState перед редиректом
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
 			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
-			if (!$bIsRedirect) {
+			if (Yii::app()->request->getIsPostRequest()) {
 				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
 			} else {
 				$aPost = $aData;
@@ -869,13 +878,6 @@ class DefaultController extends Controller
 					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
 					$sView = 'subscription/do_subscribe';
 				}
-
-				//удаляем сохраненные при регистрации данные продукта
-				//TODO вынести в другое место, либо вовсе не стирать
-				/*Yii::app()->user->setState('product', null);
-				Yii::app()->user->setState('flex_time', null);
-				Yii::app()->user->setState('flex_amount', null);
-				Yii::app()->user->setState('channel_id', null);*/
 
 				$this->render($sView, array('model' => $oForm));
 				Yii::app()->end();
