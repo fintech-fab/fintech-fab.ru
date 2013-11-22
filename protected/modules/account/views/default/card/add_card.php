@@ -21,16 +21,19 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	)
 ));
 ?>
-	<div class="alert alert-warning"><h4>Уважаемый Клиент, обращаем Ваше внимание:</h4>
+	<div class="alert alert-warning"><h4>Уважаемый Клиент:</h4>
 		<ul>
+			<li>Убедитесь, что банковская карта зарегистрирована на Ваше имя, не является предоплаченной, активна (не
+				заблокирована) и доступна для перечисления денег.
+			</li>
 			<?php
 			//если карта уже привязана, то выдаем предупреждение
 			if (Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
 				<li>При привязке новой банковской карты, данные старой карты удаляются.</li>
 			<?php endif; ?>
 			<li>
-				Сейчас перечисление займов доступно только на карты Master Card. В ближайшем времени перечисления станут
-				доступны и на карты Visa. Благодарим за понимание!
+				В данный момент перечисление займов доступно только на карты MasterCard. В ближайшее время перечисления
+				станут доступны и на карты Visa. Благодарим за понимание!
 			</li>
 			<?php if (Yii::app()->adminKreddyApi->checkCardVerifyExists()): ?>
 				<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
@@ -41,7 +44,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<p>
 			<strong>Будьте внимательны! Количество попыток ввода данных строго ограничено.</strong>
 		</p>
-		<?= $form->checkBoxRow($model, 'bConfirm'); ?>
 	</div>
 
 <?= $form->radioButtonListRow($model, 'iCardType', Dictionaries::$aCardTypes) ?>
@@ -60,6 +62,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->error($model, 'sCardYear'); ?>
 
 <?= $form->textFieldRow($model, 'sCardCvc', array('style' => 'width: 60px;', 'size' => '3', 'maxlength' => '3')); ?>
+
+<?= $form->checkBoxRow($model, 'bConfirm'); ?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

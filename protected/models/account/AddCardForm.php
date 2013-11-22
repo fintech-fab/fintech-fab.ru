@@ -61,7 +61,9 @@ class AddCardForm extends CFormModel
 	 */
 	public function attributeLabels()
 	{
-		return array(
+		//'bConfirm'  => 'Я подтверждаю правильность введенных мною данных.',
+
+		$aLabels = array(
 			'sCardPan'   => 'Номер карты',
 			'sCardMonth' => 'Срок окончания',
 			'sCardYear'  => 'Год',
@@ -70,6 +72,11 @@ class AddCardForm extends CFormModel
 			'iCardType' => 'Тип банковской карты',
 		);
 
+		if (!Yii::app()->adminKreddyApi->checkCardVerifyExists()) {
+			$aLabels['bConfirm'] = 'Я подтверждаю правильность введенных мною данных.';
+		}
+
+		return $aLabels;
 	}
 
 	/**
