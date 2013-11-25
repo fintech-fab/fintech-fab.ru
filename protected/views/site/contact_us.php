@@ -4,6 +4,12 @@
 /* @var $form IkTbActiveForm */
 
 ?>
+<script>
+	function make1TabActive() {
+		jQuery('a[href="#faq_tab_1"]').parent().addClass('active');
+		jQuery('a[href="#faq_tab_2"]').parent().removeClass('active')
+	}
+</script>
 
 <?php if (Yii::app()->user->hasFlash('contact')): ?>
 
@@ -13,7 +19,8 @@
 
 <?php else: ?>
 
-	<p>Не нашли ответ в разделе «<a data-toggle="tab" href="#faq_tab_1">Частые вопросы</a>»? </p>
+	<p>Не нашли ответ в разделе «<a data-toggle="tab" href="#faq_tab_1" onclick="make1TabActive()">Частые вопросы</a>»?
+	</p>
 
 	<p>Вы всегда можете получить полную информацию у специалиста Контактного центра <b>8-800-555-75-78</b> или <b>задать
 			свой вопрос на нашем сайте</b>. </p>

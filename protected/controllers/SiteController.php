@@ -137,15 +137,7 @@ class SiteController extends Controller
 
 			$model->setAttributes($aPost);
 			if ($model->validate()) {
-				/*$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
-				$headers="From: $name <{$model->email}>\r\n".
-					"Reply-To: {$model->email}\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-type: text/plain; charset=UTF-8";
-
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);*/
-				$sEmail = 'e.barsova@fintech-fab.ru'; //TODO: изменить vopros@kreddy.ru
+				$sEmail = 'e.barsova@fintech-fab.ru'; //TODO: изменить operator@kreddy.ru
 				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[(int)$model->subject];
 				$sMessage =
 					"Имя: " . $model->name . "\r\n" .
@@ -161,7 +153,11 @@ class SiteController extends Controller
 			}
 		}
 
-		$this->render('faq', array('model' => $model, 'iActiveTab' => $iActiveTab));
+		$aGroups = FaqGroup::model()->with('questions')->findAll();
+		$sTableQuestions = $this->renderPartial('all_questions', array('model' => $aGroups), true);
+		$sForm = $this->renderPartial('contact_us', array('model' => $model), true);
+
+		$this->render('faq', array('sForm' => $sForm, 'sTableQuestions' => $sTableQuestions, 'iActiveTab' => $iActiveTab));
 	}
 
 	/**

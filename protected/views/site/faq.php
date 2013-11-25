@@ -1,6 +1,5 @@
 <?php
 /* @var $this SiteController */
-/* @var $model ContactForm */
 /* @var $form IkTbActiveForm */
 /* @var $iActiveTab int */
 
@@ -17,12 +16,12 @@ $this->widget(
 		'tabs' => array(
 			array(
 				'label'   => 'Частые вопросы',
-				'content' => 'Home Content',
+				'content' => $sTableQuestions,
 				'active' => ($iActiveTab == 1),
 			),
 			array(
 				'label'   => 'Задать вопрос',
-				'content' => $this->renderPartial('contact_us', array('model' => $model), true),
+				'content' => $sForm,
 				'active'  => ($iActiveTab == 2),
 			),
 		),
