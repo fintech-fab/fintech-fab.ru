@@ -32,8 +32,8 @@ $this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 	<div class="row">
 		<h2 class="learn-more">Узнай больше о нас!</h2>
 
-		<p class="intro learn-more">Если возникнут вопросы, позвони нам, или <a href="mailto:info@kreddy.ru">напиши</a>
-		</p>
+		<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотрите ответы', Yii::app()
+				->createUrl('site/faq')); ?>! </p>
 	</div>
 
 	<div class="row" style="margin-left: 0;">

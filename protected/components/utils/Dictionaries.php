@@ -24,7 +24,8 @@ class Dictionaries
 
 	const C_INFO_MOSCOWTIME = "Указано московское время";
 
-	const C_FAQ_SUCCESS = "Thank you for contacting us. We will respond to you as soon as possible.";
+	const C_FAQ_SUBJECT_SENT = "Вопрос с Kreddy.ru";
+	const C_FAQ_SUCCESS = "Спасибо за Ваш вопрос! Специалист ответит Вам в ближайшее время.";
 
 	const C_SEX_FEMALE = 1;
 	const C_SEX_MALE = 2;
@@ -70,6 +71,22 @@ class Dictionaries
 	);
 
 	public static $aRegions = array();
+
+	/**
+	 * Темы вопросов FAQ
+	 *
+	 * @var array
+	 */
+	public static $aSubjectsQuestions = array(
+		1 => 'Подключение сервиса',
+		2 => 'Правила пользования сервисом',
+		3 => 'Возврат займа',
+		4 => 'Личный кабинет',
+		5 => 'Пакеты займов',
+		6 => 'Предложения по улучшению сервиса',
+		7 => 'Претензии',
+		8 => 'Другие вопросы',
+	);
 
 	/**
 	 * названия для  образования

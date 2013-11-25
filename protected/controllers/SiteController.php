@@ -128,7 +128,13 @@ class SiteController extends Controller
 		$model = new ContactForm;
 		$aPost = Yii::app()->request->getParam('ContactForm');
 
+		// номер активной вкладки, по умолчанию - первая
+		$iActiveTab = 1;
+
 		if (isset($aPost)) {
+			// изменяем номер активной вкладки на 2 - с формой отправки
+			$iActiveTab = 2;
+
 			$model->setAttributes($aPost);
 			if ($model->validate()) {
 				/*$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
@@ -139,17 +145,23 @@ class SiteController extends Controller
 					"Content-type: text/plain; charset=UTF-8";
 
 				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);*/
-				$sEmail = 'e.barsova@fintech-fab.ru'; //TODO: изменить
-				$sSubject = $model->subject;
-				$sMessage = $model->body;
+				$sEmail = 'e.barsova@fintech-fab.ru'; //TODO: изменить vopros@kreddy.ru
+				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[(int)$model->subject];
+				$sMessage =
+					"Имя: " . $model->name . "\r\n" .
+					"Телефон: " . $model->phone . "\r\n" .
+					"E-Mail: " . $model->email . "\r\n" .
+					"\r\n" .
+					"Вопрос: \r\n" .
+					$model->body;
 
 				EmailComponent::sendEmail($sEmail, $sSubject, $sMessage);
 
 				Yii::app()->user->setFlash('contact', Dictionaries::C_FAQ_SUCCESS);
-				$this->refresh();
 			}
 		}
-		$this->render('faq', array('model' => $model));
+
+		$this->render('faq', array('model' => $model, 'iActiveTab' => $iActiveTab));
 	}
 
 	/**
