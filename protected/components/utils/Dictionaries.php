@@ -24,6 +24,8 @@ class Dictionaries
 
 	const C_INFO_MOSCOWTIME = "Указано московское время";
 
+	const C_FAQ_SUCCESS = "Thank you for contacting us. We will respond to you as soon as possible.";
+
 	const C_SEX_FEMALE = 1;
 	const C_SEX_MALE = 2;
 

@@ -3,13 +3,10 @@
 /* @var $model ContactForm */
 /* @var $form IkTbActiveForm */
 
-$this->pageTitle = Yii::app()->name . ' - Contact Us';
-$this->breadcrumbs = array(
-	'Contact',
-);
-?>
+$this->pageTitle = Yii::app()->name . ' - Ваши вопросы - Наши ответы';
 
-	<h1>Contact Us</h1>
+?>
+<h1>Ваши вопросы - Наши ответы</h1>
 
 <?php if (Yii::app()->user->hasFlash('contact')): ?>
 
