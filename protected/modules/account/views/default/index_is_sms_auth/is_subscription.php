@@ -9,6 +9,7 @@ $this->breadcrumbs = array(
 	$this->module->id,
 );
 
+//TODO вынести заголовки страницы в getSomething()
 if (SiteParams::getIsIvanovoSite()) {
 	$this->pageTitle = Yii::app()->name . ' - Статус займа';
 } else {

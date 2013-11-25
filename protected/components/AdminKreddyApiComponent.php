@@ -2943,6 +2943,8 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка в getInfo есть ли привязанная карта
+	 *
 	 * @return bool
 	 */
 	public function getIsClientCardExists()
