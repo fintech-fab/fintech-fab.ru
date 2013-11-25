@@ -524,7 +524,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'prev_last_name'         => 'Прежняя фамилия',
 
 			'sex'                    => 'Пол',
-			'birthday'               => 'День рождения',
+			'birthday' => 'Дата рождения',
 			'numeric_code'           => 'Цифровой код (для подтверждения повторных займов)',
 			'email'                  => 'Email',
 			'marital_status'         => 'Семейное положение',
