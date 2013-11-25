@@ -72,10 +72,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			</li>
 			<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span> для
 				демонстрации в вэб-камеру при прохождении идентификации (подтверждение личности).
-			</li<
-			<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?=
-				Yii::app()
-					->createAbsoluteUrl('/footerLinks/view/distance'); ?>', 'Оферта на дистанционный займ');">здесь.</a>
+			</li>
+			<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?php
+				$sOfferLinkName = SiteParams::getIsIvanovoSite() ? 'offer_ivanovo' : 'distance';
+				$sOfferTitle = SiteParams::getIsIvanovoSite() ? 'Оферта' : 'Оферта на дистанционный займ';
+
+				echo Yii::app()
+					->createAbsoluteUrl('/footerLinks/view/' . $sOfferLinkName);
+				?>', '<?= $sOfferTitle ?>');">здесь.</a>
 			</li>
 		</ol>
 	</div>
