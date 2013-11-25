@@ -234,7 +234,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * Проверка на валидность номера водительского удостоверения
-	 * 2 цифры, 2 русских буквы, 6 цифр
+	 * Просто буквы или цифры
 	 *
 	 * @param $sNumber
 	 *
@@ -242,7 +242,7 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	private function checkValidDriverLicense($sNumber)
 	{
-		return (preg_match('/^\d{2}[а-яё]{2}\d{6}$/ui', $sNumber) > 0);
+		return (preg_match('/^[а-яё0-9]+$/ui', $sNumber) > 0);
 	}
 
 	/**
@@ -255,7 +255,7 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	private function checkValidPensionCertificate($sNumber)
 	{
-		return (preg_match('/^\d*$/', $sNumber) > 0);
+		return (preg_match('/^\d+$/', $sNumber) > 0);
 	}
 
 	/**
