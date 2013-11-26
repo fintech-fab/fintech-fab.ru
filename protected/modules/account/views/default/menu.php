@@ -104,6 +104,11 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 	<div style="padding-left: 20px;">
 		<h4><?= Yii::app()->adminKreddyApi->getClientFullName(); ?></h4>
 
+		<?php if (Yii::app()->adminKreddyApi->getBankCardPan()) { ?>
+			<p>
+				<strong>Номер карты:</strong>    <?= Yii::app()->adminKreddyApi->getBankCardPan() ?>
+			</p>
+		<?php } ?>
 		<p>
 			<?= $sExpiredMessage; ?>
 			<?= $sBalanceMessage; ?>
