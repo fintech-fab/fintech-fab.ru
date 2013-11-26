@@ -90,6 +90,22 @@ class SiteParams
 	);
 
 	/**
+	 * Опции для HTML Purifier
+	 *
+	 * @var array
+	 */
+	public static $aPurifyOptions = array(
+		'Filter.YouTube'           => true,
+		'HTML.SafeObject'          => true,
+		'HTML.SafeIframe'          => true,
+		'Output.FlashCompat'       => true,
+		'URI.SafeIframeRegexp'     => '%^(http://|//)(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
+		'Attr.AllowedFrameTargets' => array('_blank', '_self', '_parent', '_top'),
+		'HTML.AllowedElements'     => array("div", "p", "ul", "ol", "li", "h3", "h4", "h5", "h6", "img", "a", "b", "i", "s", "span", "u", "em", "strong", "del", "blockquote", "sup", "sub", "pre", "br", "hr", "table", "tbody", "thead", "tr", "td", "th", "iframe"),
+		'HTML.AllowedAttributes'   => array("img.src", "img.alt", "img.title", "*.width", "*.height", "a.href", "a.title", "a.target", "*.style", "*.class", "iframe.frameborder", "iframe.src"),
+	);
+
+	/**
 	 * количество цифр в номере телефона
 	 */
 	const C_PHONE_LENGTH = 10;
@@ -176,6 +192,17 @@ class SiteParams
 	public static function getIsIvanovoSite()
 	{
 		return (defined('SITE_IVANOVO')) ? SITE_IVANOVO : false;
+	}
+
+	public static function getFaqEmail()
+	{
+		$sEmail = "dev@kreddy.ru";
+
+		if (!empty(Yii::app()->params['faqEmail'])) {
+			$sEmail = Yii::app()->params['faqEmail'];
+		}
+
+		return $sEmail;
 	}
 
 	/**

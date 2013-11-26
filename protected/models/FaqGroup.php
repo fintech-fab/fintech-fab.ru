@@ -33,6 +33,7 @@ class FaqGroup extends CActiveRecord
 			array('title', 'required'),
 			array('sort_order', 'numerical', 'integerOnly' => true),
 			array('title', 'length', 'max' => 100),
+			array('title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			// The following rule is used by search().
 			array('id, title, sort_order', 'safe', 'on' => 'search'),
 		);
@@ -84,9 +85,6 @@ class FaqGroup extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
-			'sort'     => array(
-				'defaultOrder' => 'sort_order ASC',
-			)
 		));
 	}
 

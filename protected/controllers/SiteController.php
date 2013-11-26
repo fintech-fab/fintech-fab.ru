@@ -125,37 +125,37 @@ class SiteController extends Controller
 
 	public function actionFaq()
 	{
-		$model = new ContactForm;
-		$aPost = Yii::app()->request->getParam('ContactForm');
-
 		// номер активной вкладки, по умолчанию - первая
 		$iActiveTab = 1;
 
-		if (isset($aPost)) {
+		$oModel = new ContactForm;
+		$aPost = Yii::app()->request->getPost('ContactForm');
+
+		$sForm = $this->renderPartial('contact_us', array('model' => $oModel), true);
+		$aGroups = FaqGroup::model()->with('questions')->findAll();
+		$sTableQuestions = $this->renderPartial('all_questions', array('model' => $aGroups), true);
+
+		if (!empty($aPost)) {
 			// изменяем номер активной вкладки на 2 - с формой отправки
 			$iActiveTab = 2;
 
-			$model->setAttributes($aPost);
-			if ($model->validate()) {
-				$sEmail = 'e.barsova@fintech-fab.ru'; //TODO: изменить operator@kreddy.ru
-				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[(int)$model->subject];
+			$oModel->setAttributes($aPost);
+			if ($oModel->validate()) {
+				$sEmail = SiteParams::getFaqEmail();
+				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[$oModel->subject];
 				$sMessage =
-					"Имя: " . $model->name . "\r\n" .
-					"Телефон: " . $model->phone . "\r\n" .
-					"E-Mail: " . $model->email . "\r\n" .
+					"Имя: " . $oModel->name . "\r\n" .
+					"Телефон: " . $oModel->phone . "\r\n" .
+					"E-Mail: " . $oModel->email . "\r\n" .
 					"\r\n" .
 					"Вопрос: \r\n" .
-					$model->body;
+					$oModel->body;
 
 				EmailComponent::sendEmail($sEmail, $sSubject, $sMessage);
 
 				Yii::app()->user->setFlash('contact', Dictionaries::C_FAQ_SUCCESS);
 			}
 		}
-
-		$aGroups = FaqGroup::model()->with('questions')->findAll();
-		$sTableQuestions = $this->renderPartial('all_questions', array('model' => $aGroups), true);
-		$sForm = $this->renderPartial('contact_us', array('model' => $model), true);
 
 		$this->render('faq', array('sForm' => $sForm, 'sTableQuestions' => $sTableQuestions, 'iActiveTab' => $iActiveTab));
 	}

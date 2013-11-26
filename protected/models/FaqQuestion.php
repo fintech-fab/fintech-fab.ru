@@ -34,6 +34,7 @@ class FaqQuestion extends CActiveRecord
 		return array(
 			array('title, answer, group_id', 'required'),
 			array('group_id, sort_order', 'numerical', 'integerOnly' => true),
+			array('title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('title', 'length', 'max' => 500),
 			// The following rule is used by search().
 			array('id, title, answer, group_id, question_order', 'safe', 'on' => 'search'),
@@ -90,9 +91,6 @@ class FaqQuestion extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
-			'sort'     => array(
-				'defaultOrder' => 'sort_order ASC',
-			)
 		));
 	}
 
@@ -123,16 +121,7 @@ class FaqQuestion extends CActiveRecord
 	protected function afterValidate()
 	{
 		$p = new CHtmlPurifier;
-		$p->options = array(
-			'Filter.YouTube'           => true,
-			'HTML.SafeObject'          => true,
-			'HTML.SafeIframe'          => true,
-			'Output.FlashCompat'       => true,
-			'URI.SafeIframeRegexp'     => '%^(http://|//)(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
-			'Attr.AllowedFrameTargets' => array('_blank', '_self', '_parent', '_top'),
-			'HTML.AllowedElements'     => array("div", "p", "ul", "ol", "li", "h3", "h4", "h5", "h6", "img", "a", "b", "i", "s", "span", "u", "em", "strong", "del", "blockquote", "sup", "sub", "pre", "br", "hr", "table", "tbody", "thead", "tr", "td", "th", "iframe"),
-			'HTML.AllowedAttributes'   => array("img.src", "img.alt", "img.title", "*.width", "*.height", "a.href", "a.title", "a.target", "*.style", "*.class", "iframe.frameborder", "iframe.src"),
-		);
+		$p->options = SiteParams::$aPurifyOptions;
 		$this->answer = $p->purify($this->answer);
 		parent::afterValidate();
 	}
