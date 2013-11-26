@@ -42,6 +42,10 @@
 						'label' => 'Мобильный нужен не только для разговоров',
 						'url'   => '/pages/view/check'
 					),
+					array(
+						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-05_ivanovo.jpg'),
+						'label' => 'Все полезные контакты сервиса "Кредди" всегда под рукой!',
+					),
 				);
 			}
 
