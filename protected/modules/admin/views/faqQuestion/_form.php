@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $form  IkTbActiveForm
+ * @var $form  TbActiveForm
  * @var $model FaqQuestion
  */
 
@@ -26,6 +26,11 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 
 	<div class="row">
 		<?php echo $form->textFieldRow($model, 'title', array('class' => 'span4', 'maxlength' => 500)); ?>
+	</div>
+
+	<div class="row">
+		<?= $form->checkBoxRow($model, 'show_site1'); ?>
+		<?= $form->checkBoxRow($model, 'show_site2'); ?>
 	</div>
 
 	<div class="row">

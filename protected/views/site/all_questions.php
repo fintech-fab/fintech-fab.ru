@@ -12,7 +12,7 @@
 	foreach ($model as $oGroup) {
 		?>
 		<tr>
-			<td valign="top">
+			<td valign="top" class="span2">
 				<strong><?= $oGroup->title ?></strong>
 			</td>
 			<td>
@@ -41,3 +41,23 @@
 	?>
 	</tbody>
 </table>
+
+<script>
+	function openQuestionByAnchor(anchor) {
+		jQuery(anchor).removeClass('collapse');
+	}
+
+	jQuery("div.accordion-inner a[href ^= '#collapse']").click(function () {
+		openQuestionByAnchor(jQuery(this).attr('href'));
+	});
+</script>
+
+<?php
+
+Yii::app()->clientScript->registerScript('openQuestionByAnchor', "
+var sHash = $(location).attr('hash');
+if(typeof sHash!='undefined' && sHash.length){
+   openQuestionByAnchor(jQuery(sHash));
+}
+", CClientScript::POS_READY);
+?>

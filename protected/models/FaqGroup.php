@@ -33,8 +33,10 @@ class FaqGroup extends CActiveRecord
 			array('title', 'required'),
 			array('sort_order', 'numerical', 'integerOnly' => true),
 			array('title', 'length', 'max' => 100),
+			array('title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—:\s]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
+			array('show_site1, show_site2', 'numerical', 'integerOnly' => true),
 			// The following rule is used by search().
-			array('id, title, sort_order', 'safe', 'on' => 'search'),
+			array('id, title, sort_order, show_site1, show_site2', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -59,6 +61,8 @@ class FaqGroup extends CActiveRecord
 			'id'         => 'ID',
 			'title'      => 'Заголовок',
 			'sort_order' => 'Порядок сортировки',
+			'show_site1' => 'Показывать на kreddy.ru',
+			'show_site2' => 'Показывать на ivanovo.kreddy.ru'
 		);
 	}
 
@@ -84,9 +88,6 @@ class FaqGroup extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,
-			'sort'     => array(
-				'defaultOrder' => 'sort_order ASC',
-			)
 		));
 	}
 
@@ -97,8 +98,57 @@ class FaqGroup extends CActiveRecord
 	{
 		return array(
 			'alias' => 'faq_group',
-			'order' => 'faq_group.sort_order ASC',
+			'order' => 'faq_group.sort_order ASC, faq_group.id ASC',
 		);
+	}
+
+	/**
+	 * @param $iSite
+	 *
+	 * @return $this
+	 */
+	private function scopeSiteGroups($iSite)
+	{
+		$oCriteria = new CDbCriteria();
+		if ($iSite === 1) {
+			$oCriteria->addColumnCondition(array(
+				'faq_group.show_site1' => '1',
+			));
+		} elseif ($iSite === 2) {
+			$oCriteria->addColumnCondition(array(
+				'faq_group.show_site2' => '1',
+			));
+		}
+
+		$oCriteria->order = 'faq_group.sort_order ASC, faq_group.id ASC';
+
+		$this->setDbCriteria($oCriteria);
+
+		return $this;
+	}
+
+	/**
+	 * @param $iSite
+	 *
+	 * @return CActiveRecord[]
+	 */
+	public static function getSiteGroups($iSite)
+	{
+		$aScopes = array();
+
+		if ($iSite === 1) {
+			$aScopes[] = 'site1';
+		} elseif ($iSite === 2) {
+			$aScopes[] = 'site2';
+		}
+
+		$aResult = self::model()->scopeSiteGroups($iSite)->with(array(
+			'questions' => array(
+				'scopes' => $aScopes
+			),
+		))->findAll();
+
+		return $aResult;
 	}
 
 	/**

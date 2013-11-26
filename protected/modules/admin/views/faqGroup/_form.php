@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $form  IkTbActiveForm
+ * @var $form  TbActiveForm
  * @var $model faqGroup
  */
 ?>

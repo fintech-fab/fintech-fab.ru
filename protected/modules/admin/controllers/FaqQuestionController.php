@@ -19,6 +19,30 @@ class FaqQuestionController extends Controller
 		);
 	}
 
+	public function actions()
+	{
+		return array(
+			'imageUpload' => array(
+				'class'     => 'ext.RedactorUploadAction',
+				'directory' => 'uploads/images',
+				'validator' => array(
+					'mimeTypes' => array('image/png', 'image/jpg', 'image/gif', 'image/jpeg', 'image/pjpeg'),
+				)
+			),
+			'fileUpload'  => array(
+				'class'     => 'ext.RedactorUploadAction',
+				'directory' => 'uploads/files',
+				'validator' => array(
+					'types' => 'txt, pdf, doc, docx',
+				)
+			),
+			'toggle'      => array(
+				'class'     => 'bootstrap.actions.TbToggleAction',
+				'modelName' => 'FaqQuestion',
+			)
+		);
+	}
+
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -40,7 +64,7 @@ class FaqQuestionController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort'),
+				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(

@@ -1,7 +1,7 @@
 <?php
 /* @var $this FooterLinksController */
 /* @var $model FooterLinks */
-/* @var $form CActiveForm */
+/* @var $form IkTbActiveForm */
 
 Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
@@ -48,8 +48,8 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 	</div>
 
 	<div class="row">
-		<?= $form->checkBoxRow($model,'show_site1'); ?>
-		<?= $form->checkBoxRow($model,'show_site2'); ?>
+		<?= $form->checkBoxRow($model, 'show_site1'); ?>
+		<?= $form->checkBoxRow($model, 'show_site2'); ?>
 	</div>
 
 	<div class="row">

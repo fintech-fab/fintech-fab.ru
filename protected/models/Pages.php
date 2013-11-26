@@ -44,7 +44,7 @@ class Pages extends CActiveRecord
 			array('page_name', 'length', 'max' => 20),
 			array('page_name', 'match', 'pattern' => '/^[a-z][a-z0-9]+$/ui', 'message' => 'Имя может содержать только цифры и латинские символы, первым символом должна быть буква'),
 			array('page_title', 'length', 'max' => 100),
-			array('page_title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
+			array('page_title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—:\s]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('page_name', 'unique', 'message' => 'Страница должна иметь уникальное имя'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -109,16 +109,7 @@ class Pages extends CActiveRecord
 	protected function afterValidate()
 	{
 		$p = new CHtmlPurifier;
-		$p->options = array(
-			'Filter.YouTube'           => true,
-			'HTML.SafeObject'          => true,
-			'HTML.SafeIframe'          => true,
-			'Output.FlashCompat'       => true,
-			'URI.SafeIframeRegexp'     => '%^(http://|//)(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
-			'Attr.AllowedFrameTargets' => array('_blank', '_self', '_parent', '_top'),
-			'HTML.AllowedElements'     => array("div", "p", "ul", "ol", "li", "h3", "h4", "h5", "h6", "img", "a", "b", "i", "s", "span", "u", "em", "strong", "del", "blockquote", "sup", "sub", "pre", "br", "hr", "table", "tbody", "thead", "tr", "td", "th", "iframe"),
-			'HTML.AllowedAttributes'   => array("img.src", "img.alt", "img.title", "*.width", "*.height", "a.href", "a.title", "a.target", "*.style", "*.class", "iframe.frameborder", "iframe.src"),
-		);
+		$p->options = SiteParams::$aPurifyOptions;
 		$this->page_content = $p->purify($this->page_content);
 		parent::afterValidate();
 	}

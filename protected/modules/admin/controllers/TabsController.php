@@ -22,6 +22,16 @@ class TabsController extends Controller
 		);
 	}
 
+	public function actions()
+	{
+		return array(
+			'toggle' => array(
+				'class'     => 'bootstrap.actions.TbToggleAction',
+				'modelName' => 'Tabs',
+			)
+		);
+	}
+
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -43,7 +53,7 @@ class TabsController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'view', 'sort'),
+				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'view', 'sort', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
