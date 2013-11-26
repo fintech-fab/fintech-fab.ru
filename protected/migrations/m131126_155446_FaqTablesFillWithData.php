@@ -4,7 +4,7 @@ class m131126_155446_FaqTablesFillWithData extends CDbMigration
 	public function up()
 	{
 
-		$sQuery = file_get_contents('FAQTablesData.sql');
+		$sQuery = file_get_contents(Yii::app()->getBasePath() . '/migrations/FAQTablesData.sql');
 		$this->execute($sQuery);
 
 		if (Yii::app()->hasComponent('cache')) {
