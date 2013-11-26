@@ -1,12 +1,12 @@
 <?php
 /**
- * @var $form  IkTbActiveForm
+ * @var $form  TbActiveForm
  * @var $model faqGroup
  */
 ?>
 <div class="form">
 	<?php
-	$form = $this->beginWidget('bootstrap.widgets.IkTbActiveForm', array(
+	$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		'id'                   => 'faq-group-form',
 		'enableAjaxValidation' => false,
 	)); ?>

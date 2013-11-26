@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $form  IkTbActiveForm
+ * @var $form  TbActiveForm
  * @var $model FaqQuestion
  */
 
@@ -8,7 +8,7 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
 <div class="form">
 	<?php
-	$form = $this->beginWidget('bootstrap.widgets.IkTbActiveForm', array(
+	$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 		'id'                   => 'faq-group-form',
 		'enableAjaxValidation' => false,
 	)); ?>
