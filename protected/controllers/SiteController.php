@@ -131,17 +131,16 @@ class SiteController extends Controller
 		$oModel = new ContactForm;
 		$aPost = Yii::app()->request->getPost('ContactForm');
 
-		$sForm = $this->renderPartial('contact_us', array('model' => $oModel), true);
 		$aGroups = FaqGroup::model()->with('questions')->findAll();
 		$sTableQuestions = $this->renderPartial('all_questions', array('model' => $aGroups), true);
 
-		if (!empty($aPost)) {
+		if (isset($aPost)) {
 			// изменяем номер активной вкладки на 2 - с формой отправки
 			$iActiveTab = 2;
 
 			$oModel->setAttributes($aPost);
 			if ($oModel->validate()) {
-				$sEmail = SiteParams::getFaqEmail();
+				$sEmail = SiteParams::getContactEmail();
 				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[$oModel->subject];
 				$sMessage =
 					"Имя: " . $oModel->name . "\r\n" .
@@ -156,6 +155,8 @@ class SiteController extends Controller
 				Yii::app()->user->setFlash('contact', Dictionaries::C_FAQ_SUCCESS);
 			}
 		}
+
+		$sForm = $this->renderPartial('contact_us', array('model' => $oModel), true);
 
 		$this->render('faq', array('sForm' => $sForm, 'sTableQuestions' => $sTableQuestions, 'iActiveTab' => $iActiveTab));
 	}

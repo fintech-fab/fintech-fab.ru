@@ -7,6 +7,7 @@
 class SiteParams
 {
 	const DEFAULT_URL = 'https://kreddy.ru';
+	const CONTACT_EMAIL = "dev@kreddy.ru";
 	const CTIME_HOUR = 3600;
 	const CTIME_DAY = 86400;
 	const CTIME_WEEK = 604800;
@@ -194,15 +195,13 @@ class SiteParams
 		return (defined('SITE_IVANOVO')) ? SITE_IVANOVO : false;
 	}
 
-	public static function getFaqEmail()
+	public static function getContactEmail()
 	{
-		$sEmail = "dev@kreddy.ru";
-
-		if (!empty(Yii::app()->params['faqEmail'])) {
-			$sEmail = Yii::app()->params['faqEmail'];
+		if (!empty(Yii::app()->params['contactEmail'])) {
+			return Yii::app()->params['contactEmail'];
 		}
 
-		return $sEmail;
+		return self::CONTACT_EMAIL;
 	}
 
 	/**

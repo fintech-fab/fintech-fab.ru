@@ -43,7 +43,7 @@ class ContactForm extends CFormModel
 			'subject'    => 'Тема вопроса',
 			'body'       => 'Вопрос',
 			'phone'      => 'Телефон',
-			'verifyCode' => 'Введите код с картинки',
+			'verifyCode' => 'Введите текст с картинки',
 		);
 	}
 }
