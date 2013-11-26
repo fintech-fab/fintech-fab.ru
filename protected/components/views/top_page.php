@@ -22,6 +22,10 @@
 						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-04.jpg'),
 						'label' => 'Выбери свой пакет займов!',
 					),
+					array(
+						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-05.jpg'),
+						'label' => 'Все полезные контакты сервиса "Кредди" всегда под рукой!',
+					),
 				);
 			} else {
 				$aItems = array(
