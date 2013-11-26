@@ -36,8 +36,9 @@ class FaqQuestion extends CActiveRecord
 			array('group_id, sort_order', 'numerical', 'integerOnly' => true),
 			array('title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—:\s]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			array('title', 'length', 'max' => 500),
+			array('show_site1, show_site2', 'numerical', 'integerOnly' => true),
 			// The following rule is used by search().
-			array('id, title, answer, group_id, question_order', 'safe', 'on' => 'search'),
+			array('id, title, answer, group_id, question_order, show_site1, show_site2', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -64,6 +65,8 @@ class FaqQuestion extends CActiveRecord
 			'answer'     => 'Ответ',
 			'group_id'   => 'Категория',
 			'sort_order' => 'Порядок сортировки',
+			'show_site1' => 'Показывать на kreddy.ru',
+			'show_site2' => 'Показывать на ivanovo.kreddy.ru'
 		);
 	}
 
@@ -114,7 +117,19 @@ class FaqQuestion extends CActiveRecord
 	{
 		return array(
 			'alias' => 'faq_question',
-			'order' => 'faq_question.sort_order ASC',
+			'order' => 'faq_question.sort_order ASC, faq_question.id ASC',
+		);
+	}
+
+	public function scopes()
+	{
+		return array(
+			'site1' => array(
+				'condition' => 'faq_question.show_site1 = 1',
+			),
+			'site2' => array(
+				'condition' => 'faq_question.show_site2 = 1',
+			),
 		);
 	}
 

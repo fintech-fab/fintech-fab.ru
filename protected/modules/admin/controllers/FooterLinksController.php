@@ -41,6 +41,10 @@ class FooterLinksController extends Controller
 					'types' => 'txt, pdf, doc, docx',
 				)
 			),
+			'toggle' => array(
+				'class'     => 'bootstrap.actions.TbToggleAction',
+				'modelName' => 'FooterLinks',
+			)
 		);
 	}
 
@@ -65,7 +69,7 @@ class FooterLinksController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'imageUpload', 'view', 'sort'),
+				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'imageUpload', 'view', 'sort', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(

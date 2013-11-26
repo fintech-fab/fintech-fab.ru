@@ -6,7 +6,7 @@
 ?>
 <div class="form">
 	<?php
-	$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+	$form = $this->beginWidget('bootstrap.widgets.IkTbActiveForm', array(
 		'id'                   => 'faq-group-form',
 		'enableAjaxValidation' => false,
 	)); ?>

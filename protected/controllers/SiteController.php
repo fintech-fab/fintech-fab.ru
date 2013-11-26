@@ -131,7 +131,12 @@ class SiteController extends Controller
 		$oModel = new ContactForm;
 		$aPost = Yii::app()->request->getPost('ContactForm');
 
-		$aGroups = FaqGroup::model()->with('questions')->findAll();
+		$iSite = 1;
+		if (SiteParams::getIsIvanovoSite()) {
+			$iSite = 2;
+		}
+
+		$aGroups = FaqGroup::getSiteGroups($iSite);
 		$sViewQuestions = (empty($aGroups)) ? 'no_questions' : 'all_questions';
 		$sTableQuestions = $this->renderPartial($sViewQuestions, array('model' => $aGroups), true);
 

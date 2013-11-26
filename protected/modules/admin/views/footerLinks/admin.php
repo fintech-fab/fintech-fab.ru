@@ -60,7 +60,7 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
 		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
-<?php $this->widget('bootstrap.widgets.TbGridView', array(
+<?php $this->widget('bootstrap.widgets.TbExtendedGridView', array(
 	'id'                    => 'footer-links-grid',
 	'type'                  => 'striped bordered condensed',
 	'dataProvider'          => $model->search(),
@@ -72,12 +72,16 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 		'link_title',
 		'link_url',
 		array(
-			'name'=>'show_site1',
-			'value'=> '($data["show_site1"])?"Да":"Нет"'
+			'class'        => 'bootstrap.widgets.TbToggleColumn',
+			'toggleAction' => 'footerLinks/toggle',
+			'name'         => 'show_site1',
+			'htmlOptions'  => array('style' => 'width: 50px;'),
 		),
 		array(
-			'name'=>'show_site2',
-			'value'=> '($data["show_site2"])?"Да":"Нет"'
+			'class'        => 'bootstrap.widgets.TbToggleColumn',
+			'toggleAction' => 'footerLinks/toggle',
+			'name'         => 'show_site2',
+			'htmlOptions'  => array('style' => 'width: 50px;'),
 		),
 		array(
 			'class' => 'bootstrap.widgets.TbButtonColumn',

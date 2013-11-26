@@ -19,6 +19,16 @@ class FaqGroupController extends Controller
 		);
 	}
 
+	public function actions()
+	{
+		return array(
+			'toggle' => array(
+				'class'     => 'bootstrap.actions.TbToggleAction',
+				'modelName' => 'FaqGroup',
+			)
+		);
+	}
+
 	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
@@ -40,7 +50,7 @@ class FaqGroupController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort'),
+				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
