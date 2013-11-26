@@ -1,3 +1,7 @@
+TRUNCATE  `tbl_faq_groups` ;
+
+TRUNCATE  `tbl_faq_questions` ;
+
 INSERT INTO `tbl_faq_groups` (`id`, `title`, `sort_order`, `show_site1`, `show_site2`) VALUES
 (1, 'Подключение сервиса', 2, 1, 1),
 (2, 'О сервисе Кредди', 1, 1, 1),
