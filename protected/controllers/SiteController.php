@@ -132,7 +132,8 @@ class SiteController extends Controller
 		$aPost = Yii::app()->request->getPost('ContactForm');
 
 		$aGroups = FaqGroup::model()->with('questions')->findAll();
-		$sTableQuestions = $this->renderPartial('all_questions', array('model' => $aGroups), true);
+		$sViewQuestions = (empty($aGroups)) ? 'no_questions' : 'all_questions';
+		$sTableQuestions = $this->renderPartial($sViewQuestions, array('model' => $aGroups), true);
 
 		if (isset($aPost)) {
 			// изменяем номер активной вкладки на 2 - с формой отправки

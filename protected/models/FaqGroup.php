@@ -33,7 +33,7 @@ class FaqGroup extends CActiveRecord
 			array('title', 'required'),
 			array('sort_order', 'numerical', 'integerOnly' => true),
 			array('title', 'length', 'max' => 100),
-			array('title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—: ]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
+			array('title', 'match', 'pattern' => '/^[а-яёa-z0-9?,.!\-—:\s]+$/ui', 'message' => 'Заголовок может содержать только буквы, цифры, знаки препинания и пробелы'),
 			// The following rule is used by search().
 			array('id, title, sort_order', 'safe', 'on' => 'search'),
 		);

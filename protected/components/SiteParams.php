@@ -6,8 +6,8 @@
  */
 class SiteParams
 {
-	const DEFAULT_URL = 'https://kreddy.ru';
-	const CONTACT_EMAIL = "dev@kreddy.ru";
+	const DEFAULT_URL = 'https://kreddy.ru'; // url по умолчанию; изменить можно в параметрах
+	const DEFAULT_EMAIL = "dev@kreddy.ru"; // email, на который приходят письма по умолчанию; изменить можно в параметрах
 	const CTIME_HOUR = 3600;
 	const CTIME_DAY = 86400;
 	const CTIME_WEEK = 604800;
@@ -201,7 +201,7 @@ class SiteParams
 			return Yii::app()->params['contactEmail'];
 		}
 
-		return self::CONTACT_EMAIL;
+		return self::DEFAULT_EMAIL;
 	}
 
 	/**
