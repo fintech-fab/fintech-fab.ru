@@ -28,8 +28,8 @@ class ClientDataSenderCommand extends CConsoleCommand
 			$sLastName = (!empty($oClient['last_name'])) ? $oClient['last_name'] : '';
 			$sFirstName = (!empty($oClient['first_name'])) ? $oClient['first_name'] : '';
 			$sThirdName = (!empty($oClient['third_name'])) ? $oClient['third_name'] : '';
-			$sEmail = (!empty($oClient['email'])) ? $oClient['email'] : '-';
-			$sPhone = (!empty($oClient['phone'])) ? $oClient['phone'] : '-';
+			$sEmail = (!empty($oClient['email'])) ? $oClient['email'] : '';
+			$sPhone = (!empty($oClient['phone'])) ? $oClient['phone'] : '';
 
 			$this->sClientsInfo .= "Телефон: $sPhone\r\nE-mail: $sEmail\r\nФИО: $sLastName $sFirstName $sThirdName \r\n\r\n=================================================\r\n\r\n";
 
