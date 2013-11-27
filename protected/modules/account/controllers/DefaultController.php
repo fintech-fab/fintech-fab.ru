@@ -682,7 +682,7 @@ class DefaultController extends Controller
 			$aPost = Yii::app()->request->getParam('SMSCodeForm');
 			$oSmsCodeForm->setAttributes($aPost);
 			if ($oSmsCodeForm->validate()) {
-				//забираем сохраненные в сессию данные нового паспорта
+				//забираем сохраненные в сессию данные нового пароля
 				$aPassword = Yii::app()->adminKreddyApi->getPassword();
 				unset($aPassword['password_repeat']);
 				//отправляем данные в API
