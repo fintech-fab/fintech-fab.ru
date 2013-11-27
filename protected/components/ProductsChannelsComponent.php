@@ -136,11 +136,11 @@ class ProductsChannelsComponent
 				$sMobileChannels .= $iKey;
 				$sMobileChannelName = $sChannelName;
 			} elseif (!strpos($sChannelName, 'Кредди')) {
-				$aChannelsList[$iKey] = '<span data-card="1">' . $sChannelName . '</span>';
+				$aChannelsList[$iKey] = '<span data-card="1" rel="tooltip" title="' . AdminKreddyApiComponent::C_CARD_WARNING_COMMISSION . '">' . $sChannelName . '</span>';
 			}
 		}
 		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
-			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
+			$aChannelsList[$sMobileChannels] = '<span data-card="0" rel="tooltip" title="' . AdminKreddyApiComponent::C_MOBILE_MSG_REQUIREMENTS . '">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
 		}
 
 		return $aChannelsList;

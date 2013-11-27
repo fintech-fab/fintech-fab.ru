@@ -156,6 +156,11 @@ class AdminKreddyApiComponent
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
+	const C_MOBILE_MSG_REQUIREMENTS = 'Уважаемый Клиент, обращаем Ваше внимание, что у операторов сотовой связи существуют ограничения по списанию денежных средств со счета мобильного телефона. Подробности можно узнать у оператора Вашей сотовой связи';
+
+	const C_CARD_WARNING_COMMISSION = 'Уважаемый Клиент, обращаем Ваше внимание, что при перечислении займа на карту производится дополнительная оплата в размере, указанном в пакетном тарифе';
+	const C_CARD_MSG_REQUIREMENTS = 'Убедитесь, что банковская карта зарегистрирована на Ваше имя, не является предоплаченной, активна (не заблокирована) и доступна для перечисления денег.';
+	const C_CARD_WARNING_NO_CARD = 'ВНИМАНИЕ! У Вас нет привязанной банковской карты. Для получения займов на банковскую карту пройдите процедуру привязки карты.';
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
@@ -502,9 +507,7 @@ class AdminKreddyApiComponent
 
 		//если нет привязанной карты и не установлен другой warning, то уведомляем о необходимости привязки карты
 		if (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === false && !Yii::app()->user->hasFlash('warning')) {
-			Yii::app()->user->setFlash('warning', 'ВНИМАНИЕ! У Вас нет привязанной банковской карты.
-			Для получения займов на банковскую карту пройдите процедуру привязки карты.');
-			//TODO вынести сообщение в const
+			Yii::app()->user->setFlash('warning', self::C_CARD_WARNING_NO_CARD);
 		}
 
 		return $aData;
@@ -1157,7 +1160,12 @@ class AdminKreddyApiComponent
 					if (isset($aChannels[$iKey])
 						&& in_array($iKey, $aClientChannels)
 					) {
-						$aProductsAndChannels[($aProduct['id'] . '_' . $iKey)] = $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$iKey]);
+						// добавляем tooltip - предупреждение про карту
+						if (strpos($aChannels[$iKey], 'карт') && !strpos($aChannels[$iKey], 'Кредди')) {
+							$aProductsAndChannels[($aProduct['id'] . '_' . $iKey)] = '<span rel="tooltip" title="' . "Уважаемый Клиент, " . SiteParams::mb_lcfirst(AdminKreddyApiComponent::C_CARD_MSG_REQUIREMENTS) . '">' . $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$iKey]) . '</span>';
+						} else {
+							$aProductsAndChannels[($aProduct['id'] . '_' . $iKey)] = $aProduct['name'] . ' ' . SiteParams::mb_lcfirst($aChannels[$iKey]);
+						}
 					}
 				}
 			}

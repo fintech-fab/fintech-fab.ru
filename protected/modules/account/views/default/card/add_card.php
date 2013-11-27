@@ -23,8 +23,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 	<div class="alert alert-warning"><h4>Уважаемый Клиент:</h4>
 		<ul>
-			<li>Убедитесь, что банковская карта зарегистрирована на Ваше имя, не является предоплаченной, активна (не
-				заблокирована) и доступна для перечисления денег.
+			<li><?= AdminKreddyApiComponent::C_CARD_MSG_REQUIREMENTS; ?>
 			</li>
 			<?php
 			//если карта уже привязана, то выдаем предупреждение
@@ -36,9 +35,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				станут доступны и на карты Visa. Благодарим за понимание!
 			</li>
 			<?php if (Yii::app()->adminKreddyApi->checkCardVerifyExists()): ?>
-				<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
-				карте должно быть не менее 10 рублей.
-			</li>
+				<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание -
+					на карте должно быть не менее 10 рублей.
+				</li>
 			<?php endif; ?>
 		</ul>
 		<p>

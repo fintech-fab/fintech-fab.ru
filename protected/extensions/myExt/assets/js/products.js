@@ -18,7 +18,7 @@ function getDateToPayUntil(n) {
 function showConditions(products, channels) {
 	var final_price = parseInt(products.attr('data-price'));
 	var card = parseInt(channels.find('input:checked').parent().find("label > span").attr('data-card'));
-	if(card == 1){
+	if (card == 1) {
 		final_price += parseInt(products.attr('data-card'));
 	}
 
@@ -31,5 +31,14 @@ function showConditions(products, channels) {
 	var n = products.attr('data-time');
 	$('.date').html(getDateToPayUntil(n));
 	$('.final_price').html(products.attr('data-final-price'));
-	$('.channel').html(channels.find('input:checked').parent().find("label > span").html());
+	var channel = channels.find('input:checked').parent().find("label > span").html();
+	$('.channel').html(channel);
+
+	if (channel.search(/карт/) != -1) {
+		$('.attention_card').show();
+		$('.attention_mobile').hide();
+	} else {
+		$('.attention_card').hide();
+		$('.attention_mobile').show();
+	}
 }
