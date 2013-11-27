@@ -820,6 +820,20 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Возвращает PAN карты, если она привязана
+	 *
+	 * @return bool
+	 */
+	public function getBankCardPan()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (!empty($aClientInfo['bank_card_exists']) && !empty($aClientInfo['bank_card_pan']))
+			? $aClientInfo['bank_card_pan']
+			: false;
+	}
+
+	/**
 	 * Возвращает дату окончания моратория на заём, если такой мораторий есть
 	 *
 	 * @return bool|string

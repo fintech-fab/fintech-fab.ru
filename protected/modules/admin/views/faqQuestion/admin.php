@@ -1,19 +1,20 @@
 <?php
-/* @var $this FooterLinksController */
-/* @var $model FooterLinks */
+/* @var $this FaqQuestionController */
+/* @var $model FaqQuestion */
+/* @var $data FaqQuestion */
 
-$this->pageTitle = Yii::app()->name . " - Управление ссылками";
+$this->pageTitle = Yii::app()->name . " - Управление вопросами";
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
+$('.search-form').toggle();
+return false;
 });
 $('.search-form form').submit(function(){
-	$('#footer-links-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
+$.fn.yiiGridView.update('faq-group-grid', {
+data: $(this).serialize()
+});
+return false;
 });
 ");
 ?>
@@ -30,12 +31,12 @@ $str_js = "
             return ui;
         };
 
-        $('#footer-links-grid table.items tbody').sortable({
+        $('#faq-grid table.items tbody').sortable({
             forcePlaceholderSize: true,
             forceHelperSize: true,
             items: 'tr',
             update : function () {
-                serial = $('#footer-links-grid table.items tbody').sortable('serialize', {key: 'items[]', attribute: 'class'}) + '&{$csrf_token_name}={$csrf_token}';
+                serial = $('#faq-grid table.items tbody').sortable('serialize', {key: 'items[]', attribute: 'class'}) + '&{$csrf_token_name}={$csrf_token}';
                 $.ajax({
                     'url': '" . $this->createUrl('sort') . "',
                     'type': 'post',
@@ -54,32 +55,37 @@ $str_js = "
 Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 ?>
 
-<h1>Управление нижними ссылками</h1>
+<h1>Управление вопросами</h1>
 
 <p>
 	Вы также можете использовать операторы сравнения (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>
 		&lt;&gt;</b> or <b>=</b>) перед поисковым значением для определения правил поиска. </p>
 
 <?php $this->widget('bootstrap.widgets.TbExtendedGridView', array(
-	'id'                    => 'footer-links-grid',
+	'id'                    => 'faq-grid',
 	'type'                  => 'striped bordered condensed',
 	'dataProvider'          => $model->search(),
 	'filter'                => $model,
-	'rowCssClassExpression' => '"items[]_{$data->link_id}"',
+	'rowCssClassExpression' => '"items[]_{$data->id}"',
 	'columns'               => array(
-		array('name' => 'link_id', 'header' => 'ID', 'htmlOptions' => array('style' => 'width: 50px;')),
-		'link_name',
-		'link_title',
-		'link_url',
+		array('name' => 'id', 'header' => 'ID', 'htmlOptions' => array('style' => 'width: 50px;')),
+		array(
+			'name'        => 'group_id',
+			'htmlOptions' => array('style' => 'width: 100px;'),
+			'value'       => function ($data) {
+					return $data->group->title;
+				}
+		),
+		'title',
 		array(
 			'class'        => 'bootstrap.widgets.TbToggleColumn',
-			'toggleAction' => 'footerLinks/toggle',
+			'toggleAction' => 'faqQuestion/toggle',
 			'name'         => 'show_site1',
 			'htmlOptions'  => array('style' => 'width: 50px;'),
 		),
 		array(
 			'class'        => 'bootstrap.widgets.TbToggleColumn',
-			'toggleAction' => 'footerLinks/toggle',
+			'toggleAction' => 'faqQuestion/toggle',
 			'name'         => 'show_site2',
 			'htmlOptions'  => array('style' => 'width: 50px;'),
 		),

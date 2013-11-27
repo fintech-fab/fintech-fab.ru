@@ -1,50 +1,31 @@
 <?php
-/* @var $this FooterLinksController */
-/* @var $model FooterLinks */
-/* @var $form IkTbActiveForm */
+/**
+ * @var $form  TbActiveForm
+ * @var $model FaqQuestion
+ */
 
 Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 ?>
-
 <div class="form">
-
-	<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-		'id'                   => 'footer-links-form',
+	<?php
+	$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+		'id'                   => 'faq-group-form',
 		'enableAjaxValidation' => false,
 	)); ?>
 
 	<p class="note">Поля, отмеченные <span class="required">*</span> , являются обязательными.</p>
 
-	<?php echo $form->errorSummary($model); ?>
-
 	<div class="row">
-		<?php echo $form->labelEx($model, 'link_name'); ?>
-		<?php echo $form->textField($model, 'link_name', array('size' => 20, 'maxlength' => 20)); ?>
-		<?php echo $form->error($model, 'link_name'); ?>
+		<?php echo $form->errorSummary($model); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model, 'link_title'); ?>
-		<?php echo $form->textField($model, 'link_title', array('size' => 50, 'maxlength' => 50)); ?>
-		<?php echo $form->error($model, 'link_title'); ?>
+		<?php echo $form->dropDownListRow($model, 'group_id', CHtml::listData(FaqGroup::model()
+			->findAll(), 'id', 'title'), array('class' => 'span4')); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model, 'link_url'); ?>
-		<?php echo $form->textField($model, 'link_url', array('size' => 60, 'maxlength' => 255)); ?>
-		<?php echo $form->error($model, 'link_url'); ?>
-		<?php
-
-		Yii::app()->user->setFlash('info', 'Поддерживается 2 формата URL: абсолютный (<strong>http://site.ru</strong>) и относительный (<strong>/page/subpage</strong>).');
-
-		$this->widget('bootstrap.widgets.TbAlert', array(
-			'block'     => false, // display a larger alert block?
-			'fade'      => true, // use transitions?
-			'closeText' => '&times;', // close link text - if set to false, no close link is displayed
-			'alerts'    => array( // configurations per alert type
-				'info' => array('block' => false, 'fade' => true, 'closeText' => '&times;'), // success, info, warning, error or danger
-			),
-		)); ?>
+		<?php echo $form->textFieldRow($model, 'title', array('class' => 'span4', 'maxlength' => 500)); ?>
 	</div>
 
 	<div class="row">
@@ -57,10 +38,10 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		$this->widget('ImperaviRedactorWidget', array(
 			// You can either use it for model attribute
 			'model'       => $model,
-			'attribute'   => 'link_content',
+			'attribute'   => 'answer',
 
 			// or just for input field
-			'name'        => 'link_content',
+			'name'        => 'answer',
 
 			// Some options, see http://imperavi.com/redactor/docs/
 			'options'     => array(
@@ -98,10 +79,13 @@ Yii::import('ext.imperavi-redactor-widget.ImperaviRedactorWidget');
 		?>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить'); ?>
+	<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType' => 'submit',
+			'type'       => 'primary',
+			'label'      => $model->isNewRecord ? 'Создать' : 'Сохранить',
+		)); ?>
 	</div>
 
 	<?php $this->endWidget(); ?>
-
-</div><!-- form -->
+</div>

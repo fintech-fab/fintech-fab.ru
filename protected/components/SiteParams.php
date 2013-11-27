@@ -6,7 +6,8 @@
  */
 class SiteParams
 {
-	const DEFAULT_URL = 'https://kreddy.ru';
+	const DEFAULT_URL = 'https://kreddy.ru'; // url по умолчанию; изменить можно в параметрах
+	const DEFAULT_EMAIL = "dev@kreddy.ru"; // email, на который приходят письма по умолчанию; изменить можно в параметрах
 	const CTIME_HOUR = 3600;
 	const CTIME_DAY = 86400;
 	const CTIME_WEEK = 604800;
@@ -87,6 +88,22 @@ class SiteParams
 		array('Заявка на займ', 2),
 		array('Подтверждение номера телефона', 3),
 		array('Идентификация', 4)
+	);
+
+	/**
+	 * Опции для HTML Purifier
+	 *
+	 * @var array
+	 */
+	public static $aPurifyOptions = array(
+		'Filter.YouTube'           => true,
+		'HTML.SafeObject'          => true,
+		'HTML.SafeIframe'          => true,
+		'Output.FlashCompat'       => true,
+		'URI.SafeIframeRegexp'     => '%^(http://|//)(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%',
+		'Attr.AllowedFrameTargets' => array('_blank', '_self', '_parent', '_top'),
+		'HTML.AllowedElements'     => array("div", "p", "ul", "ol", "li", "h3", "h4", "h5", "h6", "img", "a", "b", "i", "s", "span", "u", "em", "strong", "del", "blockquote", "sup", "sub", "pre", "br", "hr", "table", "tbody", "thead", "tr", "td", "th", "iframe"),
+		'HTML.AllowedAttributes'   => array("img.src", "img.alt", "img.title", "*.width", "*.height", "a.href", "a.title", "a.target", "*.style", "*.class", "iframe.frameborder", "iframe.src"),
 	);
 
 	/**
@@ -176,6 +193,15 @@ class SiteParams
 	public static function getIsIvanovoSite()
 	{
 		return (defined('SITE_IVANOVO')) ? SITE_IVANOVO : false;
+	}
+
+	public static function getContactEmail()
+	{
+		if (!empty(Yii::app()->params['contactEmail'])) {
+			return Yii::app()->params['contactEmail'];
+		}
+
+		return self::DEFAULT_EMAIL;
 	}
 
 	/**

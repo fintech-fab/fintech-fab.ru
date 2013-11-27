@@ -3,25 +3,30 @@
 /* @var $model ContactForm */
 /* @var $form IkTbActiveForm */
 
-$this->pageTitle = Yii::app()->name . ' - Contact Us';
-$this->breadcrumbs = array(
-	'Contact',
-);
 ?>
-
-	<h1>Contact Us</h1>
+<script>
+	function make1TabActive() {
+		jQuery('a[href="#faq_tab_1"]').parent().addClass('active');
+		jQuery('a[href="#faq_tab_2"]').parent().removeClass('active')
+	}
+</script>
 
 <?php if (Yii::app()->user->hasFlash('contact')): ?>
 
-	<div class="alert alert-success">
-		<?php echo Yii::app()->user->getFlash('contact'); ?>
+	<div class="alert alert-success in alert-block">
+	<?php echo Yii::app()->user->getFlash('contact'); ?>
 	</div>
 
 <?php else: ?>
 
-	<p>
-		If you have business inquiries or other questions, please fill out the following form to contact us. Thank
-		you. </p>
+	<p>Не нашли ответ в разделе «<a data-toggle="tab" href="#faq_tab_1" onclick="make1TabActive()">Частые вопросы</a>»?
+	</p>
+
+	<p>Вы всегда можете получить полную информацию у специалиста Контактного центра <b>8-800-555-75-78</b> или <b>задать
+			свой вопрос на нашем сайте</b>. </p>
+
+	<p>Мы с радостью ответим на Ваш вопрос о сервисе «Кредди». </p>
+
 
 	<div class="form">
 
@@ -33,51 +38,46 @@ $this->breadcrumbs = array(
 			),
 		)); ?>
 
-		<p class="note">Fields with <span class="required">*</span> are required.</p>
-
 		<?php echo $form->errorSummary($model); ?>
 
 		<div class="row">
-			<?php echo $form->textFieldRow($model, 'name', array('style' => 'width: 400px;')); ?>
+			<?php echo $form->textFieldRow($model, 'name', array('class' => 'span4')); ?>
 		</div>
 
 		<div class="row">
-			<?php echo $form->textFieldRow($model, 'email', array('style' => 'width: 400px;')); ?>
+			<?php echo $form->textFieldRow($model, 'email', array('class' => 'span4')); ?>
 		</div>
 
 		<div class="row">
-			<?php echo $form->textFieldRow($model, 'phone', array('style' => 'width: 400px;')); ?>
+			<?php echo $form->phoneMaskedRow($model, 'phone', array('class' => 'span4')); ?>
 		</div>
 
 		<div class="row">
-			<?php echo $form->textFieldRow($model, 'subject', array('size' => 60, 'maxlength' => 128, 'style' => 'width: 400px;')); ?>
+			<?php echo $form->dropDownListRow($model, 'subject', Dictionaries::$aSubjectsQuestions, array('class' => 'span4')); ?>
 		</div>
 
 		<div class="row">
-			<?php echo $form->textAreaRow($model, 'body', array('rows' => 10, 'cols' => 100, 'style' => 'width: 400px;')); ?>
+			<?php echo $form->textAreaRow($model, 'body', array('rows' => 10, 'cols' => 100, 'class' => 'span6')); ?>
 		</div>
 
 		<?php if (CCaptcha::checkRequirements()): ?>
 			<div class="row">
 				<?php echo $form->labelEx($model, 'verifyCode'); ?>
 				<div>
-					<?php $this->widget('CCaptcha'); ?>
-					<?php echo $form->textField($model, 'verifyCode'); ?>
-				</div>
-				<div class="hint">Please enter the letters as they are shown in the image above. <br />Letters are not
-					case-sensitive.
+					<?php $this->widget('CCaptcha'); ?><br />
+					<?php echo $form->textField($model, 'verifyCode', array('class' => 'span4')); ?>
 				</div>
 				<?php echo $form->error($model, 'verifyCode'); ?>
 			</div>
 		<?php endif; ?>
 
-		<div class="form-actions">
+		<div class="row">
 			<?php
 			$this->widget('bootstrap.widgets.TbButton', array(
 				'id'         => 'send',
 				'buttonType' => 'submit',
 				'type'       => 'primary',
-				'label'      => 'Отправить',
+				'label' => 'Спросить',
 			));
 			?>
 		</div>
