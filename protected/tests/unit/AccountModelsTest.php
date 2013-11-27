@@ -528,9 +528,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$aYears = Dictionaries::getYears();
 		$aMonths = Dictionaries::$aMonthsDigital;
 
-		$sCardPan = (rand(1, 100) > 50)
-			? rand(15600000000000000, 15699999999999999)
-			: rand(16700000000000000, 16799999999999999);
+		$sCardPan = rand(16000000000000000, 16999999999999999);
 
 		return array(
 			array(
