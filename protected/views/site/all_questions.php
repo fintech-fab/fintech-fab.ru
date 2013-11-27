@@ -17,7 +17,6 @@
 			</td>
 			<td>
 				<?php foreach ($oGroup->questions as $oQuestion) {
-					$collapse = $this->beginWidget('bootstrap.widgets.TbCollapse', array('id' => 'questions' . $oQuestion->id));
 					?>
 
 					<div class="accordion-group">
@@ -32,8 +31,8 @@
 						</div>
 					</div>
 
-					<?php $this->endWidget();
-				} ?>
+
+				<?php } ?>
 			</td>
 		</tr>
 	<?php
