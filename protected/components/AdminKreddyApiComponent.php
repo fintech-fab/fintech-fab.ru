@@ -1674,8 +1674,14 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code' => $sSmsCode));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK && isset($aResult['token'])) {
 			$this->setLastSmsMessage($aResult['sms_message']);
+
+			//обновляем токен сессии в связи со сменой пароля (иначе разлогинит, т.к. пароль в старом токене другой)
+			$this->setSessionToken($aResult['token']);
+			$this->token = $aResult['token'];
+			//ставим флаг успешной СМС-авторизации
+			$this->setSmsAuthDone(true);
 
 			return true;
 		} else {
