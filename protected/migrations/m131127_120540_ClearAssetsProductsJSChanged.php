@@ -3,8 +3,10 @@ class m131127_120540_ClearAssetsProductsJSChanged extends CDbMigration
 {
 	public function up()
 	{
-		$this->execute("");
-
+		if (Yii::app()->hasComponent('cache')) {
+			Yii::app()->getComponent('cache')->flush();
+			echo "Cache flused\n";
+		}
 
 		$this->clearAssets();
 	}
@@ -44,8 +46,6 @@ class m131127_120540_ClearAssetsProductsJSChanged extends CDbMigration
 		echo "m131127_120540_ClearAssetsProductsJSChanged does not support migration down.\n";
 
 		return false;
-
-		$this->execute("");
 	}
 
 	/*	// Use safeUp/safeDown to do migration with transaction	public function safeUp()	{	}
