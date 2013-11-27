@@ -106,7 +106,7 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 
 		<?php if (Yii::app()->adminKreddyApi->getBankCardPan()) { ?>
 			<p>
-				<strong>Номер карты:</strong>    <?= Yii::app()->adminKreddyApi->getBankCardPan() ?>
+				<strong>Банковская карта:</strong>    <?= Yii::app()->adminKreddyApi->getBankCardPan() ?>
 			</p>
 		<?php } ?>
 		<p>
