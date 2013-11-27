@@ -1,8 +1,6 @@
 <?php
-/**
- * Class FooterLinksController
- */
-class FooterLinksController extends Controller
+
+class FaqQuestionController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -21,9 +19,6 @@ class FooterLinksController extends Controller
 		);
 	}
 
-	/**
-	 * @return array
-	 */
 	public function actions()
 	{
 		return array(
@@ -41,9 +36,9 @@ class FooterLinksController extends Controller
 					'types' => 'txt, pdf, doc, docx',
 				)
 			),
-			'toggle' => array(
+			'toggle'      => array(
 				'class'     => 'bootstrap.actions.TbToggleAction',
-				'modelName' => 'FooterLinks',
+				'modelName' => 'FaqQuestion',
 			)
 		);
 	}
@@ -69,7 +64,7 @@ class FooterLinksController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'imageUpload', 'view', 'sort', 'toggle'),
+				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
@@ -97,15 +92,22 @@ class FooterLinksController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new FooterLinks;
+		$oFaqGroup = FaqGroup::model()->findAll();
 
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+		if (empty($oFaqGroup)) {
+			$this->render('no_groups');
+			Yii::app()->end();
+		}
 
-		if (isset($_POST['FooterLinks'])) {
-			$model->attributes = $_POST['FooterLinks'];
+		$model = new FaqQuestion;
+
+// Uncomment the following line if AJAX validation is needed
+// $this->performAjaxValidation($model);
+
+		if (isset($_POST['FaqQuestion'])) {
+			$model->attributes = $_POST['FaqQuestion'];
 			if ($model->save()) {
-				$this->redirect(array('view', 'id' => $model->link_id));
+				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
 
@@ -124,19 +126,32 @@ class FooterLinksController extends Controller
 	{
 		$model = $this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+// Uncomment the following line if AJAX validation is needed
+// $this->performAjaxValidation($model);
 
-		if (isset($_POST['FooterLinks'])) {
-			$model->attributes = $_POST['FooterLinks'];
+		if (isset($_POST['FaqQuestion'])) {
+			$model->attributes = $_POST['FaqQuestion'];
 			if ($model->save()) {
-				$this->redirect(array('view', 'id' => $model->link_id));
+				$this->redirect(array('view', 'id' => $model->id));
 			}
 		}
 
 		$this->render('update', array(
 			'model' => $model,
 		));
+	}
+
+	public function actionSort()
+	{
+		if (Yii::app()->request->isAjaxRequest) {
+			if (isset($_POST['items']) && is_array($_POST['items'])) {
+				foreach ($_POST['items'] as $key => $val) {
+					FaqQuestion::model()->updateByPk($val, array(
+						'sort_order' => ($key + 1)
+					));
+				}
+			}
+		}
 	}
 
 	/**
@@ -147,11 +162,16 @@ class FooterLinksController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		if (Yii::app()->request->isPostRequest) {
+// we only allow deletion via POST request
+			$this->loadModel($id)->delete();
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if (!isset($_GET['ajax'])) {
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			if (!isset($_GET['ajax'])) {
+				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			}
+		} else {
+			throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
 		}
 	}
 
@@ -160,7 +180,7 @@ class FooterLinksController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider = new CActiveDataProvider('FooterLinks');
+		$dataProvider = new CActiveDataProvider('FaqQuestion');
 		$this->render('index', array(
 			'dataProvider' => $dataProvider,
 		));
@@ -171,10 +191,10 @@ class FooterLinksController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model = new FooterLinks('search');
+		$model = new FaqQuestion('search');
 		$model->unsetAttributes(); // clear any default values
-		if (isset($_GET['FooterLinks'])) {
-			$model->attributes = $_GET['FooterLinks'];
+		if (isset($_GET['FaqQuestion'])) {
+			$model->attributes = $_GET['FaqQuestion'];
 		}
 
 		$this->render('admin', array(
@@ -182,31 +202,15 @@ class FooterLinksController extends Controller
 		));
 	}
 
-	public function actionSort()
-	{
-		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['items']) && is_array($_POST['items'])) {
-				foreach ($_POST['items'] as $key => $val) {
-					FooterLinks::model()->updateByPk($val, array(
-						'link_order' => ($key + 1)
-					));
-				}
-			}
-		}
-	}
-
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 *
-	 * @param integer $id the ID of the model to be loaded
-	 *
-	 * @return FooterLinks the loaded model
-	 * @throws CHttpException
+	 * @param integer the ID of the model to be loaded
 	 */
 	public function loadModel($id)
 	{
-		$model = FooterLinks::model()->findByPk($id);
+		$model = FaqQuestion::model()->findByPk($id);
 		if ($model === null) {
 			throw new CHttpException(404, 'The requested page does not exist.');
 		}
@@ -217,11 +221,11 @@ class FooterLinksController extends Controller
 	/**
 	 * Performs the AJAX validation.
 	 *
-	 * @param FooterLinks $model the model to be validated
+	 * @param CModel the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'footer-links-form') {
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'faq-question-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

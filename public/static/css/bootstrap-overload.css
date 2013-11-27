@@ -167,7 +167,7 @@ label, input, button, select, textarea {
 	line-height: 18px;
 }
 
-.accordion-group {
+.form .accordion-group, .form-horizontal .accordion-group {
 	margin-bottom: 2px;
 	border-top: 2px dashed rgb(229, 229, 229);
 	border-left: 0;

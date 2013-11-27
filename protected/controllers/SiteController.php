@@ -123,34 +123,49 @@ class SiteController extends Controller
 		$this->render('contact');
 	}
 
-	/*public function actionContactUs()
+	public function actionFaq()
 	{
-		$model = new ContactForm;
-		$aPost = Yii::app()->request->getParam('ContactForm');
+		// номер активной вкладки, по умолчанию - первая
+		$iActiveTab = 1;
+
+		$oModel = new ContactForm;
+		$aPost = Yii::app()->request->getPost('ContactForm');
+
+		$iSite = 1;
+		if (SiteParams::getIsIvanovoSite()) {
+			$iSite = 2;
+		}
+
+		$aGroups = FaqGroup::getSiteGroups($iSite);
+		$sViewQuestions = (empty($aGroups)) ? 'no_questions' : 'all_questions';
+		$sTableQuestions = $this->renderPartial($sViewQuestions, array('model' => $aGroups), true);
 
 		if (isset($aPost)) {
-			$model->setAttributes($aPost);
-			if ($model->validate()) {
-				/*$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
-				$headers="From: $name <{$model->email}>\r\n".
-					"Reply-To: {$model->email}\r\n".
-					"MIME-Version: 1.0\r\n".
-					"Content-type: text/plain; charset=UTF-8";
+			// изменяем номер активной вкладки на 2 - с формой отправки
+			$iActiveTab = 2;
 
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);*/
-	/*$sEmail = 'i.popov@fintech-fab.ru';
-	$sSubject = $model->subject;
-	$sMessage = $model->body;
+			$oModel->setAttributes($aPost);
+			if ($oModel->validate()) {
+				$sEmail = SiteParams::getContactEmail();
+				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[$oModel->subject];
+				$sMessage =
+					"Имя: " . $oModel->name . "\r\n" .
+					"Телефон: " . $oModel->phone . "\r\n" .
+					"E-Mail: " . $oModel->email . "\r\n" .
+					"\r\n" .
+					"Вопрос: \r\n" .
+					$oModel->body;
 
-	EmailComponent::sendEmail($sEmail, $sSubject, $sMessage);
+				EmailComponent::sendEmail($sEmail, $sSubject, $sMessage);
 
-	Yii::app()->user->setFlash('contact', 'Thank you for contacting us. We will respond to you as soon as possible.');
-	$this->refresh();
-}
-}
-$this->render('contact_us', array('model' => $model));
-}*/
+				Yii::app()->user->setFlash('contact', Dictionaries::C_FAQ_SUCCESS);
+			}
+		}
+
+		$sForm = $this->renderPartial('contact_us', array('model' => $oModel), true);
+
+		$this->render('faq', array('sForm' => $sForm, 'sTableQuestions' => $sTableQuestions, 'iActiveTab' => $iActiveTab));
+	}
 
 	/**
 	 * Displays the login page

@@ -23,20 +23,20 @@ class MenuWidget extends CWidget
 				array(
 					'label' => 'Список страниц',
 					//'name'  => 'index',
-					'url'=>array('/admin/pages/index')
+					'url'   => array('/admin/pages/index')
 				),
 				array(
 					'label' => 'Добавить страницу',
 					//'name'  => 'create',
-					'url'=>array('/admin/pages/create')
+					'url'   => array('/admin/pages/create')
 				),
 				array(
 					'label' => 'Управление страницами',
-					'url'  => array('/admin/pages/admin'),
+					'url'   => array('/admin/pages/admin'),
 				),
 				array(
 					'label'   => 'Редактировать текущую страницу',
-					'url'    => (!empty($oPagesModel)) ? array('/admin/pages/update/'. $oPagesModel->page_id) : null,
+					'url'     => (!empty($oPagesModel)) ? array('/admin/pages/update/' . $oPagesModel->page_id) : null,
 					'visible' => $bViewPage,
 				),
 				array(
@@ -55,15 +55,15 @@ class MenuWidget extends CWidget
 				'name' => 'tabs', 'label' => 'Вкладки', 'content' => array(
 				array(
 					'label' => 'Список вкладок',
-					'url'  => array('/admin/tabs/index'),
+					'url'   => array('/admin/tabs/index'),
 				),
 				array(
 					'label' => 'Добавить вкладку',
-					'url'  => array('/admin/tabs/create'),
+					'url'   => array('/admin/tabs/create'),
 				),
 				array(
 					'label' => 'Управление вкладками',
-					'url'  => array('/admin/tabs/admin'),
+					'url'   => array('/admin/tabs/admin'),
 				),
 			),
 			),
@@ -71,15 +71,47 @@ class MenuWidget extends CWidget
 				'name' => 'footerLinks', 'label' => 'Нижние ссылки', 'content' => array(
 				array(
 					'label' => 'Список ссылок',
-					'url'  => array('/admin/footerLinks/index'),
+					'url'   => array('/admin/footerLinks/index'),
 				),
 				array(
 					'label' => 'Добавить ссылку',
-					'url'  => array('/admin/footerLinks/create'),
+					'url'   => array('/admin/footerLinks/create'),
 				),
 				array(
 					'label' => 'Управление ссылками',
-					'url'  => array('/admin/footerLinks/admin'),
+					'url'   => array('/admin/footerLinks/admin'),
+				),
+			),
+			),
+			array(
+				'name' => 'faqGroup', 'label' => 'FAQ: категории вопросов', 'content' => array(
+				array(
+					'label' => 'Список категорий',
+					'url'   => array('/admin/faqGroup/index'),
+				),
+				array(
+					'label' => 'Добавить категорию',
+					'url'   => array('/admin/faqGroup/create'),
+				),
+				array(
+					'label' => 'Управление категориями',
+					'url'   => array('/admin/faqGroup/admin'),
+				),
+			),
+			),
+			array(
+				'name' => 'faqQuestion', 'label' => 'FAQ: вопросы', 'content' => array(
+				array(
+					'label' => 'Список вопросов',
+					'url'   => array('/admin/faqQuestion/index'),
+				),
+				array(
+					'label' => 'Добавить вопрос',
+					'url'   => array('/admin/faqQuestion/create'),
+				),
+				array(
+					'label' => 'Управление вопросами',
+					'url'   => array('/admin/faqQuestion/admin'),
 				),
 			),
 			),
@@ -87,7 +119,7 @@ class MenuWidget extends CWidget
 				'name' => 'files', 'label' => 'Изображения', 'content' => array(
 				array(
 					'label' => 'Управление изображениями',
-					'url'  => array('/admin/files/imagesAdmin'),
+					'url'   => array('/admin/files/imagesAdmin'),
 				),
 			),
 			),

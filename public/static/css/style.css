@@ -100,11 +100,6 @@ section .intro, div .intro {
 	margin-bottom: 0;
 }
 
-.carousel-indicators {
-	left: 25px;
-	top: 250px;
-}
-
 .carousel-control {
 	left: 0;
 
