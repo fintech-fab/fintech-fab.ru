@@ -13,6 +13,7 @@ class AnketaSenderCommand extends CConsoleCommand
 
 	public function actionSendAnketa()
 	{
+		// выбираем только тех, кого ещё не "чистили"
 		$sSql = "SELECT * from `tbl_client` WHERE `flag_sms_confirmed` = '0'
 		AND `dt_update` <= TIMESTAMP((NOW() - INTERVAL 1 DAY))
 		AND `last_name` != '*'
@@ -23,7 +24,6 @@ class AnketaSenderCommand extends CConsoleCommand
 		$oDataReader = Yii::app()->db->createCommand($sSql)->query();
 
 		while (($oClient = $oDataReader->read()) !== false) {
-			// todo смотрим, на каком этапе данный клиент ....
 			$sLastName = (!empty($oClient['last_name'])) ? $oClient['last_name'] : '-';
 			$sFirstName = (!empty($oClient['first_name'])) ? $oClient['first_name'] : '-';
 			$sThirdName = (!empty($oClient['third_name'])) ? $oClient['third_name'] : '-';
@@ -33,7 +33,7 @@ class AnketaSenderCommand extends CConsoleCommand
 			$this->sClientsInfo .= "Телефон: $sPhone\r\nE-mail: $sEmail\r\nФИО: $sLastName $sFirstName $sThirdName \r\n\r\n=================================================\r\n\r\n";
 		}
 
-		$sEmail = 'e.barsova@fintech-fab.ru'; //todo
+		$sEmail = SiteParams::getContactEmail();
 		$sSubject = "Анкеты, не до конца заполненные Клиентами";
 
 		EmailComponent::sendEmail($sEmail, $sSubject, $this->sClientsInfo);
