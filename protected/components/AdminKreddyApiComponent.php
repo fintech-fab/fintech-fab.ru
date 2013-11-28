@@ -631,7 +631,7 @@ class AdminKreddyApiComponent
 		);
 		//проверяем, что текущий статус находится в списке статусов, для которых нужно выдать имя канала
 		if (in_array($sStatusName, $aStatuses)) {
-			$iActiveLoanChannelId = 20; //Yii::app()->adminKreddyApi->getSubscriptionActiveLoanChannelId();
+			$iActiveLoanChannelId = Yii::app()->adminKreddyApi->getSubscriptionActiveLoanChannelId();
 			$sChannelName = Yii::app()->productsChannels->formatChannelNameForStatus(Yii::app()->adminKreddyApi->getChannelNameById($iActiveLoanChannelId));
 
 		} else {
