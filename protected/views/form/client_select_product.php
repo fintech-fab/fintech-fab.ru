@@ -76,7 +76,7 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 
 	<div class="span8 offset2">
 		<div class="alert in alert-block fade alert-info center">
-			<strong>Если Вы являетесь нашим Клиентом, воспользуйтесь <?=
+			<strong>Если Вы уже являетесь нашим Клиентом, воспользуйтесь <?=
 				CHtml::link('Личным кабинетом', Yii::app()
 					->createUrl('account')) ?>.</strong>
 		</div>
