@@ -43,7 +43,8 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 			?>
 			<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
 		</div>
-		<br/>
+		<br />
+
 		<div class="row">
 			<?php
 			$oClientCreateForm->channel_id = Yii::app()->clientForm->getSessionChannel();
@@ -55,28 +56,39 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 			<?= $form->radioButtonListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 		</div>
 	</div>
-		<?php $this->widget('SelectedProductWidget', array(
-			'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
-		)); ?>
+	<?php $this->widget('SelectedProductWidget', array(
+		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
+	)); ?>
 
-		<div class="clearfix"></div>
-		<div class="row span11">
-			<div class="form-actions">
-				<?php $this->widget('bootstrap.widgets.TbButton', array(
-					'buttonType' => 'submit',
-					'type'       => 'primary',
-					'label'      => 'Далее →',
-				)); ?>
-			</div>
+	<div class="clearfix"></div>
+	<div class="row span11">
+		<div class="form-actions">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'buttonType' => 'submit',
+				'type'       => 'primary',
+				'label'      => 'Далее →',
+			)); ?>
 		</div>
-		<?php
-
-		$this->endWidget();
-
-		?>
-
-		<?php $this->widget('YaMetrikaGoalsWidget', array(
-			'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
-		)); ?>
-
 	</div>
+
+	<div class="clearfix"></div>
+	<br />
+
+	<div class="span8 offset2">
+		<div class="alert in alert-block fade alert-info center">
+			<strong>Если Вы являетесь нашим Клиентом, воспользуйтесь <?=
+				CHtml::link('Личным кабинетом', Yii::app()
+					->createUrl('account')) ?>.</strong>
+		</div>
+	</div>
+	<?php
+
+	$this->endWidget();
+
+	?>
+
+	<?php $this->widget('YaMetrikaGoalsWidget', array(
+		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
+	)); ?>
+
+</div>
