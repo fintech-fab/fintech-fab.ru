@@ -177,7 +177,6 @@ class FormController extends Controller
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
 				//Yii::app()->user->setStateKeyPrefix('_account'); //префикс для модуля account
 				if ($oLogin->validate() && $oLogin->login()) {
-					Yii::app()->user->setFlash('success', 'Вы успешно зарегистрировались в системе.');
 					//сохраняем данные перед редиректом в ЛК
 					if (!empty($aClientData['product'])) {
 						Yii::app()->user->setState('product', $aClientData['product']);
@@ -192,10 +191,8 @@ class FormController extends Controller
 						Yii::app()->user->setState('flex_time', $aClientData['flex_time']);
 					}
 					Yii::app()->user->setState('new_client', true);
-					//очищаем сессию (данные формы и прочее)
-					Yii::app()->clientForm->clearClientSession();
 
-					$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
+					$this->redirect(Yii::app()->createUrl('form/success'));
 				}
 
 
@@ -207,6 +204,25 @@ class FormController extends Controller
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
+	}
+
+	public function actionSuccess()
+	{
+		$bNewClient = Yii::app()->user->getState('new_client', false);
+
+		// если не новый клиент, перемещаем на /form
+		if (!$bNewClient) {
+			$this->redirect(Yii::app()->createUrl("form"));
+		}
+
+		// очищаем сессию (данные формы и прочее)
+		Yii::app()->clientForm->clearClientSession();
+
+		$this->render('form_sent',
+			array(
+				'sRedirectUri' => Yii::app()->createUrl('account/subscribe'),
+			)
+		);
 	}
 
 
