@@ -61,6 +61,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->error($model, 'sCardMonth'); ?>
 <?= $form->error($model, 'sCardYear'); ?>
 
+<?= $form->textFieldRow($model, 'sCardHolderName', array('size' => '20', 'maxlength' => '50')); ?>
+
 <?= $form->textFieldRow($model, 'sCardCvc', array('style' => 'width: 60px;', 'size' => '3', 'maxlength' => '3')); ?>
 
 <?= $form->checkBoxRow($model, 'bConfirm'); ?>

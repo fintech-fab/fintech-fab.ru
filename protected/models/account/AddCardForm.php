@@ -12,6 +12,7 @@ class AddCardForm extends CFormModel
 	public $sCardPan;
 	public $sCardMonth;
 	public $sCardYear;
+	public $sCardHolderName;
 	public $sCardCvc;
 	public $bConfirm;
 	public $iCardType;
@@ -22,7 +23,7 @@ class AddCardForm extends CFormModel
 	public function rules()
 	{
 		$aRules = array(
-			array('sCardPan, sCardMonth, sCardYear, sCardCvc, iCardType', 'required'),
+			array('sCardPan, sCardMonth, sCardYear, sCardHolderName, sCardCvc, iCardType', 'required'),
 			array('iCardType', 'required', 'message' => 'Выберите тип карты Mastercard либо Maestro'),
 
 			array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.'),
@@ -41,6 +42,10 @@ class AddCardForm extends CFormModel
 			array(
 				'sCardYear', 'in', 'range'   => array_keys(Dictionaries::getYears()),
 				                   'message' => 'Выберите год из списка'
+			),
+			array(
+				'sCardHolderName', 'match', 'message' => 'Имя держателя должен состоять только из латинских букв',
+				                            'pattern' => '/^[a-z\s]+$/i'
 			),
 			array(
 				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
@@ -64,12 +69,13 @@ class AddCardForm extends CFormModel
 		//'bConfirm'  => 'Я подтверждаю правильность введенных мною данных.',
 
 		$aLabels = array(
-			'sCardPan'   => 'Номер карты',
-			'sCardMonth' => 'Срок окончания',
-			'sCardYear'  => 'Год',
-			'sCardCvc'   => 'Код CVC',
-			'bConfirm'  => 'Я подтверждаю согласие на блокировку случайной суммы на указанной банковской карте.',
-			'iCardType' => 'Тип банковской карты',
+			'sCardPan'        => 'Номер карты',
+			'sCardMonth'      => 'Срок окончания',
+			'sCardYear'       => 'Год',
+			'sCardCvc'        => 'Код CVC',
+			'sCardHolderName' => 'Имя держателя',
+			'bConfirm'        => 'Я подтверждаю согласие на блокировку случайной суммы на указанной банковской карте.',
+			'iCardType'       => 'Тип банковской карты',
 		);
 
 		if (!Yii::app()->adminKreddyApi->checkCardVerifyExists()) {
@@ -89,6 +95,7 @@ class AddCardForm extends CFormModel
 			'sCardMonth',
 			'sCardYear',
 			'sCardCvc',
+			'sCardHolderName',
 			'iCardType',
 		);
 	}
