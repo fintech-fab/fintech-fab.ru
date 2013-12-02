@@ -2,35 +2,33 @@
 /* @var FormController $this */
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
-
-/*
- * Цифровой код
- * Согласие с условиями и передачей данных
- */
+/* @var string $sRedirectUri */
 
 $this->pageTitle = Yii::app()->name;
 
+// перенаправляем на следующую страницу....
+Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
 <div class="row">
 
-	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps' => 'sms',
-	)); ?>
-
 	<div class="span12">
-		<div class="alert in alert-block fade alert-info"><strong>Вы успешно зарегистрировались в системе. </strong>
-			Ожидайте результата по SMS. Если у Вас есть вопросы - позвоните нам 8-800-555-75-78!
+		<div class="alert in alert-block fade alert-success"><strong>Вы успешно зарегистрировались в системе. </strong>
 		</div>
+
 		<?php $this->widget(
 			'bootstrap.widgets.TbButton',
 			array(
 				'label' => 'Перейти в личный кабинет »',
 				'type'  => 'primary',
-				'url'   => Yii::app()->createUrl('/account/subscribe'),
+				'url' => Yii::app()->createUrl('/account/doSubscribe'),
 			)
 		); ?>
 	</div>
+
+	<?php $this->widget('YaMetrikaGoalsWidget', array(
+		'iDoneSteps' => 3, //TODO: изменить
+	)); ?>
 
 </div>
 

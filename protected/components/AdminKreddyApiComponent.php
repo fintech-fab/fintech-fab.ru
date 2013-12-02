@@ -1778,14 +1778,12 @@ class AdminKreddyApiComponent
 	 */
 	public function checkCanVerifyCard()
 	{
-
 		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
-			$this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
+			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
 		}
 
 		if (!$this->getIsError()) {
 			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));
-
 			$this->bCardVerifyExists = (!empty($aResult['verify_exists']));
 		}
 
