@@ -31,14 +31,5 @@ function showConditions(products, channels) {
 	var n = products.attr('data-time');
 	$('.date').html(getDateToPayUntil(n));
 	$('.final_price').html(products.attr('data-final-price'));
-	var channel = channels.find('input:checked').parent().find("label > span").html();
-	$('.channel').html(channel);
-
-	if (channel.search(/карт/) != -1) {
-		$('.attention_card').show();
-		$('.attention_mobile').hide();
-	} else {
-		$('.attention_card').hide();
-		$('.attention_mobile').show();
-	}
+	$('.channel').html(channels.find('input:checked').parent().find("label > span").html());
 }
