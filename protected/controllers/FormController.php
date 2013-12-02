@@ -220,7 +220,7 @@ class FormController extends Controller
 
 		$this->render('form_sent',
 			array(
-				'sRedirectUri' => Yii::app()->createUrl('account/subscribe'),
+				'sRedirectUri' => Yii::app()->createUrl('account/doSubscribe'),
 			)
 		);
 	}
