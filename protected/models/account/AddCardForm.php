@@ -37,15 +37,15 @@ class AddCardForm extends CFormModel
 			),
 			array(
 				'sCardMonth', 'in', 'range'   => array_keys(Dictionaries::$aMonthsDigital),
-				                    'message' => 'Выберите месяц из списка'
+				                    'message' => 'Выберите корректный месяц'
 			),
 			array(
 				'sCardYear', 'in', 'range'   => array_keys(Dictionaries::getYears()),
-				                   'message' => 'Выберите год из списка'
+				                   'message' => 'Выберите корректный год'
 			),
 			array(
-				'sCardHolderName', 'match', 'message' => 'Имя держателя должен состоять только из латинских букв',
-				                            'pattern' => '/^[a-z\s]+$/i'
+				'sCardHolderName', 'match', 'message' => 'Имя держателя должно состоять только из латинских букв',
+			                                'pattern' => '/^[a-z\s]+$/i'
 			),
 			array(
 				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',

@@ -36,34 +36,38 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				станут доступны и на карты Visa. Благодарим за понимание!
 			</li>
 			<?php if (Yii::app()->adminKreddyApi->checkCardVerifyExists()): ?>
-				<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
-				карте должно быть не менее 10 рублей.
-			</li>
+				<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание -
+					на карте должно быть не менее 10 рублей.
+				</li>
 			<?php endif; ?>
 		</ul>
 		<p>
 			<strong>Будьте внимательны! Количество попыток ввода данных строго ограничено.</strong>
 		</p>
 	</div>
+<?= $form->errorSummary($model) ?>
 
-<?= $form->radioButtonListRow($model, 'iCardType', Dictionaries::$aCardTypes) ?>
-<?= $form->textFieldRow($model, 'sCardPan', array('size' => '20', 'maxlength' => '20')); ?>
+<?= $form->labelEx($model, 'iCardType') ?>
+<?= $form->radioButtonList($model, 'iCardType', Dictionaries::$aCardTypes) ?>
 
+	<div style="background: url('/static/img/bankcard.png'); width: 534px; height: 263px;">
+		<?= $form->textField($model, 'sCardPan', array('maxlength' => '20', "style" => "position: relative; top: 45px; left: 113px; width: 175px;")); ?>
 
-<?= $form->labelEx($model, 'sCardMonth', array('class' => 'control-label')); ?>
+		<?=
+		$form->typeAheadField($model, 'sCardMonth', array(
+			'source' => array_values(Dictionaries::$aMonthsDigital),
+		), array("style" => "position: relative; top: 100px; left: 13px; width: 24px;", 'maxlength' => '2')) ?>
 
-	<div class="controls">
-		<?= $form->dropDownList($model, 'sCardMonth', Dictionaries::$aMonthsDigital, array('style' => 'width: 60px;')); ?>
-		<span style="font-size: 14pt;">/</span>
-		<?= $form->dropDownList($model, 'sCardYear', Dictionaries::getYears(), array('style' => 'width: 80px;')); ?>
+		<?=
+		$form->typeAheadField($model, 'sCardYear', array(
+			'source' => array_values(Dictionaries::getYears()),
+		), array("style" => "position: relative; top: 100px; left: 27px; width: 24px;", 'maxlength' => '2')) ?>
+
+		<?= $form->textField($model, 'sCardCvc', array("style" => "position: relative; top: 101px; left: 125px; width: 35px;", 'size' => '3', 'mask' => '999', 'maxlength' => '3')); ?>
+
+		<?= $form->textField($model, 'sCardHolderName', array("style" => "position: relative; top: 125px; left: 53px; width: 235px;")); ?>
 	</div>
 
-<?= $form->error($model, 'sCardMonth'); ?>
-<?= $form->error($model, 'sCardYear'); ?>
-
-<?= $form->textFieldRow($model, 'sCardHolderName', array('size' => '20', 'maxlength' => '50')); ?>
-
-<?= $form->textFieldRow($model, 'sCardCvc', array('style' => 'width: 60px;', 'size' => '3', 'maxlength' => '3')); ?>
 
 <?= $form->checkBoxRow($model, 'bConfirm'); ?>
 
@@ -73,7 +77,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'type'       => 'primary',
 			'size'       => 'small',
 			'label'      => 'Привязать карту',
-		)); ?>
+		));
+		?>
 	</div>
 
 <?php
