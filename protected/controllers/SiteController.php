@@ -156,7 +156,7 @@ class SiteController extends Controller
 					"Вопрос: \r\n" .
 					$oModel->body;
 
-				EmailComponent::sendEmail($sEmail, $sSubject, $sMessage, 'info@kreddy.ru');
+				EmailComponent::sendEmail($sEmail, $sSubject, $sMessage, SiteParams::getEmailFrom());
 
 				Yii::app()->user->setFlash('contact', Dictionaries::C_FAQ_SUCCESS);
 			}

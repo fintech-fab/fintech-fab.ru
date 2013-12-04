@@ -195,10 +195,29 @@ class SiteParams
 		return (defined('SITE_IVANOVO')) ? SITE_IVANOVO : false;
 	}
 
+	/**
+	 * Возвращает адрес электронной почты, на который будут отправляться письма
+	 *
+	 * @return string
+	 */
 	public static function getContactEmail()
 	{
 		if (!empty(Yii::app()->params['contactEmail'])) {
 			return Yii::app()->params['contactEmail'];
+		}
+
+		return self::DEFAULT_EMAIL;
+	}
+
+	/**
+	 * Возвращает адрес, от которого приходит письмо, отправляемое с сервера
+	 *
+	 * @return string
+	 */
+	public static function getEmailFrom()
+	{
+		if (!empty(Yii::app()->params['emailFrom'])) {
+			return Yii::app()->params['emailFrom'];
 		}
 
 		return self::DEFAULT_EMAIL;
