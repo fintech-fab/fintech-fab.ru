@@ -23,8 +23,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 	<div class="alert alert-warning"><h4>Уважаемый Клиент:</h4>
 		<ul>
-			<li>Убедитесь, что банковская карта зарегистрирована на Ваше имя, не является предоплаченной, активна (не
-				заблокирована) и доступна для перечисления денег.
+			<li><?= AdminKreddyApiComponent::C_CARD_MSG_REQUIREMENTS; ?>
 			</li>
 			<?php
 			//если карта уже привязана, то выдаем предупреждение

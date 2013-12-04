@@ -39,6 +39,6 @@ class ClientDataSenderCommand extends CConsoleCommand
 		$sEmail = SiteParams::getContactEmail();
 		$sSubject = "Анкеты, не до конца заполненные Клиентами";
 
-		EmailComponent::sendEmail($sEmail, $sSubject, $this->sClientsInfo);
+		EmailComponent::sendEmail($sEmail, $sSubject, $this->sClientsInfo, 'info@kreddy.ru');
 	}
 }

@@ -18,7 +18,7 @@ function getDateToPayUntil(n) {
 function showConditions(products, channels) {
 	var final_price = parseInt(products.attr('data-price'));
 	var card = parseInt(channels.find('input:checked').parent().find("label > span").attr('data-card'));
-	if(card == 1){
+	if (card == 1) {
 		final_price += parseInt(products.attr('data-card'));
 	}
 
