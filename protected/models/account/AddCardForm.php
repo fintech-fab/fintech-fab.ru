@@ -45,7 +45,7 @@ class AddCardForm extends CFormModel
 			),
 			array(
 				'sCardHolderName', 'match', 'message' => 'Имя держателя должно состоять только из латинских букв',
-			                                'pattern' => '/^[a-z\s]+$/i'
+				                            'pattern' => '/^[A-Z\s]+$/'
 			),
 			array(
 				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
@@ -98,6 +98,18 @@ class AddCardForm extends CFormModel
 			'sCardHolderName',
 			'iCardType',
 		);
+	}
+
+	/**
+	 * перед валидацией приводим поле "Имя держателя" к верхнему регистру
+	 */
+	public function beforeValidate()
+	{
+		if (!empty($this->sCardHolderName)) {
+			$this->sCardHolderName = mb_convert_case($this->sCardHolderName, MB_CASE_UPPER, 'utf-8');
+		}
+
+		return parent::beforeValidate();
 	}
 
 	/**
