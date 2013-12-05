@@ -466,7 +466,8 @@ class AdminKreddyApiComponent
 			'code'         => self::ERROR_AUTH,
 			'client_data'  => array(
 				'is_debt'  => null,
-				'fullname' => ''
+				'fullname'   => '',
+				'client_new' => null
 			),
 			'active_loan'  => array(
 				'balance'    => false,
@@ -522,7 +523,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (isset($aClientInfo['client_data']['client_new'])) ? $aClientInfo['client_data']['client_new'] : true;
+		return $aClientInfo['client_data']['client_new'];
 	}
 
 	/**
