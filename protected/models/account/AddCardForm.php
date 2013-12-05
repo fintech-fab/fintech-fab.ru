@@ -38,8 +38,8 @@ class AddCardForm extends CFormModel
 				'sCardPan', 'checkValidCardPan', 'iCardType' => 'iCardType', 'message' => 'Номер карты неправильный. Проверьте тип выбранной карты и ее номер.',
 			),
 			array(
-				'sCardHolderName', 'match', 'message' => 'Имя держателя должно состоять только из латинских букв',
-				                            'pattern' => '/^[A-Z\s]+$/'
+				'sCardHolderName', 'match', 'message' => 'Имя держателя не должно содержать цифр и русских букв',
+				                            'pattern' => '/^[^а-яё0-9]+$/ui'
 			),
 			array(
 				'sCardValidThru', 'checkValidCardValidThru', 'messageInvalidMonth' => 'Проверьте срок действия карты (некорректно указан месяц)',
