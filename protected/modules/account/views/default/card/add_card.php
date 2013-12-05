@@ -6,13 +6,9 @@
 
 $this->pageTitle = Yii::app()->name . " - Привязка банковской карты";
 
-// по умолчанию выбираем первый тип карты
-if (empty($model->iCardType)) {
-	$model->iCardType = reset(array_keys(Dictionaries::$aCardTypes));
-}
-
 // путь до соответствующей картинки:
-$sImagePath = mb_convert_case(Dictionaries::$aCardTypes[$model->iCardType], MB_CASE_LOWER, 'utf-8');
+$sImagePath = (!empty($model->iCardType)) ? ('url(\'' . Yii::app()
+		->getBaseUrl() . '/static/img/bankcard/icon-' . mb_convert_case(Dictionaries::$aCardTypes[$model->iCardType], MB_CASE_LOWER, 'utf-8') . '.gif\') ') : 'none';
 ?>
 	<h4>Привязка банковской карты</h4>
 
@@ -46,8 +42,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				станут доступны и на карты Visa. Благодарим за понимание!
 			</li>
 			<?php if (Yii::app()->adminKreddyApi->checkCardVerifyExists()): ?>
-				<li>На Вашей карте будет заблокирована случайная сумма не более чем на 2 часа. Обращаем Ваше внимание -
-					на карте должно быть не менее 10 рублей.
+				<li>На Вашей карте будет заморожена случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
+					карте должно быть не менее 10 рублей.
 				</li>
 			<?php endif; ?>
 		</ul>
@@ -67,7 +63,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 		<?= $form->textField($model, 'sCardHolderName', array("style" => "position: relative; top: 191px; left: -276px; width: 183px;", 'placeholder' => "MR. CARDHOLDER")); ?>
 
-		<div style="position: relative; top: 120px; left: 257px; width: 82px; height: 44px; background: url('/static/img/bankcard/icon-<?= $sImagePath; ?>.gif') " id="cardType"></div>
+		<div style="position: relative; top: 120px; left: 257px; width: 82px; height: 44px; background: <?= $sImagePath ?>" id="cardType"></div>
 	</div>
 
 <?= $form->checkBoxRow($model, 'bConfirm'); ?>
@@ -93,22 +89,29 @@ height: 14px;
 }');
 
 // TODO: добавить для visa
-Yii::app()->clientScript->registerScript('cardType', '
-oCardPan = $("#' . get_class($model) . '_sCardPan");
+$sScript = 'oCardPan = $("#' . get_class($model) . '_sCardPan");
 oCardTypeField = $("#' . get_class($model) . '_iCardType");
+var regexp;
 
-oCardPan.bind( "change click keydown keyup", function() {
+oCardPan.bind( "change click keydown keyup blur", function() {
 	if(oCardPan.val() == ""){
 		return;
 	}
 
-	if($.trim(oCardPan.val())[0] === "5" ) { // mastercard
-		oCardTypeField.val(1);
-		$("#cardType").css("backgroundImage", "url(' . Yii::app()->getBaseUrl() . '/static/img/bankcard/icon-mastercard.gif)");
-	}
-	if($.trim(oCardPan.val())[0] === "6" ) { // maestro
-		oCardTypeField.val(2);
-		$("#cardType").css("backgroundImage", "url(' . Yii::app()->getBaseUrl() . '/static/img/bankcard/icon-maestro.gif)");
-	}
+	$("#cardType").css("backgroundImage", "none");';
+
+foreach (Dictionaries::$aCardTypes as $iKey => $oType) {
+	$sScript .= '
+	regexp = ' . Dictionaries::$aCardTypesRegexp[$iKey] . ';
+	if(regexp.test($.trim(oCardPan.val()))) {
+		oCardTypeField.val(' . $iKey . ');
+		$("#cardType").css("backgroundImage", "url(' . Yii::app()
+			->getBaseUrl() . '/static/img/bankcard/icon-' . mb_convert_case($oType, MB_CASE_LOWER, 'utf-8') . '.gif)");
+	}';
+}
+
+$sScript .= '
 });
-', CClientScript::POS_END);
+';
+
+Yii::app()->clientScript->registerScript('cardType', $sScript, CClientScript::POS_END);
