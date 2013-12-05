@@ -5,12 +5,21 @@
 /* @var $sError */
 
 $this->pageTitle = Yii::app()->name . " - Привязка банковской карты";
+
+// по умолчанию выбираем первый тип карты
+if (empty($model->iCardType)) {
+	$model->iCardType = reset(array_keys(Dictionaries::$aCardTypes));
+}
+
+// путь до соответствующей картинки:
+$sImagePath = mb_convert_case(Dictionaries::$aCardTypes[$model->iCardType], MB_CASE_LOWER, 'utf-8');
 ?>
 	<h4>Привязка банковской карты</h4>
 
 <?php if (!empty($sError)): ?>
 	<div class="alert alert-error"><?= $sError ?></div>
 <?php endif; ?>
+
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -21,6 +30,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	)
 ));
 ?>
+<?= $form->errorSummary($model) ?>
+
 	<div class="alert alert-warning"><h4>Уважаемый Клиент:</h4>
 		<ul>
 			<li><?= AdminKreddyApiComponent::C_CARD_MSG_REQUIREMENTS; ?>
@@ -44,29 +55,20 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<strong>Будьте внимательны! Количество попыток ввода данных строго ограничено.</strong>
 		</p>
 	</div>
-<?= $form->errorSummary($model) ?>
 
-<?= $form->labelEx($model, 'iCardType') ?>
-<?= $form->radioButtonList($model, 'iCardType', Dictionaries::$aCardTypes) ?>
+<?= $form->hiddenField($model, 'iCardType') ?>
 
-	<div style="background: url('/static/img/bankcard.png'); width: 534px; height: 263px;">
-		<?= $form->textField($model, 'sCardPan', array('maxlength' => '20', "style" => "position: relative; top: 45px; left: 113px; width: 175px;")); ?>
+	<div style="background: url('/static/img/bankcard/cc-template.png'); width: 550px; height: 280px; margin-bottom: 15px;">
+		<?= $form->textField($model, 'sCardPan', array('maxlength' => '20', "style" => "position: relative; top: 136px; left: 40px; width: 183px;", 'placeholder' => "1234567812345678")); ?>
 
-		<?=
-		$form->typeAheadField($model, 'sCardMonth', array(
-			'source' => array_values(Dictionaries::$aMonthsDigital),
-		), array("style" => "position: relative; top: 100px; left: 13px; width: 24px;", 'maxlength' => '2')) ?>
+		<?= $form->maskedTextField($model, 'sCardValidThru', ' 99 / 99 ', array("style" => "position: relative; top: 164px; left: -29px; width: 53px;")); ?>
 
-		<?=
-		$form->typeAheadField($model, 'sCardYear', array(
-			'source' => array_values(Dictionaries::getYears()),
-		), array("style" => "position: relative; top: 100px; left: 27px; width: 24px;", 'maxlength' => '2')) ?>
+		<?= $form->maskedTextField($model, 'sCardCvc', '999', array("style" => "position: relative; top: 132px; left: 132px; width: 32px;", 'size' => '3', 'maxlength' => '3')); ?>
 
-		<?= $form->textField($model, 'sCardCvc', array("style" => "position: relative; top: 101px; left: 125px; width: 35px;", 'size' => '3', 'mask' => '999', 'maxlength' => '3')); ?>
+		<?= $form->textField($model, 'sCardHolderName', array("style" => "position: relative; top: 191px; left: -276px; width: 183px;", 'placeholder' => "MR. CARDHOLDER")); ?>
 
-		<?= $form->textField($model, 'sCardHolderName', array("style" => "position: relative; top: 125px; left: 53px; width: 235px;")); ?>
+		<div style="position: relative; top: 120px; left: 257px; width: 82px; height: 44px; background: url('/static/img/bankcard/icon-<?= $sImagePath; ?>.gif') " id="cardType"></div>
 	</div>
-
 
 <?= $form->checkBoxRow($model, 'bConfirm'); ?>
 
@@ -79,7 +81,34 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		));
 		?>
 	</div>
-
 <?php
 
 $this->endWidget();
+
+Yii::app()->clientScript->registerCss('formstyle', '
+input[type="text"] {
+background-color: transparent;
+border: 0px;
+height: 14px;
+}');
+
+// TODO: добавить для visa
+Yii::app()->clientScript->registerScript('cardType', '
+oCardPan = $("#' . get_class($model) . '_sCardPan");
+oCardTypeField = $("#' . get_class($model) . '_iCardType");
+
+oCardPan.bind( "change click keydown keyup", function() {
+	if(oCardPan.val() == ""){
+		return;
+	}
+
+	if($.trim(oCardPan.val())[0] === "5" ) { // mastercard
+		oCardTypeField.val(1);
+		$("#cardType").css("backgroundImage", "url(' . Yii::app()->getBaseUrl() . '/static/img/bankcard/icon-mastercard.gif)");
+	}
+	if($.trim(oCardPan.val())[0] === "6" ) { // maestro
+		oCardTypeField.val(2);
+		$("#cardType").css("backgroundImage", "url(' . Yii::app()->getBaseUrl() . '/static/img/bankcard/icon-maestro.gif)");
+	}
+});
+', CClientScript::POS_END);

@@ -267,7 +267,7 @@ class Dictionaries
 		$endYear = $curYear + $iQuantity;
 		$aYears = array();
 		for ($i = $curYear; $i <= $endYear; $i++) {
-			$aYears[$i] = $bAdd2000 ? (string)($i + 2000) : (string)$i; // без такого жёсткого приведения к string не работал typeahead
+			$aYears[$i] = $bAdd2000 ? ($i + 2000) : $i;
 		}
 
 		return $aYears;

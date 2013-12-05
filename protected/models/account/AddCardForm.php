@@ -17,48 +17,44 @@ class AddCardForm extends CFormModel
 	public $bConfirm;
 	public $iCardType;
 
+	public $sCardValidThru; // срок окончания: формат 09 / 15, из него потом берётся $sCardMonth, $sCardYear
+
 	/**
 	 * @return array
 	 */
 	public function rules()
 	{
 		$aRules = array(
-			array('sCardPan, sCardMonth, sCardYear, sCardHolderName, sCardCvc, iCardType', 'required'),
+			array('sCardPan, sCardValidThru, sCardHolderName, sCardCvc', 'required'),
 			array('iCardType', 'required', 'message' => 'Выберите тип карты Mastercard либо Maestro'),
 
 			array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.'),
 
 			array(
-				'sCardPan', 'match', 'message' => 'Номер карты должен содержать от 16 до 20 цифр',
-				                     'pattern' => '/^\d{16,20}$/'
+				'sCardPan', 'match', 'message' => 'Номер карты должен содержать от 16 до 18 цифр',
+				                     'pattern' => '/^\d{16,18}$/'
 			),
 			array(
 				'sCardPan', 'checkValidCardPan', 'iCardType' => 'iCardType', 'message' => 'Номер карты неправильный. Проверьте тип выбранной карты и ее номер.',
-			),
-			array(
-				'sCardMonth', 'in', 'range'   => array_keys(Dictionaries::$aMonthsDigital),
-				                    'message' => 'Выберите корректный месяц'
-			),
-			array(
-				'sCardYear', 'in', 'range'   => array_keys(Dictionaries::getYears()),
-				                   'message' => 'Выберите корректный год'
 			),
 			array(
 				'sCardHolderName', 'match', 'message' => 'Имя держателя должно состоять только из латинских букв',
 				                            'pattern' => '/^[A-Z\s]+$/'
 			),
 			array(
+				'sCardValidThru', 'checkValidCardValidThru', 'messageInvalidMonth' => 'Проверьте срок действия карты (некорректно указан месяц)',
+				                                             'messageInvalidYear'  => 'Проверьте срок действия карты (некорректно указан год)',
+			),
+			array(
 				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
 				                     'pattern' => '/^\d{3}$/'
 			),
-
 			array(
 				'iCardType', 'in', 'range' => array_keys(Dictionaries::$aCardTypes), 'message' => 'Выберите тип карты Mastercard либо Maestro'
 			),
 		);
 
 		return $aRules;
-
 	}
 
 	/**
@@ -70,7 +66,8 @@ class AddCardForm extends CFormModel
 
 		$aLabels = array(
 			'sCardPan'        => 'Номер карты',
-			'sCardMonth'      => 'Срок окончания',
+			'sCardValidThru' => 'Срок действия карты',
+			'sCardMonth'     => 'Месяц',
 			'sCardYear'       => 'Год',
 			'sCardCvc'        => 'Код CVC',
 			'sCardHolderName' => 'Имя держателя',
@@ -92,6 +89,7 @@ class AddCardForm extends CFormModel
 	{
 		return array(
 			'sCardPan',
+			'sCardValidThru',
 			'sCardMonth',
 			'sCardYear',
 			'sCardCvc',
@@ -101,15 +99,38 @@ class AddCardForm extends CFormModel
 	}
 
 	/**
-	 * перед валидацией приводим поле "Имя держателя" к верхнему регистру
+	 * перед валидацией приводим поле "Имя держателя" к верхнему регистру и убираем пробелы с номера карты
 	 */
 	public function beforeValidate()
 	{
+		if (!parent::beforeValidate()) {
+			return false;
+		}
+
 		if (!empty($this->sCardHolderName)) {
 			$this->sCardHolderName = mb_convert_case($this->sCardHolderName, MB_CASE_UPPER, 'utf-8');
 		}
 
-		return parent::beforeValidate();
+		if (!empty($this->sCardPan)) {
+			$this->sCardPan = trim($this->sCardPan);
+		}
+
+		return true;
+	}
+
+	/**
+	 * после валидации получаем поля месяц и год окончания
+	 */
+	public function afterValidate()
+	{
+		if (!empty($this->sCardValidThru)) {
+			list($sMonth, $sYear) = explode("/", $this->sCardValidThru);
+
+			$this->sCardMonth = trim($sMonth);
+			$this->sCardYear = trim($sYear);
+		}
+
+		parent::afterValidate();
 	}
 
 	/**
@@ -121,6 +142,17 @@ class AddCardForm extends CFormModel
 	public function checkValidCardPan($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkValidCardPan($attribute, $param);
+	}
+
+	/**
+	 * проверка корректности срока окончания
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidCardValidThru($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidCardValidThru($attribute, $param);
 	}
 
 	/**
