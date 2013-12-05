@@ -463,28 +463,33 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'         => self::ERROR_AUTH,
-			'client_data'  => array(
-				'is_debt'  => null,
+			'code'          => self::ERROR_AUTH,
+			'client_data'   => array(
+				'is_debt' => null,
 				'fullname'   => '',
 				'client_new' => null
 			),
-			'active_loan'  => array(
+			'active_loan'   => array(
 				'balance'    => false,
 				'expired'    => false,
 				'expired_to' => false
 			),
-			'subscription' => array(
+			'subscription'  => array(
 				'product'         => false,
 				'activity_to'     => false,
 				'available_loans' => false,
-				'balance'         => false
+				'balance'      => false,
+				'product_info' => array(
+					'channels' => array()
+				),
 			),
-			'moratoriums'  => array(
+			'moratoriums'   => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
-			)
+			),
+			'channels'      => array(),
+			'slow_channels' => array(),
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -535,11 +540,8 @@ class AdminKreddyApiComponent
 	public function getClientChannels()
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (isset($aClientInfo['channels']) && is_array($aClientInfo['channels'])) {
-			return $aClientInfo['channels'];
-		} else {
-			return array();
-		}
+
+		return $aClientInfo['channels'];
 	}
 
 	/**
@@ -550,11 +552,8 @@ class AdminKreddyApiComponent
 	public function getIsSlowChannel($iChannelId)
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (isset($aClientInfo['slow_channels']) && is_array($aClientInfo['slow_channels'])) {
-			return in_array($iChannelId, $aClientInfo['slow_channels']);
-		}
 
-		return false;
+		return in_array($iChannelId, $aClientInfo['slow_channels']);
 	}
 
 	/**
@@ -590,19 +589,11 @@ class AdminKreddyApiComponent
 	public function getClientSubscriptionChannels()
 	{
 		$aClientInfo = $this->getClientInfo();
-		//проверяем что все данные есть, и они в нужном формате
-		if (isset($aClientInfo['channels'])
-			&& is_array($aClientInfo['channels'])
-			&& isset($aClientInfo['subscription']['product_info']['channels'])
-			&& is_array($aClientInfo['subscription']['product_info']['channels'])
-		) {
-			//находим пересечение массивов, т.е. каналы, которые доступны пользователю, и при этом доступные для текущей подписки
-			$aChannels = array_intersect($aClientInfo['subscription']['product_info']['channels'], $aClientInfo['channels']);
 
-			return $aChannels;
-		} else {
-			return array();
-		}
+		//находим пересечение массивов, т.е. каналы, которые доступны пользователю, и при этом доступные для текущей подписки
+		$aChannels = array_intersect($aClientInfo['subscription']['product_info']['channels'], $aClientInfo['channels']);
+
+		return $aChannels;
 	}
 
 	/**
