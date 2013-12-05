@@ -434,7 +434,7 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, $aData);
 
-		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
+		if (isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -456,10 +456,12 @@ class AdminKreddyApiComponent
 	 */
 	public function getClientInfo()
 	{
+		//если данные уже были сохранены - возвращаем их без повторного запроса
 		if (isset($this->aClientInfo)) {
 			return $this->aClientInfo;
 		}
 
+		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
 			'code'         => self::ERROR_AUTH,
 			'client_data'  => array(
@@ -493,12 +495,15 @@ class AdminKreddyApiComponent
 			}
 		}
 
+		//сохраняем полученные данные для последующих запросов
 		$this->aClientInfo = $aData;
 
+		//запрашиваем, ушел ли клиент на идентификацию
 		$bClientOnIdentify = $this->getClientOnIdentify();
 		//если клиент ушел на идентификацию
 		//проверяем, требуется ли заново ввести паспортные данные
 		if ($bClientOnIdentify && $this->checkIsNeedPassportData()) {
+			//выводим сообщение о необходимости повторно ввести паспортные данные
 			Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
 		}
 
