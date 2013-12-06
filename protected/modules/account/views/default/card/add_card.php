@@ -7,7 +7,7 @@
 $this->pageTitle = Yii::app()->name . " - Привязка банковской карты";
 
 // путь до соответствующей картинки:
-$sImagePath = (!empty($model->iCardType)) ? ('url(\'' . Yii::app()
+$sImagePath = (!empty($model->iCardType) && in_array($model->iCardType, array_keys(Dictionaries::$aCardTypes))) ? ('url(\'' . Yii::app()
 		->getBaseUrl() . '/static/img/bankcard/icon-' . mb_convert_case(Dictionaries::$aCardTypes[$model->iCardType], MB_CASE_LOWER, 'utf-8') . '.gif\') ') : 'none';
 ?>
 	<h4>Привязка банковской карты</h4>
@@ -98,7 +98,8 @@ oCardPan.bind( "change click keydown keyup blur", function() {
 		return;
 	}
 
-	$("#cardType").css("backgroundImage", "none");';
+	$("#cardType").css("backgroundImage", "none");
+	oCardTypeField.val("-1");';
 
 foreach (Dictionaries::$aCardTypes as $iKey => $oType) {
 	$sScript .= '
