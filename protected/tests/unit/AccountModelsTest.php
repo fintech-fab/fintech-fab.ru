@@ -126,8 +126,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$aPostData = array(
 			'sCardPan'   => '',
 			'iCardType'  => '',
-			'sCardMonth' => '',
-			'sCardYear'  => '',
+			'sCardValidThru' => '',
 			'sCardCvc'   => '',
 		);
 
@@ -139,8 +138,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertNotEmpty($oForm->getError('sCardPan'));
 		$this->assertNotEmpty($oForm->getError('iCardType'));
-		$this->assertNotEmpty($oForm->getError('sCardMonth'));
-		$this->assertNotEmpty($oForm->getError('sCardYear'));
+		$this->assertNotEmpty($oForm->getError('sCardValidThru'));
 		$this->assertNotEmpty($oForm->getError('sCardCvc'));
 	}
 
@@ -148,14 +146,13 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	 * @dataProvider validMastercardCardDataProvider
 	 */
 
-	public function testAddMastercardFormValid($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	public function testAddMastercardFormValid($sCardPan, $sCardValidThru, $sCardCvc)
 	{
 		$aPostData = array(
-			'sCardPan'   => $sCardPan,
-			'iCardType'  => 1,
-			'sCardMonth' => $sCardMonth,
-			'sCardYear'  => $sCardYear,
-			'sCardCvc'   => $sCardCvc,
+			'sCardPan'       => $sCardPan,
+			'iCardType'      => 1,
+			'sCardValidThru' => $sCardValidThru,
+			'sCardCvc'       => $sCardCvc,
 		);
 
 		$oForm = new AddCardForm();
@@ -165,8 +162,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEmpty($oForm->getError('sCardPan'), print_r($oForm->getError('sCardPan'), true));
 		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
-		$this->assertEmpty($oForm->getError('sCardMonth'), print_r($oForm->getError('sCardMonth'), true));
-		$this->assertEmpty($oForm->getError('sCardYear'), print_r($oForm->getError('sCardYear'), true));
+		$this->assertEmpty($oForm->getError('sCardValidThru'), print_r($oForm->getError('sCardValidThru'), true));
 		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
 
 	}
@@ -175,14 +171,13 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	 * @dataProvider validMaestroCardDataProvider
 	 */
 
-	public function testAddMaestroFormValid($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	public function testAddMaestroFormValid($sCardPan, $sCardValidThru, $sCardCvc)
 	{
 		$aPostData = array(
-			'sCardPan'   => $sCardPan,
-			'iCardType'  => 2,
-			'sCardMonth' => $sCardMonth,
-			'sCardYear'  => $sCardYear,
-			'sCardCvc'   => $sCardCvc,
+			'sCardPan'  => $sCardPan,
+			'iCardType' => 2,
+			'sCardValidThru' => $sCardValidThru,
+			'sCardCvc'  => $sCardCvc,
 		);
 
 		$oForm = new AddCardForm();
@@ -192,8 +187,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEmpty($oForm->getError('sCardPan'), print_r($oForm->getError('sCardPan'), true));
 		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
-		$this->assertEmpty($oForm->getError('sCardMonth'), print_r($oForm->getError('sCardMonth'), true));
-		$this->assertEmpty($oForm->getError('sCardYear'), print_r($oForm->getError('sCardYear'), true));
+		$this->assertEmpty($oForm->getError('sCardValidThru'), print_r($oForm->getError('sCardValidThru'), true));
 		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
 
 	}
@@ -511,10 +505,9 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		return array(
 			array(
-				'sCardPan'   => substr((rand(15000000000000000, 15599999999999999)), 1),
-				'sCardMonth' => array_rand($aMonths, 1),
-				'sCardYear'  => array_rand($aYears, 1),
-				'sCardCvc'   => substr((rand(1000, 1999)), 1),
+				'sCardPan'       => substr((rand(15000000000000000, 15599999999999999)), 1),
+				'sCardValidThru' => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
+				'sCardCvc'       => substr((rand(1000, 1999)), 1),
 			)
 		);
 	}
@@ -532,10 +525,9 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		return array(
 			array(
-				'sCardPan'   => substr($sCardPan, 1),
-				'sCardMonth' => array_rand($aMonths, 1),
-				'sCardYear'  => array_rand($aYears, 1),
-				'sCardCvc'   => substr((rand(1000, 1999)), 1),
+				'sCardPan'       => substr($sCardPan, 1),
+				'sCardValidThru' => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
+				'sCardCvc'       => substr((rand(1000, 1999)), 1),
 			)
 		);
 	}

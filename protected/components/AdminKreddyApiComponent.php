@@ -1725,17 +1725,19 @@ class AdminKreddyApiComponent
 	 * @param $sCardPan
 	 * @param $sCardMonth
 	 * @param $sCardYear
+	 * @param $sCardHolderName
 	 * @param $sCardCvc
 	 *
 	 * @return bool
 	 */
-	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardCvc)
+	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
 	{
 		$aRequest = array(
-			'card_pan'   => $sCardPan,
-			'card_month' => $sCardMonth,
-			'card_year'  => $sCardYear,
-			'card_cvc'   => $sCardCvc
+			'card_pan'         => $sCardPan,
+			'card_month'       => $sCardMonth,
+			'card_year'        => $sCardYear,
+			'card_holder_name' => $sCardHolderName,
+			'card_cvc'         => $sCardCvc
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);

@@ -254,15 +254,20 @@ class Dictionaries
 	);
 
 	/**
+	 * Возвращает массив из $iQuantity следующуих за текущим годом лет
+	 *
+	 * @param int  $iQuantity
+	 * @param bool $bAdd2000 прибавлять ли 2000
+	 *
 	 * @return array
 	 */
-	public static function getYears()
+	public static function getYears($iQuantity = 10, $bAdd2000 = false)
 	{
 		$curYear = (int)date('y');
-		$endYear = $curYear + 10;
+		$endYear = $curYear + $iQuantity;
 		$aYears = array();
 		for ($i = $curYear; $i <= $endYear; $i++) {
-			$aYears[$i] = $i + 2000;
+			$aYears[$i] = $bAdd2000 ? ($i + 2000) : $i;
 		}
 
 		return $aYears;

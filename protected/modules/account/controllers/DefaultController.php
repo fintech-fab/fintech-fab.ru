@@ -211,6 +211,7 @@ class DefaultController extends Controller
 					$oCardForm->sCardPan,
 					$oCardForm->sCardMonth,
 					$oCardForm->sCardYear,
+					$oCardForm->sCardHolderName,
 					$oCardForm->sCardCvc
 				);
 				//если удалось отправить карту на проверку
@@ -974,6 +975,7 @@ class DefaultController extends Controller
 
 			if (($iProduct && $iChannel) || ($iProduct && $iAmount && $iChannel && $iTime)) {
 				//проверяем, не кончились ли попытки
+				//TODO: вынести из сессии в лог
 				$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
 				//если попытки не кончились, пробуем оформить подписку
 				if (!$bTriesExceed) {

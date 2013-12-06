@@ -589,8 +589,8 @@ class FormFieldValidateBehavior extends CBehavior
 	public function checkPassportLostStolen($attribute, $param)
 	{
 		//2=>'Утеря или кража',
-		$bPassportLostStolen = ($this->owner->$param['passport_change_reason']==2);
-		if($bPassportLostStolen&&empty($this->owner->$attribute)){
+		$bPassportLostStolen = ($this->owner->$param['passport_change_reason'] == 2);
+		if ($bPassportLostStolen && empty($this->owner->$attribute)) {
 			$this->owner->addError($attribute, $param['message']);
 		}
 
@@ -602,9 +602,33 @@ class FormFieldValidateBehavior extends CBehavior
 	 */
 	public function checkValidCardPan($attribute, $param)
 	{
-		$iCardType = $this->owner->$param['iCardType'];
-		if (isset(Dictionaries::$aCardTypesRegexp[$iCardType]) && !preg_match(Dictionaries::$aCardTypesRegexp[$iCardType], $this->owner->$attribute)) {
-			$this->owner->addError($attribute, $param['message']);
+		if (!empty($this->owner->$attribute)) {
+			$iCardType = $this->owner->$param['iCardType'];
+			if (isset(Dictionaries::$aCardTypesRegexp[$iCardType]) && !preg_match(Dictionaries::$aCardTypesRegexp[$iCardType], $this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+	}
+
+	/**
+	 * Разбиваем год окончания на атрибуты и проверяем каждый по отдельности
+	 * формат: 09 / 15
+	 *
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidCardValidThru($attribute, $param)
+	{
+		if (!empty($this->owner->$attribute)) {
+			list($sMonth, $sYear) = explode("/", $this->owner->$attribute);
+
+			if (!in_array(trim($sMonth), array_keys(Dictionaries::$aMonthsDigital))) {
+				$this->owner->addError($attribute, $param['messageInvalidMonth']);
+			}
+
+			if (!in_array(trim($sYear), array_keys(Dictionaries::getYears()))) {
+				$this->owner->addError($attribute, $param['messageInvalidYear']);
+			}
 		}
 	}
 
