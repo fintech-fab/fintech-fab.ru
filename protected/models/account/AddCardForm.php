@@ -146,7 +146,7 @@ class AddCardForm extends CFormModel
 	}
 
 	/**
-	 * проверка корректности срока окончания
+	 * проверка корректности срока действия
 	 *
 	 * @param $attribute
 	 * @param $param
