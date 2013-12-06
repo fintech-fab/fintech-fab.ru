@@ -465,22 +465,29 @@ class AdminKreddyApiComponent
 		$aData = array(
 			'code'          => self::ERROR_AUTH,
 			'client_data'   => array(
-				'is_debt' => null,
+				'is_debt'    => false,
 				'fullname'   => '',
-				'client_new' => null
+				'client_new' => false
+			),
+			'status'        => array(
+				'name' => false,
 			),
 			'active_loan'   => array(
-				'balance'    => false,
+				'channel_id' => false,
+				'balance'    => 0,
 				'expired'    => false,
 				'expired_to' => false
 			),
 			'subscription'  => array(
 				'product'         => false,
+				'product_id'      => false,
 				'activity_to'     => false,
-				'available_loans' => false,
-				'balance'      => false,
-				'product_info' => array(
-					'channels' => array()
+				'available_loans' => 0,
+				'balance'         => 0,
+				'product_info'    => array(
+					'channels'      => array(),
+					'loan_amount'   => false,
+					'loan_lifetime' => false,
 				),
 			),
 			'moratoriums'   => array(
@@ -490,6 +497,8 @@ class AdminKreddyApiComponent
 			),
 			'channels'      => array(),
 			'slow_channels' => array(),
+			'bank_card_exists' => false,
+			'bank_card_pan' => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -663,9 +672,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
-
-
+		return $aClientInfo['status']['name'];
 	}
 
 	/**
@@ -677,7 +684,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return ($aClientInfo['active_loan']['balance']) ? $aClientInfo['active_loan']['balance'] : 0;
+		return $aClientInfo['active_loan']['balance'];
 	}
 
 	/**
@@ -689,7 +696,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return ($aClientInfo['active_loan']['balance']) ? abs($aClientInfo['active_loan']['balance']) : 0;
+		return abs($aClientInfo['active_loan']['balance']);
 	}
 
 	/**
@@ -699,7 +706,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+		return $aClientInfo['subscription_request'];
 	}
 
 	/**
@@ -711,7 +718,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$sProduct = (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+		$sProduct = $this->getSubscriptionRequest();
 		$iProductLoan = preg_replace('/[^\d]+/', '', $sProduct);
 
 		return ($iProductLoan) ? $iProductLoan : false;
@@ -726,7 +733,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (isset($aClientInfo['active_loan']['channel_id'])) ? $aClientInfo['active_loan']['channel_id'] : false;
+		return $aClientInfo['active_loan']['channel_id'];
 	}
 
 	/**
@@ -736,7 +743,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product'])) ? $aClientInfo['subscription']['product'] : false;
+		return $aClientInfo['subscription']['product'];
 	}
 
 	/**
@@ -749,7 +756,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$iSubscriptionCost = (!empty($aClientInfo['subscription']['balance'])) ? $aClientInfo['subscription']['balance'] : 0;
+		$iSubscriptionCost = $aClientInfo['subscription']['balance'];
 
 		if ($iSubscriptionCost > 0) {
 			$iSubscriptionCost = 0;
@@ -768,7 +775,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_info']['loan_amount'])) ? $aClientInfo['subscription']['product_info']['loan_amount'] : false;
+		return $aClientInfo['subscription']['product_info']['loan_amount'];
 	}
 
 	/**
@@ -778,7 +785,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_info']['loan_lifetime'])) ? $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24 : false;
+		return $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24;
 	}
 
 	/**
@@ -788,7 +795,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_id'])) ? $aClientInfo['subscription']['product_id'] : false;
+		return $aClientInfo['subscription']['product_id'];
 	}
 
 	/**
@@ -797,7 +804,7 @@ class AdminKreddyApiComponent
 	public function getSubscriptionActivity()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? $aClientInfo['subscription']['activity_to'] : false;
+		$sActivityTo = $aClientInfo['subscription']['activity_to'];
 		$sActivityTo = $this->formatRusDate($sActivityTo, false);
 
 		return $sActivityTo;
@@ -810,7 +817,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['available_loans'])) ? $aClientInfo['subscription']['available_loans'] : 0;
+		return $aClientInfo['subscription']['available_loans'];
 	}
 
 	/**
@@ -822,7 +829,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['bank_card_exists']) && !empty($aClientInfo['bank_card_pan']))
+		return ($aClientInfo['bank_card_exists'] && $aClientInfo['bank_card_pan'])
 			? $aClientInfo['bank_card_pan']
 			: false;
 	}
@@ -835,9 +842,7 @@ class AdminKreddyApiComponent
 	public function getMoratoriumLoan()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sMoratoriumTo = (isset($aClientInfo['moratoriums']['loan']))
-			? $aClientInfo['moratoriums']['loan']
-			: null;
+		$sMoratoriumTo = $aClientInfo['moratoriums']['loan'];
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
@@ -871,12 +876,8 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
-			? $aClientInfo['moratoriums']['subscription']
-			: null;
-		$sMoratoriumScoring = (isset($aClientInfo['moratoriums']['scoring']))
-			? $aClientInfo['moratoriums']['scoring']
-			: null;
+		$sMoratoriumSub = $aClientInfo['moratoriums']['subscription'];
+		$sMoratoriumScoring = $aClientInfo['moratoriums']['scoring'];
 
 		$sMoratoriumTo = $this->getMaxDateInFormat($sMoratoriumSub, $sMoratoriumScoring);
 
@@ -893,9 +894,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$sMoratoriumLoan = (isset($aClientInfo['moratoriums']['loan']))
-			? $aClientInfo['moratoriums']['loan']
-			: null;
+		$sMoratoriumLoan = $aClientInfo['moratoriums']['loan'];
 
 		$sMoratoriumTo = $this->getMaxDateInFormat($this->getMoratoriumSubscription(), $sMoratoriumLoan);
 
@@ -908,9 +907,7 @@ class AdminKreddyApiComponent
 	public function getActiveLoanExpired()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$bExpired = (!empty($aClientInfo['active_loan']['expired']))
-			? $aClientInfo['active_loan']['expired']
-			: false;
+		$bExpired = $aClientInfo['active_loan']['expired'];
 
 		return $bExpired;
 	}
@@ -922,9 +919,8 @@ class AdminKreddyApiComponent
 	public function getActiveLoanExpiredTo()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to']))
-			? $aClientInfo['active_loan']['expired_to']
-			: false;
+		$sExpiredTo = $aClientInfo['active_loan']['expired_to'];
+
 		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
@@ -939,7 +935,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['client_data']['fullname'])) ? $aClientInfo['client_data']['fullname'] : '';
+		return $aClientInfo['client_data']['fullname'];
 	}
 
 	/**
@@ -951,7 +947,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['client_data']['is_debt']));
+		return $aClientInfo['client_data']['is_debt'];
 	}
 
 	/**
