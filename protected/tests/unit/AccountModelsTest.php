@@ -121,13 +121,31 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($oForm->getError('sms_code'));
 	}
 
+	/**
+	 * @dataProvider invalidCardHolderNameDataProvider
+	 */
+	public function testAddCardNameNoValid($sCardHolderName)
+	{
+		$aPostData = array(
+			'sCardHolderName' => $sCardHolderName,
+		);
+
+		$oForm = new AddCardForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertNotEmpty($oForm->getError('sCardHolderName'), print_r($oForm->getError('sCardHolderName'), true));
+	}
+
 	public function testAddCardFormNoValid()
 	{
 		$aPostData = array(
-			'sCardPan'   => '',
-			'iCardType'  => '',
-			'sCardValidThru' => '',
-			'sCardCvc'   => '',
+			'sCardPan'        => '',
+			'iCardType'       => '',
+			'sCardValidThru'  => '',
+			'sCardCvc'        => '',
+			'sCardHolderName' => '',
 		);
 
 
@@ -140,19 +158,21 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($oForm->getError('iCardType'));
 		$this->assertNotEmpty($oForm->getError('sCardValidThru'));
 		$this->assertNotEmpty($oForm->getError('sCardCvc'));
+		$this->assertNotEmpty($oForm->getError('sCardHolderName'));
 	}
 
 	/**
 	 * @dataProvider validMastercardCardDataProvider
 	 */
 
-	public function testAddMastercardFormValid($sCardPan, $sCardValidThru, $sCardCvc)
+	public function testAddMastercardFormValid($sCardPan, $sCardValidThru, $sCardCvc, $sCardHolderName)
 	{
 		$aPostData = array(
-			'sCardPan'       => $sCardPan,
-			'iCardType'      => 1,
-			'sCardValidThru' => $sCardValidThru,
-			'sCardCvc'       => $sCardCvc,
+			'sCardPan'        => $sCardPan,
+			'iCardType'       => 1,
+			'sCardValidThru'  => $sCardValidThru,
+			'sCardCvc'        => $sCardCvc,
+			'sCardHolderName' => $sCardHolderName,
 		);
 
 		$oForm = new AddCardForm();
@@ -164,20 +184,21 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
 		$this->assertEmpty($oForm->getError('sCardValidThru'), print_r($oForm->getError('sCardValidThru'), true));
 		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
-
+		$this->assertEmpty($oForm->getError('sCardHolderName'), print_r($oForm->getError('sCardHolderName'), true));
 	}
 
 	/**
 	 * @dataProvider validMaestroCardDataProvider
 	 */
 
-	public function testAddMaestroFormValid($sCardPan, $sCardValidThru, $sCardCvc)
+	public function testAddMaestroFormValid($sCardPan, $sCardValidThru, $sCardCvc, $sCardHolderName)
 	{
 		$aPostData = array(
-			'sCardPan'  => $sCardPan,
-			'iCardType' => 2,
-			'sCardValidThru' => $sCardValidThru,
-			'sCardCvc'  => $sCardCvc,
+			'sCardPan'        => $sCardPan,
+			'iCardType'       => 2,
+			'sCardValidThru'  => $sCardValidThru,
+			'sCardCvc'        => $sCardCvc,
+			'sCardHolderName' => $sCardHolderName,
 		);
 
 		$oForm = new AddCardForm();
@@ -189,7 +210,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
 		$this->assertEmpty($oForm->getError('sCardValidThru'), print_r($oForm->getError('sCardValidThru'), true));
 		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
-
+		$this->assertEmpty($oForm->getError('sCardHolderName'), print_r($oForm->getError('sCardHolderName'), true));
 	}
 
 	/**
@@ -494,6 +515,61 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
+	public static function getValidCardHolderName()
+	{
+		$aNames = array(
+			'MR CARDHOLDER',
+			'mrs CardHolder ',
+			'Pet   r Ivano  v',
+			'   Dmitry Petrov',
+			' Just Some-name ',
+			'  imya',
+			' Novoe Imya ',
+		);
+
+		return $aNames[array_rand($aNames, 1)];
+	}
+
+	public static function getInvalidCardHolderName()
+	{
+		$aNames = array(
+			' Никита Никитин ',
+			'Иван Иванов ',
+			'Petр Иванов',
+			'   1Dmitry Petrov',
+			' Just Somen-ame2 ',
+			'  Имя',
+		);
+
+		return $aNames[array_rand($aNames, 1)];
+	}
+
+	/**
+	 * @return array
+	 */
+
+	public static function validCardHolderNameDataProvider()
+	{
+		return array(
+			array(
+				'sCardHolderName' => self::getValidCardHolderName(),
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+
+	public static function invalidCardHolderNameDataProvider()
+	{
+		return array(
+			array(
+				'sCardHolderName' => self::getInvalidCardHolderName(),
+			)
+		);
+	}
+
 	/**
 	 * @return array
 	 */
@@ -505,9 +581,10 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		return array(
 			array(
-				'sCardPan'       => substr((rand(15000000000000000, 15599999999999999)), 1),
-				'sCardValidThru' => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
-				'sCardCvc'       => substr((rand(1000, 1999)), 1),
+				'sCardPan'        => substr((rand(15000000000000000, 15599999999999999)), 1),
+				'sCardValidThru'  => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
+				'sCardCvc'        => substr((rand(1000, 1999)), 1),
+				'sCardHolderName' => self::getValidCardHolderName(),
 			)
 		);
 	}
@@ -528,6 +605,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 				'sCardPan'       => substr($sCardPan, 1),
 				'sCardValidThru' => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
 				'sCardCvc'       => substr((rand(1000, 1999)), 1),
+				'sCardHolderName' => self::getValidCardHolderName(),
 			)
 		);
 	}
