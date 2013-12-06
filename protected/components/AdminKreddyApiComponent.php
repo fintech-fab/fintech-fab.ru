@@ -716,7 +716,6 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscriptionRequestLoan()
 	{
-		$aClientInfo = $this->getClientInfo();
 
 		$sProduct = $this->getSubscriptionRequest();
 		$iProductLoan = preg_replace('/[^\d]+/', '', $sProduct);
