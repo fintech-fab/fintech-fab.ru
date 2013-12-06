@@ -108,6 +108,7 @@ class AddCardForm extends CFormModel
 		}
 
 		if (!empty($this->sCardHolderName)) {
+			$this->sCardHolderName = trim($this->sCardHolderName);
 			$this->sCardHolderName = mb_convert_case($this->sCardHolderName, MB_CASE_UPPER, 'utf-8');
 		}
 
