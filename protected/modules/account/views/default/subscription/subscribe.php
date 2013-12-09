@@ -7,6 +7,9 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
 	<h4>Подключение Пакета</h4>
 
+	<div class="alert in alert-block alert-info">Обращаем Ваше внимание, что обработка запроса осуществляется ежедневно
+		с 10:00 до 22:00 по московскому времени.
+	</div>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
@@ -26,7 +29,7 @@ if (!empty($aClientProductsAndChannelsList)) {
 		$model->product = reset(array_keys($aClientProductsAndChannelsList));
 	}
 
-	echo $form->radioButtonList($model, 'product', $aClientProductsAndChannelsList, array("class" => "all",'uncheckValue' => $model->product));
+	echo $form->radioButtonList($model, 'product', $aClientProductsAndChannelsList, array("class" => "all", 'uncheckValue' => $model->product));
 	echo $form->error($model, 'product');
 
 	?>

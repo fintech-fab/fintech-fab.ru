@@ -73,6 +73,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span> для
 				демонстрации в вэб-камеру при прохождении идентификации (подтверждение личности).
 			</li>
+			<li>Обращаем Ваше внимание, что проверка анкеты осуществляется ежедневно с 10:00 до 22:00 по московскому
+				времени.
+			</li>
 			<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?php
 				$sOfferLinkName = SiteParams::getIsIvanovoSite() ? 'offer_ivanovo' : 'distance';
 				$sOfferTitle = SiteParams::getIsIvanovoSite() ? 'Оферта' : 'Оферта на дистанционный займ';
