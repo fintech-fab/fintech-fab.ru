@@ -109,8 +109,8 @@ class IdentifyApiComponent
 		} else {
 			// есть токен - берём из него информацию
 			$aData = $this->decryptToken($sToken);
-			$sUserHash = !empty($aData['id']) ? $aData['id'] : false;
-			$iStepNumber = !empty($aData['step']) ? $aData['step'] : false;
+			$sUserHash = !empty($aData['0']) ? $aData['0'] : false;
+			$iStepNumber = !empty($aData['1']) ? $aData['1'] : false;
 
 			// ошибка в данных из токена
 			if ($sUserHash === false || $iStepNumber === false) {
@@ -157,11 +157,7 @@ class IdentifyApiComponent
 	public function getClientAuth($sPhone, $sPassword)
 	{
 		// тестовые данные todo: убрать заглушку
-		if ($sPhone === "9513570000" && $sPassword === "Aa12345") {
-			return true;
-		}
-
-		return false;
+		return ($sPhone === "9513570000" && $sPassword === "Aa12345");
 	}
 
 	/**
@@ -220,6 +216,8 @@ class IdentifyApiComponent
 	private function getIsImage($sImageBase64)
 	{
 		$sImage = base64_decode($sImageBase64);
+
+		// todo: fix
 
 		return (imagecreatefromstring($sImage) !== false);
 	}
