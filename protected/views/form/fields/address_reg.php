@@ -83,7 +83,7 @@ if (SiteParams::getIsIvanovoSite()) {
 </div>
 
 <div class="span5 offset1">
-	<h5>Контактное лицо</h5>
+	<h5>Контакты родственников/друзей</h5>
 	<?= $form->textFieldRow($oClientCreateForm, 'relatives_one_fio', array('class' => 'span3') + $htmlOptions); ?>
 	<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', array('class' => 'span3') + $htmlOptions); ?>
 
