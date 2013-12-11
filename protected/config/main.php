@@ -28,10 +28,18 @@ $a = array(
 	),
 
 	'modules'        => array(
-		'admin'   => array(
+		'admin'    => array(
 			'ipFilters' => array('127.0.0.1', '::1'),
 		),
-		'account' => array(),
+		'account'  => array(),
+		'identify' => array(
+			'preload'    => array('identifyApi'),
+			'components' => array(
+				'identifyApi' => array(
+					'class' => 'application.modules.identify.components.IdentifyApiComponent',
+				),
+			)
+		),
 	),
 
 	'params'         => array(),
