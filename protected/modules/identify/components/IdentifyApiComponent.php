@@ -23,6 +23,9 @@ class IdentifyApiComponent
 	const STEP_DOCUMENT4 = 5;
 	const STEP_DOCUMENT5 = 6;
 
+	/**
+	 * @var array Инструкции к шагам
+	 */
 	public static $aInstructionsForSteps = array(
 		self::STEP_FACE      => 'Сфотографируйтесь',
 		self::STEP_DOCUMENT1 => 'Покажите документ1',
@@ -32,6 +35,9 @@ class IdentifyApiComponent
 		self::STEP_DOCUMENT5 => "Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.",
 	);
 
+	/**
+	 * @var array Заголовки шагов
+	 */
 	public static $aTitlesForSteps = array(
 		self::STEP_FACE      => 'https://www.google.ru/images/srpr/logo11w.png',
 		self::STEP_DOCUMENT1 => 'https://www.google.ru/images/srpr/logo11w.png',
@@ -40,6 +46,9 @@ class IdentifyApiComponent
 		self::STEP_DOCUMENT4 => 'https://www.google.ru/images/srpr/logo11w.png',
 	);
 
+	/**
+	 * @var array Описания для шагов
+	 */
 	public static $aDescriptionsForSteps = array(
 		self::STEP_FACE      => 'https://www.google.ru/images/srpr/logo11w.png',
 		self::STEP_DOCUMENT1 => 'https://www.google.ru/images/srpr/logo11w.png',
@@ -48,6 +57,9 @@ class IdentifyApiComponent
 		self::STEP_DOCUMENT4 => 'https://www.google.ru/images/srpr/logo11w.png',
 	);
 
+	/**
+	 * @var array Примеры изображений для шагов
+	 */
 	public static $aExamplesForSteps = array(
 		self::STEP_FACE      => 'https://www.google.ru/images/srpr/logo11w.png',
 		self::STEP_DOCUMENT1 => 'https://www.google.ru/images/srpr/logo11w.png',
@@ -68,13 +80,6 @@ class IdentifyApiComponent
 	 */
 	public function responseToRequest($aRequest)
 	{
-		// по умолчанию выдаём сообщение об ошибке
-		$aResponse = array(
-			'code'    => IdentifyApiComponent::ERROR_REQUEST_HANDLING,
-			'message' => IdentifyApiComponent::C_ERR_NOT_POST_REQUEST,
-		);
-
-		// получаем токен....
 		$sToken = $aRequest['token'];
 
 		// если это запрос без токена - значит, это запрос на авторизацию.
@@ -84,14 +89,14 @@ class IdentifyApiComponent
 
 			// проверить, что содержит логин и пароль, иначе вернуть код -1;
 			if (empty($sPhone) || empty($sPassword)) {
-				return $aResponse;
+				return $this->getErrorResponse('Укажите логин и пароль');
 			}
 
 			$bAuth = $this->getClientAuth($sPhone, $sPassword);
 
 			// если не удалось авторизоваться по логину-паролю вернуть код -1.
 			if (!$bAuth) {
-				return $aResponse;
+				return $this->getErrorResponse('Не удалось авторизоваться по логину-паролю');
 			}
 
 			// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
@@ -114,24 +119,24 @@ class IdentifyApiComponent
 
 			// ошибка в данных из токена
 			if ($sUserHash === false || $iStepNumber === false) {
-				return $aResponse;
+				return $this->getErrorResponse('Ошибка в данных из токена');
 			}
 
 			// если хэш неверный - ошибка. todo: убрать заглушку
 			if ($sUserHash !== self::TMP_HASH) {
-				return $aResponse;
+				return $this->getErrorResponse('Ошибка в данных из токена');
 			}
 
 			$sImageBase64 = !empty($aRequest['image']) ? $aRequest['image'] : false;
 
 			// нет картинки в ПОСТ-запросе или это не картинка
 			if ($sImageBase64 === false || !$this->getIsImage($sImageBase64)) {
-				return $aResponse;
+				return $this->getErrorResponse('Некорректное изображение');
 			}
 
 			// если не получилось сохранить изображение - ошибка
 			if (!$this->saveImage($sUserHash, $sImageBase64, $iStepNumber)) {
-				return $aResponse;
+				return $this->getErrorResponse('Не удалось сохранить изображение');
 			}
 
 			// получаем ответ исходя из номера шага.
@@ -169,12 +174,6 @@ class IdentifyApiComponent
 	 */
 	private function getResponseByStep($iStepNumber)
 	{
-		// по умолчанию выдаём сообщение об ошибке
-		$aResponse = array(
-			'code'    => IdentifyApiComponent::ERROR_REQUEST_HANDLING,
-			'message' => IdentifyApiComponent::C_ERR_NOT_POST_REQUEST,
-		);
-
 		switch ($iStepNumber) {
 			case self::STEP_FACE:
 			case self::STEP_DOCUMENT1:
@@ -202,6 +201,10 @@ class IdentifyApiComponent
 					)
 				);
 				break;
+
+			default:
+				$aResponse = $this->getErrorResponse();
+				break;
 		}
 
 
@@ -209,6 +212,23 @@ class IdentifyApiComponent
 	}
 
 	/**
+	 * Возвращает сообщение об ошибке
+	 *
+	 * @param $sErrorMessage
+	 *
+	 * @return array
+	 */
+	private function getErrorResponse($sErrorMessage = "")
+	{
+		return array(
+			'code'    => IdentifyApiComponent::ERROR_REQUEST_HANDLING,
+			'message' => (empty($sErrorMessage)) ? IdentifyApiComponent::C_ERR_NOT_POST_REQUEST : $sErrorMessage,
+		);
+	}
+
+	/**
+	 * Проверка, картинка ли: в случае если удалось получить размер - это изображение.
+	 *
 	 * @param $sImageBase64
 	 *
 	 * @return bool
@@ -216,13 +236,14 @@ class IdentifyApiComponent
 	private function getIsImage($sImageBase64)
 	{
 		$sImage = base64_decode($sImageBase64);
+		$oImageSize = @getimagesizefromstring($sImage);
 
-		// todo: fix
-
-		return (imagecreatefromstring($sImage) !== false);
+		return ($oImageSize !== false);
 	}
 
 	/**
+	 * Сохраняет изображение на сервер идентификации
+	 *
 	 * @param $sUserHash
 	 * @param $sImageBase64
 	 * @param $iStepNumber
