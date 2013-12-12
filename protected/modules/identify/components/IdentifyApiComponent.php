@@ -80,22 +80,16 @@ class IdentifyApiComponent
 	 */
 	public function processRequest($aRequest)
 	{
-		// некорректный POST-запрос - вернуть код -1;
-		if (empty($aRequest['token'])
-			&& empty($aRequest['phone'])
-			&& empty($aRequest['password'])
-			&& empty($aRequest['image'])
+		// некорректный POST-запрос - ошибка
+		if (empty($aRequest['token']) && empty($aRequest['image'])
+			&& empty($aRequest['phone']) && empty($aRequest['password'])
 		) {
-			return $this->getErrorResponse();
-		}
-
-		$sToken = $aRequest['token'];
-
-		if (empty($sToken)) {
-			// если это запрос без токена - значит, это запрос на авторизацию.
-			$aResponse = $this->getResponseToAuth($aRequest);
+			$aResponse = $this->formatErrorResponse();
+		} elseif (empty($aRequest['token'])) {
+			// если это запрос без токена - значит, это запрос на авторизацию
+			$aResponse = $this->getProcessAuthResult($aRequest);
 		} else {
-			$aResponse = $this->getResponseToToken($aRequest, $sToken);
+			$aResponse = $this->getProcessResult($aRequest, $aRequest['token']);
 		}
 
 		return $aResponse;
@@ -108,21 +102,21 @@ class IdentifyApiComponent
 	 *
 	 * @return array
 	 */
-	private function getResponseToAuth($aRequest)
+	private function getProcessAuthResult($aRequest)
 	{
 		$sPhone = $aRequest['phone'];
 		$sPassword = $aRequest['password'];
 
 		// проверить, что содержит логин и пароль, иначе вернуть код -1;
 		if (empty($sPhone) || empty($sPassword)) {
-			return $this->getErrorResponse('Укажите логин и пароль');
+			return $this->formatErrorResponse('Укажите логин и пароль');
 		}
 
 		$bAuth = $this->getIsClientAuth($sPhone, $sPassword);
 
 		// если не удалось авторизоваться по логину-паролю вернуть код -1.
 		if (!$bAuth) {
-			return $this->getErrorResponse('Не удалось авторизоваться по логину-паролю');
+			return $this->formatErrorResponse('Не удалось авторизоваться по логину-паролю');
 		}
 
 		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
@@ -130,8 +124,7 @@ class IdentifyApiComponent
 		$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
-		return $this->getNoErrorResponse($sToken,
-			array(
+		return $this->formatResponse($sToken, array(
 				'instruction' => IdentifyApiComponent::$aInstructionsForSteps[$iStepNumber],
 			)
 		);
@@ -145,7 +138,7 @@ class IdentifyApiComponent
 	 *
 	 * @return array
 	 */
-	private function getResponseToToken($aRequest, $sToken)
+	private function getProcessResult($aRequest, $sToken)
 	{
 		$aData = $this->decryptToken($sToken);
 		$sUserHash = !empty($aData['0']) ? $aData['0'] : false;
@@ -153,28 +146,28 @@ class IdentifyApiComponent
 
 		// ошибка в данных из токена
 		if ($sUserHash === false || $iStepNumber === false) {
-			return $this->getErrorResponse('Ошибка в данных из токена');
+			return $this->formatErrorResponse('Ошибка в данных из токена');
 		}
 
 		// если хэш неверный - ошибка. todo: убрать заглушку
 		if ($sUserHash !== self::TMP_HASH) {
-			return $this->getErrorResponse('Ошибка в данных из токена');
+			return $this->formatErrorResponse('Ошибка в данных из токена');
 		}
 
 		$sImageBase64 = !empty($aRequest['image']) ? $aRequest['image'] : false;
 
 		// нет картинки в ПОСТ-запросе или это не картинка
 		if ($sImageBase64 === false || !$this->getIsImage($sImageBase64)) {
-			return $this->getErrorResponse('Некорректное изображение');
+			return $this->formatErrorResponse('Некорректное изображение');
 		}
 
 		// если не получилось сохранить изображение - ошибка
 		if (!$this->saveImage($sUserHash, $sImageBase64, $iStepNumber)) {
-			return $this->getErrorResponse('Не удалось сохранить изображение');
+			return $this->formatErrorResponse('Не удалось сохранить изображение');
 		}
 
 		// получаем ответ исходя из номера шага.
-		return $this->getResponseByStep($iStepNumber, $sUserHash);
+		return $this->getProcessResultByStep($iStepNumber, $sUserHash);
 	}
 
 	/**
@@ -192,28 +185,29 @@ class IdentifyApiComponent
 	}
 
 	/**
-	 * Получаем ответ исходя из номера шага.
+	 * Возвращает ответ согласно номеру текущего шага.
 	 *
 	 * @param $iStepNumber номер шага
 	 * @param $sUserHash
 	 *
 	 * @return array
 	 */
-	private function getResponseByStep($iStepNumber, $sUserHash)
+	private function getProcessResultByStep($iStepNumber, $sUserHash)
 	{
+		$iNextStepNumber = (int)$iStepNumber + 1;
+		$sToken = $this->generateToken($sUserHash, $iNextStepNumber);
+
 		switch ($iStepNumber) {
 			case self::STEP_FACE:
 			case self::STEP_DOCUMENT1:
 			case self::STEP_DOCUMENT2:
 			case self::STEP_DOCUMENT3:
 			case self::STEP_DOCUMENT4:
-			$sToken = $this->generateToken($sUserHash, $iStepNumber + 1);
-
-			return $this->getNoErrorResponse($sToken,
+			$aResponse = $this->formatResponse($sToken,
 				array(
 					'document' => $iStepNumber,
-					'title'       => self::$aTitlesForSteps[$iStepNumber],
-						'instruction' => self::$aInstructionsForSteps[$iStepNumber],
+					'title'    => self::$aTitlesForSteps[$iStepNumber],
+					'instruction' => self::$aInstructionsForSteps[$iStepNumber],
 						'example'     => self::$aExamplesForSteps[$iStepNumber],
 						'description' => self::$aDescriptionsForSteps[$iStepNumber],
 					)
@@ -221,13 +215,11 @@ class IdentifyApiComponent
 				break;
 
 			case self::STEP_DONE:
-				$sToken = $this->generateToken($sUserHash, $iStepNumber + 1);
-
-				return $this->getDoneResponse($sToken, self::$aInstructionsForSteps[$iStepNumber]);
+				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iStepNumber]);
 				break;
 
 			default:
-				$aResponse = $this->getErrorResponse();
+				$aResponse = $this->formatErrorResponse();
 				break;
 		}
 
@@ -236,27 +228,12 @@ class IdentifyApiComponent
 	}
 
 	/**
-	 * Возвращает сообщение об ошибке
-	 *
-	 * @param $sErrorMessage
-	 *
-	 * @return array
-	 */
-	public function getErrorResponse($sErrorMessage = "")
-	{
-		return array(
-			'code'    => IdentifyApiComponent::С_ERROR_REQUEST_HANDLING,
-			'message' => (empty($sErrorMessage)) ? IdentifyApiComponent::MSG_ERROR_INVALID_REQUEST : $sErrorMessage,
-		);
-	}
-
-	/**
 	 * @param string  $sToken
 	 * @param array() $aResult
 	 *
 	 * @return array
 	 */
-	private function getNoErrorResponse($sToken, $aResult = array())
+	private function formatResponse($sToken, $aResult = array())
 	{
 		return array(
 			'code'   => IdentifyApiComponent::С_ERROR_NONE,
@@ -267,12 +244,29 @@ class IdentifyApiComponent
 	}
 
 	/**
+	 * Возвращает сообщение об ошибке (без токена)
+	 *
+	 * @param $sErrorMessage
+	 *
+	 * @return array
+	 */
+	public function formatErrorResponse($sErrorMessage = "")
+	{
+		return array(
+			'code'    => IdentifyApiComponent::С_ERROR_REQUEST_HANDLING,
+			'message' => (empty($sErrorMessage)) ? IdentifyApiComponent::MSG_ERROR_INVALID_REQUEST : $sErrorMessage,
+		);
+	}
+
+	/**
+	 * Возвращает сообщение о том, что идентификация пройдена
+	 *
 	 * @param $sToken
 	 * @param $sInstruction
 	 *
 	 * @return array
 	 */
-	private function getDoneResponse($sToken, $sInstruction)
+	private function formatDoneResponse($sToken, $sInstruction)
 	{
 		return array(
 			'code'   => IdentifyApiComponent::С_ERROR_NONE,
