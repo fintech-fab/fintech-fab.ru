@@ -144,12 +144,12 @@ $a = array(
 		),
 
 		'request'          => array(
-			'class'                  => 'HttpRequest',
-			'enableCsrfValidation'        => false, // todo вернуть
-			'enableCookieValidation' => true,
-			'csrfTokenName'          => 'stcs',
+			'class'                       => 'HttpRequest',
+			'enableCsrfValidation'        => true,
+			'enableCookieValidation'      => true,
+			'csrfTokenName'               => 'stcs',
 			'aIgnoreCsrfValidationRoutes' => array(
-				'identify',
+				'identify/default/index',
 			),
 		),
 	),
