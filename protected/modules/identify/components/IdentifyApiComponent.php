@@ -130,12 +130,10 @@ class IdentifyApiComponent
 		$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
-		return array(
-			'code'   => IdentifyApiComponent::С_ERROR_NONE,
-			'result' => array(
-				'token'       => $sToken,
+		return $this->getNoErrorResponse($sToken,
+			array(
 				'instruction' => IdentifyApiComponent::$aInstructionsForSteps[$iStepNumber],
-			),
+			)
 		);
 	}
 
@@ -213,8 +211,8 @@ class IdentifyApiComponent
 
 			return $this->getNoErrorResponse($sToken,
 				array(
-					'document'    => $iStepNumber,
-						'title'       => self::$aTitlesForSteps[$iStepNumber],
+					'document' => $iStepNumber,
+					'title'       => self::$aTitlesForSteps[$iStepNumber],
 						'instruction' => self::$aInstructionsForSteps[$iStepNumber],
 						'example'     => self::$aExamplesForSteps[$iStepNumber],
 						'description' => self::$aDescriptionsForSteps[$iStepNumber],
