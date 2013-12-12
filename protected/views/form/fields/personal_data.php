@@ -30,6 +30,9 @@ $htmlOptions = array(
 				}
 			}
 			if(iCount<=1){
+				personalDataOk = true;
+			}
+			if(iCount<1){
 				$("#passportDataHeading").attr("href","#passportData");
 				if(!$("#passportData").hasClass("in")){
 					$("#passportData").collapse("show");
@@ -37,7 +40,6 @@ $htmlOptions = array(
 				$("#passportData").find(":input").prop("disabled",false);
 				$("#addressHeading").removeClass("disabled cursor-default");
 
-				personalDataOk = true;
 				yaCounter21390544.reachGoal("expand_1");
 			}
 		}'
