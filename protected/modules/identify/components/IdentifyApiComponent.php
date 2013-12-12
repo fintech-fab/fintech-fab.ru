@@ -10,51 +10,51 @@ class IdentifyApiComponent
 	 */
 	const TMP_HASH = "390vJk!gl;6756fi&g893jn$$!13hgh"; // хэш для заглушки todo: убрать
 
-	const ERROR_NONE = 0; // нет ошибки
-	const ERROR_REQUEST_HANDLING = -1; // ошибка обработки запроса
-	const ERROR_NONE_WITH_INSTRUCTION = 1; // ошибки нет, содержит инструкцию для дальнейших действий
+	const С_ERROR_NONE = 0; // нет ошибки
+	const С_ERROR_REQUEST_HANDLING = -1; // ошибка обработки запроса
+	const С_ERROR_NONE_WITH_INSTRUCTION = 1; // ошибки нет, содержит инструкцию для дальнейших действий
 
-	const C_ERR_NOT_POST_REQUEST = "Некорректный запрос";
+	const MSG_ERROR_INVALID_REQUEST = "Некорректный запрос";
 
 	const STEP_FACE = 1;
 	const STEP_DOCUMENT1 = 2;
 	const STEP_DOCUMENT2 = 3;
 	const STEP_DOCUMENT3 = 4;
 	const STEP_DOCUMENT4 = 5;
-	const STEP_DOCUMENT5 = 6;
+	const STEP_DONE = 6;
 
 	/**
 	 * @var array Инструкции к шагам
 	 */
 	public static $aInstructionsForSteps = array(
 		self::STEP_FACE      => 'Сфотографируйтесь',
-		self::STEP_DOCUMENT1 => 'Покажите документ1',
-		self::STEP_DOCUMENT2 => 'Покажите документ2',
-		self::STEP_DOCUMENT3 => 'Покажите документ3',
-		self::STEP_DOCUMENT4 => 'Покажите документ4',
-		self::STEP_DOCUMENT5 => "Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.",
+		self::STEP_DOCUMENT1 => 'Покажите документ 1',
+		self::STEP_DOCUMENT2 => 'Покажите документ 2',
+		self::STEP_DOCUMENT3 => 'Покажите документ 3',
+		self::STEP_DOCUMENT4 => 'Покажите документ 4',
+		self::STEP_DONE      => "Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.",
 	);
 
 	/**
 	 * @var array Заголовки шагов
 	 */
 	public static $aTitlesForSteps = array(
-		self::STEP_FACE      => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT1 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT2 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT3 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT4 => 'https://www.google.ru/images/srpr/logo11w.png',
+		self::STEP_FACE      => 'Лицо',
+		self::STEP_DOCUMENT1 => 'Документ 1',
+		self::STEP_DOCUMENT2 => 'Документ 2',
+		self::STEP_DOCUMENT3 => 'Документ 3',
+		self::STEP_DOCUMENT4 => 'Документ 4',
 	);
 
 	/**
 	 * @var array Описания для шагов
 	 */
 	public static $aDescriptionsForSteps = array(
-		self::STEP_FACE      => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT1 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT2 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT3 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT4 => 'https://www.google.ru/images/srpr/logo11w.png',
+		self::STEP_FACE      => 'Пример фотографии лица',
+		self::STEP_DOCUMENT1 => 'Пример фотографии документа 1',
+		self::STEP_DOCUMENT2 => 'Пример фотографии документа 2',
+		self::STEP_DOCUMENT3 => 'Пример фотографии документа 3',
+		self::STEP_DOCUMENT4 => 'Пример фотографии документа 4',
 	);
 
 	/**
@@ -74,81 +74,109 @@ class IdentifyApiComponent
 	}
 
 	/**
-	 * @param $aRequest array()
+	 * @param $aRequest array() запрос
 	 *
 	 * @return array
 	 */
-	public function responseToRequest($aRequest)
+	public function processRequest($aRequest)
 	{
+		// некорректный POST-запрос - вернуть код -1;
+		if (empty($aRequest['token'])
+			&& empty($aRequest['phone'])
+			&& empty($aRequest['password'])
+			&& empty($aRequest['image'])
+		) {
+			return $this->getErrorResponse();
+		}
+
 		$sToken = $aRequest['token'];
 
-		// если это запрос без токена - значит, это запрос на авторизацию.
 		if (empty($sToken)) {
-			$sPhone = $aRequest['phone'];
-			$sPassword = $aRequest['password'];
-
-			// проверить, что содержит логин и пароль, иначе вернуть код -1;
-			if (empty($sPhone) || empty($sPassword)) {
-				return $this->getErrorResponse('Укажите логин и пароль');
-			}
-
-			$bAuth = $this->getClientAuth($sPhone, $sPassword);
-
-			// если не удалось авторизоваться по логину-паролю вернуть код -1.
-			if (!$bAuth) {
-				return $this->getErrorResponse('Не удалось авторизоваться по логину-паролю');
-			}
-
-			// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
-			$iStepNumber = self::STEP_FACE;
-			$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
-
-			// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
-			$aResponse = array(
-				'code'   => IdentifyApiComponent::ERROR_NONE_WITH_INSTRUCTION,
-				'result' => array(
-					'token'       => $sToken,
-					'instruction' => IdentifyApiComponent::$aInstructionsForSteps[$iStepNumber],
-				),
-			);
+			// если это запрос без токена - значит, это запрос на авторизацию.
+			$aResponse = $this->getResponseToAuth($aRequest);
 		} else {
-			// есть токен - берём из него информацию
-			$aData = $this->decryptToken($sToken);
-			$sUserHash = !empty($aData['0']) ? $aData['0'] : false;
-			$iStepNumber = !empty($aData['1']) ? $aData['1'] : false;
-
-			// ошибка в данных из токена
-			if ($sUserHash === false || $iStepNumber === false) {
-				return $this->getErrorResponse('Ошибка в данных из токена');
-			}
-
-			// если хэш неверный - ошибка. todo: убрать заглушку
-			if ($sUserHash !== self::TMP_HASH) {
-				return $this->getErrorResponse('Ошибка в данных из токена');
-			}
-
-			$sImageBase64 = !empty($aRequest['image']) ? $aRequest['image'] : false;
-
-			// нет картинки в ПОСТ-запросе или это не картинка
-			if ($sImageBase64 === false || !$this->getIsImage($sImageBase64)) {
-				return $this->getErrorResponse('Некорректное изображение');
-			}
-
-			// если не получилось сохранить изображение - ошибка
-			if (!$this->saveImage($sUserHash, $sImageBase64, $iStepNumber)) {
-				return $this->getErrorResponse('Не удалось сохранить изображение');
-			}
-
-			// получаем ответ исходя из номера шага.
-			$aResponse = $this->getResponseByStep($iStepNumber);
-
-			// если ошибки не было - добавляем в ответ токен со следующим номером шага.
-			if ($aResponse['code'] !== self::ERROR_REQUEST_HANDLING) {
-				$aResponse['result']['token'] = $this->generateToken($sUserHash, $iStepNumber + 1);
-			}
+			$aResponse = $this->getResponseToToken($aRequest, $sToken);
 		}
 
 		return $aResponse;
+	}
+
+	/**
+	 * Возвращает ответ на запрос авторизации
+	 *
+	 * @param $aRequest
+	 *
+	 * @return array
+	 */
+	private function getResponseToAuth($aRequest)
+	{
+		$sPhone = $aRequest['phone'];
+		$sPassword = $aRequest['password'];
+
+		// проверить, что содержит логин и пароль, иначе вернуть код -1;
+		if (empty($sPhone) || empty($sPassword)) {
+			return $this->getErrorResponse('Укажите логин и пароль');
+		}
+
+		$bAuth = $this->getIsClientAuth($sPhone, $sPassword);
+
+		// если не удалось авторизоваться по логину-паролю вернуть код -1.
+		if (!$bAuth) {
+			return $this->getErrorResponse('Не удалось авторизоваться по логину-паролю');
+		}
+
+		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
+		$iStepNumber = self::STEP_FACE;
+		$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
+
+		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
+		return array(
+			'code'   => IdentifyApiComponent::С_ERROR_NONE,
+			'result' => array(
+				'token'       => $sToken,
+				'instruction' => IdentifyApiComponent::$aInstructionsForSteps[$iStepNumber],
+			),
+		);
+	}
+
+	/**
+	 * Возвращает ответ на запрос с токеном
+	 *
+	 * @param $aRequest
+	 * @param $sToken
+	 *
+	 * @return array
+	 */
+	private function getResponseToToken($aRequest, $sToken)
+	{
+		$aData = $this->decryptToken($sToken);
+		$sUserHash = !empty($aData['0']) ? $aData['0'] : false;
+		$iStepNumber = !empty($aData['1']) ? $aData['1'] : false;
+
+		// ошибка в данных из токена
+		if ($sUserHash === false || $iStepNumber === false) {
+			return $this->getErrorResponse('Ошибка в данных из токена');
+		}
+
+		// если хэш неверный - ошибка. todo: убрать заглушку
+		if ($sUserHash !== self::TMP_HASH) {
+			return $this->getErrorResponse('Ошибка в данных из токена');
+		}
+
+		$sImageBase64 = !empty($aRequest['image']) ? $aRequest['image'] : false;
+
+		// нет картинки в ПОСТ-запросе или это не картинка
+		if ($sImageBase64 === false || !$this->getIsImage($sImageBase64)) {
+			return $this->getErrorResponse('Некорректное изображение');
+		}
+
+		// если не получилось сохранить изображение - ошибка
+		if (!$this->saveImage($sUserHash, $sImageBase64, $iStepNumber)) {
+			return $this->getErrorResponse('Не удалось сохранить изображение');
+		}
+
+		// получаем ответ исходя из номера шага.
+		return $this->getResponseByStep($iStepNumber, $sUserHash);
 	}
 
 	/**
@@ -159,7 +187,7 @@ class IdentifyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function getClientAuth($sPhone, $sPassword)
+	private function getIsClientAuth($sPhone, $sPassword)
 	{
 		// тестовые данные todo: убрать заглушку
 		return ($sPhone === "9513570000" && $sPassword === "Aa12345");
@@ -169,10 +197,11 @@ class IdentifyApiComponent
 	 * Получаем ответ исходя из номера шага.
 	 *
 	 * @param $iStepNumber номер шага
+	 * @param $sUserHash
 	 *
 	 * @return array
 	 */
-	private function getResponseByStep($iStepNumber)
+	private function getResponseByStep($iStepNumber, $sUserHash)
 	{
 		switch ($iStepNumber) {
 			case self::STEP_FACE:
@@ -180,10 +209,11 @@ class IdentifyApiComponent
 			case self::STEP_DOCUMENT2:
 			case self::STEP_DOCUMENT3:
 			case self::STEP_DOCUMENT4:
-				$aResponse = array(
-					'code'   => IdentifyApiComponent::ERROR_NONE_WITH_INSTRUCTION,
-					'result' => array(
-						'document'    => $iStepNumber,
+			$sToken = $this->generateToken($sUserHash, $iStepNumber + 1);
+
+			return $this->getNoErrorResponse($sToken,
+				array(
+					'document'    => $iStepNumber,
 						'title'       => self::$aTitlesForSteps[$iStepNumber],
 						'instruction' => self::$aInstructionsForSteps[$iStepNumber],
 						'example'     => self::$aExamplesForSteps[$iStepNumber],
@@ -192,14 +222,10 @@ class IdentifyApiComponent
 				);
 				break;
 
-			case self::STEP_DOCUMENT5:
-				$aResponse = array(
-					'code'   => IdentifyApiComponent::ERROR_NONE_WITH_INSTRUCTION,
-					'result' => array(
-						'done'        => 1,
-						'instruction' => self::$aInstructionsForSteps[$iStepNumber],
-					)
-				);
+			case self::STEP_DONE:
+				$sToken = $this->generateToken($sUserHash, $iStepNumber + 1);
+
+				return $this->getDoneResponse($sToken, self::$aInstructionsForSteps[$iStepNumber]);
 				break;
 
 			default:
@@ -218,11 +244,45 @@ class IdentifyApiComponent
 	 *
 	 * @return array
 	 */
-	private function getErrorResponse($sErrorMessage = "")
+	public function getErrorResponse($sErrorMessage = "")
 	{
 		return array(
-			'code'    => IdentifyApiComponent::ERROR_REQUEST_HANDLING,
-			'message' => (empty($sErrorMessage)) ? IdentifyApiComponent::C_ERR_NOT_POST_REQUEST : $sErrorMessage,
+			'code'    => IdentifyApiComponent::С_ERROR_REQUEST_HANDLING,
+			'message' => (empty($sErrorMessage)) ? IdentifyApiComponent::MSG_ERROR_INVALID_REQUEST : $sErrorMessage,
+		);
+	}
+
+	/**
+	 * @param string  $sToken
+	 * @param array() $aResult
+	 *
+	 * @return array
+	 */
+	private function getNoErrorResponse($sToken, $aResult = array())
+	{
+		return array(
+			'code'   => IdentifyApiComponent::С_ERROR_NONE,
+			'result' => array_merge(array(
+				'token' => $sToken,
+			), $aResult),
+		);
+	}
+
+	/**
+	 * @param $sToken
+	 * @param $sInstruction
+	 *
+	 * @return array
+	 */
+	private function getDoneResponse($sToken, $sInstruction)
+	{
+		return array(
+			'code'   => IdentifyApiComponent::С_ERROR_NONE,
+			'result' => array(
+				'token'       => $sToken,
+				'done'        => 1,
+				'instruction' => $sInstruction,
+			)
 		);
 	}
 
@@ -236,7 +296,7 @@ class IdentifyApiComponent
 	private function getIsImage($sImageBase64)
 	{
 		$sImage = base64_decode($sImageBase64);
-		$oImageSize = @getimagesizefromstring($sImage);
+		$oImageSize = @getimagesizefromstring($sImage) or false;
 
 		return ($oImageSize !== false);
 	}
