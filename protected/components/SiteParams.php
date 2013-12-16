@@ -185,6 +185,34 @@ class SiteParams
 		45,
 	);
 
+	public static function getHintHtmlOptions($sAttrName)
+	{
+		$aHtmlOptions = array();
+
+		if (array_key_exists($sAttrName, Dictionaries::$aHintsFormFields)) {
+			$sInfo = Dictionaries::$aHintsFormFields[$sAttrName];
+
+			$sInfoTag = CHtml::tag('i', array(
+				'class'          => 'icon icon-info-sign',
+				'data-html'      => 'true',
+				'data-trigger'   => 'hover',
+				'data-placement' => 'right',
+				'data-content'   => '<span style="color: black;">' . $sInfo . '</span>',
+				'data-toggle'    => 'popover'
+			), '', true);
+
+			$aHtmlOptions = array(
+				'append'         => $sInfoTag,
+				'data-trigger'   => 'focus',
+				'data-placement' => 'right',
+				'data-content'   => $sInfo,
+				'data-toggle'    => 'popover'
+			);
+		}
+
+		return $aHtmlOptions;
+	}
+
 	/**
 	 * Возвращает значение константы
 	 *
