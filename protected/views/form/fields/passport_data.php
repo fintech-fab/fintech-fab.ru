@@ -61,7 +61,7 @@ $htmlOptions = array(
 			</div>
 			<div class="span2">
 				<span>/</span>
-				<?= $form->maskedTextField($oClientCreateForm, 'passport_number', '999999', array('style' => 'width: 60px;', 'size' => '6', 'maxlength' => '6')); ?>
+				<?= $form->maskedTextField($oClientCreateForm, 'passport_number', '999999', SiteParams::getHintHtmlOptions('passport_number') + array('style' => 'width: 60px;', 'size' => '6', 'maxlength' => '6')); ?>
 			</div>
 		</div>
 		<div class="row">
@@ -75,15 +75,15 @@ $htmlOptions = array(
 
 
 
-	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', $htmlOptions); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', SiteParams::getHintHtmlOptions('passport_date') + $htmlOptions); ?>
 
-	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',) + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', $htmlOptions); ?>
+	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', SiteParams::getHintHtmlOptions('passport_code') + array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',) + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', SiteParams::getHintHtmlOptions('passport_issued') + $htmlOptions); ?>
 </div>
 
 <div class="span5 offset1">
 	<h5>Второй документ</h5>
-	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
+	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, SiteParams::getHintHtmlOptions('document') + array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3') + $htmlOptions); ?>
 </div>
 

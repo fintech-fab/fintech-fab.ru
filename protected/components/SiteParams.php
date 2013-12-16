@@ -189,11 +189,13 @@ class SiteParams
 	{
 		$aHtmlOptions = array();
 
-		if (array_key_exists($sAttrName, Dictionaries::$aHintsFormFields)) {
-			$sInfo = Dictionaries::$aHintsFormFields[$sAttrName];
+		$aHintsHtmlOptions = ClientCreateFormAbstract::getHints();
+
+		if (array_key_exists($sAttrName, $aHintsHtmlOptions)) {
+			$sInfo = $aHintsHtmlOptions[$sAttrName];
 
 			$sInfoTag = CHtml::tag('i', array(
-				'class'          => 'icon icon-info-sign',
+				'class' => 'icon icon-exclamation-sign',
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
 				'data-placement' => 'right',

@@ -49,9 +49,9 @@ $htmlOptions = array(
 $pastCreditHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions']);
 ?>
 <div class="span5">
-	<?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'job_position', array('class' => 'span3') + $htmlOptions); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', array('class' => 'span3') + $htmlOptions) ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'job_company', SiteParams::getHintHtmlOptions('job_company') + array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'job_position', SiteParams::getHintHtmlOptions('job_position') + array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', SiteParams::getHintHtmlOptions('job_phone') + array('class' => 'span3') + $htmlOptions) ?>
 </div>
 <div class="span5 offset1">
 	<?= $form->dropDownListRow($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, array('class' => 'span2') + $htmlOptions); ?>

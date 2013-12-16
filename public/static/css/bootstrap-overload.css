@@ -226,3 +226,7 @@ label, input, button, select, textarea {
 .collapse.in {
 	overflow: visible;
 }
+
+.popover {
+	min-width: 300px;
+}
