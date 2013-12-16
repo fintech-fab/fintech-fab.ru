@@ -162,6 +162,32 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
+
+	public function getCardBigWarning()
+	{
+		$sWarning = '<h4 style="color: #000000 !important">Уважаемый Клиент!</h4><br />' .
+			'<p>Убедитесь, что: <ul>' .
+			'<li> банковская карта <b>Mastercard или Maestro</b>,</li>' .
+			'<li> банковская карта зарегистрирована <b>на Ваше имя</b>,</li>' .
+			'<li> <b>не является</b> предоплаченной,</li>' .
+			'<li> привязана <b>к рублевому счету</b>,</li>' .
+			'<li> <b>активна</b> (не заблокирована) и доступна для перечисления денег,</li>' .
+			'<li> на карте <b>не менее 10 рублей</b>.</li>
+			</ul></p>';
+
+		if ($this->getIsClientCardExists()) {
+			$sWarning .= '<p>При привязке новой банковской карты, данные старой карты удаляются.</p>';
+		}
+
+		if ($this->checkCardVerifyExists()) {
+			$sWarning .= '<p>На Вашей карте будет заморожена случайная сумма не более чем на 2 часа. </p>';
+		}
+
+		$sWarning .= '<p>Будьте внимательны! <b>Количество попыток ввода данных строго ограничено!</b></p>';
+
+		return $sWarning;
+	}
+
 	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
@@ -2977,5 +3003,16 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (isset($aClientInfo['bank_card_exists']) && $aClientInfo['bank_card_exists'] === true);
+	}
+
+	public function getIsFirstAddingCard()
+	{
+		$bIsFirstAddingCard = (empty(Yii::app()->session['account_addCard']));
+
+		if ($bIsFirstAddingCard) {
+			Yii::app()->session['account_addCard'] = true;
+		}
+
+		return $bIsFirstAddingCard;
 	}
 }

@@ -9,6 +9,29 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 // путь до соответствующей картинки:
 $sImagePath = (!empty($model->iCardType) && in_array($model->iCardType, array_keys(Dictionaries::$aCardTypes))) ? ('url(\'' . Yii::app()
 		->getBaseUrl() . '/static/img/bankcard/icon-' . mb_convert_case(Dictionaries::$aCardTypes[$model->iCardType], MB_CASE_LOWER, 'utf-8') . '.gif\') ') : 'none';
+
+// если Клиент привязывает карту первый раз - выводим предупреждение в модальном окне
+if (Yii::app()->adminKreddyApi->getIsFirstAddingCard()):
+	?>
+	<div id="card_warning" class="modal fade">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h4>Внимание!</h4>
+		</div>
+
+		<div class="modal-body">
+			<?= Yii::app()->adminKreddyApi->getCardBigWarning(); ?>
+		</div>
+
+		<div class="modal-footer">
+			<a data-dismiss="modal" class="btn" id="yw0" href="#">Закрыть</a></div>
+
+	</div>
+	<script>
+		jQuery("#card_warning").modal('show');
+	</script>
+<?php
+endif;
 ?>
 	<h4>Привязка банковской карты</h4>
 
@@ -28,28 +51,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 <?= $form->errorSummary($model) ?>
 
-	<div class="alert alert-warning"><h4>Уважаемый Клиент:</h4>
-		<ul>
-			<li><?= AdminKreddyApiComponent::C_CARD_MSG_REQUIREMENTS; ?>
-			</li>
-			<?php
-			//если карта уже привязана, то выдаем предупреждение
-			if (Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
-				<li>При привязке новой банковской карты, данные старой карты удаляются.</li>
-			<?php endif; ?>
-			<li>
-				В данный момент перечисление займов доступно только на карты MasterCard. В ближайшее время перечисления
-				станут доступны и на карты Visa. Благодарим за понимание!
-			</li>
-			<?php if (Yii::app()->adminKreddyApi->checkCardVerifyExists()): ?>
-				<li>На Вашей карте будет заморожена случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
-					карте должно быть не менее 10 рублей.
-				</li>
-			<?php endif; ?>
-		</ul>
-		<p>
-			<strong>Будьте внимательны! Количество попыток ввода данных строго ограничено.</strong>
-		</p>
+	<div class="alert alert-warning" style="color: #000000 !important">
+		<?= Yii::app()->adminKreddyApi->getCardBigWarning(); ?>
 	</div>
 
 <?= $form->hiddenField($model, 'iCardType') ?>
@@ -88,7 +91,6 @@ border: 0px;
 height: 14px;
 }');
 
-// TODO: добавить для visa
 $sScript = 'oCardPan = $("#' . get_class($model) . '_sCardPan");
 oCardTypeField = $("#' . get_class($model) . '_iCardType");
 var regexp;
