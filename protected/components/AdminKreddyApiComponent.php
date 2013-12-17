@@ -1952,15 +1952,16 @@ class AdminKreddyApiComponent
 				break;
 		}
 
-		if ($sAction === 'check_identify' && !empty($this->aCheckIdentify)) {
+		if ($sAction == 'check_identify' && !empty($this->aCheckIdentify)) {
 			$aData = $this->aCheckIdentify;
+			$this->setLastMessage($aData['message']);
+			$this->setLastCode($aData['code']);
 		} else {
 			$aData = $this->requestAdminKreddyApi($sAction);
-			if ($sAction === 'check_identify') {
+			if ($sAction == 'check_identify') {
 				$this->aCheckIdentify = $aData;
 			}
 		}
-
 
 		return $aData;
 	}
