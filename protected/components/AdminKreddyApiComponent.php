@@ -45,6 +45,8 @@ class AdminKreddyApiComponent
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
 
+	const C_SESSION_EXPIRED = 'Время Вашей сессии истекло. Просим Вас снова зайти в личный кабинет.';
+	const C_SESSION_TIME_UNTIL_EXPIRED = 'Время сессии: ';
 
 	private $aAvailableStatuses = array(
 
@@ -127,6 +129,8 @@ class AdminKreddyApiComponent
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
 
+	const TOKEN_MINUTES_LIVE = 10; // токен живёт 10 минут todo: уточнить
+
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
@@ -161,6 +165,31 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
+
+
+	public function getCardBigWarning()
+	{
+		$sWarning = '<p>Убедитесь, что: <ul>' .
+			'<li> банковская карта <b>Mastercard, Maestro или Visa</b>,</li>' .
+			'<li> банковская карта зарегистрирована <b>на Ваше имя</b>,</li>' .
+			'<li> <b>не является</b> предоплаченной,</li>' .
+			'<li> привязана <b>к рублевому счету</b>,</li>' .
+			'<li> <b>активна</b> (не заблокирована) и доступна для перечисления денег,</li>' .
+			'<li> на карте <b>не менее 10 рублей</b>.</li>
+			</ul></p>';
+
+		if ($this->getIsClientCardExists()) {
+			$sWarning .= '<p>При привязке новой банковской карты, данные старой карты удаляются.</p>';
+		}
+
+		if ($this->checkCardVerifyExists()) {
+			$sWarning .= '<p>На Вашей карте будет заморожена случайная сумма не более чем на 2 часа. </p>';
+		}
+
+		$sWarning .= '<p>Будьте внимательны! <b>Количество попыток ввода данных строго ограничено!</b></p>';
+
+		return $sWarning;
+	}
 
 	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
@@ -323,12 +352,16 @@ class AdminKreddyApiComponent
 			$this->token = $aTokenData['token'];
 
 			return true;
-		} else {
-			$this->setSessionToken(null);
-			$this->token = null;
-
-			return false;
 		}
+
+		if (($aTokenData['code'] == self::ERROR_TOKEN_EXPIRE)) {
+			$this->setUserSessionExpired();
+		}
+
+		$this->setSessionToken(null);
+		$this->token = null;
+
+		return false;
 	}
 
 	/**
@@ -463,27 +496,42 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'         => self::ERROR_AUTH,
-			'client_data'  => array(
-				'is_debt'  => null,
-				'fullname' => ''
+			'code'          => self::ERROR_AUTH,
+			'client_data'   => array(
+				'is_debt'    => false,
+				'fullname'   => '',
+				'client_new' => false
 			),
-			'active_loan'  => array(
-				'balance'    => false,
+			'status'        => array(
+				'name' => false,
+			),
+			'active_loan'   => array(
+				'channel_id' => false,
+				'balance'    => 0,
 				'expired'    => false,
 				'expired_to' => false
 			),
-			'subscription' => array(
+			'subscription'  => array(
 				'product'         => false,
+				'product_id'      => false,
 				'activity_to'     => false,
-				'available_loans' => false,
-				'balance'         => false
+				'available_loans' => 0,
+				'balance'         => 0,
+				'product_info'    => array(
+					'channels'      => array(),
+					'loan_amount'   => false,
+					'loan_lifetime' => false,
+				),
 			),
-			'moratoriums'  => array(
+			'moratoriums'   => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
-			)
+			),
+			'channels'      => array(),
+			'slow_channels' => array(),
+			'bank_card_exists' => false,
+			'bank_card_pan' => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -522,7 +570,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (isset($aClientInfo['client_data']['client_new'])) ? $aClientInfo['client_data']['client_new'] : true;
+		return $aClientInfo['client_data']['client_new'];
 	}
 
 	/**
@@ -534,11 +582,8 @@ class AdminKreddyApiComponent
 	public function getClientChannels()
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (isset($aClientInfo['channels']) && is_array($aClientInfo['channels'])) {
-			return $aClientInfo['channels'];
-		} else {
-			return array();
-		}
+
+		return $aClientInfo['channels'];
 	}
 
 	/**
@@ -549,11 +594,8 @@ class AdminKreddyApiComponent
 	public function getIsSlowChannel($iChannelId)
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (isset($aClientInfo['slow_channels']) && is_array($aClientInfo['slow_channels'])) {
-			return in_array($iChannelId, $aClientInfo['slow_channels']);
-		}
 
-		return false;
+		return in_array($iChannelId, $aClientInfo['slow_channels']);
 	}
 
 	/**
@@ -589,19 +631,11 @@ class AdminKreddyApiComponent
 	public function getClientSubscriptionChannels()
 	{
 		$aClientInfo = $this->getClientInfo();
-		//проверяем что все данные есть, и они в нужном формате
-		if (isset($aClientInfo['channels'])
-			&& is_array($aClientInfo['channels'])
-			&& isset($aClientInfo['subscription']['product_info']['channels'])
-			&& is_array($aClientInfo['subscription']['product_info']['channels'])
-		) {
-			//находим пересечение массивов, т.е. каналы, которые доступны пользователю, и при этом доступные для текущей подписки
-			$aChannels = array_intersect($aClientInfo['subscription']['product_info']['channels'], $aClientInfo['channels']);
 
-			return $aChannels;
-		} else {
-			return array();
-		}
+		//находим пересечение массивов, т.е. каналы, которые доступны пользователю, и при этом доступные для текущей подписки
+		$aChannels = array_intersect($aClientInfo['subscription']['product_info']['channels'], $aClientInfo['channels']);
+
+		return $aChannels;
 	}
 
 	/**
@@ -671,9 +705,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['status']['name'])) ? $aClientInfo['status']['name'] : false;
-
-
+		return $aClientInfo['status']['name'];
 	}
 
 	/**
@@ -685,7 +717,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return ($aClientInfo['active_loan']['balance']) ? $aClientInfo['active_loan']['balance'] : 0;
+		return $aClientInfo['active_loan']['balance'];
 	}
 
 	/**
@@ -697,7 +729,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return ($aClientInfo['active_loan']['balance']) ? abs($aClientInfo['active_loan']['balance']) : 0;
+		return abs($aClientInfo['active_loan']['balance']);
 	}
 
 	/**
@@ -707,7 +739,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+		return $aClientInfo['subscription_request'];
 	}
 
 	/**
@@ -717,9 +749,8 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscriptionRequestLoan()
 	{
-		$aClientInfo = $this->getClientInfo();
 
-		$sProduct = (!empty($aClientInfo['subscription_request'])) ? $aClientInfo['subscription_request'] : false;
+		$sProduct = $this->getSubscriptionRequest();
 		$iProductLoan = preg_replace('/[^\d]+/', '', $sProduct);
 
 		return ($iProductLoan) ? $iProductLoan : false;
@@ -734,7 +765,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (isset($aClientInfo['active_loan']['channel_id'])) ? $aClientInfo['active_loan']['channel_id'] : false;
+		return $aClientInfo['active_loan']['channel_id'];
 	}
 
 	/**
@@ -744,7 +775,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product'])) ? $aClientInfo['subscription']['product'] : false;
+		return $aClientInfo['subscription']['product'];
 	}
 
 	/**
@@ -757,7 +788,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$iSubscriptionCost = (!empty($aClientInfo['subscription']['balance'])) ? $aClientInfo['subscription']['balance'] : 0;
+		$iSubscriptionCost = $aClientInfo['subscription']['balance'];
 
 		if ($iSubscriptionCost > 0) {
 			$iSubscriptionCost = 0;
@@ -776,7 +807,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_info']['loan_amount'])) ? $aClientInfo['subscription']['product_info']['loan_amount'] : false;
+		return $aClientInfo['subscription']['product_info']['loan_amount'];
 	}
 
 	/**
@@ -786,7 +817,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_info']['loan_lifetime'])) ? $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24 : false;
+		return $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24;
 	}
 
 	/**
@@ -796,7 +827,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['product_id'])) ? $aClientInfo['subscription']['product_id'] : false;
+		return $aClientInfo['subscription']['product_id'];
 	}
 
 	/**
@@ -805,7 +836,7 @@ class AdminKreddyApiComponent
 	public function getSubscriptionActivity()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sActivityTo = (!empty($aClientInfo['subscription']['activity_to'])) ? $aClientInfo['subscription']['activity_to'] : false;
+		$sActivityTo = $aClientInfo['subscription']['activity_to'];
 		$sActivityTo = $this->formatRusDate($sActivityTo, false);
 
 		return $sActivityTo;
@@ -818,7 +849,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['subscription']['available_loans'])) ? $aClientInfo['subscription']['available_loans'] : 0;
+		return $aClientInfo['subscription']['available_loans'];
 	}
 
 	/**
@@ -830,7 +861,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['bank_card_exists']) && !empty($aClientInfo['bank_card_pan']))
+		return ($aClientInfo['bank_card_exists'] && $aClientInfo['bank_card_pan'])
 			? $aClientInfo['bank_card_pan']
 			: false;
 	}
@@ -843,9 +874,7 @@ class AdminKreddyApiComponent
 	public function getMoratoriumLoan()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sMoratoriumTo = (isset($aClientInfo['moratoriums']['loan']))
-			? $aClientInfo['moratoriums']['loan']
-			: null;
+		$sMoratoriumTo = $aClientInfo['moratoriums']['loan'];
 		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
@@ -879,12 +908,8 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$sMoratoriumSub = (isset($aClientInfo['moratoriums']['subscription']))
-			? $aClientInfo['moratoriums']['subscription']
-			: null;
-		$sMoratoriumScoring = (isset($aClientInfo['moratoriums']['scoring']))
-			? $aClientInfo['moratoriums']['scoring']
-			: null;
+		$sMoratoriumSub = $aClientInfo['moratoriums']['subscription'];
+		$sMoratoriumScoring = $aClientInfo['moratoriums']['scoring'];
 
 		$sMoratoriumTo = $this->getMaxDateInFormat($sMoratoriumSub, $sMoratoriumScoring);
 
@@ -901,9 +926,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		$sMoratoriumLoan = (isset($aClientInfo['moratoriums']['loan']))
-			? $aClientInfo['moratoriums']['loan']
-			: null;
+		$sMoratoriumLoan = $aClientInfo['moratoriums']['loan'];
 
 		$sMoratoriumTo = $this->getMaxDateInFormat($this->getMoratoriumSubscription(), $sMoratoriumLoan);
 
@@ -916,9 +939,7 @@ class AdminKreddyApiComponent
 	public function getActiveLoanExpired()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$bExpired = (!empty($aClientInfo['active_loan']['expired']))
-			? $aClientInfo['active_loan']['expired']
-			: false;
+		$bExpired = $aClientInfo['active_loan']['expired'];
 
 		return $bExpired;
 	}
@@ -930,9 +951,8 @@ class AdminKreddyApiComponent
 	public function getActiveLoanExpiredTo()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sExpiredTo = (!empty($aClientInfo['active_loan']['expired_to']))
-			? $aClientInfo['active_loan']['expired_to']
-			: false;
+		$sExpiredTo = $aClientInfo['active_loan']['expired_to'];
+
 		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
@@ -947,7 +967,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['client_data']['fullname'])) ? $aClientInfo['client_data']['fullname'] : '';
+		return $aClientInfo['client_data']['fullname'];
 	}
 
 	/**
@@ -959,7 +979,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return (!empty($aClientInfo['client_data']['is_debt']));
+		return $aClientInfo['client_data']['is_debt'];
 	}
 
 	/**
@@ -1952,15 +1972,16 @@ class AdminKreddyApiComponent
 				break;
 		}
 
-		if ($sAction === 'check_identify' && !empty($this->aCheckIdentify)) {
+		if ($sAction == 'check_identify' && !empty($this->aCheckIdentify)) {
 			$aData = $this->aCheckIdentify;
+			$this->setLastMessage($aData['message']);
+			$this->setLastCode($aData['code']);
 		} else {
 			$aData = $this->requestAdminKreddyApi($sAction);
-			if ($sAction === 'check_identify') {
+			if ($sAction == 'check_identify') {
 				$this->aCheckIdentify = $aData;
 			}
 		}
-
 
 		return $aData;
 	}
@@ -2977,5 +2998,44 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (isset($aClientInfo['bank_card_exists']) && $aClientInfo['bank_card_exists'] === true);
+	}
+
+	public function getIsFirstAddingCard()
+	{
+		$bIsFirstAddingCard = (empty(Yii::app()->session['account_addCard']));
+
+		if ($bIsFirstAddingCard) {
+			Yii::app()->session['account_addCard'] = true;
+		}
+
+		return $bIsFirstAddingCard;
+	}
+
+
+	/**
+	 * Установка флага, что сессия пользователя истекла или не истекла.
+	 *
+	 * @param bool $bFlag
+	 */
+	public function setUserSessionExpired($bFlag = true)
+	{
+		Yii::app()->request->cookies['accountSessionExpired'] = new CHttpCookie('accountSessionExpired', $bFlag);
+	}
+
+	/**
+	 * Истекла ли сессия пользователя
+	 *
+	 * @return bool
+	 */
+	public function getIsUserSessionExpired()
+	{
+		$bResult = (!empty(Yii::app()->request->cookies['accountSessionExpired']->value));
+
+		// если непусто, очищаем куку, чтобы сообщение показывалось всего один раз.
+		if ($bResult) {
+			unset(Yii::app()->request->cookies['accountSessionExpired']);
+		}
+
+		return $bResult;
 	}
 }
