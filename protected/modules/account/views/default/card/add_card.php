@@ -37,10 +37,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			if (Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
 				<li>При привязке новой банковской карты, данные старой карты удаляются.</li>
 			<?php endif; ?>
-			<li>
-				В данный момент перечисление займов доступно только на карты MasterCard. В ближайшее время перечисления
-				станут доступны и на карты Visa. Благодарим за понимание!
-			</li>
 			<?php if (Yii::app()->adminKreddyApi->checkCardVerifyExists()): ?>
 				<li>На Вашей карте будет заморожена случайная сумма не более чем на 2 часа. Обращаем Ваше внимание - на
 					карте должно быть не менее 10 рублей.
@@ -88,7 +84,6 @@ border: 0px;
 height: 14px;
 }');
 
-// TODO: добавить для visa
 $sScript = 'oCardPan = $("#' . get_class($model) . '_sCardPan");
 oCardTypeField = $("#' . get_class($model) . '_iCardType");
 var regexp;

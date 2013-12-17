@@ -188,6 +188,32 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider validVisaCardDataProvider
+	 */
+
+	public function testAddVisaFormValid($sCardPan, $sCardValidThru, $sCardCvc, $sCardHolderName)
+	{
+		$aPostData = array(
+			'sCardPan'        => $sCardPan,
+			'iCardType'       => 3,
+			'sCardValidThru'  => $sCardValidThru,
+			'sCardCvc'        => $sCardCvc,
+			'sCardHolderName' => $sCardHolderName,
+		);
+
+		$oForm = new AddCardForm();
+		$oForm->setAttributes($aPostData);
+
+		$oForm->validate();
+
+		$this->assertEmpty($oForm->getError('sCardPan'), print_r($oForm->getError('sCardPan'), true));
+		$this->assertEmpty($oForm->getError('iCardType'), print_r($oForm->getError('iCardType'), true));
+		$this->assertEmpty($oForm->getError('sCardValidThru'), print_r($oForm->getError('sCardValidThru'), true));
+		$this->assertEmpty($oForm->getError('sCardCvc'), print_r($oForm->getError('sCardCvc'), true));
+		$this->assertEmpty($oForm->getError('sCardHolderName'), print_r($oForm->getError('sCardHolderName'), true));
+	}
+
+	/**
 	 * @dataProvider validMaestroCardDataProvider
 	 */
 
@@ -605,6 +631,25 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 				'sCardPan'       => substr($sCardPan, 1),
 				'sCardValidThru' => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
 				'sCardCvc'       => substr((rand(1000, 1999)), 1),
+				'sCardHolderName' => self::getValidCardHolderName(),
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+
+	public static function validVisaCardDataProvider()
+	{
+		$aYears = Dictionaries::getYears();
+		$aMonths = Dictionaries::$aMonthsDigital;
+
+		return array(
+			array(
+				'sCardPan'        => substr((rand(14000000000000000, 14999999999999999)), 1),
+				'sCardValidThru'  => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
+				'sCardCvc'        => substr((rand(1000, 1999)), 1),
 				'sCardHolderName' => self::getValidCardHolderName(),
 			)
 		);
