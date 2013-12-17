@@ -46,7 +46,7 @@ class AdminKreddyApiComponent
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
 
 	const C_SESSION_EXPIRED = 'Время Вашей сессии истекло. Просим Вас снова зайти в личный кабинет.';
-	const C_SESSION_TIME_UNTIL_EXPIRED = 'Ваша сессия истечёт через <span id="sessionLeftTime"></span> (обновите страницу, чтобы обновить сессию).';
+	const C_SESSION_TIME_UNTIL_EXPIRED = 'Время сессии: ';
 
 	private $aAvailableStatuses = array(
 
@@ -327,20 +327,16 @@ class AdminKreddyApiComponent
 			$this->token = $aTokenData['token'];
 
 			return true;
-		} elseif (($aTokenData['code'] == self::ERROR_TOKEN_EXPIRE) && (Yii::app()->user->getState('accountLogin', false) === true)) {
-			Yii::app()->user->setState('accountLogin', false);
-			$this->setUserSessionExpired();
-
-			$this->setSessionToken(null);
-			$this->token = null;
-
-			return false;
-		} else {
-			$this->setSessionToken(null);
-			$this->token = null;
-
-			return false;
 		}
+
+		if (($aTokenData['code'] == self::ERROR_TOKEN_EXPIRE)) {
+			$this->setUserSessionExpired();
+		}
+
+		$this->setSessionToken(null);
+		$this->token = null;
+
+		return false;
 	}
 
 	/**

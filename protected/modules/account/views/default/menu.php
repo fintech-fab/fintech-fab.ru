@@ -89,31 +89,9 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 }
 ?>
 
-<div class="well in" id="sessionLeftTimeText">
-	<?= AdminKreddyApiComponent::C_SESSION_TIME_UNTIL_EXPIRED; ?>
+<div class="well in">
+	<?php $this->widget('application.modules.account.components.SessionExpireTimeWidget'); ?>
 </div>
-<script>
-	var leftTime, iSecondsLeft, iMinutesLeft;
-	function showUntilSessionEnd() {
-		iSecondsLeft = Math.floor((leftTime - (new Date())) / 1000);
-		if (iSecondsLeft < 0) {
-			jQuery("#sessionLeftTimeText").html(<?= AdminKreddyApiComponent::C_SESSION_EXPIRED; ?>);
-			return;
-		}
-		iMinutesLeft = Math.floor(iSecondsLeft / 60);
-		iSecondsLeft -= iMinutesLeft * 60;
-		if (iSecondsLeft < 10) {
-			iSecondsLeft = "0" + iSecondsLeft;
-		}
-		jQuery("#sessionLeftTime").html(iMinutesLeft + ":" + iSecondsLeft);
-		setTimeout(showUntilSessionEnd, 1000);
-	}
-	leftTime = new Date();
-	leftTime.setTime(leftTime.getTime() + <?= AdminKreddyApiComponent::TOKEN_MINUTES_LIVE; ?> * 60 * 1000
-	)
-	;
-	showUntilSessionEnd();
-</script>
 
 <div class="well" style="padding: 8px; 0; margin-top: 20px;">
 	<?php
