@@ -323,6 +323,14 @@ class AdminKreddyApiComponent
 			$this->token = $aTokenData['token'];
 
 			return true;
+		} elseif (($aTokenData['code'] == self::ERROR_TOKEN_EXPIRE) && (Yii::app()->user->getState('accountLogin', false) === true)) {
+			Yii::app()->user->setState('accountLogin', false);
+			$this->setUserSessionExpired();
+
+			$this->setSessionToken(null);
+			$this->token = null;
+
+			return false;
 		} else {
 			$this->setSessionToken(null);
 			$this->token = null;
@@ -2977,5 +2985,20 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return (isset($aClientInfo['bank_card_exists']) && $aClientInfo['bank_card_exists'] === true);
+	}
+
+	public function setUserSessionExpired()
+	{
+		Yii::app()->session['accountSessionExpired'] = true;
+	}
+
+	/**
+	 * Истекла ли сессия пользователя
+	 *
+	 * @return bool
+	 */
+	public function getIsUserSessionExpired()
+	{
+		return (!empty(Yii::app()->session['accountSessionExpired']));
 	}
 }

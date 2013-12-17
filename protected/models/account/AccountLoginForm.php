@@ -69,6 +69,7 @@ class AccountLoginForm extends CFormModel
 		if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
 			$duration = 0;
 			Yii::app()->user->login($this->_identity, $duration);
+			Yii::app()->user->setState('accountLogin', true);
 
 			return true;
 		} else {
