@@ -26,7 +26,7 @@ class AddCardForm extends CFormModel
 	{
 		$aRules = array(
 			array('sCardPan, sCardValidThru, sCardHolderName, sCardCvc', 'required'),
-			array('iCardType', 'required', 'message' => 'Выберите тип карты Mastercard либо Maestro'),
+			array('iCardType', 'required', 'message' => 'Выберите тип карты Mastercard, Maestro либо Visa'),
 
 			array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.'),
 
@@ -50,7 +50,7 @@ class AddCardForm extends CFormModel
 				                     'pattern' => '/^\d{3}$/'
 			),
 			array(
-				'iCardType', 'in', 'range' => array_keys(Dictionaries::$aCardTypes), 'message' => 'Выберите тип карты Mastercard либо Maestro'
+				'iCardType', 'in', 'range' => array_keys(Dictionaries::$aCardTypes), 'message' => 'Выберите тип карты Mastercard, Maestro либо Visa'
 			),
 		);
 
