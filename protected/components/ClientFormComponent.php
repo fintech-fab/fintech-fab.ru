@@ -11,9 +11,67 @@
  */
 class ClientFormComponent
 {
+	const SITE1 = 'main';
+	const SITE2 = 'ivanovo';
+
 	private $iClientId;
 	private $iCurrentStep;
 	private $iDoneSteps;
+
+
+	private static $aSteps = array(
+		self::SITE1 => array(
+			'max'     => 5,
+			'min'     => 0,
+			'default' => 0,
+		),
+		self::SITE2 => array(
+			'max'     => 5,
+			'min'     => 0,
+			'default' => 0,
+		),
+
+	);
+
+
+	private static $aStepsInfo = array(
+		self::SITE1 => array(
+			0 => array(
+				'view'  => 'client_select_product',
+				'model' => 'ClientSelectProductForm',
+			),
+			1 => array(
+				'view'  => 'client_full_form',
+				'model' => 'ClientFullForm',
+			),
+			2 => array(
+				'view'  => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'confirm_phone_full_form/check_sms_code',
+					false       => 'confirm_phone_full_form/send_sms_code'
+				),
+				'model' => 'ClientConfirmPhoneViaSMSForm',
+			),
+		),
+		self::SITE2 => array(
+			0 => array(
+				'view'  => 'client_flexible_product',
+				'model' => 'ClientFlexibleProductForm',
+			),
+			1 => array(
+				'view'  => 'client_full_form',
+				'model' => 'ClientFullForm',
+			),
+			2 => array(
+				'view'  => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'confirm_phone_full_form/check_sms_code',
+					false       => 'confirm_phone_full_form/send_sms_code'
+				),
+				'model' => 'ClientConfirmPhoneViaSMSForm',
+			),
+		),
+	);
 
 	public function init()
 	{
@@ -276,7 +334,7 @@ class ClientFormComponent
 		//$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 		//отправляем СМС через API
-		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone,$sMessage);
+		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
 
 		if ($bSmsSentOk) {
 			//добавляем в лог запрос sms с этого ip
@@ -416,7 +474,10 @@ class ClientFormComponent
 
 	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
 	{
-
+		/*
+		 *		$model = self::$aStepsInfo[$this->iCurrentStep]['model'];
+		 *  	new $model();
+		 */
 
 		switch ($this->iCurrentStep) {
 			case 0:
@@ -447,8 +508,19 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 
-		switch ($this->iCurrentStep) {
+		$mView = self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'];
+		if (is_array($mView) && isset($mView['condition'])) {
+			$b = $this->$mView['condition']();
+			$sView = $mView[$b];
+		} else {
+			$sView = $mView;
+		}
+
+		return $sView;
+
+		/*switch ($this->iCurrentStep) {
 			case 0:
 				if (SiteParams::getIsIvanovoSite()) {
 					return 'client_flexible_product';
@@ -478,7 +550,7 @@ class ClientFormComponent
 			default:
 				return 'client_select_product';
 				break;
-		}
+		}*/
 	}
 
 	/**
@@ -689,7 +761,7 @@ class ClientFormComponent
 			}
 		}
 		if (isset($aShoppingProduct)) {
-			Yii::app()->session['ClientSelectProductForm'] = array('product'=> $aShoppingProduct);
+			Yii::app()->session['ClientSelectProductForm'] = array('product' => $aShoppingProduct);
 
 			Yii::app()->session['goShopping'] = true;
 			$this->nextStep();
