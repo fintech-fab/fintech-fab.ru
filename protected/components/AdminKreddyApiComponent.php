@@ -169,9 +169,8 @@ class AdminKreddyApiComponent
 
 	public function getCardBigWarning()
 	{
-		$sWarning = '<h4 style="color: #000000 !important">Уважаемый Клиент!</h4><br />' .
-			'<p>Убедитесь, что: <ul>' .
-			'<li> банковская карта <b>Mastercard или Maestro</b>,</li>' .
+		$sWarning = '<p>Убедитесь, что: <ul>' .
+			'<li> банковская карта <b>Mastercard, Maestro или Visa</b>,</li>' .
 			'<li> банковская карта зарегистрирована <b>на Ваше имя</b>,</li>' .
 			'<li> <b>не является</b> предоплаченной,</li>' .
 			'<li> привязана <b>к рублевому счету</b>,</li>' .
