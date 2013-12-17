@@ -258,12 +258,14 @@ class Dictionaries
 
 	public static $aCardTypes = array(
 		'1' => 'Mastercard',
-		'2' => 'Maestro'
+		'2' => 'Maestro',
+		'3' => 'Visa',
 	);
 
 	public static $aCardTypesRegexp = array(
 		'1' => '/^5{1}[0-5]{1}/', //номера начинаются с 50-55
 		'2' => '/^6{1}[0-9]{1}/', //номера начинаются с 60-69
+		'3' => '/^4{1}[0-9]{1}/', // номера начинаются с 40-49
 	);
 
 	/**
