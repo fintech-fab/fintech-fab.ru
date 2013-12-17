@@ -89,6 +89,10 @@ if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 }
 ?>
 
+<div class="well in">
+	<?php $this->widget('application.modules.account.components.SessionExpireTimeWidget'); ?>
+</div>
+
 <div class="well" style="padding: 8px; 0; margin-top: 20px;">
 	<?php
 

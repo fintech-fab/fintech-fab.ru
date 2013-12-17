@@ -21,6 +21,10 @@ $this->breadcrumbs = array(
 		)
 	)); ?>
 
+	<?php if (Yii::app()->adminKreddyApi->getIsUserSessionExpired()): ?>
+		<div class="alert alert-info"><?= AdminKreddyApiComponent::C_SESSION_EXPIRED; ?></div>
+	<?php endif; ?>
+
 	<p class="note">Для входа в личный кабинет введите номер телефона, указанный в Анкете, и пароль</p>
 
 	<div class="row">

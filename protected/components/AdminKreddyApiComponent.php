@@ -45,6 +45,8 @@ class AdminKreddyApiComponent
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
 
+	const C_SESSION_EXPIRED = 'Время Вашей сессии истекло. Просим Вас снова зайти в личный кабинет.';
+	const C_SESSION_TIME_UNTIL_EXPIRED = 'Время сессии: ';
 
 	private $aAvailableStatuses = array(
 
@@ -126,6 +128,8 @@ class AdminKreddyApiComponent
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
+
+	const TOKEN_MINUTES_LIVE = 10; // токен живёт 10 минут todo: уточнить
 
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
@@ -349,12 +353,16 @@ class AdminKreddyApiComponent
 			$this->token = $aTokenData['token'];
 
 			return true;
-		} else {
-			$this->setSessionToken(null);
-			$this->token = null;
-
-			return false;
 		}
+
+		if (($aTokenData['code'] == self::ERROR_TOKEN_EXPIRE)) {
+			$this->setUserSessionExpired();
+		}
+
+		$this->setSessionToken(null);
+		$this->token = null;
+
+		return false;
 	}
 
 	/**
@@ -3015,5 +3023,33 @@ class AdminKreddyApiComponent
 		}
 
 		return $bIsFirstAddingCard;
+	}
+
+
+	/**
+	 * Установка флага, что сессия пользователя истекла или не истекла.
+	 *
+	 * @param bool $bFlag
+	 */
+	public function setUserSessionExpired($bFlag = true)
+	{
+		Yii::app()->request->cookies['accountSessionExpired'] = new CHttpCookie('accountSessionExpired', $bFlag);
+	}
+
+	/**
+	 * Истекла ли сессия пользователя
+	 *
+	 * @return bool
+	 */
+	public function getIsUserSessionExpired()
+	{
+		$bResult = (!empty(Yii::app()->request->cookies['accountSessionExpired']->value));
+
+		// если непусто, очищаем куку, чтобы сообщение показывалось всего один раз.
+		if ($bResult) {
+			unset(Yii::app()->request->cookies['accountSessionExpired']);
+		}
+
+		return $bResult;
 	}
 }
