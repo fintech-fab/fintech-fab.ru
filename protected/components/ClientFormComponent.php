@@ -19,7 +19,7 @@ class ClientFormComponent
 	private $iDoneSteps;
 
 
-	private static $aSteps = array(
+	public static $aSteps = array(
 		self::SITE1 => array(
 			'max'     => 5,
 			'min'     => 0,
@@ -472,33 +472,13 @@ class ClientFormComponent
 	 * @return ClientCreateFormAbstract
 	 */
 
-	public function getFormModel() //возвращает модель, соответствующую текущему шагу заполнения формы
+	public function getFormModel()
 	{
-		/*
-		 *		$model = self::$aStepsInfo[$this->iCurrentStep]['model'];
-		 *  	new $model();
-		 */
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 
-		switch ($this->iCurrentStep) {
-			case 0:
-				if (SiteParams::getIsIvanovoSite()) {
-					return new ClientFlexibleProductForm();
-				}
+		$oModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
 
-				return new ClientSelectProductForm();
-				break;
-			case 1:
-				return new ClientFullForm();
-				break;
-			case 2:
-			case 3:
-				return new ClientConfirmPhoneViaSMSForm();
-				break;
-			default:
-				return new ClientSelectProductForm();
-				break;
-		}
-
+		return new $oModel();
 	}
 
 	/**
@@ -519,38 +499,6 @@ class ClientFormComponent
 		}
 
 		return $sView;
-
-		/*switch ($this->iCurrentStep) {
-			case 0:
-				if (SiteParams::getIsIvanovoSite()) {
-					return 'client_flexible_product';
-				}
-
-				return 'client_select_product';
-				break;
-			case 1:
-				return 'client_full_form';
-				break;
-			case 2:
-				// если SMS уже отправлялось, рендер формы проверки
-				if ($this->getFlagSmsSent()) {
-					return 'confirm_phone_full_form/check_sms_code';
-				}
-
-				return 'confirm_phone_full_form/send_sms_code';
-				break;
-			case 3:
-				// если SMS ещё не отправлялось, рендер формы отправки
-				if (!$this->getFlagSmsSent()) {
-					return 'confirm_phone_full_form/send_sms_code';
-				}
-
-				return 'confirm_phone_full_form/check_sms_code';
-				break;
-			default:
-				return 'client_select_product';
-				break;
-		}*/
 	}
 
 	/**
@@ -560,28 +508,11 @@ class ClientFormComponent
 	 */
 	public function getPostData()
 	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 
+		$sModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
 
-		switch ($this->iCurrentStep) {
-			case 0:
-				if (SiteParams::getIsIvanovoSite()) {
-					return Yii::app()->request->getParam('ClientFlexibleProductForm');
-				}
-
-				return Yii::app()->request->getParam('ClientSelectProductForm');
-				break;
-			case 1:
-				return Yii::app()->request->getParam('ClientFullForm');
-				break;
-			case 2:
-			case 3:
-				return Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
-				break;
-			default:
-				return null;
-				break;
-
-		}
+		return Yii::app()->request->getParam($sModel);
 	}
 
 

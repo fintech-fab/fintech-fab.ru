@@ -101,6 +101,16 @@ class FormController extends Controller
 	 */
 	public function actionStep($step)
 	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
+
+		$iMinStep = ClientFormComponent::$aSteps[$sSite]['min'];
+		$iMaxStep = ClientFormComponent::$aSteps[$sSite]['max'];
+
+		// проверка, что шаг корректный
+		if (($step < $iMinStep) || ($step > $iMaxStep)) {
+			$step = ClientFormComponent::$aSteps[$sSite]['default'];
+		}
+
 		if ($step > 0) {
 			$iDoneSteps = Yii::app()->clientForm->getDoneSteps();
 

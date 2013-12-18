@@ -12,6 +12,12 @@ class ClientFullForm extends ClientCreateFormAbstract
 	public $complete;
 	public $password;
 	public $password_repeat;
+	public $subscribe_news; // галочка "получать новости сервиса" todo behaviuors для новых полей
+	public $status; // статус
+	public $income_source; // источник дохода
+	public $educational_institution_name; // название учебного заведения
+	public $educational_institution_phone; // телефон учебного заведения
+	public $goal; // цель займа
 
 	/**
 	 * @return array
@@ -47,13 +53,9 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'relatives_one_fio',
 			'relatives_one_phone',
 
-			'job_company',
-			'job_position',
-			'job_phone',
-			'job_time',
-			'job_monthly_income',
-			'job_monthly_outcome',
+			'status',
 			'have_past_credit',
+			'goal',
 
 			'numeric_code',
 			'complete',
@@ -139,6 +141,11 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'friends_fio',
 				'friends_phone',
 
+				'status',
+				'income_source',
+				'educational_institution_name',
+				'educational_institution_phone',
+
 				'job_company',
 				'job_position',
 				'job_phone',
@@ -151,7 +158,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'secret_question',
 				'secret_answer',
 				'password',
-				'password_repeat'
+				'password_repeat',
+				'goal',
 			),
 			$aRequired
 		), $aMyRules);
@@ -227,30 +235,37 @@ class ClientFullForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'relatives_one_fio'   => 'ФИО',
-				'relatives_one_phone' => 'Телефон',
+				'relatives_one_fio'             => 'ФИО',
+				'relatives_one_phone'           => 'Телефон',
 
-				'friends_fio'         => 'ФИО',
-				'friends_phone'       => 'Телефон',
+				'friends_fio'                   => 'ФИО',
+				'friends_phone'                 => 'Телефон',
 
-				'complete'            => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+				'complete'                      => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
+				'subscribe_news'                => 'Я согласен/согласна получать новости от kreddy.ru (<a data-toggle="modal" href="#privacy">подробная информация</a>)', //todo: ссылка на модальное окно?
 
-				'passport_number'     => 'Серия/номер',
-				'passport_series'     => 'Серия/номер',
+				'passport_number'               => 'Серия/номер',
+				'passport_series'               => 'Серия/номер',
 
-				'secret_question'     => 'Секретный вопрос',
-				'secret_answer'       => 'Ответ на секретный вопрос',
+				'secret_question'               => 'Секретный вопрос',
+				'secret_answer'                 => 'Ответ на секретный вопрос',
 
-				'product'             => 'Сумма займа',
-				'address_reg_as_res'  => 'фактический адрес совпадает с пропиской',
+				'product'                       => 'Сумма займа',
+				'address_reg_as_res'            => 'фактический адрес совпадает с пропиской',
 
-				'job_monthly_income'  => 'Среднемесячный доход',
-				'job_monthly_outcome' => 'Среднемесячный расход',
+				'status'                        => 'Статус',
+				'educational_institution_name'  => 'Название учебного заведения',
+				'educational_institution_phone' => 'Телефон учебного заведения',
+				'job_monthly_income'            => 'Среднемесячный доход',
+				'job_monthly_outcome'           => 'Среднемесячный расход',
+				'income_source'                 => 'Источник дохода',
 
-				'have_past_credit'    => 'Наличие кредитов и займов в прошлом',
+				'have_past_credit'              => 'Наличие кредитов и займов в прошлом',
 
-				'password'            => 'Пароль для входа в личный кабинет',
-				'password_repeat'     => 'Подтверждение пароля',
+				'password'                      => 'Пароль для входа в личный кабинет',
+				'password_repeat'               => 'Подтверждение пароля',
+
+				'goal'                          => 'Цель займа',
 
 			)
 		);
@@ -317,18 +332,24 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'friends_fio',
 			'friends_phone',
 
+			'status',
+			'educational_institution_name',
+			'educational_institution_phone',
 			'job_company',
 			'job_position',
 			'job_phone',
 			'job_time',
 			'job_monthly_income',
 			'job_monthly_outcome',
+			'income_source',
 			'have_past_credit',
 
+			'goal',
 			'numeric_code',
 			'secret_question',
 			'secret_answer',
 			'complete',
+			'subscribe_news',
 			'password',
 			'password_repeat',
 		);
