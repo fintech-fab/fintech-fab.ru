@@ -185,6 +185,36 @@ class SiteParams
 		45,
 	);
 
+	public static function getHintHtmlOptions($sAttrName)
+	{
+		$aHtmlOptions = array();
+
+		$aHintsHtmlOptions = ClientCreateFormAbstract::getHints();
+
+		if (array_key_exists($sAttrName, $aHintsHtmlOptions)) {
+			$sInfo = $aHintsHtmlOptions[$sAttrName];
+
+			$sInfoTag = CHtml::tag('i', array(
+				'class' => 'icon icon-exclamation-sign',
+				'data-html'      => 'true',
+				'data-trigger'   => 'hover',
+				'data-placement' => 'right',
+				'data-content'   => '<span style="color: black;">' . $sInfo . '</span>',
+				'data-toggle'    => 'popover'
+			), '', true);
+
+			$aHtmlOptions = array(
+				'append'         => $sInfoTag,
+				'data-trigger'   => 'focus',
+				'data-placement' => 'right',
+				'data-content'   => $sInfo,
+				'data-toggle'    => 'popover'
+			);
+		}
+
+		return $aHtmlOptions;
+	}
+
 	/**
 	 * Возвращает значение константы
 	 *

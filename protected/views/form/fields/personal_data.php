@@ -56,15 +56,15 @@ $("#' . get_class($oClientCreateForm) . '_complete").parents(".controls").remove
 
 ?>
 <div class="span5">
-	<?= $form->textFieldRow($oClientCreateForm, 'last_name', $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'first_name', $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'third_name', $htmlOptions); ?>
-	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('size' => '5', 'class' => 'inline') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'last_name', SiteParams::getHintHtmlOptions('last_name') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'first_name', SiteParams::getHintHtmlOptions('first_name') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'third_name', SiteParams::getHintHtmlOptions('third_name') + $htmlOptions); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', SiteParams::getHintHtmlOptions('birthday') + array('size' => '5', 'class' => 'inline') + $htmlOptions); ?>
 </div>
 <div class="span5 offset1">
 	<?= $form->checkBoxRow($oClientCreateForm, 'complete', $htmlOptions); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'email', $htmlOptions); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', SiteParams::getHintHtmlOptions('phone') + array('size' => '15') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'email', SiteParams::getHintHtmlOptions('email') + $htmlOptions); ?>
 	<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
 	<div id="sex">
 		<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, $sexHtmlOptions); ?>

@@ -68,8 +68,8 @@ if (SiteParams::getIsIvanovoSite()) {
 
 	<?= $form->select2Row($oClientCreateForm, 'address_reg_region', array('empty' => '', 'data' => Dictionaries::getRegions()) + $htmlOptions + $select2Js); ?>
 	<div id="region-error" class="alert alert-error" style="display: none;"></div>
-	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', SiteParams::getHintHtmlOptions('address_reg_city') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', SiteParams::getHintHtmlOptions('address_reg_address') + $htmlOptions); ?>
 	<div id="reg_as_res">
 		<?= $form->checkBoxRow($oClientCreateForm, 'address_reg_as_res', $htmlOptions + array('uncheckValue' => '0')); ?>
 	</div>
@@ -77,17 +77,17 @@ if (SiteParams::getIsIvanovoSite()) {
 		<h5>Фактический адрес проживания</h5>
 
 		<?= $form->select2Row($oClientCreateForm, 'address_res_region', array('empty' => '', 'data' => Dictionaries::getRegions()) + $htmlOptions); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', array('class' => 'span3') + $htmlOptions); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', array('class' => 'span3') + $htmlOptions); ?>
+		<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', SiteParams::getHintHtmlOptions('address_res_city') + array('class' => 'span3') + $htmlOptions); ?>
+		<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', SiteParams::getHintHtmlOptions('address_res_address') + array('class' => 'span3') + $htmlOptions); ?>
 	</div>
 </div>
 
 <div class="span5 offset1">
 	<h5>Контакты родственников/друзей</h5>
-	<?= $form->textFieldRow($oClientCreateForm, 'relatives_one_fio', array('class' => 'span3') + $htmlOptions); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'relatives_one_fio', SiteParams::getHintHtmlOptions('relatives_one_fio') + array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', SiteParams::getHintHtmlOptions('relatives_one_phone') + array('class' => 'span3') + $htmlOptions); ?>
 
 	<h5>Дополнительный контакт<br />(повышает вероятность одобрения)</h5>
-	<?= $form->textFieldRow($oClientCreateForm, 'friends_fio', array('class' => 'span3') + $htmlOptions); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'friends_phone', array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'friends_fio', SiteParams::getHintHtmlOptions('friends_fio') + array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'friends_phone', SiteParams::getHintHtmlOptions('friends_phone') + array('class' => 'span3') + $htmlOptions); ?>
 </div>
