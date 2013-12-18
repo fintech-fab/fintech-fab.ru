@@ -1,13 +1,10 @@
 <?php
 /**
- * @var ClientCreateFormAbstract $oClientCreateForm
+ * @var ClientFullForm $oClientCreateForm
  * @var IkTbActiveForm           $form
  */
 ?>
 <?php
-
-//отдельно задаем свойства для радиокнопок, для корректной отработки валидации и сопутствующих JS
-$sexHtmlOptions = array('uncheckValue' => '999');
 
 //TODO yaCounter21390544.reachGoal("expand_1");
 
@@ -28,21 +25,21 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 ?>
-<h4 id="personalDataHeading">Личные данные</h4>
+<h4>Личные данные</h4>
 
 <div class="span5">
-	<?= $form->textFieldRow($oClientCreateForm, 'last_name', $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'first_name', $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'third_name', $htmlOptions); ?>
-	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('size' => '5', 'class' => 'inline') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'last_name'); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'first_name'); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'third_name'); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('size' => '5', 'class' => 'inline')); ?>
 </div>
 <div class="span5 offset1">
-	<?= $form->checkBoxRow($oClientCreateForm, 'complete', $htmlOptions); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'email', $htmlOptions); ?>
+	<?= $form->checkBoxRow($oClientCreateForm, 'complete'); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'email'); ?>
 	<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
 	<div id="sex">
-		<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, $sexHtmlOptions); ?>
+		<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, array('uncheckValue' => '999')); ?>
 	</div>
 </div>
 <div class="clearfix"></div>

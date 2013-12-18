@@ -79,14 +79,16 @@ class FormController extends Controller
 		/**
 		 * Рендер представления
 		 */
-		$sView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
+		$aView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
+		$sView = $aView['view'];
+		$sSubView = $aView['sub_view'];
 
 		if ($sView === 'client_select_product' || $sView === 'client_flexible_product') {
 			$this->showTopPageWidget = true;
 		}
 
 
-		$this->render($sView, array('oClientCreateForm' => $oClientForm));
+		$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
 	}
 
 	public function actionShopping()

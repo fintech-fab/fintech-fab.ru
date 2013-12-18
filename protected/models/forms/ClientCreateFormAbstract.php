@@ -227,12 +227,13 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'passport_date':
 					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
-					$aRules[] = array(
+					//TODO вынести проверку в модель уровнем выше, либо решить проблему с привязкой к ДР (например, добавить в формы смены паспортных данных еще и ДР)
+					/*$aRules[] = array(
 						'passport_date', 'checkValidPassportDate', 'birthDate'            => 'birthday',
 						                                           'message'              => 'Введите корректное значение даты выдачи паспорта',
 						                                           'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
 						                                           'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
-					);
+					);*/
 					break;
 
 				case 'passport_series':
@@ -360,7 +361,7 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'match', 'pattern' => '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[^А-Яа-яёЁ]+$/', 'message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры!');
 					$aRules[] = array($sFieldName, 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!');
 					break;
-				case 'addres_res_region':
+				case 'address_res_region':
 					$aRules[] = array('address_res_region', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Выберите регион из списка!');
 					break;
 				case 'address_res_city':

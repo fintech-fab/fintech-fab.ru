@@ -14,14 +14,12 @@ class ClientPersonalDataForm extends ClientFullForm
 			'first_name',
 			'last_name',
 			'third_name',
-
-			'birthday',
-
-			'phone',
 			'email',
-
 			'sex',
 			'complete',
+
+			'birthday',
+			'phone',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -29,15 +27,12 @@ class ClientPersonalDataForm extends ClientFullForm
 				'first_name',
 				'last_name',
 				'third_name',
+				'email',
+				'sex',
+				'complete',
 
 				'birthday',
-
 				'phone',
-				'email',
-
-				'sex',
-
-				'complete'
 			),
 			$aRequired
 		);
@@ -64,5 +59,4 @@ class ClientPersonalDataForm extends ClientFullForm
 			'complete',
 		);
 	}
-
 }

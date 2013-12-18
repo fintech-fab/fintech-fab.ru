@@ -1,52 +1,25 @@
 <?php
 /**
- * @var ClientCreateFormAbstract $oClientCreateForm
+ * @var ClientFullForm $oClientCreateForm
  * @var IkTbActiveForm           $form
  */
 ?>
 <?php
-$htmlOptions = array(
-	'errorOptions' => array(
-		'afterValidateAttribute' => 'js: function(html){
-			passportDataOk = false;
-			if($("#personalData").hasClass("in")) $("#personalData").collapse("hide");
-			var formName="' . get_class($oClientCreateForm) . '";
-			var aAttrs = Array(
-				"passport_series",
-				"passport_number",
-				"passport_date",
-				"passport_code",
-				"passport_issued",
-				"document",
-				"document_number"
-			);
-			var iCount = 0;
-			var sAttrName;
-			for(i=0;i<aAttrs.length;i++)
-			{
-				sAttrName = formName +"_"+aAttrs[i];
-				if(!$("#"+sAttrName).parents(".control-group").hasClass("success")){
-					iCount++;
-				}
-			}
-			if(iCount<=1){
-				$("#addressHeading").attr("href","#address");
-				if(!$("#address").hasClass("in")){
-					$("#address").collapse("show");
-				}
-				if($("#personalData").hasClass("in")){
-					$("#personalData").collapse("hide");
-				}
-				$("#address").find(":input").prop("disabled",false);
-				$("#jobInfoHeading").removeClass("disabled cursor-default");
 
-				passportDataOk = true;
-				yaCounter21390544.reachGoal("expand_2");
-			}
-		}'
-	)
-);
+$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+	'id'                   => get_class($oClientCreateForm),
+	'enableAjaxValidation' => true,
+	'type'                 => 'horizontal',
+	'clientOptions'        => array(
+		'validateOnChange' => true,
+		'validateOnSubmit' => true,
+	),
+	'action'               => Yii::app()->createUrl('/form#next'),
+));
+
 ?>
+<h4>Паспортные данные</h4>
+
 <div class="span5">
 	<div class="control-group">
 		<div class="row">
@@ -67,27 +40,28 @@ $htmlOptions = array(
 		<div class="row">
 			<div class="span5">
 				<div style="margin-left: 180px;">
-					<?= $form->error($oClientCreateForm, 'passport_series', $htmlOptions['errorOptions']); ?>
-					<?= $form->error($oClientCreateForm, 'passport_number', $htmlOptions['errorOptions']); ?></div>
+					<?= $form->error($oClientCreateForm, 'passport_series'); ?>
+					<?= $form->error($oClientCreateForm, 'passport_number'); ?></div>
 			</div>
 		</div>
 	</div>
 
 
 
-	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', $htmlOptions); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date'); ?>
 
-	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',) + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', $htmlOptions); ?>
+	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued'); ?>
 </div>
 
 <div class="span5 offset1">
 	<h5>Второй документ</h5>
-	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3')); ?>
 </div>
 
 <?php
+$this->endWidget();
 //при изменении типа документа заново валидировать поле с номером документа.
 
 Yii::app()->clientScript->registerScript('validate_document_number', '

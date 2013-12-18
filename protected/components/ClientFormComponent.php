@@ -41,13 +41,17 @@ class ClientFormComponent
 				'model' => 'ClientSelectProductForm',
 			),
 			1 => array(
-				'view' => array(
-					'main_view' => 'client_form',
-					'sub_view'  => 'personal_data'
-				),
-				'model' => 'ClientFullForm',
+				'view'     => 'client_form',
+				'sub_view' => 'personal_data',
+				'model'    => 'ClientPersonalDataForm',
 			),
 			2 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'passport_data',
+				'model'            => 'ClientPassportDataForm',
+				'modelDbRelations' => array('birthday'),
+			),
+			3 => array(
 				'view'  => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone_full_form/check_sms_code',
@@ -117,7 +121,7 @@ class ClientFormComponent
 
 		$aValidFormData = $oClientForm->getValidAttributes();
 
-		if (get_class($oClientForm) === 'ClientFullForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
 			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
@@ -210,7 +214,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === 'ClientFullForm') {
+		if (get_class($oClientForm) === 'ClientPersonalDataForm') { //TODO задавать в конфиге имя формы!!! то же и для AJAX
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
@@ -472,28 +476,60 @@ class ClientFormComponent
 	/**
 	 * Возвращает модель текущей формы.
 	 *
-	 * @return ClientCreateFormAbstract
+	 * @return ClientFullForm
 	 */
 
 	public function getFormModel()
 	{
+		/**
+		 * * @var ClientFullForm $oModel
+		 */
+		//TODO сделать загрузку в модель данных с предыдущих шагов, если требуется
+		//брать attributeNames моделей, искать пересекающиеся атрибуты,
+		//загружать в модель следующего шага атрибут предыдущего шага
+
 		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 
-		$oModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
+		$sModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
 
-		return new $oModel();
+		//создаем модель
+		$oModel = new $sModel();
+
+		//если есть связи с полями в БД, то нужно сделать запрос в БД с указанием этих полей и получить их данные
+		//это требуется для валидации данных в формах, в которых правила валидации связаны с данными из БД
+		//соответствующее поле добавляется в модель формы, и тут заполняется данными
+		if (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['modelDbRelations'])) {
+			$aRelations = self::$aStepsInfo[$sSite][$this->iCurrentStep]['modelDbRelations'];
+			$iClientId = $this->getClientId();
+			$oClientData = ClientData::model()->findByPk($iClientId);
+			//если данные клиента найдены
+			if ($oClientData) {
+				//получаем требуемые атрибуты
+				$aClientData = $oClientData->getAttributes($aRelations);
+				//записываем в модель
+				$oModel->setAttributes($aClientData);
+			}
+		}
+
+		return $oModel;
 	}
 
 	/**
 	 * Возвращает название необходимого для генерации представления.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function getView()
 	{
 		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 
 		$mView = self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'];
+		$mSubView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']))
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']
+			: null;
+
+		//TODO вынести в метод
+		//если массив вида array('condition'=>'someCondition,...);
 		if (is_array($mView) && isset($mView['condition'])) {
 			$b = $this->$mView['condition']();
 			$sView = $mView[$b];
@@ -501,7 +537,20 @@ class ClientFormComponent
 			$sView = $mView;
 		}
 
-		return $sView;
+		//если массив вида array('condition'=>'someCondition,...);
+		if (is_array($mSubView) && isset($mSubView['condition'])) {
+			$b = $this->$mSubView['condition']();
+			$sSubView = $mSubView[$b];
+		} else {
+			$sSubView = $mSubView;
+		}
+
+		$aView = array(
+			'view'     => $sView,
+			'sub_view' => $sSubView,
+		);
+
+		return $aView;
 	}
 
 	/**
