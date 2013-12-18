@@ -3,8 +3,6 @@
  * @var ClientFullForm $oClientCreateForm
  * @var IkTbActiveForm           $form
  */
-?>
-<?php
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
@@ -59,6 +57,21 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '')); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3')); ?>
 </div>
+
+<div class="clearfix"></div>
+<div class="row span10">
+	<div class="form-actions">
+		<div class="row">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'id'         => 'submitButton',
+				'buttonType' => 'submit',
+				'type'       => 'primary',
+				'label'      => 'Далее',
+			)); ?>
+		</div>
+	</div>
+</div>
+<?php $this->endWidget(); ?>
 
 <?php
 $this->endWidget();

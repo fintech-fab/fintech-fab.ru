@@ -88,7 +88,7 @@ class FormController extends Controller
 		}
 
 
-		$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
+		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
 	public function actionShopping()

@@ -8,9 +8,10 @@
 
 //TODO yaCounter21390544.reachGoal("expand_1");
 
-//TODO вспомнить нафига вот это
+// todo выпилить
 Yii::app()->clientScript->registerScript('personalDataScript', '
 $("#' . get_class($oClientCreateForm) . '_complete").parents(".controls").removeClass("controls");
+$("#' . get_class($oClientCreateForm) . '_subscribe_news").parents(".controls").removeClass("controls");
 ', CClientScript::POS_READY);
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -35,6 +36,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 </div>
 <div class="span5 offset1">
 	<?= $form->checkBoxRow($oClientCreateForm, 'complete'); ?>
+	<?= $form->checkBoxRow($oClientCreateForm, 'subscribe_news'); ?>
 	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15')); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'email'); ?>
 	<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
