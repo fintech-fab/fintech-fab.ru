@@ -43,7 +43,7 @@ class ClientFormComponent
 			1 => array(
 				'view' => array(
 					'main_view' => 'client_form',
-					'sub_view'  => 'personal_data'
+					'sub_view' => 'job_info'
 				),
 				'model' => 'ClientFullForm',
 			),
@@ -494,14 +494,21 @@ class ClientFormComponent
 		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 
 		$mView = self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'];
+		$aView['params'] = array();
+
 		if (is_array($mView) && isset($mView['condition'])) {
 			$b = $this->$mView['condition']();
-			$sView = $mView[$b];
+			$aView[] = $mView[$b];
+		} elseif (is_array($mView) && isset($mView['main_view'])) {
+			$aView[] = $mView['main_view'];
+			if (isset($mView['sub_view'])) {
+				$aView['params']['sSubView'] = $mView['sub_view'];
+			}
 		} else {
-			$sView = $mView;
+			$aView[] = $mView;
 		}
 
-		return $sView;
+		return $aView;
 	}
 
 	/**
