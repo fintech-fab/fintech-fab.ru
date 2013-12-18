@@ -41,7 +41,10 @@ class ClientFormComponent
 				'model' => 'ClientSelectProductForm',
 			),
 			1 => array(
-				'view'  => 'client_full_form',
+				'view' => array(
+					'main_view' => 'client_form',
+					'sub_view'  => 'personal_data'
+				),
 				'model' => 'ClientFullForm',
 			),
 			2 => array(
