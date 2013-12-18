@@ -42,7 +42,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		//проверяем успешность логина
 		$this->assertEquals(0, $aResult['code'], ('Код результата не равен 0: code=' . $aResult['code']));
 		//проверяем наличие токена
-		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		$this->assertNotEmpty($sToken, 'Токен не получен!' . $sResult);
 		//проверяем наличие инструкции
 		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
 
