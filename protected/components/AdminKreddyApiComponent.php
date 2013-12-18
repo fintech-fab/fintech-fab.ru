@@ -166,7 +166,9 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
-
+	/**
+	 * @return string
+	 */
 	public function getCardBigWarning()
 	{
 		$sWarning = '<p>Убедитесь, что: <ul>' .
@@ -3000,6 +3002,9 @@ class AdminKreddyApiComponent
 		return (isset($aClientInfo['bank_card_exists']) && $aClientInfo['bank_card_exists'] === true);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getIsFirstAddingCard()
 	{
 		$bIsFirstAddingCard = (empty(Yii::app()->session['account_addCard']));

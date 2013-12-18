@@ -193,12 +193,13 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'prev_third_name':
 					$aRules[] = array($sFieldName, 'checkValidClientName', 'message' => 'Отчество может содержать только русские буквы');
 					break;
-
 				case 'relatives_one_fio':
-				case 'friends_fio':
 					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может содержать только русские буквы, пробелы и дефис');
 					break;
-
+				case 'friends_fio':
+					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может содержать только русские буквы, пробелы и дефис');
+					$aRules[] = array($sFieldName, 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!');
+					break;
 				case 'sex':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажите пол', 'range' => array_keys(Dictionaries::$aSexes));
 					break;
@@ -226,6 +227,12 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'passport_date':
 					$aRules[] = array($sFieldName, 'date', 'message' => 'Введите корректное значение для даты', 'format' => 'dd.MM.yyyy');
+					$aRules[] = array(
+						'passport_date', 'checkValidPassportDate', 'birthDate'            => 'birthday',
+						                                           'message'              => 'Введите корректное значение даты выдачи паспорта',
+						                                           'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
+						                                           'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
+					);
 					break;
 
 				case 'passport_series':
@@ -261,15 +268,36 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
 					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/');
+					$aRules[] = array(
+						$sFieldName, 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в контактный центр.', 'criteria' => array(
+							'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
+						)
+					);
+					break;
+				case 'complete':
+					$aRules[] = array($sFieldName, 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных');
 					break;
 				case 'phone_home':
-				case 'job_phone':
-				case 'relatives_one_phone':
 				case 'job_director_phone':
+				$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
+				break;
+				case 'job_phone':
+					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'message' => 'Номер не должен совпадать с телефоном контактного лица!');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!');
+					break;
 				case 'friends_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица!');
+					$aRules[] = array($sFieldName, 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!');
 					break;
-
+				case 'relatives_one_phone':
+					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с номером рабочего телефона!');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!');
+					break;
 				case 'numeric_code':
 					$aRules[] = array($sFieldName, 'checkValidClientNumericCode', 'message' => 'Цифровой код должен состоять не менее, чем из ' . SiteParams::C_NUMERIC_CODE_MIN_LENGTH . ' цифр и не более чем из ' . SiteParams::C_NUMERIC_CODE_MAX_LENGTH . ' цифр');
 					$aRules[] = array($sFieldName, 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Введите цифровой код не состоящий из нулей!');
@@ -329,10 +357,20 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 				case 'password':
 					$aRules[] = array($sFieldName, 'length', 'min' => '8');
-
-					//$aRules[] = array($sFieldName, 'match', 'pattern' =>'/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[0-9A-Za-z!@#$%]+$/','message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры! Также допустимы символы: !@#$%');
 					$aRules[] = array($sFieldName, 'match', 'pattern' => '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[^А-Яа-яёЁ]+$/', 'message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры!');
 					$aRules[] = array($sFieldName, 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!');
+					break;
+				case 'addres_res_region':
+					$aRules[] = array('address_res_region', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Выберите регион из списка!');
+					break;
+				case 'address_res_city':
+					$aRules[] = array('address_res_city', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+					break;
+				case 'address_res_address':
+					$aRules[] = array('address_res_address', 'checkAddressRes', 'reg_as_res' => 'address_reg_as_res', 'message' => 'Если адрес регистрации не совпадает с фактическим адресом, то поле обязательно к заполнению!', 'message2' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+					break;
+				case 'address_reg_as_res':
+					$aRules[] = array('address_reg_as_res', 'in', 'message' => 'Может принимать только значения 0 или 1', 'range' => array(0, 1));
 					break;
 				default:
 					$aRules[] = array($sFieldName, 'safe');
@@ -439,7 +477,7 @@ class ClientCreateFormAbstract extends CFormModel
 	 * адрес регистрации совпадает с адресом проживания?
 	 * @return bool
 	 */
-	private function isAddressRegAsRes()
+	public function isAddressRegAsRes()
 	{
 		return (bool)$this->address_reg_as_res;
 	}
@@ -476,6 +514,26 @@ class ClientCreateFormAbstract extends CFormModel
 			),
 		);
 	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkFriendsOnJobPhone($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkFriendsOnJobPhone($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+
+	public function checkAddressRes($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkAddressRes($attribute, $param);
+	}
+
 
 	/**
 	 * @return array|null
@@ -613,6 +671,9 @@ class ClientCreateFormAbstract extends CFormModel
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getHints()
 	{
 		$aHintsFormFields = array(
