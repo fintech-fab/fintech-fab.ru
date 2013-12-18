@@ -1,9 +1,13 @@
 <?php
-
+/**
+ * Class DefaultController
+ */
 class DefaultController extends Controller
 {
 	public function actionIndex()
 	{
+		header('Content-Type: application/json');
+
 		// Заполняем массив request
 		$aRequest['token'] = Yii::app()->request->getPost('token', '');
 		$aRequest['phone'] = Yii::app()->request->getPost('login', '');
