@@ -33,6 +33,27 @@ class ClientFormComponent
 
 	);
 
+	/**
+	 * Конфигурация шагов заполнения формы
+	 * массив должен содержать минимум 1 подмассив сайта (либо несколько массивов для разных сайтов)
+	 *
+	 * обязательные параметры: view, model
+	 *
+	 * view - может быть строкой либо array('condition'=>'methodName,true=>'view1',false=>'view2')
+	 * condition - именя функции проверки
+	 * true & false - какие view выбрать по результату проверки
+	 *
+	 * sub_view - аналогично view, этот параметр не обязателен, может содержать имя view для включения в основной view,
+	 * поддерживает в т.ч. condition
+	 *
+	 * modelDbRelations - массив вида array('id','phone','name'), содержит список полей для запроса в БД
+	 * запрос делается по client_id, т.е. клиент должен уже существовать в БД
+	 * при вызове getFormModel() данные параметры будут запрошены и их значения помещены в модель,
+	 * это требуется для валидации некоторых значений, которые связаны с данными в БД, сохраненными туда другими формами
+	 * (на предыдущих шагах)
+	 *
+	 * @var array
+	 */
 
 	private static $aStepsInfo = array(
 		self::SITE1 => array(
@@ -49,9 +70,33 @@ class ClientFormComponent
 				'view'             => 'client_form',
 				'sub_view'         => 'passport_data',
 				'model'            => 'ClientPassportDataForm',
-				'modelDbRelations' => array('birthday'),
+				'modelDbRelations' => array(
+					'birthday'
+				),
 			),
 			3 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'address_reg',
+				'model'            => 'ClientAddressDataForm',
+				'modelDbRelations' => array(
+					'phone'
+				),
+			),
+			4 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'job_info',
+				'model'            => 'ClientJobDataForm',
+				'modelDbRelations' => array(
+					'friends_phone',
+					'relatives_one_phone'
+				),
+			),
+			5 => array(
+				'view'     => 'client_form',
+				'sub_view' => 'secret_data',
+				'model'    => 'ClientSecretDataForm',
+			),
+			6 => array(
 				'view'  => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone_full_form/check_sms_code',
@@ -80,6 +125,9 @@ class ClientFormComponent
 		),
 	);
 
+	/**
+	 *
+	 */
 	public function init()
 	{
 		if (!$this->iClientId = $this->getClientId()) {

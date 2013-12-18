@@ -291,11 +291,13 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!');
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица!');
+					//TODO возможно тоже добавить в релейшены, на случай перехода на шаг назад
 					$aRules[] = array($sFieldName, 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!');
 					break;
 				case 'relatives_one_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!');
+					//TODO возможно тоже добавить в релейшены, на случай перехода на шаг назад
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с номером рабочего телефона!');
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!');
 					break;
