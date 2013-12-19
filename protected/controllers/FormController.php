@@ -10,8 +10,24 @@ class FormController extends Controller
 {
 	public $showTopPageWidget = false;
 
+
 	public function actionIndex()
 	{
+		$this->index();
+	}
+
+	public function actionAjaxForm()
+	{
+		$this->index(true);
+	}
+
+	/**
+	 * @param bool $ajaxForm
+	 */
+	private function index($ajaxForm = null)
+	{
+		$sRedirectUrl = ($ajaxForm) ? 'form/ajaxForm' : 'form';
+
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
 		 * @var array                    $aPost
@@ -52,7 +68,7 @@ class FormController extends Controller
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
-				$this->redirect(Yii::app()->createUrl("form"));
+				$this->redirect(Yii::app()->createUrl($sRedirectUrl));
 			}
 
 		}
@@ -90,7 +106,15 @@ class FormController extends Controller
 		}
 
 
-		$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
+		if (!$ajaxForm) {
+			$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
+		} else {
+			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
+			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
+
+			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
+		}
 	}
 
 	public function actionShopping()

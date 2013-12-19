@@ -118,8 +118,8 @@ class ClientFormComponent
 				'view'             => 'client_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
-					true        => 'confirm_phone_full_form/check_sms_code',
-					false       => 'confirm_phone_full_form/send_sms_code'
+					true        => 'confirm_phone/check_sms_code',
+					false       => 'confirm_phone/send_sms_code'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3
@@ -137,8 +137,8 @@ class ClientFormComponent
 			2 => array(
 				'view'  => array(
 					'condition' => 'getFlagSmsSent',
-					true        => 'confirm_phone_full_form/check_sms_code',
-					false       => 'confirm_phone_full_form/send_sms_code'
+					true        => 'confirm_phone/check_sms_code',
+					false       => 'confirm_phone/send_sms_code'
 				),
 				'model' => 'ClientConfirmPhoneViaSMSForm',
 			),
