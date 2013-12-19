@@ -69,9 +69,10 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::SITE1 => array(
 			0 => array(
-				'view'             => 'client_select_product',
-				'model'            => 'ClientSelectProductForm',
-				'breadcrumbs_step' => 1
+				'view'                => 'client_select_product',
+				'model'               => 'ClientSelectProductForm',
+				'breadcrumbs_step'    => 1,
+				'select_product_view' => 'main',
 			),
 			1 => array(
 				'view'             => 'client_form',
@@ -127,8 +128,9 @@ class ClientFormComponent
 		),
 		self::SITE2 => array(
 			0 => array(
-				'view'  => 'client_flexible_product',
-				'model' => 'ClientFlexibleProductForm',
+				'view'                => 'client_flexible_product',
+				'model'               => 'ClientFlexibleProductForm',
+				'select_product_view' => 'flexible',
 			),
 			1 => array(
 				'view'  => 'client_full_form',
@@ -592,6 +594,9 @@ class ClientFormComponent
 		$mSubView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']))
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']
 			: null;
+		$sSelectProductView = (isset(self::$aStepsInfo[$sSite][0]['select_product_view']))
+			? self::$aStepsInfo[$sSite][0]['select_product_view']
+			: '';
 
 		//TODO вынести в метод
 		//если массив вида array('condition'=>'someCondition,...);
@@ -611,8 +616,10 @@ class ClientFormComponent
 		}
 
 		$aView = array(
-			'view'     => $sView,
-			'sub_view' => $sSubView,
+			'view'                      => $sView,
+			'sub_view'                  => $sSubView,
+			'select_product_view'       => $sSelectProductView,
+			'select_product_model_name' => self::$aStepsInfo[$sSite][0]['model'],
 		);
 
 		return $aView;

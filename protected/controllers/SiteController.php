@@ -32,7 +32,8 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		Yii::app()->clientForm->setDoneSteps(0);
+		// todo: редирект?
+		/*Yii::app()->clientForm->setDoneSteps(0);
 		Yii::app()->clientForm->setCurrentStep(0);
 
 
@@ -42,7 +43,7 @@ class SiteController extends Controller
 		} else {
 			$oClientForm = new ClientSelectProductForm();
 			$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
-		}
+		}*/
 	}
 
 	/**

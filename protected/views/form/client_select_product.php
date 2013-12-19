@@ -56,9 +56,10 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 			<?= $form->radioButtonListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 		</div>
 	</div>
-	<?php $this->widget('SelectedProductWidget', array(
-		'curStep' => Yii::app()->clientForm->getCurrentStep() + 1,
-	)); ?>
+
+	<div class="span6">
+		<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName)); ?>
+	</div>
 
 	<div class="clearfix"></div>
 	<div class="row span11">
@@ -71,6 +72,10 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 		</div>
 	</div>
 
+	<?php
+	$this->endWidget();
+	?>
+
 	<div class="clearfix"></div>
 	<br />
 
@@ -81,11 +86,6 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 					->createUrl('account')) ?>.</strong>
 		</div>
 	</div>
-	<?php
-
-	$this->endWidget();
-
-	?>
 
 	<?php $this->widget('YaMetrikaGoalsWidget', array(
 		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
