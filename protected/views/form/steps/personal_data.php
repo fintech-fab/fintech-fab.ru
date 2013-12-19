@@ -6,21 +6,15 @@
 
 //TODO yaCounter21390544.reachGoal("expand_1");
 
-// todo выпилить
-Yii::app()->clientScript->registerScript('personalDataScript', '
-$("#' . get_class($oClientCreateForm) . '_complete").parents(".controls").removeClass("controls");
-$("#' . get_class($oClientCreateForm) . '_subscribe_news").parents(".controls").removeClass("controls");
-', CClientScript::POS_READY);
-
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
-	'enableAjaxValidation' => true,
+	//'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
-	'clientOptions'        => array(
-		'validateOnChange' => true,
+	'clientOptions' => array(
+		//'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action'               => Yii::app()->createUrl('/form#next'),
+	'action' => Yii::app()->createUrl('/form/'),
 ));
 
 ?>
@@ -33,8 +27,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('size' => '5', 'class' => 'inline')); ?>
 </div>
 <div class="span5 offset1">
-	<?= $form->checkBoxRow($oClientCreateForm, 'complete'); ?>
-	<?= $form->checkBoxRow($oClientCreateForm, 'subscribe_news'); ?>
+	<?= $form->checkBoxRow($oClientCreateForm, 'complete', array('inputType' => 'bootstrap.widgets.input.TbInputVertical')); ?>
 	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15')); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'email'); ?>
 	<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
@@ -47,8 +40,16 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<div class="form-actions">
 		<div class="row">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'         => 'submitButton',
-				'buttonType' => 'submit',
+				'id'          => get_class($oClientCreateForm) . '_submitButton',
+				'buttonType'  => 'ajaxSubmit',
+				'ajaxOptions' => array(
+					'type'     => 'POST',
+					'update'   => '#formBody',
+					//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
+					//сделано во избежание навешивания кучи эвентов
+					'complete' => 'jQuery("body").off("click","#' . get_class($oClientCreateForm) . '_submitButton")',
+				),
+				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 				'type'       => 'primary',
 				'label'      => 'Далее',
 			)); ?>
@@ -57,10 +58,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 </div>
 <?php $this->endWidget(); ?>
 
+<?php //TODO вынести текст в страницы, выдавать ajax-ом при нажатии на кнопку ?>
 
-<?php $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'privacy')); ?>
-
-<div class="modal-header">
+<!--div class="modal-header">
 	<a class="close" data-dismiss="modal">&times;</a>
 	<h4>Условия обслуживания и передачи информации</h4>
 </div>
@@ -94,14 +94,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		способом, подтверждаю, что ознакомлен с правилами предоставления микрозайма, со всеми условиями предоставления
 		микрозайма. Также подтверждаю, что номер мобильного телефона, указанный в анкете, принадлежит лично мне.
 		Ответственность за неправомерное использование номера мобильного телефона лежит на мне.</p>
-</div>
+</div-->
 
-<div class="modal-footer">
-	<?php $this->widget('bootstrap.widgets.TbButton', array(
-		'label'       => 'Закрыть',
-		'url'         => '#',
-		'htmlOptions' => array('data-dismiss' => 'modal'),
-	)); ?>
-</div>
 
-<?php $this->endWidget(); ?>

@@ -7,6 +7,57 @@ Yii::import('bootstrap.widgets.TbActiveForm');
  */
 class IkTbActiveForm extends TbActiveForm
 {
+	/**
+	 *### .inputRow()
+	 *
+	 * Creates an input row of a specific type.
+	 *
+	 * This is a generic factory method. It is mainly called by various helper methods
+	 *  which pass correct type definitions to it.
+	 *
+	 * @param string $type        the input type
+	 * @param CModel $model       the data model
+	 * @param string $attribute   the attribute
+	 * @param array  $data        the data for list inputs
+	 * @param array  $htmlOptions additional HTML attributes
+	 *
+	 * @return string the generated row
+	 */
+	public function inputRow($type, $model, $attribute, $data = null, $htmlOptions = array())
+	{
+		$inputClassName = $this->getInputClassName();
+
+		/*
+		 * сделано для возможности указывать в htmlOptions тип инпута
+		 * т.к. разные типы рендерятся по-разному, и бывает нужно вывести инпут с другим типом, не таким,
+		 * какой задан у всей формы
+		 *
+		 * Input classes.
+		 * 'bootstrap.widgets.input.TbInputHorizontal';
+		 * 'bootstrap.widgets.input.TbInputInline';
+		 * 'bootstrap.widgets.input.TbInputSearch';
+		 * 'bootstrap.widgets.input.TbInputVertical';
+		 */
+		if (isset($htmlOptions['inputType'])) {
+			$inputClassName = $htmlOptions['inputType'];
+		}
+
+		ob_start();
+		Yii::app()->controller->widget(
+			$inputClassName,
+			array(
+				'type'        => $type,
+				'form'        => $this,
+				'model'       => $model,
+				'attribute'   => $attribute,
+				'data'        => $data,
+				'htmlOptions' => $htmlOptions,
+			)
+		);
+		echo "\n";
+
+		return ob_get_clean();
+	}
 
 	/**
 	 * @param CModel|CActiveForm $oForm

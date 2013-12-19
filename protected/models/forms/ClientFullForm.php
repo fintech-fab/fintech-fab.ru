@@ -138,8 +138,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'friends_fio'                   => 'ФИО',
 				'friends_phone'                 => 'Телефон',
 
-				'complete'                      => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a data-toggle="modal" href="#privacy">подробная информация</a>)',
-				'subscribe_news'                => 'Я согласен/согласна получать новости от kreddy.ru (<a data-toggle="modal" href="#privacy">подробная информация</a>)', //todo: ссылка на модальное окно?
+				'complete' => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'http://dev.kreddy.popov/footerLinks/view/offer\', \'Оферта\')"  href="#">подробная информация</a>)',
 
 				'passport_number'               => 'Серия/номер',
 				'passport_series'               => 'Серия/номер',

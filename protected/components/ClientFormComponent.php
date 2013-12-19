@@ -134,8 +134,8 @@ class ClientFormComponent
 				'view'             => 'client_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
-					true        => 'confirm_phone_full_form/check_sms_code',
-					false       => 'confirm_phone_full_form/send_sms_code'
+					true        => 'confirm_phone/check_sms_code',
+					false       => 'confirm_phone/send_sms_code'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3
@@ -153,8 +153,8 @@ class ClientFormComponent
 			2 => array(
 				'view'  => array(
 					'condition' => 'getFlagSmsSent',
-					true        => 'confirm_phone_full_form/check_sms_code',
-					false       => 'confirm_phone_full_form/send_sms_code'
+					true        => 'confirm_phone/check_sms_code',
+					false       => 'confirm_phone/send_sms_code'
 				),
 				'model' => 'ClientConfirmPhoneViaSMSForm',
 			),
@@ -298,7 +298,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) { //TODO задавать в конфиге имя формы!!! то же и для AJAX
+		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) {
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте

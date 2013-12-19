@@ -19,59 +19,46 @@ $this->pageTitle = Yii::app()->name;
 $this->widget('FormSelectProductWidget');
 
 ?>
-	<div class="row">
-		<?php if (Yii::app()->session['error']): ?>
-			<div class="alert alert-error"><?= Yii::app()->session['error']; ?></div>
-			<?php Yii::app()->session['error'] = null; ?>
-		<?php endif; ?>
 
-		<div class="alert in alert-block alert-info" style="color: #000000;">
-			<strong>Всего несколько шагов и Вы получите решение по займу:</strong>
+<?php if (Yii::app()->session['error']): ?>
+	<div class="alert alert-error"><?= Yii::app()->session['error']; ?></div>
+	<?php Yii::app()->session['error'] = null; ?>
+<?php endif; ?>
+	<div class="clearfix"></div>
 
-			<ol>
-				<?php if (SiteParams::getIsIvanovoSite()): ?>
-					<li>Выберите сумму, срок займа и канал получения (на мобильный телефон или банковскую карту).</li>
-				<?php endif; ?>
-				<?php if (!SiteParams::getIsIvanovoSite()): ?>
-					<li>Выберите удобный Пакет займов и канал получения (на мобильный телефон или банковскую карту).
-					</li>
-				<?php endif; ?>
+	<div class="span12">
+		<div class="row">
+			<ul style="list-style: none outside none; margin-left: 0; margin-right: 20px;">
+				<li style="display: inline-block; width: 20%"><?= CHtml::link('Выбор пакета', array("form/1")); ?></li>
 
-				<li>Заполните анкету</li>
-				<li>Убедитесь в наличие работающей веб-камеры и используйте один из перечисленных браузеров: Chrome или
-					Firefox последних версий.
-				</li>
-				<li>Приготовьте свой паспорт и <span id="second-document-popover" class="dashed">второй документ</span>
-					для демонстрации в вэб-камеру при прохождении идентификации (подтверждение личности).
-				</li>
-				<li>Обращаем Ваше внимание, что проверка анкеты осуществляется ежедневно с 10:00 до 22:00 по московскому
-					времени.
-				</li>
-				<li>Ознакомьтесь с Офертой <a href="#" class="dotted" onclick="return doOpenModalFrame('<?php
-					$sOfferLinkName = SiteParams::getIsIvanovoSite() ? 'offer_ivanovo' : 'distance';
-					$sOfferTitle = SiteParams::getIsIvanovoSite() ? 'Оферта' : 'Оферта на дистанционный займ';
 
-					echo Yii::app()
-						->createAbsoluteUrl('/footerLinks/view/' . $sOfferLinkName);
-					?>', '<?= $sOfferTitle ?>');">здесь.</a>
-				</li>
-			</ol>
+				<li style="display: inline-block; width: 20%"><?= CHtml::link('Личные данные', array("form/2")); ?></li>
+
+
+				<li style="display: inline-block; width: 20%"><a class="active">Паспортные данные</a></li>
+
+				<li style="display: inline-block; width: 20%">Адрес</li>
+
+				<li style="display: inline-block; width: 20%">Отправка заявки</li>
+			</ul>
 		</div>
-
-		<div class="clearfix"></div>
-		<script type="text/javascript">
-			$('#second-document-popover').popover({
-				html: true,
-				trigger: 'hover',
-				content: 'Заграничный паспорт<br/>Водительское удостоверение<br/>'
-					+ 'Пенсионное удостоверение<br/>Военный билет<br/>Свидетельство ИНН<br/>'
-					+ 'Страховое свидетельство государственного пенсионного страхования'
-			});
-		</script>
-
-		<div id="form">
-			<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
+		<div class="row">
+			<?php $this->widget('bootstrap.widgets.TbProgress', array(
+				'type'        => 'danger', // 'info', 'success' or 'danger'
+				'percent'     => 80, // the progress
+				'striped'     => true,
+				'animated'    => true,
+				'htmlOptions' => array(
+					'style' => 'height: 10px; margin-right: 20px;',
+				),
+			)); ?>
 		</div>
+	</div>
+
+	<div class="clearfix"></div>
+	<div id="formBody">
+		<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
+	</div>
 
 	</div>
 <?php
