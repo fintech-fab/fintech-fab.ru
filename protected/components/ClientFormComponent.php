@@ -532,9 +532,6 @@ class ClientFormComponent
 		/**
 		 * * @var ClientFullForm $oModel
 		 */
-		//TODO сделать загрузку в модель данных с предыдущих шагов, если требуется
-		//брать attributeNames моделей, искать пересекающиеся атрибуты,
-		//загружать в модель следующего шага атрибут предыдущего шага
 
 		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
 

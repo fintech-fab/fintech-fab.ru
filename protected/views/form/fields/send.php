@@ -41,12 +41,12 @@ $productHtmlOptions = array('errorOptions' => $htmlOptions['errorOptions'] + arr
 
 ?>
 <div class="span5">
-	<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', SiteParams::getHintHtmlOptions('numeric_code') + array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', array('class' => 'span3') + $htmlOptions); ?>
 	<?= $form->dropDownListRow($oClientCreateForm, 'secret_question', Dictionaries::$aSecretQuestions, array('class' => 'span3') + $htmlOptions); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', SiteParams::getHintHtmlOptions('secret_answer') + array('class' => 'span3') + $htmlOptions); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', array('class' => 'span3') + $htmlOptions); ?>
 </div>
 <?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
-<div class="span5 offset1">
-	<?= $form->passwordFieldRow($oClientCreateForm, 'password', SiteParams::getHintHtmlOptions('password') + $htmlOptions + array('autocomplete' => 'off')); ?>
-	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', SiteParams::getHintHtmlOptions('password_repeat') + $htmlOptions + array('autocomplete' => 'off')); ?>
+<div class="span6">
+	<?= $form->passwordFieldRow($oClientCreateForm, 'password', $htmlOptions + array('autocomplete' => 'off')); ?>
+	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', $htmlOptions + array('autocomplete' => 'off')); ?>
 </div>
