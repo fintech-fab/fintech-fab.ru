@@ -33,10 +33,10 @@ class IkTbActiveForm extends TbActiveForm
 		 * какой задан у всей формы
 		 *
 		 * Input classes.
-		 * const INPUT_HORIZONTAL = 'bootstrap.widgets.input.TbInputHorizontal';
-		 * const INPUT_INLINE = 'bootstrap.widgets.input.TbInputInline';
-		 * const INPUT_SEARCH = 'bootstrap.widgets.input.TbInputSearch';
-		 * const INPUT_VERTICAL = 'bootstrap.widgets.input.TbInputVertical';
+		 * 'bootstrap.widgets.input.TbInputHorizontal';
+		 * 'bootstrap.widgets.input.TbInputInline';
+		 * 'bootstrap.widgets.input.TbInputSearch';
+		 * 'bootstrap.widgets.input.TbInputVertical';
 		 */
 		if (isset($htmlOptions['inputType'])) {
 			$inputClassName = $htmlOptions['inputType'];

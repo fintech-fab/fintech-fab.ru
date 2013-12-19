@@ -14,7 +14,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),*/
-	//'action'               => Yii::app()->createUrl('/form/ajaxForm'),
+	'action' => Yii::app()->createUrl('/form/'),
 ));
 
 ?>
