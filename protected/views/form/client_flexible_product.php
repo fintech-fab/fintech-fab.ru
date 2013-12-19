@@ -47,33 +47,14 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 		$oClientCreateForm->time = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()));
 	}
 
-
 	$form->radioButtonGroupsList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary'));
 	?>
 	<div class="row span7">
 		<?php $this->widget('SliderWidget', array('form' => $form, 'model' => $oClientCreateForm)); ?>
 	</div>
 
-	<div class="row offset1 span4 conditions">
-
-		<div class="alert alert-success" style="margin-top: 20pt;">
-			<h5 class="pay_legend">Выбранные условия</h5>
-			<?php
-
-			?>
-			<ul>
-				<li>Размер займа:
-					<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-				</li>
-				<li>Канал получения: <span class="cost channel"></span>
-				</li>
-				<li>Дата возврата займа: &nbsp;<span class="cost date"></span>
-				</li>
-				<li>Необходимо вернуть:
-					<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-				</li>
-			</ul>
-		</div>
+	<div class="row offset1 span4">
+		<?php $this->widget('SelectedProductWidget'); ?>
 	</div>
 
 	<div class="clearfix"></div>
@@ -101,17 +82,7 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 </div>
 <?php
 //эта функция предназначена для обработки нажатий на кнопки-переключатели, выбирающие канал
-Yii::app()->clientScript->registerScript('radioButtonsTrigger', '
- var oChannelId = $("#' . get_class($oClientCreateForm) . '_channel_id");
- oChannelId.on("change",function(){
-
-		var sChannel = $("#' . get_class($oClientCreateForm) . '").find("button[value*=" + this.value + "]").html();
-		$(".cost.channel").html(sChannel);
-		$("#amount").change();
-		$("#time").change();
-	});
-oChannelId.change();
-
+Yii::app()->clientScript->registerScript('radioButtonsColors', '
 	//разные цвета кнопок
 	$(".btn-group .btn.btn-primary").first().next().removeClass("btn-primary").addClass("btn-danger").next().removeClass("btn-primary").addClass("btn-warning").next().removeClass("btn-primary").addClass("btn-success");
 ', CClientScript::POS_READY);

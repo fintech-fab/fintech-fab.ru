@@ -21,6 +21,22 @@ class ClientFormComponent
 	private $iCurrentStep;
 	private $iDoneSteps;
 
+	/**
+	 * Массив свойств для виджета сквозной выбор продукта
+	 *
+	 * @var array
+	 */
+	public static $aSelectProductSettings = array(
+		self::SITE1 => array(
+			'view'       => 'main',
+			'model_name' => 'ClientSelectProductForm',
+		),
+		self::SITE2 => array(
+			'view'       => 'flexible',
+			'model_name' => 'ClientFlexibleProductForm',
+		),
+	);
+
 
 	/**
 	 * Конфигурация шагов заполнения анкеты:
@@ -71,7 +87,7 @@ class ClientFormComponent
 			0 => array(
 				'view'             => 'client_select_product',
 				'model'            => 'ClientSelectProductForm',
-				'breadcrumbs_step' => 1
+				'breadcrumbs_step' => 1,
 			),
 			1 => array(
 				'view'             => 'client_form',
@@ -632,6 +648,27 @@ class ClientFormComponent
 		return Yii::app()->request->getParam($sModel);
 	}
 
+	/**
+	 * @return string
+	 */
+	public static function getSelectProductView()
+	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sView = isset(self::$aSelectProductSettings[$sSite]['view']) ? self::$aSelectProductSettings[$sSite]['view'] : '';
+
+		return $sView;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function getSelectProductModelName()
+	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sModelName = isset(self::$aSelectProductSettings[$sSite]['model_name']) ? self::$aSelectProductSettings[$sSite]['model_name'] : '';
+
+		return $sModelName;
+	}
 
 	/**
 	 * Переводит обработку форм на следующий шаг
