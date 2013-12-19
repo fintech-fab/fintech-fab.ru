@@ -83,15 +83,13 @@ class FormController extends Controller
 
 		$sView = $aView['view'];
 		$sSubView = $aView['sub_view'];
-		$sSelectProductView = $aView['select_product_view'];
-		$sSelectProductModelName = $aView['select_product_model_name'];
 
 		//TODO показ виджета сконфигурировать в массиве форм-компонента и отдавать через метод сюда
 		if ($sView === 'client_select_product' || $sView === 'client_flexible_product') {
 			$this->showTopPageWidget = true;
 		}
 
-		$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView, 'sSelectProductModelName' => $sSelectProductModelName, 'sSelectProductView' => $sSelectProductView,));
+		$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
 	}
 
 	public function actionShopping()

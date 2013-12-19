@@ -58,7 +58,7 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 	</div>
 
 	<div class="span6">
-		<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName)); ?>
+		<?php $this->widget('SelectedProductWidget'); ?>
 	</div>
 
 	<div class="clearfix"></div>

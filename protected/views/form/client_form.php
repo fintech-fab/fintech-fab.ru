@@ -3,8 +3,6 @@
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 /* @var $sSubView */
-/* @var $sSelectProductView      string */
-/* @var $sSelectProductModelName string */
 
 $this->pageTitle = Yii::app()->name;
 ?>
@@ -18,7 +16,7 @@ $this->pageTitle = Yii::app()->name;
 	</div>
 <?php
 
-$this->widget('FormSelectProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName));
+$this->widget('FormSelectProductWidget');
 
 ?>
 	<div class="row">

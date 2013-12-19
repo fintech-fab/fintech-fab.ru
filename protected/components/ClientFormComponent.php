@@ -21,6 +21,22 @@ class ClientFormComponent
 	private $iCurrentStep;
 	private $iDoneSteps;
 
+	/**
+	 * Массив свойств для виджета сквозной выбор продукта
+	 *
+	 * @var array
+	 */
+	public static $aSelectProductSettings = array(
+		self::SITE1 => array(
+			'view'       => 'main',
+			'model_name' => 'ClientSelectProductForm',
+		),
+		self::SITE2 => array(
+			'view'       => 'flexible',
+			'model_name' => 'ClientFlexibleProductForm',
+		),
+	);
+
 
 	/**
 	 * Конфигурация шагов заполнения анкеты:
@@ -69,10 +85,9 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::SITE1 => array(
 			0 => array(
-				'view'                => 'client_select_product',
-				'model'               => 'ClientSelectProductForm',
-				'breadcrumbs_step'    => 1,
-				'select_product_view' => 'main',
+				'view'             => 'client_select_product',
+				'model'            => 'ClientSelectProductForm',
+				'breadcrumbs_step' => 1,
 			),
 			1 => array(
 				'view'             => 'client_form',
@@ -128,9 +143,8 @@ class ClientFormComponent
 		),
 		self::SITE2 => array(
 			0 => array(
-				'view'                => 'client_flexible_product',
-				'model'               => 'ClientFlexibleProductForm',
-				'select_product_view' => 'flexible',
+				'view'  => 'client_flexible_product',
+				'model' => 'ClientFlexibleProductForm',
 			),
 			1 => array(
 				'view'  => 'client_full_form',
@@ -594,9 +608,6 @@ class ClientFormComponent
 		$mSubView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']))
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']
 			: null;
-		$sSelectProductView = (isset(self::$aStepsInfo[$sSite][0]['select_product_view']))
-			? self::$aStepsInfo[$sSite][0]['select_product_view']
-			: '';
 
 		//TODO вынести в метод
 		//если массив вида array('condition'=>'someCondition,...);
@@ -616,10 +627,8 @@ class ClientFormComponent
 		}
 
 		$aView = array(
-			'view'                      => $sView,
-			'sub_view'                  => $sSubView,
-			'select_product_view'       => $sSelectProductView,
-			'select_product_model_name' => self::$aStepsInfo[$sSite][0]['model'],
+			'view'     => $sView,
+			'sub_view' => $sSubView,
 		);
 
 		return $aView;
@@ -639,6 +648,27 @@ class ClientFormComponent
 		return Yii::app()->request->getParam($sModel);
 	}
 
+	/**
+	 * @return string
+	 */
+	public static function getSelectProductView()
+	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sView = isset(self::$aSelectProductSettings[$sSite]['view']) ? self::$aSelectProductSettings[$sSite]['view'] : '';
+
+		return $sView;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function getSelectProductModelName()
+	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sModelName = isset(self::$aSelectProductSettings[$sSite]['model_name']) ? self::$aSelectProductSettings[$sSite]['model_name'] : '';
+
+		return $sModelName;
+	}
 
 	/**
 	 * Переводит обработку форм на следующий шаг
