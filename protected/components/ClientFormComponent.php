@@ -76,7 +76,7 @@ class ClientFormComponent
 			),
 			3 => array(
 				'view'             => 'client_form',
-				'sub_view'         => 'address_reg',
+				'sub_view' => 'address_data',
 				'model'            => 'ClientAddressDataForm',
 				'modelDbRelations' => array(
 					'phone'
@@ -84,7 +84,7 @@ class ClientFormComponent
 			),
 			4 => array(
 				'view'             => 'client_form',
-				'sub_view'         => 'job_info',
+				'sub_view' => 'job_data',
 				'model'            => 'ClientJobDataForm',
 				'modelDbRelations' => array(
 					'friends_phone',
