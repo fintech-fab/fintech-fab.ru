@@ -569,7 +569,7 @@ class ClientFormComponent
 		 * * @var ClientCreateFormAbstract $oModel
 		 */
 
-		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sSite = self::getSite();
 
 		$sModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
 
@@ -602,7 +602,7 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sSite = self::getSite();
 
 		$mView = self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'];
 		$mSubView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']))
@@ -641,7 +641,7 @@ class ClientFormComponent
 	 */
 	public function getPostData()
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sSite = self::getSite();
 
 		$sModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
 
@@ -653,7 +653,7 @@ class ClientFormComponent
 	 */
 	public static function getSelectProductView()
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sSite = self::getSite();
 		$sView = isset(self::$aSelectProductSettings[$sSite]['view']) ? self::$aSelectProductSettings[$sSite]['view'] : '';
 
 		return $sView;
@@ -664,10 +664,17 @@ class ClientFormComponent
 	 */
 	public static function getSelectProductModelName()
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sSite = self::getSite();
 		$sModelName = isset(self::$aSelectProductSettings[$sSite]['model_name']) ? self::$aSelectProductSettings[$sSite]['model_name'] : '';
 
 		return $sModelName;
+	}
+
+	public static function getSite()
+	{
+		return (SiteParams::getIsIvanovoSite())
+			? self::SITE2
+			: self::SITE1;
 	}
 
 	/**
@@ -1003,7 +1010,7 @@ class ClientFormComponent
 	 */
 	public function getBreadCrumbsStep()
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+		$sSite = self::getSite();
 
 		$iBreadCrumbsStep = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['breadcrumbs_step'])
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['breadcrumbs_step']
