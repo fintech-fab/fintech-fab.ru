@@ -529,7 +529,7 @@ class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 
 		$oForm->validate();
 
-		//$this->assertNotEmpty($oForm->getError('phone')); убрано, т.к. phone теперь не должен выдавать ошибку
+		$this->assertNotEmpty($oForm->getError('phone'));
 		$this->assertNotEmpty($oForm->getError('job_phone'));
 		$this->assertNotEmpty($oForm->getError('friends_phone'));
 		$this->assertNotEmpty($oForm->getError('relatives_one_phone'));
@@ -552,7 +552,7 @@ class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 
 		$oForm->validate();
 
-		//$this->assertNotEmpty($oForm->getError('phone'));
+		$this->assertNotEmpty($oForm->getError('phone'));
 		$this->assertNotEmpty($oForm->getError('job_phone'));
 		$this->assertNotEmpty($oForm->getError('friends_phone'));
 		$this->assertNotEmpty($oForm->getError('relatives_one_phone'));

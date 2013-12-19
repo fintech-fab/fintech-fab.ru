@@ -89,6 +89,8 @@ Yii::app()->clientScript->registerScript('validate_document_number', '
 		   jQuery("#jobless").show();
 		}
 	});
+
+	jQuery("#' . get_class($oClientCreateForm) . '_status").change();
 ');
 
 ?>

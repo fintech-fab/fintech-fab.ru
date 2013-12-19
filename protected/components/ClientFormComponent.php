@@ -189,7 +189,7 @@ class ClientFormComponent
 
 		$aValidFormData = $oClientForm->getValidAttributes();
 
-		if (get_class($oClientForm) === 'ClientPersonalDataForm') {
+		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) {
 			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
