@@ -282,7 +282,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) { //TODO задавать в конфиге имя формы!!! то же и для AJAX
+		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) {
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
