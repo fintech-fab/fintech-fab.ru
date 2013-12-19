@@ -18,8 +18,6 @@ class ClientPassportDataForm extends ClientFullForm
 			'passport_issued',
 			'document',
 			'document_number',
-
-			'birthday',
 		);
 
 		$aMyRules =
@@ -41,6 +39,8 @@ class ClientPassportDataForm extends ClientFullForm
 				'passport_issued',
 				'document',
 				'document_number',
+
+				'birthday'
 			),
 			$aRequired
 		), $aMyRules);

@@ -1,8 +1,8 @@
 <?php
 /**
- * Class ClientAddressDataForm
+ * Class ClientSecretDataForm
  */
-class ClientAddressDataForm extends ClientFullForm
+class ClientSecretDataForm extends ClientFullForm
 {
 	/**
 	 * @return array
@@ -11,33 +11,20 @@ class ClientAddressDataForm extends ClientFullForm
 	{
 		// всегда обязательные поля
 		$aRequired = array(
-			'address_reg_region',
-			'address_reg_city',
-			'address_reg_address',
-
-			'relatives_one_fio',
-			'relatives_one_phone',
-
-			'phone',
+			'numeric_code',
+			'secret_question',
+			'secret_answer',
+			'password',
+			'password_repeat',
 		);
 
 		$aRules = $this->getRulesByFields(
 			array(
-				'address_reg_region',
-				'address_reg_city',
-				'address_reg_address',
-
-				'address_reg_as_res',
-
-				'address_res_region',
-				'address_res_city',
-				'address_res_address',
-
-				'relatives_one_fio',
-				'relatives_one_phone',
-
-				'friends_fio',
-				'friends_phone',
+				'numeric_code',
+				'secret_question',
+				'secret_answer',
+				'password',
+				'password_repeat',
 			),
 			$aRequired
 		);
@@ -51,24 +38,11 @@ class ClientAddressDataForm extends ClientFullForm
 	public function attributeNames()
 	{
 		return array(
-			'address_reg_region',
-			'address_reg_city',
-			'address_reg_address',
-
-			'address_reg_as_res',
-
-			'address_res_region',
-			'address_res_city',
-			'address_res_address',
-
-			'relatives_one_fio',
-			'relatives_one_phone',
-
-			'friends_fio',
-			'friends_phone',
-
-			//обязательно требуется для валидации, берется из информации предыдущих форм
-			'phone',
+			'numeric_code',
+			'secret_question',
+			'secret_answer',
+			'password',
+			'password_repeat',
 		);
 	}
 }

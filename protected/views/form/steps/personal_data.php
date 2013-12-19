@@ -1,7 +1,7 @@
 <?php
 /**
- * @var ClientFullForm $oClientCreateForm
- * @var IkTbActiveForm $form
+ * @var ClientCreateFormAbstract $oClientCreateForm
+ * @var IkTbActiveForm           $form
  */
 
 //TODO yaCounter21390544.reachGoal("expand_1");

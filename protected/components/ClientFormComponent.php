@@ -63,12 +63,12 @@ class ClientFormComponent
 			),
 			1 => array(
 				'view'     => 'client_form',
-				'sub_view' => 'personal_data',
+				'sub_view' => 'steps/personal_data',
 				'model'    => 'ClientPersonalDataForm',
 			),
 			2 => array(
 				'view'             => 'client_form',
-				'sub_view'         => 'passport_data',
+				'sub_view' => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
 				'modelDbRelations' => array(
 					'birthday'
@@ -76,7 +76,7 @@ class ClientFormComponent
 			),
 			3 => array(
 				'view'             => 'client_form',
-				'sub_view' => 'address_data',
+				'sub_view' => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
 				'modelDbRelations' => array(
 					'phone'
@@ -84,20 +84,22 @@ class ClientFormComponent
 			),
 			4 => array(
 				'view'             => 'client_form',
-				'sub_view' => 'job_data',
+				'sub_view'         => 'steps/job_data',
 				'model'            => 'ClientJobDataForm',
 				'modelDbRelations' => array(
 					'friends_phone',
-					'relatives_one_phone'
+					'relatives_one_phone',
+					'phone'
 				),
 			),
 			5 => array(
 				'view'     => 'client_form',
-				'sub_view' => 'secret_data',
+				'sub_view' => 'steps/secret_data',
 				'model'    => 'ClientSecretDataForm',
 			),
 			6 => array(
-				'view'  => array(
+				'view'     => 'client_form',
+				'sub_view' => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone_full_form/check_sms_code',
 					false       => 'confirm_phone_full_form/send_sms_code'
@@ -524,13 +526,13 @@ class ClientFormComponent
 	/**
 	 * Возвращает модель текущей формы.
 	 *
-	 * @return ClientFullForm
+	 * @return ClientCreateFormAbstract
 	 */
 
 	public function getFormModel()
 	{
 		/**
-		 * * @var ClientFullForm $oModel
+		 * * @var ClientCreateFormAbstract $oModel
 		 */
 
 		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
@@ -635,7 +637,7 @@ class ClientFormComponent
 	 */
 	public function getSessionPhone()
 	{
-		if (isset(Yii::app()->session['ClientFullForm']['phone'])) {
+		if (isset(Yii::app()->session['ClientFullForm']['phone'])) { //TODO переделать! задавать в конфиг-массиве имя модели
 			$sPhone = Yii::app()->session['ClientFullForm']['phone'];
 		} else {
 			$sPhone = false;
@@ -649,7 +651,7 @@ class ClientFormComponent
 	 */
 	public function setFlagFullFormFilled($bFullFormFilled)
 	{
-		Yii::app()->session['flagClientFullFormFilled'] = $bFullFormFilled;
+		Yii::app()->session['flagClientFullFormFilled'] = $bFullFormFilled; //TODO проверить нужно ли оставить это
 	}
 
 	/**
@@ -659,7 +661,7 @@ class ClientFormComponent
 	 */
 	public function getFlagFullFormFilled()
 	{
-		return !empty(Yii::app()->session['flagClientFullFormFilled']);
+		return !empty(Yii::app()->session['flagClientFullFormFilled']); //TODO см выше
 	}
 
 	/**
@@ -858,6 +860,7 @@ class ClientFormComponent
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['tmp_client_id'] = null;
 
+		//TODO для чистки брать все имена форм из массива конфигурации
 		//чистим данные форм
 		Yii::app()->session['ClientSelectProductForm'] = null;
 		Yii::app()->session['ClientSelectChannelForm'] = null;

@@ -59,6 +59,7 @@
 class ClientCreateFormAbstract extends CFormModel
 {
 
+	public $client_id;
 	public $comment; //комментарий
 	public $entry_point_id; //источник анкеты
 
@@ -159,6 +160,16 @@ class ClientCreateFormAbstract extends CFormModel
 	public $info_stand;
 	public $info_collector;
 	public $info;
+
+	public $complete;
+	public $password;
+	public $password_repeat;
+	public $subscribe_news; // галочка "получать новости сервиса" todo behaviuors для новых полей
+	public $status; // статус
+	public $income_source; // источник дохода
+	public $educational_institution_name; // название учебного заведения
+	public $educational_institution_phone; // телефон учебного заведения
+	public $goal; // цель займа
 
 	/**
 	 * получить правила для полей
@@ -727,11 +738,61 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * @return bool|void
+	 *
+	 * Перед валидацией приводим телефон к 10-значному виду, для валидации уникальности по БД
 	 */
 
-	protected
-	function beforeValidate()
+	protected function beforeValidate()
 	{
+		if ($this->phone) {
+			//очистка данных
+			$this->phone = ltrim($this->phone, '+ ');
+			$this->phone = preg_replace('/[^\d]/', '', $this->phone);
+
+			// убираем лишний знак слева (8-ка или 7-ка)
+			if (strlen($this->phone) == 11) {
+				$this->phone = substr($this->phone, 1, 10);
+			}
+		}
+
+		if ($this->job_phone) {
+			//очистка данных
+			$this->job_phone = ltrim($this->job_phone, '+ ');
+			$this->job_phone = preg_replace('/[^\d]/', '', $this->job_phone);
+
+			// убираем лишний знак слева (8-ка или 7-ка)
+			if (strlen($this->job_phone) == 11) {
+				$this->job_phone = substr($this->job_phone, 1, 10);
+			}
+		}
+
+		if ($this->document_number) {
+			$this->document_number = mb_strtoupper($this->document_number, 'UTF-8');
+		}
+
+		if ($this->relatives_one_phone) {
+			//очистка данных
+			$this->relatives_one_phone = ltrim($this->relatives_one_phone, '+ ');
+			$this->relatives_one_phone = preg_replace('/[^\d]/', '', $this->relatives_one_phone);
+
+			// убираем лишний знак слева (8-ка или 7-ка)
+			if (strlen($this->relatives_one_phone) == 11) {
+				$this->relatives_one_phone = substr($this->relatives_one_phone, 1, 10);
+			}
+		}
+
+		if ($this->friends_phone) {
+			//очистка данных
+			$this->friends_phone = ltrim($this->friends_phone, '+ ');
+			$this->friends_phone = preg_replace('/[^\d]/', '', $this->friends_phone);
+
+			// убираем лишний знак слева (8-ка или 7-ка)
+			if (strlen($this->friends_phone) == 11) {
+				$this->friends_phone = substr($this->friends_phone, 1, 10);
+			}
+		}
+
+
 		$oPurifier = new CHtmlPurifier;
 		$oPurifier->options = array(
 			//'HTML.SafeObject'=>true,

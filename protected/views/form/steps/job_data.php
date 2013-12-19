@@ -34,11 +34,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 </div>
 
+<?php //TODO довести до ума, сделать поля с другими названиями либо еще как-то решить проблему с одинаковыми именами полей ?>
 <div id="entrepreneur" class="statusfields hide">
-	<div class="span10"><?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3')); ?>
+	<!--div class="span10"><?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3')); ?>
 		<?= $form->textFieldRow($oClientCreateForm, 'job_position', array('class' => 'span3')); ?>
 		<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', array('class' => 'span3')) ?>
-		<?= $form->dropDownListRow($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, array('class' => 'span2')); ?></div>
+		<?= $form->dropDownListRow($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, array('class' => 'span2')); ?></div-->
 </div>
 
 <div id="student" class="statusfields hide">

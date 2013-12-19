@@ -17,8 +17,6 @@ class ClientAddressDataForm extends ClientFullForm
 
 			'relatives_one_fio',
 			'relatives_one_phone',
-
-			'phone',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -38,6 +36,7 @@ class ClientAddressDataForm extends ClientFullForm
 
 				'friends_fio',
 				'friends_phone',
+				'phone'
 			),
 			$aRequired
 		);

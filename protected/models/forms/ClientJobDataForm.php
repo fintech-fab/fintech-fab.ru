@@ -17,10 +17,9 @@ class ClientJobDataForm extends ClientFullForm
 			'job_time',
 			'job_monthly_income',
 			'job_monthly_outcome',
-			'have_past_credit',
+			//'have_past_credit',
 
-			'friends_phone',
-			'relatives_one_phone'
+			'status',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -31,7 +30,13 @@ class ClientJobDataForm extends ClientFullForm
 				'job_time',
 				'job_monthly_income',
 				'job_monthly_outcome',
-				'have_past_credit',
+				//'have_past_credit',
+				'status',
+
+				'friends_phone',
+				'relatives_one_phone',
+				'phone',
+				'status'
 			),
 			$aRequired
 		);
@@ -51,11 +56,13 @@ class ClientJobDataForm extends ClientFullForm
 			'job_time',
 			'job_monthly_income',
 			'job_monthly_outcome',
-			'have_past_credit',
+			//'have_past_credit',
 
 			//обязательно требуется для валидации, берется из информации предыдущих форм
 			'friends_phone',
-			'relatives_one_phone'
+			'phone',
+			'relatives_one_phone',
+			'status'
 		);
 	}
 }

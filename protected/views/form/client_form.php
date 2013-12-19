@@ -2,6 +2,7 @@
 /* @var FormController $this */
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
+/* @var $sSubView */
 
 $this->pageTitle = Yii::app()->name;
 
@@ -59,7 +60,7 @@ $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
 	</script>
 
 	<div id="form">
-		<?php require dirname(__FILE__) . '/steps/' . $sSubView . '.php' ?>
+		<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
 	</div>
 
 <?php
