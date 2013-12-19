@@ -44,8 +44,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		</div>
 	</div>
 
-
-
 	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date'); ?>
 
 	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
@@ -57,19 +55,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '')); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3')); ?>
 </div>
-<div class="clearfix"></div>
-<div class="row span10">
-	<div class="form-actions">
-		<div class="row">
-			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'         => 'submitButton',
-				'buttonType' => 'submit',
-				'type'       => 'primary',
-				'label'      => 'Далее',
-			)); ?>
-		</div>
-	</div>
-</div>
 
 <div class="clearfix"></div>
 <div class="row span10">
@@ -84,10 +69,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		</div>
 	</div>
 </div>
-<?php $this->endWidget(); ?>
-
-<?php
-$this->endWidget();
+<?php $this->endWidget();
 //при изменении типа документа заново валидировать поле с номером документа.
 
 Yii::app()->clientScript->registerScript('validate_document_number', '
