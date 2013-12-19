@@ -12,7 +12,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 	),
-	'action'               => Yii::app()->createUrl('/form/'),
+	'action' => Yii::app()->createUrl('/form/saveSelectedProduct'),
 )); //todo: аякс-сабмит
 
 // todo: пока берётся тупо из сессии

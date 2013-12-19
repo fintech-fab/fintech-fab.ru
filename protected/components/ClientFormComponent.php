@@ -291,6 +291,36 @@ class ClientFormComponent
 	}
 
 	/**
+	 * Сохраняет выбранные продукт/канал в сессию и/или в базу
+	 *
+	 * @param ClientCreateFormAbstract $oClientForm
+	 */
+	public function saveSelectedProduct(ClientCreateFormAbstract $oClientForm)
+	{
+		$aValidFormData = $oClientForm->getValidAttributes();
+
+		if ($this->iClientId) {
+			ClientData::saveClientDataById($aValidFormData, $this->iClientId);
+			$aValidFormData['client_id'] = $this->iClientId;
+		}
+
+		$aSessionFormData = $this->getSessionFormData($oClientForm);
+
+		//проверяем, есть ли в сессии уже какие-то данные, и проверяем что они лежат в массиве
+		if (!empty($aSessionFormData) && is_array($aSessionFormData) && is_array($aValidFormData)) {
+			//объединяем данные из сессии с новыми валидными данными
+			$aValidFormData = array_merge($aSessionFormData, $aValidFormData);
+		} elseif (!empty($aSessionFormData) && is_array($aSessionFormData)) {
+			$aValidFormData = $aSessionFormData;
+		}
+
+		Yii::app()->session[get_class($oClientForm)] = $aValidFormData;
+		Yii::app()->session[get_class($oClientForm) . '_client_id'] = $this->iClientId;
+
+		return;
+	}
+
+	/**
 	 * Выполняет обработку данных формы после проверки.
 	 *
 	 * @param ClientCreateFormAbstract|ClientSelectChannelForm $oClientForm

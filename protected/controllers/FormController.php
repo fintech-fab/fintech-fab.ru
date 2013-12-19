@@ -121,6 +121,34 @@ class FormController extends Controller
 		$this->redirect('/form');
 	}
 
+	public function actionSaveSelectedProduct()
+	{
+		/**
+		 * @var ClientCreateFormAbstract $oClientForm
+		 * @var array                    $aPost
+		 * @var string                   $sView
+		 */
+		$iClientId = Yii::app()->clientForm->getClientId();
+
+		/*
+		 * Запрашиваем у компонента форму выбора продукта
+		 */
+		$sModelName = Yii::app()->clientForm->getSelectProductModelName();
+		$oClientForm = new $sModelName();
+
+		$bIsAjax = Yii::app()->request->getIsAjaxRequest();
+		$sAjaxClass = Yii::app()->request->getParam('ajax');
+
+		if ($bIsAjax && ($sAjaxClass === $sModelName)) {
+			$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
+			Yii::app()->clientForm->saveSelectedProduct($oClientForm); //сохраняем полученные при ajax-запросе данные
+			echo $sEcho;
+			Yii::app()->end();
+		}
+
+		$this->redirect('/form');
+	}
+
 	/**
 	 *  Переход на шаг $step
 	 * @param int $step

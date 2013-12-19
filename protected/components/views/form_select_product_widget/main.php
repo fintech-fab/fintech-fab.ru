@@ -12,8 +12,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 	),
-	'action'               => Yii::app()->createUrl('/form/'),
-)); //todo: аякс-сабмит
+	'action' => Yii::app()->createUrl('/form/saveSelectedProduct'),
+));
 
 ?>
 <div class="row">

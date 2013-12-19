@@ -34,14 +34,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 </div>
 
-<?php //TODO довести до ума, сделать поля с другими названиями либо еще как-то решить проблему с одинаковыми именами полей ?>
-<div id="entrepreneur" class="statusfields hide">
-	<!--div class="span10"><?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'job_position', array('class' => 'span3')); ?>
-		<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', array('class' => 'span3')) ?>
-		<?= $form->dropDownListRow($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, array('class' => 'span2')); ?></div-->
-</div>
-
 <div id="student" class="statusfields hide">
 	<div class="span10"><?= $form->textFieldRow($oClientCreateForm, 'educational_institution_name', array('class' => 'span3')); ?>
 		<?= $form->phoneMaskedRow($oClientCreateForm, 'educational_institution_phone', array('class' => 'span3')); ?></div>
@@ -80,25 +72,36 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?php $this->endWidget(); ?>
 
 <?php
+//todo: место работы для предпринимателя по-другому называется
 //при изменении статуса выводим дополнительные поля, если нужно.
-//todo: hide все предыдущие
-Yii::app()->clientScript->registerScript('validate_document_number', '
-    var status;
-	jQuery("#' . get_class($oClientCreateForm) . '_status").change(function()
-	{
-	    status = jQuery("#' . get_class($oClientCreateForm) . '_status option:selected").val();
-		if(status == 1) {
+Yii::app()->clientScript->registerScript('loadExtraFields', '
+    var statusField = jQuery("#' . get_class($oClientCreateForm) . '_status");
+	statusField.change(function()	{
+	    status = statusField.val();
+	    if(status == "") {
+		   jQuery("#student").hide();
+		   jQuery("#jobless").hide();
+		   jQuery("#employee").hide();
+		} else if((status == 1) || (status == 2)) {
+		   jQuery("#student").hide();
+		   jQuery("#jobless").hide();
 		   jQuery("#employee").show();
-		} else if(status == 2) {
-		   jQuery("#entrepreneur").show();
 		} else if(status == 3) {
 		   jQuery("#student").show();
+		   jQuery("#jobless").hide();
+		   jQuery("#employee").hide();
+		} else if(status == 4) {
+		   jQuery("#student").hide();
+		   jQuery("#jobless").hide();
+		   jQuery("#employee").hide();
 		} else if((status == 5) || (status == 6)) {
 		   jQuery("#jobless").show();
+		   jQuery("#student").hide();
+		   jQuery("#employee").hide();
 		}
 	});
 
-	jQuery("#' . get_class($oClientCreateForm) . '_status").change();
+	statusField.change();
 ');
 
 ?>
