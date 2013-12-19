@@ -5,46 +5,36 @@
  * @var string $sErrorMessage
  */
 
-$this->pageTitle = Yii::app()->name;
-
-$aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
-
 /*
  * Отправить код подтверждения на телефон (ошибка)
  */
 ?>
 
-<div class="row">
+Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефоан:
+<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
 
-	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
+<?php
+$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+	'id'     => 'sendSmsCode',
+	'action' => Yii::app()->createUrl('/form/sendSmsCode'),
+));
 
-	<div class="span12">
-		Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефоан:
-		<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
+$this->widget('bootstrap.widgets.TbButton', array(
+	'id'         => 'sendSms',
+	'type'       => 'primary',
+	'size'       => 'small',
+	'buttonType' => 'submit',
+	'label'      => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с кодом подтверждения',
+));
 
-		<?php
-		$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-			'id'     => 'sendSmsCode',
-			'action' => Yii::app()->createUrl('/form/sendSmsCode'),
-		));
+$this->endWidget();
+?>
 
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'         => 'sendSms',
-			'type'       => 'primary',
-			'size'       => 'small',
-			'buttonType' => 'submit',
-			'label'      => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с кодом подтверждения',
-		));
-
-		$this->endWidget();
-		?>
-
-		<div class="alert in alert-block fade alert-error" id="errorMessage">
-			<?= $sErrorMessage ?>
-		</div>
-	</div>
-
-	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
-	)); ?>
+<div class="alert in alert-block fade alert-error" id="errorMessage">
+	<?= $sErrorMessage ?>
 </div>
+
+
+<?php $this->widget('YaMetrikaGoalsWidget', array(
+	'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
+)); ?>

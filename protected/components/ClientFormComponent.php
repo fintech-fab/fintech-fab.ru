@@ -14,10 +14,21 @@ class ClientFormComponent
 	const SITE1 = 'main';
 	const SITE2 = 'ivanovo';
 
+	//имя модели, в которой сохраняется телефон клиента
+	const C_PHONE_MODEL_NAME = 'ClientPersonalDataForm';
+
 	private $iClientId;
 	private $iCurrentStep;
 	private $iDoneSteps;
 
+
+	/**
+	 * Конфигурация шагов заполнения анкеты:
+	 * максимальный шаг, минимальный шаг, шаг по-умолчанию (на него переводит в случае, если текущий шаг вне пределов
+	 * минимума-максимума)
+	 *
+	 * @var array
+	 */
 
 	public static $aSteps = array(
 		self::SITE1 => array(
@@ -34,7 +45,7 @@ class ClientFormComponent
 	);
 
 	/**
-	 * Конфигурация шагов заполнения формы
+	 * Конфигурация шагов заполнения анкеты
 	 * массив должен содержать минимум 1 подмассив сайта (либо несколько массивов для разных сайтов)
 	 *
 	 * обязательные параметры: view, model
@@ -58,29 +69,33 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::SITE1 => array(
 			0 => array(
-				'view'  => 'client_select_product',
-				'model' => 'ClientSelectProductForm',
+				'view'             => 'client_select_product',
+				'model'            => 'ClientSelectProductForm',
+				'breadcrumbs_step' => 1
 			),
 			1 => array(
-				'view'     => 'client_form',
-				'sub_view' => 'steps/personal_data',
-				'model'    => 'ClientPersonalDataForm',
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/personal_data',
+				'model'            => 'ClientPersonalDataForm',
+				'breadcrumbs_step' => 2
 			),
 			2 => array(
 				'view'             => 'client_form',
-				'sub_view' => 'steps/passport_data',
+				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
 				'modelDbRelations' => array(
 					'birthday'
 				),
+				'breadcrumbs_step' => 2
 			),
 			3 => array(
 				'view'             => 'client_form',
-				'sub_view' => 'steps/address_data',
+				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
 				'modelDbRelations' => array(
 					'phone'
 				),
+				'breadcrumbs_step' => 2
 			),
 			4 => array(
 				'view'             => 'client_form',
@@ -91,20 +106,23 @@ class ClientFormComponent
 					'relatives_one_phone',
 					'phone'
 				),
+				'breadcrumbs_step' => 2
 			),
 			5 => array(
-				'view'     => 'client_form',
-				'sub_view' => 'steps/secret_data',
-				'model'    => 'ClientSecretDataForm',
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/secret_data',
+				'model'            => 'ClientSecretDataForm',
+				'breadcrumbs_step' => 2
 			),
 			6 => array(
-				'view'     => 'client_form',
-				'sub_view' => array(
+				'view'             => 'client_form',
+				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone_full_form/check_sms_code',
 					false       => 'confirm_phone_full_form/send_sms_code'
 				),
-				'model' => 'ClientConfirmPhoneViaSMSForm',
+				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'breadcrumbs_step' => 3
 			),
 		),
 		self::SITE2 => array(
@@ -137,7 +155,7 @@ class ClientFormComponent
 		}
 
 		if (!$this->iCurrentStep = $this->getCurrentStep()) {
-			$this->setCurrentStep(0);
+			$this->setCurrentStep(0); //TODO брать номер default из конфига
 		}
 
 		if (!$this->iDoneSteps = $this->getDoneSteps()) {
@@ -264,7 +282,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === 'ClientPersonalDataForm') { //TODO задавать в конфиге имя формы!!! то же и для AJAX
+		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) { //TODO задавать в конфиге имя формы!!! то же и для AJAX
 
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
@@ -637,8 +655,8 @@ class ClientFormComponent
 	 */
 	public function getSessionPhone()
 	{
-		if (isset(Yii::app()->session['ClientFullForm']['phone'])) { //TODO переделать! задавать в конфиг-массиве имя модели
-			$sPhone = Yii::app()->session['ClientFullForm']['phone'];
+		if (isset(Yii::app()->session[self::C_PHONE_MODEL_NAME]['phone'])) {
+			$sPhone = Yii::app()->session[self::C_PHONE_MODEL_NAME]['phone'];
 		} else {
 			$sPhone = false;
 		}
@@ -941,5 +959,20 @@ class ClientFormComponent
 	public function getBreadCrumbs()
 	{
 		return (SiteParams::getIsIvanovoSite()) ? SiteParams::$aIvanovoBreadCrumbs : SiteParams::$aMainBreadCrumbs;
+	}
+
+	/**
+	 * @return int|null
+	 */
+	public function getBreadCrumbsStep()
+	{
+		$sSite = (SiteParams::getIsIvanovoSite()) ? self::SITE2 : self::SITE1;
+
+		$iBreadCrumbsStep = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['breadcrumbs_step'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['breadcrumbs_step']
+			: null;
+
+		return $iBreadCrumbsStep;
+
 	}
 }

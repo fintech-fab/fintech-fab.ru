@@ -25,7 +25,7 @@ class StepsBreadCrumbsWidget extends CWidget
 
 	public function run()
 	{
-		$this->iCurStep = Yii::app()->clientForm->getCurrentStep() + 1;
+		$this->iCurStep = Yii::app()->clientForm->getBreadCrumbsStep();
 		$this->render('steps_bread_crumbs');
 	}
 }
