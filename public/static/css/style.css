@@ -468,7 +468,7 @@ slider style
 Навешиваем на форму анкеты дополнительные значки для успешного/ошибочного заполенения полей
 
 */
-#formBody .control-group.error:not(.passport-num) input {
+/*#formBody .control-group.error:not(.passport-num) input {
 	background-image: url("/static/img/icons/agt_action_fail.png");
 	background-position: right;
 	background-repeat: no-repeat;
@@ -505,21 +505,44 @@ slider style
 	background-position: right;
 	background-repeat: no-repeat;
 }
-
-#formBody .form-horizontal .control-group.success {
+*/
+#formBody .form-horizontal .control-group.success:not(.passport-num) {
 	background-image: url("/static/img/icons/button_ok.png");
 	background-position: right top;
 	background-repeat: no-repeat;
 }
 
-#formBody .form-horizontal .control-group.error {
+#formBody .form-horizontal .control-group.error:not(.passport-num) {
 	background-image: url("/static/img/icons/agt_action_fail.png");
 	background-position: right top;
 	background-repeat: no-repeat;
-
 }
 
-.icon-info-blue {
+#formBody .form-horizontal .control-group.success .append-icon-info {
+	background-image: url("/static/img/icons/button_ok.png");
+	background-repeat: no-repeat;
+	background-position: 0;
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+	margin-top: 1px;
+	vertical-align: text-top;
+	width: 16px;
+}
+
+#formBody .form-horizontal .control-group.error .append-icon-info {
+	background-image: url("/static/img/icons/agt_action_fail.png");
+	background-repeat: no-repeat;
+	background-position: 0;
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+	margin-top: 1px;
+	vertical-align: text-top;
+	width: 16px;
+}
+
+.append-icon-info {
 	background-image: url("/static/img/icons/info.png");
 	background-repeat: no-repeat;
 	background-position: 0;
@@ -543,3 +566,20 @@ slider style
 	color: red;
 }
 */
+
+#formBody .select-append .add-on {
+	background-color: #EEEEEE;
+	border: 1px solid #CCCCCC;
+	border-radius: 0 4px 4px 0;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 20px;
+	margin-left: -6px;
+	min-width: 16px;
+	padding: 4px 5px;
+	text-align: center;
+	vertical-align: top;
+	white-space: nowrap;
+	width: auto;
+}

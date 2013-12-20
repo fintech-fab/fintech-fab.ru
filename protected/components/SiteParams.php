@@ -224,7 +224,7 @@ class SiteParams
 			$sInfo = $aHintsHtmlOptions[$sAttrName];
 
 			$sInfoTag = CHtml::tag('i', array(
-				'class'          => 'icon-info-blue',
+				'class'          => 'append-icon-info',
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
 				'data-placement' => 'right',

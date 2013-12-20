@@ -36,7 +36,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 			</div>
 			<div class="span2">
 				<span>/</span>
-				<?= $form->maskedTextField($oClientCreateForm, 'passport_number', '999999', array('style' => 'width: 60px;', 'size' => '6', 'maxlength' => '6')); ?>
+				<?= $form->maskedTextField2($oClientCreateForm, 'passport_number', '999999', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_number') + array('style' => 'width: 60px;', 'size' => '6', 'maxlength' => '6')); ?>
 			</div>
 		</div>
 
@@ -58,7 +58,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 
 <div class="span5 offset1">
 	<h5>Второй документ</h5>
-	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, SiteParams::getHintHtmlOptions($oClientCreateForm, 'document_number') + array('class' => 'span3', 'empty' => '')); ?>
+	<?= $form->dropDownListRow2($oClientCreateForm, 'document', Dictionaries::$aDocuments, SiteParams::getHintHtmlOptions($oClientCreateForm, 'document') + array('class' => 'span3', 'empty' => '')); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'document_number', SiteParams::getHintHtmlOptions($oClientCreateForm, 'document_number') + array('class' => 'span3')); ?>
 </div>
 

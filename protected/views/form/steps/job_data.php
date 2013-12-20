@@ -18,7 +18,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 //todo: past credit?
 ?>
-
+<?php
+$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
+?>
 <h4 id="jobInfoHeading">Место работы</h4>
 
 <div class="span10">

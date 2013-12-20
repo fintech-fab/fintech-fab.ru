@@ -16,7 +16,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 ?>
-	<h4>Секретные данные (пароль и прочее)</h4>
+<?php
+$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
+?>
+	<h4>Отправка заявки</h4>
 	<div class="span5">
 		<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', array('class' => 'span3')); ?>
 		<?= $form->dropDownListRow($oClientCreateForm, 'secret_question', Dictionaries::$aSecretQuestions, array('class' => 'span3')); ?>

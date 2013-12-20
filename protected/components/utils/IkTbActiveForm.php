@@ -60,6 +60,44 @@ class IkTbActiveForm extends TbActiveForm
 	}
 
 	/**
+	 * Вывод маскированного поля с append и prepend (стандартный maskedTextField не добавляет append/prepend)
+	 *
+	 * @param CFormModel $model
+	 * @param            $attribute
+	 * @param            $mask
+	 * @param array      $htmlOptions
+	 */
+	public function maskedTextField2($model, $attribute, $mask, $htmlOptions = array())
+	{
+		$this->widget('IkTbInputVertical', array(
+			'type'        => 'maskedtextfield',
+			'form'        => $this,
+			'model'       => $model,
+			'attribute'   => $attribute,
+			'data'        => $mask,
+			'htmlOptions' => $htmlOptions,
+		));
+	}
+
+	/**
+	 * @param       $model
+	 * @param       $attribute
+	 * @param array $data
+	 * @param array $htmlOptions
+	 */
+	public function dropDownListRow2($model, $attribute, $data = array(), $htmlOptions = array())
+	{
+		$this->widget('IkTbInputHorizontal', array(
+			'type'        => 'dropdownlist',
+			'form'        => $this,
+			'model'       => $model,
+			'attribute'   => $attribute,
+			'data'        => $data,
+			'htmlOptions' => $htmlOptions,
+		));
+	}
+
+	/**
 	 * @param CModel|CActiveForm $oForm
 	 * @param                    $sAttribute
 	 * @param                    $aHtmlOptions
