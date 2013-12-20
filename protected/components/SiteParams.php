@@ -185,17 +185,46 @@ class SiteParams
 		45,
 	);
 
-	public static function getHintHtmlOptions($sAttrName)
+	public static $aFormWidgetSteps = array(
+		1 => array(
+			'label' => 'Личные данные',
+			'url'   => '/form/ajaxForm/2'
+		),
+		2 => array(
+			'label' => 'Паспортные данные',
+			'url'   => '/form/ajaxForm/3'
+		),
+		3 => array(
+			'label' => 'Постоянная регистрация',
+			'url'   => '/form/ajaxForm/4'
+		),
+		4 => array(
+			'label' => 'Место работы',
+			'url'   => '/form/ajaxForm/5'
+		),
+		5 => array(
+			'label' => 'Отправка заявки',
+			'url'   => '/form/ajaxForm/6'
+		),
+	);
+
+	/**
+	 * @param ClientCreateFormAbstract $oClientCreateForm
+	 * @param                          $sAttrName
+	 *
+	 * @return array
+	 */
+	public static function getHintHtmlOptions(ClientCreateFormAbstract $oClientCreateForm, $sAttrName)
 	{
 		$aHtmlOptions = array();
 
-		$aHintsHtmlOptions = ClientCreateFormAbstract::getHints();
+		$aHintsHtmlOptions = $oClientCreateForm->getHints();
 
 		if (array_key_exists($sAttrName, $aHintsHtmlOptions)) {
 			$sInfo = $aHintsHtmlOptions[$sAttrName];
 
 			$sInfoTag = CHtml::tag('i', array(
-				'class' => 'icon icon-exclamation-sign',
+				'class'          => 'icon-info-blue',
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
 				'data-placement' => 'right',

@@ -12,20 +12,24 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action' => Yii::app()->createUrl('/form'),
+	'action'               => Yii::app()->createUrl('/form'),
 ));
 
 ?>
-<h4>Паспортные данные</h4>
+<?php
+$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
+?>
+<div class="clearfix"></div><h4>Паспортные данные</h4>
 
 <div class="span5">
-	<div class="control-group">
-		<div class="row">
-			<div class="span5">
-				<h5>Паспорт</h5>
-			</div>
+
+	<div class="row">
+		<div class="span5">
+			<h5>Паспорт</h5>
 		</div>
-		<div class="row">
+	</div>
+	<div class="row">
+		<div class="control-group passport-num">
 			<div class="span3">
 				<?= $form->labelEx($oClientCreateForm, 'passport_number', array('class' => 'control-label')); ?>
 				<div class="controls"><?= $form->maskedTextField($oClientCreateForm, 'passport_series', '9999', array('style' => 'width: 40px;', 'size' => '4', 'maxlength' => '4')); ?></div>
@@ -35,25 +39,27 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				<?= $form->maskedTextField($oClientCreateForm, 'passport_number', '999999', array('style' => 'width: 60px;', 'size' => '6', 'maxlength' => '6')); ?>
 			</div>
 		</div>
-		<div class="row">
-			<div class="span5">
-				<div style="margin-left: 180px;">
-					<?= $form->error($oClientCreateForm, 'passport_series'); ?>
-					<?= $form->error($oClientCreateForm, 'passport_number'); ?></div>
-			</div>
+
+	</div>
+	<div class="row">
+		<div class="span5">
+			<div style="margin-left: 180px;">
+				<?= $form->error($oClientCreateForm, 'passport_series'); ?>
+				<?= $form->error($oClientCreateForm, 'passport_number'); ?></div>
 		</div>
 	</div>
 
-	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date'); ?>
 
-	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued'); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_date')); ?>
+
+	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_code') + array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_issued')); ?>
 </div>
 
 <div class="span5 offset1">
 	<h5>Второй документ</h5>
-	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, array('class' => 'span3', 'empty' => '')); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'document_number', array('class' => 'span3')); ?>
+	<?= $form->dropDownListRow($oClientCreateForm, 'document', Dictionaries::$aDocuments, SiteParams::getHintHtmlOptions($oClientCreateForm, 'document_number') + array('class' => 'span3', 'empty' => '')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'document_number', SiteParams::getHintHtmlOptions($oClientCreateForm, 'document_number') + array('class' => 'span3')); ?>
 </div>
 
 <div class="clearfix"></div>
@@ -61,18 +67,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<div class="form-actions">
 		<div class="row">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'          => get_class($oClientCreateForm) . '_submitButton',
+				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
 					'type'     => 'POST',
 					'update'   => '#formBody',
 					//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
 					//сделано во избежание навешивания кучи эвентов
-					'complete' => 'jQuery("body").off("click","#' . get_class($oClientCreateForm) . '_submitButton")',
+					'complete' => 'jQuery("body").off("click","#submitButton")',
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
-				'type'       => 'primary',
-				'label'      => 'Далее',
+				'type'        => 'primary',
+				'label'       => 'Далее',
 			)); ?>
 		</div>
 	</div>

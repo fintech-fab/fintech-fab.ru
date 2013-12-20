@@ -118,6 +118,7 @@ $a = array(
 				'account/<controller:\w+>/<action:\w+>'             => 'account/<controller>/<action>',
 
 				'form/<step:\d+>'                                   => 'form/step',
+				'form/ajaxForm/<step:\d+>'                          => 'form/ajaxStep',
 
 				'<controller:\w+>/<action:\w+>/<id:\d+>'            => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'          => '<controller>/<action>',
