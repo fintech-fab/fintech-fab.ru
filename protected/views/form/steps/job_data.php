@@ -13,7 +13,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action' => Yii::app()->createUrl('/form'),
+	'action'               => Yii::app()->createUrl('/form'),
 ));
 
 //todo: past credit?
@@ -53,18 +53,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<div class="form-actions">
 		<div class="row">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'          => get_class($oClientCreateForm) . '_submitButton',
+				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
 					'type'     => 'POST',
 					'update'   => '#formBody',
 					//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
 					//сделано во избежание навешивания кучи эвентов
-					'complete' => 'jQuery("body").off("click","#' . get_class($oClientCreateForm) . '_submitButton")',
+					'complete' => 'jQuery("body").off("click","#submitButton")',
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
-				'type'       => 'primary',
-				'label'      => 'Далее',
+				'type'        => 'primary',
+				'label'       => 'Далее',
 			)); ?>
 		</div>
 	</div>

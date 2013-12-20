@@ -6,30 +6,40 @@
 
 //TODO yaCounter21390544.reachGoal("expand_1");
 
+//TODO вынести скрипт в файл
+Yii::app()->clientScript->registerScript('addressScript', '
+jQuery("[data-toggle=popover]").popover();
+jQuery("body").tooltip({"selector":"[rel=tooltip]"});
+jQuery("body").off("click","#submitButton")
+');
+
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
-	//'enableAjaxValidation' => true,
+	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
-	'clientOptions' => array(
-		//'validateOnChange' => true,
+	'clientOptions'        => array(
+		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action' => Yii::app()->createUrl('/form/'),
+	'action'               => Yii::app()->createUrl('/form/'),
 ));
 
 ?>
-<h4>Личные данные</h4>
+<?php
+$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
+?>
+<div class="clearfix"></div><h4>Личные данные</h4>
 
 <div class="span5">
-	<?= $form->textFieldRow($oClientCreateForm, 'last_name'); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'first_name'); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'third_name'); ?>
-	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('size' => '5', 'class' => 'inline')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'last_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'last_name')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'first_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'first_name')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'third_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'third_name')); ?>
+	<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', SiteParams::getHintHtmlOptions($oClientCreateForm, 'birthday') + array('size' => '5', 'class' => 'inline')); ?>
 </div>
 <div class="span5 offset1">
 	<?= $form->checkBoxRow($oClientCreateForm, 'complete', array('inputType' => 'bootstrap.widgets.input.TbInputVertical')); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15')); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'email'); ?>
+	<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'phone') + array('size' => '15')); ?>
+	<?= $form->textFieldRow($oClientCreateForm, 'email', SiteParams::getHintHtmlOptions($oClientCreateForm, 'email')); ?>
 	<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
 	<div id="sex">
 		<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, array('uncheckValue' => '999')); ?>
@@ -40,18 +50,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	<div class="form-actions">
 		<div class="row">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'          => get_class($oClientCreateForm) . '_submitButton',
+				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
 					'type'     => 'POST',
 					'update'   => '#formBody',
 					//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
 					//сделано во избежание навешивания кучи эвентов
-					'complete' => 'jQuery("body").off("click","#' . get_class($oClientCreateForm) . '_submitButton")',
+					'complete' => 'jQuery("body").off("click","#submitButton")',
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
-				'type'       => 'primary',
-				'label'      => 'Далее',
+				'type'        => 'primary',
+				'label'       => 'Далее',
 			)); ?>
 		</div>
 	</div>

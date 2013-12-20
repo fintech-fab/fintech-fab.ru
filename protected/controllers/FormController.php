@@ -22,6 +22,38 @@ class FormController extends Controller
 	}
 
 	/**
+	 * TODO этот экшен и его не-ajax аналог переделать, вынести смену шага в отдельный метод, его вызывать тут
+	 *
+	 * @param $step
+	 */
+	public function actionAjaxStep($step)
+	{
+
+		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
+
+		$iMinStep = ClientFormComponent::$aSteps[$sSite]['min'];
+		$iMaxStep = ClientFormComponent::$aSteps[$sSite]['max'];
+
+		// проверка, что шаг корректный
+		if (($step < $iMinStep) || ($step > $iMaxStep)) {
+			$step = ClientFormComponent::$aSteps[$sSite]['default'];
+		}
+
+		if ($step > 0) {
+			$iDoneSteps = Yii::app()->clientForm->getDoneSteps();
+
+			if ($iDoneSteps < ($step - 1)) {
+				Yii::app()->clientForm->setCurrentStep($iDoneSteps);
+			} else {
+				Yii::app()->clientForm->setDoneSteps($step - 1);
+				Yii::app()->clientForm->setCurrentStep($step - 1);
+			}
+		}
+		$this->index(true);
+
+	}
+
+	/**
 	 * @param bool $ajaxForm
 	 */
 	private function index($ajaxForm = null)
@@ -110,6 +142,8 @@ class FormController extends Controller
 			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
 			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
+
 
 			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
 		}
