@@ -100,7 +100,14 @@ class FormController extends Controller
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
-				$this->redirect(Yii::app()->createUrl($sRedirectUrl));
+				if (!$ajaxForm) {
+					//если не ajaxForm-запрос, то редиректим (чтобы по F5 страница просто обновилась, а не ругалась на POST)
+					$this->redirect(Yii::app()->createUrl($sRedirectUrl));
+				} else {
+					//если это ajaxForm-запрос, то заново после обработки данных получаем ID клиента и модель
+					$iClientId = Yii::app()->clientForm->getClientId();
+					$oClientForm = Yii::app()->clientForm->getFormModel();
+				}
 			}
 
 		}
@@ -162,8 +169,7 @@ class FormController extends Controller
 		 * @var array                    $aPost
 		 * @var string                   $sView
 		 */
-		$iClientId = Yii::app()->clientForm->getClientId();
-
+		//TODO перепроверить метод
 		/*
 		 * Запрашиваем у компонента форму выбора продукта
 		 */

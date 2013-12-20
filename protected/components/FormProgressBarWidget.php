@@ -10,12 +10,22 @@ class FormProgressBarWidget extends CWidget
 
 	public function run()
 	{
+		//очистка эвентов для ajaxLink (для ajax-загрузки страницы с прогрессбаром)
+		Yii::app()->clientScript->registerScript('progressBar', '
+		$links = $("#progressBar a");
+			$.each($links,function()
+			{
+				id = $(this).attr("id");
+				$("body").off("click","#"+id);
+			});
+		');
+
+		echo '<div id="progressBar">';
 		$iSteps = sizeof($this->aSteps);
 		if ($iSteps > 0) {
 			$fPercent = 100 / $iSteps;
 			$iPercent = (int)$fPercent;
 			$iProgress = (int)($this->iCurrentStep * $fPercent) - 18;
-
 			echo '<div class="row" style="margin-right: 20px;">';
 
 			foreach ($this->aSteps as $iKey => $aStep) {
@@ -27,9 +37,6 @@ class FormProgressBarWidget extends CWidget
 						array($aStep['url'])
 						, array(
 							'update' => '#formBody',
-							//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
-							//сделано во избежание навешивания кучи эвентов
-							//'complete' => 'jQuery("body").off("click","#' . get_class($oClientCreateForm) . '_submitButton")',
 						));
 				} elseif ($iKey == $this->iCurrentStep) {
 					echo '<i class="icon-user"></i>';
@@ -52,6 +59,7 @@ class FormProgressBarWidget extends CWidget
 					'style' => 'height: 5px; margin-right: 20px;',
 				),
 			));
+			echo '</div>';
 			echo '</div>';
 		}
 	}

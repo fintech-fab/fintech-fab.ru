@@ -15,6 +15,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/form'),
 ));
 
+//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
+//сделано во избежание навешивания кучи эвентов
+Yii::app()->clientScript->registerScript('ajaxForm', '
+		updateAjaxForm();
+		');
+
 ?>
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
@@ -39,9 +45,6 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 					'ajaxOptions' => array(
 						'type'     => 'POST',
 						'update'   => '#formBody',
-						//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
-						//сделано во избежание навешивания кучи эвентов
-						'complete' => 'jQuery("body").off("click","#submitButton")',
 					),
 					'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 					'type'       => 'primary',

@@ -6,13 +6,6 @@
 
 //TODO yaCounter21390544.reachGoal("expand_1");
 
-//TODO вынести скрипт в файл
-Yii::app()->clientScript->registerScript('addressScript', '
-jQuery("[data-toggle=popover]").popover();
-jQuery("body").tooltip({"selector":"[rel=tooltip]"});
-jQuery("body").off("click","#submitButton")
-');
-
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
@@ -24,6 +17,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action'               => Yii::app()->createUrl('/form/'),
 ));
 
+//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
+//сделано во избежание навешивания кучи эвентов
+Yii::app()->clientScript->registerScript('ajaxForm', '
+		updateAjaxForm();
+		');
 ?>
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
@@ -55,9 +53,6 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 				'ajaxOptions' => array(
 					'type'     => 'POST',
 					'update'   => '#formBody',
-					//снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
-					//сделано во избежание навешивания кучи эвентов
-					'complete' => 'jQuery("body").off("click","#submitButton")',
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 				'type'        => 'primary',
