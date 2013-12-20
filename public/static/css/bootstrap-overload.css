@@ -1,5 +1,6 @@
 body {
-	background: #ffffff;
+	background: #ffffff url('../images/new-year_bg.png') no-repeat center top fixed;
+	background-size: cover;
 }
 
 h2 {
@@ -142,7 +143,7 @@ nav div.navbar-inner {
 .form-actions {
 	padding-bottom: 0px;
 	margin-bottom: 0px;
-	background-color: #ffffff;
+	background-color: transparent;
 	border-top: 0px;
 	text-align: center;
 }
