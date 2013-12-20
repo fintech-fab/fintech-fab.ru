@@ -89,9 +89,16 @@ class FormController extends Controller
 		$this->render($sView, array('oClientCreateForm' => $oClientForm));
 	}
 
+	//todo: убрать после НГ?
+	public function actionShoppingNewYear()
+	{
+		Yii::app()->clientForm->goSelectProduct('Кредди 3000');
+		$this->redirect('/form');
+	}
+
 	public function actionShopping()
 	{
-		Yii::app()->clientForm->goShopping();
+		Yii::app()->clientForm->goSelectProduct('Покупки');
 		$this->redirect('/form');
 	}
 

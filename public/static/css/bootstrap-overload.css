@@ -1,6 +1,6 @@
 body {
-	background: #ffffff url('../images/new-year_bg.png') no-repeat center top fixed;
-	background-size: cover;
+	/*background: #ffffff url('../images/new-year_bg.png') no-repeat center top fixed;*/
+	background: #ffffff;
 }
 
 h2 {
