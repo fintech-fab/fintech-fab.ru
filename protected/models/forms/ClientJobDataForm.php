@@ -11,13 +11,8 @@ class ClientJobDataForm extends ClientFullForm
 	{
 		// всегда обязательные поля
 		$aRequired = array(
-			'job_company',
-			'job_position',
-			'job_phone',
-			'job_time',
 			'job_monthly_income',
 			'job_monthly_outcome',
-			//'have_past_credit',
 
 			'status',
 		);
@@ -30,7 +25,9 @@ class ClientJobDataForm extends ClientFullForm
 				'job_time',
 				'job_monthly_income',
 				'job_monthly_outcome',
-				//'have_past_credit',
+				'income_source',
+				'educational_institution_name',
+				'educational_institution_phone',
 				'status',
 
 				'friends_phone',
@@ -56,7 +53,10 @@ class ClientJobDataForm extends ClientFullForm
 			'job_time',
 			'job_monthly_income',
 			'job_monthly_outcome',
-			//'have_past_credit',
+			'income_source',
+			'educational_institution_name',
+			'educational_institution_phone',
+			'status',
 
 			//обязательно требуется для валидации, берется из информации предыдущих форм
 			'friends_phone',

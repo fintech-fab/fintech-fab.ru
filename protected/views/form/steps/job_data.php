@@ -75,33 +75,40 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 //todo: место работы для предпринимателя по-другому называется
 //при изменении статуса выводим дополнительные поля, если нужно.
 Yii::app()->clientScript->registerScript('loadExtraFields', '
-    var statusField = jQuery("#' . get_class($oClientCreateForm) . '_status");
-	statusField.change(function()	{
-	    status = statusField.val();
-	    if(status == "") {
-		   jQuery("#student").hide();
-		   jQuery("#jobless").hide();
-		   jQuery("#employee").hide();
-		} else if((status == 1) || (status == 2)) {
-		   jQuery("#student").hide();
-		   jQuery("#jobless").hide();
-		   jQuery("#employee").show();
-		} else if(status == 3) {
-		   jQuery("#student").show();
-		   jQuery("#jobless").hide();
-		   jQuery("#employee").hide();
-		} else if(status == 4) {
-		   jQuery("#student").hide();
-		   jQuery("#jobless").hide();
-		   jQuery("#employee").hide();
-		} else if((status == 5) || (status == 6)) {
-		   jQuery("#jobless").show();
-		   jQuery("#student").hide();
-		   jQuery("#employee").hide();
+	var oStudent = jQuery("#student");
+	oStudent.find("label").append(" <span class=\"required\">*</span>");
+	var oJobless = jQuery("#jobless");
+	oJobless.find("label").append(" <span class=\"required\">*</span>");
+	var oEmployee = jQuery("#employee");
+	oEmployee.find("label").append(" <span class=\"required\">*</span>");
+
+    var oStatusField = jQuery("#' . get_class($oClientCreateForm) . '_status");
+	oStatusField.change(function()	{
+	    sStatus = oStatusField.val();
+	    if(sStatus == "") {
+		   oStudent.hide();
+		   oJobless.hide();
+		   oEmployee.hide();
+		} else if((sStatus == 1) || (sStatus == 2)) {
+		   oStudent.hide();
+		   oJobless.hide();
+		   oEmployee.show();
+		} else if(sStatus == 3) {
+		   oStudent.show();
+		   oJobless.hide();
+		   oEmployee.hide();
+		} else if(sStatus == 4) {
+		   oStudent.hide();
+		   oJobless.hide();
+		   oEmployee.hide();
+		} else if((sStatus == 5) || (sStatus == 6)) {
+		   oJobless.show();
+		   oStudent.hide();
+		   oEmployee.hide();
 		}
 	});
 
-	statusField.change();
+	oStatusField.change();
 ');
 
 ?>
