@@ -36,14 +36,6 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 	</div>
 </div>
 
-<?php //TODO довести до ума, сделать поля с другими названиями либо еще как-то решить проблему с одинаковыми именами полей ?>
-<div id="entrepreneur" class="statusfields hide">
-	<!--div class="span10"><?= $form->textFieldRow($oClientCreateForm, 'job_company', array('class' => 'span3')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'job_position', array('class' => 'span3')); ?>
-		<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', array('class' => 'span3')) ?>
-		<?= $form->dropDownListRow($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, array('class' => 'span2')); ?></div-->
-</div>
-
 <div id="student" class="statusfields hide">
 	<div class="span10"><?= $form->textFieldRow($oClientCreateForm, 'educational_institution_name', array('class' => 'span3')); ?>
 		<?= $form->phoneMaskedRow($oClientCreateForm, 'educational_institution_phone', array('class' => 'span3')); ?></div>
@@ -82,25 +74,43 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 <?php $this->endWidget(); ?>
 
 <?php
+//todo: место работы для предпринимателя по-другому называется
 //при изменении статуса выводим дополнительные поля, если нужно.
-//todo: hide все предыдущие
-Yii::app()->clientScript->registerScript('validate_document_number', '
-    var status;
-	jQuery("#' . get_class($oClientCreateForm) . '_status").change(function()
-	{
-	    status = jQuery("#' . get_class($oClientCreateForm) . '_status option:selected").val();
-		if(status == 1) {
-		   jQuery("#employee").show();
-		} else if(status == 2) {
-		   jQuery("#entrepreneur").show();
-		} else if(status == 3) {
-		   jQuery("#student").show();
-		} else if((status == 5) || (status == 6)) {
-		   jQuery("#jobless").show();
+Yii::app()->clientScript->registerScript('loadExtraFields', '
+	var oStudent = jQuery("#student");
+	oStudent.find("label").append(" <span class=\"required\">*</span>");
+	var oJobless = jQuery("#jobless");
+	oJobless.find("label").append(" <span class=\"required\">*</span>");
+	var oEmployee = jQuery("#employee");
+	oEmployee.find("label").append(" <span class=\"required\">*</span>");
+
+    var oStatusField = jQuery("#' . get_class($oClientCreateForm) . '_status");
+	oStatusField.change(function()	{
+	    sStatus = oStatusField.val();
+	    if(sStatus == "") {
+		   oStudent.hide();
+		   oJobless.hide();
+		   oEmployee.hide();
+		} else if((sStatus == 1) || (sStatus == 2)) {
+		   oStudent.hide();
+		   oJobless.hide();
+		   oEmployee.show();
+		} else if(sStatus == 3) {
+		   oStudent.show();
+		   oJobless.hide();
+		   oEmployee.hide();
+		} else if(sStatus == 4) {
+		   oStudent.hide();
+		   oJobless.hide();
+		   oEmployee.hide();
+		} else if((sStatus == 5) || (sStatus == 6)) {
+		   oJobless.show();
+		   oStudent.hide();
+		   oEmployee.hide();
 		}
 	});
 
-	jQuery("#' . get_class($oClientCreateForm) . '_status").change();
+	oStatusField.change();
 ');
 
 ?>

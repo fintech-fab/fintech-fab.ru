@@ -291,12 +291,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 				case 'phone_home':
 				case 'job_director_phone':
-				$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
-				break;
-				case 'job_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
-					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'message' => 'Номер не должен совпадать с телефоном контактного лица!');
-					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!');
 					break;
 				case 'friends_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
@@ -333,8 +328,55 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите значение из списка', 'range' => array_keys(Dictionaries::$aYesNo));
 					break;
 
+				case 'status':
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите статус из списка', 'range' => array_keys(Dictionaries::$aStatuses));
+					break;
+
+				case    'job_company':
+					$aRules[] = array(
+						$sFieldName, 'checkValidJobCompany', 'statusField' => 'status',
+						                                     'message'     => 'Заполните поле',
+					);
+					break;
+				case 'job_position':
+					$aRules[] = array(
+						$sFieldName, 'checkValidJobPosition', 'statusField' => 'status',
+						                                      'message'     => 'Заполните поле',
+					);
+					break;
+				case 'job_phone':
+					$aRules[] = array(
+						$sFieldName, 'checkValidJobPhone', 'statusField'        => 'status',
+						                                   'message'            => 'Заполните поле',
+						                                   'messageWrongFormat' => 'Введите корректный телефон',
+					);
+					break;
+
 				case 'job_time':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Выберите корректный стаж работы', 'range' => array_keys(Dictionaries::$aJobTimes));
+					$aRules[] = array(
+						$sFieldName, 'checkValidJobTime', 'statusField'       => 'status',
+						                                  'message'           => 'Заполните поле',
+						                                  'messageNotInRange' => 'Выберите значение из списка',
+					);
+					break;
+				case 'income_source':
+					$aRules[] = array(
+						$sFieldName, 'checkValidIncomeSource', 'statusField' => 'status',
+						                                       'message'     => 'Заполните поле',
+					);
+					break;
+				case 'educational_institution_name':
+					$aRules[] = array(
+						$sFieldName, 'checkValidEducationalInstitutionName', 'statusField' => 'status',
+						                                                     'message'     => 'Заполните поле',
+					);
+					break;
+				case 'educational_institution_phone':
+					$aRules[] = array(
+						$sFieldName, 'checkValidEducationalInstitutionPhone', 'statusField'        => 'status',
+						                                                      'message'            => 'Заполните поле',
+						                                                      'messageWrongFormat' => 'Введите корректный телефон',
+					);
 					break;
 
 				case 'job_salary_date':
@@ -546,6 +588,70 @@ class ClientCreateFormAbstract extends CFormModel
 	public function checkAddressRes($attribute, $param)
 	{
 		$this->asa('FormFieldValidateBehavior')->checkAddressRes($attribute, $param);
+	}
+
+	/**
+	 * проверка имени
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobCompany($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidJobCompany($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobPosition($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidJobPosition($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobPhone($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidJobPhone($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobTime($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidJobTime($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidIncomeSource($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidIncomeSource($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidEducationalInstitutionName($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidEducationalInstitutionName($attribute, $param);
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidEducationalInstitutionPhone($attribute, $param)
+	{
+		$this->asa('FormFieldValidateBehavior')->checkValidEducationalInstitutionPhone($attribute, $param);
 	}
 
 

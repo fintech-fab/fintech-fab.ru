@@ -43,7 +43,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'relatives_one_phone',
 
 			'status',
-			'have_past_credit',
 			'goal',
 
 			'numeric_code',
@@ -101,14 +100,12 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'income_source',
 				'educational_institution_name',
 				'educational_institution_phone',
-
 				'job_company',
 				'job_position',
 				'job_phone',
 				'job_time',
 				'job_monthly_income',
 				'job_monthly_outcome',
-				'have_past_credit',
 
 				'numeric_code',
 				'secret_question',
@@ -138,7 +135,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'friends_fio'                   => 'ФИО',
 				'friends_phone'                 => 'Телефон',
 
-				'complete' => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'http://dev.kreddy.popov/footerLinks/view/offer\', \'Оферта\')"  href="#">подробная информация</a>)',
+				'complete'                      => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'http://dev.kreddy.popov/footerLinks/view/offer\', \'Оферта\')"  href="#">подробная информация</a>)',
 
 				'passport_number'               => 'Серия/номер',
 				'passport_series'               => 'Серия/номер',
@@ -155,8 +152,6 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'job_monthly_income'            => 'Среднемесячный доход',
 				'job_monthly_outcome'           => 'Среднемесячный расход',
 				'income_source'                 => 'Источник дохода',
-
-				'have_past_credit'              => 'Наличие кредитов и займов в прошлом',
 
 				'password'                      => 'Пароль для входа в личный кабинет',
 				'password_repeat'               => 'Подтверждение пароля',
@@ -220,14 +215,12 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'job_monthly_income',
 			'job_monthly_outcome',
 			'income_source',
-			'have_past_credit',
 
 			'goal',
 			'numeric_code',
 			'secret_question',
 			'secret_answer',
 			'complete',
-			'subscribe_news',
 			'password',
 			'password_repeat',
 		);

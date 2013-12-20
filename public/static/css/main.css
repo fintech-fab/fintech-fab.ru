@@ -202,17 +202,3 @@ div.search-form {
 	padding-left: 8px;
 	padding-right: 8px;
 }
-
-.conditions ul {
-	list-style-type: none;
-	margin: 5px 0;
-	padding: 0;
-}
-
-.conditions ul li {
-	padding-bottom: 2px;
-}
-
-.conditions ul li.break {
-	padding-bottom: 10px;
-}

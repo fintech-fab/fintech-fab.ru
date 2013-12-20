@@ -449,6 +449,148 @@ class FormFieldValidateBehavior extends CBehavior
 	 * @param $attribute
 	 * @param $param
 	 */
+	public function checkValidJobCompany($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& (($iStatus == 1) || ($iStatus == 2))
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobPosition($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& (($iStatus == 1) || ($iStatus == 2))
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobPhone($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& (($iStatus == 1) || ($iStatus == 2))
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} else {
+				$param['message'] = $param['messageWrongFormat'];
+				$this->checkValidClientPhone($attribute, $param);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidJobTime($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& (($iStatus == 1) || ($iStatus == 2))
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} elseif (!in_array($this->owner->$attribute, array_keys(Dictionaries::$aJobTimes))) {
+				$this->owner->addError($attribute, $param['messageNotInRange']);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidIncomeSource($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& (($iStatus == 5) || ($iStatus == 6))
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidEducationalInstitutionName($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& ($iStatus == 3)
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			}
+		}
+
+		return;
+	}
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
+	public function checkValidEducationalInstitutionPhone($attribute, $param)
+	{
+		$iStatus = $this->owner->$param['statusField'];
+
+		if (isset($iStatus)
+			&& ($iStatus == 3)
+		) {
+			if (empty($this->owner->$attribute)) {
+				$this->owner->addError($attribute, $param['message']);
+			} else {
+				$param['message'] = $param['messageWrongFormat'];
+				$this->checkValidClientPhone($attribute, $param);
+			}
+		}
+
+		return;
+	}
+
+
+	/**
+	 * @param $attribute
+	 * @param $param
+	 */
 	public function checkOldPassport($attribute, $param)
 	{
 		$sPassportNotChanged = $this->owner->$param['passport_not_changed'];
