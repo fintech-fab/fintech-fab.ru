@@ -536,3 +536,10 @@ slider style
 	background-position: right;
 	background-repeat: no-repeat;
 }*/
+
+/*
+#ClientPersonalDataForm label.control-label:after{
+	content: '*';
+	color: red;
+}
+*/
