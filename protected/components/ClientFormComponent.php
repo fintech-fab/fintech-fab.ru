@@ -874,11 +874,11 @@ class ClientFormComponent
 			: false;
 	}
 
-	public function goShopping()
+	public function goSelectProduct($sProduct = 'Покупки')
 	{
 		$aProducts = Yii::app()->adminKreddyApi->getProducts();
 		foreach ($aProducts as $i => $aProduct) {
-			if (array_search('Покупки', $aProduct)) {
+			if (array_search($sProduct, $aProduct)) {
 				$aShoppingProduct = $i;
 			}
 		}
