@@ -48,7 +48,7 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::SITE1 => array(
-			'max' => 6,
+			'max' => 7,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -91,13 +91,19 @@ class ClientFormComponent
 				'metrika_goal'     => 'select_product',
 			),
 			1 => array(
+				'view'             => 'infographic',
+				'model'            => 'ClientSelectProductForm',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'infographic',
+			),
+			2 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/personal_data',
 				'model'            => 'ClientPersonalDataForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'personal_data',
 			),
-			2 => array(
+			3 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
@@ -107,7 +113,7 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'passport_data',
 			),
-			3 => array(
+			4 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
@@ -117,7 +123,7 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'address_data',
 			),
-			4 => array(
+			5 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/job_data',
 				'model'            => 'ClientJobDataForm',
@@ -129,14 +135,14 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'job_data',
 			),
-			5 => array(
+			6 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/secret_data',
 				'model'            => 'ClientSecretDataForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'secret_data',
 			),
-			6 => array(
+			7 => array(
 				'view'             => 'client_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
@@ -703,6 +709,8 @@ class ClientFormComponent
 		/**
 		 * * @var ClientCreateFormAbstract $oModel
 		 */
+
+		//todo: учесть, что могут быть статические страницы (инфографика)
 
 		$sSite = self::getSite();
 
