@@ -88,12 +88,14 @@ class ClientFormComponent
 				'view'             => 'client_select_product',
 				'model'            => 'ClientSelectProductForm',
 				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
 			),
 			1 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/personal_data',
 				'model'            => 'ClientPersonalDataForm',
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'personal_data',
 			),
 			2 => array(
 				'view'             => 'client_form',
@@ -102,7 +104,8 @@ class ClientFormComponent
 				'modelDbRelations' => array(
 					'birthday'
 				),
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'passport_data',
 			),
 			3 => array(
 				'view'             => 'client_form',
@@ -111,7 +114,8 @@ class ClientFormComponent
 				'modelDbRelations' => array(
 					'phone'
 				),
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'address_data',
 			),
 			4 => array(
 				'view'             => 'client_form',
@@ -122,13 +126,15 @@ class ClientFormComponent
 					'relatives_one_phone',
 					'phone'
 				),
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'job_data',
 			),
 			5 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/secret_data',
 				'model'            => 'ClientSecretDataForm',
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'secret_data',
 			),
 			6 => array(
 				'view'             => 'client_form',
@@ -138,20 +144,23 @@ class ClientFormComponent
 					false       => 'confirm_phone/send_sms_code'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
-				'breadcrumbs_step' => 3
+				'breadcrumbs_step' => 3,
+				'metrika_goal'     => 'sms_code',
 			),
 		),
-		self::SITE2 => array(
+		self::SITE2 => array( //todo breadcrumbs , goals
 			0 => array(
 				'view'             => 'client_flexible_product',
 				'model'            => 'ClientFlexibleProductForm',
 				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
 			),
 			1 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/personal_data',
 				'model'            => 'ClientPersonalDataForm',
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'personal_data',
 			),
 			2 => array(
 				'view'             => 'client_form',
@@ -160,7 +169,8 @@ class ClientFormComponent
 				'modelDbRelations' => array(
 					'birthday'
 				),
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'passport_data',
 			),
 			3 => array(
 				'view'             => 'client_form',
@@ -169,7 +179,8 @@ class ClientFormComponent
 				'modelDbRelations' => array(
 					'phone'
 				),
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'address_data',
 			),
 			4 => array(
 				'view'             => 'client_form',
@@ -180,13 +191,15 @@ class ClientFormComponent
 					'relatives_one_phone',
 					'phone'
 				),
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'job_data',
 			),
 			5 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/secret_data',
 				'model'            => 'ClientSecretDataForm',
-				'breadcrumbs_step' => 2
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'secret_data',
 			),
 			6 => array(
 				'view'             => 'client_form',
@@ -595,6 +608,15 @@ class ClientFormComponent
 		$this->setDoneSteps($iDefaultStep);
 	}
 
+	public function getMetrikaGoalByStep()
+	{
+		$sSite = self::getSite();
+
+		$sGoal = self::$aStepsInfo[$sSite][$this->iCurrentStep]['metrika_goal'];
+
+		return $sGoal;
+	}
+
 	/**
 	 * Возвращает номер текущего шага (нумерация с нуля)
 	 *
@@ -938,11 +960,11 @@ class ClientFormComponent
 			: false;
 	}
 
-	public function goShopping()
+	public function goSelectProduct($sProduct = 'Покупки')
 	{
 		$aProducts = Yii::app()->adminKreddyApi->getProducts();
 		foreach ($aProducts as $i => $aProduct) {
-			if (array_search('Покупки', $aProduct)) {
+			if (array_search($sProduct, $aProduct)) {
 				$aShoppingProduct = $i;
 			}
 		}

@@ -4,6 +4,12 @@
 			<?php
 			if (!SiteParams::getIsIvanovoSite()) {
 				$aItems = array(
+					//todo: убрать после НГ и вернуть /shopping
+					array(
+						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-new_year.jpg'),
+						'label' => 'Не отказывай себе в маленьких радостях!',
+						'url'   => '/form/shoppingNewYear'
+					),
 					array(
 						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-01.jpg'),
 						'label' => 'Быстро! Удобно! Дистанционно!',
@@ -13,11 +19,11 @@
 						'label' => 'Мобильный нужен не только для разговоров',
 						'url'   => '/pages/view/check'
 					),
-					array(
-						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-03.jpg'),
-						'label' => 'Не отказывай себе в маленьких радостях!',
-						'url'   => '/form/shopping'
-					),
+					/*		array(
+								'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-03.jpg'),
+								'label' => 'Не отказывай себе в маленьких радостях!',
+								'url'   => '/form/shopping'
+							),*/
 					array(
 						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-web-04.jpg'),
 						'label' => 'Выбери свой пакет займов!',

@@ -10,6 +10,8 @@ $this->pageTitle = Yii::app()->name;
 Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 <div class="row">
 
 	<div class="span12">
@@ -25,10 +27,6 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 			)
 		); ?>
 	</div>
-
-	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps' => 3, //TODO: изменить
-	)); ?>
 
 </div>
 

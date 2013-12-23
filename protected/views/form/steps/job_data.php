@@ -23,6 +23,9 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 		');
 
 ?>
+
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
@@ -76,8 +79,8 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
-					'type'     => 'POST',
-					'update'   => '#formBody',
+					'type'   => 'POST',
+					'update' => '#formBody',
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 				'type'        => 'primary',

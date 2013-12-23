@@ -7,6 +7,8 @@
 $this->pageTitle = Yii::app()->name;
 ?>
 
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 	<div class="row">
 		<?php
 		$aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
@@ -24,9 +26,6 @@ $this->pageTitle = Yii::app()->name;
 		<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
 	</div>
 <?php
-$this->widget('YaMetrikaGoalsWidget', array(
-	'iDoneSteps' => Yii::app()->clientForm->getCurrentStep()
-));
 
 $sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/ajax_form.js';
 Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_BEGIN);

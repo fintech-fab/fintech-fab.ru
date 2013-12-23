@@ -9,14 +9,14 @@
 
 	?>
 	<ul>
-		<li>- Размер займа:
+		<li>Размер займа:
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
-		<li>- Канал получения: <span class="cost channel"></span>
+		<li>Канал получения: <span class="cost channel"></span>
 		</li>
-		<li>- Дата возврата займа: &nbsp;<span class="cost date"></span>
+		<li>Дата возврата займа: &nbsp;<span class="cost date"></span>
 		</li>
-		<li>- Необходимо вернуть:
+		<li>Необходимо вернуть:
 			<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 	</ul>

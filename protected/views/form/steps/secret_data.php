@@ -21,6 +21,9 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 		updateAjaxForm();
 		');
 ?>
+
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
