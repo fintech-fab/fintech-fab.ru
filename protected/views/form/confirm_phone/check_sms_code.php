@@ -24,6 +24,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action'                 => Yii::app()->createUrl('/form/checkSmsCode'),
 ));
 ?>
+
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 <div id="alertsmssent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS_NUM; ?>
 	&nbsp;+7<?= Yii::app()->clientForm->getSmsSentPhone(); ?></div>
 
@@ -53,7 +56,3 @@ $this->endWidget();
 <div class="alert in alert-warning" style="font-size: 12pt;">
 	После ввода кода из SMS-сообщения необходимо пройти идентификацию для завершения регистрации.
 </div>
-
-<?php $this->widget('YaMetrikaGoalsWidget', array(
-	'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
-)); ?>

@@ -9,6 +9,8 @@
  */
 ?>
 
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефона:
 <strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
 
@@ -28,8 +30,3 @@ $this->widget('bootstrap.widgets.TbButton', array(
 
 $this->endWidget();
 ?>
-
-
-<?php $this->widget('YaMetrikaGoalsWidget', array(
-	'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
-)); ?>

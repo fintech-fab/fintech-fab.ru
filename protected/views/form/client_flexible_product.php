@@ -14,6 +14,8 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 
 ?>
 
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+
 <div class="row">
 
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
@@ -70,14 +72,8 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 		</div>
 	</div>
 	<?php
-
 	$this->endWidget();
-
 	?>
-
-	<?php $this->widget('YaMetrikaGoalsWidget', array(
-		'iDoneSteps' => Yii::app()->clientForm->getCurrentStep(),
-	)); ?>
 
 </div>
 <?php

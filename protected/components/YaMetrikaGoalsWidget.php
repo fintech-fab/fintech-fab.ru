@@ -5,18 +5,16 @@ class YaMetrikaGoalsWidget extends CWidget
 	/**
 	 * @var integer сделано шагов на данный момент
 	 */
-	public $iDoneSteps;
-	/**
-	 * @var integer вычесть из числа шагов (засчёт видеоидентификации)
-	 */
-	public $iSkippedSteps = 0;
+	private $sStep;
 
 	public function run()
 	{
-		if ($this->iDoneSteps !== 'sms') {
-			$this->iDoneSteps = (int)$this->iDoneSteps;
+		$this->sStep = Yii::app()->clientForm->getMetrikaGoalByStep();
+
+		if (!empty($this->sStep)) {
+			Yii::app()->clientScript->registerScript('yaMetrikaGoal' . $this->sStep, '
+           yaCounter21390544.reachGoal("done_step_' . $this->sStep . '");
+           ', CClientScript::POS_LOAD);
 		}
-		$this->iDoneSteps = (!empty($this->iSkippedSteps)) ? ($this->iDoneSteps - (int)$this->iSkippedSteps) : $this->iDoneSteps;
-		$this->render('ya_metrika_goals');
 	}
 }

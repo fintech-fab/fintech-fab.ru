@@ -24,7 +24,7 @@ function showConditions(products, channels) {
 		final_price += parseInt(products.attr('data-card'));
 	}
 
-
+	$('.packet_name').html(products.html());
 	$('.price_count').html(final_price);
 	$('.price_month').html(products.attr('data-price-count'));
 	var packetSize = parseInt(products.attr('data-int-count')) * parseInt(products.attr('data-final-price'));

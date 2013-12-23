@@ -4,28 +4,28 @@
  */
 ?>
 <div class="conditions">
-	<strong>Ваши условия</strong>
+	<strong>Ваши условия
+		"<span class="packet_name"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>"</strong>
 	<ul>
-		<li>- Размер Пакета -
+		<li>Размер Пакета -
 			<span class="cost packet_size"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
 		</li>
-		<li class="break">- Период действия Пакета с даты подключения -
+		<li>Период действия Пакета с даты подключения -
 			<span class="cost price_month"><?= ""; //Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
 		</li>
-		<li>- Размер первого займа -
+		<li>Размер первого займа -
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
 		</li>
-		<li>- Стоимость подключения -
+		<li>Стоимость подключения -
 			<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;руб.
 		</li>
-		<li>- Сумма к возврату -
+		<li>Сумма к возврату -
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
 		</li>
-		<li class="break">- Дата возврата - <span class="cost date"><?= ""; //$getDateToPayUntil; ?></span>
-			(<span class="cost week_day"><?= ""; //$getDateToPayUntil; ?></span>, до
-			<span class="cost time">23:50</span>)
+		<li>Дата возврата - <span class="cost date"><?= ""; //$getDateToPayUntil; ?></span>
+			(<span class="cost week_day"><?= ""; //$getDateToPayUntil; ?></span> до <span class="cost time">23:50</span>)
 		</li>
-		<li>- Канал получения - <span class="cost channel">на мобильный телефон (МТС, Билайн, Мегафон)</span></li>
+		<li>Канал получения - <span class="cost channel">на мобильный телефон (МТС, Билайн, Мегафон)</span></li>
 	</ul>
 </div>
 
