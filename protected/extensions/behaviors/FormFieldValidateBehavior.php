@@ -674,4 +674,16 @@ class FormFieldValidateBehavior extends CBehavior
 		}
 	}
 
+	/**
+	 * готовит формат даты из базы к формату для маскированого поля в форме
+	 * @param $attribute
+	 */
+	public function exportMaskedDate($attribute)
+	{
+		if (!empty($this->owner->$attribute) && $this->owner->$attribute != SiteParams::EMPTY_DATE) {
+			list($y, $m, $d) = explode('-', $this->owner->$attribute);
+			$this->owner->$attribute = $d . '.' . $m . '.' . $y;
+		}
+	}
+
 }

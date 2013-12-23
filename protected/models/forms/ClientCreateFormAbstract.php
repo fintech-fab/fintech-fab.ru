@@ -55,6 +55,7 @@
  * общий класс для всех форм ввода клиента
  *
  * @method FormFieldValidateBehavior asa()
+ * @method void exportMaskedDate()
  */
 class ClientCreateFormAbstract extends CFormModel
 {
@@ -164,7 +165,7 @@ class ClientCreateFormAbstract extends CFormModel
 	public $complete;
 	public $password;
 	public $password_repeat;
-	public $subscribe_news; // галочка "получать новости сервиса" todo behaviuors для новых полей
+
 	public $status; // статус
 	public $income_source; // источник дохода
 	public $educational_institution_name; // название учебного заведения

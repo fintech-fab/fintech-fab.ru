@@ -188,23 +188,23 @@ class SiteParams
 	public static $aFormWidgetSteps = array(
 		1 => array(
 			'label' => 'Личные данные',
-			'url'   => '/form/ajaxForm/2'
+			'url' => '/form/ajaxForm/3'
 		),
 		2 => array(
 			'label' => 'Паспортные данные',
-			'url'   => '/form/ajaxForm/3'
+			'url' => '/form/ajaxForm/4'
 		),
 		3 => array(
 			'label' => 'Постоянная регистрация',
-			'url'   => '/form/ajaxForm/4'
+			'url' => '/form/ajaxForm/5'
 		),
 		4 => array(
 			'label' => 'Место работы',
-			'url'   => '/form/ajaxForm/5'
+			'url' => '/form/ajaxForm/6'
 		),
 		5 => array(
 			'label' => 'Отправка заявки',
-			'url'   => '/form/ajaxForm/6'
+			'url' => '/form/ajaxForm/7'
 		),
 	);
 

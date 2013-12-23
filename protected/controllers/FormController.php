@@ -128,6 +128,7 @@ class FormController extends Controller
 		 */
 
 		if (Cookie::compareDataInCookie('client', 'client_id', $iClientId)
+			&& $oClientForm
 			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (!empty($oClientForm)) {
@@ -242,9 +243,7 @@ class FormController extends Controller
 	public function actionSendSmsCode()
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
-		if (!Yii::app()->clientForm->getSessionPhone()
-			|| (!Yii::app()->clientForm->getFlagFullFormFilled())
-		) {
+		if (!Yii::app()->clientForm->getSessionPhone()) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 

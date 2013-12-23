@@ -26,7 +26,7 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
 <?php
-$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
+$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => (Yii::app()->clientForm->getCurrentStep() - 1)));
 ?>
 <div class="clearfix"></div><h4>Паспортные данные</h4>
 
