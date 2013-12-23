@@ -89,13 +89,13 @@ section .intro, div .intro {
 	/*width: 400px;*/
 	/*height: 160px;*/
 	margin-left: 0;
-	margin-top: 0;
+	margin-top: -10px;
 	margin-bottom: 0;
 	padding: 0 0 0 0;
 }
 
 .navbar-top {
-	margin-bottom: 0px;
+	margin-bottom: 10px;
 }
 
 .top_page .carousel {
