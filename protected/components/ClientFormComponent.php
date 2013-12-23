@@ -148,7 +148,7 @@ class ClientFormComponent
 				'metrika_goal'     => 'sms_code',
 			),
 		),
-		self::SITE2 => array( //todo breadcrumbs , goals
+		self::SITE2 => array(
 			0 => array(
 				'view'             => 'client_flexible_product',
 				'model'            => 'ClientFlexibleProductForm',
@@ -820,10 +820,12 @@ class ClientFormComponent
 	 */
 	public function nextStep($iSteps = 1)
 	{
+		//TODO делать проверку max step
 		$this->iCurrentStep += $iSteps;
 
 		if ($this->iDoneSteps < $this->iCurrentStep) {
-			Yii::app()->session['done_steps'] = $this->iDoneSteps = $this->iCurrentStep;
+			$this->iDoneSteps = $this->iCurrentStep;
+			Yii::app()->session['done_steps'] = $this->iDoneSteps;
 		}
 		Yii::app()->session['current_step'] = $this->iCurrentStep;
 	}
@@ -960,6 +962,9 @@ class ClientFormComponent
 			: false;
 	}
 
+	/**
+	 * @param string $sProduct
+	 */
 	public function goSelectProduct($sProduct = 'Покупки')
 	{
 		$aProducts = Yii::app()->adminKreddyApi->getProducts();
