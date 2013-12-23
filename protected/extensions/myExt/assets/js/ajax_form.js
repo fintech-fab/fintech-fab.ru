@@ -5,4 +5,5 @@ function updateAjaxForm() {
 	jQuery("[data-toggle=popover]").popover();
 	jQuery("body").tooltip({"selector": "[rel=tooltip]"});
 	jQuery("body").off("click", "#submitButton");
+	jQuery("body").off("click", "#backButton");
 }

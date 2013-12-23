@@ -47,6 +47,13 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 <div class="row span10">
 	<div class="form-actions">
 		<div class="row">
+			<div class="span1">
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
+					'url'   => Yii::app()->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
+					'label' => 'Назад',
+				)); ?>
+			</div>
+
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',

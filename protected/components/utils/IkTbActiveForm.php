@@ -66,9 +66,12 @@ class IkTbActiveForm extends TbActiveForm
 	 * @param            $attribute
 	 * @param            $mask
 	 * @param array      $htmlOptions
+	 *
+	 * @return string
 	 */
 	public function maskedTextField2($model, $attribute, $mask, $htmlOptions = array())
 	{
+		ob_start();
 		$this->widget('IkTbInputVertical', array(
 			'type'        => 'maskedtextfield',
 			'form'        => $this,
@@ -77,6 +80,9 @@ class IkTbActiveForm extends TbActiveForm
 			'data'        => $mask,
 			'htmlOptions' => $htmlOptions,
 		));
+		echo "\n";
+
+		return ob_get_clean();
 	}
 
 	/**
@@ -84,9 +90,12 @@ class IkTbActiveForm extends TbActiveForm
 	 * @param       $attribute
 	 * @param array $data
 	 * @param array $htmlOptions
+	 *
+	 * @return string
 	 */
 	public function dropDownListRow2($model, $attribute, $data = array(), $htmlOptions = array())
 	{
+		ob_start();
 		$this->widget('IkTbInputHorizontal', array(
 			'type'        => 'dropdownlist',
 			'form'        => $this,
@@ -95,6 +104,9 @@ class IkTbActiveForm extends TbActiveForm
 			'data'        => $data,
 			'htmlOptions' => $htmlOptions,
 		));
+		echo "\n";
+
+		return ob_get_clean();
 	}
 
 	/**

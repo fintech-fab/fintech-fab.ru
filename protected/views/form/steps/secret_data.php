@@ -20,7 +20,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 Yii::app()->clientScript->registerScript('ajaxForm', '
 		updateAjaxForm();
 		');
-
 ?>
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
@@ -39,6 +38,19 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 	<div class="row span10">
 		<div class="form-actions">
 			<div class="row">
+				<div class="span1">
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
+						'id'          => 'backButton',
+						'buttonType'  => 'ajaxButton',
+						'ajaxOptions' => array(
+							'update' => '#formBody',
+						),
+						'url'         => Yii::app()
+								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+						'label'       => 'Назад',
+					)); ?>
+				</div>
+
 				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'id'          => 'submitButton',
 					'buttonType'  => 'ajaxSubmit',

@@ -28,6 +28,7 @@ class FormController extends Controller
 	 */
 	public function actionAjaxStep($step)
 	{
+		$step = (int)$step;
 
 		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
 
@@ -58,8 +59,6 @@ class FormController extends Controller
 	 */
 	private function index($ajaxForm = null)
 	{
-		$sRedirectUrl = ($ajaxForm) ? 'form/ajaxForm' : 'form';
-
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
 		 * @var array                    $aPost
@@ -76,11 +75,14 @@ class FormController extends Controller
 		/**
 		 * AJAX валидация
 		 */
-		if (Yii::app()->clientForm->ajaxValidation()) //проверяем, не запрошена ли ajax-валидация
+		if (Yii::app()->clientForm->isNeedAjaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
-			$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
-			Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
-			echo $sEcho;
+			//если для ajax-валидации пришла форма, соответствующая текущему шагу, то обработаем ее
+			if ($sAjaxClass = Yii::app()->request->getParam('ajax') == get_class($oClientForm)) {
+				$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
+				Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
+				echo $sEcho;
+			}
 			Yii::app()->end();
 		}
 
@@ -102,12 +104,16 @@ class FormController extends Controller
 				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 				if (!$ajaxForm) {
 					//если не ajaxForm-запрос, то редиректим (чтобы по F5 страница просто обновилась, а не ругалась на POST)
-					$this->redirect(Yii::app()->createUrl($sRedirectUrl));
+					$this->redirect(Yii::app()->createUrl("/form"));
 				} else {
 					//если это ajaxForm-запрос, то заново после обработки данных получаем ID клиента и модель
 					$iClientId = Yii::app()->clientForm->getClientId();
 					$oClientForm = Yii::app()->clientForm->getFormModel();
 				}
+			} else {
+				//если не удалось провалидировать, то все равно сохраним валидные данные
+				//используем метод saveAjaxData т.к. он сохраняет только валидные данные
+				Yii::app()->clientForm->saveAjaxData($oClientForm);
 			}
 
 		}
@@ -122,6 +128,7 @@ class FormController extends Controller
 			if (!empty($oClientForm)) {
 				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				//удаляем лишние данные перед загрузкой в форму (во избежание warning)
+				unset($sessionClientData['client_id']);
 				unset($sessionClientData['product']);
 				unset($sessionClientData['channel_id']);
 				unset($sessionClientData['entry_point']);
@@ -145,12 +152,11 @@ class FormController extends Controller
 
 		if (!$ajaxForm) {
 			$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
-		} else {
+		} elseif ($sSubView) {
 			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
 			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
-
 
 			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
 		}

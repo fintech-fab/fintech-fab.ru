@@ -185,12 +185,12 @@ class ClientFormComponent
 	 *
 	 * @return bool
 	 */
-	public function ajaxValidation()
+	public function isNeedAjaxValidation()
 	{
 		$bIsAjax = Yii::app()->request->getIsAjaxRequest();
 		$sAjaxClass = Yii::app()->request->getParam('ajax');
 
-		return ($bIsAjax && $sAjaxClass === get_class($this->getFormModel()));
+		return ($bIsAjax && $sAjaxClass);
 	}
 
 	/**
@@ -363,6 +363,7 @@ class ClientFormComponent
 				$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $oClientData->phone);
 				Cookie::saveDataToCookie('client', $aCookieData);
 			}
+
 			if ($this->iClientId) {
 				$aClientFormData = $oClientForm->getAttributes();
 
@@ -700,6 +701,9 @@ class ClientFormComponent
 		return $sModelName;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function getSite()
 	{
 		return (SiteParams::getIsIvanovoSite())
@@ -718,10 +722,11 @@ class ClientFormComponent
 			$iSteps = 1;
 		}
 		$this->iCurrentStep += $iSteps;
-		Yii::app()->session['current_step'] = $this->iCurrentStep;
-		if ($this->iDoneSteps < Yii::app()->session['current_step']) {
-			Yii::app()->session['done_steps'] = $this->iDoneSteps = Yii::app()->session['current_step'];
+
+		if ($this->iDoneSteps < $this->iCurrentStep) {
+			Yii::app()->session['done_steps'] = $this->iDoneSteps = $this->iCurrentStep;
 		}
+		Yii::app()->session['current_step'] = $this->iCurrentStep;
 	}
 
 	/**

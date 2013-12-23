@@ -34,27 +34,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 			<h5>Паспорт</h5>
 		</div>
 	</div>
-	<div class="row">
-		<div class="control-group passport-num">
-			<div class="span3">
-				<?= $form->labelEx($oClientCreateForm, 'passport_number', array('class' => 'control-label')); ?>
-				<div class="controls"><?= $form->maskedTextField($oClientCreateForm, 'passport_series', '9999', array('style' => 'width: 40px;', 'size' => '4', 'maxlength' => '4')); ?></div>
-			</div>
-			<div class="span2">
-				<span>/</span>
-				<?= $form->maskedTextField2($oClientCreateForm, 'passport_number', '999999', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_number') + array('style' => 'width: 60px;', 'size' => '6', 'maxlength' => '6')); ?>
-			</div>
-		</div>
-
-	</div>
-	<div class="row">
-		<div class="span5">
-			<div style="margin-left: 180px;">
-				<?= $form->error($oClientCreateForm, 'passport_series'); ?>
-				<?= $form->error($oClientCreateForm, 'passport_number'); ?></div>
-		</div>
-	</div>
-
+	<?= $form->maskedTextFieldRow($oClientCreateForm, 'passport_full_number', '9999 / 999999', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_number')); ?>
 
 	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_date')); ?>
 
@@ -72,6 +52,18 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 <div class="row span10">
 	<div class="form-actions">
 		<div class="row">
+			<div class="span1">
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
+					'id'          => 'backButton',
+					'buttonType'  => 'ajaxButton',
+					'ajaxOptions' => array(
+						'update' => '#formBody',
+					),
+					'url'         => Yii::app()
+							->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+					'label'       => 'Назад',
+				)); ?>
+			</div>
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
