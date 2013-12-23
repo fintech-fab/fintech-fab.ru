@@ -21,7 +21,8 @@
 			if ($l->link_url == '') { // поле "ссылка" пусто - значит, модальное окно
 				?>
 
-				<a href="#" class="dotted" onclick="return doOpenModalFrame('<?= Yii::app()->createAbsoluteUrl("footerLinks/view/$l->link_name"); ?>', '<?= $l->link_title ?>');"><?= $l->link_title ?></a>
+				<a href="#" class="dotted" onclick="return doOpenModalFrame('<?= Yii::app()
+					->createAbsoluteUrl("footerLinks/view/$l->link_name"); ?>', '<?= $l->link_title ?>');"><?= $l->link_title ?></a>
 
 			<?php
 
@@ -69,17 +70,5 @@
 
 
 	<?php $this->endWidget(); ?>
-
-
-	<?php
-	/*TODO: где-то используется? если нет - выпилить
-		Yii::app()->clientScript->registerScript('openModalByUrl', "
-				var sHash = $(location).attr('hash');
-				if(typeof sHash!='undefined' && sHash.length){
-					$(sHash).modal('show');
-				}
-	", CClientScript::POS_READY);*/
-
-	?>
 
 </div>

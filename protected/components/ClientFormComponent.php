@@ -48,12 +48,12 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::SITE1 => array(
-			'max'     => 5,
+			'max' => 6,
 			'min'     => 0,
 			'default' => 0,
 		),
 		self::SITE2 => array(
-			'max'     => 5,
+			'max' => 6,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -143,20 +143,60 @@ class ClientFormComponent
 		),
 		self::SITE2 => array(
 			0 => array(
-				'view'  => 'client_flexible_product',
-				'model' => 'ClientFlexibleProductForm',
+				'view'             => 'client_flexible_product',
+				'model'            => 'ClientFlexibleProductForm',
+				'breadcrumbs_step' => 1,
 			),
 			1 => array(
-				'view'  => 'client_full_form',
-				'model' => 'ClientFullForm',
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/personal_data',
+				'model'            => 'ClientPersonalDataForm',
+				'breadcrumbs_step' => 2
 			),
 			2 => array(
-				'view'  => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/passport_data',
+				'model'            => 'ClientPassportDataForm',
+				'modelDbRelations' => array(
+					'birthday'
+				),
+				'breadcrumbs_step' => 2
+			),
+			3 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/address_data',
+				'model'            => 'ClientAddressDataForm',
+				'modelDbRelations' => array(
+					'phone'
+				),
+				'breadcrumbs_step' => 2
+			),
+			4 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/job_data',
+				'model'            => 'ClientJobDataForm',
+				'modelDbRelations' => array(
+					'friends_phone',
+					'relatives_one_phone',
+					'phone'
+				),
+				'breadcrumbs_step' => 2
+			),
+			5 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/secret_data',
+				'model'            => 'ClientSecretDataForm',
+				'breadcrumbs_step' => 2
+			),
+			6 => array(
+				'view'             => 'client_form',
+				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
 					false       => 'confirm_phone/send_sms_code'
 				),
-				'model' => 'ClientConfirmPhoneViaSMSForm',
+				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'breadcrumbs_step' => 3
 			),
 		),
 	);
@@ -166,16 +206,20 @@ class ClientFormComponent
 	 */
 	public function init()
 	{
-		if (!$this->iClientId = $this->getClientId()) {
+		$this->iClientId = $this->getClientId();
+		if (!$this->iClientId) {
 			$this->iClientId = false;
 		}
 
-		if (!$this->iCurrentStep = $this->getCurrentStep()) {
-			$this->setCurrentStep(0); //TODO брать номер default из конфига
-		}
+		$iDefaultStep = $this->getDefaultStep();
 
-		if (!$this->iDoneSteps = $this->getDoneSteps()) {
-			$this->setDoneSteps(0);
+		$this->iCurrentStep = $this->getCurrentStep();
+		if (!$this->iCurrentStep) {
+			$this->setCurrentStep($iDefaultStep);
+		}
+		$this->iDoneSteps = $this->getDoneSteps();
+		if (!$this->iDoneSteps) {
+			$this->setDoneSteps($iDefaultStep);
 		}
 	}
 
@@ -398,9 +442,6 @@ class ClientFormComponent
 			if (!$this->compareSessionAndSentPhones()) {
 				$this->setFlagSmsSent(false);
 			}
-
-			// ставим флаг, что полная форма заполнена - чтобы при возврате к ней была активна кнопка "Отправить"
-			$this->setFlagFullFormFilled(true);
 		} else {
 			if ($this->iClientId) {
 				$aClientFormData = $oClientForm->getAttributes();
@@ -546,6 +587,14 @@ class ClientFormComponent
 		return (Yii::app()->adminKreddyApi->createClient($aClientData));
 	}
 
+
+	public function resetSteps()
+	{
+		$iDefaultStep = $this->getDefaultStep();
+		$this->setCurrentStep($iDefaultStep);
+		$this->setDoneSteps($iDefaultStep);
+	}
+
 	/**
 	 * Возвращает номер текущего шага (нумерация с нуля)
 	 *
@@ -586,6 +635,39 @@ class ClientFormComponent
 	{
 		Yii::app()->session['done_steps'] = $iSteps;
 		$this->iDoneSteps = $iSteps;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDefaultStep()
+	{
+		$sSite = $this->getSite();
+
+		return isset(self::$aSteps[$sSite]['default']) ? self::$aSteps[$sSite]['default'] : 0;
+
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMaxStep()
+	{
+		$sSite = $this->getSite();
+
+		return isset(self::$aSteps[$sSite]['max']) ? self::$aSteps[$sSite]['max'] : 0;
+
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMinStep()
+	{
+		$sSite = $this->getSite();
+
+		return isset(self::$aSteps[$sSite]['min']) ? self::$aSteps[$sSite]['min'] : 0;
+
 	}
 
 	/**
@@ -640,19 +722,18 @@ class ClientFormComponent
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']
 			: null;
 
-		//TODO вынести в метод
 		//если массив вида array('condition'=>'someCondition,...);
 		if (is_array($mView) && isset($mView['condition'])) {
-			$b = $this->$mView['condition']();
-			$sView = $mView[$b];
+			$bCondition = $this->$mView['condition']();
+			$sView = $mView[$bCondition];
 		} else {
 			$sView = $mView;
 		}
 
 		//если массив вида array('condition'=>'someCondition,...);
 		if (is_array($mSubView) && isset($mSubView['condition'])) {
-			$b = $this->$mSubView['condition']();
-			$sSubView = $mSubView[$b];
+			$bCondition = $this->$mSubView['condition']();
+			$sSubView = $mSubView[$bCondition];
 		} else {
 			$sSubView = $mSubView;
 		}
@@ -713,14 +794,10 @@ class ClientFormComponent
 
 	/**
 	 * Переводит обработку форм на следующий шаг
-	 *
 	 * @param int $iSteps
 	 */
 	public function nextStep($iSteps = 1)
 	{
-		if (!($iSteps <= 3)) {
-			$iSteps = 1;
-		}
 		$this->iCurrentStep += $iSteps;
 
 		if ($this->iDoneSteps < $this->iCurrentStep) {
@@ -741,24 +818,6 @@ class ClientFormComponent
 		}
 
 		return $sPhone;
-	}
-
-	/**
-	 * @param $bFullFormFilled
-	 */
-	public function setFlagFullFormFilled($bFullFormFilled)
-	{
-		Yii::app()->session['flagClientFullFormFilled'] = $bFullFormFilled; //TODO проверить нужно ли оставить это
-	}
-
-	/**
-	 * Была ли уже заполнена полная форма?
-	 *
-	 * @return bool
-	 */
-	public function getFlagFullFormFilled()
-	{
-		return !empty(Yii::app()->session['flagClientFullFormFilled']); //TODO см выше
 	}
 
 	/**
@@ -949,9 +1008,8 @@ class ClientFormComponent
 
 	public function clearClientSession()
 	{
-		//сбрасываем шаги заполнения анкеты в 0
-		Yii::app()->session['current_step'] = 0;
-		Yii::app()->session['done_steps'] = 0;
+		//сбрасываем шаги заполнения анкеты
+		$this->resetSteps();
 
 		//удаляем идентификаторы
 		Yii::app()->session['client_id'] = null;
@@ -970,8 +1028,6 @@ class ClientFormComponent
 		Yii::app()->session['ClientSelectProductForm'] = null;
 		Yii::app()->session['ClientFlexibleProductForm'] = null;
 		Yii::app()->session['ClientFullForm'] = null;
-
-		$this->setFlagFullFormFilled(false);
 	}
 
 
@@ -1054,4 +1110,5 @@ class ClientFormComponent
 		return $iBreadCrumbsStep;
 
 	}
+
 }

@@ -129,7 +129,7 @@ class AdminKreddyApiComponent
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
 
-	const TOKEN_MINUTES_LIVE = 10; // токен живёт 10 минут todo: уточнить
+	const TOKEN_MINUTES_LIVE = 10; // токен живёт 10 минут
 
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';

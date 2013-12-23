@@ -32,18 +32,8 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// todo: редирект?
-		/*Yii::app()->clientForm->setDoneSteps(0);
-		Yii::app()->clientForm->setCurrentStep(0);
-
-
-		if (SiteParams::getIsIvanovoSite()) {
-			$oClientForm = new ClientFlexibleProductForm();
-			$this->render('../form/client_flexible_product', array('oClientCreateForm' => $oClientForm));
-		} else {
-			$oClientForm = new ClientSelectProductForm();
-			$this->render('../form/client_select_product', array('oClientCreateForm' => $oClientForm));
-		}*/
+		Yii::app()->clientForm->resetSteps();
+		$this->redirect(Yii::app()->createUrl("/form"));
 	}
 
 	/**
