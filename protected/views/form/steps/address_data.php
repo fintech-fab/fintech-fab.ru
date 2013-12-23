@@ -44,7 +44,7 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
-	<h4>Адрес регистрации</h4>
+	<h4>Постоянная регистрация</h4>
 	<div class="span5">
 		<h5>Адрес регистрации</h5>
 
