@@ -59,6 +59,11 @@ class FormController extends Controller
 	 */
 	private function index($ajaxForm = null)
 	{
+		//проверяем, не нужно ли перейти к следующему шагу ничего не обрабатывая (для шагов без форм)
+		if (Yii::app()->clientForm->tryGoNextStep()) {
+			$this->redirect(Yii::app()->createUrl("/form"));
+		}
+
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
 		 * @var array                    $aPost

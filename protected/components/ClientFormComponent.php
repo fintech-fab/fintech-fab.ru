@@ -53,7 +53,7 @@ class ClientFormComponent
 			'default' => 0,
 		),
 		self::SITE2 => array(
-			'max' => 6,
+			'max' => 7,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -79,6 +79,8 @@ class ClientFormComponent
 	 * это требуется для валидации некоторых значений, которые связаны с данными в БД, сохраненными туда другими формами
 	 * (на предыдущих шагах)
 	 *
+	 * go_next_step - по получении post-запроса на этом шаге следует сразу перейти к следующему шагу
+	 *
 	 * @var array
 	 */
 
@@ -92,9 +94,9 @@ class ClientFormComponent
 			),
 			1 => array(
 				'view'             => 'infographic',
-				'model'            => 'ClientSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'infographic',
+				'go_next_step' => true,
 			),
 			2 => array(
 				'view'             => 'client_form',
@@ -162,13 +164,20 @@ class ClientFormComponent
 				'metrika_goal'     => 'select_product',
 			),
 			1 => array(
+				'view'             => 'infographic',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'infographic',
+				'go_next_step'     => true,
+			),
+
+			2 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/personal_data',
 				'model'            => 'ClientPersonalDataForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'personal_data',
 			),
-			2 => array(
+			3 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
@@ -178,7 +187,7 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'passport_data',
 			),
-			3 => array(
+			4 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
@@ -188,7 +197,7 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'address_data',
 			),
-			4 => array(
+			5 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/job_data',
 				'model'            => 'ClientJobDataForm',
@@ -200,14 +209,14 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'job_data',
 			),
-			5 => array(
+			6 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/secret_data',
 				'model'            => 'ClientSecretDataForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'secret_data',
 			),
-			6 => array(
+			7 => array(
 				'view'             => 'client_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
@@ -714,10 +723,16 @@ class ClientFormComponent
 
 		$sSite = self::getSite();
 
-		$sModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
+		$sModel = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['model']
+			: null;
 
 		//создаем модель
-		$oModel = new $sModel();
+		if ($sModel) {
+			$oModel = new $sModel();
+		} else {
+			return null;
+		}
 
 		//если есть связи с полями в БД, то нужно сделать запрос в БД с указанием этих полей и получить их данные
 		//это требуется для валидации данных в формах, в которых правила валидации связаны с данными из БД
@@ -785,7 +800,10 @@ class ClientFormComponent
 	{
 		$sSite = self::getSite();
 
-		$sModel = self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'];
+		$sModel = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['model']
+			: false;
+
 
 		return Yii::app()->request->getParam($sModel);
 	}
@@ -1144,6 +1162,28 @@ class ClientFormComponent
 
 		return $iBreadCrumbsStep;
 
+	}
+
+	/**
+	 * Проверяем, нужно ли на текущем шаге сразу переходить к следующему шагу, не проводя обработку переданных данных.
+	 * Требуется для "пустых" страниц без форм, содержащих, например, рекламные сообщения или различную информацию.
+	 *
+	 * @return bool
+	 */
+	public function tryGoNextStep()
+	{
+		$sSite = Yii::app()->clientForm->getSite();
+
+		if (
+			Yii::app()->request->isPostRequest
+			&& !empty(self::$aStepsInfo[$sSite][$this->iCurrentStep]['go_next_step'])
+		) {
+			$this->nextStep();
+
+			return true;
+		}
+
+		return false;
 	}
 
 }

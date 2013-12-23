@@ -86,7 +86,7 @@ $a = array(
 			'urlFormat'      => 'path',
 			'showScriptName' => false,
 			'rules'          => array(
-				''                                                  => 'form/index',
+				//''                                                  => 'form/index',
 
 				'contact'                                           => 'site/contact',
 				'contactUs'                                         => 'site/contactUs',

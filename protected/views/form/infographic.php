@@ -26,6 +26,11 @@ $this->pageTitle = Yii::app()->name;
 
 <div class="clearfix"></div>
 <div class="row span10">
+	<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+		'id'     => 'nextForm',
+		'action' => Yii::app()->createUrl('/form/'),
+	)); ?>
+
 	<div class="form-actions">
 		<div class="row">
 			<div class="span1">
@@ -38,7 +43,8 @@ $this->pageTitle = Yii::app()->name;
 			</div>
 
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'    => 'submitButton',
+				'id'         => 'nextButton',
+				'buttonType' => 'submit',
 				'url'   => Yii::app()
 						->createUrl('/form/'),
 				'type'  => 'primary',
@@ -46,6 +52,7 @@ $this->pageTitle = Yii::app()->name;
 			)); ?>
 		</div>
 	</div>
+	<?php $this->endWidget(); ?>
 </div>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
