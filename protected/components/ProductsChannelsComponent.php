@@ -78,7 +78,7 @@ class ProductsChannelsComponent
 		if (preg_match("/Кредди/", $sName)) {
 			return 'на карту Кредди';
 		} elseif (preg_match("/мобил/", $sName)) {
-			return 'на мобильный телефон (МТС, Билайн, Мегафон)';
+			return 'на мобильный телефон (МТС, Билайн, Мегафон, Теле2)';
 		}
 
 		return false;
