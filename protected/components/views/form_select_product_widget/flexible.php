@@ -40,7 +40,7 @@
 	?>
 
 	<div class="row span10">
-		<?php echo $form->radioButtonGroupsListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary', 'class' => 'btn-small')); ?>
+		<?php echo $form->radioButtonGroupsListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary', 'label' => false, 'class' => 'btn-small')); ?>
 	</div>
 
 	<div class="row">

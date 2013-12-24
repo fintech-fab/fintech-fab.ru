@@ -10,10 +10,15 @@
 ?>
 
 	<h5 class="pay_legend">Выберите сумму займа</h5>
-<?= $form->dropDownListRow($model, 'amount', $aAmountValues, array('class' => 'hide', /*'id' => 'amount'*/)); ?>
+
+<?= $form->dropDownListRow($model, 'amount', $aAmountValues, array('class' => 'hide', 'label' => false)); ?>
+
+
 	<br />    <br />    <br />
 	<h5 class="pay_legend">Выберите срок предоставления займа</h5>
-<?= $form->dropDownListRow($model, 'time', $aTimeValues, array('class' => 'hide', /*'id' => 'time'*/)); ?>
+
+<?= $form->dropDownListRow($model, 'time', $aTimeValues, array('class' => 'hide', 'label' => false)); ?>
+
 
 <?php
 Yii::app()->clientScript->registerScript('sliderWidgetVars', '
