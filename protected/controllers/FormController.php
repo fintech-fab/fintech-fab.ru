@@ -256,16 +256,18 @@ class FormController extends Controller
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
 		$oAnswer = Yii::app()->clientForm->sendSmsCode();
 
-		// если были ошибки при отправке, то выводим их в представлении
+		// если были ошибки при отправке, то добавляем в сессию сообщение об ошибке
 		if ($oAnswer !== true) {
 
 			$aView = Yii::app()->clientForm->getCheckSmsView();
 			$sView = $aView['view'];
-			$sSubView = isset($aView['error']) ? $aView['error'] : $aView['sub_view'];;
+			$sSubView = isset($aView['error']) ? $aView['error'] : $aView['sub_view'];
+
+			Yii::app()->session['error'] = $oAnswer;
 
 			$this->render($sView, array(
-					'sSubView' => $sSubView,
-					'sErrorMessage' => $oAnswer,
+					'sSubView'          => $sSubView,
+					'oClientCreateForm' => Yii::app()->clientForm->getFormModel(),
 				)
 			);
 			Yii::app()->end();
