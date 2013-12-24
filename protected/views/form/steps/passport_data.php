@@ -44,6 +44,8 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 
 	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_code') + array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
 	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_issued')); ?>
+
+	<?= $form->textFieldRow($oClientCreateForm, 'birthplace', SiteParams::getHintHtmlOptions($oClientCreateForm, 'birthplace')); ?>
 </div>
 
 <div class="span5 offset1">

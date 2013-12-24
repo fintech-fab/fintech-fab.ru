@@ -26,6 +26,7 @@ class ClientPassportDataForm extends ClientFullForm
 			'document',
 			'document_number',
 			'passport_full_number',
+			'birthplace',
 		);
 
 		$aMyRules =
@@ -51,7 +52,8 @@ class ClientPassportDataForm extends ClientFullForm
 				'document',
 				'document_number',
 
-				'birthday'
+				'birthday',
+				'birthplace',
 			),
 			$aRequired
 		), $aMyRules);
@@ -95,6 +97,7 @@ class ClientPassportDataForm extends ClientFullForm
 			'document',
 			'document_number',
 			'passport_full_number',
+			'birthplace',
 
 			//обязательно требуется для валидации, берется из информации предыдущих форм
 			'birthday',
