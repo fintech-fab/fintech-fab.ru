@@ -145,7 +145,7 @@ class ClientFormComponent
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
 					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_error'
+					'error' => 'confirm_phone/send_sms_code_error'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
@@ -218,7 +218,7 @@ class ClientFormComponent
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
 					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_error'
+					'error' => 'confirm_phone/send_sms_code_error'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3
@@ -1213,9 +1213,9 @@ class ClientFormComponent
 			return $mErrorView;
 		}
 
-		return $this->getView();
+		$aView = $this->getView();
 
-
+		return isset($aView['sub_view']) ? $aView['sub_view'] : $aView['view'];
 	}
 
 }
