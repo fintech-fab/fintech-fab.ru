@@ -76,6 +76,8 @@ class ClientCreateFormAbstract extends CFormModel
 
 	public $birthday; // день (дата) рождения
 
+	public $birthplace; //место рождения
+
 	public $passport_series; // серия паспорта
 	public $passport_number; // номер паспорта
 	public $passport_issued; // кем выдан
@@ -275,7 +277,8 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'address_reg_city':
 				case 'address_reg_address':
-					$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+				case 'birthplace':
+				$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
 					break;
 
 				case 'phone':
@@ -705,7 +708,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'prev_last_name'         => 'Прежняя фамилия',
 
 			'sex'                    => 'Пол',
-			'birthday' => 'Дата рождения',
+			'birthday'   => 'Дата рождения',
 			'numeric_code'           => 'Цифровой код (для подтверждения повторных займов)',
 			'email'                  => 'Email',
 			'marital_status'         => 'Семейное положение',
@@ -730,6 +733,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'passport_issued'        => 'Кем выдан',
 			'passport_date'          => 'Дата выдачи',
 			'passport_code'          => 'Код подразделения',
+			'birthplace' => 'Место рождения',
 
 			'job_phone'              => 'Рабочий телефон',
 			'job_less'               => 'Безработный',

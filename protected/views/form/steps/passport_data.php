@@ -102,6 +102,7 @@ Yii::app()->clientScript->registerScript('validate_document_number', '
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover("destroy");
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover(options);
 
+		options = {"content":"<span style=\"color: black;\">"+documentsArray[docVal]+"</span>"}
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover("destroy");
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover(options);
 
@@ -139,6 +140,7 @@ options = {"content":documentsArray[docVal]}
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover("destroy");
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover(options);
 
+options = {"content":"<span style=\"color: black;\">"+documentsArray[docVal]+"</span>"}
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover("destroy");
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover(options);
 
