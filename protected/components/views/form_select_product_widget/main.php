@@ -52,8 +52,8 @@
 			?>
 		</div>
 
-		<div class="span6">
-			<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
+		<div class="span5" style="width:430px !important;">
+		<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
 		</div>
 	</div>
 </div>
