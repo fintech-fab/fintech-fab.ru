@@ -1197,11 +1197,9 @@ class ClientFormComponent
 	}
 
 	/**
-	 * @param bool $bError
-	 *
 	 * @return array|null
 	 */
-	public function getCheckSmsView($bError = false)
+	public function getCheckSmsView()
 	{
 		$sSite = $this->getSite();
 
@@ -1209,13 +1207,12 @@ class ClientFormComponent
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']
 			: null;
 
-		if ($bError && $mErrorView) {
-			return $mErrorView;
-		}
 
 		$aView = $this->getView();
 
-		return isset($aView['sub_view']) ? $aView['sub_view'] : $aView['view'];
+		$aView['error'] = $mErrorView;
+
+		return $aView;
 	}
 
 }

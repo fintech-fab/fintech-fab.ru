@@ -258,9 +258,13 @@ class FormController extends Controller
 
 		// если были ошибки при отправке, то выводим их в представлении
 		if ($oAnswer !== true) {
-			//получаев view смс-кода с ошибкой отправки
-			$sView = Yii::app()->clientForm->getCheckSmsView(true);
+
+			$aView = Yii::app()->clientForm->getCheckSmsView();
+			$sView = $aView['view'];
+			$sSubView = isset($aView['error']) ? $aView['error'] : $aView['sub_view'];;
+
 			$this->render($sView, array(
+					'sSubView' => $sSubView,
 					'sErrorMessage' => $oAnswer,
 				)
 			);
@@ -294,9 +298,12 @@ class FormController extends Controller
 
 
 			//получаев view для проверки смс-кода
-			$sView = Yii::app()->clientForm->getCheckSmsView();
+			$aView = Yii::app()->clientForm->getCheckSmsView();
+			$sView = $aView['view'];
+			$sSubView = $aView['sub_view'];
 
 			$this->render($sView, array(
+				'sSubView' => $sSubView,
 				'oClientCreateForm' => $oClientSmsForm,
 			));
 			Yii::app()->end();
