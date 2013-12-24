@@ -33,12 +33,12 @@ $this->pageTitle = Yii::app()->name;
 
 	<div class="form-actions">
 		<div class="row">
-			<div class="span1">
+			<div class="span2">
 				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'id'    => 'backButton',
 					'url'   => Yii::app()
 							->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
-					'label' => 'Назад',
+					'label' => SiteParams::C_BUTTON_LABEL_BACK,
 				)); ?>
 			</div>
 
@@ -48,7 +48,7 @@ $this->pageTitle = Yii::app()->name;
 				'url'   => Yii::app()
 						->createUrl('/form/'),
 				'type'  => 'primary',
-				'label' => 'Далее',
+				'label' => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>

@@ -73,7 +73,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 	<div class="row span10">
 		<div class="form-actions">
 			<div class="row">
-				<div class="span1">
+				<div class="span2">
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'backButton',
 						'buttonType'  => 'ajaxButton',
@@ -82,7 +82,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 						),
 						'url'         => Yii::app()
 								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
-						'label'       => 'Назад',
+						'label' => SiteParams::C_BUTTON_LABEL_BACK,
 					)); ?>
 				</div>
 
@@ -95,7 +95,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 					),
 					'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 					'type'        => 'primary',
-					'label'       => 'Далее',
+					'label' => SiteParams::C_BUTTON_LABEL_NEXT,
 				)); ?>
 			</div>
 		</div>

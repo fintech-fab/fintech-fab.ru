@@ -223,11 +223,3 @@ label, input, button, select, textarea {
 .ui-slider .ui-slider-handle {
 	outline: medium none;
 }
-
-.collapse.in {
-	overflow: visible;
-}
-
-.popover {
-	min-width: 300px;
-}

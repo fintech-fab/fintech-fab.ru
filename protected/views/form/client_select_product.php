@@ -69,7 +69,7 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type'       => 'primary',
-				'label'      => 'Далее →',
+				'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>

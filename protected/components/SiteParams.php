@@ -146,6 +146,9 @@ class SiteParams
 	 */
 	const C_INN_LENGTH = 12;
 
+	const C_BUTTON_LABEL_NEXT = 'Далее →';
+	const C_BUTTON_LABEL_BACK = '← Назад';
+
 	// время жизни авторизации
 	public $iLoginTime = self::CTIME_DAY;
 
@@ -227,17 +230,19 @@ class SiteParams
 				'class'          => 'append-icon-info',
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
-				'data-placement' => 'right',
+				'data-placement' => 'top',
 				'data-content'   => '<span style="color: black;">' . $sInfo . '</span>',
-				'data-toggle'    => 'popover'
+				'data-toggle'    => 'popover',
+				'data-container' => 'false'
 			), '', true);
 
 			$aHtmlOptions = array(
 				'append'         => $sInfoTag,
 				'data-trigger'   => 'focus',
-				'data-placement' => 'right',
+				'data-placement' => 'top',
 				'data-content'   => $sInfo,
-				'data-toggle'    => 'popover'
+				'data-toggle'    => 'popover',
+				'data-container' => 'false'
 			);
 		}
 
