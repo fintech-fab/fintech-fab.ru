@@ -47,7 +47,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
 
 
-		//процедура получения фото клиента
+		//процедура загрузки фото клиента
 		$aRequest = array(
 			'token' => $sToken,
 			'image' => self::IMAGE,
@@ -55,7 +55,6 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 		$sResult = $this->_requestToCallback($aRequest);
 		$aResult = CJSON::decode($sResult);
-
 		$sToken = $aResult['result']['token'];
 
 		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
@@ -120,7 +119,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		//проверяем наличие description
 		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
 
-		//процедура загрузки документа 3
+		//процедура загрузки последнего документа
 		$aRequest = array(
 			'token' => $sToken,
 			'image' => self::IMAGE,
@@ -152,7 +151,6 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 		$sResult = $this->_requestToCallback($aRequest);
 		$aResult = CJSON::decode($sResult);
-		$sToken = $aResult['result']['token'];
 
 		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
 		//проверяем наличие токена
