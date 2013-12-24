@@ -145,7 +145,7 @@ class ClientFormComponent
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
 					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_code_error'
+					'error' => 'confirm_phone/send_sms_code'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
