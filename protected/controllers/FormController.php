@@ -258,7 +258,9 @@ class FormController extends Controller
 
 		// если были ошибки при отправке, то выводим их в представлении
 		if ($oAnswer !== true) {
-			$this->render('confirm_phone_full_form/send_sms_code_error', array(
+			//получаев view смс-кода с ошибкой отправки
+			$sView = Yii::app()->clientForm->getCheckSmsView(true);
+			$this->render($sView, array(
 					'sErrorMessage' => $oAnswer,
 				)
 			);
@@ -289,7 +291,12 @@ class FormController extends Controller
 			$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
 			$oClientSmsForm->setAttributes($aPostData);
 			$oClientSmsForm->addError('sms_code', $mAnswer);
-			$this->render('confirm_phone_full_form/check_sms_code', array(
+
+
+			//получаев view для проверки смс-кода
+			$sView = Yii::app()->clientForm->getCheckSmsView();
+
+			$this->render($sView, array(
 				'oClientCreateForm' => $oClientSmsForm,
 			));
 			Yii::app()->end();
