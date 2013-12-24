@@ -532,3 +532,7 @@ slider style
 	white-space: nowrap;
 	width: auto;
 }
+
+.input-append {
+	width: 250px;
+}
