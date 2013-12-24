@@ -7,7 +7,9 @@ class m131224_105438_AddClientFields extends CDbMigration
 ADD `income_source` VARCHAR( 255 ) NOT NULL COMMENT 'Источник дохода' AFTER `status` ,
 ADD `educational_institution_name` VARCHAR( 255 ) NOT NULL COMMENT 'Название учебного заведения' AFTER `income_source` ,
 ADD `educational_institution_phone` VARCHAR( 10 ) NOT NULL COMMENT 'Номер телефона учебного заведения' AFTER `educational_institution_name` ,
-ADD `loan_purpose` TINYINT UNSIGNED NOT NULL COMMENT 'Цель займа' AFTER `educational_institution_phone` ;");
+ADD `loan_purpose` TINYINT UNSIGNED NOT NULL COMMENT 'Цель займа' AFTER `educational_institution_phone` ,
+ADD `birthplace` VARCHAR( 255 ) NOT NULL COMMENT 'Место рождения' AFTER `birthday` ;
+");
 
 
 	}
