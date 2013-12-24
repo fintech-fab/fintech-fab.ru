@@ -203,3 +203,9 @@ div.search-form {
 	padding-left: 8px;
 	padding-right: 8px;
 }
+
+/* todo убрать после YU */
+#ClientSelectProductForm {
+	background: url('../images/nw_year_stars.jpg');
+	padding-top: 15px;
+}

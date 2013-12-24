@@ -2,29 +2,26 @@
 	<strong>Выбранные условия:</strong>
 	<ul>
 		<li>Размер займа:
-			<span class="cost final_price"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Количество займов в Пакете:
-			<span class="cost count_subscribe"><?= "";//Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
+			<span class="cost count_subscribe"><?= ""; //Dictionaries::$aDataCounts[$this->chosenProduct] ?></span></li>
 		<li>Размер Пакета:
-			<span class="cost packet_size"><?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			<span class="cost packet_size"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Вернуть <span class="cost final_price">
-				<?= "";//Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
-			до:&nbsp;<span class="cost time">23:50</span>, <span class="cost date"><?= "";//$getDateToPayUntil; ?></span>
+				<?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			до:&nbsp;<span class="cost time">23:50</span>,
+			<span class="cost date"><?= ""; //$getDateToPayUntil; ?></span>
 		</li>
 		<li>Стоимость подключения:
-			<span class="cost price_count"><?= "";//Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
+			<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Срок подключения:
-			<span class="cost price_month"><?= "";//Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
+			<span class="cost price_month"><?= ""; //Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
 		</li>
 		<li>Канал получения:&nbsp; <span class="cost channel">на мобильный телефон (МТС, Билайн, Мегафон)</span></li>
 	</ul>
-</div>
-
-<div class="span2" id="conditions-img">
-	<img src="<?= Yii::app()->request->baseUrl ?>/static/img/step<?= ($this->curStep > 6) ? '6' : $this->curStep; ?>.png">
 </div>
 
 <?php
