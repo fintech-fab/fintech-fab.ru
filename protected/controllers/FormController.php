@@ -127,8 +127,8 @@ class FormController extends Controller
 		 * Загрузка данных из сессии в форму, если данные существуют и client_id сессии совпадает с оным в куке
 		 */
 
-		if (Cookie::compareDataInCookie('client', 'client_id', $iClientId)
-			&& $oClientForm
+		if ($oClientForm
+			&& Cookie::compareDataInCookie('client', 'client_id', $iClientId)
 			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (!empty($oClientForm)) {
@@ -244,7 +244,7 @@ class FormController extends Controller
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
-			$this->redirect(Yii::app()->createUrl("form"));
+			$this->redirect(Yii::app()->createUrl("/form"));
 		}
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
@@ -258,7 +258,7 @@ class FormController extends Controller
 			);
 			Yii::app()->end();
 		}
-		$this->redirect(Yii::app()->createUrl("form"));
+		$this->redirect(Yii::app()->createUrl("/form"));
 	}
 
 	/**
