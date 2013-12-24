@@ -1,6 +1,5 @@
 body {
-	/*background: #ffffff url('../images/new-year_bg.png') no-repeat center top fixed;*/
-	background: #ffffff;
+	background: url('../images/new-year_bg.jpg') #8ed8ff repeat-y center top; /*todo: убрать после НГ - на #ffffff*/
 }
 
 h2 {
@@ -126,6 +125,7 @@ nav div.navbar-inner {
 
 #steps {
 	margin-top: 5px !important;
+	margin-bottom: 0;
 }
 
 #steps li {
