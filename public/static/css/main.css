@@ -222,3 +222,10 @@ div.search-form {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
+}
+
+/* todo убрать после YU */
+#ClientSelectProductForm {
+	background: url('../images/nw_year_stars.jpg');
+	padding-top: 15px;
+}
