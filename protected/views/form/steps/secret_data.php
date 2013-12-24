@@ -11,6 +11,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
+		'hideErrorMessage' => true,
 	),
 	'action' => Yii::app()->createUrl('/form'),
 ));

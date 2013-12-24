@@ -11,6 +11,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(
+		'hideErrorMessage' => true,
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),

@@ -467,18 +467,6 @@ slider style
 	margin-top: 1em;
 }
 
-#formBody .form-horizontal .control-group.success:not(.passport-num) {
-	background-image: url("/static/img/icons/button_ok.png");
-	background-position: right top;
-	background-repeat: no-repeat;
-}
-
-#formBody .form-horizontal .control-group.error:not(.passport-num) {
-	background-image: url("/static/img/icons/agt_action_fail.png");
-	background-position: right top;
-	background-repeat: no-repeat;
-}
-
 #formBody .form-horizontal .control-group.success .append-icon-info {
 	background-image: url("/static/img/icons/button_ok.png");
 	background-repeat: no-repeat;

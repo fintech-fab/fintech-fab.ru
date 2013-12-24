@@ -9,6 +9,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(
+		'hideErrorMessage' => true,
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
@@ -85,8 +86,25 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 //при изменении типа документа заново валидировать поле с номером документа.
 
 Yii::app()->clientScript->registerScript('validate_document_number', '
+	documentsArray = ' . CJSON::encode(Dictionaries::$aDocumentsErrors) . ';
+
 	jQuery("#' . get_class($oClientCreateForm) . '_document").change(function()
 	{
+		docVal = $("#' . get_class($oClientCreateForm) . '_document").attr("value");
+		if(docVal=="")
+		{
+			docVal = 0;
+		}
+
+		docVal = parseInt(docVal);
+
+		options = {"content":documentsArray[docVal]}
+		jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover("destroy");
+		jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover(options);
+
+		jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover("destroy");
+		jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover(options);
+
 		var form=$("#' . get_class($oClientCreateForm) . '");
         var settings = form.data("settings");
         $.each(settings.attributes, function () {
@@ -107,5 +125,23 @@ Yii::app()->clientScript->registerScript('validate_document_number', '
 	    });
 	});
 ');
+
+Yii::app()->clientScript->registerScript('validate_document_force', '
+documentsArray = ' . CJSON::encode(Dictionaries::$aDocumentsErrors) . ';
+docVal = $("#' . get_class($oClientCreateForm) . '_document").attr("value");
+if(docVal=="")
+{
+	docVal = 0;
+}
+docVal = parseInt(docVal);
+
+options = {"content":documentsArray[docVal]}
+jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover("destroy");
+jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover(options);
+
+jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover("destroy");
+jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover(options);
+
+', CClientScript::POS_LOAD);
 
 ?>
