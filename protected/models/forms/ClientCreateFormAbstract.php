@@ -279,7 +279,7 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'address_reg_address':
 				case 'birthplace':
 				$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
-					break;
+				break;
 
 				case 'phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
