@@ -5,20 +5,23 @@
  * @var $sSelectProductModelName string
  * @var $oClientCreateForm       ClientSelectProductForm
  */
-
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                   => get_class($oClientCreateForm),
-	'enableAjaxValidation' => true,
-	'clientOptions'        => array(
-		'validateOnChange' => true,
-	),
-	'action'               => Yii::app()->createUrl('/form/saveSelectedProduct'),
-));
-
 ?>
-<div class="row">
-	<div id="form_selected_product">
+<div id="form_selected_product">
+	<div class="row">
+
 		<div class="span6">
+			<?php
+			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+				'id'                   => get_class($oClientCreateForm),
+				'enableAjaxValidation' => true,
+				'clientOptions'        => array(
+					'validateOnChange' => true,
+				),
+				'action'               => Yii::app()->createUrl('/form/saveSelectedProduct'),
+			));
+
+			?>
+
 			<div class="row">
 
 				<?php
@@ -42,15 +45,15 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				?>
 				<?= $form->radioButtonListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 			</div>
+
+
+			<?php
+			$this->endWidget();
+			?>
 		</div>
 
-		<div class="span6">
-			<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
+		<div class="span5" style="width:430px !important;">
+		<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
 		</div>
 	</div>
 </div>
-<div class="clearfix"></div>
-
-<?php
-$this->endWidget();
-?>

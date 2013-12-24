@@ -202,3 +202,23 @@ div.search-form {
 	padding-left: 8px;
 	padding-right: 8px;
 }
+
+#form_selected_product {
+	margin-left: -20px;
+	margin-bottom: 15px;
+	padding: 15px 0 0 35px;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#form_selected_product_ivanovo {
+	margin-left: -20px;
+	margin-bottom: 15px;
+	padding: 15px 0 40px 15px;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}

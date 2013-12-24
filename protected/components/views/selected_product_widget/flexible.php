@@ -3,11 +3,8 @@
  * @var $sFormName string
  */
 ?>
-<div class="alert alert-success conditions" style="margin-top: 20pt;">
-	<h5 class="pay_legend">Выбранные условия</h5>
-	<?php
-
-	?>
+<div class="conditions">
+	<strong>Ваши условия</strong>
 	<ul>
 		<li>Размер займа:
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей

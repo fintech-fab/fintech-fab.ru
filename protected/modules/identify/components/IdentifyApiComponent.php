@@ -119,8 +119,8 @@ class IdentifyApiComponent
 			return $this->formatErrorResponse('Не удалось авторизоваться по логину-паролю');
 		}
 
-		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
 		$iStepNumber = self::STEP_FACE;
+		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
 		$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
@@ -202,20 +202,19 @@ class IdentifyApiComponent
 			case self::STEP_DOCUMENT1:
 			case self::STEP_DOCUMENT2:
 			case self::STEP_DOCUMENT3:
-			case self::STEP_DOCUMENT4:
 			$aResponse = $this->formatResponse($sToken,
 				array(
 					'document' => $iStepNumber,
-					'title'    => self::$aTitlesForSteps[$iStepNumber],
-					'instruction' => self::$aInstructionsForSteps[$iStepNumber],
-						'example'     => self::$aExamplesForSteps[$iStepNumber],
-						'description' => self::$aDescriptionsForSteps[$iStepNumber],
-					)
+					'title'       => self::$aTitlesForSteps[$iNextStepNumber],
+					'instruction' => self::$aInstructionsForSteps[$iNextStepNumber],
+					'example'     => self::$aExamplesForSteps[$iNextStepNumber],
+					'description' => self::$aDescriptionsForSteps[$iNextStepNumber],
+				)
 				);
 				break;
 
-			case self::STEP_DONE:
-				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iStepNumber]);
+			case self::STEP_DOCUMENT4:
+				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iNextStepNumber]);
 				break;
 
 			default:
