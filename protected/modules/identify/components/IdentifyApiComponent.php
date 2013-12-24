@@ -119,9 +119,11 @@ class IdentifyApiComponent
 			return $this->formatErrorResponse('Не удалось авторизоваться по логину-паролю');
 		}
 
-		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
+		// авторизация успешна; генерируем соответствующий токен - не для фото лица (снова), а для 1-го документа todo: убрать заглушку.
+		$iNextStepNumber = self::STEP_DOCUMENT1;
+		$sToken = $this->generateToken(self::TMP_HASH, $iNextStepNumber);
+
 		$iStepNumber = self::STEP_FACE;
-		$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
 		return $this->formatResponse($sToken, array(
@@ -198,7 +200,6 @@ class IdentifyApiComponent
 		$sToken = $this->generateToken($sUserHash, $iNextStepNumber);
 
 		switch ($iStepNumber) {
-			case self::STEP_FACE:
 			case self::STEP_DOCUMENT1:
 			case self::STEP_DOCUMENT2:
 			case self::STEP_DOCUMENT3:
