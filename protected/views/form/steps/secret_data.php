@@ -51,7 +51,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 						),
 						'url'         => Yii::app()
 								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
-						'label' => SiteParams::C_BUTTON_LABEL_NEXT,
+						'label' => SiteParams::C_BUTTON_LABEL_BACK,
 					)); ?>
 				</div>
 
