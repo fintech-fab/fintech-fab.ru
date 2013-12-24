@@ -199,7 +199,7 @@ class SiteParams
 			'url' => '/form/ajaxForm/5'
 		),
 		4 => array(
-			'label' => 'Место работы',
+			'label' => 'Дополнительная информация',
 			'url' => '/form/ajaxForm/6'
 		),
 		5 => array(

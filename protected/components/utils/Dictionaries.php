@@ -232,7 +232,7 @@ class Dictionaries
 	 *
 	 * @var array
 	 */
-	public static $aGoals = array(
+	public static $aLoanPurposes = array(
 		1 => 'Здоровье и красота',
 		2 => 'Развлечения (кафе, кино и т.п.)',
 		3 => 'Подарки друзьям и близким',

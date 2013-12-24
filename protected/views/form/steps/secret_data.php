@@ -30,14 +30,14 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 ?>
 	<h4>Отправка заявки</h4>
 	<div class="span5">
-		<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', array('class' => 'span3')); ?>
-		<?= $form->dropDownListRow($oClientCreateForm, 'secret_question', Dictionaries::$aSecretQuestions, array('class' => 'span3')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', array('class' => 'span3')); ?>
+		<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'numeric_code')); ?>
+		<?= $form->dropDownListRow2($oClientCreateForm, 'secret_question', Dictionaries::$aSecretQuestions, SiteParams::getHintHtmlOptions($oClientCreateForm, 'secret_question')); ?>
+		<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', SiteParams::getHintHtmlOptions($oClientCreateForm, 'secret_answer')); ?>
 	</div>
-	<div class="span6">
-		<?= $form->passwordFieldRow($oClientCreateForm, 'password', array('autocomplete' => 'off')); ?>
-		<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', array('autocomplete' => 'off')); ?>
-	</div>
+<div class="span5 offset1">
+	<?= $form->passwordFieldRow($oClientCreateForm, 'password', SiteParams::getHintHtmlOptions($oClientCreateForm, 'password') + array('autocomplete' => 'off')); ?>
+	<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', SiteParams::getHintHtmlOptions($oClientCreateForm, 'password_repeat') + array('autocomplete' => 'off')); ?>
+</div>
 	<div class="clearfix"></div>
 	<div class="row span10">
 		<div class="form-actions">

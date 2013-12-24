@@ -15,6 +15,9 @@ class ClientJobDataForm extends ClientFullForm
 			'job_monthly_outcome',
 
 			'status',
+			'relatives_one_fio',
+			'relatives_one_phone',
+			'loan_purpose'
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -29,11 +32,14 @@ class ClientJobDataForm extends ClientFullForm
 				'educational_institution_name',
 				'educational_institution_phone',
 				'status',
-
+				'friends_fio',
 				'friends_phone',
+				'relatives_one_fio',
 				'relatives_one_phone',
+				'loan_purpose',
+
+				//обязательно требуется для валидации, берется из информации предыдущих форм
 				'phone',
-				'status'
 			),
 			$aRequired
 		);
@@ -57,12 +63,14 @@ class ClientJobDataForm extends ClientFullForm
 			'educational_institution_name',
 			'educational_institution_phone',
 			'status',
+			'friends_fio',
+			'friends_phone',
+			'relatives_one_fio',
+			'relatives_one_phone',
+			'loan_purpose',
 
 			//обязательно требуется для валидации, берется из информации предыдущих форм
-			'friends_phone',
 			'phone',
-			'relatives_one_phone',
-			'status'
 		);
 	}
 }

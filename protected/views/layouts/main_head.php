@@ -17,6 +17,10 @@
 
 <script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=3"></script>
 
-<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
+<?php
+Yii::app()->clientScript->registerCoreScript('jquery');
+Yii::app()->clientScript->registerCoreScript('maskedinput');
+Yii::app()->clientScript->registerCoreScript('yiiactiveform');
+?>
 
 <link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />

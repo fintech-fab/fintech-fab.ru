@@ -43,7 +43,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'relatives_one_phone',
 
 			'status',
-			'goal',
+			'loan_purposel',
 
 			'numeric_code',
 			'complete',
@@ -112,7 +112,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'secret_answer',
 				'password',
 				'password_repeat',
-				'goal',
+				'loan_purpose',
 			),
 			$aRequired
 		), $aMyRules);
@@ -156,7 +156,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'password'                      => 'Пароль для входа в личный кабинет',
 				'password_repeat'               => 'Подтверждение пароля',
 
-				'goal'                          => 'Цель займа',
+				'loan_purpose' => 'Цель займа',
 
 			)
 		);
@@ -216,7 +216,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'job_monthly_outcome',
 			'income_source',
 
-			'goal',
+			'loan_purpose',
 			'numeric_code',
 			'secret_question',
 			'secret_answer',

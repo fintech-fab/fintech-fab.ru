@@ -48,12 +48,12 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::SITE1 => array(
-			'max' => 7,
+			'max'     => 7,
 			'min'     => 0,
 			'default' => 0,
 		),
 		self::SITE2 => array(
-			'max' => 7,
+			'max'     => 7,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -79,7 +79,7 @@ class ClientFormComponent
 	 * это требуется для валидации некоторых значений, которые связаны с данными в БД, сохраненными туда другими формами
 	 * (на предыдущих шагах)
 	 *
-	 * go_next_step - по получении post-запроса на этом шаге следует сразу перейти к следующему шагу
+	 * go_next_step - по получении post-запроса на этом шаге следует сразу перейти к следующему шагу, модель не требуется
 	 *
 	 * @var array
 	 */
@@ -96,7 +96,7 @@ class ClientFormComponent
 				'view'             => 'infographic',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'infographic',
-				'go_next_step' => true,
+				'go_next_step'     => true,
 			),
 			2 => array(
 				'view'             => 'client_form',
@@ -119,9 +119,6 @@ class ClientFormComponent
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
-				'modelDbRelations' => array(
-					'phone'
-				),
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'address_data',
 			),
@@ -130,8 +127,6 @@ class ClientFormComponent
 				'sub_view'         => 'steps/job_data',
 				'model'            => 'ClientJobDataForm',
 				'modelDbRelations' => array(
-					'friends_phone',
-					'relatives_one_phone',
 					'phone'
 				),
 				'breadcrumbs_step' => 2,

@@ -14,9 +14,6 @@ class ClientAddressDataForm extends ClientFullForm
 			'address_reg_region',
 			'address_reg_city',
 			'address_reg_address',
-
-			'relatives_one_fio',
-			'relatives_one_phone',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -30,13 +27,6 @@ class ClientAddressDataForm extends ClientFullForm
 				'address_res_region',
 				'address_res_city',
 				'address_res_address',
-
-				'relatives_one_fio',
-				'relatives_one_phone',
-
-				'friends_fio',
-				'friends_phone',
-				'phone'
 			),
 			$aRequired
 		);
@@ -59,15 +49,6 @@ class ClientAddressDataForm extends ClientFullForm
 			'address_res_region',
 			'address_res_city',
 			'address_res_address',
-
-			'relatives_one_fio',
-			'relatives_one_phone',
-
-			'friends_fio',
-			'friends_phone',
-
-			//обязательно требуется для валидации, берется из информации предыдущих форм
-			'phone',
 		);
 	}
 }
