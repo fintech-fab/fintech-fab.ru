@@ -144,7 +144,8 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false       => 'confirm_phone/send_sms_code'
+					false   => 'confirm_phone/send_sms_code',
+					'error' => 'confirm_phone/send_sms_error'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
@@ -216,7 +217,8 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false       => 'confirm_phone/send_sms_code'
+					false   => 'confirm_phone/send_sms_code',
+					'error' => 'confirm_phone/send_sms_error'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3
@@ -1191,6 +1193,28 @@ class ClientFormComponent
 		$sModel = self::$aSelectProductSettings[$sSite]['model'];
 
 		return !empty(Yii::app()->session[$sModel]);
+
+	}
+
+	/**
+	 * @param bool $bError
+	 *
+	 * @return array|null
+	 */
+	public function getCheckSmsView($bError = false)
+	{
+		$sSite = $this->getSite();
+
+		$mErrorView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']))
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']
+			: null;
+
+		if ($bError && $mErrorView) {
+			return $mErrorView;
+		}
+
+		return $this->getView();
+
 
 	}
 
