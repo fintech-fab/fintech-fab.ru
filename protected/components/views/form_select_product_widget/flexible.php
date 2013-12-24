@@ -36,7 +36,7 @@ if (empty($oClientCreateForm->time)) {
 ?>
 
 <div class="row">
-	<?= $form->radioButtonGroupsList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary')); ?>
+	<?= $form->radioButtonGroupsListRow($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary')); ?>
 </div>
 
 <div class="row">

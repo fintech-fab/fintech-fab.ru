@@ -10,10 +10,10 @@
 ?>
 
 	<h5 class="pay_legend">Выберите сумму займа</h5>
-<?= $form->dropDownList($model, 'amount', $aAmountValues, array('class' => 'hide', 'id' => 'amount')); ?>
+<?= $form->dropDownListRow($model, 'amount', $aAmountValues, array('class' => 'hide', /*'id' => 'amount'*/)); ?>
 	<br />    <br />    <br />
 	<h5 class="pay_legend">Выберите срок предоставления займа</h5>
-<?= $form->dropDownList($model, 'time', $aTimeValues, array('class' => 'hide', 'id' => 'time')); ?>
+<?= $form->dropDownListRow($model, 'time', $aTimeValues, array('class' => 'hide', /*'id' => 'time'*/)); ?>
 
 <?php
 Yii::app()->clientScript->registerScript('sliderWidgetVars', '
@@ -58,8 +58,8 @@ if ($bIsNeedNewClientAlert) {
 
 Yii::app()->clientScript->registerScript('sliderWidget', '
 			var oChannelId = $("#' . get_class($model) . '_channel_id");
-			var oAmount = $("#amount");
-			var oTime = $("#time");
+			var oAmount = $("#' . get_class($model) . '_amount");
+			var oTime = $("#' . get_class($model) . '_time");
 			oAmount.selectToUISlider({
 				labels: 5,
 				tooltip: false
