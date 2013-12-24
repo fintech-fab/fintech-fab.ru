@@ -106,8 +106,6 @@ class ClientData extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose', 'safe'),
-
-
 		);
 	}
 
