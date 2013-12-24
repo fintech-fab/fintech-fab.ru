@@ -8,7 +8,7 @@
 
 ?>
 
-<div id="form_selected_product">
+<div id="form_selected_product_ivanovo">
 	<div class="row">
 
 		<div class="span6">
@@ -40,10 +40,12 @@
 			if (empty($oClientCreateForm->time)) {
 				$oClientCreateForm->time = reset(array_keys(Yii::app()->adminKreddyApi->getFlexibleProductTime()));
 			}
-
 			?>
 
-			<div class="row span6">
+			<?php echo $form->radioButtonGroupsList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsForButtons(), array('type' => 'primary', 'size' => 'small'));
+
+			?>
+			<div class="row span5">
 				<?php $this->widget('SliderWidget', array('form' => $form, 'model' => $oClientCreateForm)); ?>
 			</div>
 
@@ -52,7 +54,7 @@
 			?>
 		</div>
 
-		<div class="span5" style="width:430px !important;">
+		<div class="offset1 span4" style="width:330px; padding-top:30px;">
 			<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
 		</div>
 	</div>
