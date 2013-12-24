@@ -29,11 +29,11 @@ class ClientFormComponent
 	public static $aSelectProductSettings = array(
 		self::SITE1 => array(
 			'view'       => 'main',
-			'model_name' => 'ClientSelectProductForm',
+			'model' => 'ClientSelectProductForm',
 		),
 		self::SITE2 => array(
 			'view'       => 'flexible',
-			'model_name' => 'ClientFlexibleProductForm',
+			'model' => 'ClientFlexibleProductForm',
 		),
 	);
 
@@ -820,7 +820,7 @@ class ClientFormComponent
 	public static function getSelectProductModelName()
 	{
 		$sSite = self::getSite();
-		$sModelName = isset(self::$aSelectProductSettings[$sSite]['model_name']) ? self::$aSelectProductSettings[$sSite]['model_name'] : '';
+		$sModelName = isset(self::$aSelectProductSettings[$sSite]['model']) ? self::$aSelectProductSettings[$sSite]['model'] : '';
 
 		return $sModelName;
 	}
@@ -1179,6 +1179,19 @@ class ClientFormComponent
 		}
 
 		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function checkSiteSelectedProduct()
+	{
+		$sSite = $this->getSite();
+
+		$sModel = self::$aSelectProductSettings[$sSite]['model'];
+
+		return !empty(Yii::app()->session[$sModel]);
+
 	}
 
 }

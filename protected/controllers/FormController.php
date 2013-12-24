@@ -64,6 +64,12 @@ class FormController extends Controller
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
 
+		//проверяем, что для текущего сайта выбран продукт
+		//если не выбран - то сбрасываем шаги
+		if (!Yii::app()->clientForm->checkSiteSelectedProduct()) {
+			Yii::app()->clientForm->resetSteps();
+		}
+
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
 		 * @var array                    $aPost
