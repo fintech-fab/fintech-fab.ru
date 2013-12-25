@@ -28,11 +28,11 @@ class ClientFormComponent
 	 */
 	public static $aSelectProductSettings = array(
 		self::SITE1 => array(
-			'view'       => 'main',
+			'view'  => 'main',
 			'model' => 'ClientSelectProductForm',
 		),
 		self::SITE2 => array(
-			'view'       => 'flexible',
+			'view'  => 'flexible',
 			'model' => 'ClientFlexibleProductForm',
 		),
 	);
@@ -144,8 +144,7 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_code'
+					false       => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
@@ -217,8 +216,8 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_code_error'
+					false       => 'confirm_phone/send_sms_code',
+					'error'     => 'confirm_phone/send_sms_code_error'
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3
@@ -1195,24 +1194,4 @@ class ClientFormComponent
 		return !empty(Yii::app()->session[$sModel]);
 
 	}
-
-	/**
-	 * @return array|null
-	 */
-	public function getCheckSmsView()
-	{
-		$sSite = $this->getSite();
-
-		$mErrorView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']))
-			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']
-			: null;
-
-
-		$aView = $this->getView();
-
-		$aView['error'] = $mErrorView;
-
-		return $aView;
-	}
-
 }
