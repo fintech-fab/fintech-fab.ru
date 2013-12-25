@@ -64,12 +64,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 		<div class="span2 offset2">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'submitButton',
-				'buttonType'  => 'ajaxSubmit',
-				'ajaxOptions' => array(
-					'type'   => 'POST',
-					'update' => '#formBody',
-				),
-				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
+				'buttonType' => 'submit',
 				'type'        => 'primary',
 				'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>

@@ -419,7 +419,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 				case 'password':
 					$aRules[] = array($sFieldName, 'length', 'min' => '8');
-					$aRules[] = array($sFieldName, 'match', 'pattern' => '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[^А-Яа-яёЁ]+$/', 'message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры!');
+					//$aRules[] = array($sFieldName, 'match', 'pattern' => '/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])[^А-Яа-яёЁ]+$/', 'message' => 'Пароль должен содержать не менее одной английской буквы в верхнем регистре, одной в нижнем, и не менее 1 цифры!');
 					$aRules[] = array($sFieldName, 'match', 'pattern' => '/[^а-яё]$/ui', 'message' => 'Пароль не должен содержать русские буквы!');
 					break;
 				case 'address_res_region':

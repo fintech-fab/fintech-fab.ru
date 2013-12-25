@@ -9,7 +9,6 @@
  * Ввести код подтверждения из SMS
  */
 ?>
-
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                     => "checkSmsCode",
@@ -24,7 +23,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action'                 => Yii::app()->createUrl('/form/checkSmsCode'),
 ));
 ?>
-
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
 <div id="alertsmssent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS_NUM; ?>
@@ -36,20 +34,34 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->error($oClientCreateForm, 'sms_code'); ?>
 
 <div class="clearfix"></div>
+<div class="span12">
 
-<div class="form-actions">
+	<div class="form-actions row">
+		<div class="span2 offset1">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'id'         => 'backButton',
+				'buttonType' => 'link',
+				'url'        => Yii::app()
+						->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
+				'label'      => SiteParams::C_BUTTON_LABEL_BACK,
+			)); ?>
+		</div>
+		<div class="span2 offset2">
+
+			<?php
+			$this->widget('bootstrap.widgets.TbButton', array(
+				'buttonType' => 'submit',
+				'type'       => 'primary',
+				'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
+			)); ?>
+		</div>
+	</div>
+
+
 	<?php
-	$this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType' => 'submit',
-		'type'       => 'primary',
-		'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
-	)); ?>
+	$this->endWidget();
+	?>
 </div>
-
-
-<?php
-$this->endWidget();
-?>
 
 <div class="clearfix"></div>
 

@@ -77,10 +77,10 @@ class SiteParams
 	public static $iTimeNow = null;
 
 	public static $aMainBreadCrumbs = array(
-		array('Выбор пакета', 1),
-		array('Заявка на займ', 2),
-		array('Подтверждение номера телефона', 3),
-		array('Идентификация', 4)
+		array('Выбор пакета', 1, 1),
+		array('Заявка на займ', 3, 2),
+		array('Подтверждение номера телефона', 8, 3),
+		array('Идентификация', 9, 4)
 	);
 
 	public static $aIvanovoBreadCrumbs = array(

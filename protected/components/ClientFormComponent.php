@@ -552,13 +552,12 @@ class ClientFormComponent
 	public function checkSmsCode($aPostData)
 	{
 		$iClientId = $this->getClientId();
-		$iSmsCountTries = $this->getSmsCountTries();
 
 		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
 		$oClientSmsForm->setAttributes($aPostData);
 
 		// если число попыток ввода кода меньше максимально допустимых
-		if ($iSmsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
+		if (!$this->isSmsCodeTriesExceed()) {
 			// если введённые данные валидны и совпадают с кодом из базы
 			if ($oClientSmsForm->validate()
 				&& ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $iClientId)
@@ -570,14 +569,13 @@ class ClientFormComponent
 				// успешная проверка
 				return true;
 			} else {
+				$iSmsCountTries = $this->getSmsCountTries();
 				$iSmsCountTries += 1;
 				$this->setSmsCountTries($iSmsCountTries);
 
 				// если это была последняя попытка
 				if ($iSmsCountTries == SiteParams::MAX_SMSCODE_TRIES) {
 					// возвращаем сообщение о превышении числа попыток
-					$this->clearClientSession();
-
 					return Dictionaries::C_ERR_SMS_TRIES;
 				} else {
 					// выводим сообщение - код неверен + сколько осталось попыток
@@ -588,10 +586,22 @@ class ClientFormComponent
 			}
 		} else {
 			// возвращаем сообщение о превышении числа попыток
-			$this->clearClientSession();
-
 			return Dictionaries::C_ERR_SMS_TRIES;
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSmsCodeTriesExceed()
+	{
+		$iSmsCountTries = $this->getSmsCountTries();
+
+		if ($iSmsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

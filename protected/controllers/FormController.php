@@ -299,7 +299,7 @@ class FormController extends Controller
 			$oClientSmsForm->addError('sms_code', $mAnswer);
 
 
-			//получаев view для проверки смс-кода
+			//получаем view для проверки смс-кода
 			$aView = Yii::app()->clientForm->getView();
 			$sView = $aView['view'];
 			$sSubView = $aView['sub_view'];
@@ -308,6 +308,10 @@ class FormController extends Controller
 				'sSubView' => $sSubView,
 				'oClientCreateForm' => $oClientSmsForm,
 			));
+			//если число попыток превышено, то чистим сессию
+			if (Yii::app()->clientForm->isSmsCodeTriesExceed()) {
+				Yii::app()->clientForm->clearClientSession();
+			}
 			Yii::app()->end();
 		} else {
 			//если код верный, то берем данные из БД
@@ -343,7 +347,7 @@ class FormController extends Controller
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'Ошибка! Проверьте правильность введенных данных.';
 				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
-				$this->actionStep(2); //переходим на шаг 2 - анкета пользователя
+				$this->actionStep(1); //переходим на шаг 1
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
