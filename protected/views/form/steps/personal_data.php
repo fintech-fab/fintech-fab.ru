@@ -57,16 +57,16 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 	</div>
 </div>
 <div class="clearfix"></div>
-<div class="row span10">
-	<div class="form-actions">
-		<div class="row">
-			<div class="span2">
-				<?php $this->widget('bootstrap.widgets.TbButton', array(
-					'url'   => Yii::app()->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
-					'label' => SiteParams::C_BUTTON_LABEL_BACK,
-				)); ?>
-			</div>
+<div class="span12 ">
+	<div class="form-actions row">
+		<div class="span2">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'url'   => Yii::app()->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
+				'label' => SiteParams::C_BUTTON_LABEL_BACK,
+			)); ?>
+		</div>
 
+		<div class="span2 offset2">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',

@@ -63,33 +63,35 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 			</div>
 		</div>
 		<div class="span6">
-			<h5>Фактический адрес проживания</h5>
+			<div id="address_res">
+				<h5>Фактический адрес проживания</h5>
 
-			<div id="address_res" class="row">
-
-			<?= $form->select2Row($oClientCreateForm, 'address_res_region', array('empty' => '', 'data' => Dictionaries::getRegions())); ?>
-				<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_res_city') + array('class' => 'span3')); ?>
-				<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_res_address') + array('class' => 'span3')); ?>
+				<div class="row">
+					<?= $form->select2Row($oClientCreateForm, 'address_res_region', array('empty' => '', 'data' => Dictionaries::getRegions())); ?>
+					<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_res_city') + array('class' => 'span3')); ?>
+					<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_res_address') + array('class' => 'span3')); ?>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="clearfix"></div>
-	<div class="row span10">
-		<div class="form-actions">
-			<div class="row">
-				<div class="span2">
-					<?php $this->widget('bootstrap.widgets.TbButton', array(
-						'id'          => 'backButton',
-						'buttonType'  => 'ajaxButton',
-						'ajaxOptions' => array(
-							'update' => '#formBody',
-						),
-						'url'         => Yii::app()
-								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
-						'label' => SiteParams::C_BUTTON_LABEL_BACK,
-					)); ?>
-				</div>
+	<div class="span12">
+		<div class="form-actions row">
 
+			<div class="span2">
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
+					'id'          => 'backButton',
+					'buttonType'  => 'ajaxButton',
+					'ajaxOptions' => array(
+						'update' => '#formBody',
+					),
+					'url'         => Yii::app()
+							->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+					'label'       => SiteParams::C_BUTTON_LABEL_BACK,
+				)); ?>
+			</div>
+
+			<div class="span2 offset2">
 				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'id'          => 'submitButton',
 					'buttonType'  => 'ajaxSubmit',
