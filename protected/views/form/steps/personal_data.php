@@ -32,18 +32,22 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 ?>
 <div class="clearfix"></div><h4>Личные данные</h4>
 <div class="row">
-	<div class="span5">
-		<?= $form->textFieldRow($oClientCreateForm, 'last_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'last_name')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'first_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'first_name')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'third_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'third_name')); ?>
-		<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', SiteParams::getHintHtmlOptions($oClientCreateForm, 'birthday') + array('size' => '5', 'class' => 'inline')); ?>
+	<div class="span6">
+		<div class="row">
+			<?= $form->textFieldRow($oClientCreateForm, 'last_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'last_name')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'first_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'first_name')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'third_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'third_name')); ?>
+			<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', SiteParams::getHintHtmlOptions($oClientCreateForm, 'birthday') + array('size' => '5', 'class' => 'inline')); ?>
+		</div>
 	</div>
-	<div class="span5 offset1">
-		<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'phone') + array('size' => '15')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'email', SiteParams::getHintHtmlOptions($oClientCreateForm, 'email')); ?>
-		<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
-		<div id="sex">
-			<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, array('uncheckValue' => '999')); ?>
+	<div class="span6">
+		<div class="row">
+			<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'phone') + array('size' => '15')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'email', SiteParams::getHintHtmlOptions($oClientCreateForm, 'email')); ?>
+			<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
+			<div id="sex">
+				<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, array('uncheckValue' => '999')); ?>
+			</div>
 		</div>
 	</div>
 </div>
