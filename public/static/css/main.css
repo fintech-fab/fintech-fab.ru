@@ -2,7 +2,7 @@ body {
 	margin: 0;
 	padding: 0;
 	color: #333;
-	font: normal 10pt "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font: normal 10pt "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background: #EFEFEF;
 }
 
@@ -198,14 +198,18 @@ div.search-form {
 	background: #80CFFF;
 }
 
-
 .nav-tabs > li > a, .nav-pills > li > a {
 	padding-left: 8px;
 	padding-right: 8px;
 }
 
-/* todo убрать после YU */
+/* todo убрать после НГ */
 #ClientSelectProductForm {
 	background: url('../images/nw_year_stars.jpg');
+	padding-top: 15px;
+}
+
+/* todo убрать после НГ */
+#ClientFlexibleProductForm {
 	padding-top: 15px;
 }

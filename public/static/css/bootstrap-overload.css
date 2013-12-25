@@ -125,7 +125,7 @@ nav div.navbar-inner {
 
 #steps {
 	margin-top: 5px !important;
-	margin-bottom: 0;
+	margin-bottom: 0; /* todo убрать после НГ */
 }
 
 #steps li {
