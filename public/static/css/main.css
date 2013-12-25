@@ -226,6 +226,10 @@ div.search-form {
 	padding-top: 0 !important;
 }
 
+#form_selected_product {
+	padding-top: 15px;
+}
+
 #main-content {
 	position: relative;
 }
