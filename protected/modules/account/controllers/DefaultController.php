@@ -806,6 +806,8 @@ class DefaultController extends Controller
 
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/chooseChannel'));
 
+		//todo дальше пока не переделывалось! просто копипаст экшна doSubscribe
+
 		//получаем сохраненные при регистрации данные займа (если есть)
 		//TODO возможно, делать это только если есть state new_client
 		$iProduct = Yii::app()->user->getState('product');
