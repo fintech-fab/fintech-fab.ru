@@ -218,6 +218,11 @@ div.search-form {
 	padding-top: 15px;
 }
 
+/* todo убрать после НГ */
+#ClientFlexibleProductForm {
+	padding-top: 15px;
+}
+
 #form_selected_product #ClientSelectProductForm, #form_selected_product_ivanovo #ClientSelectProductForm {
 	background: transparent !important;
 	padding-top: 0 !important;
