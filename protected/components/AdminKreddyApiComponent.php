@@ -1208,10 +1208,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * array( 1 => array(id=>1,name=>card,allow=true))
-	 */
-
-	/**
 	 * Получение названия продукта по ID
 	 *
 	 * @param $iProductId
