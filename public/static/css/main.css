@@ -213,13 +213,10 @@ div.search-form {
 	border-radius: 10px;
 }
 
-/* todo убрать после НГ */
 #ClientSelectProductForm {
-	background: url('../images/nw_year_stars.jpg');
 	padding-top: 15px;
 }
 
-/* todo убрать после НГ */
 #ClientFlexibleProductForm {
 	padding-top: 15px;
 }
@@ -227,4 +224,13 @@ div.search-form {
 #form_selected_product #ClientSelectProductForm, #form_selected_product_ivanovo #ClientSelectProductForm {
 	background: transparent !important;
 	padding-top: 0 !important;
+}
+
+#main-content {
+	position: relative;
+}
+
+/* todo убрать после НГ */
+#new_year_stars {
+	background: url('../images/nw_year_stars.jpg');
 }
