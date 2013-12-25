@@ -203,6 +203,7 @@ div.search-form {
 	padding-right: 8px;
 }
 
+/* todo убрать после НГ */
 #form_selected_product, #form_selected_product_ivanovo {
 	margin: 10px 0 15px -20px;
 	padding: 15px 0 40px 35px;
