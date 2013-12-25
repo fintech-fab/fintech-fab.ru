@@ -31,45 +31,50 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => (Yii::app()->clientForm->getCurrentStep() - 1)));
 ?>
 <h4 id="jobInfoHeading">Дополнительная информация</h4>
+<div class="row">
+	<div class="span6">
+		<h5>Место работы</h5>
 
-<div class="span5">
-	<h5>Место работы</h5>
-	<?= $form->dropDownListRow2($oClientCreateForm, 'status', Dictionaries::$aStatuses, SiteParams::getHintHtmlOptions($oClientCreateForm, 'status') + array('empty' => '')); ?>
+		<div class="row">
+			<?= $form->dropDownListRow2($oClientCreateForm, 'status', Dictionaries::$aStatuses, SiteParams::getHintHtmlOptions($oClientCreateForm, 'status') + array('empty' => '')); ?>
 
 
-	<div id="employee" class="statusfields hide">
+			<div id="employee" class="statusfields hide">
 
-		<?= $form->textFieldRow($oClientCreateForm, 'job_company', SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_company')); ?>
-		<?= $form->textFieldRow($oClientCreateForm, 'job_position', SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_position')); ?>
-		<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_phone')) ?>
-		<?= $form->dropDownListRow2($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_time') + array('class' => 'span2')); ?>
+				<?= $form->textFieldRow($oClientCreateForm, 'job_company', SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_company')); ?>
+				<?= $form->textFieldRow($oClientCreateForm, 'job_position', SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_position')); ?>
+				<?= $form->phoneMaskedRow($oClientCreateForm, 'job_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_phone')) ?>
+				<?= $form->dropDownListRow2($oClientCreateForm, 'job_time', Dictionaries::$aJobTimes, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_time') + array('class' => 'span2')); ?>
 
+			</div>
+
+			<div id="student" class="statusfields hide">
+				<?= $form->textFieldRow($oClientCreateForm, 'educational_institution_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'educational_institution_name')); ?>
+				<?= $form->phoneMaskedRow($oClientCreateForm, 'educational_institution_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'educational_institution_phone')); ?>
+			</div>
+
+			<div id="jobless" class="statusfields hide">
+				<?= $form->textFieldRow($oClientCreateForm, 'income_source', SiteParams::getHintHtmlOptions($oClientCreateForm, 'income_source')); ?>
+			</div>
+
+			<?= $form->dropDownListRow2($oClientCreateForm, 'job_monthly_income', Dictionaries::$aMonthlyMoney, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_monthly_income') + array('empty' => '')); ?>
+			<?= $form->dropDownListRow2($oClientCreateForm, 'job_monthly_outcome', Dictionaries::$aMonthlyMoney, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_monthly_outcome') + array('empty' => '')); ?>
+
+			<?= $form->dropDownListRow2($oClientCreateForm, 'loan_purpose', Dictionaries::$aLoanPurposes, SiteParams::getHintHtmlOptions($oClientCreateForm, 'loan_purpose') + array('empty' => '')); ?>
+		</div>
 	</div>
+	<div class="span6">
+		<div class="row">
+			<h5>Контакты родственников/друзей</h5>
+			<?= $form->textFieldRow($oClientCreateForm, 'relatives_one_fio', SiteParams::getHintHtmlOptions($oClientCreateForm, 'relatives_one_fio')); ?>
+			<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'relatives_one_phone')); ?>
 
-	<div id="student" class="statusfields hide">
-		<?= $form->textFieldRow($oClientCreateForm, 'educational_institution_name', SiteParams::getHintHtmlOptions($oClientCreateForm, 'educational_institution_name')); ?>
-		<?= $form->phoneMaskedRow($oClientCreateForm, 'educational_institution_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'educational_institution_phone')); ?>
+			<h5>Дополнительный контакт<br />(повышает вероятность одобрения)</h5>
+			<?= $form->textFieldRow($oClientCreateForm, 'friends_fio', SiteParams::getHintHtmlOptions($oClientCreateForm, 'friends_fio')); ?>
+			<?= $form->phoneMaskedRow($oClientCreateForm, 'friends_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'friends_phone')); ?>
+		</div>
 	</div>
-
-	<div id="jobless" class="statusfields hide">
-		<?= $form->textFieldRow($oClientCreateForm, 'income_source', SiteParams::getHintHtmlOptions($oClientCreateForm, 'income_source')); ?>
-	</div>
-
-	<?= $form->dropDownListRow2($oClientCreateForm, 'job_monthly_income', Dictionaries::$aMonthlyMoney, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_monthly_income') + array('empty' => '')); ?>
-	<?= $form->dropDownListRow2($oClientCreateForm, 'job_monthly_outcome', Dictionaries::$aMonthlyMoney, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_monthly_outcome') + array('empty' => '')); ?>
-
-	<?= $form->dropDownListRow2($oClientCreateForm, 'loan_purpose', Dictionaries::$aLoanPurposes, SiteParams::getHintHtmlOptions($oClientCreateForm, 'loan_purpose') + array('empty' => '')); ?>
 </div>
-<div class="span5 offset1">
-	<h5>Контакты родственников/друзей</h5>
-	<?= $form->textFieldRow($oClientCreateForm, 'relatives_one_fio', SiteParams::getHintHtmlOptions($oClientCreateForm, 'relatives_one_fio')); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'relatives_one_phone')); ?>
-
-	<h5>Дополнительный контакт<br />(повышает вероятность одобрения)</h5>
-	<?= $form->textFieldRow($oClientCreateForm, 'friends_fio', SiteParams::getHintHtmlOptions($oClientCreateForm, 'friends_fio')); ?>
-	<?= $form->phoneMaskedRow($oClientCreateForm, 'friends_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'friends_phone')); ?>
-</div>
-
 <div class="clearfix"></div>
 <div class="row span10">
 	<div class="form-actions">

@@ -29,31 +29,37 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 <?php
 $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => (Yii::app()->clientForm->getCurrentStep() - 1)));
 ?>
-<div class="clearfix"></div><h4>Паспортные данные</h4>
+<div class="clearfix"></div>
 
-<div class="span5">
+<h4>Паспортные данные</h4>
+<div class="row">
+	<div class="span6">
+		<h5>Паспорт</h5>
 
-	<div class="row">
-		<div class="span5">
-			<h5>Паспорт</h5>
+		<div class="row">
+
+
+			<?= $form->maskedTextFieldRow($oClientCreateForm, 'passport_full_number', '9999 / 999999', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_number')); ?>
+
+			<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_date')); ?>
+
+			<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_code') + array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_issued')); ?>
+
+			<?= $form->textFieldRow($oClientCreateForm, 'birthplace', SiteParams::getHintHtmlOptions($oClientCreateForm, 'birthplace')); ?>
 		</div>
 	</div>
-	<?= $form->maskedTextFieldRow($oClientCreateForm, 'passport_full_number', '9999 / 999999', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_number')); ?>
 
-	<?= $form->dateMaskedRow($oClientCreateForm, 'passport_date', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_date')); ?>
+	<div class="span6">
+		<h5>Второй документ</h5>
 
-	<?= $form->fieldMaskedRow($oClientCreateForm, 'passport_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_code') + array('mask' => '999-999', 'size' => '7', 'maxlength' => '7',)); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'passport_issued', SiteParams::getHintHtmlOptions($oClientCreateForm, 'passport_issued')); ?>
+		<div class="row">
 
-	<?= $form->textFieldRow($oClientCreateForm, 'birthplace', SiteParams::getHintHtmlOptions($oClientCreateForm, 'birthplace')); ?>
+			<?= $form->dropDownListRow2($oClientCreateForm, 'document', Dictionaries::$aDocuments, SiteParams::getHintHtmlOptions($oClientCreateForm, 'document') + array('class' => 'span3', 'empty' => '')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'document_number', SiteParams::getHintHtmlOptions($oClientCreateForm, 'document_number') + array('class' => 'span3')); ?>
+		</div>
+	</div>
 </div>
-
-<div class="span5 offset1">
-	<h5>Второй документ</h5>
-	<?= $form->dropDownListRow2($oClientCreateForm, 'document', Dictionaries::$aDocuments, SiteParams::getHintHtmlOptions($oClientCreateForm, 'document') + array('class' => 'span3', 'empty' => '')); ?>
-	<?= $form->textFieldRow($oClientCreateForm, 'document_number', SiteParams::getHintHtmlOptions($oClientCreateForm, 'document_number') + array('class' => 'span3')); ?>
-</div>
-
 <div class="clearfix"></div>
 <div class="row span10">
 	<div class="form-actions">
@@ -74,12 +80,12 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
-					'type'     => 'POST',
-					'update'   => '#formBody',
+					'type'   => 'POST',
+					'update' => '#formBody',
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 				'type'        => 'primary',
-				'label' => SiteParams::C_BUTTON_LABEL_NEXT,
+				'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>

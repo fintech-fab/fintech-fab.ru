@@ -52,19 +52,22 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 		</div>
 	</div>
 	<div class="row">
-		<div class="span5">
+		<div class="span6">
 			<h5>Адрес регистрации</h5>
 
-			<?= $form->select2Row($oClientCreateForm, 'address_reg_region', array('empty' => '', 'data' => Dictionaries::getRegions()) + $select2Js); ?>
-			<div id="region-error" class="alert alert-error" style="display: none;"></div>
-			<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_reg_city')); ?>
-			<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_reg_address')); ?>
+			<div class="row">
+				<?= $form->select2Row($oClientCreateForm, 'address_reg_region', array('empty' => '', 'data' => Dictionaries::getRegions()) + $select2Js); ?>
+				<div id="region-error" class="alert alert-error" style="display: none;"></div>
+				<?= $form->textFieldRow($oClientCreateForm, 'address_reg_city', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_reg_city')); ?>
+				<?= $form->textFieldRow($oClientCreateForm, 'address_reg_address', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_reg_address')); ?>
+			</div>
 		</div>
-		<div class="span5 offset1">
-			<div id="address_res">
-				<h5>Фактический адрес проживания</h5>
+		<div class="span6">
+			<h5>Фактический адрес проживания</h5>
 
-				<?= $form->select2Row($oClientCreateForm, 'address_res_region', array('empty' => '', 'data' => Dictionaries::getRegions())); ?>
+			<div id="address_res" class="row">
+
+			<?= $form->select2Row($oClientCreateForm, 'address_res_region', array('empty' => '', 'data' => Dictionaries::getRegions())); ?>
 				<?= $form->textFieldRow($oClientCreateForm, 'address_res_city', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_res_city') + array('class' => 'span3')); ?>
 				<?= $form->textFieldRow($oClientCreateForm, 'address_res_address', SiteParams::getHintHtmlOptions($oClientCreateForm, 'address_res_address') + array('class' => 'span3')); ?>
 			</div>
