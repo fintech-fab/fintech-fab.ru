@@ -536,3 +536,7 @@ slider style
 .input-append {
 	width: 250px;
 }
+
+#formBody span.help-inline.error {
+	display: none;
+}

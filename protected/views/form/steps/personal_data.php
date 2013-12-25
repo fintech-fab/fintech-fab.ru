@@ -10,6 +10,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
+	'inlineErrors' => true,
+
 	'clientOptions'        => array(
 		'hideErrorMessage' => true,
 		'validateOnChange' => true,
