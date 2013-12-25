@@ -10,8 +10,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
-	'inlineErrors' => true,
-
 	'clientOptions'        => array(
 		'hideErrorMessage' => true,
 		'validateOnChange' => true,
@@ -78,7 +76,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 				'type'        => 'primary',
-				'label' => SiteParams::C_BUTTON_LABEL_NEXT,
+				'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>
