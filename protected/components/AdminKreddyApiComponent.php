@@ -1078,6 +1078,30 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function getClientProductsList()
+	{
+		//todo: а тут точно проверяется, что доступно пользователю?
+		$aReturnProducts = array();
+
+		//получаем список продуктов
+		$aProducts = $this->getProducts();
+
+		//проверяем, что получили массивы
+		if (is_array($aProducts)) {
+
+			//перебираем все продукты
+			foreach ($aProducts as $aProduct) {
+				//получаем из продукта каналы, по которым его можно получить
+				$aReturnProducts[$aProduct['id']] = $aProduct['name'];
+			}
+		}
+
+		return $aReturnProducts;
+	}
+
+	/**
 	 * Получение массива с информацией о продуктах
 	 *
 	 * @return array|bool

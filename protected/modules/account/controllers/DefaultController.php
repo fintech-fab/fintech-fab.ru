@@ -43,6 +43,7 @@ class DefaultController extends Controller
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
+					'chooseChannel',
 				),
 				'users'   => array('@'),
 			),
@@ -787,6 +788,92 @@ class DefaultController extends Controller
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 		$this->render($sView, array('passFormRender' => $sPassFormRender, 'model' => $oProductForm));
+	}
+
+	/**
+	 * Обработка данных от формы, переданной из /account/subscribe
+	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
+	 *
+	 * Сюда возможен редирект сразу после регистрации! В этом случае POST-запрос заменяется сохраненными
+	 * в setState данными, и эти данные загружаются в форму
+	 */
+	public function actionChooseChannel()
+	{
+		//проверяем, возможно ли действие
+		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+		}
+
+		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/chooseChannel'));
+
+		//получаем сохраненные при регистрации данные займа (если есть)
+		//TODO возможно, делать это только если есть state new_client
+		$iProduct = Yii::app()->user->getState('product');
+		$sChannelsId = Yii::app()->user->getState('channel_id');
+		$iFlexAmount = Yii::app()->user->getState('flex_amount');
+		$iFlexTime = Yii::app()->user->getState('flex_time');
+
+		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
+		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
+
+		//если есть сохраненные данные в getState, то их переносим в массив $aData
+		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
+			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
+			$aData = array('product' => $iProduct . '_' . $iChannelId);
+		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
+			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
+			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
+		} else {
+			$bIsRedirect = false;
+			$aData = array();
+		}
+
+		/* если был редирект с сохранением данных, но выбранный канал равен 0,
+		 * т.е. выбранный канал отсутствовал в списке доступных клиенту
+		 * то нужно его отправить на привязку карты, с сообщением об этом
+		 */
+		if ($bIsRedirect && $iChannelId === 0) {
+			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения.
+			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
+			  и затем вернитесь к получению займа.');
+			//TODO сменить месседж и поместить в const
+			$this->redirect('/account/addCard'); //после привязки редирект вернет клиента обратно
+		}
+
+		//выбираем нужную модель
+		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientSubscribeFlexibleProductForm() : new ClientSubscribeForm();
+		//если есть POST-запрос или были данные в getState перед редиректом
+		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
+			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
+			if (Yii::app()->request->getIsPostRequest()) {
+				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
+			} else {
+				$aPost = $aData;
+			}
+
+			$oProductForm->setAttributes($aPost);
+
+			if ($oProductForm->validate()) {
+
+				//сохраняем в сессию выбранный продукт
+				$oForm = new SMSCodeForm('sendRequired');
+				if (SiteParams::getIsIvanovoSite()) {
+					Yii::app()->adminKreddyApi->setSubscribeFlexAmount($oProductForm->amount);
+					Yii::app()->adminKreddyApi->setSubscribeFlexTime($oProductForm->time);
+					Yii::app()->adminKreddyApi->setSubscribeFlexChannelId($oProductForm->channel_id);
+					$sView = 'flex_subscription/do_subscribe';
+				} else {
+					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+					$sView = 'subscription/do_subscribe';
+				}
+
+				$this->render($sView, array('model' => $oForm));
+				Yii::app()->end();
+			}
+		}
+		$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
+		$this->render($sView, array('model' => $oProductForm));
+		Yii::app()->end();
 	}
 
 	/**

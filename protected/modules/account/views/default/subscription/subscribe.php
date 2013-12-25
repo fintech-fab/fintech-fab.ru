@@ -13,11 +13,11 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
-	'action' => Yii::app()->createUrl('/account/doSubscribe'),
+	'action' => Yii::app()->createUrl('/account/chooseChannel'),
 ));
 
 
-$aClientProductsAndChannelsList = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList();
+$aClientProductsAndChannelsList = Yii::app()->adminKreddyApi->getClientProductsList();
 
 // если есть доступные пакеты для данного пользователя
 if (!empty($aClientProductsAndChannelsList)) {
