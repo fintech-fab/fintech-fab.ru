@@ -540,3 +540,15 @@ slider style
 #formBody span.help-inline.error {
 	display: none;
 }
+
+@media (max-width: 1150px) {
+	.popover {
+		max-width: 170px;
+	}
+}
+
+@media (min-width: 1150px) and (max-width: 1200px) {
+	.popover {
+		max-width: 220px;
+	}
+}

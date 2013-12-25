@@ -2,7 +2,8 @@ body {
 	margin: 0;
 	padding: 0;
 	color: #333;
-	font: normal 10pt "Helvetica Neue", Helvetica, Arial, sans-serif;
+	/*font: normal 10pt "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+	font: normal 10pt Trebuchet MS, sans-serif;
 	background: #EFEFEF;
 }
 
@@ -55,7 +56,7 @@ body {
 }
 
 #mainmenu ul li a {
-	font: bold 12px Arial;
+	font: bold 12px;
 	color: #0066A4;
 	background-color: transparent;
 	font-weight: bold;
@@ -182,7 +183,7 @@ div.search-form {
 }
 
 .operations li a {
-	font: bold 12px Arial;
+	font: bold 12px;
 	color: #0066A4;
 	display: block;
 	padding: 2px 0 2px 8px;

@@ -216,8 +216,7 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false       => 'confirm_phone/send_sms_code',
-					'error'     => 'confirm_phone/send_sms_code_error'
+					false => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3
@@ -288,7 +287,6 @@ class ClientFormComponent
 
 				if (
 					$aCookieData &&
-					Cookie::compareDataInCookie('client', 'phone', $aValidFormData['phone']) &&
 					!empty($aCookieData['client_id'])
 				) {
 					$this->iClientId = $aCookieData['client_id'];
@@ -409,7 +407,6 @@ class ClientFormComponent
 
 			if (
 				$aCookieData &&
-				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
 				!empty($aCookieData['client_id']) &&
 				!is_null(ClientData::getClientDataById($aCookieData['client_id']))
 			) {

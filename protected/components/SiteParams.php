@@ -239,7 +239,7 @@ class SiteParams
 			$aHtmlOptions = array(
 				'append'         => $sInfoTag,
 				'data-trigger'   => 'focus',
-				'data-placement' => 'top',
+				'data-placement' => 'left',
 				'data-content'   => $sInfo,
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
