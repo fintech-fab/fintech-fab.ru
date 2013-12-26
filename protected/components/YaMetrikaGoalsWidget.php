@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class YaMetrikaGoalsWidget
+ */
 class YaMetrikaGoalsWidget extends CWidget
 {
 	/**
@@ -13,7 +15,7 @@ class YaMetrikaGoalsWidget extends CWidget
 
 		if (!empty($this->sStep)) {
 			Yii::app()->clientScript->registerScript('yaMetrikaGoal' . $this->sStep, '
-           yaCounter21390544.reachGoal("done_step_' . $this->sStep . '");
+           yaCounter21390544.reachGoal("' . $this->sStep . '");
            ', CClientScript::POS_LOAD);
 		}
 	}

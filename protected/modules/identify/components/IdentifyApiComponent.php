@@ -303,6 +303,18 @@ class IdentifyApiComponent
 	 */
 	private function saveImage($sUserHash, $sImageBase64, $iStepNumber)
 	{
+		$sFilePath = Yii::app()->getBasePath() . "/../public/uploads/";
+		if (!file_exists($sFilePath . 'identify_photos')) {
+			mkdir($sFilePath . 'identify_photos');
+		}
+
+		$sFileName = /*Yii::app()->user->getId().*/
+			"photo-" . $iStepNumber . ".jpg";
+		$sFilePath .= '/identify_photos/' . $sFileName;
+
+		file_put_contents($sFilePath, base64_decode($sImageBase64));
+
+
 		//todo: убрать заглушку
 		return true;
 	}

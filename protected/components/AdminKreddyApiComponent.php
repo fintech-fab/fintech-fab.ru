@@ -2793,7 +2793,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return bool
+	 * @return bool|string
 	 */
 	public function getResetPassPhone()
 	{
