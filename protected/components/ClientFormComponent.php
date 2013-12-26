@@ -715,8 +715,6 @@ class ClientFormComponent
 		 * * @var ClientCreateFormAbstract $oModel
 		 */
 
-		//todo: учесть, что могут быть статические страницы (инфографика)
-
 		$sSite = self::getSite();
 
 		$sModel = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'])
@@ -1064,19 +1062,14 @@ class ClientFormComponent
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['tmp_client_id'] = null;
 
-		//TODO для чистки брать все имена форм из массива конфигурации
-		//чистим данные форм
-		Yii::app()->session['ClientSelectProductForm'] = null;
-		Yii::app()->session['ClientSelectChannelForm'] = null;
-		Yii::app()->session['ClientPersonalDataForm'] = null;
-		Yii::app()->session['ClientAddressForm'] = null;
-		Yii::app()->session['ClientJobInfoForm'] = null;
-		Yii::app()->session['ClientSendForm'] = null;
-		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = null;
+		$sSite = $this->getSite();
 
-		Yii::app()->session['ClientSelectProductForm'] = null;
-		Yii::app()->session['ClientFlexibleProductForm'] = null;
-		Yii::app()->session['ClientFullForm'] = null;
+		//чистим данные форм
+		foreach (self::$aStepsInfo[$sSite] as $aStep) {
+			if (isset($aStep['model'])) {
+				Yii::app()->session[$aStep['model']] = null;
+			}
+		}
 	}
 
 
