@@ -222,6 +222,7 @@ class SiteParams
 		$aHtmlOptions = array();
 
 		$aHintsHtmlOptions = $oClientCreateForm->getHints();
+		$sLabel = $oClientCreateForm->getAttributeLabel($sAttrName);
 
 		if (array_key_exists($sAttrName, $aHintsHtmlOptions)) {
 			$sInfo = $aHintsHtmlOptions[$sAttrName];
@@ -231,7 +232,7 @@ class SiteParams
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
 				'data-placement' => 'top',
-				'data-content'   => '<span style="color: black;">' . $sInfo . '</span>',
+				'data-content' => '<span class="popover-info">' . $sInfo . '</span>',
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
 			), '', true);
@@ -240,13 +241,43 @@ class SiteParams
 				'append'         => $sInfoTag,
 				'data-trigger'   => 'focus',
 				'data-placement' => 'left',
-				'data-content'   => $sInfo,
+				'data-html'    => 'true',
+				'data-content' => '<span class="popover-info"><p class="popover-label">' . $sLabel . '</p>' . $sInfo . '</span>',
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
 			);
 		}
 
 		return $aHtmlOptions;
+	}
+
+	/**
+	 * @param ClientCreateFormAbstract $oClientForm
+	 *
+	 * @return array
+	 */
+	public static function  getSecondDocumentPopoversLabel(ClientCreateFormAbstract $oClientForm)
+	{
+		$aErrors = Dictionaries::$aDocumentsPopovers;
+		foreach ($aErrors as &$sError) {
+			$sError = '<span class=\'popover-info\'><p class=\'popover-label\'>' . $oClientForm->getAttributeLabel('document_number') . '</p>' . $sError . '</span>';
+		}
+
+		return $aErrors;
+	}
+
+	/**
+	 *
+	 * @return array
+	 */
+	public static function  getSecondDocumentPopovers()
+	{
+		$aErrors = Dictionaries::$aDocumentsPopovers;
+		foreach ($aErrors as &$sError) {
+			$sError = '<span class=\'popover-info\'>' . $sError . '</span>';
+		}
+
+		return $aErrors;
 	}
 
 	/**

@@ -94,7 +94,8 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 //при изменении типа документа заново валидировать поле с номером документа.
 
 Yii::app()->clientScript->registerScript('validate_document_number', '
-	documentsArray = ' . CJSON::encode(Dictionaries::$aDocumentsErrors) . ';
+	documentsArray = ' . CJSON::encode(SiteParams::getSecondDocumentPopovers()) . ';
+	documentsArrayLabel = ' . CJSON::encode(SiteParams::getSecondDocumentPopoversLabel($oClientCreateForm)) . ';
 
 	jQuery("#' . get_class($oClientCreateForm) . '_document").change(function()
 	{
@@ -106,11 +107,11 @@ Yii::app()->clientScript->registerScript('validate_document_number', '
 
 		docVal = parseInt(docVal);
 
-		options = {"content":documentsArray[docVal]}
+		options = {"content":documentsArrayLabel[docVal]}
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover("destroy");
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover(options);
 
-		options = {"content":"<span style=\"color: black;\">"+documentsArray[docVal]+"</span>"}
+		options = {"content":documentsArray[docVal]}
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover("destroy");
 		jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover(options);
 
@@ -136,7 +137,8 @@ Yii::app()->clientScript->registerScript('validate_document_number', '
 ');
 
 Yii::app()->clientScript->registerScript('validate_document_force', '
-documentsArray = ' . CJSON::encode(Dictionaries::$aDocumentsErrors) . ';
+documentsArray = ' . CJSON::encode(SiteParams::getSecondDocumentPopovers()) . ';
+documentsArrayLabel = ' . CJSON::encode(SiteParams::getSecondDocumentPopoversLabel($oClientCreateForm)) . ';
 docVal = $("#' . get_class($oClientCreateForm) . '_document").attr("value");
 if(docVal=="")
 {
@@ -144,11 +146,11 @@ if(docVal=="")
 }
 docVal = parseInt(docVal);
 
-options = {"content":documentsArray[docVal]}
+options = {"content":documentsArrayLabel[docVal]}
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover("destroy");
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").popover(options);
 
-options = {"content":"<span style=\"color: black;\">"+documentsArray[docVal]+"</span>"}
+options = {"content":+documentsArray[docVal]}
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover("destroy");
 jQuery("#' . get_class($oClientCreateForm) . '_document_number").next("span").find("i").popover(options);
 

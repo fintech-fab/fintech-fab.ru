@@ -212,7 +212,8 @@ class ClientFormComponent
 					false => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
-				'breadcrumbs_step' => 3
+				'breadcrumbs_step' => 3,
+				'metrika_goal'     => 'sms_code',
 			),
 		),
 	);
@@ -1070,6 +1071,10 @@ class ClientFormComponent
 				Yii::app()->session[$aStep['model']] = null;
 			}
 		}
+
+		//удаляем данные из куки
+		$aCookieData = array('client_id' => null, 'phone' => null);
+		Cookie::saveDataToCookie('client', $aCookieData);
 	}
 
 

@@ -556,3 +556,13 @@ slider style
 		max-width: 220px;
 	}
 }
+
+.popover-info {
+	color: black;
+	font-size: 9pt;
+}
+
+p.popover-label {
+	text-align: right;
+	font-weight: bold;
+}
