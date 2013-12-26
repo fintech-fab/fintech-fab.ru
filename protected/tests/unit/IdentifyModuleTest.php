@@ -14,6 +14,9 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 	const NOT_IMAGE = 'fgfhfghgf';
 
+	private $login = '9646464646';
+	private $password = '12345678';
+
 	public function setUp()
 	{
 		YiiBase::$enableIncludePath = false;
@@ -24,13 +27,16 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		ob_flush();
 	}
 
+	//TODO заглушка для тестирования без реального siteAPI
+
 	// проверка полной процедуры идентификации
 	public function testIdentify()
 	{
+
 		//процедура логина
 		$aRequest = array(
-			'login'    => "9513570000",
-			'password' => "Aa12345",
+			'login'    => $this->login,
+			'password' => $this->password,
 		);
 
 		$sResult = $this->_requestToCallback($aRequest);
@@ -55,6 +61,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 		$sResult = $this->_requestToCallback($aRequest);
 		$aResult = CJSON::decode($sResult);
+		print_r($sResult);
 		$sToken = $aResult['result']['token'];
 
 		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
@@ -238,11 +245,12 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 	{
 		//процедура логина
 		$aRequest = array(
-			'login'    => "9513570000",
-			'password' => "Aa12345",
+			'login'    => $this->login,
+			'password' => $this->password,
 		);
 
 		$sResult = $this->_requestToCallback($aRequest);
+		print_r($sResult);
 		$aResult = CJSON::decode($sResult);
 		$sToken = $aResult['result']['token'];
 
@@ -274,8 +282,8 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 	{
 		//процедура логина
 		$aRequest = array(
-			'login'    => "9513570000",
-			'password' => "Aa12345",
+			'login'    => $this->login,
+			'password' => $this->password,
 		);
 
 		$sResult = $this->_requestToCallback($aRequest);
@@ -308,8 +316,8 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 	{
 		//процедура логина
 		$aRequest = array(
-			'login'    => "9513570000",
-			'password' => "Aa12345",
+			'login'    => $this->login,
+			'password' => $this->password,
 		);
 
 		$sResult = $this->_requestToCallback($aRequest);
@@ -344,8 +352,8 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 	{
 		///процедура логина
 		$aRequest = array(
-			'login'    => "9513570000",
-			'password' => "Aa12345",
+			'login'    => $this->login,
+			'password' => $this->password,
 		);
 
 		$sResult = $this->_requestToCallback($aRequest);

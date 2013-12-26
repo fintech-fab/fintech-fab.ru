@@ -87,7 +87,7 @@ class IdentifyApiComponent
 			$aResponse = $this->formatErrorResponse();
 		} elseif (empty($aRequest['token'])) {
 			// если это запрос без токена - значит, это запрос на авторизацию
-			$aResponse = $this->getProcessAuthResult($aRequest);
+			$aResponse = $this->getAuth($aRequest);
 		} else {
 			$aResponse = $this->getProcessResult($aRequest, $aRequest['token']);
 		}
@@ -102,7 +102,7 @@ class IdentifyApiComponent
 	 *
 	 * @return array
 	 */
-	private function getProcessAuthResult($aRequest)
+	private function getAuth($aRequest)
 	{
 		$sPhone = $aRequest['phone'];
 		$sPassword = $aRequest['password'];
@@ -112,16 +112,16 @@ class IdentifyApiComponent
 			return $this->formatErrorResponse('Укажите логин и пароль');
 		}
 
-		$bAuth = $this->getIsClientAuth($sPhone, $sPassword);
+		$sToken = Yii::app()->adminKreddyApi->getIdentifyApiAuth($sPhone, $sPassword);
 
 		// если не удалось авторизоваться по логину-паролю вернуть код -1.
-		if (!$bAuth) {
+		if (!$sToken) {
 			return $this->formatErrorResponse('Не удалось авторизоваться по логину-паролю');
 		}
 
 		$iStepNumber = self::STEP_FACE;
 		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
-		$sToken = $this->generateToken(self::TMP_HASH, $iStepNumber);
+		$sToken = $this->generateToken($sToken, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
 		return $this->formatResponse($sToken, array(
@@ -141,17 +141,18 @@ class IdentifyApiComponent
 	private function getProcessResult($aRequest, $sToken)
 	{
 		$aData = $this->decryptToken($sToken);
-		$sUserHash = !empty($aData['0']) ? $aData['0'] : false;
+		$sApiToken = !empty($aData['0']) ? $aData['0'] : false;
 		$iStepNumber = !empty($aData['1']) ? $aData['1'] : false;
 
 		// ошибка в данных из токена
-		if ($sUserHash === false || $iStepNumber === false) {
+		if ($sApiToken === false || $iStepNumber === false) {
 			return $this->formatErrorResponse('Ошибка в данных из токена');
 		}
 
-		// если хэш неверный - ошибка. todo: убрать заглушку
-		if ($sUserHash !== self::TMP_HASH) {
-			return $this->formatErrorResponse('Ошибка в данных из токена');
+		// обновляем токен в API (заодно проверяется его корректность)
+		$sApiToken = Yii::app()->adminKreddyApi->updateIdentifyApiToken($sApiToken);
+		if (!$sApiToken) {
+			return $this->formatErrorResponse('Ошибка авторизации! Возможно, закончилась сессия.');
 		}
 
 		$sImageBase64 = !empty($aRequest['image']) ? $aRequest['image'] : false;
@@ -162,40 +163,27 @@ class IdentifyApiComponent
 		}
 
 		// если не получилось сохранить изображение - ошибка
-		if (!$this->saveImage($sUserHash, $sImageBase64, $iStepNumber)) {
+		if (!$this->saveImage($sApiToken, $sImageBase64, $iStepNumber)) {
 			return $this->formatErrorResponse('Не удалось сохранить изображение');
 		}
 
 		// получаем ответ исходя из номера шага.
-		return $this->getProcessResultByStep($iStepNumber, $sUserHash);
-	}
-
-	/**
-	 * Авторизация в API по логину (номер телефона) и паролю
-	 *
-	 * @param $sPhone
-	 * @param $sPassword
-	 *
-	 * @return bool
-	 */
-	private function getIsClientAuth($sPhone, $sPassword)
-	{
-		// тестовые данные todo: убрать заглушку
-		return ($sPhone === "9513570000" && $sPassword === "Aa12345");
+		return $this->getProcessResultByStep($iStepNumber, $sApiToken);
 	}
 
 	/**
 	 * Возвращает ответ согласно номеру текущего шага.
 	 *
 	 * @param $iStepNumber номер шага
-	 * @param $sUserHash
+	 * @param $sApiToken
+	 *
 	 *
 	 * @return array
 	 */
-	private function getProcessResultByStep($iStepNumber, $sUserHash)
+	private function getProcessResultByStep($iStepNumber, $sApiToken)
 	{
 		$iNextStepNumber = (int)$iStepNumber + 1;
-		$sToken = $this->generateToken($sUserHash, $iNextStepNumber);
+		$sToken = $this->generateToken($sApiToken, $iNextStepNumber);
 
 		switch ($iStepNumber) {
 			case self::STEP_FACE:
@@ -210,8 +198,8 @@ class IdentifyApiComponent
 					'example'     => self::$aExamplesForSteps[$iNextStepNumber],
 					'description' => self::$aDescriptionsForSteps[$iNextStepNumber],
 				)
-				);
-				break;
+			);
+			break;
 
 			case self::STEP_DOCUMENT4:
 				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iNextStepNumber]);
@@ -295,13 +283,13 @@ class IdentifyApiComponent
 	/**
 	 * Сохраняет изображение на сервер идентификации
 	 *
-	 * @param $sUserHash
+	 * @param $sApiToken
 	 * @param $sImageBase64
 	 * @param $iStepNumber
 	 *
 	 * @return bool
 	 */
-	private function saveImage($sUserHash, $sImageBase64, $iStepNumber)
+	private function saveImage($sApiToken, $sImageBase64, $iStepNumber)
 	{
 		$sFilePath = Yii::app()->getBasePath() . "/../public/uploads/";
 		if (!file_exists($sFilePath . 'identify_photos')) {
@@ -312,26 +300,26 @@ class IdentifyApiComponent
 			"photo-" . $iStepNumber . ".jpg";
 		$sFilePath .= '/identify_photos/' . $sFileName;
 
-		file_put_contents($sFilePath, base64_decode($sImageBase64));
+		$iFileSize = @file_put_contents($sFilePath, base64_decode($sImageBase64));
 
+		//TODO реализовать отправку файла в API
 
-		//todo: убрать заглушку
-		return true;
+		return $iFileSize > 0;
 	}
 
 	/**
-	 * Генерирует токен с учётом текущего шага и идентификатора пользователя
+	 * Генерирует токен с учётом текущего шага и токена пользователя
 	 *
-	 * @param $sUserHash   хэш, идентифицирующий пользователя
+	 * @param $sApiToken хэш, идентифицирующий пользователя (токен из API)
 	 * @param $iStepNumber номер следующего щага
 	 *
 	 * @return string
 	 */
-	private function generateToken($sUserHash, $iStepNumber)
+	private function generateToken($sApiToken, $iStepNumber)
 	{
 		return CryptArray::encrypt(
 			array(
-				'id' => $sUserHash, 'step' => $iStepNumber
+				'apiToken' => $sApiToken, 'step' => $iStepNumber
 			)
 		);
 	}

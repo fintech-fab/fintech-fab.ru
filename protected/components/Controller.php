@@ -58,4 +58,38 @@ class Controller extends CController
 
 		return parent::beforeAction($aAction);
 	}
+
+	/**
+	 * Отключить DebugToolbar
+	 */
+	protected function disableDebugToolbar()
+	{
+		foreach (Yii::app()->log->routes as $oRoute) {
+			if ($oRoute instanceof YiiDebugToolbarRoute) {
+				$oRoute->enabled = false;
+			}
+		}
+	}
+
+	protected function _disableLog()
+	{
+
+		foreach (Yii::app()->log->routes as $oRoute) {
+			if ($oRoute instanceof CWebLogRoute || $oRoute instanceof YiiDebugToolbarRoute) {
+				$oRoute->enabled = false;
+			}
+		}
+	}
+
+	protected function _disableFileLog()
+	{
+
+		foreach (Yii::app()->log->routes as $oRoute) {
+			if ($oRoute instanceof CFileLogRoute) {
+				$oRoute->enabled = false;
+			}
+		}
+	}
+
+
 }
