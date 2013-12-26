@@ -212,6 +212,7 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 				case 'friends_fio':
 					$aRules[] = array($sFieldName, 'checkValidFio', 'message' => 'ФИО может содержать только русские буквы, пробелы и дефис');
+					//если есть friends_fio, то требуется сверить номера телефона!
 					$aRules[] = array($sFieldName, 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!');
 					break;
 				case 'sex':
@@ -355,6 +356,17 @@ class ClientCreateFormAbstract extends CFormModel
 						$sFieldName, 'checkValidJobPhone', 'statusField'        => 'status',
 						                                   'message'            => 'Заполните поле',
 						                                   'messageWrongFormat' => 'Введите корректный телефон',
+					);
+					$aRules[] = array(
+						$sFieldName, 'compare', 'operator'   => '!=', 'compareAttribute' => 'friends_phone',
+						                        'allowEmpty' => true,
+						                        'message'    => 'Номер не должен совпадать с телефоном дополнительного контакта!'
+					);
+					$aRules[] = array(
+						$sFieldName, 'compare', 'operator'         => '!=',
+						                        'compareAttribute' => 'relatives_one_phone',
+						                        'allowEmpty'       => true,
+						                        'message'          => 'Номер не должен совпадать с телефоном контактного лица!'
 					);
 					break;
 
