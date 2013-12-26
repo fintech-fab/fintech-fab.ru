@@ -16,6 +16,7 @@
  * @property string  $third_name
  * @property integer $sex
  * @property string  $birthday
+ * @property string  $birthplace
  * @property string  $email
  * @property string  $passport_series
  * @property string  $passport_number
