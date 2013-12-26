@@ -53,7 +53,10 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 </div>
 <div class="row">
 	<div class="span12">
-		<?= $form->checkBoxRow($oClientCreateForm, 'complete'); ?>
+		<?php
+		$oClientCreateForm->complete = false;
+		echo $form->checkBoxRow($oClientCreateForm, 'complete');
+		?>
 	</div>
 </div>
 <div class="clearfix"></div>

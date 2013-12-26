@@ -43,7 +43,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'relatives_one_phone',
 
 			'status',
-			'loan_purposel',
+			'loan_purpose',
 
 			'numeric_code',
 			'complete',

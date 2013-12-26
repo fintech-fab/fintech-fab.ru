@@ -278,8 +278,8 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'address_reg_city':
 				case 'address_reg_address':
 				case 'birthplace':
-				$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
-				break;
+					$aRules[] = array($sFieldName, 'checkValidAddressRegion', 'message' => 'Поле может содержать только русские буквы, цифры, пробелы и знаки препинания');
+					break;
 
 				case 'phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
@@ -708,7 +708,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'prev_last_name'         => 'Прежняя фамилия',
 
 			'sex'                    => 'Пол',
-			'birthday'   => 'Дата рождения',
+			'birthday'               => 'Дата рождения',
 			'numeric_code'           => 'Цифровой код (для подтверждения повторных займов)',
 			'email'                  => 'Email',
 			'marital_status'         => 'Семейное положение',
@@ -733,7 +733,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'passport_issued'        => 'Кем выдан',
 			'passport_date'          => 'Дата выдачи',
 			'passport_code'          => 'Код подразделения',
-			'birthplace' => 'Место рождения',
+			'birthplace'             => 'Место рождения',
 
 			'job_phone'              => 'Рабочий телефон',
 			'job_less'               => 'Безработный',
@@ -815,9 +815,9 @@ class ClientCreateFormAbstract extends CFormModel
 			'passport_code'                 => 'Пожалуйста, введите код подразделения, выдавшего Ваш паспорт – указан на второй странице паспорта.',
 			'passport_issued'               => 'Пожалуйста, укажите государственный орган, выдавший паспорт.',
 			'document'                      => 'Пожалуйста, выберите из списка название Вашего второго документа.',
-			'document_number' => 'Пожалуйста, выберите из списка название Вашего второго документа.',
+			'document_number'               => 'Пожалуйста, выберите из списка название Вашего второго документа.',
 
-			'birthplace'      => 'Пожалуйста, введите место рождения по паспорту.',
+			'birthplace'                    => 'Пожалуйста, введите место рождения по паспорту.',
 
 			'address_reg_region'            => 'Пожалуйста, укажите регион постоянной регистрации.',
 			'address_reg_city'              => 'Пожалуйста, введите название Вашего населенного пункта в соответствии с постоянной регистрацией.',
@@ -848,7 +848,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'numeric_code'                  => 'Пожалуйста, придумайте и введите в поле свой цифровой код. Количество символов – от 4 до 8. ',
 			'secret_question'               => 'Пожалуйста, выберите секретный вопрос.',
 			'secret_answer'                 => 'Пожалуйста, введите ответ на секретный вопрос.',
-			'password' => 'Создайте и введите свой пароль. Обращаем внимание, что пароль должен содержать не менее 8 символов и должен набираться в английской раскладке клавиатуры.',
+			'password'                      => 'Придумайте и введите свой пароль (не менее 8 символов в английской раскладке клавиатуры).',
 			'password_repeat'               => 'Пожалуйста, повторно введите пароль для входа в личный кабинет.',
 
 		);

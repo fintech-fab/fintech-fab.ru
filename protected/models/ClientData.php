@@ -260,9 +260,9 @@ class ClientData extends CActiveRecord
 	 */
 	protected function afterFind()
 	{
-		$sDateFormatInBase = "d.m.Y";
-		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
-		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
+		$sDateFormat = "d.m.Y";
+		$this->birthday = date($sDateFormat, strtotime($this->birthday));
+		$this->passport_date = date($sDateFormat, strtotime($this->passport_date));
 	}
 
 	/**

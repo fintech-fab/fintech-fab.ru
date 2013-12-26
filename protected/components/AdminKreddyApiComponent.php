@@ -323,6 +323,10 @@ class AdminKreddyApiComponent
 	 */
 	public function createClient($aClientData)
 	{
+		$sDateFormatInBase = "Y-m-d";
+		$aClientData['birthday'] = date($sDateFormatInBase, strtotime($aClientData['birthday']));
+		$aClientData['passport_date'] = date($sDateFormatInBase, strtotime($aClientData['passport_date']));
+
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 

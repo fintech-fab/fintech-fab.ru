@@ -541,6 +541,10 @@ slider style
 	display: none;
 }
 
+#formBody label.checkbox span.help-inline.error {
+	display: block;
+}
+
 @media (max-width: 1150px) {
 	.popover {
 		max-width: 170px;
