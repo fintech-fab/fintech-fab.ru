@@ -148,6 +148,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
+	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -334,6 +335,29 @@ class AdminKreddyApiComponent
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param $oCurlFile
+	 * @param $sDocumentType
+	 * @param $sToken
+	 *
+	 * @return bool
+	 */
+	public function uploadDocument($oCurlFile, $sDocumentType, $sToken)
+	{
+		$aRequest = array(
+			'token' => $sToken, 'type' => $sDocumentType,
+			'files' => $oCurlFile,
+		);
+
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_UPLOAD_DOCUMENT, $aRequest);
+		if ($aTokenData['code'] === self::ERROR_NONE) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -2074,8 +2098,11 @@ class AdminKreddyApiComponent
 			Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aTraceData));
 		}
 
-
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
+		if (isset($aRequest['files'])) {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+		} else {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
+		}
 
 		$response = curl_exec($ch);
 

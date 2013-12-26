@@ -21,18 +21,38 @@ class IdentifyApiComponent
 	const STEP_DOCUMENT2 = 3;
 	const STEP_DOCUMENT3 = 4;
 	const STEP_DOCUMENT4 = 5;
-	const STEP_DONE = 6;
+	const STEP_DOCUMENT5 = 6;
+	const STEP_DONE = 7;
+
+	const C_TYPE_PHOTO = 'photo';
+
+	const C_TYPE_PASSPORT_FRONT_FIRST = 'passport_front_first';
+	const C_TYPE_PASSPORT_FRONT_SECOND = 'passport_front_second';
+	const C_TYPE_PASSPORT_NOTIFICATION = 'passport_notification';
+	const C_TYPE_PASSPORT_LAST = 'passport_last';
+	const C_TYPE_DOCUMENT = 'document';
+
+	public static $aTypesByStep = array(
+		self::STEP_FACE      => self::C_TYPE_PHOTO,
+		self::STEP_DOCUMENT1 => self::C_TYPE_PASSPORT_FRONT_FIRST,
+		self::STEP_DOCUMENT2 => self::C_TYPE_PASSPORT_FRONT_SECOND,
+		self::STEP_DOCUMENT3 => self::C_TYPE_PASSPORT_NOTIFICATION,
+		self::STEP_DOCUMENT4 => self::C_TYPE_PASSPORT_LAST,
+		self::STEP_DOCUMENT5 => self::C_TYPE_DOCUMENT,
+		self::STEP_DONE      => null,
+	);
 
 	/**
 	 * @var array Инструкции к шагам
 	 */
 	public static $aInstructionsForSteps = array(
 		self::STEP_FACE      => 'Сфотографируйтесь',
-		self::STEP_DOCUMENT1 => 'Покажите документ 1',
-		self::STEP_DOCUMENT2 => 'Покажите документ 2',
-		self::STEP_DOCUMENT3 => 'Покажите документ 3',
-		self::STEP_DOCUMENT4 => 'Покажите документ 4',
-		self::STEP_DONE      => "Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.",
+		self::STEP_DOCUMENT1 => 'Сфотографируйте лицевую сторону паспорта (с информацией о дате выдачи)',
+		self::STEP_DOCUMENT2 => 'Сфотографируйте лицевую сторону паспорта (с Вашей фотографией, ФИО и т.д.)',
+		self::STEP_DOCUMENT3 => 'Сфотографируйте страницу паспорта с информацией о месте регистрации',
+		self::STEP_DOCUMENT4 => 'Сфотографируйте последнюю страницу паспорта (с информацией о выданных документах), даже если она пуста.',
+		self::STEP_DOCUMENT5 => 'Сфотографируйте второй документ (ИНН, заграничный паспорт, пенсионное удостоверение, водительское удостоверение, заграничный паспорт, военный билет, страховое свидетельство государственного пенсионного страхования',
+		self::STEP_DONE      => 'Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
 	);
 
 	/**
@@ -40,10 +60,12 @@ class IdentifyApiComponent
 	 */
 	public static $aTitlesForSteps = array(
 		self::STEP_FACE      => 'Лицо',
-		self::STEP_DOCUMENT1 => 'Документ 1',
-		self::STEP_DOCUMENT2 => 'Документ 2',
-		self::STEP_DOCUMENT3 => 'Документ 3',
-		self::STEP_DOCUMENT4 => 'Документ 4',
+		self::STEP_DOCUMENT1 => 'Паспорт - лицевая сторона (первая часть)',
+		self::STEP_DOCUMENT2 => 'Паспорт - лицевая сторона (вторая часть)',
+		self::STEP_DOCUMENT3 => 'Паспорт - страница регистрации',
+		self::STEP_DOCUMENT4 => 'Паспорт - последняя страница',
+		self::STEP_DOCUMENT5 => 'Второй документ',
+		self::STEP_DONE      => 'Идентификация успешно завершена!',
 	);
 
 	/**
@@ -51,10 +73,12 @@ class IdentifyApiComponent
 	 */
 	public static $aDescriptionsForSteps = array(
 		self::STEP_FACE      => 'Пример фотографии лица',
-		self::STEP_DOCUMENT1 => 'Пример фотографии документа 1',
-		self::STEP_DOCUMENT2 => 'Пример фотографии документа 2',
-		self::STEP_DOCUMENT3 => 'Пример фотографии документа 3',
-		self::STEP_DOCUMENT4 => 'Пример фотографии документа 4',
+		self::STEP_DOCUMENT1 => 'Пример фотографии лицевой стороны паспорта',
+		self::STEP_DOCUMENT2 => 'Пример фотографии лицевой стороны паспорта',
+		self::STEP_DOCUMENT3 => 'Пример фотографии страницы паспорта с регистрацией',
+		self::STEP_DOCUMENT4 => 'Пример фотографии страницы паспорта с информацией о документах',
+		self::STEP_DOCUMENT5 => 'Пример фотографии второго документа',
+		self::STEP_DONE      => 'Идентификация успешно завершена!',
 	);
 
 	/**
@@ -66,6 +90,7 @@ class IdentifyApiComponent
 		self::STEP_DOCUMENT2 => 'https://www.google.ru/images/srpr/logo11w.png',
 		self::STEP_DOCUMENT3 => 'https://www.google.ru/images/srpr/logo11w.png',
 		self::STEP_DOCUMENT4 => 'https://www.google.ru/images/srpr/logo11w.png',
+		self::STEP_DOCUMENT5 => 'https://www.google.ru/images/srpr/logo11w.png',
 	);
 
 	public function init()
@@ -190,9 +215,10 @@ class IdentifyApiComponent
 			case self::STEP_DOCUMENT1:
 			case self::STEP_DOCUMENT2:
 			case self::STEP_DOCUMENT3:
+			case self::STEP_DOCUMENT4:
 			$aResponse = $this->formatResponse($sToken,
 				array(
-					'document' => $iStepNumber,
+					'document'    => $iStepNumber,
 					'title'       => self::$aTitlesForSteps[$iNextStepNumber],
 					'instruction' => self::$aInstructionsForSteps[$iNextStepNumber],
 					'example'     => self::$aExamplesForSteps[$iNextStepNumber],
@@ -201,7 +227,7 @@ class IdentifyApiComponent
 			);
 			break;
 
-			case self::STEP_DOCUMENT4:
+			case self::STEP_DOCUMENT5:
 				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iNextStepNumber]);
 				break;
 
@@ -291,20 +317,31 @@ class IdentifyApiComponent
 	 */
 	private function saveImage($sApiToken, $sImageBase64, $iStepNumber)
 	{
-		$sFilePath = Yii::app()->getBasePath() . "/../public/uploads/";
+		$sFilePath = Yii::app()->getBasePath() . "/runtime/";
 		if (!file_exists($sFilePath . 'identify_photos')) {
 			mkdir($sFilePath . 'identify_photos');
 		}
 
-		$sFileName = /*Yii::app()->user->getId().*/
-			"photo-" . $iStepNumber . ".jpg";
-		$sFilePath .= '/identify_photos/' . $sFileName;
+		$sFileName = md5($sApiToken) . "-photo-" . $iStepNumber . ".jpg";
+		$sFilePath .= 'identify_photos/' . $sFileName;
 
 		$iFileSize = @file_put_contents($sFilePath, base64_decode($sImageBase64));
 
-		//TODO реализовать отправку файла в API
+		/** @noinspection PhpUndefinedFunctionInspection */
+		$oCurlFile = curl_file_create($sFilePath, 'image/jpeg', $sFileName);
 
-		return $iFileSize > 0;
+
+		$bResult = false;
+
+		if ($iFileSize > 0) {
+			$bResult = Yii::app()->adminKreddyApi->uploadDocument($oCurlFile, self::$aTypesByStep[$iStepNumber], $sApiToken);
+		}
+
+		if (file_exists(realpath($sFilePath))) {
+			unlink(realpath($sFilePath));
+		}
+
+		return $bResult;
 	}
 
 	/**

@@ -14,8 +14,8 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 	const NOT_IMAGE = 'fgfhfghgf';
 
-	private $login = '9646464646';
-	private $password = '12345678';
+	private $login = '9631321654';
+	private $password = 'Aa123456';
 
 	public function setUp()
 	{
@@ -62,6 +62,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		$sResult = $this->_requestToCallback($aRequest);
 		$aResult = CJSON::decode($sResult);
 		print_r($sResult);
+
 		$sToken = $aResult['result']['token'];
 
 		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
@@ -126,7 +127,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		//проверяем наличие description
 		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
 
-		//процедура загрузки последнего документа
+		//процедура загрузки документа 3
 		$aRequest = array(
 			'token' => $sToken,
 			'image' => self::IMAGE,
@@ -143,6 +144,30 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
 		//проверяем наличие document=4
 		$this->assertEquals(4, $aResult['result']['document'], "Документ не равен 4: document=" . $aResult['result']['document']);
+		//проверяем наличие title
+		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
+		//проверяем наличие example
+		$this->assertNotEmpty($aResult['result']['example'], "Нет примера");
+		//проверяем наличие description
+		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
+
+		//процедура загрузки документа 4
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+		$sToken = $aResult['result']['token'];
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
+		//проверяем наличие document=4
+		$this->assertEquals(5, $aResult['result']['document'], "Документ не равен 5: document=" . $aResult['result']['document']);
 		//проверяем наличие title
 		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
 		//проверяем наличие example

@@ -21,7 +21,6 @@ class DefaultController extends Controller
 		$aResponse = Yii::app()->getModule('identify')->identifyApi->processRequest($aRequest);
 
 		echo CJSON::encode($aResponse);
-		\
 
 		Yii::app()->end();
 	}
