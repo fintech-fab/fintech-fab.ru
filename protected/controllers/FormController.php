@@ -167,8 +167,11 @@ class FormController extends Controller
 		} elseif ($sSubView) {
 			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
 			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.min.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.maskedinput.min.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
 
 			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
 		}
