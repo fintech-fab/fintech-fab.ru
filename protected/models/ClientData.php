@@ -293,6 +293,7 @@ class ClientData extends CActiveRecord
 			'third_name'          => 'Third Name',
 			'sex'                 => 'Sex',
 			'birthday'            => 'Birthday',
+			'birthplace' => 'Birthday',
 			'email'               => 'Email',
 			'passport_series'     => 'Passport Series',
 			'passport_number'     => 'Passport Number',
@@ -356,6 +357,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('third_name', $this->third_name, true);
 		$criteria->compare('sex', $this->sex);
 		$criteria->compare('birthday', $this->birthday, true);
+		$criteria->compare('birthplace', $this->birthday, true);
 		$criteria->compare('email', $this->email, true);
 		$criteria->compare('passport_series', $this->passport_series, true);
 		$criteria->compare('passport_number', $this->passport_number, true);
