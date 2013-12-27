@@ -149,6 +149,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
+	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -351,8 +352,28 @@ class AdminKreddyApiComponent
 			'files' => $oCurlFile,
 		);
 
-		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_UPLOAD_DOCUMENT, $aRequest);
-		if ($aTokenData['code'] === self::ERROR_NONE) {
+		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_UPLOAD_DOCUMENT, $aRequest);
+		if ($aResponse['code'] === self::ERROR_NONE) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $sToken
+	 *
+	 * @return bool
+	 */
+	public function setFinishedVideoId($sToken)
+	{
+		$aRequest = array(
+			'token' => $sToken,
+		);
+
+		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_SET_IDENTIFICATION_FINISHED, $aRequest);
+		if ($aResponse['code'] === self::ERROR_NONE) {
 
 			return true;
 		}

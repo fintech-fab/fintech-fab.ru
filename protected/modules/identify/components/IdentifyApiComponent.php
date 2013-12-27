@@ -166,6 +166,7 @@ class IdentifyApiComponent
 	private function getProcessResult($aRequest, $sToken)
 	{
 		$aData = $this->decryptToken($sToken);
+
 		$sApiToken = !empty($aData['0']) ? $aData['0'] : false;
 		$iStepNumber = !empty($aData['1']) ? $aData['1'] : false;
 
@@ -228,6 +229,9 @@ class IdentifyApiComponent
 			break;
 
 			case self::STEP_DOCUMENT5:
+				if (!Yii::app()->adminKreddyApi->setFinishedVideoId($sApiToken)) {
+					return $this->formatErrorResponse('Не удалось завершить идентификацию!');
+				}
 				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iNextStepNumber]);
 				break;
 
