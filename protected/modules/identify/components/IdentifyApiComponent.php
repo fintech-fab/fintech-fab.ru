@@ -32,65 +32,55 @@ class IdentifyApiComponent
 	const C_TYPE_PASSPORT_LAST = 'passport_last';
 	const C_TYPE_DOCUMENT = 'document';
 
-	public static $aTypesByStep = array(
-		self::STEP_FACE      => self::C_TYPE_PHOTO,
-		self::STEP_DOCUMENT1 => self::C_TYPE_PASSPORT_FRONT_FIRST,
-		self::STEP_DOCUMENT2 => self::C_TYPE_PASSPORT_FRONT_SECOND,
-		self::STEP_DOCUMENT3 => self::C_TYPE_PASSPORT_NOTIFICATION,
-		self::STEP_DOCUMENT4 => self::C_TYPE_PASSPORT_LAST,
-		self::STEP_DOCUMENT5 => self::C_TYPE_DOCUMENT,
-		self::STEP_DONE      => null,
-	);
+	public static $aIdentifySteps = array(
+		self::STEP_FACE      => array(
+			'type'        => self::C_TYPE_PHOTO,
+			'instruction' => 'Сфотографируйтесь',
+			'title'       => 'Лицо',
+			'description' => 'Пример фотографии лица',
+			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
 
-	/**
-	 * @var array Инструкции к шагам
-	 */
-	public static $aInstructionsForSteps = array(
-		self::STEP_FACE      => 'Сфотографируйтесь',
-		self::STEP_DOCUMENT1 => 'Сфотографируйте лицевую сторону паспорта (с информацией о дате выдачи)',
-		self::STEP_DOCUMENT2 => 'Сфотографируйте лицевую сторону паспорта (с Вашей фотографией, ФИО и т.д.)',
-		self::STEP_DOCUMENT3 => 'Сфотографируйте страницу паспорта с информацией о месте регистрации',
-		self::STEP_DOCUMENT4 => 'Сфотографируйте последнюю страницу паспорта (с информацией о выданных документах), даже если она пуста.',
-		self::STEP_DOCUMENT5 => 'Сфотографируйте второй документ (ИНН, заграничный паспорт, пенсионное удостоверение, водительское удостоверение, заграничный паспорт, военный билет, страховое свидетельство государственного пенсионного страхования',
-		self::STEP_DONE      => 'Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
-	);
-
-	/**
-	 * @var array Заголовки шагов
-	 */
-	public static $aTitlesForSteps = array(
-		self::STEP_FACE      => 'Лицо',
-		self::STEP_DOCUMENT1 => 'Паспорт - лицевая сторона (первая часть)',
-		self::STEP_DOCUMENT2 => 'Паспорт - лицевая сторона (вторая часть)',
-		self::STEP_DOCUMENT3 => 'Паспорт - страница регистрации',
-		self::STEP_DOCUMENT4 => 'Паспорт - последняя страница',
-		self::STEP_DOCUMENT5 => 'Второй документ',
-		self::STEP_DONE      => 'Идентификация успешно завершена!',
-	);
-
-	/**
-	 * @var array Описания для шагов
-	 */
-	public static $aDescriptionsForSteps = array(
-		self::STEP_FACE      => 'Пример фотографии лица',
-		self::STEP_DOCUMENT1 => 'Пример фотографии лицевой стороны паспорта',
-		self::STEP_DOCUMENT2 => 'Пример фотографии лицевой стороны паспорта',
-		self::STEP_DOCUMENT3 => 'Пример фотографии страницы паспорта с регистрацией',
-		self::STEP_DOCUMENT4 => 'Пример фотографии страницы паспорта с информацией о документах',
-		self::STEP_DOCUMENT5 => 'Пример фотографии второго документа',
-		self::STEP_DONE      => 'Идентификация успешно завершена!',
-	);
-
-	/**
-	 * @var array Примеры изображений для шагов
-	 */
-	public static $aExamplesForSteps = array(
-		self::STEP_FACE      => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT1 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT2 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT3 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT4 => 'https://www.google.ru/images/srpr/logo11w.png',
-		self::STEP_DOCUMENT5 => 'https://www.google.ru/images/srpr/logo11w.png',
+		),
+		self::STEP_DOCUMENT1 => array(
+			'type'        => self::C_TYPE_PASSPORT_FRONT_FIRST,
+			'instruction' => 'Сфотографируйте лицевую сторону паспорта (с информацией о дате выдачи)',
+			'title'       => 'Паспорт - лицевая сторона (первая часть)',
+			'description' => 'Пример фотографии лицевой стороны паспорта',
+			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
+		),
+		self::STEP_DOCUMENT2 => array(
+			'type'        => self::C_TYPE_PASSPORT_FRONT_SECOND,
+			'instruction' => 'Сфотографируйте лицевую сторону паспорта (с Вашей фотографией, ФИО и т.д.)',
+			'title'       => 'Паспорт - лицевая сторона (вторая часть)',
+			'description' => 'Пример фотографии лицевой стороны паспорта',
+			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
+		),
+		self::STEP_DOCUMENT3 => array(
+			'type'        => self::C_TYPE_PASSPORT_NOTIFICATION,
+			'instruction' => 'Сфотографируйте страницу паспорта с информацией о месте регистрации',
+			'title'       => 'Паспорт - страница регистрации',
+			'description' => 'Пример фотографии страницы паспорта с регистрацией',
+			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
+		),
+		self::STEP_DOCUMENT4 => array(
+			'type'        => self::C_TYPE_PASSPORT_LAST,
+			'instruction' => 'Сфотографируйте последнюю страницу паспорта (с информацией о выданных документах), даже если она пуста.',
+			'title'       => 'Паспорт - последняя страница',
+			'description' => 'Пример фотографии страницы паспорта с информацией о документах',
+			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
+		),
+		self::STEP_DOCUMENT5 => array(
+			'type'        => self::C_TYPE_DOCUMENT,
+			'instruction' => 'Сфотографируйте второй документ (ИНН, заграничный паспорт, пенсионное удостоверение, водительское удостоверение, заграничный паспорт, военный билет, страховое свидетельство государственного пенсионного страхования',
+			'title'       => 'Второй документ',
+			'description' => 'Пример фотографии второго документа',
+			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
+		),
+		self::STEP_DONE      => array(
+			'instruction' => 'СВы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
+			'title'       => 'Идентификация успешно завершена!',
+			'description' => 'Идентификация успешно завершена!',
+		),
 	);
 
 	public function init()
@@ -150,7 +140,7 @@ class IdentifyApiComponent
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
 		return $this->formatResponse($sToken, array(
-				'instruction' => IdentifyApiComponent::$aInstructionsForSteps[$iStepNumber],
+				'instruction' => $this->getInstructionByStep($iStepNumber),
 			)
 		);
 	}
@@ -220,10 +210,10 @@ class IdentifyApiComponent
 			$aResponse = $this->formatResponse($sToken,
 				array(
 					'document'    => $iStepNumber,
-					'title'       => self::$aTitlesForSteps[$iNextStepNumber],
-					'instruction' => self::$aInstructionsForSteps[$iNextStepNumber],
-					'example'     => self::$aExamplesForSteps[$iNextStepNumber],
-					'description' => self::$aDescriptionsForSteps[$iNextStepNumber],
+					'title'       => $this->getTitleByStep($iNextStepNumber),
+					'instruction' => $this->getInstructionByStep($iNextStepNumber),
+					'example'     => $this->getExampleByStep($iNextStepNumber),
+					'description' => $this->getDescriptionByStep($iNextStepNumber),
 				)
 			);
 			break;
@@ -232,7 +222,7 @@ class IdentifyApiComponent
 				if (!Yii::app()->adminKreddyApi->setFinishedVideoId($sApiToken)) {
 					return $this->formatErrorResponse('Не удалось завершить идентификацию!');
 				}
-				$aResponse = $this->formatDoneResponse($sToken, self::$aInstructionsForSteps[$iNextStepNumber]);
+				$aResponse = $this->formatDoneResponse($sToken, $this->getInstructionByStep($iNextStepNumber));
 				break;
 
 			default:
@@ -338,7 +328,8 @@ class IdentifyApiComponent
 		$bResult = false;
 
 		if ($iFileSize > 0) {
-			$bResult = Yii::app()->adminKreddyApi->uploadDocument($oCurlFile, self::$aTypesByStep[$iStepNumber], $sApiToken);
+			$sType = $this->getTypeByStep($iStepNumber);
+			$bResult = Yii::app()->adminKreddyApi->uploadDocument($oCurlFile, $sType, $sApiToken);
 		}
 
 		if (file_exists(realpath($sFilePath))) {
@@ -375,5 +366,65 @@ class IdentifyApiComponent
 	private function decryptToken($sToken)
 	{
 		return CryptArray::decrypt($sToken);
+	}
+
+	/**
+	 * @param $iStepNumber
+	 *
+	 * @return mixed
+	 */
+	private function getTypeByStep($iStepNumber)
+	{
+		return isset(self::$aIdentifySteps[$iStepNumber]['type'])
+			? self::$aIdentifySteps[$iStepNumber]['type']
+			: null;
+	}
+
+	/**
+	 * @param $iStepNumber
+	 *
+	 * @return null
+	 */
+	private function getInstructionByStep($iStepNumber)
+	{
+		return isset(self::$aIdentifySteps[$iStepNumber]['instruction'])
+			? self::$aIdentifySteps[$iStepNumber]['instruction']
+			: null;
+	}
+
+	/**
+	 * @param $iStepNumber
+	 *
+	 * @return null
+	 */
+	private function getTitleByStep($iStepNumber)
+	{
+		return isset(self::$aIdentifySteps[$iStepNumber]['title'])
+			? self::$aIdentifySteps[$iStepNumber]['title']
+			: null;
+	}
+
+	/**
+	 * @param $iStepNumber
+	 *
+	 * @return null
+	 */
+	private function getDescriptionByStep($iStepNumber)
+	{
+		return isset(self::$aIdentifySteps[$iStepNumber]['description'])
+			? self::$aIdentifySteps[$iStepNumber]['description']
+			: null;
+	}
+
+	/**
+	 * @param $iStepNumber
+	 *
+	 * @return null
+	 */
+	private function getExampleByStep($iStepNumber)
+	{
+		return isset(self::$aIdentifySteps[$iStepNumber]['example'])
+			? self::$aIdentifySteps[$iStepNumber]['example']
+			: null;
 	}
 }
