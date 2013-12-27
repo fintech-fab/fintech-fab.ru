@@ -135,7 +135,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'friends_fio'                   => 'ФИО',
 				'friends_phone'                 => 'Телефон',
 
-				'complete'                      => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'http://dev.kreddy.popov/footerLinks/view/offer\', \'Оферта\')"  href="#">подробная информация</a>)',
+				'complete' => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'/pages/viewPartial/usloviya\', \'Условия обслуживания и передачи информации\')"  href="#">подробная информация</a>)',
 
 				'passport_number'               => 'Серия/номер',
 				'passport_series'               => 'Серия/номер',
