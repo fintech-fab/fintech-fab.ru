@@ -37,7 +37,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 Yii::app()->clientScript->registerScript('ajaxForm', '
 		updateAjaxForm();
 		');
-
+Yii::app()->clientScript->registerScript('scrollAndFocus', '
+		scrollAndFocus();
+		', CClientScript::POS_LOAD);
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
