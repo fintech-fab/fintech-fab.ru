@@ -8,7 +8,6 @@ class IdentifyApiComponent
 	/**
 	 * Константы
 	 */
-	const TMP_HASH = "390vJk!gl;6756fi&g893jn$$!13hgh"; // хэш для заглушки todo: убрать
 
 	const С_ERROR_NONE = 0; // нет ошибки
 	const С_ERROR_REQUEST_HANDLING = -1; // ошибка обработки запроса
@@ -207,16 +206,16 @@ class IdentifyApiComponent
 			case self::STEP_DOCUMENT2:
 			case self::STEP_DOCUMENT3:
 			case self::STEP_DOCUMENT4:
-			$aResponse = $this->formatResponse($sToken,
-				array(
-					'document'    => $iStepNumber,
-					'title'       => $this->getTitleByStep($iNextStepNumber),
-					'instruction' => $this->getInstructionByStep($iNextStepNumber),
-					'example'     => $this->getExampleByStep($iNextStepNumber),
-					'description' => $this->getDescriptionByStep($iNextStepNumber),
-				)
-			);
-			break;
+				$aResponse = $this->formatResponse($sToken,
+					array(
+						'document'    => $iStepNumber,
+						'title'       => $this->getTitleByStep($iNextStepNumber),
+						'instruction' => $this->getInstructionByStep($iNextStepNumber),
+						'example'     => $this->getExampleByStep($iNextStepNumber),
+						'description' => $this->getDescriptionByStep($iNextStepNumber),
+					)
+				);
+				break;
 
 			case self::STEP_DOCUMENT5:
 				if (!Yii::app()->adminKreddyApi->setFinishedVideoId($sApiToken)) {
@@ -342,7 +341,7 @@ class IdentifyApiComponent
 	/**
 	 * Генерирует токен с учётом текущего шага и токена пользователя
 	 *
-	 * @param $sApiToken хэш, идентифицирующий пользователя (токен из API)
+	 * @param $sApiToken   хэш, идентифицирующий пользователя (токен из API)
 	 * @param $iStepNumber номер следующего щага
 	 *
 	 * @return string
