@@ -16,6 +16,7 @@ class AddCardForm extends CFormModel
 	public $sCardCvc;
 	public $bConfirm;
 	public $iCardType;
+	public $bAgree; // Я согласен с зачислением средств на банковскую карту.
 
 	public $sCardValidThru; // срок окончания: формат 09 / 15, из него потом берётся $sCardMonth, $sCardYear
 
@@ -29,6 +30,8 @@ class AddCardForm extends CFormModel
 			array('iCardType', 'required', 'message' => 'Выберите тип карты Mastercard, Maestro либо Visa'),
 
 			array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.'),
+
+			array(' bAgree', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие с зачислением средств на карту.'),
 
 			array(
 				'sCardPan', 'match', 'message' => 'Номер карты должен содержать от 16 до 18 цифр',
@@ -73,6 +76,7 @@ class AddCardForm extends CFormModel
 			'sCardHolderName' => 'Имя держателя',
 			'bConfirm'       => 'Я подтверждаю согласие на заморозку случайной суммы на указанной банковской карте.',
 			'iCardType'       => 'Тип банковской карты',
+			'bAgree'         => 'Я согласен с зачислением средств на банковскую карту.',
 		);
 
 		if (!Yii::app()->adminKreddyApi->checkCardVerifyExists()) {
@@ -95,6 +99,7 @@ class AddCardForm extends CFormModel
 			'sCardCvc',
 			'sCardHolderName',
 			'iCardType',
+			'bAgree',
 		);
 	}
 

@@ -71,6 +71,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <?= $form->checkBoxRow($model, 'bConfirm'); ?>
 
+	<span id="bAgreeDiv" data-original-title='<?= AdminKreddyApiComponent::C_CARD_AGREEMENT; ?>' rel='tooltip' data-position="bottom">
+		<?= $form->checkBoxRow($model, 'bAgree'); ?>
+	</span>
+
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
