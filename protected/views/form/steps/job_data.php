@@ -30,7 +30,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
 <?php
-$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => (Yii::app()->clientForm->getCurrentStep() - 1)));
+$this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm->getFormWidgetSteps(), 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
 <h4 id="jobInfoHeading">Дополнительная информация</h4>
 <div class="row">

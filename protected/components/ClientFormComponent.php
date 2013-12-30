@@ -53,11 +53,68 @@ class ClientFormComponent
 			'default' => 0,
 		),
 		self::SITE2 => array(
-			'max'     => 7,
+			'max' => 6,
 			'min'     => 0,
 			'default' => 0,
 		),
 
+	);
+
+	public static $aFormWidgetSteps = array(
+		self::SITE1 => array(
+			2 => array(
+				'form_step' => 1,
+				'label'     => 'Личные данные',
+				'url'       => '/form/ajaxForm/3'
+			),
+			3 => array(
+				'form_step' => 2,
+				'label'     => 'Паспортные данные',
+				'url'       => '/form/ajaxForm/4'
+			),
+			4 => array(
+				'form_step' => 3,
+				'label'     => 'Постоянная регистрация',
+				'url'       => '/form/ajaxForm/5'
+			),
+			5 => array(
+				'form_step' => 4,
+				'label'     => 'Дополнительно',
+				'url'       => '/form/ajaxForm/6'
+			),
+			6 => array(
+				'form_step' => 5,
+				'label'     => 'Отправка заявки',
+				'url'       => '/form/ajaxForm/7'
+			),
+		),
+		self::SITE2 => array(
+			1 => array(
+				'form_step' => 1,
+				'label'     => 'Личные данные',
+				'url'       => '/form/ajaxForm/2'
+			),
+			2 => array(
+				'form_step' => 2,
+				'label'     => 'Паспортные данные',
+				'url'       => '/form/ajaxForm/3'
+			),
+			3 => array(
+				'form_step' => 3,
+				'label'     => 'Постоянная регистрация',
+				'url'       => '/form/ajaxForm/4'
+			),
+			4 => array(
+				'form_step' => 4,
+				'label'     => 'Дополнительно',
+				'url'       => '/form/ajaxForm/5'
+			),
+			5 => array(
+				'form_step' => 5,
+				'label'     => 'Отправка заявки',
+				'url'       => '/form/ajaxForm/6'
+			),
+		)
 	);
 
 	/**
@@ -1191,5 +1248,10 @@ class ClientFormComponent
 
 		return !empty(Yii::app()->session[$sModel]);
 
+	}
+
+	public function getFormWidgetSteps()
+	{
+		return self::$aFormWidgetSteps[$this->getSite()];
 	}
 }
