@@ -27,7 +27,7 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 
 <?php
 //TODO сделать getProgressBarStep()
-$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => (Yii::app()->clientForm->getCurrentStep() - 1)));
+$this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm->getFormWidgetSteps(), 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
 <h4>Отправка заявки</h4>
 <div class="row">

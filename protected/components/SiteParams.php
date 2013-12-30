@@ -188,29 +188,6 @@ class SiteParams
 		45,
 	);
 
-	public static $aFormWidgetSteps = array(
-		1 => array(
-			'label' => 'Личные данные',
-			'url' => '/form/ajaxForm/3'
-		),
-		2 => array(
-			'label' => 'Паспортные данные',
-			'url' => '/form/ajaxForm/4'
-		),
-		3 => array(
-			'label' => 'Постоянная регистрация',
-			'url' => '/form/ajaxForm/5'
-		),
-		4 => array(
-			'label' => 'Дополнительно',
-			'url' => '/form/ajaxForm/6'
-		),
-		5 => array(
-			'label' => 'Отправка заявки',
-			'url' => '/form/ajaxForm/7'
-		),
-	);
-
 	/**
 	 * @param ClientCreateFormAbstract $oClientCreateForm
 	 * @param                          $sAttrName
@@ -232,7 +209,7 @@ class SiteParams
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
 				'data-placement' => 'top',
-				'data-content' => '<span class="popover-info">' . $sInfo . '</span>',
+				'data-content'   => '<span class="popover-info">' . $sInfo . '</span>',
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
 			), '', true);
@@ -241,8 +218,8 @@ class SiteParams
 				'append'         => $sInfoTag,
 				'data-trigger'   => 'focus',
 				'data-placement' => 'left',
-				'data-html'    => 'true',
-				'data-content' => '<span class="popover-info"><p class="popover-label">' . $sLabel . '</p>' . $sInfo . '</span>',
+				'data-html'      => 'true',
+				'data-content'   => '<span class="popover-info"><p class="popover-label">' . $sLabel . '</p>' . $sInfo . '</span>',
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
 			);
