@@ -168,6 +168,12 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
+
+	/**
+	 * Переменные для тестирования API идентификации, требуются для выполнения тестов.
+	 * логин и пароль должны соответствовать заданным в IdentifyModuleTest
+	 *
+	 */
 	private $testLogin = '9631321654';
 	private $testPassword = 'Aa123456';
 	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';

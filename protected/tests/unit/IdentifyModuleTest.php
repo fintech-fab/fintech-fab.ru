@@ -14,6 +14,13 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 	const NOT_IMAGE = 'fgfhfghgf';
 
+	/**
+	 * Логин и пароль должны соответствовать заданным в AdminKreddyApiComponent
+	 * private $testLogin = '9631321654';
+	 * private $testPassword = 'Aa123456';
+	 *
+	 */
+
 	private $login = '9631321654';
 	private $password = 'Aa123456';
 
