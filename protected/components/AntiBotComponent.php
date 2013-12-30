@@ -12,6 +12,39 @@ class AntiBotComponent
 
 	}
 
+
+	/**
+	 * @return bool
+	 */
+	public static function isCanLoginRequest()
+	{
+		if (self::ipInExceptions()) {
+			return true;
+		}
+
+		$sIP = self::getUserIP();
+		$iType = SiteParams::U_ACTION_TYPE_LOGIN;
+		$iTime = SiteParams::ANTIBOT_LOGIN_TIME;
+		$iLoginCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iType, $iTime);
+		if ($iLoginCount > SiteParams::ANTIBOT_LOGINT_COUNT) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Добавление в лог еще 1 попытку логина
+	 */
+	public static function addLoginRequest()
+	{
+		$sIP = self::getUserIP();
+		if (self::checkSmsRequest()) {
+			UserActionsLog::addNewAction($sIP, SiteParams::U_ACTION_TYPE_LOGIN);
+		}
+	}
+
+
 	/**
 	 * Проверка, можно ли сделать еще 1 запрос кода по SMS
 	 *

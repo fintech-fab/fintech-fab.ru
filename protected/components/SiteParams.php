@@ -30,6 +30,7 @@ class SiteParams
 	const U_ACTION_TYPE_BLOCK_FORM = 8;
 	const U_ACTION_TYPE_BLOCK_SMS = 9;
 	const U_ACTION_TYPE_CARD_VERIFY = 101;
+	const U_ACTION_TYPE_LOGIN = 10;
 
 	/**
 	 * Время проверки для антибота, в минутах
@@ -41,6 +42,12 @@ class SiteParams
 	const ANTIBOT_FORM_TIME_SHORT = 10; //время проверки для короткого периода
 	const ANTIBOT_FORM_TIME_LONG = 60; //время проверки длинного периода
 	const ANTIBOT_FORM_TIME_BLOCK = 1440; //время блока
+
+	/**
+	 * Настройка логина для антибота
+	 */
+	const ANTIBOT_LOGIN_TIME = 60; //время проверки длинного периода
+	const ANTIBOT_LOGINT_COUNT = 10;
 
 	/**
 	 * Время и число попыток для привязки карты

@@ -6,6 +6,9 @@ class DefaultController extends Controller
 {
 	public function actionIndex()
 	{
+		$this->disableDebugToolbar();
+		$this->_disableLog();
+
 		header('Content-Type: application/json');
 
 		// Заполняем массив request
@@ -18,6 +21,7 @@ class DefaultController extends Controller
 		$aResponse = Yii::app()->getModule('identify')->identifyApi->processRequest($aRequest);
 
 		echo CJSON::encode($aResponse);
+
 		Yii::app()->end();
 	}
 }
