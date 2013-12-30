@@ -329,6 +329,14 @@ class AdminKreddyApiComponent
 	{
 		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
 
+		//проверяем, не исчерпаны ли попытки авторизации
+		if (!AntiBotComponent::isCanLoginRequest()) {
+			return null;
+		}
+
+		//добавляем в лог запись о еще одном запросе на авторизацию
+		AntiBotComponent::addLoginRequest();
+
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 
