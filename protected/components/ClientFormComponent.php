@@ -205,7 +205,11 @@ class ClientFormComponent
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
-				'metrika_goal'     => 'sms_code',
+				'metrika_goal' => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'sms_code_check',
+					false       => 'sms_code_send',
+				)
 			),
 		),
 		self::SITE2 => array(
@@ -270,7 +274,11 @@ class ClientFormComponent
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
-				'metrika_goal'     => 'sms_code',
+				'metrika_goal' => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'sms_code_check',
+					false       => 'sms_code_send',
+				)
 			),
 		),
 	);
@@ -677,11 +685,21 @@ class ClientFormComponent
 		$this->setDoneSteps($iDefaultStep);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getMetrikaGoalByStep()
 	{
 		$sSite = self::getSite();
 
-		$sGoal = self::$aStepsInfo[$sSite][$this->iCurrentStep]['metrika_goal'];
+		$mGoal = self::$aStepsInfo[$sSite][$this->iCurrentStep]['metrika_goal'];
+
+		if (is_array($mGoal) && isset($mGoal['condition'])) {
+			$bCondition = $this->$mGoal['condition']();
+			$sGoal = $mGoal[$bCondition];
+		} else {
+			$sGoal = $mGoal;
+		}
 
 		return $sGoal;
 	}

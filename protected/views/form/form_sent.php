@@ -10,7 +10,7 @@ $this->pageTitle = Yii::app()->name;
 Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
-<?php $this->widget('YaMetrikaGoalsWidget'); ?>
+<?php $this->widget('YaMetrikaGoalsWidget', array('bRegisterComplete' => true)); ?>
 
 <div class="row">
 
