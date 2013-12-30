@@ -76,7 +76,7 @@ class IdentifyApiComponent
 			'example'     => 'https://www.google.ru/images/srpr/logo11w.png',
 		),
 		self::STEP_DONE      => array(
-			'instruction' => 'СВы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
+			'instruction' => 'Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
 			'title'       => 'Идентификация успешно завершена!',
 			'description' => 'Идентификация успешно завершена!',
 		),
@@ -310,7 +310,9 @@ class IdentifyApiComponent
 	 */
 	private function saveImage($sApiToken, $sImageBase64, $iStepNumber)
 	{
+
 		$sFilePath = Yii::app()->getBasePath() . "/runtime/";
+		//создаем дирекиторию, если ее не существует
 		if (!file_exists($sFilePath . 'identify_photos')) {
 			mkdir($sFilePath . 'identify_photos');
 		}
@@ -318,15 +320,15 @@ class IdentifyApiComponent
 		$sFileName = md5($sApiToken) . "-photo-" . $iStepNumber . ".jpg";
 		$sFilePath .= 'identify_photos/' . $sFileName;
 
+		//сохраняем данные в файл
 		$iFileSize = @file_put_contents($sFilePath, base64_decode($sImageBase64));
-
-		/** @noinspection PhpUndefinedFunctionInspection */
-		$oCurlFile = curl_file_create($sFilePath, 'image/jpeg', $sFileName);
-
 
 		$bResult = false;
 
+		//если удалось сохранить данные в файл, отправляем данные через API admin.kreddy
 		if ($iFileSize > 0) {
+			/** @noinspection PhpUndefinedFunctionInspection */
+			$oCurlFile = curl_file_create($sFilePath, 'image/jpeg', $sFileName);
 			$sType = $this->getTypeByStep($iStepNumber);
 			$bResult = Yii::app()->adminKreddyApi->uploadDocument($oCurlFile, $sType, $sApiToken);
 		}
