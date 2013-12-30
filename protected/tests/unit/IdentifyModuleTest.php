@@ -61,7 +61,6 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 
 		$sResult = $this->_requestToCallback($aRequest);
 		$aResult = CJSON::decode($sResult);
-		print_r($sResult);
 
 		$sToken = $aResult['result']['token'];
 
@@ -275,7 +274,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$sResult = $this->_requestToCallback($aRequest);
-		print_r($sResult);
+
 		$aResult = CJSON::decode($sResult);
 		$sToken = $aResult['result']['token'];
 
@@ -415,6 +414,9 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 	private function _requestToCallback($aRequestFields)
 	{
 		$sLink = rtrim(Yii::app()->params['mainUrl'], '/') . '/identify';
+
+		//передаем параметр test, он требуется API для тестирования без подключения к реальному API admin.kreddy
+		$aRequestFields['test'] = true;
 		$ch = curl_init($sLink);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequestFields);

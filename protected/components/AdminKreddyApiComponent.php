@@ -168,6 +168,10 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 
+	private $testLogin = '9631321654';
+	private $testPassword = 'Aa123456';
+	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';
+
 	/**
 	 * @return string
 	 */
@@ -320,14 +324,20 @@ class AdminKreddyApiComponent
 	/**
 	 * * Метод для получения авторизации и токена для API идентификации
 	 *
-	 * @param $sPhone
-	 * @param $sPassword
+	 * @param      $sPhone
+	 * @param      $sPassword
+	 *
+	 * @param bool $bTest
 	 *
 	 * @return null|string
 	 */
-	public function getIdentifyApiAuth($sPhone, $sPassword)
+	public function getIdentifyApiAuth($sPhone, $sPassword, $bTest = false)
 	{
 		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
+
+		if ($bTest && $this->testLogin == $sPhone && $this->testPassword == $sPassword) {
+			return $this->testToken;
+		}
 
 		//проверяем, не исчерпаны ли попытки авторизации
 		if (!AntiBotComponent::isCanLoginRequest()) {
@@ -347,18 +357,24 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $oCurlFile
-	 * @param $sDocumentType
-	 * @param $sToken
+	 * @param      $oCurlFile
+	 * @param      $sDocumentType
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
 	 *
 	 * @return bool
 	 */
-	public function uploadDocument($oCurlFile, $sDocumentType, $sToken)
+	public function uploadDocument($oCurlFile, $sDocumentType, $sToken, $bTest = false)
 	{
 		$aRequest = array(
 			'token' => $sToken, 'type' => $sDocumentType,
 			'files' => $oCurlFile,
 		);
+
+		if ($bTest && $sToken == $this->testToken) {
+			return true;
+		}
 
 		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_UPLOAD_DOCUMENT, $aRequest);
 		if ($aResponse['code'] === self::ERROR_NONE) {
@@ -370,12 +386,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $sToken
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
 	 *
 	 * @return bool
 	 */
-	public function setFinishedVideoId($sToken)
+	public function setFinishedVideoId($sToken, $bTest = false)
 	{
+		if ($bTest && $sToken == $this->testToken) {
+			return true;
+		}
+
 		$aRequest = array(
 			'token' => $sToken,
 		);
@@ -447,13 +469,19 @@ class AdminKreddyApiComponent
 	/**
 	 * Метод для обновления токена для API идентификации
 	 *
-	 * @param $sToken
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
 	 *
 	 * @return null
 	 */
-	public function updateIdentifyApiToken($sToken)
+	public function updateIdentifyApiToken($sToken, $bTest = false)
 	{
 		$aRequest = array('token' => $sToken);
+
+		if ($bTest && $sToken == $this->testToken) {
+			return $this->testToken;
+		}
 
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_UPDATE, $aRequest);
 

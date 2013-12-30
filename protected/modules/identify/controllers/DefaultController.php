@@ -16,9 +16,10 @@ class DefaultController extends Controller
 		$aRequest['phone'] = Yii::app()->request->getPost('login', '');
 		$aRequest['password'] = Yii::app()->request->getPost('password', '');
 		$aRequest['image'] = Yii::app()->request->getPost('image', '');
+		$bTest = Yii::app()->request->getPost('test', false);
 
 		// посылаем запрос к API и получаем ответ
-		$aResponse = Yii::app()->getModule('identify')->identifyApi->processRequest($aRequest);
+		$aResponse = Yii::app()->getModule('identify')->identifyApi->processRequest($aRequest, $bTest);
 
 		echo CJSON::encode($aResponse);
 

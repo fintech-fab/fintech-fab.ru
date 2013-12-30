@@ -1,6 +1,8 @@
 <?php
 /**
  * Class IdentifyApiComponent
+ *
+ * @property bool bTest
  */
 
 class IdentifyApiComponent
@@ -30,6 +32,8 @@ class IdentifyApiComponent
 	const C_TYPE_PASSPORT_NOTIFICATION = 'passport_notification';
 	const C_TYPE_PASSPORT_LAST = 'passport_last';
 	const C_TYPE_DOCUMENT = 'document';
+
+	public $bTest = false;
 
 	public static $aIdentifySteps = array(
 		self::STEP_FACE      => array(
@@ -85,12 +89,16 @@ class IdentifyApiComponent
 	}
 
 	/**
-	 * @param $aRequest array() запрос
+	 * @param      $aRequest array() запрос
+	 *
+	 * @param bool $bTest
 	 *
 	 * @return array
 	 */
-	public function processRequest($aRequest)
+	public function processRequest($aRequest, $bTest = false)
 	{
+		$this->bTest = $bTest;
+
 		// некорректный POST-запрос - ошибка
 		if (empty($aRequest['token']) && empty($aRequest['image'])
 			&& empty($aRequest['phone']) && empty($aRequest['password'])
@@ -123,16 +131,16 @@ class IdentifyApiComponent
 			return $this->formatErrorResponse('Укажите логин и пароль');
 		}
 
-		$sToken = Yii::app()->adminKreddyApi->getIdentifyApiAuth($sPhone, $sPassword);
+		$sApiToken = Yii::app()->adminKreddyApi->getIdentifyApiAuth($sPhone, $sPassword, $this->bTest);
 
 		// если не удалось авторизоваться по логину-паролю вернуть код -1.
-		if (!$sToken) {
+		if (!$sApiToken) {
 			return $this->formatErrorResponse('Не удалось авторизоваться.');
 		}
 
 		$iStepNumber = self::STEP_FACE;
 		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
-		$sToken = $this->generateToken($sToken, $iStepNumber);
+		$sToken = $this->generateToken($sApiToken, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
 		return $this->formatResponse($sToken, array(
@@ -162,7 +170,7 @@ class IdentifyApiComponent
 		}
 
 		// обновляем токен в API (заодно проверяется его корректность)
-		$sApiToken = Yii::app()->adminKreddyApi->updateIdentifyApiToken($sApiToken);
+		$sApiToken = Yii::app()->adminKreddyApi->updateIdentifyApiToken($sApiToken, $this->bTest);
 		if (!$sApiToken) {
 			return $this->formatErrorResponse('Ошибка авторизации! Возможно, закончилась сессия.');
 		}
@@ -215,7 +223,7 @@ class IdentifyApiComponent
 				break;
 
 			case self::STEP_DOCUMENT5:
-				if (!Yii::app()->adminKreddyApi->setFinishedVideoId($sApiToken)) {
+				if (!Yii::app()->adminKreddyApi->setFinishedVideoId($sApiToken, $this->bTest)) {
 					return $this->formatErrorResponse('Не удалось завершить идентификацию!');
 				}
 				$aResponse = $this->formatDoneResponse($sToken, $this->getInstructionByStep($iNextStepNumber));
@@ -327,7 +335,7 @@ class IdentifyApiComponent
 			/** @noinspection PhpUndefinedFunctionInspection */
 			$oCurlFile = curl_file_create($sFilePath, 'image/jpeg', $sFileName);
 			$sType = $this->getTypeByStep($iStepNumber);
-			$bResult = Yii::app()->adminKreddyApi->uploadDocument($oCurlFile, $sType, $sApiToken);
+			$bResult = Yii::app()->adminKreddyApi->uploadDocument($oCurlFile, $sType, $sApiToken, $this->bTest);
 		}
 
 		if (file_exists(realpath($sFilePath))) {
