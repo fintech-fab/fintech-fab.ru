@@ -16,34 +16,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/chooseChannel'),
 ));
 
-
-$aClientProductsAndChannelsList = Yii::app()->adminKreddyApi->getClientProductsList();
+$aClientProductsAndChannelsList = Yii::app()->adminKreddyApi->getClientProductsAndChannelsList();
 
 // если есть доступные пакеты для данного пользователя
 if (!empty($aClientProductsAndChannelsList)) {
-	$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
-	// если пакета в сессии нет
-	if ($model->product === false) {
-		//устанавливаем в качестве выбранного пакета первый из массива доступных
-		$model->product = reset(array_keys($aClientProductsAndChannelsList));
-	}
-
-	echo $form->radioButtonList($model, 'product', $aClientProductsAndChannelsList, array("class" => "all", 'uncheckValue' => $model->product));
-	echo $form->error($model, 'product');
-
-	?>
-
-	<div class="form-actions">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType' => 'submit',
-			'type'       => 'primary',
-			'size'       => 'small',
-			'label'      => 'Подключить Пакет',
-		)); ?>
-	</div>
-
-<?php
+	$this->widget('application.modules.account.components.ShowChannelsWidget', array('aAllChannels' => Yii::app()->adminKreddyApi->getProductsChannels(), 'aAvailableChannelKeys' => Yii::app()->adminKreddyApi->getClientChannels(),));
 
 } else { // если доступных пакетов нет - выводим соответствующее сообщение
 	?>

@@ -1220,6 +1220,9 @@ class AdminKreddyApiComponent
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
 
+		// получаем список доступных пользователю каналов
+		$aClientChannels = $this->getClientChannels();
+
 		//проверяем, что получили массивы
 		if (is_array($aProducts)) {
 
