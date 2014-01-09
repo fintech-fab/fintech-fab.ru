@@ -1211,30 +1211,40 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return bool
+	 * @return array
 	 */
 	public function getClientProductsList()
 	{
-		//todo: а тут точно проверяется, что доступно пользователю?
-		$aReturnProducts = array();
-
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
-
-		// получаем список доступных пользователю каналов
+		//получаем список каналов
+		$aChannels = $this->getProductsChannels();
+		//получаем список каналов, доступных клиенту
 		$aClientChannels = $this->getClientChannels();
-
+		$aAvailableProducts = array();
 		//проверяем, что получили массивы
-		if (is_array($aProducts)) {
+		if (is_array($aProducts) && is_array($aChannels) && is_array($aClientChannels)) {
 
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
 				//получаем из продукта каналы, по которым его можно получить
-				$aReturnProducts[$aProduct['id']] = $aProduct['name'];
+				$aProductChannels = (isset($aProduct['channels']) && is_array($aProduct['channels']))
+					? $aProduct['channels']
+					: array();
+				//перебираем каналы, по которым можно получить продукт
+				foreach ($aProductChannels as $iKey => $aChannel) {
+					//проверяем, что у канала есть описание
+					//проверяем, что данный канал доступен пользователю
+					if (isset($aChannels[$iKey])
+						&& in_array($iKey, $aClientChannels)
+					) {
+						$aAvailableProducts[$aProduct['id']] = $aProduct['name'];
+					}
+				}
 			}
 		}
 
-		return $aReturnProducts;
+		return $aAvailableProducts;
 	}
 
 	/**
@@ -1272,13 +1282,15 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Получение списка каналов, доступных клиенту
+	 * Получение списка каналов, доступных клиенту, выбравшему данный продукт
 	 *
 	 * @return array
 	 */
 	public function getClientProductsChannelsList()
 	{
-		$aProducts = $this->getProductsAndChannels();
+		$iProduct = $this->getSubscriptionProduct();
+
+		return $iProduct;
 		//получаем каналы, доступные клиенту по данной подписке
 		$aClientChannels = $this->getClientSubscriptionChannels();
 
@@ -2041,6 +2053,28 @@ class AdminKreddyApiComponent
 	{
 		return (isset(Yii::app()->session['subscribeSelectedProduct']))
 			? Yii::app()->session['subscribeSelectedProduct'] :
+			false;
+	}
+
+	/**
+	 * Сохранение выбранного канала в сессию
+	 *
+	 * @param $sChannel
+	 */
+	public function setSubscribeSelectedChannel($sChannel)
+	{
+		Yii::app()->session['subscribeSelectedChannel'] = $sChannel;
+	}
+
+	/**
+	 * Получение выбранного продукта из сессии
+	 *
+	 * @return string|bool
+	 */
+	public function getSubscribeSelectedChannel()
+	{
+		return (isset(Yii::app()->session['subscribeSelectedChannel']))
+			? Yii::app()->session['subscribeSelectedChannel'] :
 			false;
 	}
 

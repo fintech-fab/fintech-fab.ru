@@ -43,7 +43,7 @@ class DefaultController extends Controller
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
-					'chooseChannel',
+					'selectChannel',
 				),
 				'users'   => array('@'),
 			),
@@ -791,22 +791,18 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Обработка данных от формы, переданной из /account/subscribe
-	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
-	 *
-	 * Сюда возможен редирект сразу после регистрации! В этом случае POST-запрос заменяется сохраненными
-	 * в setState данными, и эти данные загружаются в форму
+	 * Записывает в сессию пакет, выбранный пользователем, и выводит форму выбора канала
 	 */
-	public function actionChooseChannel()
+	public function actionSelectChannel()
 	{
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
 		}
 
-		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/chooseChannel'));
+		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/selectChannel'));
 
-		//todo дальше пока не переделывалось! просто копипаст экшна doSubscribe
+		// todo реализовать дальше....
 
 		//получаем сохраненные при регистрации данные займа (если есть)
 		//TODO возможно, делать это только если есть state new_client
@@ -821,7 +817,7 @@ class DefaultController extends Controller
 		//если есть сохраненные данные в getState, то их переносим в массив $aData
 		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct . '_' . $iChannelId);
+			$aData = array('product' => $iProduct, 'channel' => $iChannelId);
 		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
@@ -873,7 +869,7 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 		}
-		$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
+		$sView = 'subscription/select_channel';
 		$this->render($sView, array('model' => $oProductForm));
 		Yii::app()->end();
 	}
@@ -959,10 +955,9 @@ class DefaultController extends Controller
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
 			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
 			if (Yii::app()->request->getIsPostRequest()) {
-				//$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
-				//TODO $aPost = session['product']
 				$aPost = array();
-				//TODO $aPost['channel']=getPost('channel')
+				$aPost['channel'] = Yii::app()->request->getPost(get_class($oProductForm) . '_channel');
+				$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 			} else {
 				$aPost = $aData;
 			}
@@ -980,7 +975,7 @@ class DefaultController extends Controller
 					$sView = 'flex_subscription/do_subscribe';
 				} else {
 					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
-					//TODO channel
+					Yii::app()->adminKreddyApi->setSubscribeSelectedChannel($oProductForm->channel);
 					$sView = 'subscription/do_subscribe';
 				}
 

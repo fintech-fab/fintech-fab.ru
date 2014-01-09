@@ -12,10 +12,13 @@ foreach ($aClientChannels as $sKey => $mChannel) {
 
 		$this->widget('bootstrap.widgets.TbButton',
 			array(
+				'buttonType'  => 'submit',
 				'type'        => 'primary',
 				'size'        => 'small',
 				'label'       => 'Подключить Пакет',
-				'htmlOptions' => array('onclick' => 'js:alert("ok")'),
+				'htmlOptions' => array(
+					'value' => $mChannel,
+				),
 			)
 		);
 
