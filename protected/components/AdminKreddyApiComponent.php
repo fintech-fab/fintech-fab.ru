@@ -148,6 +148,8 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
+	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
+	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -166,6 +168,16 @@ class AdminKreddyApiComponent
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
+
+
+	/**
+	 * Переменные для тестирования API идентификации, требуются для выполнения тестов.
+	 * логин и пароль должны соответствовать заданным в IdentifyModuleTest
+	 *
+	 */
+	private $testLogin = '9631321654';
+	private $testPassword = 'Aa123456';
+	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';
 
 	/**
 	 * @return string
@@ -317,6 +329,96 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * * Метод для получения авторизации и токена для API идентификации
+	 *
+	 * @param      $sPhone
+	 * @param      $sPassword
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return null|string
+	 */
+	public function getIdentifyApiAuth($sPhone, $sPassword, $bTest = false)
+	{
+		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
+
+		if ($bTest && $this->testLogin == $sPhone && $this->testPassword == $sPassword) {
+			return $this->testToken;
+		}
+
+		//проверяем, не исчерпаны ли попытки авторизации
+		if (!AntiBotComponent::isCanLoginRequest()) {
+			return null;
+		}
+
+		//добавляем в лог запись о еще одном запросе на авторизацию
+		AntiBotComponent::addLoginRequest();
+
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
+		if ($aTokenData['code'] === self::ERROR_NONE) {
+
+			return $aTokenData['token'];
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param      $oCurlFile
+	 * @param      $sDocumentType
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return bool
+	 */
+	public function uploadDocument($oCurlFile, $sDocumentType, $sToken, $bTest = false)
+	{
+		$aRequest = array(
+			'token' => $sToken, 'type' => $sDocumentType,
+			'files' => $oCurlFile,
+		);
+
+		if ($bTest && $sToken == $this->testToken) {
+			return true;
+		}
+
+		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_UPLOAD_DOCUMENT, $aRequest);
+		if ($aResponse['code'] === self::ERROR_NONE) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return bool
+	 */
+	public function setFinishedVideoId($sToken, $bTest = false)
+	{
+		if ($bTest && $sToken == $this->testToken) {
+			return true;
+		}
+
+		$aRequest = array(
+			'token' => $sToken,
+		);
+
+		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_SET_IDENTIFICATION_FINISHED, $aRequest);
+		if ($aResponse['code'] === self::ERROR_NONE) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 *
 	 * @param $aClientData
 	 *
@@ -369,6 +471,32 @@ class AdminKreddyApiComponent
 		$this->token = null;
 
 		return false;
+	}
+
+	/**
+	 * Метод для обновления токена для API идентификации
+	 *
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return null
+	 */
+	public function updateIdentifyApiToken($sToken, $bTest = false)
+	{
+		$aRequest = array('token' => $sToken);
+
+		if ($bTest && $sToken == $this->testToken) {
+			return $this->testToken;
+		}
+
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_UPDATE, $aRequest);
+
+		if ($aTokenData['code'] == self::ERROR_NONE) {
+			return $aTokenData['token'];
+		}
+
+		return null;
 	}
 
 	/**
@@ -2018,7 +2146,7 @@ class AdminKreddyApiComponent
 			$iEntryPoint = 1;
 		}
 
-		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint));
+		$aRequest = array_merge(array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint), $aRequest);
 
 		//если включен debug то делаем чистку данных и trace
 		if (defined('YII_DEBUG') && YII_DEBUG) {
@@ -2034,8 +2162,11 @@ class AdminKreddyApiComponent
 			Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aTraceData));
 		}
 
-
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
+		if (isset($aRequest['files'])) {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+		} else {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
+		}
 
 		$response = curl_exec($ch);
 

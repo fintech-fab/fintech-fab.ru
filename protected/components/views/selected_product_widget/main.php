@@ -13,6 +13,7 @@
 		<li>Период действия Пакета с даты подключения -
 			<span class="cost price_month"><?= ""; //Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
 		</li>
+		<div id="scrollAnchor"></div>
 		<li>Размер первого займа -
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
 		</li>
