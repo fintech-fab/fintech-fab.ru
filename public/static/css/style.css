@@ -536,3 +536,33 @@ slider style
 .input-append {
 	width: 250px;
 }
+
+#formBody span.help-inline.error {
+	display: none;
+}
+
+#formBody label.checkbox span.help-inline.error {
+	display: block;
+}
+
+@media (max-width: 1150px) {
+	.popover {
+		max-width: 170px;
+	}
+}
+
+@media (min-width: 1150px) and (max-width: 1200px) {
+	.popover {
+		max-width: 220px;
+	}
+}
+
+.popover-info {
+	color: black;
+	font-size: 9pt;
+}
+
+p.popover-label {
+	text-align: right;
+	font-weight: bold;
+}

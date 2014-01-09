@@ -7,6 +7,9 @@
  */
 class UserIdentity extends CUserIdentity
 {
+	const ERROR_TRIES_EXCEED = 3;
+	const ERROR_MESSAGE_TRIES_EXCEED = 'Количество попыток входа в личный кабинет исчерпано. Попробуйте позже.';
+
 	/**
 	 * Authenticates a user.
 	 * The example implementation makes sure if the username and password
@@ -18,6 +21,17 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{
+		//проверяем, не исчерпаны ли попытки авторизации
+		if (!AntiBotComponent::isCanLoginRequest()) {
+			$this->errorCode = self::ERROR_TRIES_EXCEED;
+			$this->errorMessage = self::ERROR_MESSAGE_TRIES_EXCEED;
+
+			return !$this->errorCode;
+		}
+
+		//добавляем в лог запись о еще одном запросе на авторизацию
+		AntiBotComponent::addLoginRequest();
+
 		//если username - имя админа, то логинимся своими средствами
 		if ($this->username === Yii::app()->params['adminName']) {
 			$users = array(

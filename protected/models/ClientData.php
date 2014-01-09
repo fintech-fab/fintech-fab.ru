@@ -16,6 +16,7 @@
  * @property string  $third_name
  * @property integer $sex
  * @property string  $birthday
+ * @property string  $birthplace
  * @property string  $email
  * @property string  $passport_series
  * @property string  $passport_number
@@ -259,9 +260,9 @@ class ClientData extends CActiveRecord
 	 */
 	protected function afterFind()
 	{
-		$sDateFormatInBase = "d.m.Y";
-		$this->birthday = date($sDateFormatInBase, strtotime($this->birthday));
-		$this->passport_date = date($sDateFormatInBase, strtotime($this->passport_date));
+		$sDateFormat = "d.m.Y";
+		$this->birthday = date($sDateFormat, strtotime($this->birthday));
+		$this->passport_date = date($sDateFormat, strtotime($this->passport_date));
 	}
 
 	/**
@@ -292,6 +293,7 @@ class ClientData extends CActiveRecord
 			'third_name'          => 'Third Name',
 			'sex'                 => 'Sex',
 			'birthday'            => 'Birthday',
+			'birthplace' => 'Birthday',
 			'email'               => 'Email',
 			'passport_series'     => 'Passport Series',
 			'passport_number'     => 'Passport Number',
@@ -355,6 +357,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('third_name', $this->third_name, true);
 		$criteria->compare('sex', $this->sex);
 		$criteria->compare('birthday', $this->birthday, true);
+		$criteria->compare('birthplace', $this->birthday, true);
 		$criteria->compare('email', $this->email, true);
 		$criteria->compare('passport_series', $this->passport_series, true);
 		$criteria->compare('passport_number', $this->passport_number, true);

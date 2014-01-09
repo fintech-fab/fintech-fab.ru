@@ -30,6 +30,7 @@ class SiteParams
 	const U_ACTION_TYPE_BLOCK_FORM = 8;
 	const U_ACTION_TYPE_BLOCK_SMS = 9;
 	const U_ACTION_TYPE_CARD_VERIFY = 101;
+	const U_ACTION_TYPE_LOGIN = 10;
 
 	/**
 	 * Время проверки для антибота, в минутах
@@ -41,6 +42,12 @@ class SiteParams
 	const ANTIBOT_FORM_TIME_SHORT = 10; //время проверки для короткого периода
 	const ANTIBOT_FORM_TIME_LONG = 60; //время проверки длинного периода
 	const ANTIBOT_FORM_TIME_BLOCK = 1440; //время блока
+
+	/**
+	 * Настройка логина для антибота
+	 */
+	const ANTIBOT_LOGIN_TIME = 60; //время проверки длинного периода
+	const ANTIBOT_LOGINT_COUNT = 10;
 
 	/**
 	 * Время и число попыток для привязки карты
@@ -77,17 +84,17 @@ class SiteParams
 	public static $iTimeNow = null;
 
 	public static $aMainBreadCrumbs = array(
-		array('Выбор пакета', 1),
-		array('Заявка на займ', 2),
-		array('Подтверждение номера телефона', 3),
-		array('Идентификация', 4)
+		array('Выбор пакета', 1, 1),
+		array('Заявка на займ', 3, 2),
+		array('Подтверждение номера телефона', 8, 3),
+		array('Идентификация', 9, 4)
 	);
 
 	public static $aIvanovoBreadCrumbs = array(
-		array('Выбор займа', 1),
-		array('Заявка на займ', 2),
-		array('Подтверждение номера телефона', 3),
-		array('Идентификация', 4)
+		array('Выбор займа', 1, 1),
+		array('Заявка на займ', 2, 2),
+		array('Подтверждение номера телефона', 7, 3),
+		array('Идентификация', 8, 4)
 	);
 
 	/**
@@ -188,29 +195,6 @@ class SiteParams
 		45,
 	);
 
-	public static $aFormWidgetSteps = array(
-		1 => array(
-			'label' => 'Личные данные',
-			'url' => '/form/ajaxForm/3'
-		),
-		2 => array(
-			'label' => 'Паспортные данные',
-			'url' => '/form/ajaxForm/4'
-		),
-		3 => array(
-			'label' => 'Постоянная регистрация',
-			'url' => '/form/ajaxForm/5'
-		),
-		4 => array(
-			'label' => 'Дополнительно',
-			'url' => '/form/ajaxForm/6'
-		),
-		5 => array(
-			'label' => 'Отправка заявки',
-			'url' => '/form/ajaxForm/7'
-		),
-	);
-
 	/**
 	 * @param ClientCreateFormAbstract $oClientCreateForm
 	 * @param                          $sAttrName
@@ -222,6 +206,7 @@ class SiteParams
 		$aHtmlOptions = array();
 
 		$aHintsHtmlOptions = $oClientCreateForm->getHints();
+		$sLabel = $oClientCreateForm->getAttributeLabel($sAttrName);
 
 		if (array_key_exists($sAttrName, $aHintsHtmlOptions)) {
 			$sInfo = $aHintsHtmlOptions[$sAttrName];
@@ -231,7 +216,7 @@ class SiteParams
 				'data-html'      => 'true',
 				'data-trigger'   => 'hover',
 				'data-placement' => 'top',
-				'data-content'   => '<span style="color: black;">' . $sInfo . '</span>',
+				'data-content'   => '<span class="popover-info">' . $sInfo . '</span>',
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
 			), '', true);
@@ -239,14 +224,44 @@ class SiteParams
 			$aHtmlOptions = array(
 				'append'         => $sInfoTag,
 				'data-trigger'   => 'focus',
-				'data-placement' => 'top',
-				'data-content'   => $sInfo,
+				'data-placement' => 'left',
+				'data-html'      => 'true',
+				'data-content'   => '<span class="popover-info"><p class="popover-label">' . $sLabel . '</p>' . $sInfo . '</span>',
 				'data-toggle'    => 'popover',
 				'data-container' => 'false'
 			);
 		}
 
 		return $aHtmlOptions;
+	}
+
+	/**
+	 * @param ClientCreateFormAbstract $oClientForm
+	 *
+	 * @return array
+	 */
+	public static function  getSecondDocumentPopoversLabel(ClientCreateFormAbstract $oClientForm)
+	{
+		$aErrors = Dictionaries::$aDocumentsPopovers;
+		foreach ($aErrors as &$sError) {
+			$sError = '<span class=\'popover-info\'><p class=\'popover-label\'>' . $oClientForm->getAttributeLabel('document_number') . '</p>' . $sError . '</span>';
+		}
+
+		return $aErrors;
+	}
+
+	/**
+	 *
+	 * @return array
+	 */
+	public static function  getSecondDocumentPopovers()
+	{
+		$aErrors = Dictionaries::$aDocumentsPopovers;
+		foreach ($aErrors as &$sError) {
+			$sError = '<span class=\'popover-info\'>' . $sError . '</span>';
+		}
+
+		return $aErrors;
 	}
 
 	/**

@@ -2,7 +2,8 @@ body {
 	margin: 0;
 	padding: 0;
 	color: #333;
-	font: normal 10pt "Helvetica Neue", Helvetica, Arial, sans-serif;
+	/*font: normal 10pt "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+	font: normal 10pt Trebuchet MS, sans-serif;
 	background: #EFEFEF;
 }
 
@@ -55,7 +56,7 @@ body {
 }
 
 #mainmenu ul li a {
-	font: bold 12px Arial;
+	font: bold 12px;
 	color: #0066A4;
 	background-color: transparent;
 	font-weight: bold;
@@ -182,7 +183,7 @@ div.search-form {
 }
 
 .operations li a {
-	font: bold 12px Arial;
+	font: bold 12px;
 	color: #0066A4;
 	display: block;
 	padding: 2px 0 2px 8px;
@@ -206,7 +207,7 @@ div.search-form {
 /* todo убрать после НГ */
 #form_selected_product, #form_selected_product_ivanovo {
 	margin: 10px 0 15px -20px;
-	padding: 15px 0 40px 35px;
+	padding: 0px 0 10px 35px;
 	border: 1px solid #ddd;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -215,7 +216,6 @@ div.search-form {
 
 /* todo убрать после НГ */
 #ClientSelectProductForm {
-	background: url('../images/nw_year_stars.jpg');
 	padding-top: 15px;
 }
 
@@ -224,8 +224,26 @@ div.search-form {
 	padding-top: 15px;
 }
 
+#form_selected_product #ClientSelectProductForm, #form_selected_product_ivanovo #ClientSelectProductForm {
+	background: transparent !important;
+	padding-top: 0 !important;
+}
+
+#form_selected_product {
+	padding-top: 15px;
+}
+
 /* todo убрать после НГ */
 #form_selected_product #ClientSelectProductForm, #form_selected_product_ivanovo #ClientSelectProductForm {
 	background: transparent !important;
 	padding-top: 0 !important;
+}
+
+#main-content {
+	position: relative;
+}
+
+/* todo убрать после НГ */
+#new_year_stars {
+	background: url('../images/nw_year_stars.jpg');
 }

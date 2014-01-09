@@ -167,8 +167,11 @@ class FormController extends Controller
 		} elseif ($sSubView) {
 			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
 			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.min.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.maskedinput.min.js'] = false;
 			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
+			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
 
 			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
 		}
@@ -258,11 +261,11 @@ class FormController extends Controller
 
 		// если были ошибки при отправке, то добавляем в сессию сообщение об ошибке
 		if ($oAnswer !== true) {
-
-			$aView = Yii::app()->clientForm->getCheckSmsView();
+			$aView = Yii::app()->clientForm->getView();
 			$sView = $aView['view'];
-			$sSubView = isset($aView['error']) ? $aView['error'] : $aView['sub_view'];
+			$sSubView = $aView['sub_view'];
 
+			//устанавливаем в сессию ошибку, для вывода в представлении
 			Yii::app()->session['error'] = $oAnswer;
 
 			$this->render($sView, array(
@@ -299,8 +302,8 @@ class FormController extends Controller
 			$oClientSmsForm->addError('sms_code', $mAnswer);
 
 
-			//получаев view для проверки смс-кода
-			$aView = Yii::app()->clientForm->getCheckSmsView();
+			//получаем view для проверки смс-кода
+			$aView = Yii::app()->clientForm->getView();
 			$sView = $aView['view'];
 			$sSubView = $aView['sub_view'];
 
@@ -308,6 +311,10 @@ class FormController extends Controller
 				'sSubView' => $sSubView,
 				'oClientCreateForm' => $oClientSmsForm,
 			));
+			//если число попыток превышено, то чистим сессию
+			if (Yii::app()->clientForm->isSmsCodeTriesExceed()) {
+				Yii::app()->clientForm->clearClientSession();
+			}
 			Yii::app()->end();
 		} else {
 			//если код верный, то берем данные из БД
@@ -343,7 +350,7 @@ class FormController extends Controller
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'Ошибка! Проверьте правильность введенных данных.';
 				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
-				$this->actionStep(2); //переходим на шаг 2 - анкета пользователя
+				$this->actionStep(1); //переходим на шаг 1
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));

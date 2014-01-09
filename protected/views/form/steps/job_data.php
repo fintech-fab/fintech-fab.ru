@@ -22,13 +22,15 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 Yii::app()->clientScript->registerScript('ajaxForm', '
 		updateAjaxForm();
 		');
-
+Yii::app()->clientScript->registerScript('scrollAndFocus', '
+		scrollAndFocus();
+		', CClientScript::POS_LOAD);
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
 <?php
-$this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidgetSteps, 'iCurrentStep' => (Yii::app()->clientForm->getCurrentStep() - 1)));
+$this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm->getFormWidgetSteps(), 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
 <h4 id="jobInfoHeading">Дополнительная информация</h4>
 <div class="row">
@@ -76,22 +78,21 @@ $this->widget('FormProgressBarWidget', array('aSteps' => SiteParams::$aFormWidge
 	</div>
 </div>
 <div class="clearfix"></div>
-<div class="row span10">
-	<div class="form-actions">
-		<div class="row">
-			<div class="span2">
-				<?php $this->widget('bootstrap.widgets.TbButton', array(
-					'id'          => 'backButton',
-					'buttonType'  => 'ajaxButton',
-					'ajaxOptions' => array(
-						'update' => '#formBody',
-					),
-					'url'         => Yii::app()
-							->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
-					'label' => SiteParams::C_BUTTON_LABEL_BACK,
-				)); ?>
-			</div>
-
+<div class="span12">
+	<div class="form-actions row">
+		<div class="span2">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'id'          => 'backButton',
+				'buttonType'  => 'ajaxButton',
+				'ajaxOptions' => array(
+					'update' => '#formBody',
+				),
+				'url'         => Yii::app()
+						->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+				'label'       => SiteParams::C_BUTTON_LABEL_BACK,
+			)); ?>
+		</div>
+		<div class="span2 offset2">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',

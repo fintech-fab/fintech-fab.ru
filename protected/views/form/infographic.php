@@ -25,23 +25,23 @@ $this->pageTitle = Yii::app()->name;
 </div>
 
 <div class="clearfix"></div>
-<div class="row span10">
+<div class="span12">
 	<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'     => 'nextForm',
+		'type' => 'horizontal',
 		'action' => Yii::app()->createUrl('/form/'),
 	)); ?>
 
-	<div class="form-actions">
-		<div class="row">
-			<div class="span2">
-				<?php $this->widget('bootstrap.widgets.TbButton', array(
-					'id'    => 'backButton',
-					'url'   => Yii::app()
-							->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
-					'label' => SiteParams::C_BUTTON_LABEL_BACK,
-				)); ?>
-			</div>
-
+	<div class="form-actions row">
+		<div class="span2">
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'id'    => 'backButton',
+				'url'   => Yii::app()
+						->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
+				'label' => SiteParams::C_BUTTON_LABEL_BACK,
+			)); ?>
+		</div>
+		<div class="span2 offset2">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'         => 'nextButton',
 				'buttonType' => 'submit',

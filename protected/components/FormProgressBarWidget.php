@@ -7,6 +7,7 @@ class FormProgressBarWidget extends CWidget
 {
 	public $aSteps;
 	public $iCurrentStep;
+	private $fPercent;
 
 	public function run()
 	{
@@ -23,9 +24,9 @@ class FormProgressBarWidget extends CWidget
 		echo '<div id="progressBar">';
 		$iSteps = sizeof($this->aSteps);
 		if ($iSteps > 0) {
-			$fPercent = 100 / $iSteps;
-			$iPercent = (int)$fPercent;
-			$iProgress = (int)($this->iCurrentStep * $fPercent) - 18;
+			$this->fPercent = 100 / $iSteps;
+			$iPercent = (int)$this->fPercent;
+			$iProgress = $this->getProgress();
 			echo '<div class="row" style="margin-right: 20px;">';
 
 			foreach ($this->aSteps as $iKey => $aStep) {
@@ -62,6 +63,21 @@ class FormProgressBarWidget extends CWidget
 			echo '</div>';
 			echo '</div>';
 		}
+	}
+
+	/**
+	 * @return int
+	 */
+	private function getProgress()
+	{
+		$iProgress = (int)($this->getWidgetStep() * $this->fPercent) - 18;
+
+		return $iProgress;
+	}
+
+	private function getWidgetStep()
+	{
+		return $this->aSteps[$this->iCurrentStep]['form_step'];
 	}
 }
 

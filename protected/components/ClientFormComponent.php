@@ -28,11 +28,11 @@ class ClientFormComponent
 	 */
 	public static $aSelectProductSettings = array(
 		self::SITE1 => array(
-			'view'       => 'main',
+			'view'  => 'main',
 			'model' => 'ClientSelectProductForm',
 		),
 		self::SITE2 => array(
-			'view'       => 'flexible',
+			'view'  => 'flexible',
 			'model' => 'ClientFlexibleProductForm',
 		),
 	);
@@ -53,11 +53,68 @@ class ClientFormComponent
 			'default' => 0,
 		),
 		self::SITE2 => array(
-			'max'     => 7,
+			'max' => 6,
 			'min'     => 0,
 			'default' => 0,
 		),
 
+	);
+
+	public static $aFormWidgetSteps = array(
+		self::SITE1 => array(
+			2 => array(
+				'form_step' => 1,
+				'label'     => 'Личные данные',
+				'url'       => '/form/ajaxForm/3'
+			),
+			3 => array(
+				'form_step' => 2,
+				'label'     => 'Паспортные данные',
+				'url'       => '/form/ajaxForm/4'
+			),
+			4 => array(
+				'form_step' => 3,
+				'label'     => 'Постоянная регистрация',
+				'url'       => '/form/ajaxForm/5'
+			),
+			5 => array(
+				'form_step' => 4,
+				'label'     => 'Дополнительно',
+				'url'       => '/form/ajaxForm/6'
+			),
+			6 => array(
+				'form_step' => 5,
+				'label'     => 'Отправка заявки',
+				'url'       => '/form/ajaxForm/7'
+			),
+		),
+		self::SITE2 => array(
+			1 => array(
+				'form_step' => 1,
+				'label'     => 'Личные данные',
+				'url'       => '/form/ajaxForm/2'
+			),
+			2 => array(
+				'form_step' => 2,
+				'label'     => 'Паспортные данные',
+				'url'       => '/form/ajaxForm/3'
+			),
+			3 => array(
+				'form_step' => 3,
+				'label'     => 'Постоянная регистрация',
+				'url'       => '/form/ajaxForm/4'
+			),
+			4 => array(
+				'form_step' => 4,
+				'label'     => 'Дополнительно',
+				'url'       => '/form/ajaxForm/5'
+			),
+			5 => array(
+				'form_step' => 5,
+				'label'     => 'Отправка заявки',
+				'url'       => '/form/ajaxForm/6'
+			),
+		)
 	);
 
 	/**
@@ -144,12 +201,15 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_code'
+					false       => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
-				'metrika_goal'     => 'sms_code',
+				'metrika_goal' => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'sms_code_check',
+					false       => 'sms_code_send',
+				)
 			),
 		),
 		self::SITE2 => array(
@@ -160,20 +220,13 @@ class ClientFormComponent
 				'metrika_goal'     => 'select_product',
 			),
 			1 => array(
-				'view'             => 'infographic',
-				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'infographic',
-				'go_next_step'     => true,
-			),
-
-			2 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/personal_data',
 				'model'            => 'ClientPersonalDataForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'personal_data',
 			),
-			3 => array(
+			2 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
@@ -183,7 +236,7 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'passport_data',
 			),
-			4 => array(
+			3 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
@@ -193,7 +246,7 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'address_data',
 			),
-			5 => array(
+			4 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/job_data',
 				'model'            => 'ClientJobDataForm',
@@ -205,23 +258,27 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'job_data',
 			),
-			6 => array(
+			5 => array(
 				'view'             => 'client_form',
 				'sub_view'         => 'steps/secret_data',
 				'model'            => 'ClientSecretDataForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'secret_data',
 			),
-			7 => array(
+			6 => array(
 				'view'             => 'client_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false   => 'confirm_phone/send_sms_code',
-					'error' => 'confirm_phone/send_sms_code_error'
+					false => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
-				'breadcrumbs_step' => 3
+				'breadcrumbs_step' => 3,
+				'metrika_goal' => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'sms_code_check',
+					false       => 'sms_code_send',
+				)
 			),
 		),
 	);
@@ -289,7 +346,6 @@ class ClientFormComponent
 
 				if (
 					$aCookieData &&
-					Cookie::compareDataInCookie('client', 'phone', $aValidFormData['phone']) &&
 					!empty($aCookieData['client_id'])
 				) {
 					$this->iClientId = $aCookieData['client_id'];
@@ -410,7 +466,6 @@ class ClientFormComponent
 
 			if (
 				$aCookieData &&
-				Cookie::compareDataInCookie('client', 'phone', $oClientForm->phone) &&
 				!empty($aCookieData['client_id']) &&
 				!is_null(ClientData::getClientDataById($aCookieData['client_id']))
 			) {
@@ -556,13 +611,12 @@ class ClientFormComponent
 	public function checkSmsCode($aPostData)
 	{
 		$iClientId = $this->getClientId();
-		$iSmsCountTries = $this->getSmsCountTries();
 
 		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
 		$oClientSmsForm->setAttributes($aPostData);
 
 		// если число попыток ввода кода меньше максимально допустимых
-		if ($iSmsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
+		if (!$this->isSmsCodeTriesExceed()) {
 			// если введённые данные валидны и совпадают с кодом из базы
 			if ($oClientSmsForm->validate()
 				&& ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $iClientId)
@@ -574,14 +628,13 @@ class ClientFormComponent
 				// успешная проверка
 				return true;
 			} else {
+				$iSmsCountTries = $this->getSmsCountTries();
 				$iSmsCountTries += 1;
 				$this->setSmsCountTries($iSmsCountTries);
 
 				// если это была последняя попытка
 				if ($iSmsCountTries == SiteParams::MAX_SMSCODE_TRIES) {
 					// возвращаем сообщение о превышении числа попыток
-					$this->clearClientSession();
-
 					return Dictionaries::C_ERR_SMS_TRIES;
 				} else {
 					// выводим сообщение - код неверен + сколько осталось попыток
@@ -592,10 +645,22 @@ class ClientFormComponent
 			}
 		} else {
 			// возвращаем сообщение о превышении числа попыток
-			$this->clearClientSession();
-
 			return Dictionaries::C_ERR_SMS_TRIES;
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSmsCodeTriesExceed()
+	{
+		$iSmsCountTries = $this->getSmsCountTries();
+
+		if ($iSmsCountTries < SiteParams::MAX_SMSCODE_TRIES) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -620,11 +685,21 @@ class ClientFormComponent
 		$this->setDoneSteps($iDefaultStep);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getMetrikaGoalByStep()
 	{
 		$sSite = self::getSite();
 
-		$sGoal = self::$aStepsInfo[$sSite][$this->iCurrentStep]['metrika_goal'];
+		$mGoal = self::$aStepsInfo[$sSite][$this->iCurrentStep]['metrika_goal'];
+
+		if (is_array($mGoal) && isset($mGoal['condition'])) {
+			$bCondition = $this->$mGoal['condition']();
+			$sGoal = $mGoal[$bCondition];
+		} else {
+			$sGoal = $mGoal;
+		}
 
 		return $sGoal;
 	}
@@ -715,8 +790,6 @@ class ClientFormComponent
 		/**
 		 * * @var ClientCreateFormAbstract $oModel
 		 */
-
-		//todo: учесть, что могут быть статические страницы (инфографика)
 
 		$sSite = self::getSite();
 
@@ -1065,19 +1138,18 @@ class ClientFormComponent
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['tmp_client_id'] = null;
 
-		//TODO для чистки брать все имена форм из массива конфигурации
-		//чистим данные форм
-		Yii::app()->session['ClientSelectProductForm'] = null;
-		Yii::app()->session['ClientSelectChannelForm'] = null;
-		Yii::app()->session['ClientPersonalDataForm'] = null;
-		Yii::app()->session['ClientAddressForm'] = null;
-		Yii::app()->session['ClientJobInfoForm'] = null;
-		Yii::app()->session['ClientSendForm'] = null;
-		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = null;
+		$sSite = $this->getSite();
 
-		Yii::app()->session['ClientSelectProductForm'] = null;
-		Yii::app()->session['ClientFlexibleProductForm'] = null;
-		Yii::app()->session['ClientFullForm'] = null;
+		//чистим данные форм
+		foreach (self::$aStepsInfo[$sSite] as $aStep) {
+			if (isset($aStep['model'])) {
+				Yii::app()->session[$aStep['model']] = null;
+			}
+		}
+
+		//удаляем данные из куки
+		$aCookieData = array('client_id' => null, 'phone' => null);
+		Cookie::saveDataToCookie('client', $aCookieData);
 	}
 
 
@@ -1196,23 +1268,8 @@ class ClientFormComponent
 
 	}
 
-	/**
-	 * @return array|null
-	 */
-	public function getCheckSmsView()
+	public function getFormWidgetSteps()
 	{
-		$sSite = $this->getSite();
-
-		$mErrorView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']))
-			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']['error']
-			: null;
-
-
-		$aView = $this->getView();
-
-		$aView['error'] = $mErrorView;
-
-		return $aView;
+		return self::$aFormWidgetSteps[$this->getSite()];
 	}
-
 }

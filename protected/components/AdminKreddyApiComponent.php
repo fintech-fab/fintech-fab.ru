@@ -148,6 +148,8 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
+	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
+	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -165,6 +167,16 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
+
+
+	/**
+	 * Переменные для тестирования API идентификации, требуются для выполнения тестов.
+	 * логин и пароль должны соответствовать заданным в IdentifyModuleTest
+	 *
+	 */
+	private $testLogin = '9631321654';
+	private $testPassword = 'Aa123456';
+	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';
 
 	/**
 	 * @return string
@@ -316,6 +328,96 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * * Метод для получения авторизации и токена для API идентификации
+	 *
+	 * @param      $sPhone
+	 * @param      $sPassword
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return null|string
+	 */
+	public function getIdentifyApiAuth($sPhone, $sPassword, $bTest = false)
+	{
+		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
+
+		if ($bTest && $this->testLogin == $sPhone && $this->testPassword == $sPassword) {
+			return $this->testToken;
+		}
+
+		//проверяем, не исчерпаны ли попытки авторизации
+		if (!AntiBotComponent::isCanLoginRequest()) {
+			return null;
+		}
+
+		//добавляем в лог запись о еще одном запросе на авторизацию
+		AntiBotComponent::addLoginRequest();
+
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
+		if ($aTokenData['code'] === self::ERROR_NONE) {
+
+			return $aTokenData['token'];
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param      $oCurlFile
+	 * @param      $sDocumentType
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return bool
+	 */
+	public function uploadDocument($oCurlFile, $sDocumentType, $sToken, $bTest = false)
+	{
+		$aRequest = array(
+			'token' => $sToken, 'type' => $sDocumentType,
+			'files' => $oCurlFile,
+		);
+
+		if ($bTest && $sToken == $this->testToken) {
+			return true;
+		}
+
+		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_UPLOAD_DOCUMENT, $aRequest);
+		if ($aResponse['code'] === self::ERROR_NONE) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return bool
+	 */
+	public function setFinishedVideoId($sToken, $bTest = false)
+	{
+		if ($bTest && $sToken == $this->testToken) {
+			return true;
+		}
+
+		$aRequest = array(
+			'token' => $sToken,
+		);
+
+		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_SET_IDENTIFICATION_FINISHED, $aRequest);
+		if ($aResponse['code'] === self::ERROR_NONE) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 *
 	 * @param $aClientData
 	 *
@@ -323,6 +425,10 @@ class AdminKreddyApiComponent
 	 */
 	public function createClient($aClientData)
 	{
+		$sDateFormatInBase = "Y-m-d";
+		$aClientData['birthday'] = date($sDateFormatInBase, strtotime($aClientData['birthday']));
+		$aClientData['passport_date'] = date($sDateFormatInBase, strtotime($aClientData['passport_date']));
+
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
@@ -364,6 +470,32 @@ class AdminKreddyApiComponent
 		$this->token = null;
 
 		return false;
+	}
+
+	/**
+	 * Метод для обновления токена для API идентификации
+	 *
+	 * @param      $sToken
+	 *
+	 * @param bool $bTest
+	 *
+	 * @return null
+	 */
+	public function updateIdentifyApiToken($sToken, $bTest = false)
+	{
+		$aRequest = array('token' => $sToken);
+
+		if ($bTest && $sToken == $this->testToken) {
+			return $this->testToken;
+		}
+
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_UPDATE, $aRequest);
+
+		if ($aTokenData['code'] == self::ERROR_NONE) {
+			return $aTokenData['token'];
+		}
+
+		return null;
 	}
 
 	/**
@@ -498,22 +630,22 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'          => self::ERROR_AUTH,
-			'client_data'   => array(
+			'code'             => self::ERROR_AUTH,
+			'client_data'      => array(
 				'is_debt'    => false,
 				'fullname'   => '',
 				'client_new' => false
 			),
-			'status'        => array(
+			'status'           => array(
 				'name' => false,
 			),
-			'active_loan'   => array(
+			'active_loan'      => array(
 				'channel_id' => false,
 				'balance'    => 0,
 				'expired'    => false,
 				'expired_to' => false
 			),
-			'subscription'  => array(
+			'subscription'     => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -525,15 +657,15 @@ class AdminKreddyApiComponent
 					'loan_lifetime' => false,
 				),
 			),
-			'moratoriums'   => array(
+			'moratoriums'      => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'      => array(),
-			'slow_channels' => array(),
+			'channels'         => array(),
+			'slow_channels'    => array(),
 			'bank_card_exists' => false,
-			'bank_card_pan' => false,
+			'bank_card_pan'    => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -2037,7 +2169,7 @@ class AdminKreddyApiComponent
 			$iEntryPoint = 1;
 		}
 
-		$aRequest = array_merge($aRequest, array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint));
+		$aRequest = array_merge(array('token' => $this->getSessionToken(), 'entry_point' => $iEntryPoint), $aRequest);
 
 		//если включен debug то делаем чистку данных и trace
 		if (defined('YII_DEBUG') && YII_DEBUG) {
@@ -2053,8 +2185,11 @@ class AdminKreddyApiComponent
 			Yii::trace("Action: " . $sAction . " - Request: " . CJSON::encode($aTraceData));
 		}
 
-
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
+		if (isset($aRequest['files'])) {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $aRequest);
+		} else {
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($aRequest));
+		}
 
 		$response = curl_exec($ch);
 
@@ -2813,7 +2948,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return bool
+	 * @return bool|string
 	 */
 	public function getResetPassPhone()
 	{

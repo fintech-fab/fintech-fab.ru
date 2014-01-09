@@ -190,7 +190,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 		$sNumber = $this->owner->$param['chosenDocument'];
 		$bIsError = !(preg_match(Dictionaries::$aDocumentsRegexps[$sNumber], $this->owner->$attribute) > 0);
-		$sError = $bIsError ? Dictionaries::$aDocumentsErrors[$sNumber] : "";
+		$sError = $bIsError ? Dictionaries::$aDocumentsPopovers[$sNumber] : "";
 
 		if (!empty($sError)) {
 			$this->owner->addError($attribute, $sError);

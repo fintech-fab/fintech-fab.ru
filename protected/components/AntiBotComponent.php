@@ -12,6 +12,39 @@ class AntiBotComponent
 
 	}
 
+
+	/**
+	 * @return bool
+	 */
+	public static function isCanLoginRequest()
+	{
+		if (self::ipInExceptions()) {
+			return true;
+		}
+
+		$sIP = self::getUserIP();
+		$iType = SiteParams::U_ACTION_TYPE_LOGIN;
+		$iTime = SiteParams::ANTIBOT_LOGIN_TIME;
+		$iLoginCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iType, $iTime);
+		if ($iLoginCount > SiteParams::ANTIBOT_LOGINT_COUNT) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Добавление в лог еще 1 попытку логина
+	 */
+	public static function addLoginRequest()
+	{
+		$sIP = self::getUserIP();
+		if (self::checkSmsRequest()) {
+			UserActionsLog::addNewAction($sIP, SiteParams::U_ACTION_TYPE_LOGIN);
+		}
+	}
+
+
 	/**
 	 * Проверка, можно ли сделать еще 1 запрос кода по SMS
 	 *
@@ -210,7 +243,7 @@ class AntiBotComponent
 	 */
 	private static function ipInExceptions()
 	{
-		$aIpExceptions = array('46.38.98.106', '46.38.98.107', '46.38.98.108', '192.168.10.136', '192.168.10.160');
+		$aIpExceptions = array('46.38.98.106', '46.38.98.107', '46.38.98.108', '192.168.10.136', '192.168.10.160', '127.0.0.1', '192.168.10.44');
 		if (in_array(self::getUserIP(), $aIpExceptions)) {
 			return true;
 		}
