@@ -2044,7 +2044,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string|bool
 	 */
-	public function getSubscribeSelectedProductId()
+	public function getSubscribeSelectedProductId() //TODO убрать
 	{
 		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
 
@@ -2064,6 +2064,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscribeSelectedChannelId()
 	{
+		//TODO изменить getSubscribeSelectedChannel
 		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
 
 		if (count($aProduct) === 2) {
