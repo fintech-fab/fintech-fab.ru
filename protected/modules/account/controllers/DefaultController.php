@@ -929,6 +929,10 @@ class DefaultController extends Controller
 		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('product' => $iProduct . '_' . $iChannelId);
+			/** TODO
+			 * product = $iProduct,
+			 * channel = $iChannel
+			 */
 		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
@@ -955,7 +959,10 @@ class DefaultController extends Controller
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
 			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
 			if (Yii::app()->request->getIsPostRequest()) {
-				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
+				//$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
+				//TODO $aPost = session['product']
+				$aPost = array();
+				//TODO $aPost['channel']=getPost('channel')
 			} else {
 				$aPost = $aData;
 			}
@@ -973,6 +980,7 @@ class DefaultController extends Controller
 					$sView = 'flex_subscription/do_subscribe';
 				} else {
 					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+					//TODO channel
 					$sView = 'subscription/do_subscribe';
 				}
 
@@ -1050,8 +1058,8 @@ class DefaultController extends Controller
 		if ($oForm->validate()) {
 			//если точка входа не ivanovo.kreddy.ru
 			if (!SiteParams::getIsIvanovoSite()) {
-				$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId();
-				$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId();
+				$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId(); //TODO getSubscribeSelectedProduct без Id
+				$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId(); //TODO см. выше
 				$iAmount = false;
 				$iTime = false;
 			} else {

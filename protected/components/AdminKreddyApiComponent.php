@@ -167,6 +167,7 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
+	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
 
 
 	/**
@@ -2070,7 +2071,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string|bool
 	 */
-	public function getSubscribeSelectedProductId()
+	public function getSubscribeSelectedProductId() //TODO убрать
 	{
 		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
 
@@ -2090,6 +2091,7 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscribeSelectedChannelId()
 	{
+		//TODO изменить getSubscribeSelectedChannel
 		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
 
 		if (count($aProduct) === 2) {

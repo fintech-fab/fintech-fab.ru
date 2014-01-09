@@ -6,6 +6,7 @@
 class ClientSubscribeForm extends ClientCreateFormAbstract
 {
 	public $product;
+	public $channel; //TODO channel
 
 	/**
 	 * @return array
@@ -14,6 +15,7 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 	{
 		$aRules = array(
 			array('product', 'required', 'message' => 'Для оформления Пакета займов требуется выбрать продукт'),
+			//TODO channel
 			array('product', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsAndChannelsList()), 'message' => 'Для оформления Пакета займов требуется выбрать продукт'),
 		);
 
