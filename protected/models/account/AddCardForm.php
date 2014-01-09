@@ -31,7 +31,7 @@ class AddCardForm extends CFormModel
 
 			array('bConfirm', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие.'),
 
-			array(' bAgree', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие с зачислением средств на карту.'),
+			array(' bAgree', 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие с условиями зачисления средств на карту.'),
 
 			array(
 				'sCardPan', 'match', 'message' => 'Номер карты должен содержать от 16 до 18 цифр',
@@ -76,7 +76,7 @@ class AddCardForm extends CFormModel
 			'sCardHolderName' => 'Имя держателя',
 			'bConfirm'       => 'Я подтверждаю согласие на заморозку случайной суммы на указанной банковской карте.',
 			'iCardType'       => 'Тип банковской карты',
-			'bAgree'         => 'Я согласен с зачислением средств на банковскую карту.',
+			'bAgree'         => 'Я согласен с условиями зачисления средств на банковскую карту.',
 		);
 
 		if (!Yii::app()->adminKreddyApi->checkCardVerifyExists()) {

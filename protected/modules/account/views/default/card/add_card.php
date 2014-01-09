@@ -71,7 +71,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <?= $form->checkBoxRow($model, 'bConfirm'); ?>
 
-	<span id="bAgreeDiv" data-original-title='<?= AdminKreddyApiComponent::C_CARD_AGREEMENT; ?>' rel='tooltip' data-position="bottom">
+	<span id="bAgreeDiv" data-content='<?= AdminKreddyApiComponent::C_CARD_AGREEMENT; ?>' data-toggle='popover' data-trigger='hover' data-placement="top">
 		<?= $form->checkBoxRow($model, 'bAgree'); ?>
 	</span>
 
