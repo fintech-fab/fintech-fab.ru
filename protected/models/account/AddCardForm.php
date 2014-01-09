@@ -16,7 +16,7 @@ class AddCardForm extends CFormModel
 	public $sCardCvc;
 	public $bConfirm;
 	public $iCardType;
-	public $bAgree; // Я согласен с зачислением средств на банковскую карту.
+	public $bAgree; // Я согласен с усовиями зачисления средств на банковскую карту.
 
 	public $sCardValidThru; // срок окончания: формат 09 / 15, из него потом берётся $sCardMonth, $sCardYear
 
