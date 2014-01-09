@@ -8,10 +8,10 @@
 		<?= $this->sLeftTimeMessage ?><span id="sessionLeftTime"></span>
 	</span>
 <script>
-	var leftTime, iSecondsLeft, iMinutesLeft, iLiveTimeMinutes;
+	var iSessionLeftTime, iSecondsLeft, iMinutesLeft, iLiveTimeMinutes;
 
 	function showUntilSessionEnd() {
-		iSecondsLeft = Math.floor((leftTime - (new Date())) / 1000);
+		iSecondsLeft = Math.floor((iSessionLeftTime - (new Date())) / 1000);
 		if (iSecondsLeft < 0) {
 			setTimeout(function () {
 				jQuery("#sessionLeftTimeText").html('<?= $this->sExpiredMessage; ?>'); // задержка 10 сек
@@ -29,7 +29,7 @@
 	}
 
 	iLiveTimeMinutes = <?= $this->iLiveTimeMinutes; ?>;
-	leftTime = new Date();
-	leftTime.setTime(leftTime.getTime() + iLiveTimeMinutes * 60 * 1000);
+	iSessionLeftTime = new Date();
+	iSessionLeftTime.setTime(iSessionLeftTime.getTime() + iLiveTimeMinutes * 60 * 1000);
 	showUntilSessionEnd();
 </script>
