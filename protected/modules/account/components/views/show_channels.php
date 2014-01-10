@@ -38,7 +38,7 @@
 		<img src="/static/images/channels/<?= $aImageNames[ShowChannelsWidget::C_MOBILE] ?>" style="height:100px;">
 		&nbsp;
 
-		<?= $this->getAvailableChannelSubmitButton('на мобильный телефон', $aChannelsIfAvailable[ShowChannelsWidget::C_CARD], ShowChannelsWidget::MSG_CONFIRM_CHANNEL_PHONE); ?>
+		<?= $this->getAvailableChannelSubmitButton('на мобильный телефон', $aChannelsIfAvailable[ShowChannelsWidget::C_MOBILE], ShowChannelsWidget::MSG_CONFIRM_CHANNEL_PHONE); ?>
 	</div>
 
 <?php endif; ?>
