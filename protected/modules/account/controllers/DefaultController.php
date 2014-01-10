@@ -802,74 +802,25 @@ class DefaultController extends Controller
 
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/selectChannel'));
 
-		// todo реализовать дальше....
-
-		//получаем сохраненные при регистрации данные займа (если есть)
-		//TODO возможно, делать это только если есть state new_client
-		$iProduct = Yii::app()->user->getState('product');
-		$sChannelsId = Yii::app()->user->getState('channel_id');
-		$iFlexAmount = Yii::app()->user->getState('flex_amount');
-		$iFlexTime = Yii::app()->user->getState('flex_time');
-
-		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
-		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
-
-		//если есть сохраненные данные в getState, то их переносим в массив $aData
-		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
-			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct, 'channel' => $iChannelId);
-		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
-			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
-		} else {
-			$bIsRedirect = false;
-			$aData = array();
-		}
-
-		/* если был редирект с сохранением данных, но выбранный канал равен 0,
-		 * т.е. выбранный канал отсутствовал в списке доступных клиенту
-		 * то нужно его отправить на привязку карты, с сообщением об этом
-		 */
-		if ($bIsRedirect && $iChannelId === 0) {
-			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения.
-			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
-			  и затем вернитесь к получению займа.');
-			//TODO сменить месседж и поместить в const
-			$this->redirect('/account/addCard'); //после привязки редирект вернет клиента обратно
-		}
-
 		//выбираем нужную модель
-		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientSubscribeFlexibleProductForm() : new ClientSubscribeForm();
+		$oProductForm = new ClientSubscribeForm('productRequired');
 		//если есть POST-запрос или были данные в getState перед редиректом
-		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
-			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
-			if (Yii::app()->request->getIsPostRequest()) {
-				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
-			} else {
-				$aPost = $aData;
-			}
+		if (Yii::app()->request->getIsPostRequest()) {
+			//получаем данные из POST-запроса
+			$aPost = Yii::app()->request->getPost(get_class($oProductForm), array());
 
 			$oProductForm->setAttributes($aPost);
 
 			if ($oProductForm->validate()) {
-
 				//сохраняем в сессию выбранный продукт
-				$oForm = new SMSCodeForm('sendRequired');
-				if (SiteParams::getIsIvanovoSite()) {
-					Yii::app()->adminKreddyApi->setSubscribeFlexAmount($oProductForm->amount);
-					Yii::app()->adminKreddyApi->setSubscribeFlexTime($oProductForm->time);
-					Yii::app()->adminKreddyApi->setSubscribeFlexChannelId($oProductForm->channel_id);
-					$sView = 'flex_subscription/do_subscribe';
-				} else {
-					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
-					$sView = 'subscription/do_subscribe';
-				}
-
-				$this->render($sView, array('model' => $oForm));
+				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+				$sView = 'subscription/select_channel';
+				$this->render($sView, array('sFormName' => get_class($oProductForm)));
 				Yii::app()->end();
 			}
 		}
-		$sView = 'subscription/select_channel';
+
+		$sView = 'subscription/subscribe';
 		$this->render($sView, array('model' => $oProductForm));
 		Yii::app()->end();
 	}
@@ -924,11 +875,7 @@ class DefaultController extends Controller
 		//если есть сохраненные данные в getState, то их переносим в массив $aData
 		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct . '_' . $iChannelId);
-			/** TODO
-			 * product = $iProduct,
-			 * channel = $iChannel
-			 */
+			$aData = array('product' => $iProduct, 'channel' => $iChannelId);
 		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
@@ -942,22 +889,23 @@ class DefaultController extends Controller
 		 * то нужно его отправить на привязку карты, с сообщением об этом
 		 */
 		if ($bIsRedirect && $iChannelId === 0) {
-			Yii::app()->user->setFlash('warning', 'Вы выбрали получение денег на не доступный Вам канал получения.
-			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
-			  и затем вернитесь к получению займа.');
-			//TODO сменить месседж и поместить в const
+			Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_CARD_NOT_AVAILABLE);
 			$this->redirect('/account/addCard'); //после привязки редирект вернет клиента обратно
 		}
 
 		//выбираем нужную модель
-		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientSubscribeFlexibleProductForm() : new ClientSubscribeForm();
+		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientSubscribeFlexibleProductForm() : new ClientSubscribeForm('channelRequired');
 		//если есть POST-запрос или были данные в getState перед редиректом
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
 			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
 			if (Yii::app()->request->getIsPostRequest()) {
-				$aPost = array();
-				$aPost['channel'] = Yii::app()->request->getPost(get_class($oProductForm) . '_channel');
-				$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+				if (SiteParams::getIsIvanovoSite()) {
+					$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
+				} else {
+					$aPost = array();
+					$aPost['channel'] = Yii::app()->request->getPost(get_class($oProductForm) . '_channel');
+					$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+				}
 			} else {
 				$aPost = $aData;
 			}
@@ -1053,8 +1001,8 @@ class DefaultController extends Controller
 		if ($oForm->validate()) {
 			//если точка входа не ivanovo.kreddy.ru
 			if (!SiteParams::getIsIvanovoSite()) {
-				$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProductId(); //TODO getSubscribeSelectedProduct без Id
-				$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannelId(); //TODO см. выше
+				$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+				$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
 				$iAmount = false;
 				$iTime = false;
 			} else {

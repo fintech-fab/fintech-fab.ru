@@ -48,6 +48,10 @@ class AdminKreddyApiComponent
 	const C_SESSION_EXPIRED = 'Время Вашей сессии истекло. Просим Вас снова зайти в личный кабинет.';
 	const C_SESSION_TIME_UNTIL_EXPIRED = 'Время сессии: ';
 
+	const C_CARD_NOT_AVAILABLE = 'Вы выбрали получение денег на не доступный Вам канал получения.
+			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
+			  и затем вернитесь к получению займа.';
+
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
@@ -128,6 +132,9 @@ class AdminKreddyApiComponent
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
+
+	const C_MAX_SMS_CODE_TRIES = 3;
+	const C_MAX_PASS_SMS_CODE_TRIES = 5;
 
 	const TOKEN_MINUTES_LIVE = 10; // токен живёт 10 минут
 
@@ -740,7 +747,6 @@ class AdminKreddyApiComponent
 	 */
 	public function getChannelSpeed($iChannelId)
 	{
-		//TODO тут надо уточнять, что время обусловлено скоростью канала
 		return ($this->getIsSlowChannel($iChannelId)) ? "до 3 дней" : "несколько минут";
 	}
 
@@ -753,7 +759,6 @@ class AdminKreddyApiComponent
 	 */
 	public function getLoanChannelSpeed($iChannelId)
 	{
-		//TODO тут надо уточнять, что время обусловлено скоростью канала
 		return ($this->getIsSlowChannel($iChannelId)) ? "в течение 3 дней." : "в течение нескольких минут.";
 	}
 
@@ -1288,26 +1293,17 @@ class AdminKreddyApiComponent
 	 */
 	public function getClientProductsChannelsList()
 	{
-		$iProduct = $this->getSubscriptionProduct();
+		$iProduct = $this->getSubscribeSelectedProduct();
 
-		return $iProduct;
-		//получаем каналы, доступные клиенту по данной подписке
-		$aClientChannels = $this->getClientSubscriptionChannels();
-
-		$aClientChannelsList = array();
-
-		if (isset($aProducts['channels']) && isset($aClientChannels)) {
-			foreach ($aClientChannels as $iChannel) {
-				//если канал присутствует в списке каналов
-				//и находится в списке доступных для данной подписки каналов
-				if (isset($aProducts['channels'][$iChannel])
-				) {
-					$aClientChannelsList[$iChannel] = $aProducts['channels'][$iChannel];
-				}
-			}
+		if ($iProduct === false) {
+			return array();
 		}
 
-		return $aClientChannelsList;
+		$aProducts = $this->getProducts()[$iProduct];
+
+		$aClientProductsChannels = array_intersect(array_keys($aProducts['channels']), array_values($this->getClientChannels()));
+
+		return $aClientProductsChannels;
 	}
 
 	/**
@@ -2101,43 +2097,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Получение выбранного продукта из сессии
-	 *
-	 * @return string|bool
-	 */
-	public function getSubscribeSelectedProductId() //TODO убрать
-	{
-		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
-
-		if (count($aProduct) === 2) {
-			$iProductId = $aProduct[0];
-
-			return $iProductId;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Получение выбранного канала из сессии
-	 *
-	 * @return string|bool
-	 */
-	public function getSubscribeSelectedChannelId()
-	{
-		//TODO изменить getSubscribeSelectedChannel
-		$aProduct = explode('_', Yii::app()->session['subscribeSelectedProduct']);
-
-		if (count($aProduct) === 2) {
-			$iProductId = $aProduct[1];
-
-			return $iProductId;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Роутер запросов для получения данных
 	 * Получает запросы на данные и перенаправляет на requestAdminKreddyApi() с нужным экшном
 	 *
@@ -2760,8 +2719,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * TODO сделать константу для значения
-	 *
 	 * @return bool
 	 */
 	public function getIsSmsPassTriesExceed()
@@ -2770,7 +2727,7 @@ class AdminKreddyApiComponent
 		$this->increaseSmsPassTries();
 
 		//проверяем, не кончились ли попытки
-		return (Yii::app()->session['iSmsPassTries'] > 5);
+		return (Yii::app()->session['iSmsPassTries'] > self::C_MAX_PASS_SMS_CODE_TRIES);
 	}
 
 	public function resetSmsPassTries()
@@ -2789,8 +2746,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * TODO сделать константу для значения
-	 *
 	 * @return bool
 	 */
 	public function getIsSmsCodeTriesExceed()
@@ -2799,7 +2754,7 @@ class AdminKreddyApiComponent
 		$this->increaseSmsCodeTries();
 
 		//проверяем, не кончились ли попытки
-		return (Yii::app()->session['iSmsCodeTries'] > 3);
+		return (Yii::app()->session['iSmsCodeTries'] > self::C_MAX_SMS_CODE_TRIES);
 	}
 
 	public function resetSmsCodeTries()
