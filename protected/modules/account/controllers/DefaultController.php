@@ -1108,7 +1108,13 @@ class DefaultController extends Controller
 
 		$oLoanForm = new ClientLoanForm();
 		if (Yii::app()->request->getIsPostRequest()) {
-			$aPost = Yii::app()->request->getParam('ClientLoanForm', array());
+			if (SiteParams::getIsIvanovoSite()) {
+				$aPost = Yii::app()->request->getParam(get_class($oLoanForm), array());
+			} else {
+				$aPost = array();
+				$aPost['channel_id'] = Yii::app()->request->getPost(get_class($oLoanForm) . '_channel');
+			}
+
 			$oLoanForm->setAttributes($aPost);
 
 			if ($oLoanForm->validate()) {

@@ -1291,7 +1291,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-	public function getClientProductsChannelsList()
+	public function getSelectedProductChannelsList()
 	{
 		$iProduct = $this->getSubscribeSelectedProduct();
 

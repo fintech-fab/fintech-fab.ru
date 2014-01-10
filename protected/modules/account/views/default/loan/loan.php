@@ -8,6 +8,24 @@ $this->pageTitle = Yii::app()->name . " - Оформление займа";
 	<h4>Оформление займа</h4>
 
 <?php
+
+$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+	'id'     => 'loan-form',
+	'action' => Yii::app()->createUrl('/account/doLoan'),
+));
+
+$this->widget('application.modules.account.components.ShowChannelsWidget',
+	array(
+		'sFormName'             => get_class($model),
+		'aAllChannels'          => Yii::app()->adminKreddyApi->getProductsChannels(),
+		'aAvailableChannelKeys' => Yii::app()->adminKreddyApi->getClientSubscriptionChannels(),
+	)
+);
+
+$this->endWidget();
+
+/*
+
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'loan-form',
 	'action' => Yii::app()->createUrl('/account/doLoan'),
@@ -51,3 +69,4 @@ if (!empty($aClientProductsChannelsList)) {
 }
 
 $this->endWidget();
+*/

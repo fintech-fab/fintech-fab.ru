@@ -17,7 +17,7 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 			array('product', 'required', 'message' => 'Для подключения Пакета займов требуется выбрать продукт'),
 			array('channel', 'required', 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
 			array('product', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsList()), 'message' => 'Для подключения Пакета займов требуется выбрать продукт'),
-			array('channel', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getClientProductsChannelsList()), 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
+			array('channel', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getSelectedProductChannelsList()), 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
 		);
 
 		return $aRules;

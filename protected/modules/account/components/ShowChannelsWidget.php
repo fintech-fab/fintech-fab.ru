@@ -108,9 +108,6 @@ class ShowChannelsWidget extends CWidget
 
 	public function run()
 	{
-		$this->aAllChannels = Yii::app()->adminKreddyApi->getProductsChannels();
-		$this->aAvailableChannelKeys = Yii::app()->adminKreddyApi->getClientProductsChannelsList();
-
 		foreach ($this->aAvailableChannelKeys as $sKey) {
 			$sChannelName = $this->aAllChannels[$sKey];
 			if (preg_match(self::$aChannelsRegexps[self::C_MOBILE], $sChannelName)) {

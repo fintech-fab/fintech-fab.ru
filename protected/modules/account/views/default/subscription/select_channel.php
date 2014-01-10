@@ -14,6 +14,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/doSubscribe'),
 ));
 
-$this->widget('application.modules.account.components.ShowChannelsWidget', array('sFormName' => $sFormName));
+$this->widget('application.modules.account.components.ShowChannelsWidget', array(
+		'sFormName'             => $sFormName,
+		'aAllChannels'          => Yii::app()->adminKreddyApi->getProductsChannels(),
+		'aAvailableChannelKeys' => Yii::app()->adminKreddyApi->getSelectedProductChannelsList(),
+	)
+);
 
 $this->endWidget();
