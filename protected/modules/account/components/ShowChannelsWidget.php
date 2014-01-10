@@ -9,6 +9,11 @@ class ShowChannelsWidget extends CWidget
 
 	const MSG_CONFIRM_CHANNEL_PHONE = "Вы уверены, что хотите выбрать в качестве канала получения мобильный телефон? Изменить канал после подтверждения заявки нельзя!";
 
+	public static $aChannels = array(
+		self::C_MOBILE,
+		self::C_CARD,
+	);
+
 	/**
 	 * @var array названия каналов
 	 */
@@ -22,7 +27,7 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public static $aChannelsRegexps = array(
 		self::C_MOBILE => '/мобил/',
-		self::C_CARD   => '/карту/',
+		self::C_CARD => '/карт/',
 	);
 
 	/**
@@ -36,7 +41,7 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * @var array коды каналов, если доступны, либо false - если недоступны
 	 */
-	private $aAvailableChannelCodes = array(
+	private $aAvailableChannelValues = array(
 		self::C_CARD   => false,
 		self::C_MOBILE => false,
 	);
@@ -44,7 +49,7 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * @var array все каналы, доступные для данного пакета
 	 */
-	public $aAllChannels = array();
+	public $aAllChannelNames = array();
 
 	/**
 	 * @var array ключи каналов, доступных данному пользователю
@@ -59,21 +64,21 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * Возвращает код кнопки для недоступного канала
 	 *
-	 * @param $sLabelWhere название канала ("на банковскую карту")
+	 * @param $sChannelType
 	 *
 	 * @return string
 	 */
-	public function getNotAvailableChannelButton($sLabelWhere)
+	public function getNotAvailableChannelButton($sChannelType)
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
-				'label'       => ('Получить займ ' . $sLabelWhere),
+				'label' => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
 					'disabled' => 'disabled',
 					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
 				),
-			)
-			, true);
+			),
+			true);
 
 		return $sButton;
 	}
@@ -81,48 +86,79 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * Возвращает код кнопки "отправить", имеющей значение номера канала, для доступных каналов
 	 *
-	 * @param      $sLabelWhere
-	 * @param      $sValue
+	 * @param      $sChannelType
 	 * @param bool $mConfirm
 	 *
 	 * @return string
 	 */
-	public function getAvailableChannelSubmitButton($sLabelWhere, $sValue, $mConfirm = false)
+	public function getAvailableChannelSubmitButton($sChannelType, $mConfirm = false)
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
 				'buttonType'  => 'submit',
 				'type'        => 'primary',
-				'label'       => ('Получить займ ' . $sLabelWhere),
+				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
-					'value'   => $sValue,
-					'name'    => $this->sFormName . '_channel',
+					'value' => $this->aAvailableChannelValues[$sChannelType],
+					'name'  => $this->sFormName . '[channel]',
 					'confirm' => (!empty($mConfirm) ? $mConfirm : null),
 				),
-			)
-			, true);
+			),
+			true);
 
 		return $sButton;
 	}
 
-	public function run()
+	/**
+	 * Выводит нужную картинку
+	 *
+	 * @param $sChannelType
+	 *
+	 * @return string
+	 */
+	public function getImage($sChannelType)
 	{
-		foreach ($this->aAvailableChannelKeys as $sKey) {
-			$sChannelName = $this->aAllChannels[$sKey];
-			if (preg_match(self::$aChannelsRegexps[self::C_MOBILE], $sChannelName)) {
-				$this->aAvailableChannelCodes[self::C_MOBILE] = $sKey;
-			} elseif (preg_match(self::$aChannelsRegexps[self::C_CARD], $sChannelName)) {
-				$this->aAvailableChannelCodes[self::C_CARD] = $sKey;
+		return '<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;"> &nbsp;';
+	}
+
+	/**
+	 * Доступен ли канал Клиенту
+	 *
+	 * @param $sChannelType
+	 *
+	 * @return bool
+	 */
+	public function getIsChannelAvailable($sChannelType)
+	{
+		return ($this->aAvailableChannelValues[$sChannelType] !== false);
+	}
+
+	/**
+	 * Заполняет массив значений доступных каналов соответствующими id канала
+	 */
+	private function setAvailableChannelValues()
+	{
+		foreach (self::$aChannels as $sChannel) {
+			$sRegexp = self::$aChannelsRegexps[$sChannel];
+
+			// перебираем все доступные Клиенту каналы
+			foreach ($this->aAvailableChannelKeys as $sKey) {
+				// берём соответствующее имя из массива имён каналов
+				$sAvailableChannelName = $this->aAllChannelNames[$sKey];
+
+				if (preg_match($sRegexp, $sAvailableChannelName)) {
+					$this->aAvailableChannelValues[$sChannel] = $sKey;
+					break;
+				}
 			}
 		}
+	}
 
-		$this->render('show_channels',
-			array(
-				"aChannelsIfAvailable" => $this->aAvailableChannelCodes,
-				"aChannelNames"        => self::$aChannelNames,
-				"aImageNames"          => self::$aImageNames,
-				'sFormName'            => $this->sFormName,
-			)
-		);
+	public function run()
+	{
+		// заполняем массив значений каналов
+		$this->setAvailableChannelValues();
+
+		$this->render('show_channels');
 	}
 }

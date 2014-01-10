@@ -1,44 +1,46 @@
 <?php
 /**
- * @var $this                 ShowChannelsWidget
- * @var $aChannelsIfAvailable array
- * @var $aChannelNames        array
- * @var $aImageNames          array
+ * @var $this ShowChannelsWidget
  */
 ?>
 
 <div class="well center">
-	<img src="/static/images/channels/<?= $aImageNames[ShowChannelsWidget::C_CARD] ?>" style="height:100px;"> &nbsp;
+	<?= $this->getImage($this::C_CARD); ?>
 
-	<?php
 
-	// если карта не привязана, выводим сообщение о необходимости привязки
-	if (!Yii::app()->adminKreddyApi->getBankCardPan()
-		|| ($aChannelsIfAvailable[ShowChannelsWidget::C_CARD] === false)
-	) {
-		echo $this->getNotAvailableChannelButton('на банковскую карту');
+	<?php // если карта не привязана, выводим сообщение о необходимости привязки
+	if (!Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
 
-		echo '<br /><br />' . AdminKreddyApiComponent::C_CARD_WARNING_NO_CARD . "<br/><br/>";
+		<?= $this->getNotAvailableChannelButton($this::C_CARD); ?>
 
-		$this->widget('bootstrap.widgets.TbButton',
+		<br /><br />
+
+		<?= AdminKreddyApiComponent::C_CARD_WARNING_NO_CARD; ?>
+
+		<br /><br />
+
+		<?php $this->widget('bootstrap.widgets.TbButton',
 			array(
 				'url'   => Yii::app()->createUrl('account/addCard'),
 				'type'  => 'danger',
 				'label' => 'Привязать карту',
 			)
 		);
-	} else {
-		echo $this->getAvailableChannelSubmitButton($aChannelNames[ShowChannelsWidget::C_CARD], $aChannelsIfAvailable[ShowChannelsWidget::C_CARD]);
-	}
-	?>
+
+	else: ?>
+		<?= $this->getAvailableChannelSubmitButton($this::C_CARD); ?>
+	<?php endif; ?>
 </div>
 
-<?php if ($aChannelsIfAvailable[ShowChannelsWidget::C_MOBILE]) : ?>
+<?php
+
+if ($this->getIsChannelAvailable($this::C_MOBILE)) : ?>
 	<div class="well center">
-		<img src="/static/images/channels/<?= $aImageNames[ShowChannelsWidget::C_MOBILE] ?>" style="height:100px;">
+		<?= $this->getImage($this::C_MOBILE); ?>
+
 		&nbsp;
 
-		<?= $this->getAvailableChannelSubmitButton('на мобильный телефон', $aChannelsIfAvailable[ShowChannelsWidget::C_MOBILE], ShowChannelsWidget::MSG_CONFIRM_CHANNEL_PHONE); ?>
+		<?= $this->getAvailableChannelSubmitButton($this::C_MOBILE, $this::MSG_CONFIRM_CHANNEL_PHONE); ?>
 	</div>
 
 <?php endif; ?>

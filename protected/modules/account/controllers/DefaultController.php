@@ -35,15 +35,14 @@ class DefaultController extends Controller
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions' => array(
-					'logout', 'index', 'history', 'ajaxSendSms', 'checkSmsPass', 'smsPassAuth',
-					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
+					'logout', 'index', 'history', 'checkSmsPass', 'smsPassAuth',
+					'sendSmsPass', 'smsPassResend', 'subscribe', 'selectChannel', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
 					'changePassportSendSmsCode', 'changePassportCheckSmsCode', 'goIdentify',
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
-					'selectChannel',
 				),
 				'users'   => array('@'),
 			),
@@ -800,11 +799,10 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
 		}
 
-		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/selectChannel'));
-
 		//выбираем нужную модель
-		$oProductForm = new ClientSubscribeForm('productRequired');
-		//если есть POST-запрос или были данные в getState перед редиректом
+		$oProductForm = new ClientSubscribeForm();
+
+		//если есть POST-запрос
 		if (Yii::app()->request->getIsPostRequest()) {
 			//получаем данные из POST-запроса
 			$aPost = Yii::app()->request->getPost(get_class($oProductForm), array());
@@ -814,6 +812,7 @@ class DefaultController extends Controller
 			if ($oProductForm->validate()) {
 				//сохраняем в сессию выбранный продукт
 				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+
 				$sView = 'subscription/select_channel';
 				$this->render($sView, array('sFormName' => get_class($oProductForm)));
 				Yii::app()->end();
@@ -839,6 +838,7 @@ class DefaultController extends Controller
 			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
 		}
 
+		// устанавливаем returnUrl, чтобы после видеоидентификации пользователь вернулся на эту страницу
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/doSubscribe'));
 
 		//проверяем, нужна ли повторная видеоидентификация
@@ -899,11 +899,8 @@ class DefaultController extends Controller
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
 			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
 			if (Yii::app()->request->getIsPostRequest()) {
-				if (SiteParams::getIsIvanovoSite()) {
-					$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
-				} else {
-					$aPost = array();
-					$aPost['channel'] = Yii::app()->request->getPost(get_class($oProductForm) . '_channel');
+				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
+				if (!SiteParams::getIsIvanovoSite()) {
 					$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 				}
 			} else {
@@ -1108,12 +1105,7 @@ class DefaultController extends Controller
 
 		$oLoanForm = new ClientLoanForm();
 		if (Yii::app()->request->getIsPostRequest()) {
-			if (SiteParams::getIsIvanovoSite()) {
-				$aPost = Yii::app()->request->getParam(get_class($oLoanForm), array());
-			} else {
-				$aPost = array();
-				$aPost['channel_id'] = Yii::app()->request->getPost(get_class($oLoanForm) . '_channel');
-			}
+			$aPost = Yii::app()->request->getParam(get_class($oLoanForm), array());
 
 			$oLoanForm->setAttributes($aPost);
 

@@ -1293,17 +1293,19 @@ class AdminKreddyApiComponent
 	 */
 	public function getSelectedProductChannelsList()
 	{
-		$iProduct = $this->getSubscribeSelectedProduct();
+		$aChannels = array();
 
-		if ($iProduct === false) {
-			return array();
+		$iSelectedProduct = $this->getSubscribeSelectedProduct();
+		$aProducts = $this->getProducts();
+
+		if (isset($aProducts[$iSelectedProduct]['channels'])) {
+			$aSelectedProductChannels = array_keys($aProducts[$iSelectedProduct]['channels']);
+			$aClientChannels = array_values($this->getClientChannels());
+
+			$aChannels = array_intersect($aSelectedProductChannels, $aClientChannels);
 		}
 
-		$aProducts = $this->getProducts()[$iProduct];
-
-		$aClientProductsChannels = array_intersect(array_keys($aProducts['channels']), array_values($this->getClientChannels()));
-
-		return $aClientProductsChannels;
+		return $aChannels;
 	}
 
 	/**
@@ -2053,28 +2055,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Сохранение выбранного канала в сессию
-	 *
-	 * @param $sChannel
-	 */
-	public function setSubscribeSelectedChannel($sChannel)
-	{
-		Yii::app()->session['subscribeSelectedChannel'] = $sChannel;
-	}
-
-	/**
-	 * Получение выбранного продукта из сессии
-	 *
-	 * @return string|bool
-	 */
-	public function getSubscribeSelectedChannel()
-	{
-		return (isset(Yii::app()->session['subscribeSelectedChannel']))
-			? Yii::app()->session['subscribeSelectedChannel'] :
-			false;
-	}
-
-	/**
 	 * Сохранение в сессию выбранного канала получения продукта
 	 *
 	 * @param $iChannel
@@ -2093,6 +2073,28 @@ class AdminKreddyApiComponent
 	{
 		return (isset(Yii::app()->session['loanSelectedChannel']))
 			? Yii::app()->session['loanSelectedChannel'] :
+			false;
+	}
+
+	/**
+	 * Сохранение выбранного канала в сессию
+	 *
+	 * @param $sChannel
+	 */
+	public function setSubscribeSelectedChannel($sChannel)
+	{
+		Yii::app()->session['subscribeSelectedChannel'] = $sChannel;
+	}
+
+	/**
+	 * Получение выбранного продукта из сессии
+	 *
+	 * @return string|bool
+	 */
+	public function getSubscribeSelectedChannel()
+	{
+		return (isset(Yii::app()->session['subscribeSelectedChannel']))
+			? Yii::app()->session['subscribeSelectedChannel'] :
 			false;
 	}
 

@@ -16,7 +16,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 $this->widget('application.modules.account.components.ShowChannelsWidget', array(
 		'sFormName'             => $sFormName,
-		'aAllChannels'          => Yii::app()->adminKreddyApi->getProductsChannels(),
+		'aAllChannelNames' => Yii::app()->adminKreddyApi->getProductsChannels(),
 		'aAvailableChannelKeys' => Yii::app()->adminKreddyApi->getSelectedProductChannelsList(),
 	)
 );

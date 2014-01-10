@@ -204,7 +204,6 @@ div.search-form {
 	padding-right: 8px;
 }
 
-/* todo убрать после НГ */
 #form_selected_product, #form_selected_product_ivanovo {
 	margin: 10px 0 15px -20px;
 	padding: 0px 0 10px 35px;
@@ -214,12 +213,10 @@ div.search-form {
 	border-radius: 10px;
 }
 
-/* todo убрать после НГ */
 #ClientSelectProductForm {
 	padding-top: 15px;
 }
 
-/* todo убрать после НГ */
 #ClientFlexibleProductForm {
 	padding-top: 15px;
 }
@@ -231,12 +228,6 @@ div.search-form {
 
 #form_selected_product {
 	padding-top: 15px;
-}
-
-/* todo убрать после НГ */
-#form_selected_product #ClientSelectProductForm, #form_selected_product_ivanovo #ClientSelectProductForm {
-	background: transparent !important;
-	padding-top: 0 !important;
 }
 
 #main-content {
