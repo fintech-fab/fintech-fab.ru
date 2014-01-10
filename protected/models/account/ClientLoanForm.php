@@ -14,7 +14,7 @@ class ClientLoanForm extends ClientCreateFormAbstract
 	{
 		$aRules = array(
 			array('channel_id', 'required', 'message' => 'Для оформления займа требуется выбрать способ его получения'),
-			array('channel_id', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientSubscriptionChannels()), 'message' => 'Для оформления займа требуется выбрать способ его получения'),
+			array('channel_id', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getClientSubscriptionChannels()), 'message' => 'Для оформления займа требуется выбрать способ его получения'),
 		);
 
 		return $aRules;

@@ -68,11 +68,10 @@ class ShowChannelsWidget extends CWidget
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
 				'label'       => ('Получить займ ' . $sLabelWhere),
-				'htmlOptions' =>
-					array(
-						'disabled' => 'disabled',
-						'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
-					),
+				'htmlOptions' => array(
+					'disabled' => 'disabled',
+					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
+				),
 			)
 			, true);
 

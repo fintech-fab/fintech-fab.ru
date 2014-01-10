@@ -13,6 +13,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'loan-form',
 	'action' => Yii::app()->createUrl('/account/doLoan'),
 ));
+?>
+
+	<div class="alert alert-info">Размер займа: <b><?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount(); ?>
+			рублей</b></div>
+
+<?php
 
 $this->widget('application.modules.account.components.ShowChannelsWidget',
 	array(
