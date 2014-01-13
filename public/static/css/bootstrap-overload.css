@@ -2,6 +2,10 @@ body {
 	background: url('../images/new-year_bg.jpg') #8ed8ff repeat-y center top; /*todo: убрать после НГ - на #ffffff*/
 }
 
+.alert {
+	color: #000000 !important;
+}
+
 h2 {
 	font-size: 24px;
 	line-height: 36px;

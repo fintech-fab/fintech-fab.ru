@@ -78,7 +78,7 @@ class ShowChannelsWidget extends CWidget
 				'htmlOptions' => array(
 					'disabled' => 'disabled',
 					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
-					'style' => 'width: ' . self::BTN_WIDTH_PX . "px",
+					'style' => 'width: ' . (self::BTN_WIDTH_PX - 30) . "px",
 				),
 			),
 			true);

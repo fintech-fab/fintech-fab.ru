@@ -23,9 +23,10 @@
 			array(
 				'url'         => Yii::app()->createUrl('account/addCard'),
 				'type'        => 'danger',
-				'label'       => 'Привязать карту',
+				'icon'        => "icon-ok icon-white",
+				'label'       => 'Привязать банковскую карту',
 				'htmlOptions' => array(
-					'style' => 'width: ' . $this::BTN_WIDTH_PX . "px",
+					'style' => 'width: ' . ($this::BTN_WIDTH_PX + 80) . "px",
 				),
 			)
 		);
@@ -37,7 +38,7 @@
 
 <?php
 
-if ($this->getIsChannelAvailable($this::C_MOBILE)) : ?>
+if (!$this->getIsChannelAvailable($this::C_MOBILE)) : ?>
 	<div class="well center">
 		<?= $this->getImage($this::C_MOBILE); ?>
 
