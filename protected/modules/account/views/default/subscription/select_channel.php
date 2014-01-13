@@ -9,8 +9,7 @@ $this->pageTitle = Yii::app()->name . " - Выберите канал получ
 
 	<div class="alert alert-info">Ваш пакет займов -
 		&quot;<?= Yii::app()->adminKreddyApi->getProductNameById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
-		&quot;<br /> Размер займа
-		- <?= Yii::app()->adminKreddyApi->getProductLoanAmountById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
+		&quot;<br /> Размер первого займа - <?= Yii::app()->adminKreddyApi->getProductLoanAmountById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
 		руб.
 	</div>
 

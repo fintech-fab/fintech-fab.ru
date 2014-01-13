@@ -9,7 +9,7 @@
 
 
 	<?php // если карта не привязана, выводим сообщение о необходимости привязки
-	if (!Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
+	if (Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
 
 		<?= $this->getNotAvailableChannelButton($this::C_CARD); ?>
 
@@ -26,7 +26,7 @@
 				'icon'        => "icon-ok icon-white",
 				'label'       => 'Привязать банковскую карту',
 				'htmlOptions' => array(
-					'style' => 'width: ' . ($this::BTN_WIDTH_PX + 80) . "px",
+					'style' => 'width: ' . ($this::BTN_WIDTH_PX + 95) . "px",
 				),
 			)
 		);
