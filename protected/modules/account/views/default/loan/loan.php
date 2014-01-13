@@ -15,8 +15,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 ?>
 
-	<div class="alert alert-info">Размер займа: <b><?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount(); ?>
-			рублей</b></div>
+	<div class="alert alert-info">Ваш пакет займов - &quot;<?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?>
+		&quot;<br /> Размер второго займа - <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount(); ?> руб.
+	</div>
 
 <?php
 

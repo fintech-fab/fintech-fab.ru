@@ -18,20 +18,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 $aClientProductList = Yii::app()->adminKreddyApi->getClientProductsList();
 
-// если есть доступные пакеты для данного пользователя
-if (!empty($aClientProductList)) {
-	$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
-	// если пакета в сессии нет
-	if ($model->product === false) {
-		//устанавливаем в качестве выбранного пакета первый из массива доступных
-		$model->product = reset(array_keys($aClientProductList));
-	}
+// если пакета в сессии нет
+if ($model->product === false) {
+	//устанавливаем в качестве выбранного пакета первый из массива доступных
+	$model->product = reset(array_keys($aClientProductList));
+}
 
-	echo $form->radioButtonList($model, 'product', $aClientProductList, array("class" => "all", 'uncheckValue' => $model->product));
-	echo $form->error($model, 'product');
+echo $form->radioButtonList($model, 'product', $aClientProductList, array("class" => "all", 'uncheckValue' => $model->product));
+echo $form->error($model, 'product');
 
-	?>
+?>
 
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
@@ -43,12 +41,4 @@ if (!empty($aClientProductList)) {
 	</div>
 
 <?php
-
-} else { // если доступных пакетов нет - выводим соответствующее сообщение
-	?>
-
-	<div class="alert alert-info"><?= Yii::app()->adminKreddyApi->getNoAvailableProductsMessage() ?></div>
-
-<?php
-}
 $this->endWidget();

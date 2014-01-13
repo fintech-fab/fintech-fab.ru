@@ -9,6 +9,8 @@ class ShowChannelsWidget extends CWidget
 
 	const MSG_CONFIRM_CHANNEL_PHONE = "Вы уверены, что хотите выбрать в качестве канала получения мобильный телефон? Изменить канал после подтверждения заявки нельзя!";
 
+	const BTN_WIDTH_PX = 190;
+
 	public static $aChannels = array(
 		self::C_MOBILE,
 		self::C_CARD,
@@ -35,7 +37,7 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public static $aImageNames = array(
 		self::C_CARD   => 'card.png',
-		self::C_MOBILE => 'mobile.jpg',
+		self::C_MOBILE => 'mobile.png',
 	);
 
 	/**
@@ -72,10 +74,11 @@ class ShowChannelsWidget extends CWidget
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
-				'label' => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
+				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
 					'disabled' => 'disabled',
 					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
+					'style' => 'width: ' . self::BTN_WIDTH_PX . "px",
 				),
 			),
 			true);
@@ -102,6 +105,8 @@ class ShowChannelsWidget extends CWidget
 					'value' => $this->aAvailableChannelValues[$sChannelType],
 					'name'  => $this->sFormName . '[channel]',
 					'confirm' => (!empty($mConfirm) ? $mConfirm : null),
+					'style' => 'width: ' . self::BTN_WIDTH_PX . "px",
+
 				),
 			),
 			true);
@@ -118,7 +123,9 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public function getImage($sChannelType)
 	{
-		return '<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;"> &nbsp;';
+		return
+			'<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;" class="img-polaroid">
+		&nbsp;';
 	}
 
 	/**

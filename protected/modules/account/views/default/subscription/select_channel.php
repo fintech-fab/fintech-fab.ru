@@ -3,9 +3,16 @@
 /* @var IkTbActiveForm $form */
 /* @var string $sFormName */
 
-$this->pageTitle = Yii::app()->name . " - Выбор канала";
+$this->pageTitle = Yii::app()->name . " - Выберите канал получения займа";
 ?>
-	<h4>Выбор канала</h4>
+	<h4>Выберите канал получения займа</h4>
+
+	<div class="alert alert-info">Ваш пакет займов -
+		&quot;<?= Yii::app()->adminKreddyApi->getProductNameById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
+		&quot;<br /> Размер займа
+		- <?= Yii::app()->adminKreddyApi->getProductLoanAmountById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
+		руб.
+	</div>
 
 <?php
 
