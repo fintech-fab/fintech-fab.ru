@@ -177,19 +177,6 @@ class FormController extends Controller
 		}
 	}
 
-	//todo: убрать после НГ?
-	public function actionShoppingNewYear()
-	{
-		Yii::app()->clientForm->goSelectProduct('Кредди 3000');
-		$this->redirect('/form');
-	}
-
-	public function actionShopping()
-	{
-		Yii::app()->clientForm->goSelectProduct('Покупки');
-		$this->redirect('/form');
-	}
-
 	public function actionSaveSelectedProduct()
 	{
 		/**
@@ -308,7 +295,7 @@ class FormController extends Controller
 			$sSubView = $aView['sub_view'];
 
 			$this->render($sView, array(
-				'sSubView' => $sSubView,
+				'sSubView'          => $sSubView,
 				'oClientCreateForm' => $oClientSmsForm,
 			));
 			//если число попыток превышено, то чистим сессию

@@ -53,7 +53,7 @@ class ClientFormComponent
 			'default' => 0,
 		),
 		self::SITE2 => array(
-			'max' => 6,
+			'max'     => 6,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -205,7 +205,7 @@ class ClientFormComponent
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
-				'metrika_goal' => array(
+				'metrika_goal'     => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'sms_code_check',
 					false       => 'sms_code_send',
@@ -270,11 +270,11 @@ class ClientFormComponent
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
-					false => 'confirm_phone/send_sms_code',
+					false       => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 3,
-				'metrika_goal' => array(
+				'metrika_goal'     => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'sms_code_check',
 					false       => 'sms_code_send',
@@ -1056,25 +1056,6 @@ class ClientFormComponent
 		return isset(Yii::app()->session['ClientSelectProductForm']['channel_id'])
 			? Yii::app()->session['ClientSelectProductForm']['channel_id']
 			: false;
-	}
-
-	/**
-	 * @param string $sProduct
-	 */
-	public function goSelectProduct($sProduct = 'Покупки')
-	{
-		$aProducts = Yii::app()->adminKreddyApi->getProducts();
-		foreach ($aProducts as $i => $aProduct) {
-			if (array_search($sProduct, $aProduct)) {
-				$aShoppingProduct = $i;
-			}
-		}
-		if (isset($aShoppingProduct)) {
-			Yii::app()->session['ClientSelectProductForm'] = array('product' => $aShoppingProduct);
-
-			Yii::app()->session['goShopping'] = true;
-			$this->nextStep();
-		}
 	}
 
 	/**
