@@ -109,6 +109,22 @@ class AdminKreddyApiComponent
 		self::C_CLIENT_NEW                     => 'Выберите займ',
 	);
 
+	const C_MOBILE = 'mobile';
+	const C_CARD = 'card';
+
+	private static $aChannels = array(
+		self::C_MOBILE,
+		self::C_CARD,
+	);
+
+	/**
+	 * @var array массив каналов с рег.выражениями - на карту и на мобильный
+	 */
+	private static $aChannelsRegexps = array(
+		self::C_MOBILE => '/мобил/',
+		self::C_CARD   => '/карт/',
+	);
+
 	const ERROR_NONE = 0; //нет ошибок
 	const ERROR_UNKNOWN = 1; //неизвестная ошибка
 	const ERROR_AUTH = 2; //ошибка авторизации
@@ -1250,6 +1266,46 @@ class AdminKreddyApiComponent
 		}
 
 		return $aAvailableProducts;
+	}
+
+	/**
+	 * Заполняет массив значений доступных каналов соответствующими id канала
+	 *
+	 * @param $bIsSecondLoan
+	 *
+	 * @return array
+	 */
+	public function getAvailableChannelValues($bIsSecondLoan = false)
+	{
+		$aAvailableChannelValues = array(
+			self::C_CARD   => false,
+			self::C_MOBILE => false,
+		);
+
+		$aAllChannelNames = $this->getProductsChannels();
+
+		if ($bIsSecondLoan) {
+			$aAvailableChannelKeys = $this->getClientSubscriptionChannels();
+		} else {
+			$aAvailableChannelKeys = $this->getSelectedProductChannelsList();
+		}
+
+		foreach (self::$aChannels as $sChannel) {
+			$sRegexp = self::$aChannelsRegexps[$sChannel];
+
+			// перебираем все доступные Клиенту каналы
+			foreach ($aAvailableChannelKeys as $sKey) {
+				// берём соответствующее имя из массива имён каналов
+				$sAvailableChannelName = $aAllChannelNames[$sKey];
+
+				if (preg_match($sRegexp, $sAvailableChannelName)) {
+					$aAvailableChannelValues[$sChannel] = $sKey;
+					break;
+				}
+			}
+		}
+
+		return $aAvailableChannelValues;
 	}
 
 	/**

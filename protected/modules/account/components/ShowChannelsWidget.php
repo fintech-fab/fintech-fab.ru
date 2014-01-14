@@ -11,25 +11,12 @@ class ShowChannelsWidget extends CWidget
 
 	const BTN_WIDTH_PX = 190;
 
-	private static $aChannels = array(
-		self::C_MOBILE,
-		self::C_CARD,
-	);
-
 	/**
 	 * @var array названия каналов
 	 */
 	private static $aChannelNames = array(
 		self::C_MOBILE => 'на мобильный телефон',
 		self::C_CARD   => 'на банковскую карту',
-	);
-
-	/**
-	 * @var array массив каналов с рег.выражениями - на карту и на мобильный
-	 */
-	private static $aChannelsRegexps = array(
-		self::C_MOBILE => '/мобил/',
-		self::C_CARD => '/карт/',
 	);
 
 	/**
@@ -41,22 +28,9 @@ class ShowChannelsWidget extends CWidget
 	);
 
 	/**
-	 * @var array коды каналов, если доступны, либо false - если недоступны
+	 * @var array каналов
 	 */
-	private $aAvailableChannelValues = array(
-		self::C_CARD   => false,
-		self::C_MOBILE => false,
-	);
-
-	/**
-	 * @var array все каналы, доступные для данного пакета
-	 */
-	public $aAllChannelNames = array();
-
-	/**
-	 * @var array ключи каналов, доступных данному пользователю
-	 */
-	public $aAvailableChannelKeys = array();
+	public $aAvailableChannels = array();
 
 	/**
 	 * @var string название формы, в которую вставляется виджет
@@ -105,7 +79,7 @@ class ShowChannelsWidget extends CWidget
 				'type'        => 'primary',
 				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
-					'value' => $this->aAvailableChannelValues[$sChannelType],
+					'value' => $this->aAvailableChannels[$sChannelType],
 					'name'  => $this->sFormName . '[channel]',
 					'confirm' => (!empty($mConfirm) ? $mConfirm : null),
 					'style' => 'width: ' . self::BTN_WIDTH_PX . "px",
@@ -156,7 +130,7 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public function getIsMobileAvailable()
 	{
-		$bIsAvailable = ($this->aAvailableChannelValues[self::C_MOBILE] !== false);
+		$bIsAvailable = ($this->aAvailableChannels[self::C_MOBILE] !== false);
 
 		return $bIsAvailable;
 	}
@@ -193,32 +167,8 @@ class ShowChannelsWidget extends CWidget
 		return $sButton;
 	}
 
-	/**
-	 * Заполняет массив значений доступных каналов соответствующими id канала
-	 */
-	private function setAvailableChannelValues()
-	{
-		foreach (self::$aChannels as $sChannel) {
-			$sRegexp = self::$aChannelsRegexps[$sChannel];
-
-			// перебираем все доступные Клиенту каналы
-			foreach ($this->aAvailableChannelKeys as $sKey) {
-				// берём соответствующее имя из массива имён каналов
-				$sAvailableChannelName = $this->aAllChannelNames[$sKey];
-
-				if (preg_match($sRegexp, $sAvailableChannelName)) {
-					$this->aAvailableChannelValues[$sChannel] = $sKey;
-					break;
-				}
-			}
-		}
-	}
-
 	public function run()
 	{
-		// заполняем массив значений каналов
-		$this->setAvailableChannelValues();
-
 		echo '<div class="well center">' .
 			$this->getCardImage();
 		if ($this->getIsCardAvailable()):
