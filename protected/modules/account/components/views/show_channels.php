@@ -5,44 +5,33 @@
 ?>
 
 <div class="well center">
-	<?= $this->getImage($this::C_CARD); ?>
+	<?= $this->getCardImage(); ?>
 
+	<?php if ($this->getIsCardAvailable()): ?>
 
-	<?php // если карта не привязана, выводим сообщение о необходимости привязки
-	if (Yii::app()->adminKreddyApi->getIsClientCardExists()): ?>
+		<?= $this->getCardSubmitButton(); ?>
 
-		<?= $this->getNotAvailableChannelButton($this::C_CARD); ?>
+	<?php else: ?>
 
-		<br /><br />
-
-		<?= preg_replace('/(внимание!)/ui', '<b style="color: #ff0000;">$1</b>', AdminKreddyApiComponent::C_CARD_WARNING_NO_CARD); ?>
+		<?= $this->getCardNotAvailableButton(); ?>
 
 		<br /><br />
 
-		<?php $this->widget('bootstrap.widgets.TbButton',
-			array(
-				'url'         => Yii::app()->createUrl('account/addCard'),
-				'type'        => 'danger',
-				'icon'        => "icon-ok icon-white",
-				'label'       => 'Привязать банковскую карту',
-				'htmlOptions' => array(
-					'style' => 'width: ' . ($this::BTN_WIDTH_PX + 95) . "px",
-				),
-			)
-		);
+		<?= $this->getNoCardWarning(); ?>
 
-	else: ?>
-		<?= $this->getAvailableChannelSubmitButton($this::C_CARD); ?>
+		<br /><br />
+
+		<?= $this->getAddCardButton(); ?>
+
 	<?php endif; ?>
 </div>
 
-<?php
+<?php if ($this->getIsMobileAvailable()) : ?>
 
-if (!$this->getIsChannelAvailable($this::C_MOBILE)) : ?>
 	<div class="well center">
-		<?= $this->getImage($this::C_MOBILE); ?>
+		<?= $this->getMobileImage(); ?>
 
-		<?= $this->getAvailableChannelSubmitButton($this::C_MOBILE, $this::MSG_CONFIRM_CHANNEL_PHONE); ?>
+		<?= $this->getMobileSubmitButton(); ?>
 	</div>
 
 <?php endif; ?>

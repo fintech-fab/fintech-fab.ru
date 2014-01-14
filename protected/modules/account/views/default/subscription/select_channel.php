@@ -9,7 +9,8 @@ $this->pageTitle = Yii::app()->name . " - Выберите канал получ
 
 	<div class="alert alert-info">Ваш пакет займов -
 		&quot;<?= Yii::app()->adminKreddyApi->getProductNameById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
-		&quot;<br /> Размер первого займа - <?= Yii::app()->adminKreddyApi->getProductLoanAmountById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
+		&quot;<br /> Размер первого займа
+		- <?= Yii::app()->adminKreddyApi->getProductLoanAmountById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
 		руб.
 	</div>
 
@@ -22,8 +23,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 $this->widget('application.modules.account.components.ShowChannelsWidget', array(
 		'sFormName'             => $sFormName,
-		'aAllChannelNames' => Yii::app()->adminKreddyApi->getProductsChannels(),
+		'aAllChannelNames'  => Yii::app()->adminKreddyApi->getProductsChannels(),
 		'aAvailableChannelKeys' => Yii::app()->adminKreddyApi->getSelectedProductChannelsList(),
+		'bClientCardExists' => Yii::app()->adminKreddyApi->getIsClientCardExists(),
 	)
 );
 

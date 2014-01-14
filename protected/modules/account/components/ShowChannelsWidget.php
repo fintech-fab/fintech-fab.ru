@@ -6,12 +6,12 @@ class ShowChannelsWidget extends CWidget
 	const C_CARD = 'card';
 
 	const MSG_CHANNEL_NOT_AVAILABLE = 'Данный канал недоступен!';
-
+	const MSG_NO_CARD_WARNING = '<b style="color: #ff0000;">ВНИМАНИЕ!</b> У Вас нет привязанной банковской карты. Для получения займов на банковскую карту пройдите процедуру привязки карты.';
 	const MSG_CONFIRM_CHANNEL_PHONE = "Вы уверены, что хотите выбрать в качестве канала получения мобильный телефон? Изменить канал после подтверждения заявки нельзя!";
 
 	const BTN_WIDTH_PX = 190;
 
-	public static $aChannels = array(
+	private static $aChannels = array(
 		self::C_MOBILE,
 		self::C_CARD,
 	);
@@ -19,7 +19,7 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * @var array названия каналов
 	 */
-	public static $aChannelNames = array(
+	private static $aChannelNames = array(
 		self::C_MOBILE => 'на мобильный телефон',
 		self::C_CARD   => 'на банковскую карту',
 	);
@@ -27,7 +27,7 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * @var array массив каналов с рег.выражениями - на карту и на мобильный
 	 */
-	public static $aChannelsRegexps = array(
+	private static $aChannelsRegexps = array(
 		self::C_MOBILE => '/мобил/',
 		self::C_CARD => '/карт/',
 	);
@@ -35,7 +35,7 @@ class ShowChannelsWidget extends CWidget
 	/**
 	 * @var array названия файлов картинок (из папки static/images/channels/
 	 */
-	public static $aImageNames = array(
+	private static $aImageNames = array(
 		self::C_CARD   => 'card.png',
 		self::C_MOBILE => 'mobile.png',
 	);
@@ -64,17 +64,20 @@ class ShowChannelsWidget extends CWidget
 	public $sFormName = "";
 
 	/**
-	 * Возвращает код кнопки для недоступного канала
-	 *
-	 * @param $sChannelType
+	 * @var bool привязана ли у Клиента банковская карта
+	 */
+	public $bClientCardExists = false;
+
+	/**
+	 * Возвращает код кнопки для недоступного канала - банковская карта
 	 *
 	 * @return string
 	 */
-	public function getNotAvailableChannelButton($sChannelType)
+	public function getCardNotAvailableButton()
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
-				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
+				'label'       => ('Получить займ ' . self::$aChannelNames[self::C_CARD]),
 				'htmlOptions' => array(
 					'disabled' => 'disabled',
 					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
@@ -94,7 +97,7 @@ class ShowChannelsWidget extends CWidget
 	 *
 	 * @return string
 	 */
-	public function getAvailableChannelSubmitButton($sChannelType, $mConfirm = false)
+	private function getAvailableChannelSubmitButton($sChannelType, $mConfirm = false)
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
@@ -114,6 +117,16 @@ class ShowChannelsWidget extends CWidget
 		return $sButton;
 	}
 
+	public function getMobileSubmitButton()
+	{
+		return $this->getAvailableChannelSubmitButton(self::C_MOBILE, self::MSG_CONFIRM_CHANNEL_PHONE);
+	}
+
+	public function getCardSubmitButton()
+	{
+		return $this->getAvailableChannelSubmitButton(self::C_CARD);
+	}
+
 	/**
 	 * Выводит нужную картинку
 	 *
@@ -121,23 +134,65 @@ class ShowChannelsWidget extends CWidget
 	 *
 	 * @return string
 	 */
-	public function getImage($sChannelType)
+	private function getImage($sChannelType)
 	{
-		return
-			'<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;" class="img-polaroid">
-		&nbsp;';
+		return '<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;" class="img-polaroid">&nbsp;';
+	}
+
+	public function getMobileImage()
+	{
+		return $this->getImage(self::C_MOBILE);
+	}
+
+	public function getCardImage()
+	{
+		return $this->getImage(self::C_CARD);
 	}
 
 	/**
-	 * Доступен ли канал Клиенту
-	 *
-	 * @param $sChannelType
+	 * Доступен ли канал мобильный Клиенту
 	 *
 	 * @return bool
 	 */
-	public function getIsChannelAvailable($sChannelType)
+	public function getIsMobileAvailable()
 	{
-		return ($this->aAvailableChannelValues[$sChannelType] !== false);
+		$bIsAvailable =
+			isset($this->aAvailableChannelValues[self::C_MOBILE])
+			&& ($this->aAvailableChannelValues[self::C_MOBILE] !== false);
+
+		return $bIsAvailable;
+	}
+
+	/**
+	 * Доступна ли канал карта Клиенту
+	 *
+	 * @return bool
+	 */
+	public function getIsCardAvailable()
+	{
+		return (!empty($this->bClientCardExists));
+	}
+
+	public function getNoCardWarning()
+	{
+		return self::MSG_NO_CARD_WARNING;
+	}
+
+	public function getAddCardButton()
+	{
+		$sButton = $this->widget('bootstrap.widgets.TbButton',
+			array(
+				'url'         => Yii::app()->createUrl('account/addCard'),
+				'type'        => 'danger',
+				'icon'        => "icon-ok icon-white",
+				'label'       => 'Привязать банковскую карту',
+				'htmlOptions' => array(
+					'style' => 'width: ' . ($this::BTN_WIDTH_PX + 95) . "px",
+				),
+			), true
+		);
+
+		return $sButton;
 	}
 
 	/**

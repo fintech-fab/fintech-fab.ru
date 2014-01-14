@@ -3,9 +3,9 @@
 /* @var ClientLoanForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Оформление займа";
+$this->pageTitle = Yii::app()->name . " - Оформление займа - Выберите канал получения займа";
 ?>
-	<h4>Оформление займа</h4>
+	<h4>Оформление займа - Выберите канал получения займа</h4>
 
 <?php
 
@@ -24,8 +24,9 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 $this->widget('application.modules.account.components.ShowChannelsWidget',
 	array(
 		'sFormName'             => get_class($model),
-		'aAllChannelNames' => Yii::app()->adminKreddyApi->getProductsChannels(),
+		'aAllChannelNames'  => Yii::app()->adminKreddyApi->getProductsChannels(),
 		'aAvailableChannelKeys' => Yii::app()->adminKreddyApi->getClientSubscriptionChannels(),
+		'bClientCardExists' => Yii::app()->adminKreddyApi->getIsClientCardExists(),
 	)
 );
 
