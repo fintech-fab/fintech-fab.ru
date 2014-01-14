@@ -185,7 +185,7 @@ class ShowChannelsWidget extends CWidget
 				'icon'        => "icon-ok icon-white",
 				'label'       => 'Привязать банковскую карту',
 				'htmlOptions' => array(
-					'style' => 'width: ' . ($this::BTN_WIDTH_PX + 95) . "px",
+					'style' => 'width: ' . (self::BTN_WIDTH_PX + 95) . "px",
 				),
 			), true
 		);
