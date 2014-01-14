@@ -136,7 +136,7 @@ class ShowChannelsWidget extends CWidget
 	 */
 	private function getImage($sChannelType)
 	{
-		return '<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;" class="img-polaroid">&nbsp;';
+		return '<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;" class="img-polaroid"> &nbsp; ';
 	}
 
 	public function getMobileImage()
@@ -221,7 +221,6 @@ class ShowChannelsWidget extends CWidget
 
 		echo '<div class="well center">' .
 			$this->getCardImage();
-
 		if ($this->getIsCardAvailable()):
 			echo $this->getCardSubmitButton();
 		else:
