@@ -1275,22 +1275,22 @@ class AdminKreddyApiComponent
 	 */
 	public function getAvailableChannelValues()
 	{
+		// по умолчанию ставим false, т.е. что каналы недоступны
 		$aAvailableChannelValues = array(
-			self::C_CARD => $this->getIsClientCardExists(),
+			self::C_CARD => false,
 			self::C_MOBILE => false,
 		);
 
-		$aAllChannelNames = $this->getProductsChannels();
-
 		$bIsSecondLoan = $this->getSubscriptionProductId();
 		if ($bIsSecondLoan) {
-			// если повторный займ - соответственно, берём каналы, доступные по данной подписке.
+			// если повторный займ - соответственно, берём каналы, доступные по текущей подписке.
 			$aAvailableChannelKeys = $this->getClientSubscriptionChannels();
 		} else {
 			// иначе берём каналы, доступные по выбранному на предыдущем шаге формы Пакету
 			$aAvailableChannelKeys = $this->getSelectedProductChannelsList();
 		}
 
+		$aAllChannelNames = $this->getProductsChannels();
 		foreach (self::$aChannels as $sChannel) {
 			$sRegexp = self::$aChannelsRegexps[$sChannel];
 
@@ -1299,6 +1299,8 @@ class AdminKreddyApiComponent
 				// берём соответствующее имя из массива имён каналов
 				$sAvailableChannelName = $aAllChannelNames[$sKey];
 
+				// ищем совпадению по регулярному выражению. в случае успеха - записываем id канала на место false
+				// например: $aAvailableChannelValues['card'] = 20;
 				if (preg_match($sRegexp, $sAvailableChannelName)) {
 					$aAvailableChannelValues[$sChannel] = $sKey;
 					break;
