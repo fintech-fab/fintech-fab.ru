@@ -1271,19 +1271,18 @@ class AdminKreddyApiComponent
 	/**
 	 * Заполняет массив значений доступных каналов соответствующими id канала
 	 *
-	 * @param $bIsSecondLoan
-	 *
 	 * @return array
 	 */
-	public function getAvailableChannelValues($bIsSecondLoan = false)
+	public function getAvailableChannelValues()
 	{
 		$aAvailableChannelValues = array(
-			self::C_CARD   => false,
+			self::C_CARD => $this->getIsClientCardExists(),
 			self::C_MOBILE => false,
 		);
 
 		$aAllChannelNames = $this->getProductsChannels();
 
+		$bIsSecondLoan = $this->getSubscriptionProductId();
 		if ($bIsSecondLoan) {
 			// если повторный займ - соответственно, берём каналы, доступные по данной подписке.
 			$aAvailableChannelKeys = $this->getClientSubscriptionChannels();

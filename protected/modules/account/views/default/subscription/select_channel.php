@@ -22,9 +22,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('application.modules.account.components.ShowChannelsWidget', array(
-		'sFormName'             => $sFormName,
-		'aAvailableChannels' => Yii::app()->adminKreddyApi->getAvailableChannelValues(false),
-		'bClientCardExists'  => Yii::app()->adminKreddyApi->getIsClientCardExists(),
+		'sFormName'          => $sFormName,
+		'aAvailableChannels' => Yii::app()->adminKreddyApi->getAvailableChannelValues(),
 	)
 );
 

@@ -38,11 +38,6 @@ class ShowChannelsWidget extends CWidget
 	public $sFormName = "";
 
 	/**
-	 * @var bool привязана ли у Клиента банковская карта
-	 */
-	public $bClientCardExists = false;
-
-	/**
 	 * Возвращает код кнопки для недоступного канала - банковская карта
 	 *
 	 * @return string
@@ -142,7 +137,9 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public function getIsCardAvailable()
 	{
-		return $this->bClientCardExists;
+		$bIsAvailable = ($this->aAvailableChannels[self::C_CARD] !== false);
+
+		return $bIsAvailable;
 	}
 
 	public function getNoCardWarning()
