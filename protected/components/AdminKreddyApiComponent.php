@@ -1284,10 +1284,11 @@ class AdminKreddyApiComponent
 
 		$aAllChannelNames = $this->getProductsChannels();
 
-		// если повторный займ - соответственно, берём каналы, доступные по данной подписке.
 		if ($bIsSecondLoan) {
+			// если повторный займ - соответственно, берём каналы, доступные по данной подписке.
 			$aAvailableChannelKeys = $this->getClientSubscriptionChannels();
 		} else {
+			// иначе берём каналы, доступные по выбранному на предыдущем шаге формы Пакету
 			$aAvailableChannelKeys = $this->getSelectedProductChannelsList();
 		}
 
