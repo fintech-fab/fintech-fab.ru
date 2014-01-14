@@ -75,7 +75,7 @@ class ShowChannelsWidget extends CWidget
 				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
 					'value' => $this->aAvailableChannels[$sChannelType],
-					'name'  => $this->sFormName . '[channel]',
+					'name' => $this->sFormName . '[channel_id]',
 					'confirm' => (!empty($mConfirm) ? $mConfirm : null),
 					'style' => 'width: ' . self::BTN_WIDTH_PX . "px",
 

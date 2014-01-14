@@ -875,7 +875,7 @@ class DefaultController extends Controller
 		//если есть сохраненные данные в getState, то их переносим в массив $aData
 		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct, 'channel' => $iChannelId);
+			$aData = array('product' => $iProduct, 'channel_id' => $iChannelId);
 		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
@@ -920,7 +920,7 @@ class DefaultController extends Controller
 					$sView = 'flex_subscription/do_subscribe';
 				} else {
 					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
-					Yii::app()->adminKreddyApi->setSubscribeSelectedChannel($oProductForm->channel);
+					Yii::app()->adminKreddyApi->setSubscribeSelectedChannel($oProductForm->channel_id);
 					$sView = 'subscription/do_subscribe';
 				}
 

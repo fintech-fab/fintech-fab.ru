@@ -6,7 +6,7 @@
 class ClientSubscribeForm extends ClientCreateFormAbstract
 {
 	public $product;
-	public $channel;
+	public $channel_id;
 
 	/**
 	 * @return array
@@ -15,9 +15,9 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 	{
 		$aRules = array(
 			array('product', 'required', 'message' => 'Для подключения Пакета займов требуется выбрать продукт'),
-			array('channel', 'required', 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
+			array('channel_id', 'required', 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
 			array('product', 'in', 'range' => array_keys(Yii::app()->adminKreddyApi->getClientProductsList()), 'message' => 'Для подключения Пакета займов требуется выбрать продукт'),
-			array('channel', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getSelectedProductChannelsList()), 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
+			array('channel_id', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getSelectedProductChannelsList()), 'message' => 'Для подключения Пакета займов требуется выбрать канал', 'on' => 'channelRequired'),
 		);
 
 		return $aRules;
@@ -32,7 +32,7 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'channel' => 'Выберите продукт',
+				'channel_id' => 'Выберите продукт',
 				'product' => 'Выберите канал',
 			)
 		);
@@ -45,7 +45,7 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 	{
 		return array(
 			'product',
-			'channel',
+			'channel_id',
 		);
 	}
 }
