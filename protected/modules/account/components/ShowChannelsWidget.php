@@ -156,9 +156,7 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public function getIsMobileAvailable()
 	{
-		$bIsAvailable =
-			isset($this->aAvailableChannelValues[self::C_MOBILE])
-			&& ($this->aAvailableChannelValues[self::C_MOBILE] !== false);
+		$bIsAvailable = ($this->aAvailableChannelValues[self::C_MOBILE] !== false);
 
 		return $bIsAvailable;
 	}
@@ -170,7 +168,7 @@ class ShowChannelsWidget extends CWidget
 	 */
 	public function getIsCardAvailable()
 	{
-		return (!empty($this->bClientCardExists));
+		return $this->bClientCardExists;
 	}
 
 	public function getNoCardWarning()
@@ -221,6 +219,25 @@ class ShowChannelsWidget extends CWidget
 		// заполняем массив значений каналов
 		$this->setAvailableChannelValues();
 
-		$this->render('show_channels');
+		echo '<div class="well center">' .
+			$this->getCardImage();
+
+		if ($this->getIsCardAvailable()):
+			echo $this->getCardSubmitButton();
+		else:
+			echo $this->getCardNotAvailableButton() .
+				'<br /><br />' .
+				$this->getNoCardWarning() .
+				'<br /><br />' .
+				$this->getAddCardButton();
+		endif;
+		echo '</div>';
+
+		if ($this->getIsMobileAvailable()) :
+			echo '<div class="well center">' .
+				$this->getMobileImage() .
+				$this->getMobileSubmitButton() .
+				'</div>';
+		endif;
 	}
 }
