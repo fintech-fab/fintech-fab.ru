@@ -1,5 +1,5 @@
 body {
-	background: url('../images/new-year_bg.jpg') #8ed8ff repeat-y center top; /*todo: убрать после НГ - на #ffffff*/
+	background: #ffffff repeat-y center top;
 }
 
 .alert {
@@ -129,7 +129,6 @@ nav div.navbar-inner {
 
 #steps {
 	margin-top: 5px !important;
-	margin-bottom: 0; /* todo убрать после НГ */
 }
 
 #steps li {
