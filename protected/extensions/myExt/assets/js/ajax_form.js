@@ -3,18 +3,27 @@
  */
 function updateAjaxForm() {
 
+	var oBody = jQuery("body");
+
 	jQuery("[data-toggle=popover]").popover();
-	jQuery("body").tooltip({"selector": "[rel=tooltip]"});
-	jQuery("body").off("click", "#submitButton");
-	jQuery("body").off("click", "#backButton");
+	oBody.tooltip({"selector": "[rel=tooltip]"});
+	oBody.off("click", "#submitButton");
+	oBody.off("click", "#backButton");
 
 }
 
 function scrollAndFocus() {
-	if ($("#scrollAnchor")) {
-		$('html, body').animate({
-			scrollTop: $("#scrollAnchor").offset().top
+	var oScrollAnchor = jQuery("#scrollAnchor");
+	if (oScrollAnchor.length > 0) {
+		jQuery('html, body').animate({
+			scrollTop: oScrollAnchor.offset().top
 		}, 500);
 	}
-	$("#formBody").find("input[type!='hidden']").first().delay(600).focus();
+	var oFormBody = jQuery("#formBody");
+	var oErrorInput = oFormBody.find("input[type!='hidden'].error").first();
+	if (oErrorInput.length > 0) {
+		oErrorInput.delay(600).focus()
+	} else {
+		oFormBody.find("input[type!='hidden']").first().delay(600).focus();
+	}
 }

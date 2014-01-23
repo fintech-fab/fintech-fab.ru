@@ -53,7 +53,7 @@ class ProductsChannelsComponent
 					. "' data-final-price='" . $aProduct['amount']
 					. "' data-card='" . $iCardPrice . "' data-price-count='"
 					. $iSubscriptionLifetime . "&nbsp;дней"
-					. "' data-count='" . $aProduct['loan_count'] . "&nbsp;займа"
+					. "' data-count='" . $aProduct['loan_count'] . '&nbsp;' . self::getLoanCountLabel($aProduct['loan_count'])
 					. "' data-int-count='" . $aProduct['loan_count']
 					. "' data-time='" . $iLoanLifetime . "'>"
 					. $aProduct['name']
@@ -64,6 +64,31 @@ class ProductsChannelsComponent
 		}
 
 		return $aProductsList;
+	}
+
+	/**
+	 * @param $iLoanCount
+	 *
+	 * @return string
+	 */
+	public static function getLoanCountLabel($iLoanCount)
+	{
+		$iLoanCount = $iLoanCount % 10;
+		switch ($iLoanCount) {
+			case 1:
+				$sLabel = 'займ';
+				break;
+			case 2:
+			case 3:
+			case 4:
+				$sLabel = 'займа';
+				break;
+			default:
+				$sLabel = 'займов';
+				break;
+		}
+
+		return $sLabel;
 	}
 
 	/**

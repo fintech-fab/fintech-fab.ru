@@ -6,8 +6,7 @@
 <div class="conditions">
 	<strong>Ваши условия</strong>
 	<ul>
-		<div id="scrollAnchor"></div>
-		<li>Размер займа:
+		<li id="scrollAnchor">Размер займа:
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Канал получения: <span class="cost channel"></span>

@@ -4,27 +4,24 @@
  */
 ?>
 <div class="conditions">
-	<strong>Ваши условия
-		"<span class="packet_name"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>"</strong>
+	<strong>Ваши условия "<span class="packet_name"></span>"</strong>
 	<ul>
-		<li>Размер Пакета -
-			<span class="cost packet_size"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
+		<li>Размер Пакета - <span class="cost packet_size"></span>&nbsp;руб.
 		</li>
-		<li>Период действия Пакета с даты подключения -
-			<span class="cost price_month"><?= ""; //Dictionaries::$aDataPriceCounts[$this->chosenProduct] ?></span>
+		<li>Количество займов в пакете - <span class="cost count_subscribe"></span>
 		</li>
-		<div id="scrollAnchor"></div>
-		<li>Размер первого займа -
-			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
+		<li>Период действия Пакета с даты подключения - <span class="cost price_month"></span>
 		</li>
-		<li>Стоимость подключения -
-			<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;руб.
+		<li>Период действия Пакета с даты подключения - <span class="cost price_month"></span>
 		</li>
-		<li>Сумма к возврату -
-			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;руб.
+		<li id="scrollAnchor">Размер первого займа - <span class="cost final_price"></span>&nbsp;руб.
 		</li>
-		<li>Дата возврата - <span class="cost date"><?= ""; //$getDateToPayUntil; ?></span>
-			(<span class="cost week_day"><?= ""; //$getDateToPayUntil; ?></span> до <span class="cost time">23:50</span>)
+		<li>Стоимость подключения - <span class="cost price_count"></span>&nbsp;руб.
+		</li>
+		<li>Сумма к возврату - <span class="cost final_price"></span>&nbsp;руб.
+		</li>
+		<li>Дата возврата - <span class="cost date"></span> (<span class="cost week_day"></span> до
+			<span class="cost time">23:50</span>)
 		</li>
 		<li>Канал получения - <span class="cost channel">на мобильный телефон (МТС, Билайн, Мегафон)</span></li>
 	</ul>
