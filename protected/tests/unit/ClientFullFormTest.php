@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientFullFormTest
  * @method assertEmpty
@@ -7,9 +8,13 @@
  * @method assertEquals
  *
  */
-
 class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 {
+
+	public function setUp()
+	{
+		YiiBase::$enableIncludePath = false;
+	}
 
 	public function testClientPassword()
 	{
@@ -244,6 +249,132 @@ class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 		$aErrors = $oForm->getErrors();
 		$this->assertTrue(!isset($aErrors[$field]));
 		$this->assertEquals($strCleanValue, $oForm->$field);
+	}
+
+	public function testDocumentOnSuccess()
+	{
+		$oForm = new ClientFullForm();
+
+		$aTestData = array(
+			//загранпаспорт
+			array(
+				'document'        => 1,
+				'document_number' => '123456789',
+			),
+			array(
+				'document'        => 1,
+				'document_number' => '12№3456789',
+			),
+			array(
+				'document'        => 1,
+				'document_number' => '12-3456789',
+			),
+			array(
+				'document'        => 1,
+				'document_number' => '12/3456789',
+			),
+			array(
+				'document'        => 1,
+				'document_number' => '12 3456789',
+			),
+			//водительское удостоверение
+			array(
+				'document'        => 2,
+				'document_number' => '12ЖД 345678',
+			),
+			array(
+				'document'        => 2,
+				'document_number' => '12 АБ345678',
+			),
+			array(
+				'document'        => 2,
+				'document_number' => '12 - ВГ - 345678',
+			),
+			array(
+				'document'        => 2,
+				'document_number' => '12ДЕ345678',
+			),
+			array(
+				'document'        => 2,
+				'document_number' => '12ЖЗ-345678',
+			),
+			array(
+				'document'        => 2,
+				'document_number' => '12ИЙ/345678',
+			),
+			array(
+				'document'        => 2,
+				'document_number' => '12ИЙ №345678',
+			),
+			//военный билет
+			array(
+				'document'        => 4,
+				'document_number' => 'АБ 1234567',
+			),
+			array(
+				'document'        => 4,
+				'document_number' => 'ВГ7654321',
+			),
+			array(
+				'document'        => 4,
+				'document_number' => 'ДЕ-1234567',
+			),
+			array(
+				'document'        => 4,
+				'document_number' => 'ЁЖ/1234567',
+			),
+			array(
+				'document'        => 4,
+				'document_number' => 'АБ№1234567',
+			),
+			//ИНН
+			array(
+				'document'        => 5,
+				'document_number' => '1234 5678 9012',
+			),
+			array(
+				'document'        => 5,
+				'document_number' => '1234-5678-9012',
+			),
+			array(
+				'document'        => 5,
+				'document_number' => '1234/5678/9012',
+			),
+			array(
+				'document'        => 5,
+				'document_number' => '№1234-5678-9012',
+			),
+			array(
+				'document'        => 5,
+				'document_number' => '№1234 - 5678 - 9012',
+			),
+			//СНИЛС
+			array(
+				'document'        => 6,
+				'document_number' => '123-456-789-01',
+			),
+			array(
+				'document'        => 6,
+				'document_number' => '123 456 789 01',
+			),
+			array(
+				'document'        => 6,
+				'document_number' => '123/456/789/01',
+			),
+			array(
+				'document'        => 6,
+				'document_number' => '№123-456-789-01',
+			),
+
+		);
+
+		foreach ($aTestData as $aDocument) {
+			$oForm->document = $aDocument['document'];
+			$oForm->document_number = $aDocument['document_number'];
+			$oForm->validate('document_number');
+			$aErrors = $oForm->getErrors();
+			$this->assertFalse(isset($aErrors['document_number']));
+		}
 	}
 
 	/**

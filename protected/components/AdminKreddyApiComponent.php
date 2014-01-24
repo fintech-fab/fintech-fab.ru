@@ -1,9 +1,8 @@
 <?php
+
 /**
  * Class AdminKreddyApiComponent
  */
-
-
 class AdminKreddyApiComponent
 {
 
@@ -187,6 +186,7 @@ class AdminKreddyApiComponent
 
 	const C_CARD_MSG_REQUIREMENTS = 'Убедитесь, что банковская карта зарегистрирована на Ваше имя, не является предоплаченной, активна (не заблокирована) и доступна для перечисления денег.';
 	const C_CARD_WARNING_NO_CARD = 'ВНИМАНИЕ! У Вас нет привязанной банковской карты. Для получения займов на банковскую карту пройдите процедуру привязки карты.';
+	const C_CARD_WARNING_EXPIRED = 'ВНИМАНИЕ! У ранее привязанной банковской карты вышел срок действия привязки и необходимо привязать ту же самую или новую карту.';
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
@@ -654,22 +654,22 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'             => self::ERROR_AUTH,
-			'client_data'      => array(
+			'code'              => self::ERROR_AUTH,
+			'client_data'       => array(
 				'is_debt'    => false,
 				'fullname'   => '',
 				'client_new' => false
 			),
-			'status'           => array(
+			'status'            => array(
 				'name' => false,
 			),
-			'active_loan'      => array(
+			'active_loan'       => array(
 				'channel_id' => false,
 				'balance'    => 0,
 				'expired'    => false,
 				'expired_to' => false
 			),
-			'subscription'     => array(
+			'subscription'      => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -681,15 +681,16 @@ class AdminKreddyApiComponent
 					'loan_lifetime' => false,
 				),
 			),
-			'moratoriums'      => array(
+			'moratoriums'       => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'         => array(),
-			'slow_channels'    => array(),
-			'bank_card_exists' => false,
-			'bank_card_pan'    => false,
+			'channels'          => array(),
+			'slow_channels'     => array(),
+			'bank_card_exists'  => false,
+			'bank_card_expired' => false,
+			'bank_card_pan'     => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -714,7 +715,13 @@ class AdminKreddyApiComponent
 		}
 
 		//если нет привязанной карты и не установлен другой warning, то уведомляем о необходимости привязки карты
-		if (isset($aData['bank_card_exists']) && $aData['bank_card_exists'] === false && !Yii::app()->user->hasFlash('warning')) {
+		if (Yii::app()->user->hasFlash('warning')) {
+			return $aData;
+		}
+
+		if ($aData['bank_card_expired'] == true) {
+			Yii::app()->user->setFlash('warning', self::C_CARD_WARNING_EXPIRED);
+		} elseif ($aData['bank_card_exists'] == false) {
 			Yii::app()->user->setFlash('warning', self::C_CARD_WARNING_NO_CARD);
 		}
 
@@ -1277,7 +1284,7 @@ class AdminKreddyApiComponent
 	{
 		// по умолчанию ставим false, т.е. что каналы недоступны
 		$aAvailableChannelValues = array(
-			self::C_CARD => false,
+			self::C_CARD   => false,
 			self::C_MOBILE => false,
 		);
 
@@ -2393,6 +2400,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Возвращаем время отправки СМС-пароля
+	 *
 	 * @return int|''
 	 */
 	public function getSmsPassSentTime()
@@ -2402,6 +2410,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверяем, отправлено ли СМС с кодом подтверждения восстановления пароля
+	 *
 	 * @return bool
 	 */
 	public function checkResetPassSmsCodeSent()
@@ -2411,6 +2420,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Возвращаем время отправки СМС с кодом подтверждения восстановления пароля
+	 *
 	 * @return int|''
 	 */
 	public function getResetPassSmsCodeSentTime()
@@ -2441,6 +2451,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверяем, есть ли в сессии номер телефна, указанный в форме восстановления пароля
+	 *
 	 * @return bool
 	 */
 	public function checkResetPassPhone()
@@ -2684,6 +2695,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверка, требуется ли видеоидентификация
+	 *
 	 * @return bool
 	 */
 	public function getIsNeedIdentify()
@@ -2693,6 +2705,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Проверка, требуется ли подтверждение/изменение паспортных данных
+	 *
 	 * @return bool
 	 */
 	public function getIsNeedPassportData()
@@ -3098,6 +3111,7 @@ class AdminKreddyApiComponent
 
 	/**
 	 * Функция получает список каналов в виде строки "1_2_3", и выбирает из списка каналов один, доступный клиенту
+	 *
 	 * @param $sChannelsId
 	 *
 	 * @return int

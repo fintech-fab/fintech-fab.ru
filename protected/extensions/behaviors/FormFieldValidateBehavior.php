@@ -188,9 +188,22 @@ class FormFieldValidateBehavior extends CBehavior
 			return;
 		}
 
-		$sNumber = $this->owner->$param['chosenDocument'];
-		$bIsError = !(preg_match(Dictionaries::$aDocumentsRegexps[$sNumber], $this->owner->$attribute) > 0);
-		$sError = $bIsError ? Dictionaries::$aDocumentsPopovers[$sNumber] : "";
+		$iNumber = $this->owner->$param['chosenDocument'];
+
+		$sDocumentNumber = $this->owner->$attribute;
+
+		//чистим номер от лишних символов
+		//удаляем пробелы
+		$sDocumentNumber = preg_replace('/\s+/', '', $sDocumentNumber);
+		//удаляем символ №
+		$sDocumentNumber = preg_replace('/№/', '', $sDocumentNumber);
+		//удаляем символ /
+		$sDocumentNumber = preg_replace('/\//', '', $sDocumentNumber);
+		//удаляем символ -
+		$sDocumentNumber = preg_replace('/-/', '', $sDocumentNumber);
+
+		$bIsError = !(preg_match(Dictionaries::$aDocumentsRegexps[$iNumber], $sDocumentNumber) > 0);
+		$sError = $bIsError ? Dictionaries::$aDocumentsPopovers[$iNumber] : "";
 
 		if (!empty($sError)) {
 			$this->owner->addError($attribute, $sError);
