@@ -12,8 +12,6 @@
 		</li>
 		<li>Период действия Пакета с даты подключения - <span class="cost price_month"></span>
 		</li>
-		<li>Период действия Пакета с даты подключения - <span class="cost price_month"></span>
-		</li>
 		<li id="scrollAnchor">Размер первого займа - <span class="cost final_price"></span>&nbsp;руб.
 		</li>
 		<li>Стоимость подключения - <span class="cost price_count"></span>&nbsp;руб.
