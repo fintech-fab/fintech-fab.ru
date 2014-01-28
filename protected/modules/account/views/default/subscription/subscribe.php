@@ -8,7 +8,7 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 	<h4>Подключение Пакета</h4>
 
 	<div class="alert in alert-block alert-info">Обращаем Ваше внимание, что обработка запроса осуществляется ежедневно
-		с 10:00 до 22:00 по московскому времени.
+		с 09:00 до 22:00 по московскому времени.
 	</div>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
