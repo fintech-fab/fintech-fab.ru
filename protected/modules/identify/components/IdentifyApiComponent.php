@@ -74,7 +74,7 @@ class IdentifyApiComponent
 			'instruction' => 'Сфотографируйте второй документ (ИНН, заграничный паспорт, пенсионное удостоверение, водительское удостоверение, заграничный паспорт, военный билет, страховое свидетельство государственного пенсионного страхования',
 			'title'       => 'Второй документ',
 			'description' => 'Пример фотографии второго документа',
-			'example' => 'https://kreddy.ru/static/images/documents/second.jpg',
+			'example' => 'https://kreddy.ru/static/images/documents/second.png',
 		),
 		self::STEP_DONE      => array(
 			'instruction' => 'Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
