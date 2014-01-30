@@ -1,4 +1,6 @@
 <?php /* @var $this Controller */ ?>
+
+<!--suppress HtmlUnknownTarget -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="language" content="Russian" />
 
@@ -9,18 +11,16 @@
 
 <title><?= CHtml::encode($this->pageTitle); ?></title>
 <?php //TODO сделать в конфиге версию static-файлов и грузить её сюда  ?>
+
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/main.css?v=5" />
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/bootstrap-overload.css?v=5" />
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/form.css?v=1" />
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/style.css?v=7" />
 <link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/payment.css?v=1" />
-
 <script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=4"></script>
-
 <?php
 Yii::app()->clientScript->registerCoreScript('jquery');
 Yii::app()->clientScript->registerCoreScript('maskedinput');
 Yii::app()->clientScript->registerCoreScript('yiiactiveform');
 ?>
-
 <link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />

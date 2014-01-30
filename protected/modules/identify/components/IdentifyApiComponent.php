@@ -194,8 +194,8 @@ class IdentifyApiComponent
 	/**
 	 * Возвращает ответ согласно номеру текущего шага.
 	 *
-	 * @param $iStepNumber номер шага
-	 * @param $sApiToken
+	 * @param integer $iStepNumber номер шага
+	 * @param string  $sApiToken
 	 *
 	 *
 	 * @return array
@@ -348,8 +348,8 @@ class IdentifyApiComponent
 	/**
 	 * Генерирует токен с учётом текущего шага и токена пользователя
 	 *
-	 * @param $sApiToken   хэш, идентифицирующий пользователя (токен из API)
-	 * @param $iStepNumber номер следующего щага
+	 * @param string  $sApiToken   хэш, идентифицирующий пользователя (токен из API)
+	 * @param integer $iStepNumber номер следующего щага
 	 *
 	 * @return string
 	 */

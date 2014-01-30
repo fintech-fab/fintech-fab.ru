@@ -663,12 +663,15 @@ class AdminKreddyApiComponent
 			'status'            => array(
 				'name' => false,
 			),
+			'loan_request'                    => false,
 			'active_loan'       => array(
 				'channel_id' => false,
 				'balance'    => 0,
 				'expired'    => false,
 				'expired_to' => false
 			),
+			'subscription_request'            => false,
+			'subscription_request_can_cancel' => false,
 			'subscription'      => array(
 				'product'         => false,
 				'product_id'      => false,
@@ -705,6 +708,24 @@ class AdminKreddyApiComponent
 		//сохраняем полученные данные для последующих запросов
 		$this->aClientInfo = $aData;
 
+		$this->processNewClientInfo($aData);
+
+		return $aData;
+	}
+
+	/**
+	 *
+	 * После получения новой информации о клиенте следует обработать информацию
+	 * и соответствующим образом отреагировать на нее
+	 *
+	 * @param $aData
+	 */
+
+	protected function processNewClientInfo($aData)
+	{
+		//сохраняем полученные данные для последующих запросов
+		$this->aClientInfo = $aData;
+
 		//запрашиваем, ушел ли клиент на идентификацию
 		$bClientOnIdentify = $this->getClientOnIdentify();
 		//если клиент ушел на идентификацию
@@ -716,7 +737,7 @@ class AdminKreddyApiComponent
 
 		//если нет привязанной карты и не установлен другой warning, то уведомляем о необходимости привязки карты
 		if (Yii::app()->user->hasFlash('warning')) {
-			return $aData;
+			return;
 		}
 
 		if ($aData['bank_card_expired'] == true) {
@@ -725,7 +746,7 @@ class AdminKreddyApiComponent
 			Yii::app()->user->setFlash('warning', self::C_CARD_WARNING_NO_CARD);
 		}
 
-		return $aData;
+		return;
 	}
 
 	/**
@@ -736,6 +757,13 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return $aClientInfo['client_data']['client_new'];
+	}
+
+	public function getIsCanCancelRequest()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['subscription_request_can_cancel'];
 	}
 
 	/**
