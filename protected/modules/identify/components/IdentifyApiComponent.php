@@ -71,7 +71,7 @@ class IdentifyApiComponent
 		),
 		self::STEP_DOCUMENT5 => array(
 			'type'        => self::C_TYPE_DOCUMENT,
-			'instruction' => 'Сфотографируйте второй документ (ИНН, загр. паспорт, пенс. уд-е, вод. уд-е, военный билет, свидетельство пенсионного страхования)',
+			'instruction' => 'Сфотографируйте второй документ (ИНН, загр. паспорт, пенс. уд-е, вод. уд-е, в/билет, свид-во пенс. страхования)',
 			'title'       => 'Второй документ',
 			'description' => 'Пример фотографии второго документа',
 			'example' => 'https://kreddy.ru/static/images/documents/second.png',
