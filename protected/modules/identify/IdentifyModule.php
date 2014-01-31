@@ -1,6 +1,8 @@
 <?php
 /**
  * Class IdentifyModule
+ *
+ * @property IdentifyApiComponent $identifyApi
  */
 class IdentifyModule extends CWebModule
 {

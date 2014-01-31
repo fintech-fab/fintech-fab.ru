@@ -139,7 +139,7 @@ class IdentifyApiComponent
 		}
 
 		$iStepNumber = self::STEP_FACE;
-		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
+		// авторизация успешна; генерируем соответствующий токен
 		$sToken = $this->generateToken($sApiToken, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
