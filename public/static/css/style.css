@@ -566,3 +566,7 @@ p.popover-label {
 	text-align: right;
 	font-weight: bold;
 }
+
+.alert, .alert h4 {
+	color: #000000;
+}

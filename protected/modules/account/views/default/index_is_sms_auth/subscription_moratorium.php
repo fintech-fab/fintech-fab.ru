@@ -1,20 +1,8 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $sIdentifyRender
  *
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
-
 
 // Если есть мораторий на подписку
 ?>
@@ -62,5 +50,3 @@ $this->widget(
 	Вы можете отправить новую заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan() ?>
 	<br />
 </div>
-
-<?= $sIdentifyRender ?>

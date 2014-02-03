@@ -1,18 +1,7 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $passFormRender
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
 
 
 // Если есть мораторий на подписку
@@ -52,12 +41,9 @@ $this->widget(
 );
 ?>
 
-<div class="clearfix"></div>
-<br />
+<div class="clearfix"></div><br />
 <div class="well">
 	Вы можете отправить новую заявку <?= Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan() ?>
 	<br />
 </div>
-<div class="clearfix"></div>
-<br />
-<?= $passFormRender // отображаем форму запроса SMS-пароля ?>
+<div class="clearfix"></div><br />

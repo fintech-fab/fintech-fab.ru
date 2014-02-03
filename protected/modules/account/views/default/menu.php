@@ -68,7 +68,18 @@ $this->menu[] = array(
 	),
 );
 $this->menu[] = '';
-
+$this->menu[] = array(
+	'label' => 'Идентификация',
+	'items' => array(
+		array(
+			'label' => 'На сайте', 'url' => array('/account/default/identifySite')
+		),
+		array(
+			'label' => 'На смартфоне', 'url' => array('/account/default/identifyApp')
+		),
+	),
+);
+$this->menu[] = '';
 $this->menu[] = array(
 	'label' => 'Выход', 'url' => array('/account/default/logout')
 );

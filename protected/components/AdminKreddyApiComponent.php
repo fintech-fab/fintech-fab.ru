@@ -654,22 +654,23 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'              => self::ERROR_AUTH,
-			'client_data'       => array(
+			'code'                 => self::ERROR_AUTH,
+			'client_data'          => array(
 				'is_debt'    => false,
 				'fullname'   => '',
 				'client_new' => false
 			),
-			'status'            => array(
+			'status'               => array(
 				'name' => false,
 			),
-			'active_loan'       => array(
+			'first_identification' => false,
+			'active_loan'          => array(
 				'channel_id' => false,
 				'balance'    => 0,
 				'expired'    => false,
 				'expired_to' => false
 			),
-			'subscription'      => array(
+			'subscription'         => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -681,16 +682,16 @@ class AdminKreddyApiComponent
 					'loan_lifetime' => false,
 				),
 			),
-			'moratoriums'       => array(
+			'moratoriums'          => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'          => array(),
-			'slow_channels'     => array(),
-			'bank_card_exists'  => false,
-			'bank_card_expired' => false,
-			'bank_card_pan'     => false,
+			'channels'             => array(),
+			'slow_channels'        => array(),
+			'bank_card_exists'     => false,
+			'bank_card_expired'    => false,
+			'bank_card_pan'        => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -2054,6 +2055,13 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->bCardVerifyExists;
+	}
+
+	public function isFirstIdentification()
+	{
+		$aData = $this->getClientInfo();
+
+		return $aData['first_identification'];
 	}
 
 	/**

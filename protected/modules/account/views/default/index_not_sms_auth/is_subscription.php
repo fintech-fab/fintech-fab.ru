@@ -2,20 +2,7 @@
 /**
  * @var $this DefaultController
  * @var $smsState
- * @var $passFormRender
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
-
 
 $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 //подписка есть
@@ -61,5 +48,4 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 	<strong>Доступно займов:</strong> <?= $iAvailableLoans; ?><br />
 <?php endif; ?>
 <br />
-<?= $passFormRender // отображаем форму запроса SMS-пароля ?>
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class DefaultController
  */
@@ -35,7 +36,7 @@ class DefaultController extends Controller
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions' => array(
-					'logout', 'index', 'history', 'checkSmsPass', 'smsPassAuth',
+					'logout', 'index', 'history', 'identifySite', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'selectChannel', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
@@ -100,11 +101,14 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
+
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$sView = 'index_is_sms_auth/';
+			$sIndex = 'index_is_sms_auth/index';
 		} else {
 			$sView = 'index_not_sms_auth/';
+			$sIndex = 'index_not_sms_auth/index';
 		}
 
 		// выбираем представление в зависимости от статуса подписки
@@ -144,9 +148,29 @@ class DefaultController extends Controller
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
+		$sContent = $this->renderPartial($sView, array(), true);
 
-		$this->render($sView, array('passFormRender' => $sPassFormRender, 'sIdentifyRender' => $sIdentifyRender));
+		$this->render($sIndex, array('sContent' => $sContent, 'passFormRender' => $sPassFormRender, 'sIdentifyRender' => $sIdentifyRender));
 
+
+	}
+
+	public function actionIdentifySite()
+	{
+		$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+		if ($aGetIdent) {
+
+			$oIdentify = new VideoIdentifyForm();
+			$oIdentify->setAttributes($aGetIdent);
+			$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/");
+			//выводим форму отправки на идентификацию
+			$this->render('identify_site', array('model' => $oIdentify));
+		}
+	}
+
+	public function actionIdentifyApp()
+	{
+		$this->render('identify_app');
 	}
 
 	/**

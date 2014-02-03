@@ -2,18 +2,7 @@
 /**
  * @var $this DefaultController
  * @var $smsState
- * @var $sIdentifyRender
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
 
 //количество доступных займов
 $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
@@ -61,5 +50,3 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 	Вы можете оформить займ <?= Yii::app()->adminKreddyApi->getMoratoriumLoan() ?>
 	<br />
 </div>
-
-<?= $sIdentifyRender ?>

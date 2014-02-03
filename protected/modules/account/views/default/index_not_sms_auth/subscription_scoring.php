@@ -1,18 +1,7 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $passFormRender
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
 
 // подписка "висит" на скоринге
 ?>
@@ -42,4 +31,3 @@ if (Yii::app()->adminKreddyApi->getStatusMessage()) {
 }
 ?>
 <br />
-<?= $passFormRender // отображаем форму запроса SMS-пароля ?>

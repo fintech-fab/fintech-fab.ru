@@ -1,20 +1,8 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $sIdentifyRender
  *
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
-
 
 // если можно оформить новый пакет
 ?>
@@ -72,5 +60,3 @@ $this->widget(
 		?>
 	</div>
 <?php endif; ?>
-
-<?= $sIdentifyRender ?>
