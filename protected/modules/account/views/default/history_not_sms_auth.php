@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $passFormRender
+ * @var $sPassFormRender
  * @var $history
  * @var $historyProvider
  */
@@ -15,4 +15,4 @@ $this->pageTitle = Yii::app()->name . ' - История операций';
 ?>
 <h4>История операций</h4>
 
-<?= $passFormRender // отображаем форму запроса SMS-пароля ?>
+<?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>

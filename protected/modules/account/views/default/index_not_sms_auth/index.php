@@ -2,8 +2,8 @@
 /**
  * @var $this DefaultController
  * @var $smsState
- * @var $sContent
- * @var $passFormRender
+ * @var $sClientInfoRender
+ * @var $sPassFormRender
  */
 
 $this->breadcrumbs = array(
@@ -17,8 +17,8 @@ if (SiteParams::getIsIvanovoSite()) {
 }
 ?>
 
-<?= $sContent ?>
+<?= $sClientInfoRender ?>
 
-<?= $passFormRender // отображаем форму запроса SMS-пароля ?>
+<?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>
 
 <?php $this->renderPartial('app_info'); ?>

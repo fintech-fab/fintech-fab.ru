@@ -1,7 +1,6 @@
 <?php
 /**
  * @var $this DefaultController
- * @var $passFormRender
  * @var $history
  * @var $historyProvider
  */

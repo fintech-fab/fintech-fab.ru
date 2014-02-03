@@ -2,7 +2,7 @@
 /**
  * @var $this DefaultController
  * @var $smsState
- * @var $sContent
+ * @var $sClientInfoRender
  * @var $sIdentifyRender
  */
 
@@ -17,7 +17,7 @@ if (SiteParams::getIsIvanovoSite()) {
 }
 ?>
 
-<?= $sContent ?>
+<?= $sClientInfoRender ?>
 
 <?= $sIdentifyRender ?>
 	<br />
