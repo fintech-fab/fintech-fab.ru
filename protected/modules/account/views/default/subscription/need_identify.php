@@ -57,3 +57,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 
 $this->endWidget();
+?>
+	<br />
+<?php $this->renderPartial('app_info'); ?>
