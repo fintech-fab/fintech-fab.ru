@@ -6,6 +6,10 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сма
 <h4>Идентификация на смартфоне</h4>
 
 <div class="alert in alert-block alert-info span7">
+	<div class="fright">
+		<img width="180" height="180" src="/static/images/app_google_qr_180.png" />
+	</div>
+
 	<h4>Не работает веб-камера?</h4><br /> Пройдите идентификацию на своем смартфоне!<br /> Скачайте приложение прямо
 	сейчас!<br />
 
@@ -15,5 +19,7 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сма
 	<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
 		<br /><br />После идентификации потребуется ввести данные документов, использованных при идентификации.
 	<?php endif; ?>
+
+	<br class="cl"/>
 
 </div>

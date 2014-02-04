@@ -570,3 +570,10 @@ p.popover-label {
 .alert, .alert h4 {
 	color: #000000;
 }
+
+.fright{
+    float: right;
+}
+.cl{
+    clear: both;
+}
