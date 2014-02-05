@@ -5,10 +5,6 @@
 			if (!SiteParams::getIsIvanovoSite()) {
 				$aItems = array(
 					array(
-						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-01.jpg'),
-						'label' => 'В любом месте, в любое время',
-					),
-					array(
 						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-02.jpg'),
 						'label' => 'Без лишних свидетелей',
 					),
@@ -27,6 +23,11 @@
 					array(
 						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-06.jpg'),
 						'label' => 'Сколько занял - столько и вернул',
+					),
+					array(
+						'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-01.jpg'),
+						'label' => 'В любом месте, в любое время',
+						'url'   => '/pages/view/smsinfo',
 					),
 				);
 			} else {
