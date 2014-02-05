@@ -2001,8 +2001,6 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
 
-		//$this->setLastMessage($aResult['message']);
-
 		if ($aResult['code'] === self::ERROR_NONE) {
 			return true;
 		} else {
@@ -2234,7 +2232,6 @@ class AdminKreddyApiComponent
 		$ch = curl_init($sApiUrl . $sAction);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
 		if (SiteParams::getIsIvanovoSite()) {
