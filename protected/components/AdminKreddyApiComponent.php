@@ -229,6 +229,22 @@ class AdminKreddyApiComponent
 		return $sWarning;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getCardVerifyWarning()
+	{
+		$sWarning = '<p>Уважаемый Клиент!<br/>Вам необходимо узнать замороженную сумму, одним из следующих способов:: <ul>' .
+			'<li>SMS-банкинг</li>' .
+			'<li>Интернет-банкинг</li>' .
+			'<li>По телефону службы поддержки банка (номер телефона указан на обратной стороне карты)</li>' .
+			'</ul>
+			<strong>БУДЬТЕ ВНИМАТЕЛЬНЫ ПРИ ВВОДЕ СУММЫ, КОЛИЧЕСТВО ПОПЫТОК ОГРАНИЧЕНО</strong>
+			</p>';
+
+		return $sWarning;
+	}
+
 	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
@@ -3249,6 +3265,19 @@ class AdminKreddyApiComponent
 		return $bIsFirstAddingCard;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function getIsFirstVerifyingCard()
+	{
+		$bIsFirstVerifyingCard = (empty(Yii::app()->session['account_verifyCard']));
+
+		if ($bIsFirstVerifyingCard) {
+			Yii::app()->session['account_verifyCard'] = true;
+		}
+
+		return $bIsFirstVerifyingCard;
+	}
 
 	/**
 	 * Установка флага, что сессия пользователя истекла или не истекла.
