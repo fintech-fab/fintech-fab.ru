@@ -202,49 +202,6 @@ class AdminKreddyApiComponent
 	private $testPassword = 'Aa123456';
 	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';
 
-	/**
-	 * @return string
-	 */
-	public function getCardBigWarning()
-	{
-		$sWarning = '<p>Убедитесь, что: <ul>' .
-			'<li> банковская карта <b>Mastercard, Maestro или Visa</b>,</li>' .
-			'<li> банковская карта зарегистрирована <b>на Ваше имя</b>,</li>' .
-			'<li> <b>не является</b> предоплаченной,</li>' .
-			'<li> привязана <b>к рублевому счету</b>,</li>' .
-			'<li> <b>активна</b> (не заблокирована) и доступна для перечисления денег,</li>' .
-			'<li> на карте <b>не менее 10 рублей</b>.</li>
-			</ul></p>';
-
-		if ($this->getIsClientCardExists()) {
-			$sWarning .= '<p>При привязке новой банковской карты, данные старой карты удаляются.</p>';
-		}
-
-		if ($this->checkCardVerifyExists()) {
-			$sWarning .= '<p>На Вашей карте будет заморожена случайная сумма не более чем на 2 часа. </p>';
-		}
-
-		$sWarning .= '<p>Будьте внимательны! <b>Количество попыток ввода данных строго ограничено!</b></p>';
-
-		return $sWarning;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getCardVerifyWarning()
-	{
-		$sWarning = '<p>Уважаемый Клиент!<br/>Вам необходимо узнать замороженную сумму, одним из следующих способов:: <ul>' .
-			'<li>SMS-банкинг</li>' .
-			'<li>Интернет-банкинг</li>' .
-			'<li>По телефону службы поддержки банка (номер телефона указан на обратной стороне карты)</li>' .
-			'</ul>
-			<strong>БУДЬТЕ ВНИМАТЕЛЬНЫ ПРИ ВВОДЕ СУММЫ, КОЛИЧЕСТВО ПОПЫТОК ОГРАНИЧЕНО!</strong>
-			</p>';
-
-		return $sWarning;
-	}
-
 	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
@@ -689,7 +646,7 @@ class AdminKreddyApiComponent
 			),
 			'subscription_request'            => false,
 			'subscription_request_can_cancel' => false,
-			'subscription'      => array(
+			'subscription'         => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,

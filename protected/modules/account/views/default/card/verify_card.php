@@ -15,7 +15,7 @@ if (Yii::app()->adminKreddyApi->getIsFirstVerifyingCard()):
 		</div>
 
 		<div class="modal-body">
-			<?= Yii::app()->adminKreddyApi->getCardVerifyWarning(); ?>
+			<?= $this->renderPartial('card/card_verify_warning', null, true); ?>
 		</div>
 
 		<div class="modal-footer">

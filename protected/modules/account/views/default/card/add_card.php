@@ -20,7 +20,7 @@ if (Yii::app()->adminKreddyApi->getIsFirstAddingCard()):
 		</div>
 
 		<div class="modal-body">
-			<?= Yii::app()->adminKreddyApi->getCardBigWarning(); ?>
+			<?= $this->renderPartial('card/card_add_warning', null, true); ?>
 		</div>
 
 		<div class="modal-footer">
@@ -52,7 +52,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->errorSummary($model) ?>
 
 	<div class="alert alert-warning" style="color: #000000 !important">
-		<?= Yii::app()->adminKreddyApi->getCardBigWarning(); ?>
+		<?= $this->renderPartial('card/card_add_warning', null, true); ?>
 	</div>
 
 <?= $form->hiddenField($model, 'iCardType') ?>
