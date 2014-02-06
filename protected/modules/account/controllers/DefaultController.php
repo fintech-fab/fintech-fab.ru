@@ -44,6 +44,7 @@ class DefaultController extends Controller
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
+					'cancelRequest'
 				),
 				'users'   => array('@'),
 			),
@@ -1234,6 +1235,25 @@ class DefaultController extends Controller
 		$this->render('loan/do_loan_check_sms_code', array('model' => $oForm));
 	}
 
+	public function actionCancelRequest()
+	{
+		if (!Yii::app()->adminKreddyApi->getIsCanCancelRequest()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
+		if (Yii::app()->request->getPost('cancel')) {
+			if (Yii::app()->adminKreddyApi->doCancelRequest()) {
+				Yii::app()->user->setFlash('success', AdminKreddyApiComponent::C_REQUEST_CANCEL_SUCCESS);
+				$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+			} else {
+				Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_REQUEST_CANCEL_ERROR);
+				$this->redirect(Yii::app()->createUrl('/account/cancelRequest'));
+			}
+
+		}
+
+		$this->render('cancel_request');
+	}
 
 	public function actionSendSmsPass()
 	{
@@ -1298,8 +1318,7 @@ class DefaultController extends Controller
 		$this->render('sms_password/check_password', array('model' => $oSmsPassForm,));
 	}
 
-	public
-	function actionSmsPassResend()
+	public function actionSmsPassResend()
 	{
 		/**
 		 * если время до переотправки не больше 0 (т.е. истекло)
@@ -1355,8 +1374,7 @@ class DefaultController extends Controller
 	/**
 	 * Запрос на повторную отправку кода для восстановления пароля
 	 */
-	public
-	function actionResetPasswordResendSmsCode()
+	public function actionResetPasswordResendSmsCode()
 	{
 		$this->layout = '/layouts/column1';
 		$oForm = new AccountResetPasswordForm();
@@ -1387,8 +1405,7 @@ class DefaultController extends Controller
 	/**
 	 * Проверка кода, отправленного в SMS. Если код верен - отправка SMS с паролем на телефон из сессии
 	 */
-	public
-	function actionResetPassSendPass()
+	public function actionResetPassSendPass()
 	{
 		$this->layout = '/layouts/column1';
 
@@ -1424,8 +1441,7 @@ class DefaultController extends Controller
 	/**
 	 * Сообщение об успешной отправке нового пароля
 	 */
-	public
-	function actionResetPassSmsSentSuccess()
+	public function actionResetPassSmsSentSuccess()
 	{
 		$this->layout = '/layouts/column1';
 

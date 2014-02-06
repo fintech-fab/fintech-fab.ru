@@ -17,7 +17,11 @@ if (SiteParams::getIsIvanovoSite()) {
 		)
 	);
 }
-
+if (Yii::app()->adminKreddyApi->getIsCanCancelRequest()) {
+	$this->menu[] = array(
+		'label' => 'Отказаться/изменить текущие условия', 'url' => array('/account/cancelRequest')
+	);
+}
 $this->menu[] = array(
 	'label' => 'История операций', 'url' => array('/account/default/history')
 );

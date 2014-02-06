@@ -172,6 +172,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
 	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
+	const API_ACTION_CANCEL_REQUEST = 'siteClient/doCancelRequest';
 
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
@@ -192,6 +193,8 @@ class AdminKreddyApiComponent
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
 	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
 
+	const C_REQUEST_CANCEL_SUCCESS = 'Ваше подключение успешно отменено. Будем ждать новой заявки!';
+	const C_REQUEST_CANCEL_ERROR = 'Ошибка! Не удалось отменить подключение.';
 
 	/**
 	 * Переменные для тестирования API идентификации, требуются для выполнения тестов.
@@ -1624,6 +1627,28 @@ class AdminKreddyApiComponent
 		}
 	}
 
+	/**
+	 * Отмена неоплаченной подписки
+	 *
+	 * @return bool
+	 */
+	public function doCancelRequest()
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CANCEL_REQUEST);
+
+		if ($aResult['code'] === self::ERROR_NONE) {
+
+			return true;
+		} else {
+			if (isset($aResult['message'])) {
+				$this->setLastMessage($aResult['message']);
+			} else {
+				$this->setLastMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
 
 	/**
 	 * Проверка возможности подписки
