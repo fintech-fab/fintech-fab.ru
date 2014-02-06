@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class DefaultController
  */
@@ -35,7 +36,7 @@ class DefaultController extends Controller
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions' => array(
-					'logout', 'index', 'history', 'checkSmsPass', 'smsPassAuth',
+					'logout', 'index', 'history', 'identifySite', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'selectChannel', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
@@ -100,29 +101,32 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
+
 		//выбираем папку представления в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-			$sView = 'index_is_sms_auth/';
+			$sClientInfoView = 'index_is_sms_auth/';
+			$sIndexView = 'index_is_sms_auth/index';
 		} else {
-			$sView = 'index_not_sms_auth/';
+			$sClientInfoView = 'index_not_sms_auth/';
+			$sIndexView = 'index_not_sms_auth/index';
 		}
 
 		// выбираем представление в зависимости от статуса подписки
 		if (Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если подписка есть
 			if (Yii::app()->adminKreddyApi->getMoratoriumLoan()
 			) { // если есть мораторий на заём
-				$sView .= 'loan_moratorium';
+				$sClientInfoView .= 'loan_moratorium';
 			} else { //если подписка есть
-				$sView .= 'is_subscription';
+				$sClientInfoView .= 'is_subscription';
 			}
 		} else { // нет подписки
 			if (Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan()
 			) { // если есть мораторий на подписку/скоринг или заём
-				$sView .= 'subscription_moratorium';
+				$sClientInfoView .= 'subscription_moratorium';
 			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
-				$sView .= 'subscription_scoring';
+				$sClientInfoView .= 'subscription_scoring';
 			} else { // можно оформить новый Пакет
-				$sView .= 'new_subscription_available';
+				$sClientInfoView .= 'new_subscription_available';
 			}
 		}
 
@@ -144,9 +148,34 @@ class DefaultController extends Controller
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
+		$sClientInfoRender = $this->renderPartial($sClientInfoView, array(), true);
 
-		$this->render($sView, array('passFormRender' => $sPassFormRender, 'sIdentifyRender' => $sIdentifyRender));
+		$this->render($sIndexView, array(
+				'sClientInfoRender' => $sClientInfoRender,
+				'sPassFormRender'   => $sPassFormRender,
+				'sIdentifyRender'   => $sIdentifyRender
+			)
+		);
 
+
+	}
+
+	public function actionIdentifySite()
+	{
+		$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+		if ($aGetIdent) {
+
+			$oIdentify = new VideoIdentifyForm();
+			$oIdentify->setAttributes($aGetIdent);
+			$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/");
+			//выводим форму отправки на идентификацию
+			$this->render('identify_site', array('model' => $oIdentify));
+		}
+	}
+
+	public function actionIdentifyApp()
+	{
+		$this->render('identify_app');
 	}
 
 	/**
@@ -171,7 +200,7 @@ class DefaultController extends Controller
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
-		$this->render($sView, array('passFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
+		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
 
 	/**
@@ -321,7 +350,7 @@ class DefaultController extends Controller
 			//рендерим форму запроса СМС-пароля
 			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 			//рендерим страницу с требованием пройти СМС-авторизацию
-			$this->render('change_passport_data/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			$this->render('change_passport_data/need_sms_auth', array('sPassFormRender' => $sPassFormRender));
 			Yii::app()->end();
 		}
 
@@ -439,7 +468,7 @@ class DefaultController extends Controller
 			//рендерим форму запроса СМС-пароля
 			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 			//рендерим страницу с требованием пройти СМС-авторизацию
-			$this->render('change_numeric_code/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			$this->render('change_numeric_code/need_sms_auth', array('sPassFormRender' => $sPassFormRender));
 			Yii::app()->end();
 		}
 
@@ -530,7 +559,7 @@ class DefaultController extends Controller
 			//рендерим форму запроса СМС-пароля
 			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 			//рендерим страницу с требованием пройти СМС-авторизацию
-			$this->render('change_secret_question/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			$this->render('change_secret_question/need_sms_auth', array('sPassFormRender' => $sPassFormRender));
 			Yii::app()->end();
 		}
 
@@ -621,7 +650,7 @@ class DefaultController extends Controller
 			//рендерим форму запроса СМС-пароля
 			$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 			//рендерим страницу с требованием пройти СМС-авторизацию
-			$this->render('change_password/need_sms_auth', array('passFormRender' => $sPassFormRender));
+			$this->render('change_password/need_sms_auth', array('sPassFormRender' => $sPassFormRender));
 			Yii::app()->end();
 		}
 
@@ -786,7 +815,7 @@ class DefaultController extends Controller
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
-		$this->render($sView, array('passFormRender' => $sPassFormRender, 'model' => $oProductForm));
+		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'model' => $oProductForm));
 	}
 
 	/**
@@ -1089,7 +1118,7 @@ class DefaultController extends Controller
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
-		$this->render($sView, array('passFormRender' => $sPassFormRender, 'model' => $oLoanForm));
+		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'model' => $oLoanForm));
 	}
 
 	/**

@@ -19,7 +19,9 @@ class DefaultController extends Controller
 		$bTest = Yii::app()->request->getPost('test', false);
 
 		// посылаем запрос к API и получаем ответ
-		$aResponse = Yii::app()->getModule('identify')->identifyApi->processRequest($aRequest, $bTest);
+		/** @var IdentifyModule $oModule */
+		$oModule = Yii::app()->getModule('identify');
+		$aResponse = $oModule->identifyApi->processRequest($aRequest, $bTest);
 
 		echo CJSON::encode($aResponse);
 

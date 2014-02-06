@@ -55,6 +55,8 @@ $this->widget('bootstrap.widgets.TbButton', array(
 ?>
 </div>
 <?php
-
-
 $this->endWidget();
+
+?>
+	<br />
+<?php $this->renderPartial('app_info'); ?>

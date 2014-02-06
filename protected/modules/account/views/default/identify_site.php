@@ -3,14 +3,18 @@
 /* @var VideoIdentifyForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
+$this->pageTitle = Yii::app()->name . " - Идентификация на сайте";
 ?>
-	<h4>Требуется идентификация</h4>
+	<h4>Идентификация на сайте</h4>
 
 	<div class="alert in alert-block alert-warning span7">
-		<h4>Для подключения пакета займов, необходимо пройти идентификацию.</h4>
+		<h4>Для идентификации вам потребуется веб-камера.
+			<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
+				После идентификации потребуется ввести
+				данные документов, использованных при идентификации.
+			<?php endif; ?>
+		</h4>
 	</div>
-	<div class="clearfix"></div>
 <?php
 $this->widget("CheckBrowserWidget");
 
@@ -54,9 +58,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		?>
 	</div>
 <?php
-
-
 $this->endWidget();
+
 ?>
 	<br />
 <?php $this->renderPartial('app_info'); ?>

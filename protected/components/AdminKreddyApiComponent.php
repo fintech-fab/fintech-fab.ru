@@ -229,6 +229,22 @@ class AdminKreddyApiComponent
 		return $sWarning;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getCardVerifyWarning()
+	{
+		$sWarning = '<p>Уважаемый Клиент!<br/>Вам необходимо узнать замороженную сумму, одним из следующих способов:: <ul>' .
+			'<li>SMS-банкинг</li>' .
+			'<li>Интернет-банкинг</li>' .
+			'<li>По телефону службы поддержки банка (номер телефона указан на обратной стороне карты)</li>' .
+			'</ul>
+			<strong>БУДЬТЕ ВНИМАТЕЛЬНЫ ПРИ ВВОДЕ СУММЫ, КОЛИЧЕСТВО ПОПЫТОК ОГРАНИЧЕНО!</strong>
+			</p>';
+
+		return $sWarning;
+	}
+
 	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
@@ -654,17 +670,18 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'              => self::ERROR_AUTH,
-			'client_data'       => array(
+			'code'                 => self::ERROR_AUTH,
+			'client_data'          => array(
 				'is_debt'    => false,
 				'fullname'   => '',
 				'client_new' => false
 			),
-			'status'            => array(
+			'status'               => array(
 				'name' => false,
 			),
 			'loan_request'                    => false,
-			'active_loan'       => array(
+			'first_identification' => false,
+			'active_loan'          => array(
 				'channel_id' => false,
 				'balance'    => 0,
 				'expired'    => false,
@@ -684,16 +701,16 @@ class AdminKreddyApiComponent
 					'loan_lifetime' => false,
 				),
 			),
-			'moratoriums'       => array(
+			'moratoriums'          => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'          => array(),
-			'slow_channels'     => array(),
-			'bank_card_exists'  => false,
-			'bank_card_expired' => false,
-			'bank_card_pan'     => false,
+			'channels'             => array(),
+			'slow_channels'        => array(),
+			'bank_card_exists'     => false,
+			'bank_card_expired'    => false,
+			'bank_card_pan'        => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -2028,8 +2045,6 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
 
-		//$this->setLastMessage($aResult['message']);
-
 		if ($aResult['code'] === self::ERROR_NONE) {
 			return true;
 		} else {
@@ -2082,6 +2097,13 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->bCardVerifyExists;
+	}
+
+	public function isFirstIdentification()
+	{
+		$aData = $this->getClientInfo();
+
+		return $aData['first_identification'];
 	}
 
 	/**
@@ -2254,7 +2276,6 @@ class AdminKreddyApiComponent
 		$ch = curl_init($sApiUrl . $sAction);
 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('host:ccv'));
 		curl_setopt($ch, CURLOPT_POST, true);
 
 		if (SiteParams::getIsIvanovoSite()) {
@@ -3272,6 +3293,19 @@ class AdminKreddyApiComponent
 		return $bIsFirstAddingCard;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function getIsFirstVerifyingCard()
+	{
+		$bIsFirstVerifyingCard = (empty(Yii::app()->session['account_verifyCard']));
+
+		if ($bIsFirstVerifyingCard) {
+			Yii::app()->session['account_verifyCard'] = true;
+		}
+
+		return $bIsFirstVerifyingCard;
+	}
 
 	/**
 	 * Установка флага, что сессия пользователя истекла или не истекла.

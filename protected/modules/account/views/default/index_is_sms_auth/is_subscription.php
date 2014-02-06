@@ -2,19 +2,7 @@
 /**
  * @var $this DefaultController
  * @var $smsState
- * @var $sIdentifyRender
  */
-
-$this->breadcrumbs = array(
-	$this->module->id,
-);
-
-//TODO вынести заголовки страницы в getSomething()
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
 
 //количество доступных займов
 $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
@@ -41,9 +29,9 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 	<strong>Сумма займа:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?><br />
 <?php endif; ?>
 
-	<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
-	&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameForStatus(); ?>
-	<br />
+<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
+&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameForStatus(); ?>
+<br />
 
 
 <?php if (Yii::app()->adminKreddyApi->getActiveLoanExpiredTo()) {
@@ -60,5 +48,3 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 
 	<strong>Доступно займов:</strong> <?= $iAvailableLoans; ?><br />
 <?php endif; ?>
-
-<?= $sIdentifyRender ?>

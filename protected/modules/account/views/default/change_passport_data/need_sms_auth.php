@@ -1,10 +1,10 @@
 <?php
 /* @var DefaultController $this */
 /* @var IkTbActiveForm $form */
-/* @var $passFormRender */
+/* @var $sPassFormRender */
 
 $this->pageTitle = Yii::app()->name . " - Изменение паспортных данных";
 ?>
 <h4>Изменение паспортных данных</h4>
 
-<?= $passFormRender // отображаем форму запроса SMS-пароля ?>
+<?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>

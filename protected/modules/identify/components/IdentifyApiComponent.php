@@ -46,35 +46,35 @@ class IdentifyApiComponent
 			'instruction' => 'Сфотографируйте лицевую сторону паспорта (с информацией о дате выдачи)',
 			'title'       => 'Паспорт - лицевая сторона (первая часть)',
 			'description' => 'Пример фотографии лицевой стороны паспорта',
-			'example'     => '/images/documents/example1.jpg',
+			'example' => 'https://kreddy.ru/static/images/documents/example1.jpg',
 		),
 		self::STEP_DOCUMENT2 => array(
 			'type'        => self::C_TYPE_PASSPORT_FRONT_SECOND,
 			'instruction' => 'Сфотографируйте лицевую сторону паспорта (с Вашей фотографией, ФИО и т.д.)',
 			'title'       => 'Паспорт - лицевая сторона (вторая часть)',
 			'description' => 'Пример фотографии лицевой стороны паспорта',
-			'example'     => '/images/documents/example2.jpg',
+			'example' => 'https://kreddy.ru/static/images/documents/example2.jpg',
 		),
 		self::STEP_DOCUMENT3 => array(
 			'type'        => self::C_TYPE_PASSPORT_NOTIFICATION,
 			'instruction' => 'Сфотографируйте страницу паспорта с информацией о месте регистрации',
 			'title'       => 'Паспорт - страница регистрации',
 			'description' => 'Пример фотографии страницы паспорта с регистрацией',
-			'example'     => '/images/documents/example3.jpg',
+			'example' => 'https://kreddy.ru/static/images/documents/example3.jpg',
 		),
 		self::STEP_DOCUMENT4 => array(
 			'type'        => self::C_TYPE_PASSPORT_LAST,
 			'instruction' => 'Сфотографируйте последнюю страницу паспорта (с информацией о выданных документах), даже если она пуста.',
 			'title'       => 'Паспорт - последняя страница',
 			'description' => 'Пример фотографии страницы паспорта с информацией о документах',
-			'example'     => '/images/documents/example4.jpg',
+			'example' => 'https://kreddy.ru/static/images/documents/example4.jpg',
 		),
 		self::STEP_DOCUMENT5 => array(
 			'type'        => self::C_TYPE_DOCUMENT,
-			'instruction' => 'Сфотографируйте второй документ (ИНН, заграничный паспорт, пенсионное удостоверение, водительское удостоверение, заграничный паспорт, военный билет, страховое свидетельство государственного пенсионного страхования',
+			'instruction' => 'Сфотографируйте второй документ (ИНН, загр. паспорт, пенс. уд-е, вод. уд-е, в/билет, свид-во пенс. страхования)',
 			'title'       => 'Второй документ',
 			'description' => 'Пример фотографии второго документа',
-			'example'     => '/images/documents/second.jpg',
+			'example' => 'https://kreddy.ru/static/images/documents/second.png',
 		),
 		self::STEP_DONE      => array(
 			'instruction' => 'Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
@@ -139,7 +139,7 @@ class IdentifyApiComponent
 		}
 
 		$iStepNumber = self::STEP_FACE;
-		// авторизация успешна; генерируем соответствующий токен todo: убрать заглушку.
+		// авторизация успешна; генерируем соответствующий токен
 		$sToken = $this->generateToken($sApiToken, $iStepNumber);
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.

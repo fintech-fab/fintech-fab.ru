@@ -4,6 +4,29 @@
 /* @var IkTbActiveForm $form */
 
 $this->pageTitle = Yii::app()->name . " - Привязка банковской карты";
+
+// если Клиент верифицирует карту первый раз (в течение сессии) - выводим предупреждение в модальном окне
+if (Yii::app()->adminKreddyApi->getIsFirstVerifyingCard()):
+	?>
+	<div id="verify_warning" class="modal fade">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h4>Внимание!</h4>
+		</div>
+
+		<div class="modal-body">
+			<?= Yii::app()->adminKreddyApi->getCardVerifyWarning(); ?>
+		</div>
+
+		<div class="modal-footer">
+			<a data-dismiss="modal" class="btn" id="yw0" href="#">Закрыть</a></div>
+
+	</div>
+	<script>
+		jQuery("#verify_warning").modal('show');
+	</script>
+<?php
+endif;
 ?>
 	<h4>Привязка банковской карты</h4>
 
