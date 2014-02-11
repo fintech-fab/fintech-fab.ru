@@ -51,8 +51,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 <?= $form->errorSummary($model) ?>
 
-	<div class="alert alert-error">
-		<p style="color: red;">Уважаемые клиенты! По техническим причинам банковские карты VISA временно отвязаны от
+	<div class="alert alert-warning">
+	<p style="color: red;">Уважаемые клиенты! По техническим причинам банковские карты VISA временно отвязаны от
 			всех аккаунтов.<br /> Вы можете привязать другую карту (MasterCard, Maestro) или получить займ на счет
 			Вашего мобильного телефона (Мегафон, МТС, Билайн, Теле 2).<br /> Приносим свои извинения за доставленные
 			неудобства.</p>
