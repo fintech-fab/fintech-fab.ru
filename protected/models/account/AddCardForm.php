@@ -53,7 +53,7 @@ class AddCardForm extends CFormModel
 				                     'pattern' => '/^\d{3}$/'
 			),
 			array(
-				'iCardType', 'in', 'range' => array_keys(Dictionaries::$aCardTypes), 'message' => 'Выберите тип карты Mastercard, Maestro либо Visa'
+				'iCardType', 'in', 'range' => array_keys(Dictionaries::$aCardTypes), 'message' => 'Выберите тип карты Mastercard или Maestro'
 			),
 		);
 

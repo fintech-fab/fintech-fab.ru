@@ -35,9 +35,9 @@ endif;
 ?>
 	<h4>Привязка банковской карты</h4>
 
-<?php if (!empty($sError)): ?>
+<?php if (!empty($sError)) { ?>
 	<div class="alert alert-error"><?= $sError ?></div>
-<?php endif; ?>
+<?php } ?>
 
 
 <?php
@@ -50,6 +50,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 ?>
 <?= $form->errorSummary($model) ?>
+
+	<div class="alert alert-error">
+		<p style="color: red;">Уважаемые клиенты! По техническим причинам банковские карты VISA временно отвязаны от
+			всех аккаунтов.<br /> Вы можете привязать другую карту (MasterCard, Maestro) или получить займ на счет
+			Вашего мобильного телефона (Мегафон, МТС, Билайн, Теле 2).<br /> Приносим свои извинения за доставленные
+			неудобства.</p>
+	</div>
 
 	<div class="alert alert-warning" style="color: #000000 !important">
 		<?= $this->renderPartial('card/card_add_warning', null, true); ?>
