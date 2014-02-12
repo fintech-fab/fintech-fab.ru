@@ -321,9 +321,8 @@ class AdminKreddyApiComponent
 			$this->token = $aTokenData['token'];
 
 
-
 			// Если смс-авторизация не требутеся
-			if (!$this->getIsNeedSmsAuth()){
+			if (!$this->getIsNeedSmsAuth()) {
 				$this->setSmsAuthDone(true);
 			}
 
@@ -1803,19 +1802,8 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
 
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
+		return $this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -1859,19 +1847,7 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_NUMERIC_CODE,
 			array('sms_code' => $sSmsCode, 'ChangeNumericCodeForm' => $aNumericCode));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
+		return $this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -1914,19 +1890,7 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION,
 			array('sms_code' => $sSmsCode, 'ChangeSecretQuestionForm' => $aSecretQuestion));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
+		return $this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -1968,19 +1932,7 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SMS_AUTH_SETTING,
 			array('sms_code' => $sSmsCode, 'ChangeSmsAuthSettingForm' => $aSmsAuthSetting));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
+		return $this->checkChangeResultMessage($aResult);
 	}
 
 
@@ -2022,25 +1974,17 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code' => $sSmsCode));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK && isset($aResult['token'])) {
-			$this->setLastSmsMessage($aResult['sms_message']);
+		$bResult = $this->checkChangeResultMessage($aResult);
 
+		if ($bResult){
 			//обновляем токен сессии в связи со сменой пароля (иначе разлогинит, т.к. пароль в старом токене другой)
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
 			//ставим флаг успешной СМС-авторизации
 			$this->setSmsAuthDone(true);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
 		}
+
+		return $bResult;
 	}
 
 	/**
@@ -2361,7 +2305,14 @@ class AdminKreddyApiComponent
 			$aGetData = CJSON::decode($response);
 
 			if (is_array($aGetData)) {
-				$aData['message'] = ''; //в случае если сервер ответил, но не передал message,
+
+				// в случае если сервер ответил, но не передал message,
+				$aData = array(
+					'message'     => '',
+					'sms_message' => '',
+					'sms_code'    => '',
+				);
+
 				$aData = CMap::mergeArray($aData, $aGetData);
 			}
 		}
@@ -3400,5 +3351,33 @@ class AdminKreddyApiComponent
 		}
 
 		return $bResult;
+	}
+
+	private function checkChangeResultMessage($aResult)
+	{
+		// Ошибок нет
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		}
+
+		// смс не ок - отображаем ошибку смс
+		if ($aResult['sms_status'] !== self::SMS_AUTH_OK && $aResult['sms_message']) {
+
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+		} elseif ($aResult['sms_status'] === self::SMS_AUTH_OK) {
+
+			$this->setLastSmsMessage($aResult['message']);
+
+		} else {
+
+			$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+
+		}
+
+		return false;
 	}
 }
