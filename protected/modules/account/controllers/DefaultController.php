@@ -659,11 +659,6 @@ class DefaultController extends Controller
 
 		$oChangeSmsAuthSettingForm = new ChangeSmsAuthSettingForm();
 
-		if (Yii::app()->request->isAjaxRequest) {
-			echo CActiveForm::validate($oChangeSmsAuthSettingForm);
-			Yii::app()->end();
-		}
-
 		if (Yii::app()->request->getIsPostRequest()) {
 			$aPost = Yii::app()->request->getParam('ChangeSmsAuthSettingForm');
 			$oChangeSmsAuthSettingForm->setAttributes($aPost);
