@@ -320,9 +320,12 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 
-			$this->getClientInfo();
-			$bSmsAuthDone = !$this->getIsNeedSmsAuth();
-			$this->setSmsAuthDone($bSmsAuthDone);
+
+
+			// Если смс-авторизация не требутеся
+			if (!$this->getIsNeedSmsAuth()){
+				$this->setSmsAuthDone(true);
+			}
 
 			if ($this->checkIsNeedPassportData()) {
 				Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
@@ -2438,7 +2441,9 @@ class AdminKreddyApiComponent
 	 */
 	public function getIsNeedSmsAuth()
 	{
-		return ($this->getLastCode() === self::ERROR_NEED_SMS_AUTH);
+		$aInfo = $this->getClientInfo();
+
+		return ($aInfo['code'] === self::ERROR_NEED_SMS_AUTH);
 	}
 
 	/**
@@ -3180,7 +3185,9 @@ class AdminKreddyApiComponent
 	 */
 	public function getIsNeedRedirect()
 	{
-		return ($this->getLastCode() == self::ERROR_NEED_REDIRECT);
+		$aInfo = $this->getClientInfo();
+
+		return ($aInfo['code'] == self::ERROR_NEED_REDIRECT);
 	}
 
 	/**
