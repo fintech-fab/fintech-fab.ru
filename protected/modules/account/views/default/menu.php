@@ -70,7 +70,7 @@ $this->menu[] = array(
 			'label' => 'Изменение пароля', 'url' => array('/account/default/changePassword')
 		),
 		array(
-			'label' => 'Вкл./Выкл. дополнительной СМС-аутентификации', 'url' => array('/account/default/changeSmsAuthSettings')
+			'label' => 'Вкл./Выкл. дополнительной СМС-аутентификации', 'url' => array('/account/default/changeSmsAuthSetting')
 		),
 	),
 );

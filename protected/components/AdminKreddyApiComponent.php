@@ -168,6 +168,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
 	const API_ACTION_CHANGE_PASSPORT = 'siteClient/doChangePassport';
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
+	const API_ACTION_CHANGE_SMS_AUTH_SETTING = 'siteClient/doChangeSmsAuthSetting';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
@@ -638,9 +639,9 @@ class AdminKreddyApiComponent
 		$aData = array(
 			'code'                            => self::ERROR_AUTH,
 			'client_data'                     => array(
-				'is_debt'         => false,
-				'fullname'        => '',
-				'client_new'      => false,
+				'is_debt'          => false,
+				'fullname'         => '',
+				'client_new'       => false,
 				'sms_auth_enabled' => false,
 			),
 			'status'                          => array(
@@ -1951,6 +1952,61 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Заявка на смену параметра СМС-аутентификации, подписанная СМС-кодом
+	 *
+	 * @param string $sSmsCode
+	 *
+	 * @param        $aSmsAuthSetting
+	 *
+	 * @return bool
+	 */
+	public function changeSmsAuthSetting($sSmsCode, $aSmsAuthSetting)
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SMS_AUTH_SETTING,
+			array('sms_code' => $sSmsCode, 'ChangeSmsAuthSettingForm' => $aSmsAuthSetting));
+
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+
+	/**
+	 * Отправка СМС с кодом подтверждения для смены параметра аутентификации по СМС
+	 *
+	 * @return bool
+	 */
+	public function sendSmsChangeSmsAuthSetting()
+	{
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SMS_AUTH_SETTING);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
 	 * Заявка на смену пароля, подписанная СМС-кодом
 	 *
 	 * @param $sSmsCode
@@ -3016,6 +3072,22 @@ class AdminKreddyApiComponent
 	public function getSecretQuestion()
 	{
 		return Yii::app()->session['aSecretQuestion'];
+	}
+
+	/**
+	 * @param array $aSmsAuthSetting
+	 */
+	public function setSmsAuthSetting(array $aSmsAuthSetting)
+	{
+		Yii::app()->session['aSmsAuthSetting'] = $aSmsAuthSetting;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSmsAuthSetting()
+	{
+		return Yii::app()->session['aSmsAuthSetting'];
 	}
 
 	/**
