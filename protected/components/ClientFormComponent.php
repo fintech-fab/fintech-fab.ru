@@ -912,6 +912,7 @@ class ClientFormComponent
 
 	/**
 	 * Переводит обработку форм на следующий шаг
+	 *
 	 * @param int $iSteps
 	 */
 	public function nextStep($iSteps = 1)
@@ -1032,6 +1033,7 @@ class ClientFormComponent
 
 	/**
 	 * Получение из сессии времени выбранного "гибкого" займа
+	 *
 	 * @return bool
 	 */
 	public function getSessionFlexibleProductTime()
@@ -1252,5 +1254,24 @@ class ClientFormComponent
 	public function getFormWidgetSteps()
 	{
 		return self::$aFormWidgetSteps[$this->getSite()];
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getError()
+	{
+		$sError = Yii::app()->session['error'];
+		Yii::app()->session['error'] = null;
+
+		return $sError;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasError()
+	{
+		return !empty(Yii::app()->session['error']);
 	}
 }

@@ -18,10 +18,9 @@ $this->pageTitle = Yii::app()->name;
 	</div>
 <?php $this->widget('FormSelectProductWidget'); ?>
 
-<?php if (Yii::app()->session['error']): ?>
-	<div class="alert alert-error"><?= Yii::app()->session['error']; ?></div>
-	<?php Yii::app()->session['error'] = null; ?>
-<?php endif; ?>
+<?php if (Yii::app()->clientForm->hasError()) { ?>
+	<div class="alert alert-error"><?= Yii::app()->clientForm->getError(); ?></div>
+<?php } ?>
 	<div id="formBody">
 		<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
 	</div>
