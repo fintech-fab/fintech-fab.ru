@@ -636,18 +636,19 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'                 => self::ERROR_AUTH,
-			'client_data'          => array(
-				'is_debt'    => false,
-				'fullname'   => '',
-				'client_new' => false
+			'code'                            => self::ERROR_AUTH,
+			'client_data'                     => array(
+				'is_debt'         => false,
+				'fullname'        => '',
+				'client_new'      => false,
+				'sms_auth_enabled' => false,
 			),
-			'status'               => array(
+			'status'                          => array(
 				'name' => false,
 			),
 			'loan_request'                    => false,
-			'first_identification' => false,
-			'active_loan'          => array(
+			'first_identification'            => false,
+			'active_loan'                     => array(
 				'channel_id' => false,
 				'balance'    => 0,
 				'expired'    => false,
@@ -655,7 +656,7 @@ class AdminKreddyApiComponent
 			),
 			'subscription_request'            => false,
 			'subscription_request_can_cancel' => false,
-			'subscription'         => array(
+			'subscription'                    => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -667,16 +668,16 @@ class AdminKreddyApiComponent
 					'loan_lifetime' => false,
 				),
 			),
-			'moratoriums'          => array(
+			'moratoriums'                     => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'             => array(),
-			'slow_channels'        => array(),
-			'bank_card_exists'     => false,
-			'bank_card_expired'    => false,
-			'bank_card_pan'        => false,
+			'channels'                        => array(),
+			'slow_channels'                   => array(),
+			'bank_card_exists'                => false,
+			'bank_card_expired'               => false,
+			'bank_card_pan'                   => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
