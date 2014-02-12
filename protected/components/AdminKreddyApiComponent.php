@@ -310,12 +310,18 @@ class AdminKreddyApiComponent
 	 */
 	public function getAuth($sPhone, $sPassword)
 	{
+
 		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
 
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
+
 		if ($aTokenData['code'] === self::ERROR_NONE) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
+
+			$this->getClientInfo();
+			$bSmsAuthDone = !$this->getIsNeedSmsAuth();
+			$this->setSmsAuthDone($bSmsAuthDone);
 
 			if ($this->checkIsNeedPassportData()) {
 				Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
