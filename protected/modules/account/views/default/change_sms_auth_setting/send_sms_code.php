@@ -3,9 +3,11 @@
 /* @var SMSCodeForm $oSmsCodeForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Включение/Выключение дополнительной аутентификации по смс";
+
+$this->pageTitle = Yii::app()->name . " - Настройка безопасности";
 ?>
-	<h4>Включение/Выключение дополнительной аутентификации по смс</h4>
+
+	<h4>Настройка безопасности</h4>
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
@@ -14,8 +16,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $oSmsCodeForm->sendSmsCode = 1;
-echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 ?>
+<?= $form->hiddenField($oSmsCodeForm, 'sendSmsCode'); ?>
 	<div class="alert in alert-block alert-warning span7">
 		Для изменения параметра дополнительной СМС-аутентификации требуется подтверждение одноразовым SMS-кодом
 	</div>

@@ -3,9 +3,10 @@
 /* @var ChangeSmsAuthSettingForm $oChangeSmsAuthSettingForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Включение/Выключение дополнительной аутентификации по смс";
+$this->pageTitle = Yii::app()->name . " - Настройка безопасности";
 ?>
-	<h4>Включение/Выключение дополнительной аутентификации по смс</h4>
+
+	<h4>Настройка безопасности</h4>
 
 <?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'sms-auth-setting-form',

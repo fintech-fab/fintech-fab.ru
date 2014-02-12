@@ -3,22 +3,18 @@
 /* @var SMSCodeForm $oSmsCodeForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Включение/Выключение дополнительной аутентификации по смс";
+$this->pageTitle = Yii::app()->name . " - Настройка безопасности";
 ?>
-<h4>Изменение секретного вопроса</h4>
-<?php
+<h4>Настройка безопасности</h4>
 
-/* $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Информация о подключении',
-	'content' => $this->renderPartial('change_passport_data/_data', array(), true)
-));*/
-?>
 <div class="alert in alert-block alert-success span7">
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
+
 <div class="alert in alert-block alert-info span7">
 	Для подтверждения операции введите код, отправленный Вам по SMS
 </div>
+
 <div class="form" id="activeForm">
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
