@@ -231,6 +231,8 @@ div.search-form {
 }
 
 #main-content {
+	margin-top: -10px;
+	padding-top: 10px;
 	position: relative;
 }
 
@@ -240,6 +242,7 @@ div.search-form {
 }
 
 .main-bgr-14feb {
+	margin-top: -10px;
 	background: url('../images/transparentbg.png'), url('../images/14feb-bg.gif');
 	background-position: center top, left top;
 	background-repeat: repeat-y, repeat;

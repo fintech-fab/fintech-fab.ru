@@ -21,11 +21,12 @@ $this->endContent();
 <!--  header navbar end -->
 
 <!-- main content start-->
-<?= $content; ?>
+<div class="main-bgr-14feb">
+	<br />
+	<?= $content; ?>
+	<br />
+</div>
 <!-- main content end-->
-
-<br />
-
 <!-- footer start-->
 <?php $this->beginContent('//layouts/main_footer');
 echo $content;

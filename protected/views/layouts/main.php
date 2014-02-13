@@ -22,10 +22,9 @@ $this->endContent();
 <div class="top-page-widget hearts-bgr-14feb">
 	<?php
 	$this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
-?>
+	?>
 </div>
 <div class="main-bgr-14feb">
-	<br />
 	<!-- main content start-->
 	<?= $content; ?>
 	<!-- main content end--><br />
