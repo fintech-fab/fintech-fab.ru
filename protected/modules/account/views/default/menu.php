@@ -71,6 +71,11 @@ $this->menu[] = array(
 		),
 	),
 );
+
+$this->menu[] = array(
+	'label' => 'Настройки безопасности', 'url' => array('/account/default/changeSmsAuthSetting')
+);
+
 $this->menu[] = '';
 $this->menu[] = array(
 	'label' => 'Идентификация',
