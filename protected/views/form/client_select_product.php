@@ -33,10 +33,10 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 	));
 
 	?>
-	<div class="span6">
+	<div class="span6 birds-14feb">
 		<div class="row">
 
-			<?php
+		<?php
 			$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
 			// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 			if (empty($oClientCreateForm->product)) {

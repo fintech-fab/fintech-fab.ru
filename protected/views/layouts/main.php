@@ -19,27 +19,32 @@ echo $content;
 $this->endContent();
 ?>
 <!--  header navbar end -->
-<?php
-$this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
+<div class="top-page-widget hearts-bgr-14feb">
+	<?php
+	$this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 ?>
-<!-- main content start-->
-<?= $content; ?>
-<!-- main content end--><br />
+</div>
+<div class="main-bgr-14feb">
+	<br />
+	<!-- main content start-->
+	<?= $content; ?>
+	<!-- main content end--><br />
 
-<div class="page-divider1"></div>
+	<div class="page-divider1"></div>
 
-<div class="container">
-	<div class="row">
-		<h2 class="learn-more">Узнай больше о нас!</h2>
+	<div class="container">
+		<div class="row">
+			<h2 class="learn-more">Узнай больше о нас!</h2>
 
-		<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотрите ответы', Yii::app()
-				->createUrl('site/faq')); ?>! </p>
-	</div>
+			<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотрите ответы', Yii::app()
+					->createUrl('site/faq')); ?>! </p>
+		</div>
 
-	<div class="row" style="margin-left: 0;">
-		<?php
-		$this->widget('BottomTabsWidget');
-		?>
+		<div class="row" style="margin-left: 0;">
+			<?php
+			$this->widget('BottomTabsWidget');
+			?>
+		</div>
 	</div>
 </div>
 <!-- footer start-->

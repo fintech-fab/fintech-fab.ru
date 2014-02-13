@@ -72,4 +72,4 @@
 		</div>
 	</div>
 </div>
-<div class="page-divider"></div><br />
+<div class="page-divider"></div>

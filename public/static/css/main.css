@@ -238,3 +238,27 @@ div.search-form {
 #new_year_stars {
 	background: url('../images/nw_year_stars.jpg');
 }
+
+.main-bgr-14feb {
+	background: url('../images/transparentbg.png'), url('../images/14feb-bg.gif');
+	background-position: center top, left top;
+	background-repeat: repeat-y, repeat;
+
+	width: 100%;
+}
+
+.hearts-bgr-14feb {
+	background: url('../images/transparentbg.png'), url('../images/14feb-hearts.png'), url('../images/14feb-hearts.png');
+	background-position: center top, left top, right top;
+	background-repeat: repeat-y, no-repeat, no-repeat;
+}
+
+.top-page-widget {
+	margin-top: -10px;
+}
+
+.birds-14feb {
+	background: url('../images/14feb-birds.png');
+	background-position: right top;
+	background-repeat: no-repeat;
+}
