@@ -1253,4 +1253,23 @@ class ClientFormComponent
 	{
 		return self::$aFormWidgetSteps[$this->getSite()];
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getError()
+	{
+		$sError = Yii::app()->session['error'];
+		Yii::app()->session['error'] = null;
+
+		return $sError;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasError()
+	{
+		return !empty(Yii::app()->session['error']);
+	}
 }
