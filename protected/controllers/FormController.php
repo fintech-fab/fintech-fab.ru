@@ -206,6 +206,7 @@ class FormController extends Controller
 
 	/**
 	 *  Переход на шаг $step
+	 *
 	 * @param int $step
 	 */
 	public function actionStep($step)

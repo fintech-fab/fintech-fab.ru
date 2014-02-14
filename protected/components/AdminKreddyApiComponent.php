@@ -1812,10 +1812,11 @@ class AdminKreddyApiComponent
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 		}
+
 		return $aResult;
 
 		//TODO не укладывается в логику checkChangeResultMessage стоит ли переписать?
-  		//		return $this->checkChangeResultMessage($aResult);
+		//		return $this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -1823,7 +1824,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function isNoChangePassportErrors($aResult) {
+	public function isNoChangePassportErrors($aResult)
+	{
 		return ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK);
 	}
 
@@ -1832,7 +1834,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function isChangePassportSmsAuthError($aResult) {
+	public function isChangePassportSmsAuthError($aResult)
+	{
 		return ($aResult['sms_status'] !== self::SMS_AUTH_OK);
 	}
 
@@ -1841,9 +1844,11 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function isChangePassportValidationError($aResult) {
+	public function isChangePassportValidationError($aResult)
+	{
 		return ($aResult['code'] === self::ERROR_VALIDATION);
 	}
+
 	/**
 	 * Отправка СМС с кодом подтверждения смены паспорта
 	 *
@@ -2014,7 +2019,7 @@ class AdminKreddyApiComponent
 
 		$bResult = $this->checkChangeResultMessage($aResult);
 
-		if ($bResult){
+		if ($bResult) {
 			//обновляем токен сессии в связи со сменой пароля (иначе разлогинит, т.к. пароль в старом токене другой)
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
