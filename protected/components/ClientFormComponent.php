@@ -912,6 +912,7 @@ class ClientFormComponent
 
 	/**
 	 * Переводит обработку форм на следующий шаг
+	 *
 	 * @param int $iSteps
 	 */
 	public function nextStep($iSteps = 1)
@@ -1032,6 +1033,7 @@ class ClientFormComponent
 
 	/**
 	 * Получение из сессии времени выбранного "гибкого" займа
+	 *
 	 * @return bool
 	 */
 	public function getSessionFlexibleProductTime()
