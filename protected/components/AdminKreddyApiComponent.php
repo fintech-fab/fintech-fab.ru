@@ -136,6 +136,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
+	const ERROR_VALIDATION = 24; //ошибка валидации
 	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
@@ -1784,7 +1785,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param        $aPassportData
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public function changePassport($sSmsCode, $aPassportData)
 	{
@@ -1794,19 +1795,43 @@ class AdminKreddyApiComponent
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
 		} else {
 			if (isset($aResult['sms_message'])) {
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
-
-			return false;
 		}
+		return $aResult;
+
 	}
 
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isNoChangePassportErrors($aResult) {
+		return ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK);
+	}
+
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isChangePassportSmsAuthError($aResult) {
+		return ($aResult['sms_status'] !== self::SMS_AUTH_OK);
+	}
+
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isChangePassportValidationError($aResult) {
+		return ($aResult['code'] === self::ERROR_VALIDATION);
+	}
 	/**
 	 * Отправка СМС с кодом подтверждения смены паспорта
 	 *
