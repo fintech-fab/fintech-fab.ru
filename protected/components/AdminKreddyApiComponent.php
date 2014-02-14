@@ -1814,8 +1814,8 @@ class AdminKreddyApiComponent
 		}
 		return $aResult;
 
-
-		return $this->checkChangeResultMessage($aResult);
+		//TODO не укладывается в логику checkChangeResultMessage
+		//		return $this->checkChangeResultMessage($aResult);
 	}
 
 	/**
