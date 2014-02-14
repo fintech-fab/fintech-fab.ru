@@ -45,7 +45,7 @@ class DefaultController extends Controller
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
-					'cancelRequest'
+					'cancelRequest',
 				),
 				'users'   => array('@'),
 			),
@@ -221,13 +221,10 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
-		//проверяем, не находится ли карта на верификации, если да - выводим форму ввода проверочной суммы
+		//проверяем, не находится ли карта на верификации, если да - выводим отправляем на страницу верификации
 		if (Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
-			$oVerifyForm = new VerifyCardForm();
-			$this->render('card/verify_card', array('model' => $oVerifyForm));
-			Yii::app()->end();
+			$this->redirect($this->createUrl('/account/verifyCard'));
 		}
-
 
 		//если пришел POST-запрос
 		if (Yii::app()->request->isPostRequest) {
@@ -304,8 +301,21 @@ class DefaultController extends Controller
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
-		$oVerifyForm = new VerifyCardForm();
+		$sVerify3DHtml = Yii::app()->adminKreddyApi->getCardVerify3DHtml();
+		$bNeedWait = Yii::app()->adminKreddyApi->isCardVerifyNeedWait();
 
+		if (!Yii::app()->request->isPostRequest &&
+			$sVerify3DHtml &&
+			!$bNeedWait
+		) {
+			echo $sVerify3DHtml;
+			Yii::app()->end();
+		} elseif ($bNeedWait) {
+			$this->render('card/verify_3d');
+			Yii::app()->end();
+		}
+
+		$oVerifyForm = new VerifyCardForm();
 		//если пришел POST-запрос, то пробуем верифицировать карту с полученными данными
 		if (Yii::app()->request->isPostRequest) {
 			$aPostData = Yii::app()->request->getParam('VerifyCardForm');
@@ -669,7 +679,7 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 		}
-		if($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
+		if ($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
 			$oChangeSmsAuthSettingForm->sms_auth_enabled = $aClientInfo['client_data']['sms_auth_enabled'];
 		}
 		$this->render('change_sms_auth_setting/sms_auth_setting_form', array('oChangeSmsAuthSettingForm' => $oChangeSmsAuthSettingForm));

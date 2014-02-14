@@ -179,9 +179,9 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
-	const API_ACTION_ADD_CARD = 'siteClient/addClientCard';
-	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
-	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClient/checkClientCanVerifyCard';
+	const API_ACTION_ADD_CARD = 'siteClientCard/addClientCard';
+	const API_ACTION_VERIFY_CARD = 'siteClientCard/verifyClientCard';
+	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClientCard/checkClientCanVerifyCard';
 
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
@@ -223,6 +223,8 @@ class AdminKreddyApiComponent
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
+	private $sCardVerify3DHtml = null;
+	private $bCardVerifyNeedWait = false;
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -1976,7 +1978,7 @@ class AdminKreddyApiComponent
 
 		$bResult = $this->checkChangeResultMessage($aResult);
 
-		if ($bResult){
+		if ($bResult) {
 			//обновляем токен сессии в связи со сменой пароля (иначе разлогинит, т.к. пароль в старом токене другой)
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
@@ -2028,11 +2030,21 @@ class AdminKreddyApiComponent
 	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
 	{
 		$aRequest = array(
-			'card_pan'         => $sCardPan,
-			'card_month'       => $sCardMonth,
-			'card_year'        => $sCardYear,
-			'card_holder_name' => $sCardHolderName,
-			'card_cvc'         => $sCardCvc
+			'card_pan'          => $sCardPan,
+			'card_month'        => $sCardMonth,
+			'card_year'         => $sCardYear,
+			//'card_holder_name' => $sCardHolderName,
+			'card_cvc'          => $sCardCvc,
+			//TODO СДЕЛАТЬ В ФОРМЕ
+			'email'             => 'email@test.local',
+			'address'           => 'address',
+			'city'              => 'Moscow',
+			'zip_code'          => '0000001',
+			'country'           => 'RU',
+			'verify_method'     => 2,
+			'ip'                => Yii::app()->request->getUserHostAddress(),
+			'card_printed_name' => $sCardHolderName,
+			'redirect_url'      => Yii::app()->createAbsoluteUrl('/account/addCard'),
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
@@ -2072,7 +2084,15 @@ class AdminKreddyApiComponent
 	{
 		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
+
+			if (isset($aResult['html'])) {
+				$this->sCardVerify3DHtml = $aResult['html'];
+			}
+			if (isset($aResult['need_wait'])) {
+				$this->bCardVerifyNeedWait = $aResult['need_wait'];
+			}
 		}
+
 
 		if (!$this->getIsError()) {
 			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));
@@ -2080,6 +2100,22 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->bCardCanVerify;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isCardVerifyNeedWait()
+	{
+		return $this->bCardVerifyNeedWait;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getCardVerify3DHtml()
+	{
+		return $this->sCardVerify3DHtml;
 	}
 
 	public function checkCardVerifyExists()
@@ -3353,6 +3389,11 @@ class AdminKreddyApiComponent
 		return $bResult;
 	}
 
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
 	private function checkChangeResultMessage($aResult)
 	{
 		// Ошибок нет
