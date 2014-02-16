@@ -4,7 +4,7 @@ namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
 
-class MainController extends BaseController
+class TestController extends BaseController
 {
 
 	public $layout = 'site';
@@ -14,9 +14,5 @@ class MainController extends BaseController
 		return $this->make('main');
 	}
 
-	public function about()
-	{
-		return $this->make('about');
-	}
 
 }
