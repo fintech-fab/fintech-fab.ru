@@ -774,7 +774,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'job_contact_name'       => 'ФИО руководителя/директора',
 			'job_contact_phone'      => 'Телефон руководителя/директора',
 
-			'have_past_credit'       => 'Уже были кредиты',
+			'have_past_credit' => 'Были кредиты в прошлом?',
 			'have_dependents'        => 'Есть иждивенцы',
 
 			'relatives_degree'       => 'Степень родства',

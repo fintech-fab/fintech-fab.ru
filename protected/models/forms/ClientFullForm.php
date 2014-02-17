@@ -159,7 +159,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'password_repeat'               => 'Подтверждение пароля',
 
 				'loan_purpose'                  => 'Цель займа',
-				'have_past_credit'              => 'Уже были кредиты',
+				'have_past_credit'              => 'Наличие кредитов и займов в прошлом',
 
 			)
 		);
