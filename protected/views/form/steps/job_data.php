@@ -63,6 +63,8 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 			<?= $form->dropDownListRow2($oClientCreateForm, 'job_monthly_outcome', Dictionaries::$aMonthlyMoney, SiteParams::getHintHtmlOptions($oClientCreateForm, 'job_monthly_outcome') + array('empty' => '')); ?>
 
 			<?= $form->dropDownListRow2($oClientCreateForm, 'loan_purpose', Dictionaries::$aLoanPurposes, SiteParams::getHintHtmlOptions($oClientCreateForm, 'loan_purpose') + array('empty' => '')); ?>
+
+			<?= $form->radioButtonListInlineRow($oClientCreateForm, 'have_past_credit', Dictionaries::$aYesNo, SiteParams::getHintHtmlOptions($oClientCreateForm, 'have_past_credit') + array('empty' => '')); ?>
 		</div>
 	</div>
 	<div class="span6">
@@ -102,7 +104,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 				),
 				'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 				'type'        => 'primary',
-				'label' => SiteParams::C_BUTTON_LABEL_NEXT,
+				'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>
