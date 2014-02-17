@@ -9,7 +9,7 @@
 				<?php
 				$this->widget('FooterLinksWidget');
 				?>
-				<p>&copy; <?= SiteParams::copyrightYear() ?> ООО "Финансовые Решения"</p>
+				<p>&copy; <?= SiteParams::copyrightYear() ?> ООО "Финансовые Решения", 115172, г. Москва, Гончарная наб., 1, стр.4, ОГРН 1117746371270</p>
 			</div>
 		</div>
 	</div>
