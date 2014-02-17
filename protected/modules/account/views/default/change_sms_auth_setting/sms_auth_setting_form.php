@@ -8,6 +8,13 @@ $this->pageTitle = Yii::app()->name . " - Настройка безопасно�
 
 	<h4>Настройка безопасности</h4>
 
+	<p>Двухфакторная аутентификация <?=($oChangeSmsAuthSettingForm->sms_auth_enabled) ? 'включена' : 'выключена';?></p>
+
+	<p>
+		Вы можете <?=($oChangeSmsAuthSettingForm->sms_auth_enabled) ? 'выключить' : 'включить';?> дополнительную
+		проверку входа в личный кабинет по смс-коду
+	</p>
+
 <?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'sms-auth-setting-form',
 	'enableAjaxValidation' => false,
@@ -18,17 +25,20 @@ $this->pageTitle = Yii::app()->name . " - Настройка безопасно�
 
 	<div class="row">
 		<div class="span5">
-			<?= $form->checkBoxRow($oChangeSmsAuthSettingForm, 'sms_auth_enabled'); ?>
+			<?= $form->hiddenField(
+				$oChangeSmsAuthSettingForm,
+				'sms_auth_enabled',
+				array('value'=> ($oChangeSmsAuthSettingForm->sms_auth_enabled)?0:1)); ?>
 		</div>
 	</div>
-
+	<br>
 	<div class="clearfix"></div>
-	<div class="form-actions">
+	<div>
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'normal',
-			'label'      => 'Отправить',
+			'label'      => ($oChangeSmsAuthSettingForm->sms_auth_enabled) ? 'Выключить' : 'Включить',
 		)); ?>
 	</div>
 
