@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientJobDataForm
  */
@@ -17,7 +18,8 @@ class ClientJobDataForm extends ClientFullForm
 			'status',
 			'relatives_one_fio',
 			'relatives_one_phone',
-			'loan_purpose'
+			'loan_purpose',
+			'have_past_credit',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -37,6 +39,7 @@ class ClientJobDataForm extends ClientFullForm
 				'relatives_one_fio',
 				'relatives_one_phone',
 				'loan_purpose',
+				'have_past_credit',
 
 				//обязательно требуется для валидации, берется из информации предыдущих форм
 				'phone',
@@ -68,7 +71,7 @@ class ClientJobDataForm extends ClientFullForm
 			'relatives_one_fio',
 			'relatives_one_phone',
 			'loan_purpose',
-
+			'have_past_credit',
 			//обязательно требуется для валидации, берется из информации предыдущих форм
 			'phone',
 		);

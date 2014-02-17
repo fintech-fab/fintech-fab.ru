@@ -50,6 +50,7 @@
  * v Согласен с условиями и передачей данных
  *
  */
+
 /**
  * Class ClientCreateFormAbstract
  * общий класс для всех форм ввода клиента
@@ -127,7 +128,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	//>--- Наличие кредитной истории ---<//
 
-	public $have_past_credit = 0; // раньше были кредиты @new
+	public $have_past_credit; // раньше были кредиты @new
 
 	//>--- Контактные данные ближайшего окружения ---<//
 
@@ -176,6 +177,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * получить правила для полей
+	 *
 	 * @param array $aFields
 	 * @param array $aRequires
 	 *
@@ -478,6 +480,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка имени
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -488,6 +491,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка учреждения, выдавшего паспорт
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -498,6 +502,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка фио
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -508,6 +513,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка составляющих адреса
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -519,6 +525,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка, что возраст в заданном диапазоне
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -529,6 +536,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка даты выдачи паспорта на валидность
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -539,6 +547,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка номера второго документа на валидность
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -549,6 +558,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * адрес регистрации совпадает с адресом проживания?
+	 *
 	 * @return bool
 	 */
 	public function isAddressRegAsRes()
@@ -558,6 +568,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка номера телефона
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -568,6 +579,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка цифрового кода
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -578,6 +590,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * подключаем общий помощник по валидации разных данных
+	 *
 	 * @return array
 	 */
 	public function behaviors()
@@ -610,6 +623,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * проверка имени
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -700,6 +714,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 	/**
 	 * названия атрибутов
+	 *
 	 * @return array
 	 */
 	public function attributeLabels()
@@ -759,7 +774,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'job_contact_name'       => 'ФИО руководителя/директора',
 			'job_contact_phone'      => 'Телефон руководителя/директора',
 
-			'have_past_credit'       => 'Были кредиты в прошлом?',
+			'have_past_credit'       => 'Уже были кредиты',
 			'have_dependents'        => 'Есть иждивенцы',
 
 			'relatives_degree'       => 'Степень родства',
@@ -835,9 +850,9 @@ class ClientCreateFormAbstract extends CFormModel
 			'address_reg_city'              => 'Пожалуйста, введите название Вашего населенного пункта в соответствии с постоянной регистрацией.',
 			'address_reg_address'           => 'Пожалуйста, введите данные постоянной регистрации: название улицы, номер дома, номер корпуса/строения, номер квартиры.',
 			'relatives_one_fio'             => 'Пожалуйста, введите фамилию, имя, отчество любого родственника или знакомого, данный контакт необходим в случае, если мы не сможем с Вами связаться.',
-			'relatives_one_phone' => 'Пожалуйста, введите номер телефона Вашего родственника или знакомого, данный контакт необходим в случае, если мы не сможем с Вами связаться (должен отличаться от других номеров в анкете).',
+			'relatives_one_phone'           => 'Пожалуйста, введите номер телефона Вашего родственника или знакомого, данный контакт необходим в случае, если мы не сможем с Вами связаться (должен отличаться от других номеров в анкете).',
 			'friends_fio'                   => 'Пожалуйста, введите фамилию, имя, отчество.',
-			'friends_phone'       => 'Пожалуйста, введите номер телефона (должен отличаться от других номеров в анкете).',
+			'friends_phone'                 => 'Пожалуйста, введите номер телефона (должен отличаться от других номеров в анкете).',
 			'address_res_region'            => 'Пожалуйста, укажите регион Вашего фактического проживания.',
 			'address_res_city'              => 'Пожалуйста, введите название населенного пункта, в котором Вы фактически проживаете.',
 			'address_res_address'           => 'Пожалуйста, введите адрес Вашего фактического проживания : название улицы, номер дома, номер корпуса/строения, номер квартиры.',
@@ -849,7 +864,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'educational_institution_phone' => 'Пожалуйста, укажите номер телефона учебного заведения',
 			'job_company'                   => 'Пожалуйста, укажите название организации, в которой работаете. ',
 			'job_position'                  => 'Пожалуйста, укажите свою должность.',
-			'job_phone'           => 'Введите номер рабочего телефона (должен отличаться от других номеров в анкете).',
+			'job_phone'                     => 'Введите номер рабочего телефона (должен отличаться от других номеров в анкете).',
 			'job_time'                      => 'Введите свой трудовой стаж на текущем месте работы.',
 
 			'job_monthly_income'            => 'Пожалуйста, укажите Ваш среднемесячный доход.',
@@ -857,11 +872,13 @@ class ClientCreateFormAbstract extends CFormModel
 
 			'loan_purpose'                  => 'Пожалуйста, выберите цель займа.',
 
+			'have_past_credit'              => 'Пожалуйста, укажите, были ли у Вас кредиты в прошлом',
+
 			'numeric_code'                  => 'Пожалуйста, придумайте и введите в поле свой цифровой код. Количество символов – от 4 до 8. ',
 			'secret_question'               => 'Пожалуйста, выберите секретный вопрос.',
 			'secret_answer'                 => 'Пожалуйста, введите ответ на секретный вопрос.',
 			'password'                      => 'Придумайте и введите свой пароль (не менее 8 символов в английской раскладке клавиатуры).',
-			'password_repeat' => 'Пожалуйста, повторно введите пароль для входа в личный кабинет. Убедитесь, что пароли совпадают!',
+			'password_repeat'               => 'Пожалуйста, повторно введите пароль для входа в личный кабинет. Убедитесь, что пароли совпадают!',
 
 		);
 

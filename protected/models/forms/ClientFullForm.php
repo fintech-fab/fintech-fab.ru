@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Class ClientFullForm
  *
  * @method FormFieldValidateBehavior asa()
  *
  */
-
 class ClientFullForm extends ClientCreateFormAbstract
 {
 	/**
@@ -44,6 +44,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 
 			'status',
 			'loan_purpose',
+			'have_past_credit',
 
 			'numeric_code',
 			'complete',
@@ -113,6 +114,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'password',
 				'password_repeat',
 				'loan_purpose',
+				'have_past_credit',
 			),
 			$aRequired
 		), $aMyRules);
@@ -135,7 +137,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'friends_fio'                   => 'ФИО',
 				'friends_phone'                 => 'Телефон',
 
-				'complete' => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'/pages/viewPartial/usloviya\', \'Условия обслуживания и передачи информации\')"  href="#">подробная информация</a>)',
+				'complete'                      => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'/pages/viewPartial/usloviya\', \'Условия обслуживания и передачи информации\')"  href="#">подробная информация</a>)',
 
 				'passport_number'               => 'Серия/номер',
 				'passport_series'               => 'Серия/номер',
@@ -156,7 +158,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'password'                      => 'Пароль для входа в личный кабинет',
 				'password_repeat'               => 'Подтверждение пароля',
 
-				'loan_purpose' => 'Цель займа',
+				'loan_purpose'                  => 'Цель займа',
+				'have_past_credit'              => 'Уже были кредиты',
 
 			)
 		);
@@ -217,6 +220,8 @@ class ClientFullForm extends ClientCreateFormAbstract
 			'income_source',
 
 			'loan_purpose',
+			'have_past_credit',
+
 			'numeric_code',
 			'secret_question',
 			'secret_answer',
