@@ -46,6 +46,7 @@ class DefaultController extends Controller
 					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
 					'cancelRequest',
+					'returnFrom3DSecurity',
 				),
 				'users'   => array('@'),
 			),
@@ -205,6 +206,12 @@ class DefaultController extends Controller
 		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
 
+
+	public function actionReturnFrom3DSecurity()
+	{
+		$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
+	}
+
 	/**
 	 * Привязка банковской карты
 	 *
@@ -221,9 +228,10 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
-		//проверяем, не находится ли карта на верификации, если да - выводим отправляем на страницу верификации
-		if (Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
-			$this->redirect($this->createUrl('/account/verifyCard'));
+		//проверяем, не находится ли карта на верификации, если да - отправляем на страницу верификации
+		$oCardStatus = Yii::app()->adminKreddyApi->checkVerifyCardStatus();
+		if ($oCardStatus->bCardCanVerify) {
+			$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
 		}
 
 		//если пришел POST-запрос
@@ -236,11 +244,7 @@ class DefaultController extends Controller
 			if ($oCardForm->validate()) {
 				//отправляем данные в API на проверку
 				$bAddCardOk = Yii::app()->adminKreddyApi->addClientCard(
-					$oCardForm->sCardPan,
-					$oCardForm->sCardMonth,
-					$oCardForm->sCardYear,
-					$oCardForm->sCardHolderName,
-					$oCardForm->sCardCvc
+					$oCardForm
 				);
 				//если удалось отправить карту на проверку
 				if ($bAddCardOk) {
@@ -288,21 +292,28 @@ class DefaultController extends Controller
 		}
 
 		//если нельзя провести верификацию карты то отправляем на форму добавления карты
-		if (!Yii::app()->adminKreddyApi->checkCanVerifyCard()) {
-			/**
-			 * если в куках написано, что карта отправлена на верификацию,
-			 * но API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
-			 * и удаляем куку
-			 */
-			Cookie::compareDataInCookie('cardVerify', 'onVerify', true);
-			Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
+		$oCardStatus = Yii::app()->adminKreddyApi->checkVerifyCardStatus();
+
+		if (!$oCardStatus->bCardCanVerify) {
+			if ($oCardStatus->bCardVerify3DsError) {
+				Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_CARD_VERIFY_ERROR_3DS);
+			} else {
+				/**
+				 * если в куках написано, что карта отправлена на верификацию,
+				 * но API говорит что верифицироваться нельзя, то пишем user->setFlash сообщение
+				 * и удаляем куку
+				 */
+				Cookie::compareDataInCookie('cardVerify', 'onVerify', true);
+				Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_CARD_VERIFY_EXPIRED);
+			}
 			Cookie::saveDataToCookie('cardVerify', array('onVerify' => false));
+
 
 			$this->redirect($this->createUrl('/account/addCard'));
 		}
 
-		$sVerify3DHtml = Yii::app()->adminKreddyApi->getCardVerify3DHtml();
-		$bNeedWait = Yii::app()->adminKreddyApi->isCardVerifyNeedWait();
+		$sVerify3DHtml = $oCardStatus->sCardVerify3DHtml;
+		$bNeedWait = $oCardStatus->bCardVerifyNeedWait;
 
 		if (!Yii::app()->request->isPostRequest &&
 			$sVerify3DHtml &&

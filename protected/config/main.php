@@ -153,6 +153,7 @@ $a = array(
 			'csrfTokenName'               => 'stcs',
 			'aIgnoreCsrfValidationRoutes' => array(
 				'identify/default/index',
+				'account/default/returnFrom3DSecurity'
 			),
 		),
 	),

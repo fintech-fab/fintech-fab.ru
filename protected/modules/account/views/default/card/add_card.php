@@ -43,6 +43,7 @@ endif;
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'          => 'add-card',
+	'type' => 'horizontal',
 	'action'      => Yii::app()->createUrl('/account/addCard'),
 	'htmlOptions' => array(
 		'autocomplete' => 'off',
@@ -52,7 +53,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->errorSummary($model) ?>
 
 	<div class="alert alert-warning">
-	<p style="color: red;">Уважаемые клиенты! По техническим причинам банковские карты VISA временно отвязаны от
+		<p style="color: red;">Уважаемые клиенты! По техническим причинам банковские карты VISA временно отвязаны от
 			всех аккаунтов.<br /> Вы можете привязать другую карту (MasterCard, Maestro) или получить займ на счет
 			Вашего мобильного телефона (Мегафон, МТС, Билайн, Теле 2).<br /> Приносим свои извинения за доставленные
 			неудобства.</p>
@@ -64,24 +65,29 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <?= $form->hiddenField($model, 'iCardType') ?>
 
+<?= $form->textFieldRow($model, 'sEmail', array('maxlength' => '50')); ?>
+<?= $form->textFieldRow($model, 'sAddress', array('maxlength' => '50')); ?>
+<?= $form->textFieldRow($model, 'sCity', array('maxlength' => '50')); ?>
+<?= $form->textFieldRow($model, 'sZipCode', array('maxlength' => '10')); ?>
+
 	<div style="background: url('/static/img/bankcard/cc-template.png'); width: 550px; height: 280px; margin-bottom: 15px;">
-		<?= $form->textField($model, 'sCardPan', array('maxlength' => '20', "style" => "position: relative; top: 136px; left: 40px; width: 183px;", 'placeholder' => "1234567812345678")); ?>
+		<?= $form->textField($model, 'sCardPan', array('class' => 'card', 'maxlength' => '20', "style" => "position: relative; top: 136px; left: 40px; width: 183px;", 'placeholder' => "1234567812345678")); ?>
 
-		<?= $form->maskedTextField($model, 'sCardValidThru', ' 99 / 99 ', array("style" => "position: relative; top: 164px; left: -29px; width: 53px;")); ?>
+		<?= $form->maskedTextField($model, 'sCardValidThru', ' 99 / 99 ', array('class' => 'card', "style" => "position: relative; top: 164px; left: -29px; width: 53px;")); ?>
 
-		<?= $form->maskedTextField($model, 'sCardCvc', '999', array("style" => "position: relative; top: 132px; left: 132px; width: 32px;", 'size' => '3', 'maxlength' => '3')); ?>
+		<?= $form->maskedTextField($model, 'sCardCvc', '999', array('class' => 'card', "style" => "position: relative; top: 132px; left: 132px; width: 32px;", 'size' => '3', 'maxlength' => '3')); ?>
 
-		<?= $form->textField($model, 'sCardHolderName', array("style" => "position: relative; top: 191px; left: -276px; width: 183px;", 'placeholder' => "MR. CARDHOLDER")); ?>
+		<?= $form->textField($model, 'sCardHolderName', array('class' => 'card', "style" => "position: relative; top: 191px; left: -276px; width: 183px;", 'placeholder' => "MR. CARDHOLDER")); ?>
 
-		<div style="position: relative; top: 120px; left: 257px; width: 82px; height: 44px; background: <?= $sImagePath ?>" id="cardType"></div>
+		<div style="position: relative; top: 130px; left: 257px; width: 82px; height: 44px; background: <?= $sImagePath ?>" id="cardType"></div>
 	</div>
+	<div class="confirmations">
+		<?= $form->checkBoxRow($model, 'bConfirm'); ?>
 
-<?= $form->checkBoxRow($model, 'bConfirm'); ?>
-
-	<span id="bAgreeDiv" data-content='<?= AdminKreddyApiComponent::C_CARD_AGREEMENT; ?>' data-toggle='popover' data-trigger='hover' data-placement="top">
+		<span id="bAgreeDiv" data-content='<?= AdminKreddyApiComponent::C_CARD_AGREEMENT; ?>' data-toggle='popover' data-trigger='hover' data-placement="top">
 		<?= $form->checkBoxRow($model, 'bAgree'); ?>
 	</span>
-
+	</div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
@@ -96,11 +102,15 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 $this->endWidget();
 
 Yii::app()->clientScript->registerCss('formstyle', '
-input[type="text"] {
+input[type="text"].card {
 background-color: transparent;
 border: 0px;
 height: 14px;
-}');
+}
+
+div.confirmations {
+margin-left: -180px;
+');
 
 $sScript = 'oCardPan = $("#' . get_class($model) . '_sCardPan");
 oCardTypeField = $("#' . get_class($model) . '_iCardType");

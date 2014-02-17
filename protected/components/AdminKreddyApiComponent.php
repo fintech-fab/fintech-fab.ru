@@ -192,6 +192,7 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
+	const C_CARD_VERIFY_ERROR_3DS = "При авторизации карты произошла ошибка. Возможно, неверно введен код авторизации. Попробуйте повторить процедуру привязки карты.";
 	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
 
 	const C_REQUEST_CANCEL_SUCCESS = 'Ваше подключение успешно отменено. Будем ждать новой заявки!';
@@ -223,8 +224,6 @@ class AdminKreddyApiComponent
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
-	private $sCardVerify3DHtml = null;
-	private $bCardVerifyNeedWait = false;
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -2019,32 +2018,29 @@ class AdminKreddyApiComponent
 	/**
 	 * Привязка банковской карты к аккаунту
 	 *
-	 * @param $sCardPan
-	 * @param $sCardMonth
-	 * @param $sCardYear
-	 * @param $sCardHolderName
-	 * @param $sCardCvc
+	 * @param AddCardForm $oCardForm
 	 *
 	 * @return bool
 	 */
-	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
+	public function addClientCard(AddCardForm $oCardForm)
+		//$sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
 	{
 		$aRequest = array(
-			'card_pan'          => $sCardPan,
-			'card_month'        => $sCardMonth,
-			'card_year'         => $sCardYear,
+			'card_pan'          => $oCardForm->sCardPan,
+			'card_month'        => $oCardForm->sCardMonth,
+			'card_year'         => $oCardForm->sCardYear,
 			//'card_holder_name' => $sCardHolderName,
-			'card_cvc'          => $sCardCvc,
-			//TODO СДЕЛАТЬ В ФОРМЕ
-			'email'             => 'email@test.local',
-			'address'           => 'address',
-			'city'              => 'Moscow',
-			'zip_code'          => '0000001',
-			'country'           => 'RU',
-			'verify_method'     => 2,
+			'card_cvc'          => $oCardForm->sCardCvc,
+
+			'email'             => $oCardForm->sEmail,
+			'address'           => $oCardForm->sAddress,
+			'city'              => $oCardForm->sCity,
+			'zip_code'          => $oCardForm->sZipCode,
+			'country'           => $oCardForm->sCountry,
+
 			'ip'                => Yii::app()->request->getUserHostAddress(),
-			'card_printed_name' => $sCardHolderName,
-			'redirect_url'      => Yii::app()->createAbsoluteUrl('/account/addCard'),
+			'card_printed_name' => $oCardForm->sCardHolderName,
+			'redirect_url'      => Yii::app()->createAbsoluteUrl('/account/returnFrom3DSecurity'),
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
@@ -2078,50 +2074,45 @@ class AdminKreddyApiComponent
 	 * Проверяет, требуется ли клиенту пройти верификацию карты
 	 * 0 - не может, нужно сначала добавить карту
 	 *
-	 * @return bool
+	 * @return stdClass
 	 */
-	public function checkCanVerifyCard()
+	public function checkVerifyCardStatus()
 	{
+		$sCardVerify3DHtml = null;
+		$bCardVerifyNeedWait = false;
+
 		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
 
 			if (isset($aResult['html'])) {
-				$this->sCardVerify3DHtml = $aResult['html'];
+				$sCardVerify3DHtml = $aResult['html'];
 			}
 			if (isset($aResult['need_wait'])) {
-				$this->bCardVerifyNeedWait = $aResult['need_wait'];
+				$bCardVerifyNeedWait = $aResult['need_wait'];
 			}
 		}
 
+		$bCardVerify3DsError = (!empty($aResult['card_error_3ds']));
 
 		if (!$this->getIsError()) {
 			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));
 			$this->bCardVerifyExists = (!empty($aResult['verify_exists']));
 		}
 
-		return $this->bCardCanVerify;
-	}
+		$oResult = new stdClass();
+		$oResult->bCardCanVerify = $this->bCardCanVerify;
+		$oResult->sCardVerify3DHtml = $sCardVerify3DHtml;
+		$oResult->bCardVerify3DsError = $bCardVerify3DsError;
+		$oResult->bCardVerifyNeedWait = $bCardVerifyNeedWait;
+		$oResult->bCardVerifyExists = $this->bCardVerifyExists;
 
-	/**
-	 * @return bool
-	 */
-	public function isCardVerifyNeedWait()
-	{
-		return $this->bCardVerifyNeedWait;
-	}
-
-	/**
-	 * @return null
-	 */
-	public function getCardVerify3DHtml()
-	{
-		return $this->sCardVerify3DHtml;
+		return $oResult;
 	}
 
 	public function checkCardVerifyExists()
 	{
 		if (!isset($this->bCardVerifyExists)) {
-			$this->checkCanVerifyCard();
+			$this->checkVerifyCardStatus();
 		}
 
 		return $this->bCardVerifyExists;
