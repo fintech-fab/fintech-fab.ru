@@ -313,7 +313,11 @@ class AdminKreddyApiComponent
 	public function getAuth($sPhone, $sPassword)
 	{
 
-		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
+		$aRequest = array(
+			'login'    => $sPhone,
+			'password' => $sPassword,
+			'ip'       => Yii::app()->request->getUserHostAddress()
+		);
 
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
 
