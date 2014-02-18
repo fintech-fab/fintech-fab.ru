@@ -142,6 +142,21 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
 	const ERROR_NEED_CARD = 202; //требуется привязать банковскую карту
 
+	/**
+	 * Требуется подождать и повторить запрос
+	 */
+	const ERROR_NEED_WAIT = 203;
+
+	/**
+	 * Требуется пройти процесс 3DS авторизации
+	 */
+	const ERROR_NEED_3DS_PROCESS = 204;
+
+	/**
+	 * Ошибка в процессе верификации карты через 3DS
+	 */
+	const ERROR_VERIFY_3DS = 205;
+
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
@@ -192,7 +207,7 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
-	const C_CARD_VERIFY_ERROR_3DS = "При авторизации карты произошла ошибка. Возможно, неверно введен код авторизации. Попробуйте повторить процедуру привязки карты.";
+	const C_CARD_VERIFY_ERROR_3DS = "При авторизации карты произошла ошибка. Возможно, неверно введены данные карты или код авторизации. Попробуйте повторить процедуру привязки карты.";
 	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
 
 	const C_REQUEST_CANCEL_SUCCESS = 'Ваше подключение успешно отменено. Будем ждать новой заявки!';
@@ -2084,19 +2099,30 @@ class AdminKreddyApiComponent
 	{
 		$sCardVerify3DHtml = null;
 		$bCardVerifyNeedWait = false;
+		$bCardVerify3DsError = false;
 
 		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
 
-			if (isset($aResult['html'])) {
-				$sCardVerify3DHtml = $aResult['html'];
+			//если код "требуется пройти 3ds"
+			if ($aResult['code'] == self::ERROR_NEED_3DS_PROCESS) {
+				$sCardVerify3DHtml = isset($aResult['html']) ?
+					$aResult['html'] :
+					null;
 			}
-			if (isset($aResult['need_wait'])) {
-				$bCardVerifyNeedWait = $aResult['need_wait'];
+
+			//если код "ждите"
+			if ($aResult['code'] == self::ERROR_NEED_WAIT) {
+				$bCardVerifyNeedWait = true;
 			}
+
+			//если код "ошибка 3ds"
+			if ($aResult['code'] == self::ERROR_VERIFY_3DS) {
+				$bCardVerify3DsError = true;
+			}
+
 		}
 
-		$bCardVerify3DsError = (!empty($aResult['card_error_3ds']));
 
 		if (!$this->getIsError()) {
 			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));

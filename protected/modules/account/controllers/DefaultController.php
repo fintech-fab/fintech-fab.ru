@@ -316,8 +316,7 @@ class DefaultController extends Controller
 		$bNeedWait = $oCardStatus->bCardVerifyNeedWait;
 
 		if (!Yii::app()->request->isPostRequest &&
-			$sVerify3DHtml &&
-			!$bNeedWait
+			$sVerify3DHtml
 		) {
 			echo $sVerify3DHtml;
 			Yii::app()->end();
