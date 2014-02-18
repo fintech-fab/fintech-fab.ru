@@ -443,12 +443,30 @@ class DefaultController extends Controller
 				//забираем сохраненные в сессию данные нового паспорта
 				$aPassportData = Yii::app()->adminKreddyApi->getPassportData();
 				//отправляем данные в API
-				$bChangePassport = Yii::app()->adminKreddyApi->changePassport($oSmsCodeForm->smsCode, $aPassportData);
-				if ($bChangePassport) { //если нет ошибок
+				$aResult = Yii::app()->adminKreddyApi->changePassport($oSmsCodeForm->smsCode, $aPassportData);
+				if (Yii::app()->adminKreddyApi->isNoChangePassportErrors($aResult)) { //если нет ошибок
+
 					$this->render('change_passport_data/success');
 					Yii::app()->end();
-				} else {
+
+				} elseif (Yii::app()->adminKreddyApi->isChangePassportSmsAuthError($aResult)) {
+
 					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+
+				} elseif (Yii::app()->adminKreddyApi->isChangePassportValidationError($aResult)) {
+
+					Yii::app()->user->setFlash('error', 'Ошибка! Возможно, клиент с такими паспортными данными уже зарегистрирован в системе. Обратитесь в контактный центр'); //удаляем warning
+
+					$oChangePassportForm = new ChangePassportDataForm();
+					$oChangePassportForm->setAttributes($aPassportData);
+
+					$this->render('change_passport_data/passport_form', array('oChangePassportForm' => $oChangePassportForm));
+					Yii::app()->end();
+
+				} else {
+
+					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
+
 				}
 			}
 		}
@@ -669,7 +687,7 @@ class DefaultController extends Controller
 				Yii::app()->end();
 			}
 		}
-		if($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
+		if ($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
 			$oChangeSmsAuthSettingForm->sms_auth_enabled = $aClientInfo['client_data']['sms_auth_enabled'];
 		}
 		$this->render('change_sms_auth_setting/sms_auth_setting_form', array('oChangeSmsAuthSettingForm' => $oChangeSmsAuthSettingForm));

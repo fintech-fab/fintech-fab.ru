@@ -136,6 +136,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
+	const ERROR_VALIDATION = 24; //ошибка валидации
 	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
@@ -1794,7 +1795,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param        $aPassportData
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public function changePassport($sSmsCode, $aPassportData)
 	{
@@ -1802,8 +1803,50 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+		}
 
-		return $this->checkChangeResultMessage($aResult);
+		return $aResult;
+
+		//TODO не укладывается в логику checkChangeResultMessage стоит ли переписать?
+		//		return $this->checkChangeResultMessage($aResult);
+	}
+
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isNoChangePassportErrors($aResult)
+	{
+		return ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK);
+	}
+
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isChangePassportSmsAuthError($aResult)
+	{
+		return ($aResult['sms_status'] !== self::SMS_AUTH_OK);
+	}
+
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
+	public function isChangePassportValidationError($aResult)
+	{
+		return ($aResult['code'] === self::ERROR_VALIDATION);
 	}
 
 	/**
@@ -1976,7 +2019,7 @@ class AdminKreddyApiComponent
 
 		$bResult = $this->checkChangeResultMessage($aResult);
 
-		if ($bResult){
+		if ($bResult) {
 			//обновляем токен сессии в связи со сменой пароля (иначе разлогинит, т.к. пароль в старом токене другой)
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
