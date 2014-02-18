@@ -224,6 +224,7 @@ class AdminKreddyApiComponent
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
+	private $iSmsCode;
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -1793,7 +1794,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param        $aPassportData
+	 * @param array $aPassportData
 	 *
 	 * @return array
 	 */
@@ -1803,50 +1804,13 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
+		$this->setLastSmsMessage($aResult['sms_message']);
+
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
+			return true;
 		}
 
-		return $aResult;
-
-		//TODO не укладывается в логику checkChangeResultMessage стоит ли переписать?
-		//		return $this->checkChangeResultMessage($aResult);
-	}
-
-	/**
-	 * @param $aResult
-	 *
-	 * @return bool
-	 */
-	public function isNoChangePassportErrors($aResult)
-	{
-		return ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK);
-	}
-
-	/**
-	 * @param $aResult
-	 *
-	 * @return bool
-	 */
-	public function isChangePassportSmsAuthError($aResult)
-	{
-		return ($aResult['sms_status'] !== self::SMS_AUTH_OK);
-	}
-
-	/**
-	 * @param $aResult
-	 *
-	 * @return bool
-	 */
-	public function isChangePassportValidationError($aResult)
-	{
-		return ($aResult['code'] === self::ERROR_VALIDATION);
+		return false;
 	}
 
 	/**
@@ -2354,6 +2318,7 @@ class AdminKreddyApiComponent
 					'message'     => '',
 					'sms_message' => '',
 					'sms_code'    => '',
+					'sms_status' => '',
 				);
 
 				$aData = CMap::mergeArray($aData, $aGetData);
@@ -2361,6 +2326,7 @@ class AdminKreddyApiComponent
 		}
 		$this->setLastMessage($aData['message']);
 		$this->setLastCode($aData['code']);
+		$this->setLastSmsStatus($aData['sms_status']);
 
 		return $aData;
 	}
@@ -3422,5 +3388,15 @@ class AdminKreddyApiComponent
 		}
 
 		return false;
+	}
+
+	private function setLastSmsStatus($iSmsCode)
+	{
+		$this->iSmsCode = $iSmsCode;
+	}
+
+	public function isSuccessfulLastSmsCode()
+	{
+		return $this->iSmsCode == self::SMS_AUTH_OK;
 	}
 }
