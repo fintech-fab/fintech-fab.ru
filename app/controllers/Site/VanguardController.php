@@ -33,6 +33,6 @@ class VanguardController extends BaseController
 			$feedback = 'Что сломалось, попробуйте ещё раз';
 		}
 
-		return $this->make('test', array('feedback' => $feedback));
+		return $this->make('feedback', array('feedback' => $feedback));
 	}
 }
