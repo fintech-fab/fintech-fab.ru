@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'default' => 'production',
+	'default'     => 'production',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -50,7 +50,7 @@ return array(
 	|
 	*/
 
-	'groups' => array(
+	'groups'      => array(
 
 		'web' => array('production')
 

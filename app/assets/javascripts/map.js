@@ -1,5 +1,4 @@
-function browser()
-{
+function browser() {
 	var ua = navigator.userAgent;
 
 	if (ua.search(/MSIE/) > 0) return 'Internet Explorer';
@@ -21,9 +20,9 @@ function browser()
 
 ymaps.ready(init);
 
-function init () {
+function init() {
 	var myMap = new ymaps.Map("map", {
-			center: [55.72074,37.65098],
+			center: [55.72074, 37.65098],
 			zoom: 15
 		}),
 
@@ -32,7 +31,7 @@ function init () {
 			// Описание геометрии.
 			geometry: {
 				type: "Point",
-				coordinates: [55.72074,37.65098]
+				coordinates: [55.72074, 37.65098]
 			},
 			// Свойства.
 			properties: {
@@ -48,8 +47,8 @@ function init () {
 			draggable: false
 		});
 
-	if(browser()=='Internet Explorer'){
-		myMap.behaviors.disable(['drag','rightMouseButtonMagnifier','dblClickZoom','leftMouseButtonMagnifier']);
+	if (browser() == 'Internet Explorer') {
+		myMap.behaviors.disable(['drag', 'rightMouseButtonMagnifier', 'dblClickZoom', 'leftMouseButtonMagnifier']);
 		var cursor = myMap.cursors.push('arrow');
 	}
 	// Создаем метку с помощью вспомогательного класса.

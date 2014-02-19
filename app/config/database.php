@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'fetch' => PDO::FETCH_CLASS,
+	'fetch'       => PDO::FETCH_CLASS,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'mysql',
+	'default'     => 'mysql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -48,11 +48,11 @@ return array(
 
 		'sqlite' => array(
 			'driver'   => 'sqlite',
-			'database' => __DIR__.'/../database/production.sqlite',
+			'database' => __DIR__ . '/../database/production.sqlite',
 			'prefix'   => '',
 		),
 
-		'mysql' => array(
+		'mysql'  => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'dev',
@@ -63,7 +63,7 @@ return array(
 			'prefix'    => '',
 		),
 
-		'pgsql' => array(
+		'pgsql'  => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
 			'database' => 'database',
@@ -96,7 +96,7 @@ return array(
 	|
 	*/
 
-	'migrations' => 'migrations',
+	'migrations'  => 'migrations',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return array(
 	|
 	*/
 
-	'redis' => array(
+	'redis'       => array(
 
 		'cluster' => false,
 

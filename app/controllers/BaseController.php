@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
-use Controller, View, Request;
+use Controller;
+use Request;
+use View;
 
 class BaseController extends Controller
 {
