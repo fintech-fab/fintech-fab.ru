@@ -2789,6 +2789,8 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_IDENTIFY
 			&& $this->getLastCode() !== self::ERROR_NEED_PASSPORT_DATA
 			&& $this->getLastCode() !== self::ERROR_NEED_REDIRECT
+			&& $this->getLastCode() !== self::ERROR_NEED_WAIT
+			&& $this->getLastCode() !== self::ERROR_NEED_3DS_PROCESS
 		);
 	}
 
