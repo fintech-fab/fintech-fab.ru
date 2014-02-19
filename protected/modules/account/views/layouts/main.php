@@ -19,9 +19,10 @@ echo $content;
 $this->endContent();
 ?>
 <!--  header navbar end -->
-
+<div class="left-stars-23feb"></div>
+<div class="right-stars-23feb"></div>
 <!-- main content start-->
-<div class="main-bgr-14feb">
+<div class="main-bgr-23feb">
 	<br />
 	<?= $content; ?>
 	<br />

@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * Class FooterLinksController
+ */
 class FooterLinksController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-	public $layout = '//layouts/column2';
+	public $layout = '//layouts/column1';
 
 	/**
 	 * @return array action filters
@@ -30,7 +33,7 @@ class FooterLinksController extends Controller
 		return array(
 			array(
 				'allow', // allow all users to perform 'index' and 'view' actions
-				'actions' => array('view'),
+				'actions' => array('view', 'viewPage'),
 				'users'   => array('*'),
 			),
 			array(
@@ -48,6 +51,18 @@ class FooterLinksController extends Controller
 	public function actionView($name)
 	{
 		$this->renderPartial('view', array(
+			'model' => $this->loadModelByName($name),
+		), false, true);
+	}
+
+	/**
+	 * Displays a particular model.
+	 *
+	 * @param $name
+	 */
+	public function actionViewPage($name)
+	{
+		$this->render('view', array(
 			'model' => $this->loadModelByName($name),
 		), false, true);
 	}
