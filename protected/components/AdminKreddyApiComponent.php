@@ -143,6 +143,21 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
 	const ERROR_NEED_CARD = 202; //требуется привязать банковскую карту
 
+	/**
+	 * Требуется подождать и повторить запрос
+	 */
+	const ERROR_NEED_WAIT = 203;
+
+	/**
+	 * Требуется пройти процесс 3DS авторизации
+	 */
+	const ERROR_NEED_3DS_PROCESS = 204;
+
+	/**
+	 * Ошибка в процессе верификации карты через 3DS
+	 */
+	const ERROR_VERIFY_3DS = 205;
+
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
@@ -180,9 +195,9 @@ class AdminKreddyApiComponent
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
-	const API_ACTION_ADD_CARD = 'siteClient/addClientCard';
-	const API_ACTION_VERIFY_CARD = 'siteClient/verifyClientCard';
-	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClient/checkClientCanVerifyCard';
+	const API_ACTION_ADD_CARD = 'siteClientCard/addClientCard';
+	const API_ACTION_VERIFY_CARD = 'siteClientCard/verifyClientCard';
+	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClientCard/checkClientCanVerifyCard';
 
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
@@ -193,6 +208,7 @@ class AdminKreddyApiComponent
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
 	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
 	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
+	const C_CARD_VERIFY_ERROR_3DS = "При авторизации карты произошла ошибка. Возможно, неверно введены данные карты или код авторизации. Попробуйте повторить процедуру привязки карты.";
 	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
 
 	const C_REQUEST_CANCEL_SUCCESS = 'Ваше подключение успешно отменено. Будем ждать новой заявки!';
@@ -314,7 +330,11 @@ class AdminKreddyApiComponent
 	public function getAuth($sPhone, $sPassword)
 	{
 
-		$aRequest = array('login' => $sPhone, 'password' => $sPassword);
+		$aRequest = array(
+			'login'    => $sPhone,
+			'password' => $sPassword,
+			'ip'       => Yii::app()->request->getUserHostAddress()
+		);
 
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
 
@@ -2024,22 +2044,29 @@ class AdminKreddyApiComponent
 	/**
 	 * Привязка банковской карты к аккаунту
 	 *
-	 * @param $sCardPan
-	 * @param $sCardMonth
-	 * @param $sCardYear
-	 * @param $sCardHolderName
-	 * @param $sCardCvc
+	 * @param AddCardForm $oCardForm
 	 *
 	 * @return bool
 	 */
-	public function addClientCard($sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
+	public function addClientCard(AddCardForm $oCardForm)
+		//$sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
 	{
 		$aRequest = array(
-			'card_pan'         => $sCardPan,
-			'card_month'       => $sCardMonth,
-			'card_year'        => $sCardYear,
-			'card_holder_name' => $sCardHolderName,
-			'card_cvc'         => $sCardCvc
+			'card_pan'          => $oCardForm->sCardPan,
+			'card_month'        => $oCardForm->sCardMonth,
+			'card_year'         => $oCardForm->sCardYear,
+			//'card_holder_name' => $sCardHolderName,
+			'card_cvc'          => $oCardForm->sCardCvc,
+
+			'email'             => $oCardForm->sEmail,
+			'address'           => $oCardForm->sAddress,
+			'city'              => $oCardForm->sCity,
+			'zip_code'          => $oCardForm->sZipCode,
+			'country'           => $oCardForm->sCountry,
+
+			'ip'                => Yii::app()->request->getUserHostAddress(),
+			'card_printed_name' => $oCardForm->sCardHolderName,
+			'redirect_url'      => Yii::app()->createAbsoluteUrl('/account/returnFrom3DSecurity'),
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
@@ -2073,26 +2100,56 @@ class AdminKreddyApiComponent
 	 * Проверяет, требуется ли клиенту пройти верификацию карты
 	 * 0 - не может, нужно сначала добавить карту
 	 *
-	 * @return bool
+	 * @return stdClass
 	 */
-	public function checkCanVerifyCard()
+	public function checkVerifyCardStatus()
 	{
+		$sCardVerify3DHtml = null;
+		$bCardVerifyNeedWait = false;
+		$bCardVerify3DsError = false;
+
 		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
 			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
+
+			//если код "требуется пройти 3ds"
+			if ($aResult['code'] == self::ERROR_NEED_3DS_PROCESS) {
+				$sCardVerify3DHtml = isset($aResult['html']) ?
+					$aResult['html'] :
+					null;
+			}
+
+			//если код "ждите"
+			if ($aResult['code'] == self::ERROR_NEED_WAIT) {
+				$bCardVerifyNeedWait = true;
+			}
+
+			//если код "ошибка 3ds"
+			if ($aResult['code'] == self::ERROR_VERIFY_3DS) {
+				$bCardVerify3DsError = true;
+			}
+
 		}
+
 
 		if (!$this->getIsError()) {
 			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));
 			$this->bCardVerifyExists = (!empty($aResult['verify_exists']));
 		}
 
-		return $this->bCardCanVerify;
+		$oResult = new stdClass();
+		$oResult->bCardCanVerify = $this->bCardCanVerify;
+		$oResult->sCardVerify3DHtml = $sCardVerify3DHtml;
+		$oResult->bCardVerify3DsError = $bCardVerify3DsError;
+		$oResult->bCardVerifyNeedWait = $bCardVerifyNeedWait;
+		$oResult->bCardVerifyExists = $this->bCardVerifyExists;
+
+		return $oResult;
 	}
 
 	public function checkCardVerifyExists()
 	{
 		if (!isset($this->bCardVerifyExists)) {
-			$this->checkCanVerifyCard();
+			$this->checkVerifyCardStatus();
 		}
 
 		return $this->bCardVerifyExists;
@@ -2741,6 +2798,8 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_IDENTIFY
 			&& $this->getLastCode() !== self::ERROR_NEED_PASSPORT_DATA
 			&& $this->getLastCode() !== self::ERROR_NEED_REDIRECT
+			&& $this->getLastCode() !== self::ERROR_NEED_WAIT
+			&& $this->getLastCode() !== self::ERROR_NEED_3DS_PROCESS
 		);
 	}
 
@@ -3362,6 +3421,11 @@ class AdminKreddyApiComponent
 		return $bResult;
 	}
 
+	/**
+	 * @param $aResult
+	 *
+	 * @return bool
+	 */
 	private function checkChangeResultMessage($aResult)
 	{
 		// Ошибок нет
