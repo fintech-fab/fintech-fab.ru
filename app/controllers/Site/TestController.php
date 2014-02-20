@@ -7,12 +7,11 @@ use App\Controllers\BaseController;
 class TestController extends BaseController
 {
 
-	public $layout = 'site';
+	public $layout = 'test';
 
 	public function index()
 	{
-		return $this->make('main');
+		return $this->make('test');
 	}
-
 
 }
