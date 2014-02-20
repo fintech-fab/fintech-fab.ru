@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from'       => array('address' => 'eupathy@gmail.com', 'name' => 'Serg'),
+	'from'       => array('address' => null, 'name' => null),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password'   => 'samantabhadra',
+	'password'   => null,
 
 	/*
 	|--------------------------------------------------------------------------
