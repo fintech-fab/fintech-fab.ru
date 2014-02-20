@@ -2379,11 +2379,11 @@ class AdminKreddyApiComponent
 				);
 
 				$aData = CMap::mergeArray($aData, $aGetData);
+				$this->setLastSmsStatus($aData['sms_status']);
 			}
 		}
 		$this->setLastMessage($aData['message']);
 		$this->setLastCode($aData['code']);
-		$this->setLastSmsStatus($aData['sms_status']);
 
 		return $aData;
 	}
