@@ -80,7 +80,7 @@ return array(
 	|
 	*/
 
-	'custom' => array(),
+	'custom'           => array(),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,6 +93,6 @@ return array(
 	|
 	*/
 
-	'attributes' => array(),
+	'attributes'       => array(),
 
 );

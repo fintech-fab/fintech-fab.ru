@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'default' => 'sync',
+	'default'     => 'sync',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ return array(
 
 	'connections' => array(
 
-		'sync' => array(
+		'sync'       => array(
 			'driver' => 'sync',
 		),
 
@@ -40,7 +40,7 @@ return array(
 			'queue'  => 'default',
 		),
 
-		'sqs' => array(
+		'sqs'        => array(
 			'driver' => 'sqs',
 			'key'    => 'your-public-key',
 			'secret' => 'your-secret-key',
@@ -48,14 +48,14 @@ return array(
 			'region' => 'us-east-1',
 		),
 
-		'iron' => array(
+		'iron'       => array(
 			'driver'  => 'iron',
 			'project' => 'your-project-id',
 			'token'   => 'your-token',
 			'queue'   => 'your-queue-name',
 		),
 
-		'redis' => array(
+		'redis'      => array(
 			'driver' => 'redis',
 			'queue'  => 'default',
 		),
@@ -73,7 +73,7 @@ return array(
 	|
 	*/
 
-	'failed' => array(
+	'failed'      => array(
 
 		'database' => 'mysql', 'table' => 'failed_jobs',
 
