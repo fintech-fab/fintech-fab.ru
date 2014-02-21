@@ -1824,7 +1824,11 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
-		$this->setLastSmsMessage($aResult['sms_message']);
+		if (isset($aResult['sms_message'])) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+		} else {
+			$this->setLastSmsMessage($aResult['message']);
+		}
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			return true;
