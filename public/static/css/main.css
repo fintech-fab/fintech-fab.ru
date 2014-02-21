@@ -265,3 +265,76 @@ div.search-form {
 	background-position: right top;
 	background-repeat: no-repeat;
 }
+
+.bold {
+	font-weight: bold;
+}
+
+@media (min-width: 1360px) {
+
+	.left-stars-23feb {
+		background: url('../images/left-stars-23feb.png') no-repeat;
+		position: fixed;
+		display: block;
+		left: 0;
+		top: 80px;
+		width: 185px;
+		height: 720px;
+		overflow: hidden;
+		z-index: 999;
+	}
+
+	.right-stars-23feb {
+		background: url('../images/right-stars-23feb.png') no-repeat;
+		position: fixed;
+		display: block;
+		right: 0;
+		top: 80px;
+		width: 185px;
+		height: 720px;
+		overflow: hidden;
+		z-index: 999;
+	}
+}
+
+@media (min-width: 1280px) and (max-width: 1359px) {
+
+	.left-stars-23feb {
+		background: url('../images/left-stars-23feb.png') no-repeat;
+		background-size: 150px 584px;
+		-o-background-size: 150px 584px;
+		-webkit-background-size: 150px 584px;
+		position: fixed;
+		display: block;
+		left: 0;
+		top: 80px;
+		width: 150px;
+		height: 584px;
+		overflow: hidden;
+		z-index: 999;
+	}
+
+	.right-stars-23feb {
+		background: url('../images/right-stars-23feb.png') no-repeat;
+		background-size: 150px 584px;
+		-o-background-size: 150px 584px;
+		-webkit-background-size: 150px 584px;
+		position: fixed;
+		display: block;
+		right: 0;
+		top: 80px;
+		width: 150px;
+		height: 584px;
+		overflow: hidden;
+		z-index: 999;
+	}
+}
+
+.main-bgr-23feb {
+	margin-top: -10px;
+	background: url('../images/transparentbg.png'), url('../images/23feb-bg.gif');
+	background-position: center top, left top;
+	background-repeat: repeat-y, repeat;
+
+	width: 100%;
+}

@@ -19,12 +19,15 @@ echo $content;
 $this->endContent();
 ?>
 <!--  header navbar end -->
-<div class="top-page-widget hearts-bgr-14feb">
+<div class="top-page-widget">
 	<?php
 	$this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 	?>
 </div>
-<div class="main-bgr-14feb">
+<div class="left-stars-23feb"></div>
+<div class="right-stars-23feb"></div>
+
+<div class="main-bgr-23feb">
 	<!-- main content start-->
 	<?= $content; ?>
 	<!-- main content end--><br />

@@ -33,8 +33,8 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 	));
 
 	?>
-	<div class="span6 birds-14feb">
-		<div class="row">
+	<div class="span6">
+	<div class="row">
 
 		<?php
 			$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
