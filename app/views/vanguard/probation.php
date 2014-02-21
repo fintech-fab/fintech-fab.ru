@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var string $feedback
+ */
+?>
 <div class="row">
 	<div class="col-md-3">
 		<img src="/assets/main/logo.png" height="100px" class="img" />
@@ -82,13 +87,20 @@
 				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
 		</div>
 		<div class="tab-pane" id="tab4">
-			<form class="form-horizontal" role="form" method="post">
-				<div class="form-group">
-					<label for="inputName" class="col-sm-2 control-label">Как звать</label>
+			<?= Form::open(); ?>
+			<div class="form-group">
+				<label for="inputName" class="col-sm-2 control-label">Как звать</label>
 
-					<div class="col-sm-8">
-						<input type="text" name="name" class="form-control" id="inputName" placeholder="Имя" required>
-					</div>
+				<div class="col-sm-8">
+					<?php
+					echo Form::input('text', 'name', '', array(
+						'placeholder' => 'тут имя',
+						'class'       => 'form-control',
+						'id'          => 'inputName',
+						'required'    => 'required',
+					));
+					?>
+				</div>
 				</div>
 				<div class="form-group">
 					<label for="inputAbout" class="col-sm-2 control-label">О себе</label>
@@ -109,7 +121,7 @@
 						<button type="submit" class="btn btn-default">Sign in</button>
 					</div>
 				</div>
-			</form>
+			<?= Form::close(); ?>
 		</div>
 	</div>
 </div>

@@ -3,7 +3,12 @@
 namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
+use Config;
+use FintechFab\Components\Helper;
+use Illuminate\Mail\Message;
+use Input;
 use Mail;
+use Redirect;
 
 class VanguardController extends BaseController
 {
@@ -12,27 +17,42 @@ class VanguardController extends BaseController
 
 	public function index()
 	{
+		// TODO вернуть userMessage
 		return $this->make('probation');
 	}
 
 	public function order()
 	{
-		$name = $_POST['name'];
-		$about = $_POST['about'];
-		$email = $_POST['email'];
+		$data = $this->getOrderFormData();
 
-		$data = array('name' => $name, 'about' => $about, 'email' => $email);
+		Mail::send('emails.newImprover', $data, function (Message $message) {
+			$message->to(Config::get('app.vanguard.recipient_order_form'))->subject('Новая заявка');
+		});
 
-		if (Mail::send('emails.newImprover', $data, function ($message) {
-			$message->to('eupathy@gmail.com')->subject('Новая заявка');
-		})
-		) {
-			$feedback = ucwords((string)$name);
+		if (0 == count(Mail::failures())) {
+			$feedback = Helper::ucwords($data['name']);
 			$feedback .= ', cпасибо за регистрацию. Ожидайте ответа по электронной почте.';
 		} else {
 			$feedback = 'Что сломалось, попробуйте ещё раз';
 		}
 
-		return $this->make('feedback', array('feedback' => $feedback));
+		return Redirect::to('vanguard')->with('userMessage', $feedback);
+
+	}
+
+	private function getOrderFormData()
+	{
+		$name = Input::get('name');
+		$about = Input::get('about');
+		$email = Input::get('email');
+
+		$data = array(
+			'name'  => $name,
+			'about' => $about,
+			'email' => $email,
+		);
+
+		return $data;
+
 	}
 }
