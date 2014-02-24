@@ -218,8 +218,15 @@ class DefaultController extends Controller
 	 */
 	public function actionAddCard()
 	{
-		$oCardForm = new AddCardForm();
 		$sError = null;
+
+		$oCardStatus = Yii::app()->adminKreddyApi->checkVerifyCardStatus();
+
+		if (Yii::app()->adminKreddyApi->isCardVerifyNeedAdditionalFields()) {
+			$oCardForm = new AddCardForm('additionalFields');
+		} else {
+			$oCardForm = new AddCardForm();
+		}
 
 		//проверяем, может ли клиент сделать еще одну попытку привязки карты
 		if (!AntiBotComponent::getIsAddCardCanRequest(Yii::app()->user->getId())) {
@@ -229,7 +236,6 @@ class DefaultController extends Controller
 		}
 
 		//проверяем, не находится ли карта на верификации, если да - отправляем на страницу верификации
-		$oCardStatus = Yii::app()->adminKreddyApi->checkVerifyCardStatus();
 		if ($oCardStatus->bCardCanVerify) {
 			$this->redirect(Yii::app()->createUrl('/account/verifyCard'));
 		}
@@ -237,6 +243,7 @@ class DefaultController extends Controller
 		//если пришел POST-запрос
 		if (Yii::app()->request->isPostRequest) {
 			Yii::app()->user->getFlash('warning'); //удаляем warning
+
 
 			$aPostData = Yii::app()->request->getParam('AddCardForm');
 			$oCardForm->setAttributes($aPostData);
