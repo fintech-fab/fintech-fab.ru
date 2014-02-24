@@ -54,7 +54,7 @@ return array(
 	|
 	*/
 
-	'from'       => array('address' => 'myrassilka@yandex.ru', 'name' => 'Testov Test'),
+	'from'       => array('address' => 'test@yandex.ru', 'name' => 'Testov Test'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return array(
 	|
 	*/
 
-	'username'   => 'myrassilka',
+	'username'   => 'test',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password'   => '06031961',
+	'password'   => 'null',
 
 	/*
 	|--------------------------------------------------------------------------
