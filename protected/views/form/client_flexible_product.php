@@ -19,7 +19,11 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 <div class="row">
 
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
-
+	<?php
+	if (Yii::app()->clientForm->hasError()) {
+		?>
+		<div class="alert alert-error"><?= Yii::app()->clientForm->getError(); ?></div>
+	<?php } ?>
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'id'                   => get_class($oClientCreateForm),

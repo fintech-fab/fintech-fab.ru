@@ -15,10 +15,14 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
-
 <div class="row">
 
 	<?php $this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs)); ?>
+	<?php
+	if (Yii::app()->clientForm->hasError()) {
+		?>
+		<div class="alert alert-error"><?= Yii::app()->clientForm->getError(); ?></div>
+	<?php } ?>
 
 	<?php
 
@@ -34,9 +38,9 @@ $aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
 
 	?>
 	<div class="span6">
-	<div class="row">
+		<div class="row">
 
-		<?php
+			<?php
 			$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
 			// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 			if (empty($oClientCreateForm->product)) {

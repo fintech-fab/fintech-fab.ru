@@ -338,7 +338,8 @@ class FormController extends Controller
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе Кредди. Обратитесь в контактный центр';
 				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
-				$this->actionStep(3); //переходим на шаг 3
+				Yii::app()->clientForm->clearClientSession(); //чистим сессию
+				$this->actionStep(1); //переходим на шаг 1
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
