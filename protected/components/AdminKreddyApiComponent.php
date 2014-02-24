@@ -2173,8 +2173,7 @@ class AdminKreddyApiComponent
 		return $this->oCardVerifyStatus->bCardVerifyExists;
 	}
 
-	public
-	function isFirstIdentification()
+	public function isFirstIdentification()
 	{
 		$aData = $this->getClientInfo();
 
@@ -2186,8 +2185,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkIsNeedIdentify()
+	public function checkIsNeedIdentify()
 	{
 		$this->getData('check_identify');
 
@@ -2199,8 +2197,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkIsNeedPassportData()
+	public function checkIsNeedPassportData()
 	{
 		$this->getData('check_identify');
 
@@ -2211,8 +2208,7 @@ class AdminKreddyApiComponent
 	 * @return array|bool
 	 */
 
-	public
-	function getIdentify()
+	public function getIdentify()
 	{
 		$aResult = $this->getData('identify');
 
@@ -2231,8 +2227,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sProduct
 	 */
-	public
-	function setSubscribeSelectedProduct($sProduct)
+	public function setSubscribeSelectedProduct($sProduct)
 	{
 		Yii::app()->session['subscribeSelectedProduct'] = $sProduct;
 	}
@@ -2242,8 +2237,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string|bool
 	 */
-	public
-	function getSubscribeSelectedProduct()
+	public function getSubscribeSelectedProduct()
 	{
 		return (isset(Yii::app()->session['subscribeSelectedProduct']))
 			? Yii::app()->session['subscribeSelectedProduct'] :
@@ -2255,8 +2249,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $iChannel
 	 */
-	public
-	function setLoanSelectedChannel($iChannel)
+	public function setLoanSelectedChannel($iChannel)
 	{
 		Yii::app()->session['loanSelectedChannel'] = $iChannel;
 	}
@@ -2266,8 +2259,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string|bool
 	 */
-	public
-	function getLoanSelectedChannel()
+	public function getLoanSelectedChannel()
 	{
 		return (isset(Yii::app()->session['loanSelectedChannel']))
 			? Yii::app()->session['loanSelectedChannel'] :
@@ -2279,8 +2271,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sChannel
 	 */
-	public
-	function setSubscribeSelectedChannel($sChannel)
+	public function setSubscribeSelectedChannel($sChannel)
 	{
 		Yii::app()->session['subscribeSelectedChannel'] = $sChannel;
 	}
@@ -2290,8 +2281,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string|bool
 	 */
-	public
-	function getSubscribeSelectedChannel()
+	public function getSubscribeSelectedChannel()
 	{
 		return (isset(Yii::app()->session['subscribeSelectedChannel']))
 			? Yii::app()->session['subscribeSelectedChannel'] :
@@ -2443,8 +2433,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Логаут, чистит данные в сессии и удаляет токен
 	 */
-	public
-	function logout()
+	public function logout()
 	{
 		// очищаем сессии, связанные с отправкой SMS
 		$this->clearSmsState();
@@ -2459,8 +2448,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return int
 	 */
-	public
-	function getResultStatus($aResult)
+	public function getResultStatus($aResult)
 	{
 		if (isset($aResult) && isset($aResult['code'])) {
 			$iRet = $aResult['code'];
@@ -2477,8 +2465,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsAuth()
+	public function getIsAuth()
 	{
 		$aInfo = Yii::app()->adminKreddyApi->getClientInfo();
 		$iStatus = $this->getResultStatus($aInfo);
@@ -2491,8 +2478,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsNeedSmsAuth()
+	public function getIsNeedSmsAuth()
 	{
 		$aInfo = $this->getClientInfo();
 
@@ -2504,8 +2490,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsNeedSmsCode()
+	public function getIsNeedSmsCode()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_SMS_CODE);
 	}
@@ -2523,8 +2508,7 @@ class AdminKreddyApiComponent
 	/**
 	 * очищаем сессии, связанные с отправкой SMS (форма Восстановления пароля)
 	 */
-	public
-	function clearResetPassSmsCodeState()
+	public function clearResetPassSmsCodeState()
 	{
 		Yii::app()->session['resetPassSmsCodeSent'] = null;
 		Yii::app()->session['resetPassSmsCodeSentTime'] = null;
@@ -2535,8 +2519,7 @@ class AdminKreddyApiComponent
 	/**
 	 * очищаем сессии, связанные с отправкой SMS (форма SMS пароль)
 	 */
-	public
-	function clearSmsPassState()
+	public function clearSmsPassState()
 	{
 		Yii::app()->session['smsPassSent'] = null;
 		Yii::app()->session['smsPassSentTime'] = null;
@@ -2549,8 +2532,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkSmsPassSent()
+	public function checkSmsPassSent()
 	{
 		return (!empty(Yii::app()->session['smsPassSent']));
 	}
@@ -2560,8 +2542,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return int|''
 	 */
-	public
-	function getSmsPassSentTime()
+	public function getSmsPassSentTime()
 	{
 		return (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : '';
 	}
@@ -2571,8 +2552,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkResetPassSmsCodeSent()
+	public function checkResetPassSmsCodeSent()
 	{
 		return (!empty(Yii::app()->session['resetPassSmsCodeSent']));
 	}
@@ -2582,8 +2562,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return int|''
 	 */
-	public
-	function getResetPassSmsCodeSentTime()
+	public function getResetPassSmsCodeSentTime()
 	{
 		return (!empty(Yii::app()->session['resetPassSmsCodeSentTime'])) ? Yii::app()->session['resetPassSmsCodeSentTime'] : '';
 	}
@@ -2594,8 +2573,7 @@ class AdminKreddyApiComponent
 	 * @param array $aData
 	 *
 	 */
-	public
-	function setResetPassData(array $aData)
+	public function setResetPassData(array $aData)
 	{
 		Yii::app()->session['resetPasswordData'] = $aData;
 	}
@@ -2605,8 +2583,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string
 	 */
-	public
-	function getResetPassData()
+	public function getResetPassData()
 	{
 		return (!empty(Yii::app()->session['resetPasswordData'])) ? Yii::app()->session['resetPasswordData'] : '';
 	}
@@ -2616,8 +2593,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkResetPassPhone()
+	public function checkResetPassPhone()
 	{
 		return (!empty(Yii::app()->session['resetPasswordData']['phone']));
 	}
@@ -2630,8 +2606,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function checkSmsAuthStatus($aResult)
+	public function checkSmsAuthStatus($aResult)
 	{
 		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
 			$this->setSmsAuthDone(true);
@@ -2647,8 +2622,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsSmsAuth()
+	public function getIsSmsAuth()
 	{
 		return (!empty(Yii::app()->session['smsAuthDone']));
 	}
@@ -2659,8 +2633,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return integer
 	 */
-	public
-	function getSmsPassLeftTime()
+	public function getSmsPassLeftTime()
 	{
 		$curTime = time();
 		$leftTime = (!empty(Yii::app()->session['smsPassSentTime']))
@@ -2675,8 +2648,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Сохраняем время отправки СМС-пароля и ставим флаг "СМС отправлено"
 	 */
-	public
-	function setSmsPassSentAndTime()
+	public function setSmsPassSentAndTime()
 	{
 		Yii::app()->session['smsPassSent'] = true;
 		Yii::app()->session['smsPassSentTime'] = time();
@@ -2688,8 +2660,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return integer
 	 */
-	public
-	function getResetPassSmsCodeLeftTime()
+	public function getResetPassSmsCodeLeftTime()
 	{
 		$iCurTime = time();
 		$iLeftTime = (!empty(Yii::app()->session['resetPassSmsCodeSentTime']))
@@ -2704,8 +2675,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Сохраняем время отправки СМС-кода для восстановления пароля и ставим флаг "СМС отправлено"
 	 */
-	public
-	function setResetPassSmsCodeSentAndTime()
+	public function setResetPassSmsCodeSentAndTime()
 	{
 		Yii::app()->session['resetPassSmsCodeSent'] = true;
 		Yii::app()->session['resetPassSmsCodeSentTime'] = time();
@@ -2720,8 +2690,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-	public
-	function formatRusDate($sDate, $bWithTime = true)
+	public function formatRusDate($sDate, $bWithTime = true)
 	{
 		if (!is_numeric($sDate)) {
 			$sDate = strtotime($sDate);
@@ -2746,8 +2715,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sMessage
 	 */
-	public
-	function setLastSmsMessage($sMessage)
+	public function setLastSmsMessage($sMessage)
 	{
 		$this->sLastSmsMessage = $sMessage;
 	}
@@ -2757,8 +2725,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string
 	 */
-	public
-	function getLastSmsMessage()
+	public function getLastSmsMessage()
 	{
 		return $this->sLastSmsMessage;
 	}
@@ -2768,8 +2735,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $sMessage
 	 */
-	public
-	function setLastMessage($sMessage)
+	public function setLastMessage($sMessage)
 	{
 		$this->sLastMessage = $sMessage;
 	}
@@ -2779,8 +2745,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string
 	 */
-	public
-	function getLastMessage()
+	public function getLastMessage()
 	{
 		return $this->sLastMessage;
 	}
@@ -2788,8 +2753,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param $bAccepted
 	 */
-	public
-	function setScoringAccepted($bAccepted)
+	public function setScoringAccepted($bAccepted)
 	{
 		$this->bScoringAccepted = $bAccepted;
 	}
@@ -2797,8 +2761,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return mixed
 	 */
-	public
-	function getScoringAccepted()
+	public function getScoringAccepted()
 	{
 		return $this->bScoringAccepted;
 	}
@@ -2809,8 +2772,7 @@ class AdminKreddyApiComponent
 	 * @param $iCode
 	 *
 	 */
-	public
-	function setLastCode($iCode)
+	public function setLastCode($iCode)
 	{
 		$this->iLastCode = $iCode;
 	}
@@ -2820,8 +2782,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return integer
 	 */
-	public
-	function getLastCode()
+	public function getLastCode()
 	{
 		return $this->iLastCode;
 	}
@@ -2831,8 +2792,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsNotAllowed()
+	public function getIsNotAllowed()
 	{
 		return ($this->getLastCode() === self::ERROR_NOT_ALLOWED || $this->getLastCode() === self::ERROR_NEED_REDIRECT);
 	}
@@ -2853,8 +2813,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsError()
+	public function getIsError()
 	{
 		return ($this->getLastCode() !== self::ERROR_NONE
 			&& $this->getLastCode() !== self::ERROR_NEED_SMS_AUTH
@@ -2871,8 +2830,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getIsPhoneError()
+	public function getIsPhoneError()
 	{
 		return $this->getLastCode() === self::ERROR_PHONE_ERROR;
 	}
@@ -2882,8 +2840,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsNeedIdentify()
+	public function getIsNeedIdentify()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_IDENTIFY);
 	}
@@ -2893,8 +2850,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsNeedPassportData()
+	public function getIsNeedPassportData()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_PASSPORT_DATA);
 	}
@@ -2903,8 +2859,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return string
 	 */
-	public
-	function getDoSubscribeMessage()
+	public function getDoSubscribeMessage()
 	{
 		$bScoringAccepted = $this->getScoringAccepted();
 		if (!empty($bScoringAccepted) && !SiteParams::getIsIvanovoSite()) {
@@ -2920,8 +2875,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string
 	 */
-	public
-	function getDoLoanMessage()
+	public function getDoLoanMessage()
 	{
 		$sMessage = strtr(self::C_DO_LOAN_MSG, $this->formatStatusMessage());
 
@@ -2931,8 +2885,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return string
 	 */
-	public
-	function getNoAvailableProductsMessage()
+	public function getNoAvailableProductsMessage()
 	{
 		return self::C_NO_AVAILABLE_PRODUCTS;
 	}
@@ -2940,8 +2893,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param $bSmsAuthDone
 	 */
-	public
-	function setSmsAuthDone($bSmsAuthDone)
+	public function setSmsAuthDone($bSmsAuthDone)
 	{
 		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
 	}
@@ -2949,8 +2901,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return string
 	 */
-	public
-	function getSubscriptionNotAvailableMessage()
+	public function getSubscriptionNotAvailableMessage()
 	{
 		if (SiteParams::getIsIvanovoSite()) {
 			$sMessage = self::C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO;
@@ -2966,8 +2917,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return string
 	 */
-	public
-	function getLoanNotAvailableMessage()
+	public function getLoanNotAvailableMessage()
 	{
 		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $this->formatStatusMessage());
 
@@ -2977,8 +2927,7 @@ class AdminKreddyApiComponent
 	/**
 	 *
 	 */
-	public
-	function increaseSmsPassTries()
+	public function increaseSmsPassTries()
 	{
 		Yii::app()->session['iSmsPassTries'] = (Yii::app()->session['iSmsPassTries'])
 			? (Yii::app()->session['iSmsPassTries'] + 1)
@@ -2988,8 +2937,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getIsSmsPassTriesExceed()
+	public function getIsSmsPassTriesExceed()
 	{
 		//увеличиваем счетчик попыток
 		$this->increaseSmsPassTries();
@@ -2998,8 +2946,7 @@ class AdminKreddyApiComponent
 		return (Yii::app()->session['iSmsPassTries'] > self::C_MAX_PASS_SMS_CODE_TRIES);
 	}
 
-	public
-	function resetSmsPassTries()
+	public function resetSmsPassTries()
 	{
 		Yii::app()->session['iSmsPassTries'] = 0;
 	}
@@ -3018,8 +2965,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getIsSmsCodeTriesExceed()
+	public function getIsSmsCodeTriesExceed()
 	{
 		//увеличиваем счетчик попыток
 		$this->increaseSmsCodeTries();
@@ -3028,8 +2974,7 @@ class AdminKreddyApiComponent
 		return (Yii::app()->session['iSmsCodeTries'] > self::C_MAX_SMS_CODE_TRIES);
 	}
 
-	public
-	function resetSmsCodeTries()
+	public function resetSmsCodeTries()
 	{
 		Yii::app()->session['iSmsCodeTries'] = 0;
 	}
@@ -3040,8 +2985,7 @@ class AdminKreddyApiComponent
 	 * @return array
 	 */
 
-	public
-	function getFlexibleProduct()
+	public function getFlexibleProduct()
 	{
 		$aProducts = $this->getProducts();
 
@@ -3062,8 +3006,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array|bool
 	 */
-	public
-	function getFlexibleProductTime()
+	public function getFlexibleProductTime()
 	{
 		$aProducts = $this->getProducts();
 
@@ -3085,8 +3028,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array|bool
 	 */
-	public
-	function getFlexibleProductPercentage()
+	public function getFlexibleProductPercentage()
 	{
 		$aProducts = $this->getProducts();
 
@@ -3106,8 +3048,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-	public
-	function getFlexibleProductChannelCosts()
+	public function getFlexibleProductChannelCosts()
 	{
 		$aProducts = $this->getProducts();
 
@@ -3137,8 +3078,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param array $aPassportData
 	 */
-	public
-	function setPassportData(array $aPassportData)
+	public function setPassportData(array $aPassportData)
 	{
 		Yii::app()->session['aPassportData'] = $aPassportData;
 	}
@@ -3146,8 +3086,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array
 	 */
-	public
-	function getPassportData()
+	public function getPassportData()
 	{
 		return Yii::app()->session['aPassportData'];
 	}
@@ -3155,8 +3094,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param array $aNumericCode
 	 */
-	public
-	function setNumericCode(array $aNumericCode)
+	public function setNumericCode(array $aNumericCode)
 	{
 		Yii::app()->session['aNumericCode'] = $aNumericCode;
 	}
@@ -3164,8 +3102,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array
 	 */
-	public
-	function getNumericCode()
+	public function getNumericCode()
 	{
 		return Yii::app()->session['aNumericCode'];
 	}
@@ -3173,8 +3110,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param array $aSecretQuestion
 	 */
-	public
-	function setSecretQuestion(array $aSecretQuestion)
+	public function setSecretQuestion(array $aSecretQuestion)
 	{
 		Yii::app()->session['aSecretQuestion'] = $aSecretQuestion;
 	}
@@ -3182,8 +3118,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array
 	 */
-	public
-	function getSecretQuestion()
+	public function getSecretQuestion()
 	{
 		return Yii::app()->session['aSecretQuestion'];
 	}
@@ -3191,8 +3126,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param array $aSmsAuthSetting
 	 */
-	public
-	function setSmsAuthSetting(array $aSmsAuthSetting)
+	public function setSmsAuthSetting(array $aSmsAuthSetting)
 	{
 		Yii::app()->session['aSmsAuthSetting'] = $aSmsAuthSetting;
 	}
@@ -3200,8 +3134,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array
 	 */
-	public
-	function getSmsAuthSetting()
+	public function getSmsAuthSetting()
 	{
 		return Yii::app()->session['aSmsAuthSetting'];
 	}
@@ -3211,8 +3144,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string|bool
 	 */
-	public
-	function getPassportDataField($sField)
+	public function getPassportDataField($sField)
 	{
 		if ($sField === 'passport_change_reason' && !empty(Yii::app()->session['aPassportData'][$sField])) {
 			return (!empty(Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]))
@@ -3229,8 +3161,7 @@ class AdminKreddyApiComponent
 	 * @param $bClientIsOnIdentify
 	 *
 	 */
-	public
-	function setClientOnIdentify($bClientIsOnIdentify)
+	public function setClientOnIdentify($bClientIsOnIdentify)
 	{
 		Yii::app()->session['bClientOnIdentify'] = $bClientIsOnIdentify;
 	}
@@ -3238,8 +3169,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getClientOnIdentify()
+	public function getClientOnIdentify()
 	{
 		return (!empty(Yii::app()->session['bClientOnIdentify']));
 	}
@@ -3247,8 +3177,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool|string
 	 */
-	public
-	function getResetPassPhone()
+	public function getResetPassPhone()
 	{
 		$aData = $this->getResetPassData();
 
@@ -3258,8 +3187,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param array $aPassword
 	 */
-	public
-	function setPassword(array $aPassword)
+	public function setPassword(array $aPassword)
 	{
 		Yii::app()->session['aPassword'] = $aPassword;
 	}
@@ -3267,8 +3195,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array
 	 */
-	public
-	function getPassword()
+	public function getPassword()
 	{
 		return (!empty(Yii::app()->session['aPassword'])) ? Yii::app()->session['aPassword'] : array();
 	}
@@ -3281,8 +3208,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function sendSms($sPhone, $sMessage)
+	public function sendSms($sPhone, $sMessage)
 	{
 		if (!Yii::app()->params['bSmsGateIsOff']) {
 
@@ -3301,8 +3227,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getIsNeedRedirect()
+	public function getIsNeedRedirect()
 	{
 		$aInfo = $this->getClientInfo();
 
@@ -3312,8 +3237,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param $iAmount
 	 */
-	public
-	function setSubscribeFlexAmount($iAmount)
+	public function setSubscribeFlexAmount($iAmount)
 	{
 		Yii::app()->session['subscribeFlexAmount'] = $iAmount;
 	}
@@ -3321,8 +3245,7 @@ class AdminKreddyApiComponent
 	/**
 	 *
 	 */
-	public
-	function getSubscribeFlexAmount()
+	public function getSubscribeFlexAmount()
 	{
 		return (isset(Yii::app()->session['subscribeFlexAmount']))
 			? Yii::app()->session['subscribeFlexAmount']
@@ -3332,8 +3255,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param $iChannelId
 	 */
-	public
-	function setSubscribeFlexChannelId($iChannelId)
+	public function setSubscribeFlexChannelId($iChannelId)
 	{
 		Yii::app()->session['subscribeFlexChannelId'] = $iChannelId;
 	}
@@ -3341,8 +3263,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return string|bool
 	 */
-	public
-	function getSubscribeFlexChannelId()
+	public function getSubscribeFlexChannelId()
 	{
 		return (isset(Yii::app()->session['subscribeFlexChannelId']))
 			? Yii::app()->session['subscribeFlexChannelId']
@@ -3356,8 +3277,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return int
 	 */
-	public
-	function getClientSelectedChannelByIdString($sChannelsId)
+	public function getClientSelectedChannelByIdString($sChannelsId)
 	{
 		//список каналов из сессии (выбранный при регистрации канал/список каналов) разбиваем на массив каналов (если пришел в виде "1_2_3")
 		$aChannelsId = explode('_', $sChannelsId);
@@ -3384,8 +3304,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @param $iTime
 	 */
-	public
-	function setSubscribeFlexTime($iTime)
+	public function setSubscribeFlexTime($iTime)
 	{
 		Yii::app()->session['subscribeFlexTime'] = $iTime;
 	}
@@ -3396,8 +3315,7 @@ class AdminKreddyApiComponent
 	 * @return bool
 	 */
 
-	public
-	function getSubscribeFlexTime($bFormat = false)
+	public function getSubscribeFlexTime($bFormat = false)
 	{
 
 		$iFlexTime = (isset(Yii::app()->session['subscribeFlexTime']))
@@ -3418,8 +3336,7 @@ class AdminKreddyApiComponent
 	/**
 	 * Считаем стоимость с учетом процентов и стоимости использования канала
 	 */
-	public
-	function getSubscribeFlexCost()
+	public function getSubscribeFlexCost()
 	{
 		$iAmount = $this->getSubscribeFlexAmount();
 		$iTime = $this->getSubscribeFlexTime();
@@ -3445,8 +3362,7 @@ class AdminKreddyApiComponent
 	 * @return int
 	 */
 
-	public
-	function getSubscribeFlexProductId()
+	public function getSubscribeFlexProductId()
 	{
 		$aProducts = $this->getProducts();
 		$iAmount = (int)$this->getSubscribeFlexAmount();
@@ -3468,8 +3384,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsClientCardExists()
+	public function getIsClientCardExists()
 	{
 		$aClientInfo = $this->getClientInfo();
 
@@ -3479,8 +3394,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getIsFirstAddingCard()
+	public function getIsFirstAddingCard()
 	{
 		$bIsFirstAddingCard = (empty(Yii::app()->session['account_addCard']));
 
@@ -3494,8 +3408,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public
-	function getIsFirstVerifyingCard()
+	public function getIsFirstVerifyingCard()
 	{
 		$bIsFirstVerifyingCard = (empty(Yii::app()->session['account_verifyCard']));
 
@@ -3511,8 +3424,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param bool $bFlag
 	 */
-	public
-	function setUserSessionExpired($bFlag = true)
+	public function setUserSessionExpired($bFlag = true)
 	{
 		Yii::app()->request->cookies['accountSessionExpired'] = new CHttpCookie('accountSessionExpired', $bFlag);
 	}
@@ -3522,8 +3434,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public
-	function getIsUserSessionExpired()
+	public function getIsUserSessionExpired()
 	{
 		$bResult = (!empty(Yii::app()->request->cookies['accountSessionExpired']->value));
 
@@ -3540,8 +3451,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	private
-	function checkChangeResultMessage($aResult)
+	private function checkChangeResultMessage($aResult)
 	{
 		// Ошибок нет
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {

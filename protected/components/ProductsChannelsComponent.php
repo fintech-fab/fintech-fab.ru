@@ -105,7 +105,7 @@ class ProductsChannelsComponent
 		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный телефон (МТС, Билайн, Мегафон, Теле2)';
 		} elseif (preg_match("/карт/", $sName)) {
-			return 'на карту Mastercard, Maestro, Visa';
+			return 'на карту Mastercard, Maestro';
 		}
 
 		return false;
