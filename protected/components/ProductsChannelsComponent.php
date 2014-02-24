@@ -160,26 +160,27 @@ class ProductsChannelsComponent
 			if (strpos($sChannelName, 'Кредди')) {
 				continue;
 			}
-			if (strpos($sChannelName, 'мобильный')) {
-				if (!empty($sMobileChannels)) {
-					$sMobileChannels .= '_';
-				}
-				$sMobileChannels .= $iKey;
-				$sMobileChannelName = $sChannelName;
-			} elseif (strpos($sChannelName, 'карт')) {
+			if (strpos($sChannelName, 'карт')) {
 				if (!empty($sCardChannels)) {
 					$sCardChannels .= '_';
 				}
 				$sCardChannels .= $iKey;
 				$sCardChannelName = $sChannelName;
+			} elseif (strpos($sChannelName, 'мобильный')) {
+				if (!empty($sMobileChannels)) {
+					$sMobileChannels .= '_';
+				}
+				$sMobileChannels .= $iKey;
+				$sMobileChannelName = $sChannelName;
 			}
-		}
-		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
-			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
 		}
 		if (!empty($sCardChannels) && !empty($sCardChannelName)) {
 			$aChannelsList[$sCardChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sCardChannelName)) . '</span>';
 		}
+		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
+			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
+		}
+
 
 		return $aChannelsList;
 	}
