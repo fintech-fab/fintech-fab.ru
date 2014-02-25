@@ -48,7 +48,7 @@ $a = array(
 
 	'components'     => array(
 		'cache'            => array(
-			'class' => 'CMemCache',
+			'class' => 'CDummyCache',
 		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
@@ -56,7 +56,7 @@ $a = array(
 		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
 			'sApiUrl'     => 'https://admin.kreddy.ru:8081/siteApi/',
-			'sTestApiUrl' => 'http://admin.kreddy.popov/siteApi/'
+			'sTestApiUrl' => 'http://admin.kreddy.new/siteApi/'
 		),
 		'antiBot'          => array(
 			'class' => 'application.components.AntiBotComponent',
