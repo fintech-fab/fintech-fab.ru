@@ -18,6 +18,7 @@ if (empty($content)) {
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" src="/../../assets/stylesheets/css.css">
 
 	<?= stylesheet_link_tag() ?>
 
@@ -25,7 +26,8 @@ if (empty($content)) {
 <body>
 <div class="container">
 	<div><img src="/assets/main/logo.png" border="0" width="370" height="175" class="img" /></div>
-	<div class="row text-center"><h2>[cайт на стадии разработки]</h2></div>
+	<div class="row text-center"><h2> [cайт на стадии разработки]</h2></div>
+
 	<div class="row"><?= $content ?></div>
 
 
