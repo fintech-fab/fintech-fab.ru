@@ -9,6 +9,7 @@ use Illuminate\Mail\Message;
 use Input;
 use Mail;
 use Redirect;
+use Session;
 
 class VanguardController extends BaseController
 {
@@ -17,8 +18,9 @@ class VanguardController extends BaseController
 
 	public function index()
 	{
-		// TODO вернуть userMessage
-		return $this->make('probation');
+		$userMessage = Session::get('userMessage');
+
+		return $this->make('probation', array('userMessage' => $userMessage));
 	}
 
 	public function order()
@@ -26,14 +28,14 @@ class VanguardController extends BaseController
 		$data = $this->getOrderFormData();
 
 		Mail::send('emails.newImprover', $data, function (Message $message) {
-			$message->to(Config::get('app.vanguard.recipient_order_form'))->subject('Новая заявка');
+			$message->to(Config::get('mail.recipient_order_form'))->subject('Новая заявка');
 		});
 
 		if (0 == count(Mail::failures())) {
 			$feedback = Helper::ucwords($data['name']);
 			$feedback .= ', cпасибо за регистрацию. Ожидайте ответа по электронной почте.';
 		} else {
-			$feedback = 'Что сломалось, попробуйте ещё раз';
+			$feedback = 'Что-то сломалось, попробуйте ещё раз';
 		}
 
 		return Redirect::to('vanguard')->with('userMessage', $feedback);

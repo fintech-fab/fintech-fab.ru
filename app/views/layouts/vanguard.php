@@ -2,11 +2,15 @@
 if (empty($content)) {
 	$content = '';
 }
+/**
+ * @var string $userMessage
+ */
 ?>
 <!DOCTYPE html>
 <html>
 <?= View::make('layouts.inc.head.head') ?>
 <body>
+
 <div class="container">
 	<header class="row">
 		<nav class="navbar navbar-default" role="navigation">

@@ -13,6 +13,5 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
 
 	<?= stylesheet_link_tag() ?>
-	<?= stylesheet_link_tag("mystyle") ?>
 
 </head>

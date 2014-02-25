@@ -1,8 +1,8 @@
 <?php
 /**
- * @var string $feedback
+ * @var string $userMessage
  */
 ?>
 <div class="jumbotron">
-	<p class="text-center"><?= $feedback ?></p>
+	<p class="text-center"><?= $userMessage ?></p>
 </div>
