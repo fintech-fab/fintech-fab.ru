@@ -685,6 +685,7 @@ class AdminKreddyApiComponent
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
+				'channel_id' => false,
 				'available_loans' => 0,
 				'balance'         => 0,
 				'product_info'    => array(
