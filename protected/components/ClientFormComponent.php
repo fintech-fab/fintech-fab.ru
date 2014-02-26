@@ -144,7 +144,7 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::SITE1 => array(
 			0 => array(
-				'view'             => 'client_select_product',
+				'view' => 'client_fast_reg',
 				'model'            => 'ClientSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
