@@ -1,8 +1,8 @@
 <div class="row text-center"><a href="probation"><b>Стажер, тыкни</b></a></div>
-<div class="row test">
+<div class="row mt20">
 
-	<div class="col-xs-5 col-xs-offset-1">
-	<p><b>FINTECH_FAB</b> &mdash; высокотехнологичная компания на рынке финансовых технологий.</p>
+	<div class="col-xs-5">
+		<p><b>FINTECH_FAB</b> &mdash; высокотехнологичная компания на рынке финансовых технологий.</p>
 
 		<p class="pheader">Мы создаем</p>
 
@@ -19,8 +19,8 @@
 	</div>
 	<div class="col-xs-5">
 
-	<div class="pdf_block">
-			<a class="how_to_find" href="/assets/fintechfab.roadmap.pdf" target="_blank"><img src="/assets/main/pdf.jpg" width="70" height="70" /><br />
+		<div class="pdf_block">
+		<a class="how_to_find" href="/assets/fintechfab.roadmap.pdf" target="_blank"><img src="/assets/main/pdf.jpg" width="70" height="70" /><br />
 				Как найти<br />наш офис?</a>
 		</div>
 

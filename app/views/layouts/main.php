@@ -18,7 +18,6 @@ if (empty($content)) {
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" src="/../../assets/stylesheets/css.css">
 
 	<?= stylesheet_link_tag() ?>
 

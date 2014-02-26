@@ -16,7 +16,7 @@
 			<li><a href="#tab4" data-toggle="tab">Я готов</a></li>
 		</ul>
 
-		<div class="tab-content">
+		<div class="tab-content probation">
 			<div class="tab-pane active" id="tab1">
 				<div class="row">
 					Lorem ipsum dolor sit amet. Quae ab illo inventore veritatis. Ducimus, qui dolorem eum fugiat, quo
@@ -47,34 +47,61 @@
 				</div>
 			</div>
 			<div class="tab-pane" id="tab4">
-				<?= Form::open(); ?>
-				<table class="table">
-					<tr>
-						<td><?= Form::label('username', 'Как Вас звать:'); ?></td>
-						<td>
-							<input size="43" id="username" type="text" name="username" placeholder="Фамилия Имя">
-						</td>
-					</tr>
-					<tr>
-						<td><?= Form::label('email', 'Email:'); ?></td>
-						<td>
-							<input size="43" id="email" type="email" name="email" placeholder="example@gmail.com">
-						</td>
-					</tr>
-					<tr>
-						<td><?= Form::label('about', 'Немного о себе:'); ?></td>
-						<td><textarea rows="10" cols="45" id="about" name="about"> </textarea>
-						</td>
-					</tr>
+				<?=
+				Form::open(array(
+					'class'  => 'form-horizontal',
+					'role'   => 'form',
+					'method' => 'post',
+				)); ?>
 
-					<tr>
-						<td colspan="2" align="center">
-							<?=
-							Form::submit('Заявиться!');
-							echo Form::close();?>
-						</td>
-					</tr>
-				</table>
+				<div class="form-group">
+					<label for="inputName" class="col-sm-2 control-label">Как Вас звать:</label>
+
+					<div class="col-sm-10">
+						<?=
+						Form::input('text', 'username', '', array(
+							'placeholder' => 'Фамилия Имя',
+							'class'       => 'form-control',
+							'id'          => 'inputName',
+							'required'    => 'required',
+						));
+						?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputAbout" class="col-sm-2 control-label">Немного о себе:</label>
+
+					<div class="col-sm-10">
+						<?=
+						Form::textarea('about', '', array(
+							'placeholder' => 'Пару слов',
+							'class'       => 'form-control',
+							'id'          => 'inputAbout',
+							'required'    => 'required',
+						));
+						?>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail" class="col-sm-2 control-label">Email:</label>
+
+					<div class="col-sm-10">
+						<?=
+						Form::input('email', 'email', '', array(
+							'placeholder' => 'test@test.com',
+							'class'       => 'form-control',
+							'id'          => 'inputEmail',
+							'required'    => 'required',
+						));
+						?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">Заявиться!</button>
+					</div>
+				</div>
+				<?= Form::close(); ?>
 
 				<div class="row">
 
