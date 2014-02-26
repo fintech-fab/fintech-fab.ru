@@ -133,9 +133,7 @@ return array(
 	|    FilesystemCache -> creates a cached file in the directory given to the constructor (we use laravel's storage path)
 	|
 	*/
-	'cache'                  => new Codesleeve\AssetPipeline\Filters\CacheEnvironmentFilter(
-			new Codesleeve\AssetPipeline\Filters\ClientCacheFilter(
-				new Assetic\Cache\FilesystemCache(App::make('path.storage') . '/cache/asset-pipeline')), App::environment()),
+	'cache'                  => array('production'),
 
 	/*
 	|--------------------------------------------------------------------------
