@@ -2,11 +2,15 @@
 if (empty($content)) {
 	$content = '';
 }
+/**
+ * @var string $userMessage
+ */
 ?>
 <!DOCTYPE html>
 <html>
 <?= View::make('layouts.inc.head.head') ?>
 <body>
+
 <div class="container">
 	<header class="row">
 		<nav class="navbar navbar-default" role="navigation">
@@ -17,7 +21,7 @@ if (empty($content)) {
 						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 						<span class="icon-bar"></span> <span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="">Наш сайт</a>
+					<a class="navbar-brand" href="/">Наш сайт</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
