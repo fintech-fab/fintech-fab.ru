@@ -979,6 +979,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @return bool|string
+	 */
+	public function getSubscriptionChannel()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		$iChannelId = $aClientInfo['subscription']['channel_id'];
+
+		return $this->getChannelNameById($iChannelId);
+	}
+
+	/**
 	 * Стоимость текущей подписки клиента из getInfo
 	 *
 	 * @return bool
@@ -3494,4 +3506,6 @@ class AdminKreddyApiComponent
 	{
 		return $this->iSmsCode == self::SMS_AUTH_OK;
 	}
+
+
 }
