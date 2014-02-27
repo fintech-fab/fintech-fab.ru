@@ -3,9 +3,9 @@
 
 return array(
 	'db' => array(
-		'connectionString' => 'mysql:host=localhost;dbname=kreddy',
-		'username'         => 'username',
-		'password'         => 'pass',
+		'connectionString' => 'mysql:host=%MYSQL_HOST%;dbname=%MYSQL_DBNAME%',
+		'username'         => '%MYSQL_USERNAME%',
+		'password'         => '%MYSQL_PASSWORD%',
 		'charset'          => 'utf8',
 	),
 );
