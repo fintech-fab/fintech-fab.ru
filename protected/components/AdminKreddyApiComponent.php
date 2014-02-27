@@ -200,6 +200,8 @@ class AdminKreddyApiComponent
 	const API_ACTION_VERIFY_CARD = 'siteClientCard/verifyClientCard';
 	const API_ACTION_CHECK_CAN_VERIFY_CARD = 'siteClientCard/checkClientCanVerifyCard';
 
+	const API_ACTION_EMAIL_INFO = 'siteEmail/emailLinkHandler';
+
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
@@ -1814,7 +1816,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param array $aPassportData
+	 * @param array  $aPassportData
 	 *
 	 * @return array
 	 */
@@ -2395,7 +2397,7 @@ class AdminKreddyApiComponent
 					'message'     => '',
 					'sms_message' => '',
 					'sms_code'    => '',
-					'sms_status' => '',
+					'sms_status'  => '',
 				);
 
 				$aData = CMap::mergeArray($aData, $aGetData);
@@ -3493,5 +3495,15 @@ class AdminKreddyApiComponent
 	public function isSuccessfulLastSmsCode()
 	{
 		return $this->iSmsCode == self::SMS_AUTH_OK;
+	}
+
+	/**
+	 * @param $aRequest
+	 *
+	 * @return array
+	 */
+	public function sendInfoFromEmail($aRequest)
+	{
+		return $this->requestAdminKreddyApi(self::API_ACTION_EMAIL_INFO, $aRequest);
 	}
 }
