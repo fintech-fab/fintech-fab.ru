@@ -710,6 +710,7 @@ class AdminKreddyApiComponent
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
+				'channel_id' => false,
 				'available_loans' => 0,
 				'balance'         => 0,
 				'product_info'    => array(
@@ -1001,6 +1002,18 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return $aClientInfo['subscription']['product'];
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getSubscriptionChannel()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		$iChannelId = $aClientInfo['subscription']['channel_id'];
+
+		return $this->getChannelNameById($iChannelId);
 	}
 
 	/**
@@ -3519,4 +3532,6 @@ class AdminKreddyApiComponent
 	{
 		return $this->iSmsCode == self::SMS_AUTH_OK;
 	}
+
+
 }
