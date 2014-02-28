@@ -13,6 +13,7 @@ class AdminKreddyApiComponent
 
 	const C_CLIENT_NEW = 'client_new';
 	const C_CLIENT_ACTIVE = 'client_active';
+	const C_CLIENT_FAST_REG = 'client_fast_reg';
 
 	const C_CLIENT_MORATORIUM_LOAN = 'client_moratorium_loan';
 	const C_CLIENT_MORATORIUM_SUBSCRIPTION = 'client_moratorium_subscription';
@@ -78,6 +79,7 @@ class AdminKreddyApiComponent
 
 		self::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
 		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
+		self::C_CLIENT_FAST_REG                => 'Требуется заполнить анкету',
 	);
 
 	private $aAvailableStatusesIvanovo = array(
@@ -173,6 +175,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
+	const API_ACTION_CREATE_FAST_REG_CLIENT = 'siteClient/signupFast';
 	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/checkSubscribe';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_CHECK_LOAN = 'siteClient/checkLoan';
@@ -462,6 +465,28 @@ class AdminKreddyApiComponent
 
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
+
+		if (!self::getIsError() && !self::getIsPhoneError()) {
+			$this->setSessionToken($aTokenData['token']);
+			$this->token = $aTokenData['token'];
+			$this->setSmsAuthDone(true);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 *
+	 * @param $aClientData
+	 *
+	 * @return bool
+	 */
+	public function createFastRegClient($aClientData)
+	{
+		$aRequest = array('clientData' => CJSON::encode($aClientData));
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_FAST_REG_CLIENT, $aRequest);
 
 		if (!self::getIsError() && !self::getIsPhoneError()) {
 			$this->setSessionToken($aTokenData['token']);
@@ -1814,7 +1839,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param array $aPassportData
+	 * @param array  $aPassportData
 	 *
 	 * @return array
 	 */
@@ -2395,7 +2420,7 @@ class AdminKreddyApiComponent
 					'message'     => '',
 					'sms_message' => '',
 					'sms_code'    => '',
-					'sms_status' => '',
+					'sms_status'  => '',
 				);
 
 				$aData = CMap::mergeArray($aData, $aGetData);

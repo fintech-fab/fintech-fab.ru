@@ -29,12 +29,12 @@ class DefaultController extends Controller
 	{
 		return array(
 			array(
-				'allow', // allow all users to perform 'index' and 'view' actions
+				'allow',
 				'actions' => array('login', 'resetPassword', 'resetPassSendPass', 'resetPassSmsSentSuccess', 'resetPasswordResendSmsCode'),
 				'users'   => array('*'),
 			),
 			array(
-				'allow', // allow authenticated user to perform 'create' and 'update' actions
+				'allow',
 				'actions' => array(
 					'logout', 'index', 'history', 'identifySite', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'selectChannel', 'doSubscribe', 'doSubscribeCheckSmsCode',
@@ -47,6 +47,7 @@ class DefaultController extends Controller
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
 					'cancelRequest',
 					'returnFrom3DSecurity',
+					'continueForm',
 				),
 				'users'   => array('@'),
 			),
@@ -160,6 +161,29 @@ class DefaultController extends Controller
 			)
 		);
 
+
+	}
+
+	public function actionContinueForm()
+	{
+		$sPhone = Yii::app()->user->getId();
+		/**найдем клиента в таблице регистрации по номеру телефона,
+		 * т.к. этот клиент зарегистрирован, то надо искать с флагом "телефон подтвержден по смс"
+		 */
+		$oClientData = ClientData::model()->scopeConfirmedPhone($sPhone)->find();
+
+		//TODO проверять наличие записи, если нету - делаем новую
+
+		//снимаем флаг "анкеты заполнена", чтобы не создавалась новая запись
+		$oClientData->complete = 0;
+		$oClientData->save();
+
+		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте
+		$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $sPhone);
+		Cookie::saveDataToCookie('client', $aCookieData);
+
+		//ставим клиенту флаг "продолжает регистрацию"
+		Yii::app()->clientForm->setContinueReg(true);
 
 	}
 

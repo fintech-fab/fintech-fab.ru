@@ -24,7 +24,7 @@
 
 <?php
 // если есть статус, выводим его
-if (Yii::app()->adminKreddyApi->getStatusMessage()) {
+if (Yii::app()->adminKreddyApi->getClientStatus()) {
 	?>
 	<strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
 	<br /><br />

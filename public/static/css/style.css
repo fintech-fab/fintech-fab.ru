@@ -571,9 +571,14 @@ p.popover-label {
 	color: #000000;
 }
 
-.fright{
-    float: right;
+.fright {
+	float: right;
 }
-.cl{
-    clear: both;
+
+.cl {
+	clear: both;
+}
+
+#ClientFastRegForm p.confirm label {
+	font-size: 8pt;
 }

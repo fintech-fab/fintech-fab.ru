@@ -8,14 +8,14 @@
 
 /**
  * Class ClientFormComponent
+ *
  */
 class ClientFormComponent
 {
 	const SITE1 = 'main';
 	const SITE2 = 'ivanovo';
-
-	//имя модели, в которой сохраняется телефон клиента
-	const C_PHONE_MODEL_NAME = 'ClientPersonalDataForm';
+	const FAST_REG = 'fast';
+	const CONTINUE_REG = 'continue'; //продолжение регистрации
 
 	private $iClientId;
 	private $iCurrentStep;
@@ -23,18 +23,44 @@ class ClientFormComponent
 
 	/**
 	 * Массив свойств для виджета сквозной выбор продукта
+	 * Этот же массив определяет, где хранится информация о выбранном продукте,
+	 * и если на каком-то шаге информация не будет найдена - будет сделан сброс шагов
+	 * TODO протестить для быстрой регистрации
 	 *
 	 * @var array
 	 */
 	public static $aSelectProductSettings = array(
+		self::FAST_REG => array(
+			'view'  => 'main',
+			'model' => 'ClientFastRegForm',
+		),
 		self::SITE1 => array(
 			'view'  => 'main',
-			'model' => 'ClientSelectProductForm',
+			'model' => 'ClientFastRegForm',
 		),
 		self::SITE2 => array(
 			'view'  => 'flexible',
 			'model' => 'ClientFlexibleProductForm',
 		),
+	);
+
+	public static $aPhoneFormSettings = array(
+		self::FAST_REG => array(
+			'model' => 'ClientFastRegForm',
+		),
+		self::SITE1    => array(
+			'model' => 'ClientPersonalDataForm',
+		),
+		self::SITE2    => array(
+			'model' => 'ClientPersonalDataForm',
+		),
+	);
+
+	//TODO брать эти данные из массивы выше ^^^
+	//имя моделей, в которох сохраняется телефон клиента
+	private static $aPhoneForms = array(
+		'ClientPersonalDataForm',
+		'ClientFastRegForm'
 	);
 
 
@@ -47,6 +73,11 @@ class ClientFormComponent
 	 */
 
 	public static $aSteps = array(
+		self::FAST_REG => array(
+			'max'     => 1,
+			'min'     => 0,
+			'default' => 0,
+		),
 		self::SITE1 => array(
 			'max'     => 7,
 			'min'     => 0,
@@ -138,14 +169,98 @@ class ClientFormComponent
 	 *
 	 * go_next_step - по получении post-запроса на этом шаге следует сразу перейти к следующему шагу, модель не требуется
 	 *
+	 * breadcrumbs_step - шаг, отображаемый в breadscrumb
+	 * metrika_goal - цель яндекс.метрики
+	 *
 	 * @var array
 	 */
 
 	private static $aStepsInfo = array(
-		self::SITE1 => array(
+		self::FAST_REG     => array(
 			0 => array(
-				'view' => 'client_fast_reg',
-				'model'            => 'ClientSelectProductForm',
+				'view'  => 'client_fast_reg', //TODO
+				'model' => 'ClientFastRegForm', //TODO
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+			),
+			1 => array(
+				'view'             => 'client_fast_form',
+				'sub_view'         => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'confirm_phone/check_sms_code',
+					false       => 'confirm_phone/send_sms_code',
+				),
+				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'sms_code_check',
+					false       => 'sms_code_send',
+				)
+			),
+		),
+		self::CONTINUE_REG => array(
+			0 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/personal_data',
+				'model'            => 'ClientPersonalDataForm',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'personal_data',
+			),
+			1 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/passport_data',
+				'model'            => 'ClientPassportDataForm',
+				'modelDbRelations' => array(
+					'birthday'
+				),
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => 'passport_data',
+			),
+			2 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/address_data',
+				'model'            => 'ClientAddressDataForm',
+				'breadcrumbs_step' => 3,
+				'metrika_goal'     => 'address_data',
+			),
+			3 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/job_data',
+				'model'            => 'ClientJobDataForm',
+				'modelDbRelations' => array(
+					'phone'
+				),
+				'breadcrumbs_step' => 4,
+				'metrika_goal'     => 'job_data',
+			),
+			4 => array(
+				'view'             => 'client_form',
+				'sub_view'         => 'steps/secret_data',
+				'model'            => 'ClientSecretDataForm',
+				'breadcrumbs_step' => 5,
+				'metrika_goal'     => 'secret_data',
+			),
+			5 => array( //TODO тут вместо СМС-кода требуется сообщение об успешном заполнении и кнопка перехода в ЛК
+				'view'             => 'client_form',
+				'sub_view'         => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'confirm_phone/check_sms_code',
+					false       => 'confirm_phone/send_sms_code',
+				),
+				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'breadcrumbs_step' => 6,
+				'metrika_goal'     => array(
+					'condition' => 'getFlagSmsSent',
+					true        => 'sms_code_check',
+					false       => 'sms_code_send',
+				)
+			),
+		),
+		self::SITE1        => array(
+			0 => array(
+				'view'             => 'client_fast_reg',
+				'model'            => 'ClientFastRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 			),
@@ -212,7 +327,7 @@ class ClientFormComponent
 				)
 			),
 		),
-		self::SITE2 => array(
+		self::SITE2        => array(
 			0 => array(
 				'view'             => 'client_flexible_product',
 				'model'            => 'ClientFlexibleProductForm',
@@ -328,10 +443,9 @@ class ClientFormComponent
 	 */
 	public function saveAjaxData(ClientCreateFormAbstract $oClientForm)
 	{
-
 		$aValidFormData = $oClientForm->getValidAttributes();
 
-		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) {
+		if (in_array(get_class($oClientForm), self::$aPhoneForms)) {
 			if (isset($aValidFormData['phone'])) {
 				/**
 				 * проверяем, есть ли в куках информация о клиенте
@@ -453,8 +567,7 @@ class ClientFormComponent
 	 */
 	public function formDataProcess(ClientCreateFormAbstract $oClientForm)
 	{
-		if (get_class($oClientForm) === self::C_PHONE_MODEL_NAME) {
-
+		if (in_array(get_class($oClientForm), self::$aPhoneForms)) {
 			/**
 			 * проверяем, есть ли в куках информация о клиенте
 			 * и сравниваем введенный телефон с телефоном в куках.
@@ -469,6 +582,7 @@ class ClientFormComponent
 				!empty($aCookieData['client_id']) &&
 				!is_null(ClientData::getClientDataById($aCookieData['client_id']))
 			) {
+
 				$this->iClientId = $aCookieData['client_id'];
 				$this->setClientId($this->iClientId);
 			} else {
@@ -511,6 +625,7 @@ class ClientFormComponent
 
 				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
+
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 			}
 
@@ -519,6 +634,7 @@ class ClientFormComponent
 			 * т.е. клиент вернулся на анкету и ввел другой номер,
 			 * то позволяем снова отправить СМС с кодом водтверждения
 			 */
+
 			if (!$this->compareSessionAndSentPhones()) {
 				$this->setFlagSmsSent(false);
 			}
@@ -528,6 +644,7 @@ class ClientFormComponent
 				ClientData::saveClientDataById($aClientFormData, $this->iClientId);
 			}
 		}
+
 		/**
 		 * Сохраняем данные формы в сессию
 		 */
@@ -674,7 +791,14 @@ class ClientFormComponent
 		//создаем клиента в admin.kreddy.ru через API
 		//получаем от API авторизацию (сообщение что токен получен)
 		//и логиним юзера
-		return (Yii::app()->adminKreddyApi->createClient($aClientData));
+		$sSite = $this->getSiteConfigName();
+
+		//если клиент прошел быструю регистрацию, то отправляем его другим методом
+		if ($sSite == self::FAST_REG) {
+			return Yii::app()->adminKreddyApi->createFastRegClient($aClientData);
+		}
+
+		return Yii::app()->adminKreddyApi->createClient($aClientData);
 	}
 
 
@@ -690,7 +814,7 @@ class ClientFormComponent
 	 */
 	public function getMetrikaGoalByStep()
 	{
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 
 		$mGoal = self::$aStepsInfo[$sSite][$this->iCurrentStep]['metrika_goal'];
 
@@ -751,7 +875,7 @@ class ClientFormComponent
 	 */
 	public function getDefaultStep()
 	{
-		$sSite = $this->getSite();
+		$sSite = $this->getSiteConfigName();
 
 		return isset(self::$aSteps[$sSite]['default']) ? self::$aSteps[$sSite]['default'] : 0;
 
@@ -762,7 +886,7 @@ class ClientFormComponent
 	 */
 	public function getMaxStep()
 	{
-		$sSite = $this->getSite();
+		$sSite = $this->getSiteConfigName();
 
 		return isset(self::$aSteps[$sSite]['max']) ? self::$aSteps[$sSite]['max'] : 0;
 
@@ -773,7 +897,7 @@ class ClientFormComponent
 	 */
 	public function getMinStep()
 	{
-		$sSite = $this->getSite();
+		$sSite = $this->getSiteConfigName();
 
 		return isset(self::$aSteps[$sSite]['min']) ? self::$aSteps[$sSite]['min'] : 0;
 
@@ -791,7 +915,7 @@ class ClientFormComponent
 		 * * @var ClientCreateFormAbstract $oModel
 		 */
 
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 
 		$sModel = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'])
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['model']
@@ -830,7 +954,7 @@ class ClientFormComponent
 	 */
 	public function getView()
 	{
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 
 		$mView = self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'];
 		$mSubView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']))
@@ -868,7 +992,7 @@ class ClientFormComponent
 	 */
 	public function getPostData()
 	{
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 
 		$sModel = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'])
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['model']
@@ -883,7 +1007,7 @@ class ClientFormComponent
 	 */
 	public static function getSelectProductView()
 	{
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 		$sView = isset(self::$aSelectProductSettings[$sSite]['view']) ? self::$aSelectProductSettings[$sSite]['view'] : '';
 
 		return $sView;
@@ -894,7 +1018,7 @@ class ClientFormComponent
 	 */
 	public static function getSelectProductModelName()
 	{
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 		$sModelName = isset(self::$aSelectProductSettings[$sSite]['model']) ? self::$aSelectProductSettings[$sSite]['model'] : '';
 
 		return $sModelName;
@@ -903,11 +1027,26 @@ class ClientFormComponent
 	/**
 	 * @return string
 	 */
-	public static function getSite()
+	public static function getSiteConfigName()
 	{
+		//TODO тут проверять сессию, если юзер имеет флаг из ЛК - отправлять на дозаполнение формы
+		//TODO тут же проверять, не умерла ли сессия ЛК
+
+		if (isset(Yii::app()->session['site_config'])) {
+			return Yii::app()->session['site_config'];
+		}
+
 		return (SiteParams::getIsIvanovoSite())
 			? self::SITE2
 			: self::SITE1;
+	}
+
+	/**
+	 * @param $cSiteConfig
+	 */
+	public function setSiteConfigName($cSiteConfig)
+	{
+		Yii::app()->session['site_config'] = $cSiteConfig;
 	}
 
 	/**
@@ -932,8 +1071,12 @@ class ClientFormComponent
 	 */
 	public function getSessionPhone()
 	{
-		if (isset(Yii::app()->session[self::C_PHONE_MODEL_NAME]['phone'])) {
-			$sPhone = Yii::app()->session[self::C_PHONE_MODEL_NAME]['phone'];
+		$sSite = $this->getSiteConfigName();
+
+		$sModel = self::$aPhoneFormSettings[$sSite]['model'];
+
+		if (isset(Yii::app()->session[$sModel]['phone'])) {
+			$sPhone = Yii::app()->session[$sModel]['phone'];
 		} else {
 			$sPhone = false;
 		}
@@ -1013,8 +1156,12 @@ class ClientFormComponent
 	 */
 	public function getSessionProduct()
 	{
-		return isset(Yii::app()->session['ClientSelectProductForm']['product'])
-			? Yii::app()->session['ClientSelectProductForm']['product']
+		$sSite = $this->getSiteConfigName();
+
+		$sModel = self::$aSelectProductSettings[$sSite]['model'];
+
+		return isset(Yii::app()->session[$sModel]['product'])
+			? Yii::app()->session[$sModel]['product']
 			: false;
 	}
 
@@ -1049,14 +1196,12 @@ class ClientFormComponent
 	 */
 	public function getSessionChannel()
 	{
-		if (SiteParams::getIsIvanovoSite()) {
-			return isset(Yii::app()->session['ClientFlexibleProductForm']['channel_id'])
-				? Yii::app()->session['ClientFlexibleProductForm']['channel_id']
-				: false;
-		}
+		$sSite = $this->getSiteConfigName();
 
-		return isset(Yii::app()->session['ClientSelectProductForm']['channel_id'])
-			? Yii::app()->session['ClientSelectProductForm']['channel_id']
+		$sModel = self::$aSelectProductSettings[$sSite]['model'];
+
+		return isset(Yii::app()->session[$sModel]['channel_id'])
+			? Yii::app()->session[$sModel]['channel_id']
 			: false;
 	}
 
@@ -1121,7 +1266,7 @@ class ClientFormComponent
 		Yii::app()->session['client_id'] = null;
 		Yii::app()->session['tmp_client_id'] = null;
 
-		$sSite = $this->getSite();
+		$sSite = $this->getSiteConfigName();
 
 		//чистим данные форм
 		foreach (self::$aStepsInfo[$sSite] as $aStep) {
@@ -1206,7 +1351,7 @@ class ClientFormComponent
 	 */
 	public function getBreadCrumbsStep()
 	{
-		$sSite = self::getSite();
+		$sSite = self::getSiteConfigName();
 
 		$iBreadCrumbsStep = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['breadcrumbs_step'])
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['breadcrumbs_step']
@@ -1224,7 +1369,7 @@ class ClientFormComponent
 	 */
 	public function tryGoNextStep()
 	{
-		$sSite = Yii::app()->clientForm->getSite();
+		$sSite = Yii::app()->clientForm->getSiteConfigName();
 
 		if (
 			Yii::app()->request->isPostRequest
@@ -1243,7 +1388,7 @@ class ClientFormComponent
 	 */
 	public function checkSiteSelectedProduct()
 	{
-		$sSite = $this->getSite();
+		$sSite = $this->getSiteConfigName();
 
 		$sModel = self::$aSelectProductSettings[$sSite]['model'];
 
@@ -1253,7 +1398,7 @@ class ClientFormComponent
 
 	public function getFormWidgetSteps()
 	{
-		return self::$aFormWidgetSteps[$this->getSite()];
+		return self::$aFormWidgetSteps[$this->getSiteConfigName()];
 	}
 
 	/**
@@ -1273,5 +1418,55 @@ class ClientFormComponent
 	public function hasError()
 	{
 		return !empty(Yii::app()->session['error']);
+	}
+
+	public function checkRegistrationType()
+	{
+		$iCurrentStep = $this->getCurrentStep();
+		//если текущий шаг нулевой, значит надо сделать выбор типа регистрации
+		//потому если не нулевой - то выход
+		if ($iCurrentStep != 0) {
+			return;
+		}
+		//получаем модель быстрой регистрации
+		$sModel = self::$aStepsInfo[self::FAST_REG][$iCurrentStep]['model'];
+		//создаем объект формы
+		$oClientFastRegForm = new $sModel();
+		//получаем данные из запроса
+		$aPost = Yii::app()->request->getPost(get_class($oClientFastRegForm));
+
+		//если был запрос с такой формой, и флаг fast_reg установлен, переключаем режим и выходим
+		if (isset($aPost) && !empty($aPost['fast_reg'])) {
+			//переключаем режим сайта на быструю регистрацию
+			Yii::app()->clientForm->setSiteConfigName(ClientFormComponent::FAST_REG);
+
+			return;
+		}
+
+		$sSite = $this->getSiteConfigName();
+
+		//если текущая конфигурация "быстрая регистрация", но данных не пришло или пришли без флага, то нужно переключить в обычный режим
+		if ($sSite == self::FAST_REG) {
+			//сбрасываем конфигурацию регистрации, чтобы задействовалась конфигурация по-умолчанию
+			$this->setSiteConfigName(null);
+		}
+	}
+
+	/**
+	 * Флаг продолжения регистрации после быстрой регистрации и перехода из ЛК на заполнение анкеты
+	 *
+	 * @param $bContinue
+	 */
+	public function setContinueReg($bContinue)
+	{
+		Yii::app()->session['client_continue_reg'] = $bContinue;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getContinueReg()
+	{
+		return Yii::app()->session['client_continue_reg'];
 	}
 }

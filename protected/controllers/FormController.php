@@ -30,7 +30,7 @@ class FormController extends Controller
 	{
 		$step = (int)$step;
 
-		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
+		$sSite = Yii::app()->clientForm->getSiteConfigName();
 
 		$iMinStep = ClientFormComponent::$aSteps[$sSite]['min'];
 		$iMaxStep = ClientFormComponent::$aSteps[$sSite]['max'];
@@ -70,6 +70,9 @@ class FormController extends Controller
 			Yii::app()->clientForm->resetSteps();
 		}
 
+		//запустим проверку типа регистрации, она переключит "режим" анкеты, если потребуется
+		Yii::app()->clientForm->checkRegistrationType();
+
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
 		 * @var array                    $aPost
@@ -88,8 +91,13 @@ class FormController extends Controller
 		 */
 		if (Yii::app()->clientForm->isNeedAjaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
+			$sAjaxClass = Yii::app()->request->getParam('ajax');
 			//если для ajax-валидации пришла форма, соответствующая текущему шагу, то обработаем ее
-			if ($sAjaxClass = Yii::app()->request->getParam('ajax') == get_class($oClientForm)) {
+			if (
+				$sAjaxClass == get_class($oClientForm) ||
+				$sAjaxClass == get_class($oClientForm) . '_fast'
+				//для формы быстрой регистрации
+			) {
 				$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
 				Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
 				echo $sEcho;
@@ -102,16 +110,13 @@ class FormController extends Controller
 		 */
 
 		$aPost = Yii::app()->clientForm->getPostData();
-
 		if ($aPost) //проверяем, был ли POST запрос
 		{
-
-			$oClientForm->attributes = $aPost; //передаем запрос в форму
-
+			$oClientForm->setAttributes($aPost); //передаем запрос в форму
 			if ($oClientForm->validate()) {
-
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
+
 				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 				if (!$ajaxForm) {
 					//если не ajaxForm-запрос, то редиректим (чтобы по F5 страница просто обновилась, а не ругалась на POST)
@@ -158,7 +163,11 @@ class FormController extends Controller
 		$sSubView = $aView['sub_view'];
 
 		//TODO показ виджета сконфигурировать в массиве форм-компонента и отдавать через метод сюда
-		if ($sView === 'client_select_product' || $sView === 'client_flexible_product') {
+		if (
+			$sView === 'client_select_product' ||
+			$sView === 'client_flexible_product' ||
+			$sView === 'client_fast_reg'
+		) {
 			$this->showTopPageWidget = true;
 		}
 
@@ -211,7 +220,7 @@ class FormController extends Controller
 	 */
 	public function actionStep($step)
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
+		$sSite = Yii::app()->clientForm->getSiteConfigName();
 
 		$iMinStep = ClientFormComponent::$aSteps[$sSite]['min'];
 		$iMaxStep = ClientFormComponent::$aSteps[$sSite]['max'];
@@ -241,8 +250,16 @@ class FormController extends Controller
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
+
+			//TODO тут сделать проверку, что клиент реально на нужном шаге!!!!!
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
+
+		//если клиент запрашивает СМС, значит, заполнил анкету полностью
+		//TODO переносим это в clientForm->checkFormComplete()
+		$iClientId = Yii::app()->clientForm->getClientId();
+		$aData['complete'] = 1;
+		ClientData::saveClientDataById($aData, $iClientId);
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
 		$oAnswer = Yii::app()->clientForm->sendSmsCode();
@@ -307,13 +324,16 @@ class FormController extends Controller
 		} else {
 			//если код верный, то берем данные из БД
 			$aClientData = ClientData::getClientDataById($iClientId);
-			//отправляем в API данные клиента, и если клиент успешно создан
-			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
+
+			//отправляем в API данные клиента
+			$bRegisterSuccess = Yii::app()->clientForm->sendClientToApi($aClientData);
+
+			//если клиент успешно создан
+			if ($bRegisterSuccess) {
 
 				//автоматический логин юзера в личный кабинет
 				$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
-				//Yii::app()->user->setStateKeyPrefix('_account'); //префикс для модуля account
 				if ($oLogin->validate() && $oLogin->login()) {
 					//сохраняем данные перед редиректом в ЛК
 					if (!empty($aClientData['product'])) {

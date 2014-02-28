@@ -165,7 +165,7 @@ class ClientCreateFormAbstract extends CFormModel
 	public $info_collector;
 	public $info;
 
-	public $complete;
+	public $agree;
 	public $password;
 	public $password_repeat;
 
@@ -293,7 +293,7 @@ class ClientCreateFormAbstract extends CFormModel
 						)
 					);
 					break;
-				case 'complete':
+				case 'agree':
 					$aRules[] = array($sFieldName, 'required', 'requiredValue' => 1, 'message' => 'Необходимо подтвердить свое согласие на обработку данных');
 					break;
 				case 'phone_home':
@@ -774,7 +774,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'job_contact_name'       => 'ФИО руководителя/директора',
 			'job_contact_phone'      => 'Телефон руководителя/директора',
 
-			'have_past_credit' => 'Были кредиты в прошлом?',
+			'have_past_credit'       => 'Были кредиты в прошлом?',
 			'have_dependents'        => 'Есть иждивенцы',
 
 			'relatives_degree'       => 'Степень родства',
