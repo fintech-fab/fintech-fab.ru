@@ -24,11 +24,12 @@ $this->endContent();
 	$this->widget('TopPageWidget', array("show" => $this->showTopPageWidget));
 	?>
 </div>
-<div class="left-stars-23feb"></div>
-<div class="right-stars-23feb"></div>
-
-<div class="main-bgr-23feb">
-	<!-- main content start-->
+<?php
+//<div class="left-stars-23feb"></div>
+//<div class="right-stars-23feb"></div>
+?>
+<div class="main-bgr-8mar">
+<!-- main content start-->
 	<?= $content; ?>
 	<!-- main content end--><br />
 

@@ -338,3 +338,12 @@ div.search-form {
 
 	width: 100%;
 }
+
+.main-bgr-8mar {
+	margin-top: -10px;
+	background: url('../images/transparentbg.png'), url('../images/8mar-bg.gif');
+	background-position: center top, left top;
+	background-repeat: repeat-y, repeat;
+
+	width: 100%;
+}
