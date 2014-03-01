@@ -14,4 +14,14 @@ class MainController extends BaseController
 		return $this->make('main');
 	}
 
+	public function vk()
+	{
+		return $this->make('vk');
+	}
+
+	public function test()
+	{
+		return $this->make('test');
+	}
+
 }
