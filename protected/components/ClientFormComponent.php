@@ -30,28 +30,35 @@ class ClientFormComponent
 	 * @var array
 	 */
 	public static $aSelectProductSettings = array(
-		self::FAST_REG => array(
+		self::FAST_REG     => array(
 			'view'  => 'main',
 			'model' => 'ClientFastRegForm',
 		),
-		self::SITE1 => array(
+		self::CONTINUE_REG => array(
+			'view'  => 'main',
+			'model' => 'ClientSelectProductForm',
+		),
+		self::SITE1        => array(
 			'view'  => 'main',
 			'model' => 'ClientFastRegForm',
 		),
-		self::SITE2 => array(
+		self::SITE2        => array(
 			'view'  => 'flexible',
 			'model' => 'ClientFlexibleProductForm',
 		),
 	);
 
 	public static $aPhoneFormSettings = array(
-		self::FAST_REG => array(
+		self::FAST_REG     => array(
 			'model' => 'ClientFastRegForm',
 		),
-		self::SITE1    => array(
+		self::CONTINUE_REG => array(
+			'model' => 'ClientFastRegForm', //TODO сделать чтобы телефон там хранился
+		),
+		self::SITE1        => array(
 			'model' => 'ClientPersonalDataForm',
 		),
-		self::SITE2    => array(
+		self::SITE2        => array(
 			'model' => 'ClientPersonalDataForm',
 		),
 	);
@@ -73,17 +80,22 @@ class ClientFormComponent
 	 */
 
 	public static $aSteps = array(
-		self::FAST_REG => array(
+		self::FAST_REG     => array(
 			'max'     => 1,
 			'min'     => 0,
 			'default' => 0,
 		),
-		self::SITE1 => array(
+		self::CONTINUE_REG => array(
+			'max'     => 5,
+			'min'     => 0,
+			'default' => 0,
+		),
+		self::SITE1        => array(
 			'max'     => 7,
 			'min'     => 0,
 			'default' => 0,
 		),
-		self::SITE2 => array(
+		self::SITE2        => array(
 			'max'     => 6,
 			'min'     => 0,
 			'default' => 0,
@@ -92,7 +104,7 @@ class ClientFormComponent
 	);
 
 	public static $aFormWidgetSteps = array(
-		self::SITE1 => array(
+		self::SITE1        => array(
 			2 => array(
 				'form_step' => 1,
 				'label'     => 'Личные данные',
@@ -119,7 +131,34 @@ class ClientFormComponent
 				'url'       => '/form/ajaxForm/7'
 			),
 		),
-		self::SITE2 => array(
+		self::CONTINUE_REG => array(
+			0 => array(
+				'form_step' => 1,
+				'label'     => 'Личные данные',
+				'url'       => '/form/ajaxForm/3'
+			),
+			1 => array(
+				'form_step' => 2,
+				'label'     => 'Паспортные данные',
+				'url'       => '/form/ajaxForm/4'
+			),
+			2 => array(
+				'form_step' => 3,
+				'label'     => 'Постоянная регистрация',
+				'url'       => '/form/ajaxForm/5'
+			),
+			3 => array(
+				'form_step' => 4,
+				'label'     => 'Дополнительно',
+				'url'       => '/form/ajaxForm/6'
+			),
+			4 => array(
+				'form_step' => 5,
+				'label'     => 'Отправка заявки',
+				'url'       => '/form/ajaxForm/7'
+			),
+		),
+		self::SITE2        => array(
 			1 => array(
 				'form_step' => 1,
 				'label'     => 'Личные данные',
@@ -178,8 +217,8 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::FAST_REG     => array(
 			0 => array(
-				'view'  => 'client_fast_reg', //TODO
-				'model' => 'ClientFastRegForm', //TODO
+				'view'             => 'client_fast_reg', //TODO
+				'model'            => 'ClientFastRegForm', //TODO
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 			),
@@ -202,8 +241,15 @@ class ClientFormComponent
 		self::CONTINUE_REG => array(
 			0 => array(
 				'view'             => 'client_form',
-				'sub_view'         => 'steps/personal_data',
-				'model'            => 'ClientPersonalDataForm',
+				'sub_view'         => 'steps/personal_data_continue',
+				'model'            => 'ClientPersonalDataContinueForm', //TODO тут нужна новая форма, без ФИО и телефона
+				'modelDbRelations' => array(
+					'phone',
+					'first_name',
+					'last_name',
+					'third_name',
+					'email',
+				),
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'personal_data',
 			),
@@ -241,8 +287,9 @@ class ClientFormComponent
 				'breadcrumbs_step' => 5,
 				'metrika_goal'     => 'secret_data',
 			),
-			5 => array( //TODO тут вместо СМС-кода требуется сообщение об успешном заполнении и кнопка перехода в ЛК
-				'view'             => 'client_form',
+			5 => array(
+				'controllerMethod' => 'continueRegSuccess', //на этом шаге требуется вызвать метод, и больше ничего не нужно делать
+				/*'view'             => 'client_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
 					true        => 'confirm_phone/check_sms_code',
@@ -254,7 +301,7 @@ class ClientFormComponent
 					'condition' => 'getFlagSmsSent',
 					true        => 'sms_code_check',
 					false       => 'sms_code_send',
-				)
+				)*/
 			),
 		),
 		self::SITE1        => array(
@@ -582,7 +629,6 @@ class ClientFormComponent
 				!empty($aCookieData['client_id']) &&
 				!is_null(ClientData::getClientDataById($aCookieData['client_id']))
 			) {
-
 				$this->iClientId = $aCookieData['client_id'];
 				$this->setClientId($this->iClientId);
 			} else {
@@ -944,6 +990,7 @@ class ClientFormComponent
 			}
 		}
 
+
 		return $oModel;
 	}
 
@@ -1032,8 +1079,22 @@ class ClientFormComponent
 		//TODO тут проверять сессию, если юзер имеет флаг из ЛК - отправлять на дозаполнение формы
 		//TODO тут же проверять, не умерла ли сессия ЛК
 
-		if (isset(Yii::app()->session['site_config'])) {
-			return Yii::app()->session['site_config'];
+		$sSite = Yii::app()->session['site_config'];
+
+		//если текущий конфиг "продолжение регистрации"
+		if ($sSite == self::CONTINUE_REG) {
+			//проверим, залогинен ли юзер
+			if (Yii::app()->user->getId()) {
+				return self::CONTINUE_REG;
+			}
+			//если не залогинен, то сбрасываем конфиг сайта на дефолтный
+			Yii::app()->session['site_config'] = null;
+			$sSite = null;
+		}
+
+		//если есть текущий конфиг в сессии, то вернем его
+		if ($sSite) {
+			return $sSite;
 		}
 
 		return (SiteParams::getIsIvanovoSite())
@@ -1072,6 +1133,11 @@ class ClientFormComponent
 	public function getSessionPhone()
 	{
 		$sSite = $this->getSiteConfigName();
+
+		//если у нас продолжение регистрации - то телефон берем из userId
+		if ($sSite == self::CONTINUE_REG) {
+			return Yii::app()->user->getId();
+		}
 
 		$sModel = self::$aPhoneFormSettings[$sSite]['model'];
 
@@ -1453,20 +1519,63 @@ class ClientFormComponent
 	}
 
 	/**
-	 * Флаг продолжения регистрации после быстрой регистрации и перехода из ЛК на заполнение анкеты
+	 * Параметр продолжения регистрации после быстрой регистрации и перехода из ЛК на заполнение анкеты
 	 *
 	 * @param $bContinue
 	 */
 	public function setContinueReg($bContinue)
 	{
-		Yii::app()->session['client_continue_reg'] = $bContinue;
+		if ($bContinue) {
+			$this->setSiteConfigName(self::CONTINUE_REG);
+		} else {
+			$this->setSiteConfigName(null);
+		}
 	}
 
 	/**
-	 * @return mixed
+	 * @return bool
 	 */
-	public function getContinueReg()
+	public function isContinueReg()
 	{
-		return Yii::app()->session['client_continue_reg'];
+		$sSite = $this->getSiteConfigName();
+
+		return ($sSite == self::CONTINUE_REG);
+	}
+
+	/**
+	 * сохраняем данные перед редиректом в ЛК
+	 */
+	public function saveDataBeforeRedirectToAccount()
+	{
+		if (!empty($aClientData['product'])) {
+			Yii::app()->user->setState('product', $aClientData['product']);
+		}
+		if (!empty($aClientData['channel_id'])) {
+			Yii::app()->user->setState('channel_id', $aClientData['channel_id']);
+		}
+		if (!empty($aClientData['flex_amount'])) {
+			Yii::app()->user->setState('flex_amount', $aClientData['flex_amount']);
+		}
+		if (!empty($aClientData['flex_time'])) {
+			Yii::app()->user->setState('flex_time', $aClientData['flex_time']);
+		}
+		Yii::app()->user->setState('new_client', true);
+
+	}
+
+	/**
+	 * Получаем указанный в настройках метод контроллера, который требуется выполнить на текущем шаге
+	 *
+	 * @return null
+	 */
+	public function getControllerMethod()
+	{
+		$sSite = self::getSiteConfigName();
+
+		$sControllerMethod = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['controllerMethod'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['controllerMethod']
+			: null;
+
+		return $sControllerMethod;
 	}
 }

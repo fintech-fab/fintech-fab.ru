@@ -65,8 +65,8 @@ class FormController extends Controller
 		}
 
 		//проверяем, что для текущего сайта выбран продукт
-		//если не выбран - то сбрасываем шаги
-		if (!Yii::app()->clientForm->checkSiteSelectedProduct()) {
+		//если не выбран, и это не продолжение регистрации (там продукт не выбираем) - то сбрасываем шаги
+		if (!Yii::app()->clientForm->checkSiteSelectedProduct() && Yii::app()->clientForm->isContinueReg()) {
 			Yii::app()->clientForm->resetSteps();
 		}
 
@@ -79,6 +79,15 @@ class FormController extends Controller
 		 * @var string                   $sView
 		 */
 		$iClientId = Yii::app()->clientForm->getClientId();
+
+		//пробуем получить метод, который требуется вызвать на этом шаге, если он задан
+		$sMethod = Yii::app()->clientForm->getControllerMethod();
+		//если метод указан в конфиге и такой метод в контроллере существует, выполним его
+		if ($sMethod && function_exists($this->$sMethod())) {
+			$this->$sMethod();
+			//обязательно завершать приложение после выполнения метода, если сам метод этого не сделал
+			Yii::app()->end();
+		}
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -173,14 +182,9 @@ class FormController extends Controller
 
 		if (!$ajaxForm) {
 			$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
+
 		} elseif ($sSubView) {
-			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
-			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.min.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.maskedinput.min.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
+			$this->disableJs();
 
 			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
 		}
@@ -336,19 +340,7 @@ class FormController extends Controller
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
 				if ($oLogin->validate() && $oLogin->login()) {
 					//сохраняем данные перед редиректом в ЛК
-					if (!empty($aClientData['product'])) {
-						Yii::app()->user->setState('product', $aClientData['product']);
-					}
-					if (!empty($aClientData['channel_id'])) {
-						Yii::app()->user->setState('channel_id', $aClientData['channel_id']);
-					}
-					if (!empty($aClientData['flex_amount'])) {
-						Yii::app()->user->setState('flex_amount', $aClientData['flex_amount']);
-					}
-					if (!empty($aClientData['flex_time'])) {
-						Yii::app()->user->setState('flex_time', $aClientData['flex_time']);
-					}
-					Yii::app()->user->setState('new_client', true);
+					Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
 
 					$this->redirect(Yii::app()->createUrl('form/success'));
 				}
@@ -363,6 +355,48 @@ class FormController extends Controller
 			}
 		}
 		$this->redirect(Yii::app()->createUrl("form"));
+	}
+
+	/**
+	 *
+	 */
+	public function continueRegSuccess()
+	{
+		if (!Yii::app()->clientForm->isContinueReg()) {
+			$this->redirect(Yii::app()->createUrl('/form'));
+		}
+
+		$iClientId = Yii::app()->clientForm->getClientId();
+
+		//берем данные из БД
+		$aClientData = ClientData::getClientDataById($iClientId);
+
+		//отправляем в API данные клиента
+		//TODO тут нужен новый метод для дозаполнения данных клиента
+		$bRegisterSuccess = Yii::app()->clientForm->sendClientToApi($aClientData);
+
+		//если клиент успешно создан
+		if ($bRegisterSuccess) {
+
+			//автоматический логин юзера в личный кабинет
+			$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
+			$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
+			if ($oLogin->validate() && $oLogin->login()) {
+				//сохраняем данные перед редиректом в ЛК
+				Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
+
+				//отключаем режим продолжения регистрации
+				Yii::app()->clientForm->setContinueReg(false);
+				$this->redirect(Yii::app()->createUrl('form/success'));
+			}
+
+
+		} else {
+			//если не удалось создать нового клиента, то выводим ошибку
+			Yii::app()->session['error'] = 'Произошла ошибка при отправке данных на сервер. Попробуйте вернуться в личный кабинет и начать сначала.';
+			//Yii::app()->clientForm->clearClientSession(); //чистим сессию
+			$this->actionStep(1); //переходим на шаг 1
+		}
 	}
 
 	public function actionSuccess()
@@ -382,6 +416,17 @@ class FormController extends Controller
 				'sRedirectUri' => Yii::app()->createUrl('account/doSubscribe'),
 			)
 		);
+	}
+
+	private function disableJs()
+	{
+		//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
+		Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.min.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.maskedinput.min.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
 	}
 
 

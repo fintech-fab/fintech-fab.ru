@@ -87,6 +87,28 @@ class DefaultController extends Controller
 			}
 		}
 
+		//список действий, доступных для клиента, прошедшего быструю регистрацию
+		$aActionsForFastRegUser = array(
+			'index',
+			'history',
+			'login',
+			'logout',
+			'resetPassword',
+			'resetPassSendPass',
+			'resetPassSmsSentSuccess',
+			'resetPasswordResendSmsCode'
+		);
+		//если данный клиент прошел быструю регистрацию
+		if (Yii::app()->adminKreddyApi->isFastReg()) {
+			//но вызванное действие не входит в доступные
+			if (!in_array($sActionId, $aActionsForFastRegUser)) {
+				//покажем приглашение к продолжению регистрации
+				$this->render('need_continue_reg');
+				Yii::app()->end();
+			}
+		}
+
+
 		return parent::beforeAction($aAction);
 	}
 
@@ -106,8 +128,12 @@ class DefaultController extends Controller
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
 
-		//выбираем папку представления в зависимости от статуса СМС-авторизации
-		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+		//выбираем папку представления в зависимости от статуса СМС-авторизации и статуса регистрации
+		//если клиент прошел быструю регистрацию не не заполнил анкеты
+		if (Yii::app()->adminKreddyApi->isFastReg()) {
+			$sClientInfoView = 'index_fast_reg/';
+			$sIndexView = 'index_fast_reg/index';
+		} elseif (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$sClientInfoView = 'index_is_sms_auth/';
 			$sIndexView = 'index_is_sms_auth/index';
 		} else {
@@ -174,16 +200,23 @@ class DefaultController extends Controller
 
 		//TODO проверять наличие записи, если нету - делаем новую
 
+
 		//снимаем флаг "анкеты заполнена", чтобы не создавалась новая запись
 		$oClientData->complete = 0;
+		//TODO тут же требуется проверить ФИО в базе, если уже забито "*" то обновить из fullname
 		$oClientData->save();
 
 		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте
 		$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $sPhone);
 		Cookie::saveDataToCookie('client', $aCookieData);
+		//пишем в сессию ID клиента
+		Yii::app()->session['client_id'] = $oClientData->client_id;
 
 		//ставим клиенту флаг "продолжает регистрацию"
 		Yii::app()->clientForm->setContinueReg(true);
+
+		//отправляем на форму регистрации
+		$this->redirect(Yii::app()->createUrl('/form'));
 
 	}
 

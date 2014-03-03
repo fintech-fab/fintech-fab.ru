@@ -82,6 +82,19 @@ class ClientFastRegForm extends ClientFullForm
 	}
 
 	/**
+	 * @return array
+	 */
+	public function attributeLabels()
+	{
+		return array_merge(
+			parent::attributeLabels(),
+			array('product' => 'Выберите Пакет займов'),
+			array('channel_id' => 'Выберите способ получения займа')
+		);
+	}
+
+
+	/**
 	 * @return bool|void
 	 */
 	public function beforeValidate()

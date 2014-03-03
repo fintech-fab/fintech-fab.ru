@@ -1,61 +1,19 @@
 <?php
 /**
  * @var ClientCreateFormAbstract $oClientCreateForm
- * @var                          $aProducts
  * @var IkTbActiveForm           $form
+ * @var FastRegProductsWidget    $this
  */
 
-
 ?>
-
-<ul id="productsTabs" class="nav nav-tabs">
-	<?php foreach ($aProducts as $iKey => $aProduct) { ?>
-		<li <?= $iKey == array_keys($aProducts)[0] ? 'class="active"' : '' ?>>
-			<a href="#product<?= $aProduct['id'] ?>" data-toggle="tab" style="font-size: 20pt;"><?= $aProduct['amount'] ?></a>
-		</li>
-	<?php } ?>
-
-</ul>
-
-<div class="span6">
-	<div class="row">
-		<div class="tab-content" id="myTabContent">
-			<?php foreach ($aProducts as $iKey => $aProduct) { ?>
-				<div id="product<?= $aProduct['id'] ?>" class="tab-pane fade <?= $iKey == array_keys($aProducts)[0] ? 'active in' : '' ?>">
-					<?php
-
-					//'name' => 'Кредди 3000'
-					//'subscription_lifetime' => '2592000'
-					//'loan_lifetime' => '604800'
-
-					?>
-					<strong><span class="packet_name"><?= $aProduct['name'] ?></span>"</strong>
-					<ul>
-						<li>Размер одного займа - <span class="cost final_price"><?= $aProduct['loan_amount'] ?></span>&nbsp;руб.
-						</li>
-
-						<li>Доступная сумма - <span class="cost packet_size"><?= $aProduct['amount'] ?></span>&nbsp;руб.
-						</li>
-						<li>Количество займов в пакете -
-							<span class="cost count_subscribe"><?= $aProduct['loan_count'] ?></span>
-						</li>
-
-						<li>Стоимость подключения -
-							<span class="cost price_count"><?= $aProduct['subscription_cost'] ?></span>&nbsp;руб.
-						</li>
-
-						<li>Возврат каждого займа - в течение
-							<span class="cost price_count"><?= $aProduct['loan_lifetime'] / (3600 * 24) ?></span>&nbsp;дней
-							(с момента перечисления займа)
-						</li>
-
-					</ul>
-				</div>
-			<?php } ?>
-		</div>
-	</div>
-	<div class="row">
+<div id="fastRegWidget">
+	<?php $this->renderNavTabs() ?>
+	<div class="span5">
 		<div class="row">
+			<?php $this->renderTabsContents(); ?>
+		</div>
+		<div class="row">
+
 			<?php
 			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				'id'                   => get_class($oClientCreateForm),
@@ -74,7 +32,10 @@
 				$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getProducts()));
 			}
 			?>
-			<?= $form->radioButtonListRow($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
+			<div class="hide">
+				<?= $form->radioButtonList($oClientCreateForm, 'product', Yii::app()->productsChannels->getProducts(), array("class" => "all")); ?>
+				<br />
+			</div>
 
 			<?php
 			$oClientCreateForm->channel_id = Yii::app()->clientForm->getSessionChannel();
@@ -83,12 +44,70 @@
 				$oClientCreateForm->channel_id = reset(array_keys(Yii::app()->productsChannels->getChannels()));
 			}
 			?>
+			<h4>Куда перечислить деньги?</h4>
+
+			<div class="channel-img"><img src="static/images/cards.png" /></div>
+			<div class="channel-img"><img src="static/images/mobile.png" /></div>
 			<?= $form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 			<div class="clearfix"></div>
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type'       => 'primary',
-				'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
+				'label'       => 'Подключить пакет',
+				'htmlOptions' => array(
+					'style' => 'width: 250px; margin-top: 10px;'
+				),
+			)); ?>
+			<?php
+			$this->endWidget();
+			?>
+
+		</div>
+	</div>
+	<div class="span6 offset1">
+		<div class="row">
+			<?php
+			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+				'id'                   => get_class($oClientCreateForm) . '_fast',
+				'enableAjaxValidation' => true,
+				'type'                 => 'inline',
+				'clientOptions'        => array(
+					'validateOnChange' => true,
+					'validateOnSubmit' => false,
+				),
+				'action'               => Yii::app()->createUrl('/form/'),
+			));
+
+			?>
+			<h3>Быстрая регистрация</h3>
+			<?= $form->errorSummary($oClientCreateForm); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'last_name'); ?><br />
+
+			<?= $form->textFieldRow($oClientCreateForm, 'first_name'); ?><br />
+
+			<?= $form->textFieldRow($oClientCreateForm, 'third_name'); ?><br />
+
+			<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15')); ?><br />
+
+			<?= $form->textFieldRow($oClientCreateForm, 'email'); ?><br />
+			<?php $oClientCreateForm->fast_reg = 1; ?>
+			<?= $form->hiddenField($oClientCreateForm, 'fast_reg'); ?>
+
+			<span class="confirm">
+				<?php
+				$oClientCreateForm->agree = false;
+				echo $form->checkBoxRow($oClientCreateForm, 'agree');
+				?>
+			</span>
+
+			<div class="clearfix"></div>
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'buttonType'  => 'submit',
+				'type'        => 'primary',
+				'label'       => 'Зарегистрироваться',
+				'htmlOptions' => array(
+					'style' => 'width: 250px; margin-top: 10px;'
+				),
 			)); ?>
 			<?php
 			$this->endWidget();
@@ -96,52 +115,18 @@
 		</div>
 	</div>
 </div>
-<div class="span6">
-	<div class="row">
-		<?php
-		$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-			'id'                   => get_class($oClientCreateForm) . '_fast',
-			'enableAjaxValidation' => true,
-			'type'                 => 'inline',
-			'clientOptions'        => array(
-				'validateOnChange' => true,
-				'validateOnSubmit' => false,
-			),
-			'action'               => Yii::app()->createUrl('/form/'),
-		));
+<script lang="text/javascript">
+	$('a[data-toggle="tab"]').on('shown', function (e) {
+		var sTabDivId = $(e.target).attr('href');
+		var sSelectedProductId = $(sTabDivId).attr('data-value');
 
-		?>
-		<?= $form->errorSummary($oClientCreateForm); ?>
-		<p><?= $form->textFieldRow($oClientCreateForm, 'last_name'); ?></p>
+		var sFormName = '#<?= get_class($oClientCreateForm) ?>';
 
-		<p><?= $form->textFieldRow($oClientCreateForm, 'first_name'); ?></p>
+		var oForm = $(sFormName);
 
-		<p><?= $form->textFieldRow($oClientCreateForm, 'third_name'); ?></p>
+		oInput = oForm.find('input[value=' + sSelectedProductId + ']');
 
-		<p><?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('size' => '15')); ?></p>
+		oInput.attr('checked', 'checked');
 
-		<p><?= $form->textFieldRow($oClientCreateForm, 'email'); ?></p>
-		<?php $oClientCreateForm->fast_reg = 1; ?>
-		<p><?= $form->hiddenField($oClientCreateForm, 'fast_reg'); ?></p>
-
-		<p class="confirm">
-			<?php
-			$oClientCreateForm->agree = false;
-			echo $form->checkBoxRow($oClientCreateForm, 'agree');
-			?>
-		</p>
-
-		<div class="clearfix"></div>
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-			'buttonType' => 'submit',
-			'type'       => 'primary',
-			'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
-		)); ?>
-		<?php
-		$this->endWidget();
-		?>
-	</div>
-</div>
-
-
-
+	})
+</script>

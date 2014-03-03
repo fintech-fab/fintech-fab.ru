@@ -935,6 +935,19 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isFastReg()
+	{
+		$cStatus = $this->getClientStatus();
+		if ($cStatus == self::C_CLIENT_FAST_REG) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Получение баланса
 	 *
 	 * @return int
@@ -1288,7 +1301,7 @@ class AdminKreddyApiComponent
 		}
 
 
-		$aProducts = Yii::app()->cache->get($sCacheName);
+		//$aProducts = Yii::app()->cache->get($sCacheName);
 
 		if (!empty($aProducts)) {
 			return $aProducts;
