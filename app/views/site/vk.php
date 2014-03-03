@@ -30,15 +30,33 @@ if (isset($token['access_token'])) {
 ?>
 <div class="row text-center">
 	<?php    if ($result) {
-
-		echo "Социальный ID пользователя: " . $userInfo['uid'] . '<br />';
-		echo "Имя пользователя: " . $userInfo['first_name'] . '<br />';
-		echo "Фамилия пользователя: " . $userInfo['last_name'] . '<br />';
-		echo "Ссылка на профиль пользователя: " . $userInfo['screen_name'] . '<br />';
-		echo "Пол пользователя: " . $userInfo['sex'] . '<br />';
-		echo "День Рождения: " . $userInfo['bdate'] . '<br />';
-		echo '<img src="' . $userInfo['photo_big'] . '" />';
+		$id_vk = $userInfo['uid'];
+		$first_name = $userInfo['first_name'];
+		$last_name = $userInfo['last_name'];
+		$bdate = $userInfo['bdate'];
+		echo "Социальный ID пользователя: " . $id_vk . '<br />';
+		echo "Имя пользователя: " . $first_name . '<br />';
+		echo "Фамилия пользователя: " . $last_name . '<br />';
+		echo "День Рождения: " . $bdate . '<br />';
 		echo "<br />";
+		//TODO переделать запрос.
+		$users = DB::table('users_vk')->get();
+		foreach ($users as $user) {
+			if ($id_vk != $user->id_vk) {
+				DB::table('users_vk')->insert(
+					array(
+						'id_vk'      => $id_vk,
+						'first_name' => $first_name,
+						'last_name'  => $last_name,
+					)
+				);
+				echo "Пользователь внесен в базу";
+
+			} else {
+				echo "Такой пользователь уже есть в базе.";
+			}
+		}
+
 	}
 	}
 	?>
