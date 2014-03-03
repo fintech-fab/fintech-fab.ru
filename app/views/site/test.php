@@ -1,6 +1,6 @@
 <?php
-$client_id = 'ID'; // ID приложения
-$client_secret = 'key'; // Защищённый ключ
+$client_id = Config::get('vk.ID_vk'); // ID приложения
+$client_secret = Config::get('vk.key_vk'); // Защищённый ключ
 $redirect_uri = 'http://fintech-fab.dev:8080/vk'; // Адрес сайта
 
 $url = 'http://oauth.vk.com/authorize';

@@ -1,6 +1,6 @@
 <?php
-$client_id = 'ID'; // ID приложения
-$client_secret = 'key'; // Защищённый ключ
+$client_id = Config::get('vk.ID_vk'); // ID приложения
+$client_secret = Config::get('vk.key_vk'); // Защищённый ключ
 $redirect_uri = 'http://fintech-fab.dev:8080/vk'; // Адрес сайта
 
 if (isset($_GET['code'])) {
@@ -33,6 +33,7 @@ if (isset($token['access_token'])) {
 
 		echo "Социальный ID пользователя: " . $userInfo['uid'] . '<br />';
 		echo "Имя пользователя: " . $userInfo['first_name'] . '<br />';
+		echo "Фамилия пользователя: " . $userInfo['last_name'] . '<br />';
 		echo "Ссылка на профиль пользователя: " . $userInfo['screen_name'] . '<br />';
 		echo "Пол пользователя: " . $userInfo['sex'] . '<br />';
 		echo "День Рождения: " . $userInfo['bdate'] . '<br />';
