@@ -39,22 +39,27 @@ if (isset($token['access_token'])) {
 		echo "Фамилия пользователя: " . $last_name . '<br />';
 		echo "День Рождения: " . $bdate . '<br />';
 		echo "<br />";
-		//TODO переделать запрос.
-		$users = DB::table('users_vk')->get();
-		foreach ($users as $user) {
-			if ($id_vk != $user->id_vk) {
-				DB::table('users_vk')->insert(
-					array(
-						'id_vk'      => $id_vk,
-						'first_name' => $first_name,
-						'last_name'  => $last_name,
-					)
-				);
-				echo "Пользователь внесен в базу";
 
-			} else {
-				echo "Такой пользователь уже есть в базе.";
+		$users = DB::table('users_vk')->get();
+		$res = false;
+		foreach ($users as $user) {
+			if ($id_vk == $user->id_vk) {
+				$res = true;
+				break;
 			}
+		}
+		if ($res) {
+			echo "Такой пользователь уже есть в базе.";
+			$res = false;
+		} else {
+			DB::table('users_vk')->insert(
+				array(
+					'id_vk'      => $id_vk,
+					'first_name' => $first_name,
+					'last_name'  => $last_name,
+				)
+			);
+			echo "Пользователь внесен в базу";
 		}
 
 	}
