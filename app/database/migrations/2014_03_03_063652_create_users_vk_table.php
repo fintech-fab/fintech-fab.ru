@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateUsersVkTable extends Migration
 {
@@ -12,7 +13,7 @@ class CreateUsersVkTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create("users_vk", function ($table) {
+		Schema::create("users_vk", function (Blueprint $table) {
 			$table->increments("id");
 			$table->integer("id_vk");
 			$table->string("first_name", 32);
@@ -31,7 +32,7 @@ class CreateUsersVkTable extends Migration
 	 */
 	public function down()
 	{
-		//
+		Schema::drop('users_vk');
 	}
 
 }

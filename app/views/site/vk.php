@@ -1,7 +1,15 @@
 <?php
+
+/**
+ * @var array $userInfo
+ */
+
+
+use FintechFab\Models\UserVk;
+
 $client_id = Config::get('vk.ID_vk'); // ID приложения
 $client_secret = Config::get('vk.key_vk'); // Защищённый ключ
-$redirect_uri = 'http://fintech-fab.dev:8080/vk'; // Адрес сайта
+$redirect_uri = Config::get('vk.url'); // Адрес сайта
 
 if (isset($_GET['code'])) {
 $result = false;
@@ -29,7 +37,8 @@ if (isset($token['access_token'])) {
 }
 ?>
 <div class="row text-center">
-	<?php    if ($result) {
+	<?php
+	if ($result) {
 		$id_vk = $userInfo['uid'];
 		$first_name = $userInfo['first_name'];
 		$last_name = $userInfo['last_name'];
@@ -40,27 +49,46 @@ if (isset($token['access_token'])) {
 		echo "День Рождения: " . $bdate . '<br />';
 		echo "<br />";
 
-		$users = DB::table('users_vk')->get();
-		$res = false;
-		foreach ($users as $user) {
-			if ($id_vk == $user->id_vk) {
-				$res = true;
-				break;
-			}
+		//dd($id_vk);
+
+		/*
+		$component = new UserSocialComponent;
+		$component->doEntrySocialNetwork();
+
+		if($component->getError()){
+
+		}else{
+
 		}
-		if ($res) {
-			echo "Такой пользователь уже есть в базе.";
-			$res = false;
-		} else {
-			DB::table('users_vk')->insert(
-				array(
-					'id_vk'      => $id_vk,
-					'first_name' => $first_name,
-					'last_name'  => $last_name,
-				)
-			);
-			echo "Пользователь внесен в базу";
+
+		if($component->user){
+
 		}
+		if($component->socual_network){
+
+		}
+
+		$sn = Input::get('sn');
+
+		if($sn == 'vk'){
+			$sn_comp = new VkComponent();
+		}
+
+		$sn_comp->parseData();
+		$sn_comp->createUser();
+		$sn_comp->createUserNetwork();
+
+		*/
+
+
+		$user = UserVk::firstOrNew(array(
+			'id_vk' => $id_vk,
+		));
+
+		$user->setAttribute('id_vk', $id_vk);
+		$user->setAttribute('first_name', $first_name);
+		$user->setAttribute('last_name', $last_name);
+		$user->save();
 
 	}
 	}
