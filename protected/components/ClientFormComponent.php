@@ -53,7 +53,7 @@ class ClientFormComponent
 			'model' => 'ClientFastRegForm',
 		),
 		self::CONTINUE_REG => array(
-			'model' => 'ClientFastRegForm', //TODO сделать чтобы телефон там хранился
+			'model' => 'ClientPersonalDataContinueForm',
 		),
 		self::SITE1        => array(
 			'model' => 'ClientPersonalDataForm',
@@ -135,27 +135,27 @@ class ClientFormComponent
 			0 => array(
 				'form_step' => 1,
 				'label'     => 'Личные данные',
-				'url'       => '/form/ajaxForm/3'
+				'url' => '/form/ajaxForm/1'
 			),
 			1 => array(
 				'form_step' => 2,
 				'label'     => 'Паспортные данные',
-				'url'       => '/form/ajaxForm/4'
+				'url' => '/form/ajaxForm/2'
 			),
 			2 => array(
 				'form_step' => 3,
 				'label'     => 'Постоянная регистрация',
-				'url'       => '/form/ajaxForm/5'
+				'url' => '/form/ajaxForm/3'
 			),
 			3 => array(
 				'form_step' => 4,
 				'label'     => 'Дополнительно',
-				'url'       => '/form/ajaxForm/6'
+				'url' => '/form/ajaxForm/5'
 			),
 			4 => array(
 				'form_step' => 5,
 				'label'     => 'Отправка заявки',
-				'url'       => '/form/ajaxForm/7'
+				'url' => '/form/ajaxForm/6'
 			),
 		),
 		self::SITE2        => array(
@@ -221,12 +221,13 @@ class ClientFormComponent
 				'model'            => 'ClientFastRegForm', //TODO
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
+				'topPageWidget' => true,
 			),
 			1 => array(
 				'view'             => 'client_fast_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
-					true        => 'confirm_phone/check_sms_code',
+					true => 'confirm_phone/check_sms_code_fast_reg',
 					false       => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
@@ -235,14 +236,15 @@ class ClientFormComponent
 					'condition' => 'getFlagSmsSent',
 					true        => 'sms_code_check',
 					false       => 'sms_code_send',
-				)
+				),
+				'topPageWidget'    => true,
 			),
 		),
 		self::CONTINUE_REG => array(
 			0 => array(
-				'view'             => 'client_form',
+				'view'  => 'client_continue_form',
 				'sub_view'         => 'steps/personal_data_continue',
-				'model'            => 'ClientPersonalDataContinueForm', //TODO тут нужна новая форма, без ФИО и телефона
+				'model' => 'ClientPersonalDataContinueForm',
 				'modelDbRelations' => array(
 					'phone',
 					'first_name',
@@ -254,7 +256,7 @@ class ClientFormComponent
 				'metrika_goal'     => 'personal_data',
 			),
 			1 => array(
-				'view'             => 'client_form',
+				'view' => 'client_continue_form',
 				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
 				'modelDbRelations' => array(
@@ -264,44 +266,31 @@ class ClientFormComponent
 				'metrika_goal'     => 'passport_data',
 			),
 			2 => array(
-				'view'             => 'client_form',
+				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
-				'breadcrumbs_step' => 3,
+				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'address_data',
 			),
 			3 => array(
-				'view'             => 'client_form',
+				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/job_data',
 				'model'            => 'ClientJobDataForm',
 				'modelDbRelations' => array(
 					'phone'
 				),
-				'breadcrumbs_step' => 4,
+				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'job_data',
 			),
 			4 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/secret_data',
-				'model'            => 'ClientSecretDataForm',
-				'breadcrumbs_step' => 5,
+				'view'             => 'client_continue_form',
+				'sub_view'         => 'steps/secret_data_continue',
+				'model'            => 'ClientSecretDataContinueForm',
+				'breadcrumbs_step' => 2,
 				'metrika_goal'     => 'secret_data',
 			),
 			5 => array(
 				'controllerMethod' => 'continueRegSuccess', //на этом шаге требуется вызвать метод, и больше ничего не нужно делать
-				/*'view'             => 'client_form',
-				'sub_view'         => array(
-					'condition' => 'getFlagSmsSent',
-					true        => 'confirm_phone/check_sms_code',
-					false       => 'confirm_phone/send_sms_code',
-				),
-				'model'            => 'ClientConfirmPhoneViaSMSForm',
-				'breadcrumbs_step' => 6,
-				'metrika_goal'     => array(
-					'condition' => 'getFlagSmsSent',
-					true        => 'sms_code_check',
-					false       => 'sms_code_send',
-				)*/
 			),
 		),
 		self::SITE1        => array(
@@ -310,6 +299,7 @@ class ClientFormComponent
 				'model'            => 'ClientFastRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
+				'topPageWidget' => true,
 			),
 			1 => array(
 				'view'             => 'infographic',
@@ -380,6 +370,7 @@ class ClientFormComponent
 				'model'            => 'ClientFlexibleProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
+				'topPageWidget' => true,
 			),
 			1 => array(
 				'view'             => 'client_form',
@@ -847,6 +838,21 @@ class ClientFormComponent
 		return Yii::app()->adminKreddyApi->createClient($aClientData);
 	}
 
+	/**
+	 * @param $aClientData
+	 *
+	 * @return bool
+	 */
+	public function updateFastRegClient($aClientData)
+	{
+		if ($this->isContinueReg()) {
+			return Yii::app()->adminKreddyApi->updateFastRegClient($aClientData);
+		}
+
+		return false;
+
+	}
+
 
 	public function resetSteps()
 	{
@@ -1076,15 +1082,12 @@ class ClientFormComponent
 	 */
 	public static function getSiteConfigName()
 	{
-		//TODO тут проверять сессию, если юзер имеет флаг из ЛК - отправлять на дозаполнение формы
-		//TODO тут же проверять, не умерла ли сессия ЛК
-
 		$sSite = Yii::app()->session['site_config'];
 
 		//если текущий конфиг "продолжение регистрации"
 		if ($sSite == self::CONTINUE_REG) {
 			//проверим, залогинен ли юзер
-			if (Yii::app()->user->getId()) {
+			if (Yii::app()->user->getId() && Yii::app()->adminKreddyApi->isLoggedIn()) {
 				return self::CONTINUE_REG;
 			}
 			//если не залогинен, то сбрасываем конфиг сайта на дефолтный
@@ -1409,6 +1412,10 @@ class ClientFormComponent
 	 */
 	public function getBreadCrumbs()
 	{
+		if ($this->isContinueReg()) {
+			return SiteParams::$aContinueRegBreadCrumbs;
+		}
+
 		return (SiteParams::getIsIvanovoSite()) ? SiteParams::$aIvanovoBreadCrumbs : SiteParams::$aMainBreadCrumbs;
 	}
 
@@ -1465,6 +1472,17 @@ class ClientFormComponent
 	public function getFormWidgetSteps()
 	{
 		return self::$aFormWidgetSteps[$this->getSiteConfigName()];
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isTopPageWidgetVisible()
+	{
+		$sSite = $this->getSiteConfigName();
+		$iCurrentStep = $this->getCurrentStep();
+
+		return !empty(self::$aStepsInfo[$sSite][$iCurrentStep]['topPageWidget']);
 	}
 
 	/**
@@ -1578,4 +1596,21 @@ class ClientFormComponent
 
 		return $sControllerMethod;
 	}
+
+	/**
+	 * Проверяем, что находимся на последнем шаге формы, значит форма заполнена
+	 *
+	 * @return bool
+	 */
+	public function checkFormComplete()
+	{
+		$iCurrentStep = $this->getCurrentStep();
+
+		$sSite = self::getSiteConfigName();
+		$iLastStep = self::$aSteps[$sSite]['max'];
+
+		return $iCurrentStep == $iLastStep;
+	}
+
+
 }

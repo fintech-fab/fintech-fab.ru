@@ -176,6 +176,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_GET_IDENTIFY = 'video/getIdentify';
 	const API_ACTION_CREATE_CLIENT = 'siteClient/signup';
 	const API_ACTION_CREATE_FAST_REG_CLIENT = 'siteClient/signupFast';
+	const API_ACTION_UPDATE_FAST_REG_CLIENT = 'siteClient/updateFastReg';
 	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/checkSubscribe';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_CHECK_LOAN = 'siteClient/checkLoan';
@@ -320,6 +321,14 @@ class AdminKreddyApiComponent
 			//если токен существует, то запрашиваем его обновление
 			$this->updateClientToken();
 		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isLoggedIn()
+	{
+		return isset($this->token);
 	}
 
 	/**
@@ -485,6 +494,21 @@ class AdminKreddyApiComponent
 	 */
 	public function createFastRegClient($aClientData)
 	{
+		//список полей, которые требуется передать при быстрой регистрации
+		$aRequiredFields = array(
+			'first_name'  => null,
+			'last_name'   => null,
+			'third_name'  => null,
+			'email'       => null,
+			'phone'       => null,
+			'tracking_id' => null,
+			'ip'          => null,
+		);
+
+
+		//получаем массив, соджержащий только заданные поля
+		$aClientData = array_intersect_key($aClientData, $aRequiredFields);
+
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_FAST_REG_CLIENT, $aRequest);
 
@@ -492,6 +516,81 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 			$this->setSmsAuthDone(true);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param $aClientData
+	 *
+	 * @return bool
+	 */
+	public function updateFastRegClient($aClientData)
+	{
+		//список полей, которые требуется передать при обновлении анкеты быстрой регистрации
+		$aRequiredFields = array(
+			'sex'                           => null,
+			'prev_last_name'                => null,
+			'birthday'                      => null,
+
+			'passport_series'               => null,
+			'passport_number'               => null,
+			'passport_date'                 => null,
+			'passport_code'                 => null,
+			'passport_issued'               => null,
+
+			'document'                      => null,
+			'document_number'               => null,
+
+			'relatives_one_fio'             => null,
+			'relatives_one_phone'           => null,
+
+			'address_reg_region'            => null,
+			'address_reg_city'              => null,
+			'address_reg_address'           => null,
+
+			'address_res_region'            => null,
+			'address_res_city'              => null,
+			'address_res_address'           => null,
+
+			'numeric_code'                  => null,
+
+			'job_company'                   => null,
+			'job_position'                  => null,
+			'job_phone'                     => null,
+
+			'job_time'                      => null,
+			'job_monthly_income'            => null,
+			'job_monthly_outcome'           => null,
+
+			'friends_fio'                   => null,
+			'friends_phone'                 => null,
+
+			'secret_question'               => null,
+			'secret_answer'                 => null,
+
+			'status'                        => null,
+			'income_source'                 => null,
+			'educational_institution_name'  => null,
+			'educational_institution_phone' => null,
+			'loan_purpose'                  => null,
+			'birthplace'                    => null,
+		);
+
+		//получаем массив, соджержащий только заданные поля
+		$aClientData = array_intersect_key($aClientData, $aRequiredFields);
+
+		$sDateFormatInBase = "Y-m-d";
+		$aClientData['birthday'] = date($sDateFormatInBase, strtotime($aClientData['birthday']));
+		$aClientData['passport_date'] = date($sDateFormatInBase, strtotime($aClientData['passport_date']));
+
+		$aRequest = array('clientData' => CJSON::encode($aClientData));
+		$this->requestAdminKreddyApi(self::API_ACTION_UPDATE_FAST_REG_CLIENT, $aRequest);
+
+		if (!self::getIsError()) {
 
 			return true;
 		}

@@ -66,7 +66,7 @@ class FormController extends Controller
 
 		//проверяем, что для текущего сайта выбран продукт
 		//если не выбран, и это не продолжение регистрации (там продукт не выбираем) - то сбрасываем шаги
-		if (!Yii::app()->clientForm->checkSiteSelectedProduct() && Yii::app()->clientForm->isContinueReg()) {
+		if (!Yii::app()->clientForm->checkSiteSelectedProduct() && !Yii::app()->clientForm->isContinueReg()) {
 			Yii::app()->clientForm->resetSteps();
 		}
 
@@ -171,14 +171,7 @@ class FormController extends Controller
 		$sView = $aView['view'];
 		$sSubView = $aView['sub_view'];
 
-		//TODO показ виджета сконфигурировать в массиве форм-компонента и отдавать через метод сюда
-		if (
-			$sView === 'client_select_product' ||
-			$sView === 'client_flexible_product' ||
-			$sView === 'client_fast_reg'
-		) {
-			$this->showTopPageWidget = true;
-		}
+		$this->showTopPageWidget = Yii::app()->clientForm->isTopPageWidgetVisible();
 
 		if (!$ajaxForm) {
 			$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
@@ -259,9 +252,14 @@ class FormController extends Controller
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
 
-		//если клиент запрашивает СМС, значит, заполнил анкету полностью
-		//TODO переносим это в clientForm->checkFormComplete()
+		//проверим, что форма заполнена
+		if (!Yii::app()->clientForm->checkFormComplete()) {
+			$this->redirect(Yii::app()->createUrl("/form"));
+		}
+
+
 		$iClientId = Yii::app()->clientForm->getClientId();
+		//если клиент запрашивает СМС, значит, заполнил анкету полностью
 		$aData['complete'] = 1;
 		ClientData::saveClientDataById($aData, $iClientId);
 
@@ -341,7 +339,7 @@ class FormController extends Controller
 				if ($oLogin->validate() && $oLogin->login()) {
 					//сохраняем данные перед редиректом в ЛК
 					Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
-
+					Yii::app()->clientForm->clearClientSession();
 					$this->redirect(Yii::app()->createUrl('form/success'));
 				}
 
@@ -372,29 +370,26 @@ class FormController extends Controller
 		$aClientData = ClientData::getClientDataById($iClientId);
 
 		//отправляем в API данные клиента
-		//TODO тут нужен новый метод для дозаполнения данных клиента
-		$bRegisterSuccess = Yii::app()->clientForm->sendClientToApi($aClientData);
+		$bRegisterSuccess = Yii::app()->clientForm->updateFastRegClient($aClientData);
 
 		//если клиент успешно создан
 		if ($bRegisterSuccess) {
 
 			//автоматический логин юзера в личный кабинет
-			$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
-			$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
-			if ($oLogin->validate() && $oLogin->login()) {
-				//сохраняем данные перед редиректом в ЛК
-				Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
+			//$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
+			//$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
 
-				//отключаем режим продолжения регистрации
-				Yii::app()->clientForm->setContinueReg(false);
-				$this->redirect(Yii::app()->createUrl('form/success'));
-			}
+			Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
 
+			//отключаем режим продолжения регистрации
+			Yii::app()->clientForm->setContinueReg(false);
+			Yii::app()->clientForm->clearClientSession(); //чистим сессию
+			$this->redirect(Yii::app()->createUrl('form/success'));
 
 		} else {
 			//если не удалось создать нового клиента, то выводим ошибку
 			Yii::app()->session['error'] = 'Произошла ошибка при отправке данных на сервер. Попробуйте вернуться в личный кабинет и начать сначала.';
-			//Yii::app()->clientForm->clearClientSession(); //чистим сессию
+			Yii::app()->clientForm->clearClientSession(); //чистим сессию
 			$this->actionStep(1); //переходим на шаг 1
 		}
 	}

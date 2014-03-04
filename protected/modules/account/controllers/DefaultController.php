@@ -93,6 +93,7 @@ class DefaultController extends Controller
 			'history',
 			'login',
 			'logout',
+			'continueForm',
 			'resetPassword',
 			'resetPassSendPass',
 			'resetPassSmsSentSuccess',
@@ -192,18 +193,32 @@ class DefaultController extends Controller
 
 	public function actionContinueForm()
 	{
+		//если клиент не является прошедшим только быструю регистрацию, то не пускаем
+		if (!Yii::app()->adminKreddyApi->isFastReg()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
 		$sPhone = Yii::app()->user->getId();
 		/**найдем клиента в таблице регистрации по номеру телефона,
-		 * т.к. этот клиент зарегистрирован, то надо искать с флагом "телефон подтвержден по смс"
+		 * т.к. этот клиент зарегистрирован, надо искать с флагом "телефон подтвержден по смс"
 		 */
 		$oClientData = ClientData::model()->scopeConfirmedPhone($sPhone)->find();
 
-		//TODO проверять наличие записи, если нету - делаем новую
-
+		//если вдруг запись почему-то не найдена (такого быть не может при корректной работе системы), ругаемся ошибкой
+		if (!$oClientData) {
+			Yii::app()->session['error'] = 'Произошла ошибка: не удалось перейти к заполнению анкеты.
+			 Попробуйте повторить через несколько минут.';
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
 
 		//снимаем флаг "анкеты заполнена", чтобы не создавалась новая запись
 		$oClientData->complete = 0;
-		//TODO тут же требуется проверить ФИО в базе, если уже забито "*" то обновить из fullname
+		//обновим ФИО в базе, на случай если уже стерто
+		$sClientFullName = Yii::app()->adminKreddyApi->getClientFullName();
+		$aClientFullName = explode(' ', $sClientFullName);
+		$oClientData->first_name = $aClientFullName[0];
+		$oClientData->third_name = $aClientFullName[1];
+		$oClientData->last_name = $aClientFullName[2];
 		$oClientData->save();
 
 		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте

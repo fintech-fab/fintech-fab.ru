@@ -50,7 +50,7 @@ class FastRegProductsWidget extends CWidget
 					</a>
 				<?php } else { ?>
 					<a href="#product_<?= $aProduct['id'] ?>" data-toggle="tab" style="width: 165px;">
-						<?= ($aProduct['amount'] != 15000) ? $aProduct['amount'] : '<img src="static/images/kreddy90.png"/>' ?>
+						<?= ($aProduct['amount'] != 15000) ? $aProduct['amount'] : '<img src="/static/images/kreddy90.png"/>' ?>
 					</a>
 				<?php } ?>
 			</li>
@@ -75,10 +75,10 @@ class FastRegProductsWidget extends CWidget
 			if ($aProduct['amount'] != 15000) {
 				?>
 				<div class="product_name">
-					<img src="static/images/kreddy_product.png" />&nbsp;<span><strong><?= $aProduct['amount'] ?></strong></span>
+					<img src="/static/images/kreddy_product.png" />&nbsp;<span><strong><?= $aProduct['amount'] ?></strong></span>
 				</div>
 			<?php } else { ?>
-				<div class="product_name"><img src="static/images/kreddy90.png" /></div>
+				<div class="product_name"><img src="/static/images/kreddy90.png" /></div>
 			<?php } ?>
 
 			Размер одного займа - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong><br />

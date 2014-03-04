@@ -46,8 +46,8 @@
 			?>
 			<h4>Куда перечислить деньги?</h4>
 
-			<div class="channel-img"><img src="static/images/cards.png" /></div>
-			<div class="channel-img"><img src="static/images/mobile.png" /></div>
+			<div class="channel-img"><img src="/static/images/cards.png" /></div>
+			<div class="channel-img"><img src="/static/images/mobile.png" /></div>
 			<?= $form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 			<div class="clearfix"></div>
 			<?php $this->widget('bootstrap.widgets.TbButton', array(

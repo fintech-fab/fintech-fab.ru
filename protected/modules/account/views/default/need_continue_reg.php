@@ -13,11 +13,12 @@
 <div class="center">
 	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
-		'id'         => 'submitButton',
-		'buttonType' => 'submit',
-		'type'       => 'primary',
-		'size'       => 'large',
-		'label'      => 'Заполнить анкету',
+		'id'    => 'submitButton',
+
+		'type'  => 'primary',
+		'size'  => 'large',
+		'label' => 'Заполнить анкету',
+		'url'   => Yii::app()->createUrl('/account/continueForm'),
 	));
 	?>
 </div>
