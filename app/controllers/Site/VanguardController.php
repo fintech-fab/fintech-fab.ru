@@ -9,7 +9,6 @@ use Illuminate\Mail\Message;
 use Input;
 use Mail;
 use Redirect;
-use Session;
 
 class VanguardController extends BaseController
 {
@@ -18,12 +17,10 @@ class VanguardController extends BaseController
 
 	public function index()
 	{
-		$userMessage = Session::get('userMessage');
-
-		return $this->make('probation', array('userMessage' => $userMessage));
+		return $this->make('index');
 	}
 
-	public function order()
+	public function postOrder()
 	{
 		$data = $this->getOrderFormData();
 

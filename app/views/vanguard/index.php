@@ -11,12 +11,6 @@
 		<h2 class="text-center">Эта стажировка проводится стажировщиками для стажирующихся стажеров</h2>
 	</div>
 </div>
-<?php if ($userMessage != ''): ?>
-	<div class="jumbotron">
-		<p class="text-center"><?= $userMessage ?></p>
-	</div>
-<?php endif ?>
-<!--	View::make('vanguard.feedback',array('userMessage' => $userMessage))?> -->
 <div class="col-md-offset-1 col-md-10">
 	<ul class="nav nav-tabs">
 		<li class="active">
@@ -112,47 +106,47 @@
 					));
 					?>
 				</div>
-				</div>
-				<div class="form-group">
-					<label for="inputAbout" class="col-sm-2 control-label">О себе</label>
+			</div>
+			<div class="form-group">
+				<label for="inputAbout" class="col-sm-2 control-label">О себе</label>
 
-					<div class="col-sm-8">
-						<?=
-						Form::textarea('about', '', array(
-							'placeholder' => 'О себе',
-							'class'       => 'form-control',
-							'id'          => 'inputAbout',
-							'required'    => 'required',
-							'rows'        => '10',
-						));
-						?>
-					</div>
+				<div class="col-sm-8">
+					<?=
+					Form::textarea('about', '', array(
+						'placeholder' => 'О себе',
+						'class'       => 'form-control',
+						'id'          => 'inputAbout',
+						'required'    => 'required',
+						'rows'        => '10',
+					));
+					?>
 				</div>
-				<div class="form-group">
-					<label for="inputEmail" class="col-sm-2 control-label">Email</label>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail" class="col-sm-2 control-label">Email</label>
 
-					<div class="col-sm-8">
+				<div class="col-sm-8">
 
-						<?=
-						Form::input('email', 'email', '', array(
-							'placeholder' => 'Email',
-							'class'       => 'form-control',
-							'id'          => 'inputEmail',
-							'required'    => 'required',
-						));
-						?>
-					</div>
+					<?=
+					Form::input('email', 'email', '', array(
+						'placeholder' => 'Email',
+						'class'       => 'form-control',
+						'id'          => 'inputEmail',
+						'required'    => 'required',
+					));
+					?>
 				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<?=
-						Form::button('Sign in', array(
-							'type'  => 'submit',
-							'class' => 'btn btn-default',
-						));
-						?>
-					</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<?=
+					Form::button('Sign in', array(
+						'type'  => 'submit',
+						'class' => 'btn btn-default',
+					));
+					?>
 				</div>
+			</div>
 			<?= Form::close(); ?>
 		</div>
 	</div>
