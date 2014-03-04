@@ -1400,7 +1400,7 @@ class AdminKreddyApiComponent
 		}
 
 
-		//$aProducts = Yii::app()->cache->get($sCacheName);
+		$aProducts = Yii::app()->cache->get($sCacheName);
 
 		if (!empty($aProducts)) {
 			return $aProducts;
