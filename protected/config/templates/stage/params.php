@@ -10,4 +10,5 @@ return array(
 	'ivanovoUrl'       => '%IVANOVO_URL%',
 	'contactEmail'     => 'operator@kreddy.ru',
 	'emailFrom'        => 'info@kreddy.ru',
+	'ivPath'           => '/var/www/keys/',
 );
