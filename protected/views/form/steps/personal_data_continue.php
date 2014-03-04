@@ -72,6 +72,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
+					'complete' => 'checkBlankResponse',
 					'type'   => 'POST',
 					'update' => '#formBody',
 				),

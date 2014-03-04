@@ -27,3 +27,14 @@ function scrollAndFocus() {
 		oFormBody.find("input[type!='hidden'][disabled!='disabled']").first().delay(600).focus();
 	}
 }
+/**
+ *
+ * В случае, если ответ пустой, перезагружаем страницу
+ */
+function checkBlankResponse(xhr) {
+	if (xhr.responseText == '') {
+		window.location.reload(true);
+		return false;
+	}
+	return true;
+}
