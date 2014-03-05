@@ -8,6 +8,11 @@ function echoActiveClassIfRequestMatches($requestUri)
 	}
 }
 
+function echoAuthMode()
+{
+	echo '<a href="" data-toggle="modal" data-target="#loginModal">Вход</a>';
+}
+
 ?>
 <div class="container">
 	<header class="row">
@@ -37,7 +42,7 @@ function echoActiveClassIfRequestMatches($requestUri)
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="" data-toggle="modal" data-target="#loginModal">Вход</a></li>
+						<li><?= echoAuthMode() ?></li>
 					</ul>
 					<?= View::make('vanguard.loginModal') ?>
 				</div>
