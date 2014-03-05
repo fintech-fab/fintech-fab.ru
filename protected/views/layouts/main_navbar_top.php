@@ -30,20 +30,11 @@
 				</div>
 			<span class="account span2">
 				<?php
-				if (Yii::app()->user->isGuest) {
-					$this->widget('bootstrap.widgets.TbButton', array(
-							'label' => 'Личный кабинет',
-							'url'   => Yii::app()->createAbsoluteUrl('/account/login'),
-						)
-					);
-				} else {
-					$this->widget('bootstrap.widgets.TbButton', array(
-							'label' => 'Выход',
-							'icon'  => 'icon-off',
-							'url'   => Yii::app()->createAbsoluteUrl('/account/logout'),
-						)
-					);
-				}
+				$this->widget('bootstrap.widgets.TbButton', array(
+						'label' => 'Личный кабинет',
+						'url'   => Yii::app()->createAbsoluteUrl('/account/login'),
+					)
+				);
 				?>
 			</span>
 			</div>
