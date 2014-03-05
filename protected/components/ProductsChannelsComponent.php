@@ -50,7 +50,7 @@ class ProductsChannelsComponent
 				}
 
 				$aProductsList[$key] = "<span data-price='" . $aProduct['subscription_cost']
-					. "' data-final-price='" . $aProduct['amount']
+					. "' data-final-price='" . $aProduct['loan_amount']
 					. "' data-card='" . $iCardPrice . "' data-price-count='"
 					. $iSubscriptionLifetime . "&nbsp;дней"
 					. "' data-count='" . $aProduct['loan_count'] . '&nbsp;' . self::getLoanCountLabel($aProduct['loan_count'])
