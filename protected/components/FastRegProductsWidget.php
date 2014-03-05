@@ -44,13 +44,13 @@ class FastRegProductsWidget extends CWidget
 		foreach ($this->aProducts as $aProduct) {
 			?>
 			<li <?= $aProduct['id'] == $this->getActiveProductId() ? 'class="active"' : '' ?>>
-				<?php if ($aProduct['amount'] != 15000) { ?>
+				<?php if ($aProduct['name'] != 'Кредди 90 дней') { ?>
 					<a href="#product_<?= $aProduct['id'] ?>" data-toggle="tab">
 						<?= $aProduct['loan_amount'] ?>
 					</a>
 				<?php } else { ?>
 					<a href="#product_<?= $aProduct['id'] ?>" data-toggle="tab" style="width: 165px;">
-						<?= ($aProduct['amount'] != 15000) ? $aProduct['loan_amount'] : '<img src="/static/images/kreddy90.png"/>' ?>
+						<?= ($aProduct['name'] != 'Кредди 90 дней') ? $aProduct['loan_amount'] : '<img src="/static/images/kreddy90.png"/>' ?>
 					</a>
 				<?php } ?>
 			</li>
