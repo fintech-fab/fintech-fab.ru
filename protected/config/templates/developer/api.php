@@ -1,6 +1,6 @@
 <?php
 
 return array(
-	'sApiTestUrl' => 'http://admin.%MAIN_URL%/siteApi/',
+	'sApiUrl' => 'http://admin.%MAIN_URL%/siteApi/',
 );
  
