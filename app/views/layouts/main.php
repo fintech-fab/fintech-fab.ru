@@ -5,7 +5,10 @@ if (empty($content)) {
 ?>
 <!DOCTYPE html>
 <html>
-<?= View::make('layouts.inc.head.head') ?>
+<head>
+	<script src="//api-maps.yandex.ru/2.0/?load=package.standard,package.geoObjects&lang=ru-RU" type="text/javascript"></script>
+	<?= View::make('layouts.inc.head.head') ?>
+</head>
 <body>
 <div class="container">
 	<div><img src="/assets/main/logo.png" border="0" width="370" height="175" class="img" /></div>

@@ -30,12 +30,20 @@ class VanguardController extends BaseController
 
 		if (0 == count(Mail::failures())) {
 			$feedback = Helper::ucwords($data['name']);
-			$feedback .= ', cпасибо за регистрацию. Ожидайте ответа по электронной почте.';
+			$feedback .= ', cпасибо за регистрацию.
+			Ожидайте ответа по электронной почте.';
 		} else {
 			$feedback = 'Что-то сломалось, попробуйте ещё раз';
 		}
 
 		return Redirect::to('vanguard')->with('userMessage', $feedback);
+
+	}
+
+	public function registration()
+	{
+
+		return $this->make('registration');
 
 	}
 
