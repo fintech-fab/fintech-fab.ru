@@ -36,6 +36,10 @@ function echoActiveClassIfRequestMatches($requestUri)
 						</div>
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="" data-toggle="modal" data-target="#loginModal">Вход</a></li>
+					</ul>
+					<?= View::make('vanguard.loginModal') ?>
 				</div>
 				<!-- /.navbar-collapse -->
 			</div>

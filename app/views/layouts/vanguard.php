@@ -13,6 +13,7 @@ if (empty($content)) {
 </head>
 <body>
 <?= View::make('layouts.inc.navbar.navbar') ?>
+<?= View::make('vanguard.flash_message') ?>
 
 <div class="container"><?= $content ?></div>
 </body>
