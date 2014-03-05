@@ -64,7 +64,7 @@ class FormProgressBarWidget extends CWidget
 			echo '</div>';
 			echo '</div>';
 
-			Yii::app()->clientScript->registerScript('addressScript', '
+			Yii::app()->clientScript->registerScript('checkResponseScript', '
 			function checkBlankResponseText(xhr){
 				if(xhr.responseText == \'\'){
 					window.location.reload(true);
@@ -86,6 +86,9 @@ class FormProgressBarWidget extends CWidget
 		return $iProgress;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	private function getWidgetStep()
 	{
 		return $this->aSteps[$this->iCurrentStep]['form_step'];

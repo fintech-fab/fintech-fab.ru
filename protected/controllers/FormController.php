@@ -65,10 +65,7 @@ class FormController extends Controller
 		}
 
 		//проверяем, что для текущего сайта выбран продукт
-		//если не выбран, и это не продолжение регистрации (там продукт не выбираем) - то сбрасываем шаги
-		if (!Yii::app()->clientForm->checkSiteSelectedProduct() && !Yii::app()->clientForm->isContinueReg()) {
-			Yii::app()->clientForm->resetSteps();
-		}
+		Yii::app()->clientForm->checkSiteSelectedProduct();
 
 		//запустим проверку типа регистрации, она переключит "режим" анкеты, если потребуется
 		Yii::app()->clientForm->checkRegistrationType();
@@ -100,17 +97,7 @@ class FormController extends Controller
 		 */
 		if (Yii::app()->clientForm->isNeedAjaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
-			$sAjaxClass = Yii::app()->request->getParam('ajax');
-			//если для ajax-валидации пришла форма, соответствующая текущему шагу, то обработаем ее
-			if (
-				$sAjaxClass == get_class($oClientForm) ||
-				$sAjaxClass == get_class($oClientForm) . '_fast'
-				//для формы быстрой регистрации
-			) {
-				$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
-				Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
-				echo $sEcho;
-			}
+			echo Yii::app()->clientForm->doAjaxValidation($oClientForm);
 			Yii::app()->end();
 		}
 
@@ -126,7 +113,6 @@ class FormController extends Controller
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
 
-				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
 				if (!$ajaxForm) {
 					//если не ajaxForm-запрос, то редиректим (чтобы по F5 страница просто обновилась, а не ругалась на POST)
 					$this->redirect(Yii::app()->createUrl("/form"));
@@ -152,15 +138,11 @@ class FormController extends Controller
 			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (!empty($oClientForm)) {
-				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
+				$aSessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				//удаляем лишние данные перед загрузкой в форму (во избежание warning)
-				unset($sessionClientData['client_id']);
-				unset($sessionClientData['product']);
-				unset($sessionClientData['channel_id']);
-				unset($sessionClientData['entry_point']);
-				unset($sessionClientData['flex_amount']);
-				unset($sessionClientData['flex_time']);
-				$oClientForm->setAttributes($sessionClientData);
+				Yii::app()->clientForm->clearSessionClientData($aSessionClientData);
+
+				$oClientForm->setAttributes($aSessionClientData);
 			}
 		}
 
@@ -256,7 +238,6 @@ class FormController extends Controller
 		if (!Yii::app()->clientForm->checkFormComplete()) {
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
-
 
 		$iClientId = Yii::app()->clientForm->getClientId();
 		//если клиент запрашивает СМС, значит, заполнил анкету полностью

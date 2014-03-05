@@ -1355,8 +1355,7 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	private
-	function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH)
+	private function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH)
 	{
 		// генерация рандомного кода
 		list($usec, $sec) = explode(' ', microtime());
@@ -1416,7 +1415,11 @@ class ClientFormComponent
 			return SiteParams::$aContinueRegBreadCrumbs;
 		}
 
-		return (SiteParams::getIsIvanovoSite()) ? SiteParams::$aIvanovoBreadCrumbs : SiteParams::$aMainBreadCrumbs;
+		if (SiteParams::getIsIvanovoSite()) {
+			return SiteParams::$aIvanovoBreadCrumbs;
+		}
+
+		return SiteParams::$aMainBreadCrumbs;
 	}
 
 	/**
@@ -1465,8 +1468,12 @@ class ClientFormComponent
 
 		$sModel = self::$aSelectProductSettings[$sSite]['model'];
 
-		return !empty(Yii::app()->session[$sModel]);
+		$bIsSelectedProduct = !empty(Yii::app()->session[$sModel]);
 
+		//если не выбран продукт, и это не продолжение регистрации (там продукт не выбираем) - то сбрасываем шаги
+		if (!$bIsSelectedProduct && !$this->isContinueReg()) {
+			$this->resetSteps();
+		}
 	}
 
 	public function getFormWidgetSteps()
@@ -1610,6 +1617,45 @@ class ClientFormComponent
 		$iLastStep = self::$aSteps[$sSite]['max'];
 
 		return $iCurrentStep == $iLastStep;
+	}
+
+	/**
+	 * @param $oClientForm
+	 *
+	 * @return null|string
+	 */
+	public function doAjaxValidation($oClientForm)
+	{
+		$sAjaxClass = Yii::app()->request->getParam('ajax');
+		//если для ajax-валидации пришла форма, соответствующая текущему шагу, то обработаем ее
+		if (
+			$sAjaxClass == get_class($oClientForm) ||
+			$sAjaxClass == get_class($oClientForm) . '_fast'
+			//для формы быстрой регистрации
+		) {
+			$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
+			Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
+			return $sEcho;
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param $aSessionClientData
+	 *
+	 * @return mixed
+	 */
+	public function clearSessionClientData(&$aSessionClientData)
+	{
+		unset($aSessionClientData['client_id']);
+		unset($aSessionClientData['product']);
+		unset($aSessionClientData['channel_id']);
+		unset($aSessionClientData['entry_point']);
+		unset($aSessionClientData['flex_amount']);
+		unset($aSessionClientData['flex_time']);
+
+		return $aSessionClientData;
 	}
 
 
