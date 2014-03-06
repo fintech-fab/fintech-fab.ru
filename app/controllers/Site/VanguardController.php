@@ -29,14 +29,15 @@ class VanguardController extends BaseController
 		});
 
 		if (0 == count(Mail::failures())) {
-			$feedback = Helper::ucwords($data['name']);
-			$feedback .= ', cпасибо за регистрацию.
+			$userMessage = Helper::ucwords($data['name']);
+			$userMessage .= ', cпасибо за регистрацию.
 			Ожидайте ответа по электронной почте.';
 		} else {
-			$feedback = 'Что-то сломалось, попробуйте ещё раз';
+			$userMessage = 'Что-то сломалось, попробуйте ещё раз';
 		}
+		$title = 'Заявка на стажировку принята';
 
-		return Redirect::to('vanguard')->with('userMessage', $feedback);
+		return Redirect::to('vanguard')->with('userMessage', $userMessage)->with('title', $title);
 
 	}
 

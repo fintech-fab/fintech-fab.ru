@@ -1,5 +1,10 @@
 <?php
+/**
+ * @var string $userMessage
+ * @var string $title
+ */
 $userMessage = Session::get('userMessage');
+$title = Session::get('title');
 if (!$userMessage) {
 	return;
 }
@@ -10,7 +15,7 @@ if (!$userMessage) {
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Заявка на Регистрацию принята.</h4>
+				<h4 class="modal-title"><?= $title ?></h4>
 			</div>
 			<div class="modal-body">
 				<p><?= $userMessage ?></p>

@@ -1,7 +1,5 @@
 <?php
-/**
- * @var string $userMessage
- */
+
 ?>
 <div class="row">
 	<div class="col-md-3">
