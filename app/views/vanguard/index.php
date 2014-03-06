@@ -89,6 +89,7 @@
 		<div class="tab-pane" id="tab4">
 			<?=
 			Form::open(array(
+				'action' => 'vanguard',
 				'class'  => 'form-horizontal',
 				'role'   => 'form',
 				'method' => 'post',

@@ -13,9 +13,11 @@
 			<div class="modal-body">
 				<?=
 				Form::open(array(
+					'action' => 'auth',
 					'class'  => 'form-horizontal',
 					'role'   => 'form',
 					'method' => 'post',
+
 				)); ?>
 				<div class="form-group">
 					<label for="inputEmail" class="col-sm-4 control-label">Email</label>
