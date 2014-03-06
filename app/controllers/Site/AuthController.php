@@ -23,12 +23,12 @@ class AuthController extends BaseController
 
 	private function getOrderFormData()
 	{
-		$name = Input::get('name');
+		$email = Input::get('email');
 		$password = Input::get('password');
 
 
 		$data = array(
-			'name'     => $name,
+			'email' => $email,
 			'password' => $password,
 		);
 
