@@ -59,9 +59,7 @@ class AuthController extends BaseController
 		$user->save();
 
 		Auth::login($user);
-		if (Auth::check()) {
-			dd('урааааа');
-		}
+
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
 
