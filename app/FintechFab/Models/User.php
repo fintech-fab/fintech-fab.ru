@@ -12,10 +12,8 @@ use Eloquent;
  * @property string  $password
  * @property string  $updated_at
  * @property string  $created_at
- *
- * @method UserVk static where($column)
  */
-class Users extends Eloquent
+class User extends Eloquent
 {
 
 	protected $fillable = array('first_name', 'last_name', 'email');

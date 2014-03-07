@@ -3,8 +3,9 @@
 namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
+use Auth;
 use FintechFab\Components\Helper;
-use FintechFab\Models\Users;
+use FintechFab\Models\User;
 use Hash;
 use Input;
 use Redirect;
@@ -17,7 +18,20 @@ class AuthController extends BaseController
 
 	public function postAuth()
 	{
+
+
 		$data = Input::all();
+		$email = Input::get('email');
+		$password = Input::get('password');
+		/*echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+		dd($data);*/
+		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
+			dd('залогинен');
+
+			return Redirect::to('user/profile');
+		}
 		dd($data);
 
 
@@ -38,13 +52,12 @@ class AuthController extends BaseController
 				->withInput(Input::except('password'));
 		}
 
-		$password = Hash::make('$data[password]');
+		$user = new User;
 
-		$user = new Users;
-		$user->setAttribute('first_name', $data['first_name']);
-		$user->setAttribute('last_name', $data['last_name']);
-		$user->setAttribute('email', $data['email']);
-		$user->setAttribute('password', $password);
+		$user->first_name = Input::get('first_name');
+		$user->last_name = Input::get('last_name');
+		$user->email = Input::get('email');
+		$user->password = Hash::make(Input::get('password'));
 		$user->save();
 
 		$userMessage = "Спасибо за регистрацию";
