@@ -2066,24 +2066,34 @@ class AdminKreddyApiComponent
 	 * @return bool
 	 */
 	public function addClientCard(AddCardForm $oCardForm)
-		//$sCardPan, $sCardMonth, $sCardYear, $sCardHolderName, $sCardCvc)
 	{
-		$aRequest = array(
+
+
+		$aAddCardForm = array(
 			'card_pan'          => $oCardForm->sCardPan,
 			'card_month'        => $oCardForm->sCardMonth,
 			'card_year'         => $oCardForm->sCardYear,
-			//'card_holder_name' => $sCardHolderName,
+
 			'card_cvc'          => $oCardForm->sCardCvc,
-
-			'email'             => $oCardForm->sEmail,
-			'address'           => $oCardForm->sAddress,
-			'city'              => $oCardForm->sCity,
-			'zip_code'          => $oCardForm->sZipCode,
-			'country'           => $oCardForm->sCountry,
-
-			'ip'                => Yii::app()->request->getUserHostAddress(),
 			'card_printed_name' => $oCardForm->sCardHolderName,
-			'redirect_url'      => Yii::app()->createAbsoluteUrl('/account/returnFrom3DSecurity'),
+		);
+
+		if (Yii::app()->adminKreddyApi->isCardVerifyNeedAdditionalFields()) {
+			$aAdditionalCardFields = array(
+				'email'        => $oCardForm->sEmail,
+				'address'      => $oCardForm->sAddress,
+				'city'         => $oCardForm->sCity,
+				'zip_code'     => $oCardForm->sZipCode,
+				'country'      => $oCardForm->sCountry,
+
+				'ip'           => Yii::app()->request->getUserHostAddress(),
+				'redirect_url' => Yii::app()->createAbsoluteUrl('/account/returnFrom3DSecurity'),
+			);
+
+			$aAddCardForm = CMap::mergeArray($aAddCardForm, $aAdditionalCardFields);
+		}
+		$aRequest = array(
+			'AddCard' => $aAddCardForm,
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_ADD_CARD, $aRequest);
