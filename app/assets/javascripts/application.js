@@ -1,1 +1,2 @@
 //= require main
+//= require map

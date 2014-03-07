@@ -7,8 +7,13 @@ namespace App\Controllers\Site;
 use App\Controllers\BaseController;
 use Config;
 use FintechFab\Models\UserVk;
+use Auth;
+use FintechFab\Components\Helper;
+use FintechFab\Models\User;
+use Hash;
 use Input;
 use Redirect;
+use Validator;
 
 class AuthController extends BaseController
 {
@@ -17,7 +22,20 @@ class AuthController extends BaseController
 
 	public function postAuth()
 	{
-		$data = $this->getOrderFormData();
+
+
+		$data = Input::all();
+		$email = Input::get('email');
+		$password = Input::get('password');
+		/*echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+		dd($data);*/
+		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
+			dd('залогинен');
+
+			return Redirect::to('user/profile');
+		}
 		dd($data);
 
 
@@ -25,18 +43,31 @@ class AuthController extends BaseController
 
 	}
 
-	private function getOrderFormData()
+	public function postRegistration()
 	{
-		$email = Input::get('email');
-		$password = Input::get('password');
+		$data = Input::all();
+		$validator = Validator::make($data, Helper::rulesForInput(), Helper::messagesForErrors());
+		$userMessage = $validator->messages()->first();
+		$title = 'Ошибка';
 
+		if ($userMessage != null) {
+			return Redirect::to('registration')->with('userMessage', $userMessage)
+				->with('title', $title)
+				->withInput(Input::except('password'));
+		}
 
-		$data = array(
-			'email' => $email,
-			'password' => $password,
-		);
+		$user = new User;
 
-		return $data;
+		$user->first_name = Input::get('first_name');
+		$user->last_name = Input::get('last_name');
+		$user->email = Input::get('email');
+		$user->password = Hash::make(Input::get('password'));
+		$user->save();
+
+		$userMessage = "Спасибо за регистрацию";
+		$title = 'Регистрация прошла успешно';
+
+		return Redirect::to('vanguard')->with('userMessage', $userMessage)->with('title', $title);
 
 	}
 
@@ -93,4 +124,6 @@ class AuthController extends BaseController
 
 		}
 	}
+
+
 }

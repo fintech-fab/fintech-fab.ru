@@ -20,9 +20,9 @@
 
 				)); ?>
 				<div class="form-group">
-					<label for="inputEmail" class="col-sm-4 control-label">Email</label>
+					<label for="inputEmail" class="col-sm-3 control-label">Email</label>
 
-					<div class="col-sm-8">
+					<div class="col-sm-9">
 
 						<?=
 						Form::input('email', 'email', '', array(
@@ -35,9 +35,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword" class="col-sm-4 control-label">Пароль</label>
+					<label for="inputPassword" class="col-sm-3 control-label">Пароль</label>
 
-					<div class="col-sm-8">
+					<div class="col-sm-9">
 						<?=
 						Form::input('password', 'password', '', array(
 							'placeholder' => 'Пароль',
@@ -62,9 +62,9 @@
 				</div>
 				<?= Form::close(); ?>
 				<hr>
-				<h4 class="text-center">Вход через социальные сети</h4>
 
-				<div class="iconLine text-center">
+				<div class="text-center">
+					<h4 class="text-center">Вход через социальные сети</h4>
 					<a href=""><img src="/assets/ico/vk32.png" alt="" /></a>
 					<a href=""><img src="/assets/ico/fb32.png" alt="" /></a>
 					<a href=""><img src="/assets/ico/gp32.png" alt="" /></a>
