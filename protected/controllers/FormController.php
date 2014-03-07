@@ -206,6 +206,7 @@ class FormController extends Controller
 
 	/**
 	 *  Переход на шаг $step
+	 *
 	 * @param int $step
 	 */
 	public function actionStep($step)
@@ -335,8 +336,9 @@ class FormController extends Controller
 
 			} else {
 				//если не удалось создать нового клиента, то выводим ошибку
-				Yii::app()->session['error'] = 'Ошибка! Проверьте правильность введенных данных.';
+				Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе Кредди. Обратитесь в контактный центр';
 				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
+				Yii::app()->clientForm->clearClientSession(); //чистим сессию
 				$this->actionStep(1); //переходим на шаг 1
 			}
 		}

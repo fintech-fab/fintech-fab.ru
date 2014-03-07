@@ -64,11 +64,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 
 <?= $form->hiddenField($model, 'iCardType') ?>
-
-<?= $form->textFieldRow($model, 'sEmail', array('maxlength' => '50')); ?>
-<?= $form->textFieldRow($model, 'sAddress', array('maxlength' => '50')); ?>
-<?= $form->textFieldRow($model, 'sCity', array('maxlength' => '50')); ?>
-<?= $form->textFieldRow($model, 'sZipCode', array('maxlength' => '10')); ?>
+<?php if (Yii::app()->adminKreddyApi->isCardVerifyNeedAdditionalFields()) { ?>
+	<?= $form->textFieldRow($model, 'sEmail', array('maxlength' => '50')); ?>
+	<?= $form->textFieldRow($model, 'sAddress', array('maxlength' => '50')); ?>
+	<?= $form->textFieldRow($model, 'sCity', array('maxlength' => '50')); ?>
+	<?= $form->textFieldRow($model, 'sZipCode', array('maxlength' => '10')); ?>
+<?php } ?>
 
 	<div style="background: url('/static/img/bankcard/cc-template.png'); width: 550px; height: 280px; margin-bottom: 15px;">
 		<?= $form->textField($model, 'sCardPan', array('class' => 'card', 'maxlength' => '20', "style" => "position: relative; top: 136px; left: 40px; width: 183px;", 'placeholder' => "1234567812345678")); ?>

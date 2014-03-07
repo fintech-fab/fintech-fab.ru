@@ -2,6 +2,7 @@
 
 /**
  * Class AdminKreddyApiComponent
+ *
  */
 class AdminKreddyApiComponent
 {
@@ -136,6 +137,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_AUTH = 9; //требуется СМС-авторизация
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
+	const ERROR_VALIDATION = 24; //ошибка валидации
 	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
@@ -234,11 +236,11 @@ class AdminKreddyApiComponent
 	private $bScoringAccepted = null;
 	private $aCheckIdentify;
 	private $bIsNeedCard;
-	private $bCardCanVerify;
-	private $bCardVerifyExists;
 
 	public $sApiUrl = '';
 	public $sTestApiUrl = '';
+	private $iSmsCode;
+	private $oCardVerifyStatus;
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -683,6 +685,7 @@ class AdminKreddyApiComponent
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
+				'channel_id' => false,
 				'available_loans' => 0,
 				'balance'         => 0,
 				'product_info'    => array(
@@ -974,6 +977,18 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 
 		return $aClientInfo['subscription']['product'];
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getSubscriptionChannel()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		$iChannelId = $aClientInfo['subscription']['channel_id'];
+
+		return $this->getChannelNameById($iChannelId);
 	}
 
 	/**
@@ -1812,9 +1827,9 @@ class AdminKreddyApiComponent
 	 *
 	 * @param string $sSmsCode
 	 *
-	 * @param        $aPassportData
+	 * @param array $aPassportData
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public function changePassport($sSmsCode, $aPassportData)
 	{
@@ -1822,8 +1837,17 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
+		if (isset($aResult['sms_message'])) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+		} else {
+			$this->setLastSmsMessage($aResult['message']);
+		}
 
-		return $this->checkChangeResultMessage($aResult);
+		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -2101,51 +2125,65 @@ class AdminKreddyApiComponent
 		$bCardVerifyNeedWait = false;
 		$bCardVerify3DsError = false;
 
-		if (!isset($this->bCardCanVerify) || !isset($this->bCardVerifyExists)) {
-			$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
-
-			//если код "требуется пройти 3ds"
-			if ($aResult['code'] == self::ERROR_NEED_3DS_PROCESS) {
-				$sCardVerify3DHtml = isset($aResult['html']) ?
-					$aResult['html'] :
-					null;
-			}
-
-			//если код "ждите"
-			if ($aResult['code'] == self::ERROR_NEED_WAIT) {
-				$bCardVerifyNeedWait = true;
-			}
-
-			//если код "ошибка 3ds"
-			if ($aResult['code'] == self::ERROR_VERIFY_3DS) {
-				$bCardVerify3DsError = true;
-			}
-
+		if (isset($this->oCardVerifyStatus)) {
+			return $this->oCardVerifyStatus;
 		}
 
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_CAN_VERIFY_CARD);
 
-		if (!$this->getIsError()) {
-			$this->bCardCanVerify = (!empty($aResult['card_can_verify']));
-			$this->bCardVerifyExists = (!empty($aResult['verify_exists']));
+		//если код "требуется пройти 3ds"
+		if ($aResult['code'] == self::ERROR_NEED_3DS_PROCESS) {
+			$sCardVerify3DHtml = isset($aResult['html']) ?
+				$aResult['html'] :
+				null;
 		}
+
+		//если код "ждите"
+		if ($aResult['code'] == self::ERROR_NEED_WAIT) {
+			$bCardVerifyNeedWait = true;
+		}
+
+		//если код "ошибка 3ds"
+		if ($aResult['code'] == self::ERROR_VERIFY_3DS) {
+			$bCardVerify3DsError = true;
+		}
+
 
 		$oResult = new stdClass();
-		$oResult->bCardCanVerify = $this->bCardCanVerify;
+		$oResult->bCardCanVerify = !empty($aResult['card_can_verify']);
 		$oResult->sCardVerify3DHtml = $sCardVerify3DHtml;
 		$oResult->bCardVerify3DsError = $bCardVerify3DsError;
 		$oResult->bCardVerifyNeedWait = $bCardVerifyNeedWait;
-		$oResult->bCardVerifyExists = $this->bCardVerifyExists;
+		$oResult->bCardVerifyExists = !empty($aResult['verify_exists']);
+		$oResult->bCardVerifyNeedAdditionalFields = !empty($aResult['verify_additional_fields']);
+
+		$this->oCardVerifyStatus = $oResult;
 
 		return $oResult;
 	}
 
-	public function checkCardVerifyExists()
+	/**
+	 * @return mixed
+	 */
+	public function isCardVerifyNeedAdditionalFields()
 	{
-		if (!isset($this->bCardVerifyExists)) {
+		if (!isset($this->oCardVerifyStatus)) {
 			$this->checkVerifyCardStatus();
 		}
 
-		return $this->bCardVerifyExists;
+		return $this->oCardVerifyStatus->bCardVerifyNeedAdditionalFields;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function checkCardVerifyExists()
+	{
+		if (!isset($this->oCardVerifyStatus)) {
+			$this->checkVerifyCardStatus();
+		}
+
+		return $this->oCardVerifyStatus->bCardVerifyExists;
 	}
 
 	public function isFirstIdentification()
@@ -2271,7 +2309,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-	private function getData($sType)
+	private
+	function getData($sType)
 	{
 		//проверяем, какие данные запрошены, и выбираем необходимый экшн и отправляем запрос в API
 		switch ($sType) {
@@ -2317,7 +2356,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-	private function requestAdminKreddyApi($sAction, $aRequest = array())
+	private
+	function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
 		$aData = array('code' => self::ERROR_AUTH, 'message' => self::ERROR_MESSAGE_UNKNOWN);
@@ -2368,9 +2408,11 @@ class AdminKreddyApiComponent
 					'message'     => '',
 					'sms_message' => '',
 					'sms_code'    => '',
+					'sms_status' => '',
 				);
 
 				$aData = CMap::mergeArray($aData, $aGetData);
+				$this->setLastSmsStatus($aData['sms_status']);
 			}
 		}
 		$this->setLastMessage($aData['message']);
@@ -2384,7 +2426,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @return mixed
 	 */
-	private function getSessionToken()
+	private
+	function getSessionToken()
 	{
 		return Yii::app()->session['akApi_token'];
 	}
@@ -2394,7 +2437,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $token
 	 */
-	private function setSessionToken($token)
+	private
+	function setSessionToken($token)
 	{
 		Yii::app()->session['akApi_token'] = $token;
 	}
@@ -2467,7 +2511,8 @@ class AdminKreddyApiComponent
 	/**
 	 * очищаем сессии, связанные с отправкой SMS
 	 */
-	private function clearSmsState()
+	private
+	function clearSmsState()
 	{
 		$this->clearSmsPassState();
 		$this->clearResetPassSmsCodeState();
@@ -2770,7 +2815,8 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	private function getIsNeedCard()
+	private
+	function getIsNeedCard()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_CARD);
 	}
@@ -2921,7 +2967,8 @@ class AdminKreddyApiComponent
 	/**
 	 *
 	 */
-	protected function increaseSmsCodeTries()
+	protected
+	function increaseSmsCodeTries()
 	{
 		Yii::app()->session['iSmsCodeTries'] = (Yii::app()->session['iSmsCodeTries'])
 			? (Yii::app()->session['iSmsCodeTries'] + 1)
@@ -3444,4 +3491,22 @@ class AdminKreddyApiComponent
 
 		return false;
 	}
+
+	/**
+	 * @param $iSmsCode
+	 */
+	private function setLastSmsStatus($iSmsCode)
+	{
+		$this->iSmsCode = $iSmsCode;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSuccessfulLastSmsCode()
+	{
+		return $this->iSmsCode == self::SMS_AUTH_OK;
+	}
+
+
 }

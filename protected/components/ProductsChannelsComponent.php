@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Компонент ProductsChannelsComponent
  *
  * Отвечает за вывод на сайт списка доступных комбинаций продуктов/каналов, полученных из AdminKreddyApi
  * TODO возможно стоит вернуть все функции в AdminKreddyApiComponent
  */
-
 class ProductsChannelsComponent
 {
 	public function init()
@@ -104,6 +104,8 @@ class ProductsChannelsComponent
 			return 'на карту Кредди';
 		} elseif (preg_match("/мобил/", $sName)) {
 			return 'на мобильный телефон (МТС, Билайн, Мегафон, Теле2)';
+		} elseif (preg_match("/карт/", $sName)) {
+			return 'на карту Mastercard, Maestro';
 		}
 
 		return false;
@@ -153,20 +155,32 @@ class ProductsChannelsComponent
 		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
 		$aChannelsList = array();
 		$sMobileChannels = '';
+		$sCardChannels = '';
 		foreach ($aChannels as $iKey => $sChannelName) {
-			if (strpos($sChannelName, 'мобильный')) {
+			if (strpos($sChannelName, 'Кредди')) {
+				continue;
+			}
+			if (strpos($sChannelName, 'карт')) {
+				if (!empty($sCardChannels)) {
+					$sCardChannels .= '_';
+				}
+				$sCardChannels .= $iKey;
+				$sCardChannelName = $sChannelName;
+			} elseif (strpos($sChannelName, 'мобильный')) {
 				if (!empty($sMobileChannels)) {
 					$sMobileChannels .= '_';
 				}
 				$sMobileChannels .= $iKey;
 				$sMobileChannelName = $sChannelName;
-			} elseif (!strpos($sChannelName, 'Кредди')) {
-				$aChannelsList[$iKey] = '<span data-card="1">' . $sChannelName . '</span>';
 			}
+		}
+		if (!empty($sCardChannels) && !empty($sCardChannelName)) {
+			$aChannelsList[$sCardChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sCardChannelName)) . '</span>';
 		}
 		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
 			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
 		}
+
 
 		return $aChannelsList;
 	}

@@ -32,7 +32,8 @@ class AddCardForm extends CFormModel
 	public function rules()
 	{
 		$aRules = array(
-			array('sCardPan, sCardValidThru, sCardHolderName, sCardCvc, sEmail, sAddress, sCity, sZipCode, sCountry', 'required'),
+			array('sCardPan, sCardValidThru, sCardHolderName, sCardCvc', 'required'),
+			array('sEmail, sAddress, sCity, sZipCode, sCountry', 'required', 'on' => 'additionalFields'),
 			array('iCardType', 'required', 'message' => 'Используйте только карты Mastercard или Maestro'),
 
 			array(

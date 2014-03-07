@@ -50,7 +50,13 @@ class CryptArray
 
 	public static function getIvPath($salt)
 	{
-		return dirname(__FILE__) . '/iv_' . md5($salt);
+		if (Yii::app()->params['ivPath']) {
+			$sDirectory = Yii::app()->params['ivPath'];
+		} else {
+			$sDirectory = dirname(__FILE__);
+		}
+
+		return $sDirectory . '/iv_' . md5($salt);
 	}
 
 	public static function getIv($salt)
@@ -105,8 +111,9 @@ class CryptArray
 	protected function getSalt()
 	{
 		$salt = (!empty(Yii::app()->params['cryptSalt']))
-			? substr(Yii::app()->params['cryptSalt'],0,32)
+			? substr(Yii::app()->params['cryptSalt'], 0, 32)
 			: 'fkf4a7h0853k6nxlsg84';
+
 		return $salt;
 	}
 

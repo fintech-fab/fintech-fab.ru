@@ -24,7 +24,7 @@ $iAvailableLoans = Yii::app()->adminKreddyApi->getSubscriptionAvailableLoans();
 <?php if (!SiteParams::getIsIvanovoSite()): ?>
 	<strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?><br />
 <?php endif; ?>
-
+<strong>Канал получения займа:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionChannel() ?><br />
 <?php if (SiteParams::getIsIvanovoSite()): ?>
 	<strong>Сумма займа:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?><br />
 <?php endif; ?>
