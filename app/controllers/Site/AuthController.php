@@ -32,7 +32,7 @@ class AuthController extends BaseController
 		$userMessage = $validator->messages()->first();
 		$title = 'Ошибка';
 
-		if (isset($userMessage)) {
+		if ($userMessage != null) {
 			return Redirect::to('registration')->with('userMessage', $userMessage)
 				->with('title', $title)
 				->withInput(Input::except('password'));
