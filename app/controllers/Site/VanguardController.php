@@ -15,9 +15,9 @@ class VanguardController extends BaseController
 
 	public $layout = 'vanguard';
 
-	public function index()
+	public function vanguard()
 	{
-		return $this->make('index');
+		return $this->make('vanguard');
 	}
 
 	public function postOrder()

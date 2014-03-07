@@ -3,10 +3,12 @@
 namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
+use FintechFab\Components\Helper;
 use FintechFab\Models\Users;
 use Hash;
 use Input;
 use Redirect;
+use Validator;
 
 class AuthController extends BaseController
 {
@@ -15,7 +17,7 @@ class AuthController extends BaseController
 
 	public function postAuth()
 	{
-		$data = $this->getOrderFormData();
+		$data = Input::all();
 		dd($data);
 
 
@@ -26,14 +28,11 @@ class AuthController extends BaseController
 	public function postRegistration()
 	{
 		$data = Input::all();
+		$validator = Validator::make($data, Helper::rulesForInput(), Helper::messagesForErrors());
+		$userMessage = $validator->messages()->first();
+		$title = 'Ошибка';
 
-
-		$checkEmail = Users::where('email', '=', $data['email'])->get()->toArray();
-
-		if (isset($checkEmail[0])) {
-			$userMessage = "Пользователь с таким Email уже существует";
-			$title = 'Ошибка';
-
+		if (isset($userMessage)) {
 			return Redirect::to('registration')->with('userMessage', $userMessage)
 				->with('title', $title)
 				->withInput(Input::except('password'));
@@ -42,8 +41,6 @@ class AuthController extends BaseController
 		$password = Hash::make('$data[password]');
 
 		$user = new Users;
-
-
 		$user->setAttribute('first_name', $data['first_name']);
 		$user->setAttribute('last_name', $data['last_name']);
 		$user->setAttribute('email', $data['email']);
@@ -57,18 +54,5 @@ class AuthController extends BaseController
 
 	}
 
-	private function getOrderFormData()
-	{
-		$email = Input::get('email');
-		$password = Input::get('password');
 
-
-		$data = array(
-			'email' => $email,
-			'password' => $password,
-		);
-
-		return $data;
-
-	}
 }
