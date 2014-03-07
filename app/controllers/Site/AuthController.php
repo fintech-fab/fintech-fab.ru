@@ -26,9 +26,23 @@ class AuthController extends BaseController
 	public function postRegistration()
 	{
 		$data = Input::all();
-		$user = new Users;
+
+
+		$checkEmail = Users::where('email', '=', $data['email'])->get()->toArray();
+
+		if (isset($checkEmail[0])) {
+			$userMessage = "Пользователь с таким Email уже существует";
+			$title = 'Ошибка';
+
+			return Redirect::to('registration')->with('userMessage', $userMessage)
+				->with('title', $title)
+				->withInput(Input::except('password'));
+		}
 
 		$password = Hash::make('$data[password]');
+
+		$user = new Users;
+
 
 		$user->setAttribute('first_name', $data['first_name']);
 		$user->setAttribute('last_name', $data['last_name']);
