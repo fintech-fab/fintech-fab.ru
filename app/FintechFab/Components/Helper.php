@@ -3,6 +3,8 @@
 namespace FintechFab\Components;
 
 
+use Auth;
+
 class Helper
 {
 	public static function ucwords($str)
@@ -15,7 +17,7 @@ class Helper
 	public static function messagesForErrors()
 	{
 		$rules = array(
-			'required'   => 'Поле :attribute и должно быть заполнено.',
+			'required' => 'Поле :attribute должно быть заполнено.',
 			'min'        => 'Поле :attribute должно содержать не менее :min символов.',
 			'unique'     => 'Пользователь с таким E-mail уже зарегистрирован.',
 			'email'      => 'Адрес E-mail должен быть корректным',
@@ -36,5 +38,16 @@ class Helper
 		);
 
 		return $rules;
+	}
+
+	public static function linkForUserProfil()
+	{
+		$first_name = Auth::user()->first_name;
+		$last_name = Auth::user()->last_name;
+		$link_user = '<li><a href="">' . $first_name . ' ' . $last_name . '</a></li>';
+
+		$link_logout = '<li><a href="/logout">Выход</a></li>';
+
+		return $link_user . $link_logout;
 	}
 } 

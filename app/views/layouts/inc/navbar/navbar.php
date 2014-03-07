@@ -1,16 +1,24 @@
 <?php
+use FintechFab\Components\Helper;
+
 function echoActiveClassIfRequestMatches($requestUri)
 {
 	$current_file_name = basename(Request::server('REQUEST_URI'), ".php");
 
 	if ($current_file_name == $requestUri) {
-		echo 'class="active"';
+		return 'class="active"';
 	}
+
+	return '';
 }
 
 function echoAuthMode()
 {
-	echo '<a href="" data-toggle="modal" data-target="#loginModal">Вход</a>';
+	if (Auth::check()) {
+		return Helper::linkForUserProfil();
+	}
+
+	return '<li><a href="" data-toggle="modal" data-target="#loginModal">Вход</a></li>';
 }
 
 ?>
@@ -42,7 +50,7 @@ function echoAuthMode()
 						<button type="submit" class="btn btn-default">Submit</button>
 					</form>
 					<ul class="nav navbar-nav navbar-right">
-						<li><?= echoAuthMode() ?></li>
+						<?= echoAuthMode() ?>
 					</ul>
 					<?= View::make('vanguard.loginModal') ?>
 				</div>
