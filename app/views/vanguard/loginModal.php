@@ -1,4 +1,5 @@
 <?php
+use FintechFab\Components\Social;
 
 ?>
 
@@ -65,6 +66,10 @@
 
 				<div class="text-center">
 					<h4 class="text-center">Вход через социальные сети</h4>
+					<?=
+					Social::vk()
+					//TODO Картинка должна остаться здесь
+					?>
 					<a href=""><img src="/assets/ico/vk32.png" alt="" /></a>
 					<a href=""><img src="/assets/ico/fb32.png" alt="" /></a>
 					<a href=""><img src="/assets/ico/gp32.png" alt="" /></a>
