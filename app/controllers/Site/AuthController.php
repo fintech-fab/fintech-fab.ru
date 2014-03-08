@@ -16,25 +16,18 @@ class AuthController extends BaseController
 	public $layout = 'vanguard';
 	public function postAuth()
 	{
-		$data = Input::all();
 		$email = Input::get('email');
 		$password = Input::get('password');
 
-		/*echo '<pre>';
-		print_r($data);
-		echo '</pre>';*/
-		//dd($email, $password);
 		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
-			return Redirect::to('vanguard')->with('userMessage', 'ураааа!!!!');
+			$title = 'Приветствуем ' . Auth::user()->first_name;
+
+			return Redirect::intended('vanguard')->with('userMessage', 'Вы успешно авторизовались')
+				->with('title', $title);
 		}
-		if (Auth::check()) {
-			dd('урааааа');
-		}
-		dd('stop');
 
-
-		return Redirect::to('vanguard')->with('userMessage', $data);
-
+		return Redirect::intended('registration')->with('userMessage', 'Такого пользователя нет.')
+			->with('title', 'Ошибка');
 	}
 
 	public function postRegistration()
@@ -69,6 +62,9 @@ class AuthController extends BaseController
 	public function logout()
 	{
 		Auth::logout();
+
+		return Redirect::intended('vanguard')->with('userMessage', 'Приходите к нам ещё.')
+			->with('title', 'Всего доброго');
 	}
 
 }
