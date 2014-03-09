@@ -9,6 +9,7 @@ use Auth;
 use Config;
 use FintechFab\Components\Helper;
 use FintechFab\Models\User;
+use FintechFab\Models\UserVk;
 use Hash;
 use Input;
 use Redirect;
@@ -108,25 +109,29 @@ class AuthController extends BaseController
 				$first_name = $userInfo['first_name'];
 				$last_name = $userInfo['last_name'];
 				$bdate = $userInfo['bdate'];
-				\Session::put('id_vk', $id_vk);
+				/*\Session::put('id_vk', $id_vk);
 				\Session::put('first_name', $first_name);
 				\Session::put('last_name', $last_name);
 				\Session::put('bdate', $bdate);
-				$this->make('vk');
+				$this->make('vk');*/
 
 
-				/*$user = UserVk::firstOrNew(array(
+				$user = UserVk::firstOrNew(array(
 					'id_vk' => $id_vk,
 				));
 
 				$user->setAttribute('id_vk', $id_vk);
 				$user->setAttribute('first_name', $first_name);
 				$user->setAttribute('last_name', $last_name);
-				$user->save();*/
+				$user->save();
 
 			}
 
 		}
+		$userMessage = "Добро пожаловать на наш сайт!";
+		$title = 'Вы успешно авторизовались!';
+
+		return Redirect::to('vanguard')->with('userMessage', $userMessage)->with('title', $title);
 	}
 
 	public function logout()

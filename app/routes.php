@@ -9,6 +9,5 @@ Route::get('registration', array('as' => 'registration', 'uses' => 'App\Controll
 Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\AuthController@logout'));
 
 Route::get('probation', 'App\Controllers\Site\MainController@probation');
-Route::post('probation', 'App\Controllers\Site\MainController@thank');
 
 Route::get('vk', 'App\Controllers\Site\AuthController@vk');

@@ -20,7 +20,7 @@ class Social
 			'response_type' => 'code'
 		);
 
-		$link = '<a href="' . $url . '?' . urldecode(http_build_query($params)) . '"><img src="/assets/ico/vk32.png" alt="" /></a>';
+		$link = $url . '?' . urldecode(http_build_query($params));
 
 		return $link;
 	}
