@@ -6,6 +6,7 @@ Route::post('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Sit
 Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
 Route::post('registration', array('as' => 'registration', 'uses' => 'App\Controllers\Site\AuthController@postRegistration'));
 Route::get('registration', array('as' => 'registration', 'uses' => 'App\Controllers\Site\VanguardController@registration'));
+Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\AuthController@logout'));
 
 Route::get('probation', 'App\Controllers\Site\MainController@probation');
 Route::post('probation', 'App\Controllers\Site\MainController@thank');

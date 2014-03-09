@@ -16,26 +16,24 @@ use Validator;
 
 class AuthController extends BaseController
 {
-
 	public $layout = 'vanguard';
-
 	public function postAuth()
 	{
-
-
 		$data = Input::all();
 		$email = Input::get('email');
 		$password = Input::get('password');
+
 		/*echo '<pre>';
 		print_r($data);
-		echo '</pre>';
-		dd($data);*/
+		echo '</pre>';*/
+		//dd($email, $password);
 		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
-			dd('залогинен');
-
-			return Redirect::to('user/profile');
+			return Redirect::to('vanguard')->with('userMessage', 'ураааа!!!!');
 		}
-		dd($data);
+		if (Auth::check()) {
+			dd('урааааа');
+		}
+		dd('stop');
 
 
 		return Redirect::to('vanguard')->with('userMessage', $data);
@@ -62,6 +60,8 @@ class AuthController extends BaseController
 		$user->email = Input::get('email');
 		$user->password = Hash::make(Input::get('password'));
 		$user->save();
+
+		Auth::login($user);
 
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
@@ -129,5 +129,9 @@ class AuthController extends BaseController
 		}
 	}
 
+	public function logout()
+	{
+		Auth::logout();
+	}
 
 }

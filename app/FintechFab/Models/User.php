@@ -3,6 +3,8 @@
 namespace FintechFab\Models;
 
 use Eloquent;
+use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Auth\UserInterface;
 
 /**
  * @property integer $id
@@ -13,7 +15,7 @@ use Eloquent;
  * @property string  $updated_at
  * @property string  $created_at
  */
-class User extends Eloquent
+class User extends Eloquent implements UserInterface, RemindableInterface
 {
 
 	protected $fillable = array('first_name', 'last_name', 'email');
@@ -25,4 +27,33 @@ class User extends Eloquent
 		return trim($this->first_name . ' ' . $this->last_name);
 	}
 
+	/**
+	 * Get the unique identifier for the user.
+	 *
+	 * @return mixed
+	 */
+	public function getAuthIdentifier()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * Get the password for the user.
+	 *
+	 * @return string
+	 */
+	public function getAuthPassword()
+	{
+		return $this->password;
+	}
+
+	/**
+	 * Get the e-mail address where password reminders are sent.
+	 *
+	 * @return string
+	 */
+	public function getReminderEmail()
+	{
+		return $this->email;
+	}
 }
