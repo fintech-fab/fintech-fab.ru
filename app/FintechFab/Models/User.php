@@ -20,12 +20,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
 	protected $fillable = array('first_name', 'last_name', 'email');
 
-	protected $table = 'users';
-
-	public function getName()
+	public function SocialNetworks()
 	{
-		return trim($this->first_name . ' ' . $this->last_name);
+		return $this->has_many('SocialNetwork');
 	}
+
+	protected $table = 'users';
 
 	/**
 	 * Get the unique identifier for the user.

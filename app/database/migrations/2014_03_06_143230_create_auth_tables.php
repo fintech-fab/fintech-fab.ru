@@ -21,19 +21,15 @@ class CreateAuthTables extends Migration
 			$table->string('password');
 			$table->timestamps();
 		});
-		Schema::create('social_networks', function (Blueprint $table) {
+		Schema::create('users_social_networks', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('id_network');
+			$table->integer('user_id')->nullable();
+			$table->string('id_user_in_network');
 			$table->string('social_net_name');
-			$table->string('first_name', 32)->nullable();
-			$table->string('last_name', 32)->nullable();
-			$table->string('email')->nullable();
+			$table->string('first_name', 32);
+			$table->string('last_name', 32);
 			$table->integer('link');
 			$table->timestamps();
-		});
-		Schema::create('users_social_networks', function (Blueprint $table) {
-			$table->integer('user_id')->unique();
-			$table->integer('social_network_id')->unique();
 		});
 		Schema::create('roles', function (Blueprint $table) {
 			$table->increments('id');
@@ -55,7 +51,6 @@ class CreateAuthTables extends Migration
 	public function down()
 	{
 		Schema::drop('users');
-		Schema::drop('social_networks');
 		Schema::drop('users_social_networks');
 		Schema::drop('roles');
 		Schema::drop('users_roles');

@@ -2,6 +2,8 @@
 /**
  * @var string $userMessage
  */
+use FintechFab\Components\Social;
+
 ?>
 <div class="col-md-offset-3 col-md-6 inner">
 	<div class="content">
@@ -96,8 +98,8 @@
 		<hr>
 		<div class="text-center">
 			<h3>Регистрация через социалные сети</h3>
-			<a href=""><img src="/assets/ico/vk48.png" alt="" /></a>
-			<a href=""><img src="/assets/ico/fb48.png" alt="" /></a>
+			<a href="<?= Social::vk() ?>"><img src="/assets/ico/vk48.png" alt="" /></a>
+			<a href="<?= Social::fb() ?>"><img src="/assets/ico/fb48.png" alt="" /></a>
 			<a href=""><img src="/assets/ico/gp48.png" alt="" /></a>
 		</div>
 	</div>
