@@ -12,7 +12,7 @@ class Social
 	public static function vk()
 	{
 		$client_id = Config::get('social.ID_vk'); // ID приложения
-		$redirect_uri = Config::get('social.url'); // Адрес сайта
+		$redirect_uri = Config::get('social.url_vk'); // Адрес сайта
 
 		$url = 'http://oauth.vk.com/authorize';
 
@@ -41,7 +41,6 @@ class Social
 		);
 
 		$link = $url . '?' . urldecode(http_build_query($params));
-
 		return $link;
 	}
 

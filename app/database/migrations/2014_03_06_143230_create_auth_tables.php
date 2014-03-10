@@ -28,7 +28,7 @@ class CreateAuthTables extends Migration
 			$table->string('social_net_name');
 			$table->string('first_name', 32);
 			$table->string('last_name', 32);
-			$table->integer('link');
+			$table->string('link');
 			$table->timestamps();
 		});
 		Schema::create('roles', function (Blueprint $table) {

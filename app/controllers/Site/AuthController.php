@@ -84,18 +84,22 @@ class AuthController extends BaseController
 		if (isset($token['access_token'])) {
 			$params = array(
 				'uids'         => $token['user_id'],
-				'fields'       => 'uid,first_name,last_name,bdate,',
+				'fields' => 'uid,first_name,last_name,bdate,screen_name',
 				'access_token' => $token['access_token']
 			);
 
 			$userInfo = json_decode(file_get_contents('https://api.vk.com/method/users.get' . '?' . urldecode(http_build_query($params))), true);
+
 			if (isset($userInfo['response'][0]['uid'])) {
 				$userInfo = $userInfo['response'][0];
 				$result = true;
 			}
 		}
 		if ($result) {
-			$userInfo['social_net_name'] = 'fb';
+
+			$userInfo['social_net_name'] = 'vk';
+			$userInfo['id'] = $userInfo['uid'];
+			$userInfo['link'] = 'https://vk.com/' . $userInfo['screen_name'];
 			$user = Social::setSocialUser($userInfo);
 			if ($user != null) {
 				Auth::login($user);
