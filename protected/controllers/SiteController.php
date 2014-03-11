@@ -191,4 +191,32 @@ class SiteController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
+	public function actionEmail()
+	{
+		$oAdminKreddyApi = Yii::app()->adminKreddyApi;
+
+		$sPostCode = Yii::app()->request->getQuery('code');
+
+		if (!empty($sPostCode)) {
+			Yii::app()->session['code'] = $sPostCode;
+			$this->redirect('site/email');
+		}
+		if (!empty(Yii::app()->session['code'])) {
+			$aRequest = array(
+				'emailCode' => Yii::app()->session['code'],
+			);
+			Yii::app()->session['code'] = null;
+
+			$aResponse = $oAdminKreddyApi->sendInfoFromEmail($aRequest);
+
+			$aLastCode = $oAdminKreddyApi->getLastCode();
+			if ($aLastCode == $oAdminKreddyApi::ERROR_NONE) {
+				$this->render('email', array('sRequestType' => $aResponse['sEmailRequestType']));
+			} else {
+				$this->render('email', array('sRequestType' => 'codeError'));
+			}
+		} else {
+			$this->redirect(Yii::app()->homeUrl);
+		}
+	}
 }
