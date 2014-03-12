@@ -191,7 +191,7 @@ class SiteController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
-	public function actionEmail($code)
+	public function actionEmail($code = null)
 	{
 		$oAdminKreddyApi = Yii::app()->adminKreddyApi;
 
