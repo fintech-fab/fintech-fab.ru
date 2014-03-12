@@ -198,7 +198,7 @@ class SiteController extends Controller
 		$sPostCode = trim($code);
 		if (!empty($sPostCode)) {
 			Yii::app()->session['code'] = $sPostCode;
-			$this->redirect('site/email');
+			$this->redirect('/site/email');
 		}
 		if (!empty(Yii::app()->session['code'])) {
 			$aRequest = array(
