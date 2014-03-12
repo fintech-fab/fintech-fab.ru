@@ -191,12 +191,11 @@ class SiteController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
-	public function actionEmail()
+	public function actionEmail($code)
 	{
 		$oAdminKreddyApi = Yii::app()->adminKreddyApi;
 
-		$sPostCode = Yii::app()->request->getQuery('code');
-
+		$sPostCode = trim($code);
 		if (!empty($sPostCode)) {
 			Yii::app()->session['code'] = $sPostCode;
 			$this->redirect('site/email');
