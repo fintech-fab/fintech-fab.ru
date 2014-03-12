@@ -56,7 +56,7 @@ $this->endContent();
 					Со всей информацией, касающейся финансовой ответственности Клиента в случае просрочки платежа
 					(штрафы и пени), методах взыскания задолженности ООО "Финансовые Решения", а так же условий
 					возобновления займа, можно ознакомиться в Оферте перейдя по
-					<a href="#" class="dotted" onclick="return doOpenModalFrame('/footerLinks/view/distance', 'ссылке');">ссылке</a>
+					<a href="#" class="dotted" onclick="return doOpenModalFrame('/footerLinks/view/distance', 'Оферта на дистанционный займ');">ссылке</a>
 				</p>
 			</div>
 		<?php endif ?>
