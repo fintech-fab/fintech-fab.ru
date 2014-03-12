@@ -34,7 +34,7 @@ class AddCardForm extends CFormModel
 		$aRules = array(
 			array('sCardPan, sCardValidThru, sCardHolderName, sCardCvc', 'required'),
 			array('sEmail, sAddress, sCity, sZipCode, sCountry', 'required', 'on' => 'additionalFields'),
-			array('iCardType', 'required', 'message' => 'Используйте только карты Mastercard или Maestro'),
+			array('iCardType', 'required', 'message' => 'Используйте только карты Mastercard, Maestro или Visa'),
 
 			array(
 				'bConfirm',
@@ -73,7 +73,7 @@ class AddCardForm extends CFormModel
 			array(
 				'iCardType',
 				'in', 'range'   => array_keys(Dictionaries::$aCardTypes),
-				      'message' => 'Используйте только карты Mastercard или Maestro'
+				      'message' => 'Используйте только карты Mastercard, Maestro или Visa'
 			),
 
 			array('sEmail', 'length', 'max' => '50', 'message' => 'Слишком длинный e-mail'),

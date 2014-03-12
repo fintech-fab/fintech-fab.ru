@@ -165,5 +165,6 @@ $a['components'] = CMap::mergeArray($a['components'], require(__DIR__ . '/custom
 $a['modules'] = CMap::mergeArray($a['modules'], require(__DIR__ . '/custom/modules.php'));
 $a['params'] = CMap::mergeArray($a['params'], require(__DIR__ . '/custom/params.php'));
 $a['components']['log'] = CMap::mergeArray($a['components']['log'], require(__DIR__ . '/custom/log.php'));
+$a['components']['adminKreddyApi'] = CMap::mergeArray($a['components']['adminKreddyApi'], include(__DIR__ . '/custom/api.php'));
 
 return $a;
