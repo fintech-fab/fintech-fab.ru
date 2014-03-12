@@ -24,9 +24,9 @@ class AuthController extends BaseController
 		$password = Input::get('password');
 
 		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
-			$title = 'Приветствуем ' . Auth::user()->first_name;
+			$title = 'Приветствуем ' . Helper::user()->first_name;
 
-			return Redirect::intended('vanguard')->with('userMessage', 'Вы успешно авторизовались')
+			return Redirect::back()->with('userMessage', 'Вы успешно авторизовались')
 				->with('title', $title);
 		}
 
@@ -60,7 +60,7 @@ class AuthController extends BaseController
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
 
-		return Redirect::to('vanguard')->with('userMessage', $userMessage)->with('title', $title);
+		return Redirect::back()->with('userMessage', $userMessage)->with('title', $title);
 
 	}
 
@@ -95,25 +95,26 @@ class AuthController extends BaseController
 				$result = true;
 			}
 		}
-		if ($result) {
 
-			$userInfo['social_net_name'] = 'vk';
-			$userInfo['id'] = $userInfo['uid'];
-			$userInfo['link'] = 'https://vk.com/' . $userInfo['screen_name'];
-			$user = Social::setSocialUser($userInfo);
-			if ($user != null) {
-				Auth::login($user);
-				$userMessage = "Добро пожаловать на наш сайт!";
-				$title = 'Вы успешно авторизовались!';
-				$path = 'vanguard';
-			}
-		} else {
-			$userMessage = "Что-то не так, попробуйте ещё раз";
-			$title = 'Ошибка';
-			$path = 'register';
+		if (!$result) {
+			$this->resultError();
 		}
 
-		return Redirect::to($path)->with('userMessage', $userMessage)->with('title', $title);
+
+		$userInfo['social_net_name'] = 'vk';
+		$userInfo['id'] = $userInfo['uid'];
+		$userInfo['link'] = 'https://vk.com/' . $userInfo['screen_name'];
+		$user = Social::setSocialUser($userInfo);
+
+		if (is_null($user)) {
+			$this->resultError();
+		}
+
+		Auth::login($user);
+		$userMessage = "Добро пожаловать на наш сайт!";
+		$title = 'Вы успешно авторизовались!';
+
+		return Redirect::back()->with('userMessage', $userMessage)->with('title', $title);
 	}
 
 
@@ -156,6 +157,13 @@ class AuthController extends BaseController
 
 		return Redirect::intended('vanguard')->with('userMessage', 'Приходите к нам ещё.')
 			->with('title', 'Всего доброго');
+	}
+
+	private function resultError()
+	{
+		return Redirect::to('register')
+			->with('userMessage', "Что-то не так, попробуйте ещё раз")
+			->with('title', 'Ошибка');
 	}
 
 }

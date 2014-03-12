@@ -7,6 +7,7 @@ if (empty($content)) {
 <html>
 <head>
 	<script src="//api-maps.yandex.ru/2.0/?load=package.standard,package.geoObjects&lang=ru-RU" type="text/javascript"></script>
+	<script src="/js/map.js" type="text/javascript"></script>
 	<?= View::make('layouts.inc.head.head') ?>
 </head>
 <body>

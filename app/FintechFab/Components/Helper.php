@@ -4,6 +4,7 @@ namespace FintechFab\Components;
 
 
 use Auth;
+use FintechFab\Models\User;
 
 class Helper
 {
@@ -40,14 +41,22 @@ class Helper
 		return $rules;
 	}
 
-	public static function linkForUserProfil()
+	public static function linkForUserProfile()
 	{
-		$first_name = Auth::user()->first_name;
-		$last_name = Auth::user()->last_name;
+		$first_name = Helper::user()->first_name;
+		$last_name = Helper::user()->last_name;
 		$link_user = '<li><a href="">' . $first_name . ' ' . $last_name . '</a></li>';
 
 		$link_logout = '<li><a href="/logout">Выход</a></li>';
 
 		return $link_user . $link_logout;
+	}
+
+	/**
+	 * @return \Illuminate\Auth\UserInterface|null|User
+	 */
+	public static function user()
+	{
+		return Auth::user();
 	}
 } 

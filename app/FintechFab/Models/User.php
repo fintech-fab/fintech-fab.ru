@@ -5,6 +5,7 @@ namespace FintechFab\Models;
 use Eloquent;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\UserInterface;
+use Illuminate\Support\Collection;
 
 /**
  * @property integer $id
@@ -14,6 +15,9 @@ use Illuminate\Auth\UserInterface;
  * @property string  $password
  * @property string  $updated_at
  * @property string  $created_at
+ *
+ * @property Collection|SocialNetwork[] SocialNetworks
+ * @method User find() static
  */
 class User extends Eloquent implements UserInterface, RemindableInterface
 {
@@ -22,7 +26,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
 	public function SocialNetworks()
 	{
-		return $this->has_many('SocialNetwork');
+		return $this->hasMany(SocialNetwork::class);
 	}
 
 	protected $table = 'users';

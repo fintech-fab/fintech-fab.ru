@@ -15,7 +15,7 @@ function echoActiveClassIfRequestMatches($requestUri)
 function echoAuthMode()
 {
 	if (Auth::check()) {
-		return Helper::linkForUserProfil();
+		return Helper::linkForUserProfile();
 	}
 
 	return '<li><a href="" data-toggle="modal" data-target="#loginModal">Вход</a></li>';
