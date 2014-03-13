@@ -50,6 +50,7 @@ $this->endContent();
 		</div>
 
 		<?php if (!SiteParams::getIsIvanovoSite()) : ?>
+			<br /><br />
 			<div class="row">
 
 				<p class="intro">
