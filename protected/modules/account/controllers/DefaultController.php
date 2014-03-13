@@ -216,9 +216,9 @@ class DefaultController extends Controller
 		//обновим ФИО в базе, на случай если уже стерто
 		$sClientFullName = Yii::app()->adminKreddyApi->getClientFullName();
 		$aClientFullName = explode(' ', $sClientFullName);
-		$oClientData->first_name = $aClientFullName[0];
-		$oClientData->third_name = $aClientFullName[1];
-		$oClientData->last_name = $aClientFullName[2];
+		$oClientData->first_name = $aClientFullName[1];
+		$oClientData->third_name = $aClientFullName[2];
+		$oClientData->last_name = $aClientFullName[0];
 		$oClientData->save();
 
 		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте

@@ -73,9 +73,6 @@ class ClientPersonalDataContinueForm extends ClientFullForm
 		$aAttributes = parent::getAttributes();
 		unset($aAttributes['phone']);
 		unset($aAttributes['email']);
-		unset($aAttributes['last_name']);
-		unset($aAttributes['first_name']);
-		unset($aAttributes['third_name']);
 
 		return $aAttributes;
 	}
