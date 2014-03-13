@@ -23,14 +23,10 @@ $this->endContent();
 //<div class="left-stars-23feb"></div>
 //<div class="right-stars-23feb"></div>
 ?>
-<!-- main content start-->
-<div class="main-bgr-8mar">
+<!-- main content start--><!--<div class="main-bgr-8mar">--><br />
+<?= $content; ?>
 <br />
-	<?= $content; ?>
-	<br />
-</div>
-<!-- main content end-->
-<!-- footer start-->
+<!--</div>--><!-- main content end--><!-- footer start-->
 <?php $this->beginContent('//layouts/main_footer');
 echo $content;
 $this->endContent();
