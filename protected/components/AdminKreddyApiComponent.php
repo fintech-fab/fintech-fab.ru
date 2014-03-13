@@ -534,6 +534,9 @@ class AdminKreddyApiComponent
 	{
 		//список полей, которые требуется передать при обновлении анкеты быстрой регистрации
 		$aRequiredFields = array(
+			'last_name'                     => null,
+			'first_name'                    => null,
+			'third_name'                    => null,
 			'sex'                           => null,
 			'prev_last_name'                => null,
 			'birthday'                      => null,
