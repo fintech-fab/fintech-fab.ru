@@ -214,11 +214,10 @@ class DefaultController extends Controller
 		//снимаем флаг "анкеты заполнена", чтобы не создавалась новая запись
 		$oClientData->complete = 0;
 		//обновим ФИО в базе, на случай если уже стерто
-		$sClientFullName = Yii::app()->adminKreddyApi->getClientFullName();
-		$aClientFullName = explode(' ', $sClientFullName);
-		$oClientData->first_name = $aClientFullName[1];
-		$oClientData->third_name = $aClientFullName[2];
-		$oClientData->last_name = $aClientFullName[0];
+		$aClientData = Yii::app()->adminKreddyApi->getClientData();
+		$oClientData->first_name = $aClientData['first_name'];
+		$oClientData->third_name = $aClientData['third_name'];
+		$oClientData->last_name = $aClientData['last_name'];
 		$oClientData->save();
 
 		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте

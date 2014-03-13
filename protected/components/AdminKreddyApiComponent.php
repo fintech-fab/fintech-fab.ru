@@ -1325,6 +1325,13 @@ class AdminKreddyApiComponent
 		return $aClientInfo['client_data']['fullname'];
 	}
 
+	public function getClientData()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['client_data'];
+	}
+
 	/**
 	 * Есть ли у клиента задолженность по кредиту
 	 *
