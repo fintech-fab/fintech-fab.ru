@@ -29,7 +29,7 @@ $this->endContent();
 //<div class="right-stars-23feb"></div>
 ?>
 <div class="main-bgr-8mar">
-<!-- main content start-->
+	<!-- main content start-->
 	<?= $content; ?>
 	<!-- main content end--><br />
 
@@ -48,6 +48,19 @@ $this->endContent();
 			$this->widget('BottomTabsWidget');
 			?>
 		</div>
+
+		<?php if (!SiteParams::getIsIvanovoSite()) : ?>
+			<br /><br />
+			<div class="row">
+
+				<p class="intro">
+					Со всей информацией, касающейся финансовой ответственности Клиента в случае просрочки платежа
+					(штрафы и пени), методах взыскания задолженности ООО "Финансовые Решения", а так же условий
+					возобновления займа, можно ознакомиться в Оферте перейдя по
+					<a href="#" class="dotted" onclick="return doOpenModalFrame('/footerLinks/view/distance', 'Оферта на дистанционный займ');">ссылке</a>
+				</p>
+			</div>
+		<?php endif ?>
 	</div>
 </div>
 <!-- footer start-->
