@@ -10,6 +10,7 @@ use Config;
 use FintechFab\Components\Social;
 use FintechFab\Components\WorkWithInput;
 use FintechFab\Models\User;
+use FintechFab\Widgets\LinksInMenu;
 use Hash;
 use Input;
 use Redirect;
@@ -21,26 +22,33 @@ class AuthController extends BaseController
 
 	public function postAuth()
 	{
-		$email = Input::get('email');
-		$password = Input::get('password');
+		$data = Input::all();
+		$validator = Validator::make($data, WorkWithInput::rulesForInputAuth(), WorkWithInput::messagesForErrors());
+		$userMessages = $validator->messages();
+		$emailError = $userMessages->first('email');
+		$emailPassword = $userMessages->first('password');
+		$result['errors'] = array($emailError, $emailPassword);
 
-		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
-			$title = 'Приветствуем ' . Auth::user()->first_name;
-
-			return Redirect::back()
-				->with('userMessage', 'Вы успешно авторизовались')
-				->with('title', $title);
+		if ($userMessages->has('email') || $userMessages->has('password')) {
+			return $result;
 		}
 
-		return Redirect::intended('registration')
-			->with('userMessage', 'Такого пользователя нет.')
-			->with('title', 'Ошибка');
+
+		if (Auth::attempt(array('email' => $data['email'], 'password' => $data['password']))) {
+			$result['authOk'] = LinksInMenu::echoAuthMode();
+
+			return $result;
+		}
+		$result['authError'] = "Нет такого пользователя";
+
+		return $result;
+
 	}
 
 	public function postRegistration()
 	{
 		$data = Input::all();
-		$validator = Validator::make($data, WorkWithInput::rulesForInput(), WorkWithInput::messagesForErrors());
+		$validator = Validator::make($data, WorkWithInput::rulesForInputRegistration(), WorkWithInput::messagesForErrors());
 		$userMessage = $validator->messages()->first();
 		$title = 'Ошибка';
 
@@ -84,7 +92,7 @@ class AuthController extends BaseController
 		if (isset($token['access_token'])) {
 			$params = array(
 				'uids'         => $token['user_id'],
-				'fields' => 'uid,first_name,last_name,bdate,screen_name',
+				'fields' => 'uid,first_name,last_name,bdate,screen_name,photo_big',
 				'access_token' => $token['access_token']
 			);
 
@@ -101,6 +109,7 @@ class AuthController extends BaseController
 		}
 		$userInfo['social_net_name'] = 'vk';
 		$userInfo['id'] = $userInfo['uid'];
+		$userInfo['photo'] = $userInfo['photo_big'];
 		$userInfo['link'] = 'https://vk.com/' . $userInfo['screen_name'];
 		$user = Social::setSocialUser($userInfo);
 
@@ -127,7 +136,10 @@ class AuthController extends BaseController
 		parse_str(file_get_contents('https://graph.facebook.com/oauth/access_token' . '?'
 			. http_build_query($params)), $tokenInfo);
 
-		$params = array('access_token' => $tokenInfo['access_token']);
+		$params = array(
+			'fields'       => 'id,first_name,last_name,link,birthday,picture.type(large)',
+			'access_token' => $tokenInfo['access_token']
+		);
 		$userInfo = json_decode(file_get_contents('https://graph.facebook.com/me' . '?'
 			. urldecode(http_build_query($params))), true);
 
@@ -135,6 +147,8 @@ class AuthController extends BaseController
 			$this->resultError();
 		}
 		$userInfo['social_net_name'] = 'fb';
+		$userInfo['photo'] = $userInfo['picture']['data']['url'];
+
 		$user = Social::setSocialUser($userInfo);
 		if (is_null($user)) {
 			$this->resultError();
@@ -149,7 +163,7 @@ class AuthController extends BaseController
 	{
 		Auth::logout();
 
-		return Redirect::intended('vanguard')->with('userMessage', 'Приходите к нам ещё.')
+		return Redirect::back()->with('userMessage', 'Приходите к нам ещё.')
 			->with('title', 'Всего доброго');
 	}
 

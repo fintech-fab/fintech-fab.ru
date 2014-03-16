@@ -56,16 +56,17 @@ class Social
 			$user = User::find($userSocialNetwork['user_id']);
 		} else {
 			$user = new User();
+			$user->first_name = $userInfo['first_name'];
+			$user->last_name = $userInfo['last_name'];
+			$user->save();
 		}
-		$user->first_name = $userInfo['first_name'];
-		$user->last_name = $userInfo['last_name'];
-		$user->save();
 		Auth::login($user);
-		$userSocialNetwork->setAttribute('user_id', $user['id']);
+		$userSocialNetwork->user_id = $user['id'];
 		$userSocialNetwork->setAttribute('id_user_in_network', $userInfo['id']);
 		$userSocialNetwork->setAttribute('first_name', $userInfo['first_name']);
 		$userSocialNetwork->setAttribute('last_name', $userInfo['last_name']);
 		$userSocialNetwork->setAttribute('link', $userInfo['link']);
+		$userSocialNetwork->setAttribute('photo', $userInfo['photo']);
 		$userSocialNetwork->setAttribute('social_net_name', $userInfo['social_net_name']);
 		$userSocialNetwork->save();
 

@@ -33,7 +33,9 @@ class LinksInMenu
 	{
 		$first_name = Auth::user()->first_name;
 		$last_name = Auth::user()->last_name;
-		$link_user = '<li><a href="profile">' . $first_name . ' ' . $last_name . '</a></li>';
+		$link_user = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("profile") . '>
+							<a href="profile">' . $first_name . ' ' . $last_name . '</a>
+						</li>';
 
 		$link_logout = '<li><a href="/logout">Выход</a></li>';
 

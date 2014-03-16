@@ -30,10 +30,11 @@ use FintechFab\Components\Social;
 							'placeholder' => 'Email',
 							'class'       => 'form-control',
 							'id'          => 'inputEmail',
-							'required'    => 'required',
+							//'required'    => 'required',
 						));
 						?>
 					</div>
+					<div id="errorEmail" class="errorModal text-center"></div>
 				</div>
 				<div class="form-group">
 					<label for="inputPassword" class="col-sm-3 control-label">Пароль</label>
@@ -44,10 +45,11 @@ use FintechFab\Components\Social;
 							'placeholder' => 'Пароль',
 							'class'       => 'form-control',
 							'id'          => 'inputPassword',
-							'required'    => 'required',
+							//'required'    => 'required',
 						));
 						?>
 					</div>
+					<div id="errorPassword" class="errorModal text-center"></div>
 				</div>
 				<div class="form-group">
 					<p class="col-sm-8">Не зарегистрирован?<br><a href="/registration">Регистрация</a></p>
@@ -55,8 +57,9 @@ use FintechFab\Components\Social;
 					<div class=" col-sm-4">
 						<?=
 						Form::button('Login', array(
-							'type'  => 'submit',
+							'type' => 'button',
 							'class' => 'btn btn-primary',
+							'id'   => 'btn-login',
 						));
 						?>
 					</div>

@@ -9,7 +9,8 @@ Route::post('registration', array(
 	'uses' => 'App\Controllers\Site\AuthController@postRegistration'
 ));
 Route::get('registration', array(
-	'before' => 'guest', 'as' => 'registration',
+	'before' => 'guest',
+	'as'     => 'registration',
 	'uses'   => 'App\Controllers\Site\VanguardController@registration'
 ));
 
@@ -25,3 +26,4 @@ Route::group(array('before' => 'auth'), function () {
 	));
 
 });
+Route::post('login', array('as' => 'login', 'uses' => 'App\Controllers\Site\Login@postAuth'));
