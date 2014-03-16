@@ -23,6 +23,8 @@ class AuthController extends BaseController
 	public function postAuth()
 	{
 		$data = Input::all();
+		$remember = isset($data['remember']) ? true : false;
+
 		$validator = Validator::make($data, WorkWithInput::rulesForInputAuth(), WorkWithInput::messagesForErrors());
 		$userMessages = $validator->messages();
 		$emailError = $userMessages->first('email');
@@ -33,16 +35,13 @@ class AuthController extends BaseController
 			return $result;
 		}
 
-
-		if (Auth::attempt(array('email' => $data['email'], 'password' => $data['password']))) {
+		if (Auth::attempt(array('email' => $data['email'], 'password' => $data['password']), $remember)) {
 			$result['authOk'] = LinksInMenu::echoAuthMode();
-
 			return $result;
 		}
-		$result['authError'] = "Нет такого пользователя";
+		$result['errors']['1'] = "Нет такого пользователя";
 
 		return $result;
-
 	}
 
 	public function postRegistration()

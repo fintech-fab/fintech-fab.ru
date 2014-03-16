@@ -42,7 +42,7 @@ class WorkWithInput
 	{
 		$rules = array(
 			'email'    => 'required|email',
-			'password' => 'required|min:4|alpha_dash',
+			'password' => 'required|alpha_dash',
 		);
 
 		return $rules;

@@ -26,4 +26,3 @@ Route::group(array('before' => 'auth'), function () {
 	));
 
 });
-Route::post('login', array('as' => 'login', 'uses' => 'App\Controllers\Site\Login@postAuth'));
