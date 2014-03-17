@@ -18,6 +18,16 @@ Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\Aut
 Route::get('vk', 'App\Controllers\Site\AuthController@vk');
 Route::get('fb', 'App\Controllers\Site\AuthController@fb');
 
+Route::get('admin', array(
+	'as'   => 'admin',
+	'uses' => 'App\Controllers\Site\UserProfileController@showAdmin'
+));
+
+Route::get('workAdmin', array(
+	'as'   => 'WorkAdmin',
+	'uses' => 'App\Controllers\Site\UserProfileController@forAdmin'
+));
+
 Route::group(array('before' => 'auth'), function () {
 	Route::get('profile', array(
 		'as'   => 'profile',

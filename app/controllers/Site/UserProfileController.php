@@ -10,6 +10,7 @@ namespace App\Controllers\Site;
 
 
 use App\Controllers\BaseController;
+use FintechFab\Models\User;
 
 class UserProfileController extends BaseController
 {
@@ -20,5 +21,24 @@ class UserProfileController extends BaseController
 	{
 
 		dd('Нужно сделать');
+	}
+
+	public function showAdmin()
+	{
+		return $this->make('admin');
+	}
+
+	public function forAdmin()
+	{
+		$users = User::all();
+		foreach ($users as $user) {
+			$x[] = array(
+				'first_name' => $user->first_name,
+				'last_name'  => $user->last_name,
+			);
+		}
+
+		//dd($x[0]);
+		return $x;
 	}
 } 
