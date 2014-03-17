@@ -19,8 +19,7 @@ class UserProfileController extends BaseController
 
 	public function showUserProfile()
 	{
-
-		dd('Нужно сделать');
+		return $this->make('userProfile');
 	}
 
 	public function showAdmin()

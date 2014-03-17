@@ -26,7 +26,7 @@ class WorkWithInput
 		return $rules;
 	}
 
-	public static function rulesForInput()
+	public static function rulesForInputRegistration()
 	{
 		$rules = array(
 			'first_name'     => 'required',
@@ -38,5 +38,14 @@ class WorkWithInput
 		return $rules;
 	}
 
+	public static function rulesForInputAuth()
+	{
+		$rules = array(
+			'email'    => 'required|email',
+			'password' => 'required|alpha_dash',
+		);
+
+		return $rules;
+	}
 
 } 

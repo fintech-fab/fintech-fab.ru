@@ -20,3 +20,8 @@
 .inner {
 	padding-bottom: 15px;
 }
+
+.errorModal {
+	color: #ff0000;
+
+}

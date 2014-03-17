@@ -93,7 +93,7 @@
 				'method' => 'post',
 			)); ?>
 			<div class="form-group">
-				<label for="inputName" class="col-sm-2 control-label">Как звать</label>
+				<?= Form::label('inputName', 'Как звать', array('class' => 'col-sm-2 control-label')) ?>
 
 				<div class="col-sm-8">
 					<?=
@@ -107,7 +107,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="inputAbout" class="col-sm-2 control-label">О себе</label>
+				<?= Form::label('inputAbout', 'О себе', array('class' => 'col-sm-2 control-label')) ?>
 
 				<div class="col-sm-8">
 					<?=
@@ -122,7 +122,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="inputEmail" class="col-sm-2 control-label">Email</label>
+				<?= Form::label('inputEmail', 'Email', array('class' => 'col-sm-2 control-label')) ?>
 
 				<div class="col-sm-8">
 
