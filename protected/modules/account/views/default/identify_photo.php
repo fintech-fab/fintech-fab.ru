@@ -3,12 +3,12 @@
 /* @var VideoIdentifyForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Идентификация на сайте";
+$this->pageTitle = Yii::app()->name . " - Идентификация с загрузкой фотографий";
 ?>
-	<h4>Идентификация на сайте</h4>
+	<h4>Идентификация с загрузкой фотографий</h4>
 
 	<div class="alert in alert-block alert-warning span7">
-		<h4>Для идентификации вам потребуется веб-камера.
+		<h4>Для идентификации вам потребуется фотокамера или мобильный телефон с фотокамерой.
 			<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
 				После идентификации потребуется ввести
 				данные документов, использованных при идентификации.
@@ -37,6 +37,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnSubmit' => false,
 	),
 ));
+
 ?>
 
 <?= $form->hiddenField($model, 'type', array('name' => 'type')); ?>
@@ -63,4 +64,4 @@ $this->endWidget();
 
 ?>
 	<br />
-<?php $this->renderPartial('app_info'); ?>
+<?php //$this->renderPartial('app_info'); ?>

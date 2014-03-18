@@ -6,6 +6,7 @@
  */
 class VideoIdentifyForm extends CFormModel
 {
+	public $type;
 	public $client_code;
 	public $service;
 	public $signature;
@@ -31,6 +32,7 @@ class VideoIdentifyForm extends CFormModel
 	 */
 	public function attributeLabels()
 	{
+		array('type' => 'Identify Type');
 		array('client_code' => 'Client Code');
 		array('service' => 'Service');
 		array('signature' => 'Signature');
