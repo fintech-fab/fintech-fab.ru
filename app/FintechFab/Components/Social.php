@@ -58,6 +58,7 @@ class Social
 			$user = new User();
 			$user->first_name = $userInfo['first_name'];
 			$user->last_name = $userInfo['last_name'];
+			$user->photo = $userInfo['photo'];
 			$user->save();
 		}
 		Auth::login($user);

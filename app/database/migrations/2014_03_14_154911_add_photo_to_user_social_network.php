@@ -16,6 +16,9 @@ class AddPhotoToUserSocialNetwork extends Migration
 		Schema::table('users_social_networks', function (Blueprint $table) {
 			$table->string('photo')->after('link');
 		});
+		Schema::table('users', function (Blueprint $table) {
+			$table->string('photo')->after('password');
+		});
 	}
 
 	/**
@@ -26,6 +29,9 @@ class AddPhotoToUserSocialNetwork extends Migration
 	public function down()
 	{
 		Schema::table('users_social_networks', function (Blueprint $table) {
+			$table->dropColumn('photo');
+		});
+		Schema::table('users', function (Blueprint $table) {
 			$table->dropColumn('photo');
 		});
 	}
