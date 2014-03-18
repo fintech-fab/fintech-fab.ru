@@ -28,42 +28,40 @@ $this->endContent();
 //<div class="left-stars-23feb"></div>
 //<div class="right-stars-23feb"></div>
 ?>
-<div class="main-bgr-8mar">
-	<!-- main content start-->
-	<?= $content; ?>
-	<!-- main content end--><br />
+<!--<div class="main-bgr-8mar">-->    <!-- main content start-->
+<?= $content; ?>
+<!-- main content end--><br />
 
-	<div class="page-divider1"></div>
+<div class="page-divider1"></div>
 
-	<div class="container">
-		<div class="row">
-			<h2 class="learn-more">Узнай больше о нас!</h2>
+<div class="container">
+	<div class="row">
+		<h2 class="learn-more">Узнай больше о нас!</h2>
 
-			<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотрите ответы', Yii::app()
-					->createUrl('site/faq')); ?>! </p>
-		</div>
-
-		<div class="row" style="margin-left: 0;">
-			<?php
-			$this->widget('BottomTabsWidget');
-			?>
-		</div>
-
-		<?php if (!SiteParams::getIsIvanovoSite()) : ?>
-			<br /><br />
-			<div class="row">
-
-				<p class="intro">
-					Со всей информацией, касающейся финансовой ответственности Клиента в случае просрочки платежа
-					(штрафы и пени), методах взыскания задолженности ООО "Финансовые Решения", а так же условий
-					возобновления займа, можно ознакомиться в Оферте перейдя по
-					<a href="#" class="dotted" onclick="return doOpenModalFrame('/footerLinks/view/distance', 'Оферта на дистанционный займ');">ссылке</a>
-				</p>
-			</div>
-		<?php endif ?>
+		<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотрите ответы', Yii::app()
+				->createUrl('site/faq')); ?>! </p>
 	</div>
+
+	<div class="row" style="margin-left: 0;">
+		<?php
+		$this->widget('BottomTabsWidget');
+		?>
+	</div>
+
+	<?php if (!SiteParams::getIsIvanovoSite()) : ?>
+		<br /><br />
+		<div class="row">
+
+			<p class="intro">
+				Со всей информацией, касающейся финансовой ответственности Клиента в случае просрочки платежа (штрафы и
+				пени), методах взыскания задолженности ООО "Финансовые Решения", а так же условий возобновления займа,
+				можно ознакомиться в Оферте перейдя по
+				<a href="#" class="dotted" onclick="return doOpenModalFrame('/footerLinks/view/distance', 'Оферта на дистанционный займ');">ссылке</a>
+			</p>
+		</div>
+	<?php endif ?>
 </div>
-<!-- footer start-->
+<!--</div>--><!-- footer start-->
 <?php $this->beginContent('//layouts/main_footer');
 echo $content;
 $this->endContent();

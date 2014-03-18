@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by JetBrains PhpStorm.
  * User: e.zamorskaya
@@ -32,6 +33,7 @@ class Dictionaries
 
 	/**
 	 * названия для пола
+	 *
 	 * @var array
 	 */
 	public static $aSexes = array(
@@ -44,6 +46,7 @@ class Dictionaries
 
 	/**
 	 * названия для семейного положения
+	 *
 	 * @var array
 	 */
 	public static $aMaritalStatuses = array(
@@ -74,6 +77,7 @@ class Dictionaries
 
 	/**
 	 * Подсказки для полей формы
+	 *
 	 * @var array
 	 */
 	public static $aHintsFormFields = array(
@@ -139,6 +143,7 @@ class Dictionaries
 
 	/**
 	 * названия для  образования
+	 *
 	 * @var array
 	 */
 	public static $aEducations = array(
@@ -197,6 +202,7 @@ class Dictionaries
 
 	/**
 	 * дополнительный расход
+	 *
 	 * @var array
 	 */
 	public static $aLiabilities = array(
@@ -216,6 +222,7 @@ class Dictionaries
 
 	/**
 	 * дни выдачи зарплаты/аванса
+	 *
 	 * @var array
 	 */
 	public static $aMoneyDays = array(
@@ -246,6 +253,7 @@ class Dictionaries
 
 	/**
 	 * варианты второго документа
+	 *
 	 * @var array
 	 */
 	public static $aDocuments = array(
@@ -259,6 +267,7 @@ class Dictionaries
 
 	/**
 	 * правила заполнения второго документа
+	 *
 	 * @var array
 	 */
 	public static $aDocumentsRegexps = array(
@@ -272,6 +281,7 @@ class Dictionaries
 
 	/**
 	 * Сообщения об ошибках для второго документа
+	 *
 	 * @var array
 	 */
 	public static $aDocumentsPopovers = array(
@@ -286,6 +296,7 @@ class Dictionaries
 
 	/**
 	 * названия дней недели для вывода в блоке "Выбранные условия"
+	 *
 	 * @var array
 	 */
 	public static $aDays = array(
@@ -300,6 +311,7 @@ class Dictionaries
 
 	/**
 	 * месяца года для вывода в блоке "Выбранные условия"
+	 *
 	 * @var array
 	 */
 	public static $aMonths = array(
@@ -371,6 +383,7 @@ class Dictionaries
 
 	/**
 	 * Выбор суммы займа
+	 *
 	 * @var array
 	 */
 	public static $aProducts = array(
@@ -381,6 +394,7 @@ class Dictionaries
 
 	/**
 	 * Цена за подписку
+	 *
 	 * @var array
 	 */
 	public static $aDataPrices = array(
@@ -391,6 +405,7 @@ class Dictionaries
 
 	/**
 	 * Сумма займа (просто цифры)
+	 *
 	 * @var array
 	 */
 	public static $aDataFinalPrices = array(
@@ -401,6 +416,7 @@ class Dictionaries
 
 	/**
 	 * Длительность подписки
+	 *
 	 * @var array
 	 */
 	public static $aDataPriceCounts = array(
@@ -411,6 +427,7 @@ class Dictionaries
 
 	/**
 	 * Кол-во возможных займов
+	 *
 	 * @var array
 	 */
 	public static $aDataCounts = array(
@@ -421,6 +438,7 @@ class Dictionaries
 
 	/**
 	 * Срок возврата займа
+	 *
 	 * @var array
 	 */
 	public static $aDataTimes = array(
@@ -439,6 +457,7 @@ class Dictionaries
 
 	/**
 	 * Выбор способа получения займа в зависимости от выбранной на предыдущем шаге суммы
+	 *
 	 * @param int $chosen_sum_index
 	 *
 	 * @var array
@@ -482,6 +501,7 @@ class Dictionaries
 
 	/**
 	 * варианты секретного вопроса
+	 *
 	 * @var array
 	 */
 	public static $aSecretQuestions = array(
@@ -495,6 +515,7 @@ class Dictionaries
 
 	/**
 	 * выбранный секретный вопрос
+	 *
 	 * @param $id
 	 *
 	 * @return string
@@ -565,6 +586,7 @@ class Dictionaries
 
 	/**
 	 * список регионов
+	 *
 	 * @return array
 	 */
 	public static function getRegions()
