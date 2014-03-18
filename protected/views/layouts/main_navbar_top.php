@@ -9,7 +9,7 @@
 
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></a>
 				<a href="<?= Yii::app()->request->baseUrl; ?>/" class="brand">
-					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/logo-slogan2.png" alt="Kreddy" /> </a>
+					<img src="<?= Yii::app()->request->baseUrl; ?>/static/img/logo-slogan5.png" alt="Kreddy" /> </a>
 
 				<div class="span4" style="margin-top: 13px; margin-left: 20px;">
 					<?php
