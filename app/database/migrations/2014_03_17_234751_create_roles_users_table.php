@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddPhotoToUserSocialNetwork extends Migration
+class CreateRolesUsersTable extends Migration
 {
 
 	/**
@@ -13,8 +13,10 @@ class AddPhotoToUserSocialNetwork extends Migration
 	 */
 	public function up()
 	{
-		Schema::table('users_social_networks', function (Blueprint $table) {
-			$table->string('photo')->after('link');
+		Schema::drop('users_roles');
+		Schema::create('role_user', function (Blueprint $table) {
+			$table->integer('user_id');
+			$table->integer('role_id');
 		});
 	}
 
@@ -25,9 +27,7 @@ class AddPhotoToUserSocialNetwork extends Migration
 	 */
 	public function down()
 	{
-		Schema::table('users_social_networks', function (Blueprint $table) {
-			$table->dropColumn('photo');
-		});
+		Schema::drop('role_user');
 	}
 
 }

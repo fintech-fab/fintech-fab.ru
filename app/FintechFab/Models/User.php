@@ -30,6 +30,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
 	}
 
+	public function roles()
+	{
+		return $this->belongsToMany(Role::class);
+	}
+
 	protected $table = 'users';
 
 	/**

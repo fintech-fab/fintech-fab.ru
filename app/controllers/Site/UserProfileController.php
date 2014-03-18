@@ -10,6 +10,7 @@ namespace App\Controllers\Site;
 
 
 use App\Controllers\BaseController;
+use FintechFab\Components\Role;
 use FintechFab\Models\User;
 
 class UserProfileController extends BaseController
@@ -34,10 +35,12 @@ class UserProfileController extends BaseController
 			$x[] = array(
 				'first_name' => $user->first_name,
 				'last_name'  => $user->last_name,
+				'admin'     => Role::userRole((int)$user->id, "admin"),
+				'moderator' => Role::userRole((int)$user->id, "moderator"),
+				'user'      => Role::userRole((int)$user->id, "user"),
 			);
 		}
 
-		//dd($x[0]);
 		return $x;
 	}
 } 
