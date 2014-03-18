@@ -18,6 +18,9 @@ class CreateRolesUsersTable extends Migration
 			$table->integer('user_id');
 			$table->integer('role_id');
 		});
+		Schema::table('users', function (Blueprint $table) {
+			$table->string('photo')->after('password');
+		});
 	}
 
 	/**
@@ -27,6 +30,12 @@ class CreateRolesUsersTable extends Migration
 	 */
 	public function down()
 	{
+		Schema::table('users_social_networks', function (Blueprint $table) {
+			$table->dropColumn('photo');
+		});
+		Schema::table('users', function (Blueprint $table) {
+			$table->dropColumn('photo');
+		});
 		Schema::drop('role_user');
 	}
 
