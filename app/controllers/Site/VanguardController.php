@@ -29,38 +29,35 @@ class VanguardController extends BaseController
 		});
 
 		if (0 == count(Mail::failures())) {
+
 			$userMessage = Helper::ucwords($data['name']);
-			$userMessage .= ', cпасибо за регистрацию.
-			Ожидайте ответа по электронной почте.';
+			$userMessage .= ',
+				вы поразительно инициативны! :-)
+				Мы ответим вам не позже следующего рабочего дня.
+			';
+
 		} else {
-			$userMessage = 'Что-то сломалось, попробуйте ещё раз';
+			$userMessage = 'Что-то сломалось, но вы можете попробовать еще раз';
 		}
-		$title = 'Заявка на стажировку принята';
 
-		return Redirect::to('vanguard')->with('userMessage', $userMessage)->with('title', $title);
+		$title = 'Все получилось';
 
-	}
-
-	public function registration()
-	{
-
-		return $this->make('registration');
+		return Redirect::to('vanguard')
+			->with('userMessage', $userMessage)
+			->with('userMessageTitle', $title);
 
 	}
 
 	private function getOrderFormData()
 	{
-		$name = Input::get('name');
-		$about = Input::get('about');
-		$email = Input::get('email');
-
 		$data = array(
-			'name'  => $name,
-			'about' => $about,
-			'email' => $email,
+			'name'  => Input::get('name'),
+			'about' => Input::get('about'),
+			'email' => Input::get('email'),
 		);
 
 		return $data;
 
 	}
+
 }
