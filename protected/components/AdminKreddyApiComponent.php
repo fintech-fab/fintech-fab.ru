@@ -611,24 +611,11 @@ class AdminKreddyApiComponent
 
 			'numeric_code'                  => null,
 
-			'job_company'                   => null,
-			'job_position'                  => null,
-			'job_phone'                     => null,
-
-			'job_time'                      => null,
-			'job_monthly_income'            => null,
-			'job_monthly_outcome'           => null,
-
-			'friends_fio'                   => null,
-			'friends_phone'                 => null,
-
 			'secret_question'               => null,
 			'secret_answer'                 => null,
 
 			'status'                        => null,
-			'income_source'                 => null,
-			'educational_institution_name'  => null,
-			'educational_institution_phone' => null,
+
 			'loan_purpose'                  => null,
 			'birthplace'                    => null,
 		);
