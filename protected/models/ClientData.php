@@ -89,23 +89,8 @@ class ClientData extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
+
 		return array(
-			/*
-			array('passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address', 'required'),
-			array('sex', 'numerical', 'integerOnly'=>true),
-			array('client_id', 'length', 'max'=>11),
-			array('phone', 'length', 'max'=>10),
-			array('first_name, last_name, third_name, email, address_reg_address', 'length', 'max'=>255),
-			array('passport_series', 'length', 'max'=>4),
-			array('passport_number', 'length', 'max'=>6),
-			array('passport_code', 'length', 'max'=>7),
-			array('document, address_reg_region, address_reg_city', 'length', 'max'=>100),
-			array('document_number', 'length', 'max'=>30),
-			array('birthday, dt_add, dt_update', 'safe'),*/
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
 		);
 	}

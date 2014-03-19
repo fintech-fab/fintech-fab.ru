@@ -12,9 +12,6 @@ class ClientJobDataForm extends ClientFullForm
 	{
 		// всегда обязательные поля
 		$aRequired = array(
-			'job_monthly_income',
-			'job_monthly_outcome',
-
 			'status',
 			'relatives_one_fio',
 			'relatives_one_phone',
@@ -24,18 +21,7 @@ class ClientJobDataForm extends ClientFullForm
 
 		$aRules = $this->getRulesByFields(
 			array(
-				'job_company',
-				'job_position',
-				'job_phone',
-				'job_time',
-				'job_monthly_income',
-				'job_monthly_outcome',
-				'income_source',
-				'educational_institution_name',
-				'educational_institution_phone',
 				'status',
-				'friends_fio',
-				'friends_phone',
 				'relatives_one_fio',
 				'relatives_one_phone',
 				'loan_purpose',
@@ -56,18 +42,7 @@ class ClientJobDataForm extends ClientFullForm
 	public function attributeNames()
 	{
 		return array(
-			'job_company',
-			'job_position',
-			'job_phone',
-			'job_time',
-			'job_monthly_income',
-			'job_monthly_outcome',
-			'income_source',
-			'educational_institution_name',
-			'educational_institution_phone',
 			'status',
-			'friends_fio',
-			'friends_phone',
 			'relatives_one_fio',
 			'relatives_one_phone',
 			'loan_purpose',
