@@ -13,7 +13,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnSubmit' => true,
 		'hideErrorMessage' => true,
 	),
-	'action' => Yii::app()->createUrl('/form'),
+	'action'               => Yii::app()->createUrl('/form'),
 ));
 
 //снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
@@ -29,7 +29,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
 <?php
-//TODO сделать getProgressBarStep()
+
 $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm->getFormWidgetSteps(), 'iCurrentStep' => Yii::app()->clientForm->getCurrentStep()));
 ?>
 <h4>Отправка заявки</h4>
@@ -43,8 +43,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 	</div>
 	<div class="span6">
 		<div class="row">
-			<?= $form->passwordFieldRow($oClientCreateForm, 'password', SiteParams::getHintHtmlOptions($oClientCreateForm, 'password') + array('autocomplete' => 'off')); ?>
-			<?= $form->passwordFieldRow($oClientCreateForm, 'password_repeat', SiteParams::getHintHtmlOptions($oClientCreateForm, 'password_repeat') + array('autocomplete' => 'off')); ?>
+
 		</div>
 	</div>
 </div>
@@ -67,11 +66,11 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 		</div>
 
 		<div class="span2 offset2">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'          => 'submitButton',
+			<?php
+			$this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
-				'type'        => 'primary',
-				'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
+				'type'       => 'primary',
+				'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>

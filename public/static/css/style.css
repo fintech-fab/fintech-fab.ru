@@ -571,9 +571,97 @@ p.popover-label {
 	color: #000000;
 }
 
-.fright{
-    float: right;
+.fright {
+	float: right;
 }
-.cl{
-    clear: both;
+
+.cl {
+	clear: both;
+}
+
+#ClientFastRegForm_fast .confirm label {
+	font-size: 9pt;
+}
+
+#fastRegWidget .nav-tabs li a {
+	display: table-cell;
+	border-top: 0;
+	border-bottom: 1px;
+	border-left: 0;
+	border-right: 0;
+	width: 135px;
+	vertical-align: middle;
+	padding-top: 15px;
+	font-size: 35pt;
+	height: 63px;
+	font-family: Trebuchet MS, sans-serif;
+	font-weight: 100;
+	text-align: center;
+	color: #555555;
+}
+
+#fastRegWidget .nav-tabs li.active a {
+	border-bottom: 3px;
+	border-bottom-style: solid;
+	border-color: #D73454;
+	background-color: #FDF5F8;
+}
+
+#fastRegWidget .btn-primary {
+	background-color: #C21D43;
+	background-image: linear-gradient(to bottom, #C42F6E, #C22023);
+}
+
+#fastRegWidget label.radio label {
+	width: 150px;
+}
+
+#fastRegWidget label.radio {
+	vertical-align: top;
+}
+
+#fastRegWidget .channel-img {
+	display: inline-block;
+	width: 150px;
+	height: 100px;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#fastRegWidget .channel-img img {
+	width: 150px;
+	height: 100px;
+}
+
+#fastRegWidget .red-font {
+	color: #C22030;
+}
+
+#fastRegWidget input[type="text"] {
+	width: 350px;
+	height: 35px;
+	margin-bottom: 10px;
+	font-size: 20pt;
+	font-weight: 400;
+
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+
+	-webkit-box-shadow: inset 5px 5px 10px 1px #BBBBBB;
+	-moz-box-shadow: inset 5px 5px 10px 1px #BBBBBB;
+
+	box-shadow: inset 5px 5px 10px 1px #BBBBBB;
+
+	background: transparent;
+}
+
+#fastRegWidget .product_name {
+	font-size: 26pt;
+	margin-bottom: 10px;
+	height: 65px;
+}
+
+#fastRegWidget .product_name img {
+	vertical-align: middle;
 }

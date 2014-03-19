@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class ClientPersonalDataForm
+ * Class ClientPersonalDataContinueForm
  */
-class ClientPersonalDataForm extends ClientFullForm
+class ClientPersonalDataContinueForm extends ClientFullForm
 {
 	/**
 	 * @return array
@@ -20,7 +20,6 @@ class ClientPersonalDataForm extends ClientFullForm
 			'agree',
 
 			'birthday',
-			'phone',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -33,10 +32,11 @@ class ClientPersonalDataForm extends ClientFullForm
 				'agree',
 
 				'birthday',
-				'phone',
 			),
 			$aRequired
 		);
+
+		$aRules[] = array('phone', 'safe');
 
 		return $aRules;
 	}
@@ -59,5 +59,21 @@ class ClientPersonalDataForm extends ClientFullForm
 			'sex',
 			'agree',
 		);
+	}
+
+
+	/**
+	 * Эти параметры нужны только для загрузку их в форму,
+	 * но нельзя позволять их из формы получить и потом сохранить в БД
+	 *
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		$aAttributes = parent::getAttributes();
+		unset($aAttributes['phone']);
+		unset($aAttributes['email']);
+
+		return $aAttributes;
 	}
 }

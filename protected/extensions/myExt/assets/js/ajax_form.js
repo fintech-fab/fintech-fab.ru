@@ -20,10 +20,21 @@ function scrollAndFocus() {
 		}, 500);
 	}
 	var oFormBody = jQuery("#formBody");
-	var oErrorInput = oFormBody.find("input[type!='hidden'].error").first();
+	var oErrorInput = oFormBody.find("input[type!='hidden'][disabled!='disabled'].error").first();
 	if (oErrorInput.length > 0) {
 		oErrorInput.delay(600).focus()
 	} else {
-		oFormBody.find("input[type!='hidden']").first().delay(600).focus();
+		oFormBody.find("input[type!='hidden'][disabled!='disabled']").first().delay(600).focus();
 	}
+}
+/**
+ *
+ * В случае, если ответ пустой, перезагружаем страницу
+ */
+function checkBlankResponse(xhr) {
+	if (xhr.responseText == '') {
+		window.location.reload(true);
+		return false;
+	}
+	return true;
 }

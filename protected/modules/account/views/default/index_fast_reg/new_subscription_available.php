@@ -42,21 +42,3 @@ $this->widget(
 );
 ?>
 
-<?php if (Yii::app()->adminKreddyApi->checkSubscribe()): ?>
-	<div class="clearfix"></div>
-
-	<br />
-	<div class="well">
-		<?php
-		if (!SiteParams::getIsIvanovoSite()) {
-			$sLabel = 'Подключить Пакет';
-		} else {
-			$sLabel = 'Оформить займ';
-		}
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'label' => $sLabel, 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
-					->createUrl('account/subscribe'),
-		));
-		?>
-	</div>
-<?php endif; ?>

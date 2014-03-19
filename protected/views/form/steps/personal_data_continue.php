@@ -45,8 +45,8 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 	</div>
 	<div class="span6">
 		<div class="row">
-			<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'phone') + array('size' => '15')); ?>
-			<?= $form->textFieldRow($oClientCreateForm, 'email', SiteParams::getHintHtmlOptions($oClientCreateForm, 'email')); ?>
+			<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'phone') + array('size' => '15', 'disabled' => 'disabled')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'email', SiteParams::getHintHtmlOptions($oClientCreateForm, 'email') + array('disabled' => 'disabled')); ?>
 			<?php //отдельный DIV ID для радиокнопок, для обработки в JS ?>
 			<div id="sex">
 				<?= $form->radioButtonListRow($oClientCreateForm, 'sex', Dictionaries::$aSexes, array('uncheckValue' => '999')); ?>
@@ -65,12 +65,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 <div class="clearfix"></div>
 <div class="span12 ">
 	<div class="form-actions row">
-		<div class="span2">
-			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'url'   => Yii::app()->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
-				'label' => SiteParams::C_BUTTON_LABEL_BACK,
-			)); ?>
-		</div>
+		<div class="span2"></div>
 
 		<div class="span2 offset2">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(

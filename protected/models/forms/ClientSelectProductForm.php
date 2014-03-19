@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientSelectProductForm
  *
@@ -16,10 +17,9 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRules[] = array('product, channel_id','required');
+		$aRules[] = array('product, channel_id', 'required');
 		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выберите сумму займа');
 		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выберите правильный способ получения займа');
-
 
 		return $aRules;
 

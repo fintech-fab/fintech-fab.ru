@@ -30,7 +30,7 @@ class FormController extends Controller
 	{
 		$step = (int)$step;
 
-		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
+		$sSite = Yii::app()->clientForm->getSiteConfigName();
 
 		$iMinStep = ClientFormComponent::$aSteps[$sSite]['min'];
 		$iMaxStep = ClientFormComponent::$aSteps[$sSite]['max'];
@@ -65,10 +65,10 @@ class FormController extends Controller
 		}
 
 		//проверяем, что для текущего сайта выбран продукт
-		//если не выбран - то сбрасываем шаги
-		if (!Yii::app()->clientForm->checkSiteSelectedProduct()) {
-			Yii::app()->clientForm->resetSteps();
-		}
+		Yii::app()->clientForm->checkSiteSelectedProduct();
+
+		//запустим проверку типа регистрации, она переключит "режим" анкеты, если потребуется
+		Yii::app()->clientForm->checkRegistrationType();
 
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
@@ -76,6 +76,15 @@ class FormController extends Controller
 		 * @var string                   $sView
 		 */
 		$iClientId = Yii::app()->clientForm->getClientId();
+
+		//пробуем получить метод, который требуется вызвать на этом шаге, если он задан
+		$sMethod = Yii::app()->clientForm->getControllerMethod();
+		//если метод указан в конфиге и такой метод в контроллере существует, выполним его
+		if ($sMethod && function_exists($this->$sMethod())) {
+			$this->$sMethod();
+			//обязательно завершать приложение после выполнения метода, если сам метод этого не сделал
+			Yii::app()->end();
+		}
 
 		/*
 		 * Запрашиваем у компонента текущую форму (компонент сам определяет, какая форма соответствует
@@ -88,12 +97,7 @@ class FormController extends Controller
 		 */
 		if (Yii::app()->clientForm->isNeedAjaxValidation()) //проверяем, не запрошена ли ajax-валидация
 		{
-			//если для ajax-валидации пришла форма, соответствующая текущему шагу, то обработаем ее
-			if ($sAjaxClass = Yii::app()->request->getParam('ajax') == get_class($oClientForm)) {
-				$sEcho = IkTbActiveForm::validate($oClientForm); //проводим валидацию и возвращаем результат
-				Yii::app()->clientForm->saveAjaxData($oClientForm); //сохраняем полученные при ajax-запросе данные
-				echo $sEcho;
-			}
+			echo Yii::app()->clientForm->doAjaxValidation($oClientForm);
 			Yii::app()->end();
 		}
 
@@ -102,17 +106,13 @@ class FormController extends Controller
 		 */
 
 		$aPost = Yii::app()->clientForm->getPostData();
-
 		if ($aPost) //проверяем, был ли POST запрос
 		{
-
-			$oClientForm->attributes = $aPost; //передаем запрос в форму
-
+			$oClientForm->setAttributes($aPost); //передаем запрос в форму
 			if ($oClientForm->validate()) {
-
 				Yii::app()->clientForm->formDataProcess($oClientForm);
 				Yii::app()->clientForm->nextStep(); //переводим анкету на следующий шаг
-				//$oClientForm = Yii::app()->clientForm->getFormModel(); //заново запрашиваем модель (т.к. шаг изменился)
+
 				if (!$ajaxForm) {
 					//если не ajaxForm-запрос, то редиректим (чтобы по F5 страница просто обновилась, а не ругалась на POST)
 					$this->redirect(Yii::app()->createUrl("/form"));
@@ -138,15 +138,11 @@ class FormController extends Controller
 			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (!empty($oClientForm)) {
-				$sessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
+				$aSessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				//удаляем лишние данные перед загрузкой в форму (во избежание warning)
-				unset($sessionClientData['client_id']);
-				unset($sessionClientData['product']);
-				unset($sessionClientData['channel_id']);
-				unset($sessionClientData['entry_point']);
-				unset($sessionClientData['flex_amount']);
-				unset($sessionClientData['flex_time']);
-				$oClientForm->setAttributes($sessionClientData);
+				Yii::app()->clientForm->clearSessionClientData($aSessionClientData);
+
+				$oClientForm->setAttributes($aSessionClientData);
 			}
 		}
 
@@ -157,21 +153,13 @@ class FormController extends Controller
 		$sView = $aView['view'];
 		$sSubView = $aView['sub_view'];
 
-		//TODO показ виджета сконфигурировать в массиве форм-компонента и отдавать через метод сюда
-		if ($sView === 'client_select_product' || $sView === 'client_flexible_product') {
-			$this->showTopPageWidget = true;
-		}
+		$this->showTopPageWidget = Yii::app()->clientForm->isTopPageWidgetVisible();
 
 		if (!$ajaxForm) {
 			$this->render($sView, array('oClientCreateForm' => $oClientForm, 'sSubView' => $sSubView));
+
 		} elseif ($sSubView) {
-			//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
-			Yii::app()->clientscript->scriptMap['jquery.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.min.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.maskedinput.min.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
-			Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
+			$this->disableJs();
 
 			$this->renderPartial($sSubView, array('oClientCreateForm' => $oClientForm), false, true);
 		}
@@ -211,7 +199,7 @@ class FormController extends Controller
 	 */
 	public function actionStep($step)
 	{
-		$sSite = (SiteParams::getIsIvanovoSite()) ? ClientFormComponent::SITE2 : ClientFormComponent::SITE1;
+		$sSite = Yii::app()->clientForm->getSiteConfigName();
 
 		$iMinStep = ClientFormComponent::$aSteps[$sSite]['min'];
 		$iMaxStep = ClientFormComponent::$aSteps[$sSite]['max'];
@@ -241,8 +229,20 @@ class FormController extends Controller
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
+
+			//TODO тут сделать проверку, что клиент реально на нужном шаге!!!!!
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
+
+		//проверим, что форма заполнена
+		if (!Yii::app()->clientForm->checkFormComplete()) {
+			$this->redirect(Yii::app()->createUrl("/form"));
+		}
+
+		$iClientId = Yii::app()->clientForm->getClientId();
+		//если клиент запрашивает СМС, значит, заполнил анкету полностью
+		$aData['complete'] = 1;
+		ClientData::saveClientDataById($aData, $iClientId);
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
 		$oAnswer = Yii::app()->clientForm->sendSmsCode();
@@ -307,29 +307,23 @@ class FormController extends Controller
 		} else {
 			//если код верный, то берем данные из БД
 			$aClientData = ClientData::getClientDataById($iClientId);
-			//отправляем в API данные клиента, и если клиент успешно создан
-			if (Yii::app()->clientForm->sendClientToApi($aClientData)) {
+
+			//отправляем в API данные клиента
+			$bRegisterSuccess = Yii::app()->clientForm->sendClientToApi($aClientData);
+
+			//если клиент успешно создан
+			if ($bRegisterSuccess) {
 
 				//автоматический логин юзера в личный кабинет
 				$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
-				//Yii::app()->user->setStateKeyPrefix('_account'); //префикс для модуля account
 				if ($oLogin->validate() && $oLogin->login()) {
 					//сохраняем данные перед редиректом в ЛК
-					if (!empty($aClientData['product'])) {
-						Yii::app()->user->setState('product', $aClientData['product']);
-					}
-					if (!empty($aClientData['channel_id'])) {
-						Yii::app()->user->setState('channel_id', $aClientData['channel_id']);
-					}
-					if (!empty($aClientData['flex_amount'])) {
-						Yii::app()->user->setState('flex_amount', $aClientData['flex_amount']);
-					}
-					if (!empty($aClientData['flex_time'])) {
-						Yii::app()->user->setState('flex_time', $aClientData['flex_time']);
-					}
-					Yii::app()->user->setState('new_client', true);
+					Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
 
+					//установим информацию о завершенной регистрации перед редиректом
+					Yii::app()->clientForm->setRegisterComplete();
+					Yii::app()->clientForm->clearClientSession();
 					$this->redirect(Yii::app()->createUrl('form/success'));
 				}
 
@@ -345,23 +339,88 @@ class FormController extends Controller
 		$this->redirect(Yii::app()->createUrl("form"));
 	}
 
+	/**
+	 *
+	 */
+	public function continueRegSuccess()
+	{
+		if (!Yii::app()->clientForm->isContinueReg()) {
+			$this->redirect(Yii::app()->createUrl('/form'));
+		}
+
+		$iClientId = Yii::app()->clientForm->getClientId();
+
+		//берем данные из БД
+		$aClientData = ClientData::getClientDataById($iClientId);
+
+		//отправляем в API данные клиента
+		$bRegisterSuccess = Yii::app()->clientForm->updateFastRegClient($aClientData);
+
+		//если клиент успешно создан
+		if ($bRegisterSuccess) {
+
+			//автоматический логин юзера в личный кабинет
+			//$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
+			//$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
+
+			Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
+
+			//отключаем режим продолжения регистрации
+			Yii::app()->clientForm->setContinueReg(false);
+
+			//установим информацию о завершенной регистрации перед редиректом
+			Yii::app()->clientForm->setRegisterComplete();
+			Yii::app()->clientForm->clearClientSession(); //чистим сессию
+			$this->redirect(Yii::app()->createUrl('form/success'));
+
+		} else {
+			//если не удалось создать нового клиента, то выводим ошибку
+			Yii::app()->session['error'] = 'Произошла ошибка при отправке данных на сервер. Попробуйте вернуться в личный кабинет и начать сначала.';
+			Yii::app()->clientForm->clearClientSession(); //чистим сессию
+			$this->actionStep(1); //переходим на шаг 1
+		}
+	}
+
 	public function actionSuccess()
 	{
 		$bNewClient = Yii::app()->user->getState('new_client', false);
 
+		$aRegisterComplete = Yii::app()->clientForm->getRegisterComplete();
+
 		// если не новый клиент, перемещаем на /form
-		if (!$bNewClient) {
+		if (!$bNewClient || !$aRegisterComplete) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// очищаем сессию (данные формы и прочее)
 		Yii::app()->clientForm->clearClientSession();
 
+		$aRegisterComplete = Yii::app()->clientForm->getRegisterComplete();
+
+		$sSuccessYmGoal = isset($aRegisterComplete['sYmGoal']) ?
+			$aRegisterComplete['sYmGoal'] :
+			'';
+
+		//сотрем информацию о завершении регистрации
+		Yii::app()->clientForm->setRegisterComplete(false);
+
 		$this->render('form_sent',
 			array(
-				'sRedirectUri' => Yii::app()->createUrl('account/doSubscribe'),
+				'sRedirectUri'   => Yii::app()->createUrl('account/doSubscribe'),
+				'sSuccessYmGoal' => $sSuccessYmGoal
 			)
 		);
+	}
+
+	private function disableJs()
+	{
+		//отключаем из вывода файлы скриптов во избежание проблем (они уже подключены на странице)
+		Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.min.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.maskedinput.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.maskedinput.min.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.js'] = false;
+		Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
 	}
 
 

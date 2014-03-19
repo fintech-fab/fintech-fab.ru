@@ -112,6 +112,24 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
+	 * Ищем успешно зарегистрированного клиента
+	 *
+	 * @param $sPhone
+	 *
+	 * @return ClientData
+	 */
+	public function scopeConfirmedPhone($sPhone)
+	{
+		$this->getDbCriteria()->addColumnCondition(array(
+			'phone'              => $sPhone,
+			'flag_sms_confirmed' => 1,
+			'flag_archived'      => 0,
+		));
+
+		return $this;
+	}
+
+	/**
 	 * @param $iClientId
 	 *
 	 * @return ClientData
@@ -156,7 +174,7 @@ class ClientData extends CActiveRecord
 			$oClientData = new self;
 		}
 
-		if ($oClientData && $oClientData->complete == 1) {
+		if ($oClientData && $oClientData->complete == 1) { //TODO в формах complete сменить на agree, а complete ставить руками после завершения реги!
 			$oClientData->flag_archived = 1;
 			$oClientData->save();
 			$oClientData = new self;
