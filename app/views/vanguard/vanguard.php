@@ -1,15 +1,17 @@
 <?php
 
 ?>
-<div class="row">
-	<div class="col-md-3">
-		<img src="/assets/main/logo.png" height="100px" class="img" />
-	</div>
-	<div class="col-md-9">
-		<h2 class="text-center">Эта стажировка проводится стажировщиками для стажирующихся стажеров</h2>
-	</div>
+<div class="jumbotron">
+	<h3>Здесь про то, что:</h3>
+
+	<p>мы сделали стажировку для любых заинтересованных лиц. Приходите, будете делать разные веб-штуки, общаться на тему
+		веб-технологий и программировать все, что захочется.</p>
+
+	<p>А мы с удовольствием поучаствуем :-)</p>
 </div>
-<div class="col-md-offset-1 col-md-10">
+
+<div class="col-md-12">
+
 	<ul class="nav nav-tabs">
 		<li class="active">
 			<a href="#tab1" data-toggle="tab">Для кого</a>
@@ -23,68 +25,134 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab1">
 
+			<ul>
+				<li>Для людей, твердо решивших посвятить несколько лет своей жизни интернет-технологиям в целом и
+					разработке веб-проектов в частности;
+				</li>
+				<li>Для уже вставших на путь веб-разработки и горящих принять участие в &laquo;живом&raquo; проекте,
+					чтобы отточить и закрепить знания и навыки;
+				</li>
+				<li>Для уже опытных разработчиков, которые хотят поучаствовать в программе в любой роли - мы никогда не
+					откажемся от инициативы и помощи!
+				</li>
+			</ul>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>
+					Программа начата недавно и
+					<ul>
+						<li>Не формализована - делаем что хотим;</li>
+						<li>Не бюрократизирована - не заключаем договоров, не подписываемся под обязательствами;</li>
+						<li>Мы с вами всегда можем договориться обо всем, что всех устроит :-)</li>
+					</ul>
+				</li>
+			</ul>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
-
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
 		</div>
+
 		<div class="tab-pane" id="tab2">
-			<h4>Внутри ничего интересного - сплошной кодинг</h4>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>Полное и безоговорочное погружение в разработку живого веб-проекта;</li>
+				<li>
+					Участие в уникальном игровом проекте компании – корпоративный портал &laquo;для своих&raquo;;
+					<ul>
+						<li>Проект как opensource - решенные вами задачи - всегда ваши, их можно включать в
+							портфолио/резюме;
+						</li>
+						<li>Участие в разработке открытых проектов само по себе плюс для портфолио и будущей карьеры;
+						</li>
+						<li>Проект не формализован, задачи мы придумываем себе сами, и любую идею можно назначить
+							гениальной и включить в проект;
+						</li>
+						<li>Эту страницу сделали люди, первыми к нам пришедшие (исходный код - <a href="">тут</a>)</li>
+					</ul>
+				</li>
+			</ul>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>
+					Основной путь в программе:
+					<ul>
+						<li>Пройти &laquo;для себя&raquo; испытательный срок – неделю, или две, или месяц;</li>
+						<li>Принять взаимное решение &laquo;работаем дальше&raquo; или &laquo;не интересно&raquo;.</li>
+						<li>Славно потрудиться в команде (как минимум – в парной) под руководством опытного
+							разработчика.
+						</li>
+						<li>По результату работы, если решенные вами задачи включаются в &laquo;боевую&raquo; версию
+							проекта &mdash; рассматривается денеженое вознаграждение за реальный результат;
+						</li>
+						<li>По окончанию стажировки – подробная рецензия по результатам и ценные рекомендации для
+							будущего места работы.
+						</li>
+					</ul>
+				</li>
+			</ul>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>
+					Еженедельные семинары:
+					<ul>
+						<li>Раз в неделю, как договоримся, мы собираемся у нас в офисе и обсуждаем вопросы, которые вы
+							сами хотите обсудить;
+						</li>
+						<li>Проводим мастер-классы на самые острые темы;</li>
+						<li>Разбираем основательно и подробно сложные кейсы по задачам, которыми вы занимаетесь.</li>
+						<li>Если вы удаленщик, пока еще ничего не предусмотрено... и вам будет сложнее. Но трудности
+							только закаляют, м? :-)
+						</li>
+						<li>На крайний случай, есть</li>
+					</ul>
+				</li>
+			</ul>
+
 		</div>
 		<div class="tab-pane" id="tab3">
-			<h4>А вот пользы дофига и большой вагончик</h4>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>
+					Для людей &laquo;без опыта&raquo; польза значительна:
+					<ul>
+						<li>Вы развиваетесь в том, чего вам хочется, сами формируете программу стажировки, мы только
+							активно помогаем;
+						</li>
+						<li>Вы начинаете свою карьеру в строго технологической компании, которая реализует крупные
+							финансовые сервисы, а не занимается выпуском сайтов-визиток;
+						</li>
+						<li>При обнаружении взаимного восторга от сотрудничества, вы получаете отличные рекомендации, а
+							возможно – и хорошо оплачиваемое место работы.
+						</li>
+					</ul>
+				</li>
+			</ul>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>
+					Для людей &laquo;с опытом&raquo;... сами решайте :-)
+				</li>
+			</ul>
 
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A culpa cupiditate dolorum enim eum impedit
-				nemo repellendus saepe ut voluptatum. Alias at dolores error, excepturi fugit laboriosam possimus
-				ratione recusandae. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores cupiditate eos
-				impedit repudiandae tempore! Deserunt dignissimos dolore doloremque dolores dolorum ipsum modi natus
-				nesciunt, nulla, odio officia perferendis quaerat quisquam!</p>
+			<ul>
+				<li>
+					В любом случае, вы получаете не только технологический, но и командный опыт:
+					<ul>
+						<li>Вы будете понимать, что значит трудиться в команде;</li>
+						<li>Какие сложности и радости ждут вас на пути веб-разработчика;</li>
+						<li>Какие правила нужно соблюдать, а какие нарушать;</li>
+						<li>Как программировать так, чтобы ваш код не был популярен
+							<a href="http://govnokod.ru/" target="_blank" rel="nofollow">на подобных сайтах</a> :-)
+						</li>
+					</ul>
+				</li>
+			</ul>
+
 		</div>
 		<div class="tab-pane" id="tab4">
+
+			<p>Например, <a href="http://wiki.fintech-fab.ru" target="_blank">здесь</a> вы увидите наш стартовый рабочий
+				материал по основному проекту. Советуем посмотреть. Если вы это можете &laquo;осилить&raquo;
+				самостоятельно, то считайте, что проходной тест пройден и подавайте заявку:</p>
+
 			<?=
 			Form::open(array(
 				'action' => 'vanguard',
@@ -93,12 +161,12 @@
 				'method' => 'post',
 			)); ?>
 			<div class="form-group">
-				<label for="inputName" class="col-sm-2 control-label">Как звать</label>
+				<label for="inputName" class="col-sm-3 control-label">Как звать-величать</label>
 
 				<div class="col-sm-8">
 					<?=
 					Form::input('text', 'name', '', array(
-						'placeholder' => 'Имя',
+						'placeholder' => 'Имя. Лучше с фамилией.',
 						'class'       => 'form-control',
 						'id'          => 'inputName',
 						'required'    => 'required',
@@ -107,12 +175,12 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="inputAbout" class="col-sm-2 control-label">О себе</label>
+				<label for="inputAbout" class="col-sm-3 control-label">О себе</label>
 
 				<div class="col-sm-8">
 					<?=
 					Form::textarea('about', '', array(
-						'placeholder' => 'О себе',
+						'placeholder' => 'Расскажите про себя в свободной форме, но обязательно на тему сотрудничества',
 						'class'       => 'form-control',
 						'id'          => 'inputAbout',
 						'required'    => 'required',
@@ -122,13 +190,13 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="inputEmail" class="col-sm-2 control-label">Email</label>
+				<label for="inputEmail" class="col-sm-3 control-label">Email для получения ответа</label>
 
 				<div class="col-sm-8">
 
 					<?=
 					Form::input('email', 'email', '', array(
-						'placeholder' => 'Email',
+						'placeholder' => 'your@mail.com',
 						'class'       => 'form-control',
 						'id'          => 'inputEmail',
 						'required'    => 'required',
@@ -137,9 +205,9 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
+				<div class="col-sm-offset-3 col-sm-10">
 					<?=
-					Form::button('Sign in', array(
+					Form::button('Отправить', array(
 						'type'  => 'submit',
 						'class' => 'btn btn-default',
 					));
@@ -149,4 +217,8 @@
 			<?= Form::close(); ?>
 		</div>
 	</div>
+
+	<pre class="pull-right"><small><?= "&lt;?php echo " ?>"для ленивых - главный пейдж
+			<a href="/">здесь</a>"<?= " ?>" ?></small></pre>
+
 </div>

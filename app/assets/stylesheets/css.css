@@ -1,7 +1,7 @@
 body {
 	/*noinspection CssUnknownTarget*/
 	background: url("main/bg_left.png") no-repeat, url("main/bg_right.png") no-repeat right top, #481152;
-	font-family: Arial, sans-serif;
+	font-family: Trebuchet MS, sans-serif;
 }
 
 .container {
