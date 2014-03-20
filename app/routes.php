@@ -29,6 +29,11 @@ Route::get('workAdmin', array(
 	'uses' => 'App\Controllers\Site\UserProfileController@forAdmin'
 ));
 
+Route::get('changeRole', array(
+	'as'   => 'changeRole',
+	'uses' => 'App\Controllers\Site\UserProfileController@changeRole'
+));
+
 Route::group(array('before' => 'auth'), function () {
 	Route::get('profile', array(
 		'as'   => 'profile',

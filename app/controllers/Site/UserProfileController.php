@@ -12,6 +12,7 @@ namespace App\Controllers\Site;
 use App\Controllers\BaseController;
 use FintechFab\Components\Role;
 use FintechFab\Models\User;
+use Input;
 
 class UserProfileController extends BaseController
 {
@@ -42,5 +43,20 @@ class UserProfileController extends BaseController
 		}
 
 		return $x;
+	}
+
+	public function changeRole()
+	{
+		$userN = Input::get('userN');
+		$roleN = Input::get('roleN');
+		$val = Input::get('val');
+		$user = User::find($userN);
+		//dd($val);
+		if ($val == "true") {
+			$user->roles()->attach($roleN);
+		} else {
+			$user->roles()->detach($roleN);
+		}
+
 	}
 } 
