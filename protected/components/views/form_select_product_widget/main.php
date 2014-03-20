@@ -14,6 +14,7 @@
 			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 				'id'                   => get_class($oClientCreateForm),
 				'enableAjaxValidation' => true,
+				'bShowRequired'        => false,
 				'clientOptions'        => array(
 					'validateOnChange' => true,
 				),
@@ -53,7 +54,7 @@
 		</div>
 
 		<div class="span5" style="width:430px !important;">
-		<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
+			<?php $this->widget('SelectedProductWidget', array('sSelectProductView' => $sSelectProductView, 'sSelectProductModelName' => $sSelectProductModelName,)); ?>
 		</div>
 	</div>
 </div>

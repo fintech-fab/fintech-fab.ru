@@ -7,6 +7,31 @@ Yii::import('bootstrap.widgets.TbActiveForm');
  */
 class IkTbActiveForm extends TbActiveForm
 {
+	public $bShowRequired = true;
+
+	/**
+	 * Renders an HTML label for a model attribute.
+	 * This method is a wrapper of {@link CHtml::activeLabelEx}.
+	 * Please check {@link CHtml::activeLabelEx} for detailed information
+	 * about the parameters for this method.
+	 *
+	 * @param CModel $model       the data model
+	 * @param string $attribute   the attribute
+	 * @param array  $htmlOptions additional HTML attributes.
+	 *
+	 * @return string the generated label tag
+	 */
+	public function labelEx($model, $attribute, $htmlOptions = array())
+	{
+
+
+		if (!$this->bShowRequired) {
+			return CHtml::activeLabel($model, $attribute, $htmlOptions);
+		}
+
+		return CHtml::activeLabelEx($model, $attribute, $htmlOptions);
+	}
+
 	/**
 	 *### .inputRow()
 	 *
