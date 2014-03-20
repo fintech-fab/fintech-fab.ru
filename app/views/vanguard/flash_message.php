@@ -4,7 +4,7 @@
  * @var string $title
  */
 $userMessage = Session::get('userMessage');
-$userMessageTitle = Session::get('title');
+$userMessageTitle = Session::get('userMessageTitle');
 if (!$userMessage) {
 	return;
 }
