@@ -7,11 +7,11 @@ $this->pageTitle = Yii::app()->name . " - Настройка безопасно�
 ?>
 <h4>Настройка безопасности</h4>
 
-<div class="alert in alert-block alert-success span7">
+<div class="alert in alert-block alert-success">
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
 
-<div class="alert in alert-block alert-info span7">
+<div class="alert in alert-block alert-info">
 	Для подтверждения операции введите код, отправленный Вам по SMS
 </div>
 

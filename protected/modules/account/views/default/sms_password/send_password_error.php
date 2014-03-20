@@ -16,9 +16,9 @@ $this->pageTitle = Yii::app()->name;
 ?>
 <h4>Авторизация по SMS-паролю</h4>
 
-<div id="alertSmsSent" class="alert in alert-error span7">
-При отправке SMS с паролем произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка повторяется,
-	обратитесь в контактный центр.
+<div id="alertSmsSent" class="alert in alert-error">
+	При отправке SMS с паролем произошла ошибка. Попробуйте снова запросить пароль.<br />В случае, если ошибка
+	повторяется, обратитесь в контактный центр.
 </div>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(

@@ -5,10 +5,10 @@
 
 ?>
 
-	<br/><br/>
-	<div class="alert in alert-block alert-warning span7">
-		<h4>Вам необходимо пройти идентификацию!</h4>
-	</div>
+<br /><br />
+<div class="alert in alert-block alert-warning">
+	<h4>Вам необходимо пройти идентификацию!</h4>
+</div>
 <div class="clearfix"></div>
 <?php
 $this->widget("CheckBrowserWidget");
@@ -30,15 +30,15 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
 <div class="center">
-<?php
-$this->widget('bootstrap.widgets.TbButton', array(
-	'id'         => 'submitButton',
-	'buttonType' => 'submit',
-	'type'       => 'primary',
-	'size'       => 'large',
-	'label'      => 'Пройти идентификацию',
-));
-?>
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'id'         => 'submitButton',
+		'buttonType' => 'submit',
+		'type'       => 'primary',
+		'size'       => 'large',
+		'label'      => 'Пройти идентификацию',
+	));
+	?>
 </div>
 <?php
 

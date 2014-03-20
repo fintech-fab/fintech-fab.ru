@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
 	<h4>Требуется идентификация</h4>
 
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		<h4>Для подключения пакета займов, необходимо пройти идентификацию.</h4>
 	</div>
 	<div class="clearfix"></div>

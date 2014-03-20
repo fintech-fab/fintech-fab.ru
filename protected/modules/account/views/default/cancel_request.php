@@ -10,7 +10,7 @@ $this->pageTitle = Yii::app()->name . " - Отказаться/изменить 
 <strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
 &nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameForStatus(); ?>
 <br /><br />
-<div class="alert in alert-block alert-warning span7">
+<div class="alert in alert-block alert-warning">
 	Вы передумали подключать пакет <?= Yii::app()->adminKreddyApi->getSubscriptionProduct(); ?>?
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(

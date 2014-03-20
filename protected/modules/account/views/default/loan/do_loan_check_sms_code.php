@@ -12,10 +12,10 @@ $this->widget('bootstrap.widgets.TbBox', array(
 	'content' => $this->renderPartial('loan/_loan', array(), true)
 ));
 ?>
-<div class="alert in alert-block alert-success span7">
+<div class="alert in alert-block alert-success">
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
-<div class="alert in alert-block alert-info span7">
+<div class="alert in alert-block alert-info">
 	Для подтверждения операции введите код, отправленный Вам по SMS
 </div>
 <div class="form" id="activeForm">
@@ -24,7 +24,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 		'id'          => 'loan-form',
 		'action'      => Yii::app()->createUrl('/account/doLoanCheckSmsCode'),
 		'htmlOptions' => array(
-			'class' => "span4",
+			'class'        => "span4",
 			'autocomplete' => 'off',
 		),
 	));

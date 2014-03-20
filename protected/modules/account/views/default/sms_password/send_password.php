@@ -14,7 +14,7 @@
 
 $this->pageTitle = Yii::app()->name;
 ?>
-<div class="alert in alert-block alert-warning span7">
+<div class="alert in alert-block alert-warning">
 	Для получения подробной информации и совершения иных действий требуется авторизоваться по одноразовому SMS-паролю
 </div>
 <?php

@@ -20,7 +20,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');
 ?>
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		Для подключения Пакета требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">

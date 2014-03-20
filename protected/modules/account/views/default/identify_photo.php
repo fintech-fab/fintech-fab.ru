@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name . " - Идентификация с загр
 ?>
 	<h4>Идентификация с загрузкой фотографий</h4>
 
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		<h4>Для идентификации вам потребуется фотокамера или мобильный телефон с фотокамерой.
 			<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
 				После идентификации потребуется ввести

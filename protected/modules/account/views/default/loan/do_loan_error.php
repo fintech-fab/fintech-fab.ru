@@ -23,7 +23,7 @@ echo $form->hiddenField($model, 'sendSmsCode');
 
 
 
-	<div class="alert in alert-block alert-error span7">
+	<div class="alert in alert-block alert-error">
 		При отправке SMS с кодом подтверждения произошла ошибка. Попробуйте снова запросить код подтверждения.<br />В
 		случае, если ошибка повторяется, обратитесь в контактный центр.
 	</div>
