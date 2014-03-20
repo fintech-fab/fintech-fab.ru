@@ -42,7 +42,9 @@ $a = array(
 		),
 	),
 
-	'params'         => array(),
+	'params' => array(
+		'bShowAlert' => true,
+	),
 
 	'theme'          => 'classic',
 
