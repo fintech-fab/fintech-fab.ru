@@ -9,13 +9,8 @@ $this->pageTitle = Yii::app()->name;
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
-	<div class="row">
-		<?php
-		$aCrumbs = Yii::app()->clientForm->getBreadCrumbs();
+	<br />
 
-		//$this->widget('StepsBreadCrumbsWidget', array('aCrumbs' => $aCrumbs));
-		?>
-	</div>
 
 <?php if (Yii::app()->clientForm->hasError()) { ?>
 	<div class="alert alert-error"><?= Yii::app()->clientForm->getError(); ?></div>
