@@ -24,14 +24,14 @@ Route::get('admin', array(
 	'uses' => 'App\Controllers\Site\UserProfileController@showAdmin'
 ));
 
-Route::get('workAdmin', array(
+Route::get('TableForAdmin', array(
 	'as'   => 'WorkAdmin',
-	'uses' => 'App\Controllers\Site\UserProfileController@forAdmin'
+	'uses' => 'App\Controllers\Site\AdminController@TableForAdmin'
 ));
 
 Route::get('changeRole', array(
 	'as'   => 'changeRole',
-	'uses' => 'App\Controllers\Site\UserProfileController@changeRole'
+	'uses' => 'App\Controllers\Site\AdminController@changeRole'
 ));
 
 Route::group(array('before' => 'auth'), function () {

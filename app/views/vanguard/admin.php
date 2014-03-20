@@ -12,14 +12,13 @@
 </div>
 <div class="text-center">
 
-	<button id="users">Загрузить пользователей</button>
-
+	<button id="btnUsers">Загрузить пользователей</button>
 
 </div><br>
 <div class="row">
 	<div class="col-xs-10 col-xs-offset-1">
 		<table class="table table-striped" id="tableUser">
-
 		</table>
+		<span id="changeResult"></span>
 	</div>
 </div>
