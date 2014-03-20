@@ -63,6 +63,13 @@ class ClientFormComponent
 		),
 	);
 
+	public static $aSuccessYmGoal = array(
+		self::SITE1        => 'register_complete',
+		self::SITE2        => 'register_complete',
+		self::FAST_REG     => 'fr_register_complete',
+		self::CONTINUE_REG => 'fr_continue_complete',
+	);
+
 	//TODO брать эти данные из массивы выше ^^^
 	//имя моделей, в которох сохраняется телефон клиента
 	private static $aPhoneForms = array(
@@ -234,17 +241,17 @@ class ClientFormComponent
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => array(
 					'condition' => 'getFlagSmsSent',
-					true        => 'sms_code_check',
-					false       => 'sms_code_send',
+					true  => 'fr_sms_code_check',
+					false => 'fr_sms_code_send',
 				),
 				'topPageWidget'    => true,
 			),
 		),
 		self::CONTINUE_REG => array(
 			0 => array(
-				'view'  => 'client_continue_form',
+				'view'         => 'client_continue_form',
 				'sub_view'         => 'steps/personal_data_continue',
-				'model' => 'ClientPersonalDataContinueForm',
+				'model'        => 'ClientPersonalDataContinueForm',
 				'modelDbRelations' => array(
 					'phone',
 					'first_name',
@@ -253,24 +260,24 @@ class ClientFormComponent
 					'email',
 				),
 				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'personal_data',
+				'metrika_goal' => 'fr_personal_data',
 			),
 			1 => array(
-				'view' => 'client_continue_form',
+				'view'         => 'client_continue_form',
 				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
 				'modelDbRelations' => array(
 					'birthday'
 				),
 				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'passport_data',
+				'metrika_goal' => 'fr_passport_data',
 			),
 			2 => array(
 				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
 				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'address_data',
+				'metrika_goal' => 'fr_address_data',
 			),
 			3 => array(
 				'view'             => 'client_continue_form',
@@ -280,14 +287,14 @@ class ClientFormComponent
 					'phone'
 				),
 				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'job_data',
+				'metrika_goal' => 'fr_job_data',
 			),
 			4 => array(
 				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/secret_data_continue',
 				'model'            => 'ClientSecretDataContinueForm',
 				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'secret_data',
+				'metrika_goal' => 'fr_secret_data',
 			),
 			5 => array(
 				'controllerMethod' => 'continueRegSuccess', //на этом шаге требуется вызвать метод, и больше ничего не нужно делать
@@ -1658,5 +1665,33 @@ class ClientFormComponent
 		return $aSessionClientData;
 	}
 
+	/**
+	 * @param bool $bComplete
+	 */
+	public function setRegisterComplete($bComplete = true)
+	{
+		if ($bComplete == false) {
+			Yii::app()->session['register_complete'] = null;
+
+			return;
+		}
+
+		$sSite = self::getSiteConfigName();
+
+		$sYmGoal = self::$aSuccessYmGoal[$sSite];
+
+		Yii::app()->session['register_complete'] = array(
+			'sRegSite' => $sSite,
+			'sYmGoal'  => $sYmGoal
+		);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getRegisterComplete()
+	{
+		return Yii::app()->session['register_complete'];
+	}
 
 }

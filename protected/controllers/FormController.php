@@ -320,6 +320,9 @@ class FormController extends Controller
 				if ($oLogin->validate() && $oLogin->login()) {
 					//сохраняем данные перед редиректом в ЛК
 					Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
+
+					//установим информацию о завершенной регистрации перед редиректом
+					Yii::app()->clientForm->setRegisterComplete();
 					Yii::app()->clientForm->clearClientSession();
 					$this->redirect(Yii::app()->createUrl('form/success'));
 				}
@@ -364,6 +367,9 @@ class FormController extends Controller
 
 			//отключаем режим продолжения регистрации
 			Yii::app()->clientForm->setContinueReg(false);
+
+			//установим информацию о завершенной регистрации перед редиректом
+			Yii::app()->clientForm->setRegisterComplete();
 			Yii::app()->clientForm->clearClientSession(); //чистим сессию
 			$this->redirect(Yii::app()->createUrl('form/success'));
 
@@ -379,17 +385,29 @@ class FormController extends Controller
 	{
 		$bNewClient = Yii::app()->user->getState('new_client', false);
 
+		$aRegisterComplete = Yii::app()->clientForm->getRegisterComplete();
+
 		// если не новый клиент, перемещаем на /form
-		if (!$bNewClient) {
+		if (!$bNewClient || !$aRegisterComplete) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
 		// очищаем сессию (данные формы и прочее)
 		Yii::app()->clientForm->clearClientSession();
 
+		$aRegisterComplete = Yii::app()->clientForm->getRegisterComplete();
+
+		$sSuccessYmGoal = isset($aRegisterComplete['sYmGoal']) ?
+			$aRegisterComplete['sYmGoal'] :
+			'';
+
+		//сотрем информацию о завершении регистрации
+		Yii::app()->clientForm->setRegisterComplete(false);
+
 		$this->render('form_sent',
 			array(
-				'sRedirectUri' => Yii::app()->createUrl('account/doSubscribe'),
+				'sRedirectUri'   => Yii::app()->createUrl('account/doSubscribe'),
+				'sSuccessYmGoal' => $sSuccessYmGoal
 			)
 		);
 	}

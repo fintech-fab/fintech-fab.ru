@@ -470,9 +470,57 @@ class AdminKreddyApiComponent
 	 */
 	public function createClient($aClientData)
 	{
+		$aRequiredFields = array(
+			'tracking_id'         => null,
+			'ip'                  => null,
+
+			'last_name'           => null,
+			'first_name'          => null,
+			'third_name'          => null,
+			'sex'                 => null,
+			'prev_last_name'      => null,
+			'birthday'            => null,
+			'phone'               => null,
+			'email'               => null,
+
+			'passport_series'     => null,
+			'passport_number'     => null,
+			'passport_date'       => null,
+			'passport_code'       => null,
+			'passport_issued'     => null,
+
+			'document'            => null,
+			'document_number'     => null,
+
+			'relatives_one_fio'   => null,
+			'relatives_one_phone' => null,
+
+			'address_reg_region'  => null,
+			'address_reg_city'    => null,
+			'address_reg_address' => null,
+
+			'address_reg_as_res'  => null,
+
+			'address_res_region'  => null,
+			'address_res_city'    => null,
+			'address_res_address' => null,
+
+			'numeric_code'        => null,
+
+			'secret_question'     => null,
+			'secret_answer'       => null,
+
+			'status'              => null,
+			'loan_purpose'        => null,
+			'birthplace'          => null,
+			'password'            => null,
+		);
+
 		$sDateFormatInBase = "Y-m-d";
 		$aClientData['birthday'] = date($sDateFormatInBase, strtotime($aClientData['birthday']));
 		$aClientData['passport_date'] = date($sDateFormatInBase, strtotime($aClientData['passport_date']));
+
+		$aClientData = array_intersect_key($aClientData, $aRequiredFields);
 
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
@@ -563,24 +611,11 @@ class AdminKreddyApiComponent
 
 			'numeric_code'                  => null,
 
-			'job_company'                   => null,
-			'job_position'                  => null,
-			'job_phone'                     => null,
-
-			'job_time'                      => null,
-			'job_monthly_income'            => null,
-			'job_monthly_outcome'           => null,
-
-			'friends_fio'                   => null,
-			'friends_phone'                 => null,
-
 			'secret_question'               => null,
 			'secret_answer'                 => null,
 
 			'status'                        => null,
-			'income_source'                 => null,
-			'educational_institution_name'  => null,
-			'educational_institution_phone' => null,
+
 			'loan_purpose'                  => null,
 			'birthplace'                    => null,
 		);
