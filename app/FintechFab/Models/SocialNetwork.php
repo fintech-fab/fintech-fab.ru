@@ -24,9 +24,9 @@ class SocialNetwork extends Eloquent implements UserInterface
 
 	protected $table = 'users_social_networks';
 
-	public function setUserData($user)
+	public function user()
 	{
-		dd($user);
+		return $this->belongsTo(User::class);
 	}
 
 	public function getAuthIdentifier()

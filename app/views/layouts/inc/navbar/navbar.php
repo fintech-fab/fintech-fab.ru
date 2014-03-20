@@ -1,25 +1,5 @@
 <?php
-use FintechFab\Components\Helper;
-
-function echoActiveClassIfRequestMatches($requestUri)
-{
-	$current_file_name = basename(Request::server('REQUEST_URI'), ".php");
-
-	if ($current_file_name == $requestUri) {
-		return 'class="active"';
-	}
-
-	return '';
-}
-
-function echoAuthMode()
-{
-	if (Auth::check()) {
-		return Helper::linkForUserProfile();
-	}
-
-	return '<li><a href="" data-toggle="modal" data-target="#loginModal">Вход</a></li>';
-}
+use FintechFab\Widgets\LinksInMenu;
 
 ?>
 <div class="container">
@@ -38,19 +18,13 @@ function echoAuthMode()
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li <?= echoActiveClassIfRequestMatches("vanguard") ?>><a href="/vanguard">Стажировка</a></li>
-						<li <?= echoActiveClassIfRequestMatches("registration") ?>>
-							<a href="/registration">Регистрация</a></li>
-						<li><a href="">И ещё одна</a></li>
+						<li <?= LinksInMenu::echoActiveClassIfRequestMatches("vanguard") ?>>
+							<a href="/vanguard">Стажировка</a>
+						</li>
+						<li><a href="">Ещё страница</a></li>
 					</ul>
-					<form class="navbar-form navbar-right" role="search">
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Search">
-						</div>
-						<button type="submit" class="btn btn-default">Submit</button>
-					</form>
 					<ul class="nav navbar-nav navbar-right">
-						<?= echoAuthMode() ?>
+						<?= LinksInMenu::echoAuthMode() ?>
 					</ul>
 					<?= View::make('vanguard.loginModal') ?>
 				</div>

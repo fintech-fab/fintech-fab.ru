@@ -14,10 +14,4 @@ class MainController extends BaseController
 		return $this->make('main');
 	}
 
-	public function probation()
-	{
-		return $this->make('probation');
-	}
-
-
 }

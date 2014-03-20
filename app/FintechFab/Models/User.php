@@ -8,13 +8,13 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Support\Collection;
 
 /**
- * @property integer $id
- * @property string  $first_name
- * @property string  $last_name
- * @property string  $email
- * @property string  $password
- * @property string  $updated_at
- * @property string  $created_at
+ * @property integer                    $id
+ * @property string                     $first_name
+ * @property string                     $last_name
+ * @property string                     $email
+ * @property string                     $password
+ * @property string                     $updated_at
+ * @property string                     $created_at
  *
  * @property Collection|SocialNetwork[] SocialNetworks
  * @method User find() static
@@ -27,6 +27,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	public function SocialNetworks()
 	{
 		return $this->hasMany(SocialNetwork::class);
+
+	}
+
+	public function roles()
+	{
+		return $this->belongsToMany(Role::class);
 	}
 
 	protected $table = 'users';

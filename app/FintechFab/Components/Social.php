@@ -2,6 +2,7 @@
 
 namespace FintechFab\Components;
 
+use Auth;
 use Config;
 use FintechFab\Models\SocialNetwork;
 use FintechFab\Models\User;
@@ -41,6 +42,7 @@ class Social
 		);
 
 		$link = $url . '?' . urldecode(http_build_query($params));
+
 		return $link;
 	}
 
@@ -49,22 +51,24 @@ class Social
 		$userSocialNetwork = SocialNetwork::firstOrNew(array(
 			'id_user_in_network' => $userInfo['id'],
 		));
-		$userSocialNetwork->setAttribute('id_user_in_network', $userInfo['id']);
-		$userSocialNetwork->setAttribute('first_name', $userInfo['first_name']);
-		$userSocialNetwork->setAttribute('last_name', $userInfo['last_name']);
-		$userSocialNetwork->setAttribute('link', $userInfo['link']);
-		$userSocialNetwork->setAttribute('social_net_name', $userInfo['social_net_name']);
-		$userSocialNetwork->save();
 
 		if ($userSocialNetwork['user_id'] != null) {
 			$user = User::find($userSocialNetwork['user_id']);
 		} else {
 			$user = new User();
+			$user->first_name = $userInfo['first_name'];
+			$user->last_name = $userInfo['last_name'];
+			$user->photo = $userInfo['photo'];
+			$user->save();
 		}
-		$user->first_name = $userInfo['first_name'];
-		$user->last_name = $userInfo['last_name'];
-		$user->save();
-		$userSocialNetwork->setAttribute('user_id', $user['id']);
+		Auth::login($user);
+		$userSocialNetwork->user_id = $user['id'];
+		$userSocialNetwork->setAttribute('id_user_in_network', $userInfo['id']);
+		$userSocialNetwork->setAttribute('first_name', $userInfo['first_name']);
+		$userSocialNetwork->setAttribute('last_name', $userInfo['last_name']);
+		$userSocialNetwork->setAttribute('link', $userInfo['link']);
+		$userSocialNetwork->setAttribute('photo', $userInfo['photo']);
+		$userSocialNetwork->setAttribute('social_net_name', $userInfo['social_net_name']);
 		$userSocialNetwork->save();
 
 		return $user;
