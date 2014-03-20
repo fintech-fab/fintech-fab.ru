@@ -17,7 +17,7 @@ use Input;
 class UserProfileController extends BaseController
 {
 	// TODO
-	public $layout = 'vanguard';
+	public $layout = 'profile';
 
 	public function showUserProfile()
 	{

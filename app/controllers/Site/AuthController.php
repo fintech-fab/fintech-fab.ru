@@ -18,7 +18,13 @@ use Validator;
 
 class AuthController extends BaseController
 {
-	public $layout = 'vanguard';
+	public $layout = 'auth';
+
+	public function registration()
+	{
+		return $this->make('registration');
+	}
+
 
 	public function postAuth()
 	{
@@ -54,7 +60,7 @@ class AuthController extends BaseController
 		if ($userMessage != null) {
 			return Redirect::to('registration')
 				->with('userMessage', $userMessage)
-				->with('title', $title)
+				->with('userMessageTitle', $title)
 				->withInput(Input::except('password'));
 		}
 
@@ -71,7 +77,7 @@ class AuthController extends BaseController
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
 
-		return Redirect::back()->with('userMessage', $userMessage)->with('title', $title);
+		return Redirect::back()->with('userMessage', $userMessage)->with('userMessageTitle', $title);
 
 	}
 
@@ -118,7 +124,7 @@ class AuthController extends BaseController
 
 		return Redirect::back()
 			->with('userMessage', 'Добро пожаловать на наш сайт!')
-			->with('title', 'Вы успешно авторизовались!');
+			->with('userMessageTitle', 'Вы успешно авторизовались!');
 	}
 
 
@@ -155,7 +161,7 @@ class AuthController extends BaseController
 
 		return Redirect::back()
 			->with('userMessage', 'Добро пожаловать на наш сайт!')
-			->with('title', 'Вы успешно авторизовались!');
+			->with('userMessageTitle', 'Вы успешно авторизовались!');
 	}
 
 	public function logout()
@@ -163,14 +169,14 @@ class AuthController extends BaseController
 		Auth::logout();
 
 		return Redirect::back()->with('userMessage', 'Приходите к нам ещё.')
-			->with('title', 'Всего доброго');
+			->with('userMessageTitle', 'Всего доброго');
 	}
 
 	private function resultError()
 	{
 		return Redirect::to('register')
 			->with('userMessage', "Что-то не так, попробуйте ещё раз")
-			->with('title', 'Ошибка');
+			->with('userMessageTitle', 'Ошибка');
 	}
 
 }

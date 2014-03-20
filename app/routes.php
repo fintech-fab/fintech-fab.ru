@@ -11,7 +11,7 @@ Route::post('registration', array(
 Route::get('registration', array(
 	'before' => 'guest',
 	'as'     => 'registration',
-	'uses'   => 'App\Controllers\Site\VanguardController@registration'
+	'uses' => 'App\Controllers\Site\AuthController@registration'
 ));
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\AuthController@logout'));
