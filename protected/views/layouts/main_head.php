@@ -24,3 +24,5 @@ Yii::app()->clientScript->registerCoreScript('maskedinput');
 Yii::app()->clientScript->registerCoreScript('yiiactiveform');
 ?>
 <link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
+
+<?php $this->widget('UserAlertWidget'); ?>
