@@ -577,3 +577,11 @@ p.popover-label {
 .cl{
     clear: both;
 }
+
+#main-content h4 {
+	font-weight: bold;
+}
+
+#main-content div.alert h4 {
+	font-weight: normal;
+}

@@ -36,7 +36,7 @@ class DefaultController extends Controller
 			array(
 				'allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions' => array(
-					'logout', 'index', 'history', 'identifySite', 'identifyPhoto', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
+					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
 					'sendSmsPass', 'smsPassResend', 'subscribe', 'selectChannel', 'doSubscribe', 'doSubscribeCheckSmsCode',
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					'addCard', 'verifyCard', 'successCard', 'refresh', 'changePassport',
@@ -135,7 +135,7 @@ class DefaultController extends Controller
 
 		$sIdentifyRender = '';
 
-		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+		if (!Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
 			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
 			if ($aGetIdent) {
 				$oIdentify = new VideoIdentifyForm();
@@ -161,6 +161,19 @@ class DefaultController extends Controller
 		);
 
 
+	}
+
+	public function actionIdentify()
+	{
+		$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+		if ($aGetIdent) {
+
+			$oIdentify = new VideoIdentifyForm();
+			$oIdentify->setAttributes($aGetIdent);
+			$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/");
+			//выводим форму отправки на идентификацию
+			$this->render('identify', array('model' => $oIdentify));
+		}
 	}
 
 	public function actionIdentifySite()
