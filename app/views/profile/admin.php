@@ -19,6 +19,6 @@
 	<div class="col-xs-10 col-xs-offset-1">
 		<table class="table table-striped" id="tableUser">
 		</table>
-		<span id="changeResult"></span>
+		<div id="message" class="row"></div>
 	</div>
 </div>

@@ -10,19 +10,24 @@ use Input;
 class AdminController extends BaseController
 {
 
-	public $layout = 'vanguard';
+	//public $layout = 'vanguard';
 
 	public function TableForAdmin()
 	{
-		$users = User::all();
-		foreach ($users as $user) {
-			$x[] = array(
-				'first_name' => $user->first_name,
-				'last_name'  => $user->last_name,
-				'admin'      => Role::userRole((int)$user->id, "admin"),
-				'moderator'  => Role::userRole((int)$user->id, "moderator"),
-				'user'       => Role::userRole((int)$user->id, "user"),
-			);
+		$count = User::all()->count();
+		if (!$count) {
+			$x = "В Базе данных еще нет пользователей";
+		} else {
+			$users = User::all();
+			foreach ($users as $user) {
+				$x[] = array(
+					'first_name' => $user->first_name,
+					'last_name'  => $user->last_name,
+					'admin'      => Role::userRole((int)$user->id, "admin"),
+					'moderator'  => Role::userRole((int)$user->id, "moderator"),
+					'user'       => Role::userRole((int)$user->id, "user"),
+				);
+			}
 		}
 
 		return $x;
