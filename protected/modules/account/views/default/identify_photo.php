@@ -7,13 +7,14 @@ $this->pageTitle = Yii::app()->name . " - Идентификация с загр
 ?>
 	<h4>Идентификация с загрузкой фотографий</h4>
 
-	<div class="alert in alert-block alert-warning span7">
-		<h4>Для идентификации вам потребуется фотокамера или мобильный телефон с фотокамерой.
-			<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
-				После идентификации потребуется ввести
-				данные документов, использованных при идентификации.
-			<?php endif; ?>
-		</h4>
+	<div class="alert in alert-block alert-warning">
+
+		<h4>Подготовьте документы (паспорт и второй документ), фотокамеру или мобильный телефон с фотокамерой.</h4>
+		<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
+			<br />
+			<h4>После загрузки фотографий потребуется ввести данные документов. </h4>
+		<?php endif; ?>
+
 	</div>
 <?php
 $this->widget("CheckBrowserWidget");

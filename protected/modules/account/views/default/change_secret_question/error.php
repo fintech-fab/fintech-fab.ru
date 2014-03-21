@@ -18,8 +18,8 @@ echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 ?>
 
 
-	<?php //TODO вынести сообщения в константы ?>
-	<div class="alert in alert-block alert-error span7">
+<?php //TODO вынести сообщения в константы ?>
+	<div class="alert in alert-block alert-error">
 		При отправке SMS с кодом произошла ошибка. Попробуйте снова запросить код.<br />В случае, если ошибка
 		повторяется, обратитесь в контактный центр.
 	</div>

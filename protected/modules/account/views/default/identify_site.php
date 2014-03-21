@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сай
 ?>
 	<h4>Идентификация на сайте</h4>
 
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		<h4>Для идентификации вам потребуется веб-камера.
 			<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
 				После идентификации потребуется ввести

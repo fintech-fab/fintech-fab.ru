@@ -10,7 +10,7 @@ $this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 <div class="form" id="activeForm">
 	<div class="row">
 
-		<div class="alert in alert-info span7">
+		<div class="alert in alert-info">
 			<?= $message ?>
 		</div>
 

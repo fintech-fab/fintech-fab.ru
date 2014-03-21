@@ -10,7 +10,7 @@ $this->pageTitle = Yii::app()->name . " - Оформление займа";
 <div class="form" id="activeForm">
 	<div class="row">
 
-		<div class="alert in alert-info span7">
+		<div class="alert in alert-info">
 			<?= $message ?>
 		</div>
 

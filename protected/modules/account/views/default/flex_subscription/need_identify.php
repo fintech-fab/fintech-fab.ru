@@ -7,10 +7,10 @@ $this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
 	<h4>Требуется идентификация</h4>
 
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		<h4>Для поформления займа, необходимо пройти идентификацию.</h4>
 	</div>
-<div class="clearfix"></div>
+	<div class="clearfix"></div>
 <?php
 $this->widget("CheckBrowserWidget");
 
@@ -40,19 +40,19 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'signature', array('name' => 'signature')); ?>
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
-<div class="center">
-<?php
-$this->widget('bootstrap.widgets.TbButton', array(
-	'id'         => 'submitButton',
-	'type'       => 'primary',
-	'size'       => 'large',
-	'label'      => 'Пройти идентификацию',
-	'htmlOptions'=>array(
-		'onclick'=>'js: goIdentify()'
-	)
-));
-?>
-</div>
+	<div class="center">
+		<?php
+		$this->widget('bootstrap.widgets.TbButton', array(
+			'id'          => 'submitButton',
+			'type'        => 'primary',
+			'size'        => 'large',
+			'label'       => 'Пройти идентификацию',
+			'htmlOptions' => array(
+				'onclick' => 'js: goIdentify()'
+			)
+		));
+		?>
+	</div>
 <?php
 
 
