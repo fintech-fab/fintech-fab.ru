@@ -14,7 +14,7 @@ use App\Controllers\BaseController;
 class UserProfileController extends BaseController
 {
 	// TODO
-	public $layout = 'vanguard';
+	public $layout = 'profile';
 
 	public function showUserProfile()
 	{

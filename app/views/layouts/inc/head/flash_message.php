@@ -4,7 +4,7 @@
  * @var string $title
  */
 $userMessage = Session::get('userMessage');
-$title = Session::get('title');
+$userMessageTitle = Session::get('userMessageTitle');
 if (!$userMessage) {
 	return;
 }
@@ -15,18 +15,12 @@ if (!$userMessage) {
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title text-center"><?= $title ?></h4>
+				<h4 class="modal-title text-center"><?= HTML::entities($userMessageTitle) ?></h4>
 			</div>
 			<div class="modal-body">
-				<p class="text-center"><?= $userMessage ?></p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+				<p class="text-center"><?= HTML::entities($userMessage) ?></p>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+</div>
 
