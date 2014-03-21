@@ -9,35 +9,18 @@ use FintechFab\Models\User;
 class Social
 {
 
-	public static function vk()
+	public static function linkForSocNet($socNetName)
 	{
-		$client_id = Config::get('social.ID_vk'); // ID приложения
-		$redirect_uri = Config::get('social.url_vk'); // Адрес сайта
-
-		$url = 'http://oauth.vk.com/authorize';
+		$client_id = Config::get('social.' . $socNetName . '.ID'); // ID приложения
+		$redirect_uri = Config::get('social.' . $socNetName . '.redirect_url'); // Адрес сайта
+		$url = Config::get('social.' . $socNetName . '.url');
+		$scope = Config::get('social.' . $socNetName . '.scope');
 
 		$params = array(
 			'client_id'     => $client_id,
 			'redirect_uri'  => $redirect_uri,
-			'response_type' => 'code'
-		);
-
-		$link = $url . '?' . urldecode(http_build_query($params));
-
-		return $link;
-	}
-
-	public static function fb()
-	{
-		$client_id = Config::get('social.ID_fb'); // ID приложения
-		$redirect_uri = Config::get('social.url_fb'); // Адрес сайта
-
-		$url = 'https://www.facebook.com/dialog/oauth';
-
-		$params = array(
-			'client_id'     => $client_id,
-			'redirect_uri'  => $redirect_uri,
-			'response_type' => 'code'
+			'response_type' => 'code',
+			'scope'         => $scope
 		);
 
 		$link = $url . '?' . urldecode(http_build_query($params));
@@ -70,5 +53,10 @@ class Social
 		$userSocialNetwork->save();
 
 		return $user;
+	}
+
+	public static function getSocialNetForUser($user)
+	{
+
 	}
 }

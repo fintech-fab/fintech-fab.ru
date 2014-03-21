@@ -14,8 +14,6 @@ use Illuminate\Auth\UserInterface;
  * @property integer $link_vk
  * @property string  $updated_at
  * @property string  $created_at
- *
- * @method UserVk static where($column)
  */
 class SocialNetwork extends Eloquent implements UserInterface
 {

@@ -1,28 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 21.03.14
- * Time: 15:08
- */
-
 namespace FintechFab\Components;
-
 
 use Config;
 use Input;
 use Redirect;
 
-class AuthSocial
+class GetSocialUser
 {
 	public static function vk()
 	{
 		$result = false;
 		$params = array(
-			'client_id'     => Config::get('social.ID_vk'),
-			'client_secret' => Config::get('social.key_vk'),
+			'client_id'     => Config::get('social.vk.ID'),
+			'client_secret' => Config::get('social.vk.key'),
 			'code'          => Input::get('code'),
-			'redirect_uri'  => Config::get('social.url_vk')
+			'redirect_uri'  => Config::get('social.vk.redirect_url')
 		);
 
 		$token = json_decode(file_get_contents('https://oauth.vk.com/access_token' . '?'
@@ -44,7 +36,7 @@ class AuthSocial
 			}
 		}
 		if (!$result) {
-			AuthSocial::resultError();
+			GetSocialUser::resultError();
 		}
 		$userInfo['social_net_name'] = 'vk';
 		$userInfo['id'] = $userInfo['uid'];
@@ -57,10 +49,10 @@ class AuthSocial
 	public static function fb()
 	{
 		$params = array(
-			'client_id'     => Config::get('social.ID_fb'),
-			'client_secret' => Config::get('social.key_fb'),
+			'client_id'     => Config::get('social.fb.ID'),
+			'client_secret' => Config::get('social.fb.key'),
 			'code'          => Input::get('code'),
-			'redirect_uri'  => Config::get('social.url_fb')
+			'redirect_uri'  => Config::get('social.fb.redirect_url')
 		);
 
 		$tokenInfo = null;
@@ -75,7 +67,7 @@ class AuthSocial
 			. urldecode(http_build_query($params))), true);
 
 		if (!isset($userInfo['id'])) {
-			AuthSocial::resultError();
+			GetSocialUser::resultError();
 		}
 		$userInfo['social_net_name'] = 'fb';
 		$userInfo['photo'] = $userInfo['picture']['data']['url'];
@@ -89,4 +81,4 @@ class AuthSocial
 			->with('userMessage', "Что-то не так, попробуйте ещё раз")
 			->with('userMessageTitle', 'Ошибка');
 	}
-} 
+}

@@ -6,7 +6,7 @@ namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
 use Auth;
-use FintechFab\Components\AuthSocial;
+use FintechFab\Components\GetSocialUser;
 use FintechFab\Components\Social;
 use FintechFab\Components\WorkWithInput;
 use FintechFab\Models\User;
@@ -87,11 +87,11 @@ class AuthController extends BaseController
 		$current_url = basename(Request::server('REQUEST_URI'), ".php");
 		$socialNetName = explode('?', $current_url);
 
-		$userInfo = AuthSocial::$socialNetName[0]();
+		$userInfo = GetSocialUser::$socialNetName[0]();
 		$user = Social::setSocialUser($userInfo);
 
 		if (is_null($user)) {
-			AuthSocial::resultError();
+			GetSocialUser::resultError();
 		}
 		Auth::login($user);
 

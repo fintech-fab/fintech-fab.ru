@@ -30,7 +30,7 @@ use FintechFab\Components\Social;
 							'placeholder' => 'Email',
 							'class'       => 'form-control',
 							'id'          => 'inputEmail',
-							'required' => 'required',
+							'required'    => 'required',
 						));
 						?>
 					</div>
@@ -45,7 +45,7 @@ use FintechFab\Components\Social;
 							'placeholder' => 'Пароль',
 							'class'       => 'form-control',
 							'id'          => 'inputPassword',
-							'required' => 'required',
+							'required'    => 'required',
 						));
 						?>
 					</div>
@@ -59,14 +59,14 @@ use FintechFab\Components\Social;
 					<div id="errorPassword" class="errorModal text-center"></div>
 				</div>
 				<div class="form-group">
-				<p class="col-sm-8">Не зарегистрирован?<br><a href="/registration">Регистрация</a></p>
+					<p class="col-sm-8">Не зарегистрирован?<br><a href="/registration">Регистрация</a></p>
 
 					<div class=" col-sm-4">
 						<?=
 						Form::button('Login', array(
-							'type' => 'button',
+							'type'  => 'button',
 							'class' => 'btn btn-primary',
-							'id'   => 'btn-login',
+							'id'    => 'btn-login',
 						));
 						?>
 					</div>
@@ -77,9 +77,9 @@ use FintechFab\Components\Social;
 				<div class="text-center">
 					<h4 class="text-center">Вход через социальные сети</h4>
 
-					<a href="<?= Social::vk() ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
-					<a href="<?= Social::fb() ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
-					<a href=""><img src="/assets/ico/gp32.png" alt="" /></a>
+					<a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
+					<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
+					<a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
 				</div>
 			</div>
 			<div class="modal-footer">
