@@ -41,44 +41,49 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
 
-<div class="alert in alert-block alert-info">
-	<h4>Видеоидентификация</h4>
-	Нужна веб-камера и браузер Chrome или Firefox. <a href="<?=
-	Yii::app()
-		->createUrl('/pages/view/browser') ?>" target="_blank">Скачать браузер >>></a> <br /> <br />
-	<?php $this->widget("CheckBrowserWidget"); ?>
+<div class="row">
+	<div class="span4">
+		<div class="alert in alert-block alert-info" style="height: 135px;">
+			<h4>Видеоидентификация</h4>
+			Нужна веб-камера и браузер Chrome или Firefox.<br /> <a href="<?=
+			Yii::app()
+				->createUrl('/pages/view/browser') ?>" target="_blank">Скачать браузер >>></a> <br /> <br />
+			<?php $this->widget("CheckBrowserWidget"); ?>
 
-	<div class="center">
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'          => 'submitButton',
-			'type'        => 'primary',
-			'size'        => 'large',
-			'label'       => 'Пройти идентификацию',
-			'htmlOptions' => array(
-				'onclick' => 'js: goIdentify(1)'
-			)
-		));
-		?>
+			<div class="center">
+				<?php
+				$this->widget('bootstrap.widgets.TbButton', array(
+					'id'          => 'submitButton',
+					'type'        => 'primary',
+					'size'        => 'large',
+					'label'       => 'Пройти идентификацию',
+					'htmlOptions' => array(
+						'onclick' => 'js: goIdentify(1)'
+					)
+				));
+				?>
+			</div>
+		</div>
 	</div>
-</div>
+	<div class="span4">
+		<div class="alert in alert-block alert-info" style="height: 135px;">
+			<h4>Идентификация с загрузкой фото</h4>
+			Нужен фотоаппарат или мобильный телефон с фотокамерой <br /><br />
 
-<div class="alert in alert-block alert-info">
-	<h4>Идентификация с загрузкой фото</h4>
-	Нужен фотоаппарат или мобильный телефон с фотокамерой <br /><br />
-
-	<div class="center">
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'          => 'submitButton',
-			'type'        => 'primary',
-			'size'        => 'large',
-			'label'       => 'Пройти идентификацию',
-			'htmlOptions' => array(
-				'onclick' => 'js: goIdentify(2)'
-			)
-		));
-		?>
+			<div class="center">
+				<?php
+				$this->widget('bootstrap.widgets.TbButton', array(
+					'id'          => 'submitButton',
+					'type'        => 'primary',
+					'size'        => 'large',
+					'label'       => 'Пройти идентификацию',
+					'htmlOptions' => array(
+						'onclick' => 'js: goIdentify(2)'
+					)
+				));
+				?>
+			</div>
+		</div>
 	</div>
 </div>
 <div class="alert in alert-block alert-info">
