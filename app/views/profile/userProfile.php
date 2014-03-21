@@ -1,11 +1,12 @@
 <?php
 use FintechFab\Models\User;
 
-$user = User::find(Auth::user()->id);
-$userSocial = User::find($user['id'])->SocialNetworks()->first()->toArray();
-/*echo $userSocial['photo'];
-echo'<pre>';
+$user = User::find(Auth::user()->id)->first()->toArray();
+$userSocial = User::find($user['id'])->SocialNetworks()->get()->toArray();
+
+/*echo'<pre>';
 print_r($userSocial);
+print_r($user);
 echo'</pre>';
 die();*/
 
@@ -14,7 +15,7 @@ die();*/
 	<h2 class="text-center">Профиль</h2>    <br>
 
 	<div class="row">
-		<img src="<?= $userSocial['photo'] ?>" class="img-rounded col-md-offset-1 col-md-3">
+		<img src="<?= $user['photo'] ?>" class="img-rounded col-md-offset-1 col-md-3">
 
 		<p class="col-md-offset-2 col-md-2">Имя:</p>
 
@@ -28,5 +29,10 @@ die();*/
 
 		<p class="col-md-2"><?= $user['email'] ?></p>        <br>
 	</div>
-	<h2 class="text-center">Подключить соцсеть</h2>
+	<h2 class="text-center">Подключенные соцсети</h2>
+
+	<?=
+	Form::button('Подключить новую соцсеть', array(
+		'class' => 'btn btn-primary',
+	));?>
 </div>

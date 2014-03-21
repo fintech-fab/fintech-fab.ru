@@ -16,8 +16,8 @@ Route::get('registration', array(
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\AuthController@logout'));
 
-Route::get('vk', 'App\Controllers\Site\AuthController@vk');
-Route::get('fb', 'App\Controllers\Site\AuthController@fb');
+Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
+Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
 Route::get('admin', array(
 	'as'   => 'admin',
