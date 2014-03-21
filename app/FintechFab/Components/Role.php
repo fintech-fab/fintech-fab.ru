@@ -12,7 +12,7 @@ class Role
 		$result = 0;
 		$user = User::find($id);
 		foreach ($user->roles as $role) {
-			if ($role_name == $role->role_name) {
+			if ($role_name == $role->role) {
 				$result = "checked";
 			}
 		}
