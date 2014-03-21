@@ -135,7 +135,7 @@ class DefaultController extends Controller
 
 		$sIdentifyRender = '';
 
-		if (!Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
 			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
 			if ($aGetIdent) {
 				$oIdentify = new VideoIdentifyForm();
