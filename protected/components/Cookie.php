@@ -1,12 +1,11 @@
 <?php
+
 /**
  * Компонент Cookie
  * занимается обработкой данных cookies
  * и их шифрованием/дешифрованием
  *
  */
-
-
 class Cookie
 {
 	/**
@@ -59,10 +58,11 @@ class Cookie
 	/**
 	 * Шифрует и сериализует массив $data и записывает в куку $cookieName
 	 *
-	 * @param $cookieName string
-	 * @param $data       array
+	 * @param      $cookieName string
+	 * @param      $data       array
+	 * @param null $expire
 	 */
-	public static function saveDataToCookie($cookieName, $data)
+	public static function saveDataToCookie($cookieName, $data, $expire = null)
 	{
 		$sEncrypt = serialize($data);
 		$cookieData = CryptArray::encryptVal($sEncrypt);
@@ -72,10 +72,19 @@ class Cookie
 			$aCookieOptions = array(
 				'domain' => $aCookieOptions['domain']
 			);
+			if (isset($expire)) {
+				$aCookieOptions['expire'] = $expire;
+			}
 		} else {
-			$aCookieOptions = array(
-				'expire' => time() + 60 * 60 * 24
-			);
+			if (is_null($expire)) {
+				$aCookieOptions = array(
+					'expire' => time() + 60 * 60 * 24
+				);
+			} else {
+				$aCookieOptions = array(
+					'expire' => $expire
+				);
+			}
 		}
 
 		$cookie = new CHttpCookie($cookieName, $cookieData, $aCookieOptions);
