@@ -28,7 +28,7 @@ $(document).ready(function () {
 					var val = this.checked;
 					$.get('changeRole', {"userN": userN, "roleN": roleN, "val": val},
 						function (res) {
-							$("#message").html(res).css({'color': 'red'});
+							$("#message").dialog({ title: 'Сообщение', show: 'drop', hide: 'explode' }).html(res);
 						});
 				});
 			}
