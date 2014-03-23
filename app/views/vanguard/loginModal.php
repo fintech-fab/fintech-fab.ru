@@ -21,7 +21,7 @@ use FintechFab\Components\Social;
 
 				)); ?>
 				<div class="form-group">
-					<label for="inputEmail" class="col-sm-3 control-label">Email</label>
+					<?= Form::label('inputEmail', 'Email', array('class' => 'col-sm-3 control-label')) ?>
 
 					<div class="col-sm-9">
 
@@ -34,9 +34,10 @@ use FintechFab\Components\Social;
 						));
 						?>
 					</div>
+					<div id="errorEmail" class="errorModal text-center"></div>
 				</div>
 				<div class="form-group">
-					<label for="inputPassword" class="col-sm-3 control-label">Пароль</label>
+					<?= Form::label('inputPassword', 'Пароль', array('class' => 'col-sm-3 control-label')) ?>
 
 					<div class="col-sm-9">
 						<?=
@@ -48,6 +49,14 @@ use FintechFab\Components\Social;
 						));
 						?>
 					</div>
+					<div id="errorPassword" class="errorModal text-center"></div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-9 checkbox">
+						<label>
+							<?= Form::checkbox('remember', 'true'); ?>Запомнить меня </label>
+					</div>
+					<div id="errorPassword" class="errorModal text-center"></div>
 				</div>
 				<div class="form-group">
 					<p class="col-sm-8">Не зарегистрирован?<br><a href="/registration">Регистрация</a></p>
@@ -55,8 +64,9 @@ use FintechFab\Components\Social;
 					<div class=" col-sm-4">
 						<?=
 						Form::button('Login', array(
-							'type'  => 'submit',
+							'type'  => 'button',
 							'class' => 'btn btn-primary',
+							'id'    => 'btn-login',
 						));
 						?>
 					</div>
@@ -67,9 +77,9 @@ use FintechFab\Components\Social;
 				<div class="text-center">
 					<h4 class="text-center">Вход через социальные сети</h4>
 
-					<a href="<?= Social::vk() ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
-					<a href="<?= Social::fb() ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
-					<a href=""><img src="/assets/ico/gp32.png" alt="" /></a>
+					<a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
+					<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
+					<a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
 				</div>
 			</div>
 			<div class="modal-footer">

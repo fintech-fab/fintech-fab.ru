@@ -6,44 +6,62 @@ namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
 use Auth;
-use Config;
-use FintechFab\Components\Helper;
+use FintechFab\Components\GetSocialUser;
 use FintechFab\Components\Social;
+use FintechFab\Components\WorkWithInput;
 use FintechFab\Models\User;
+use FintechFab\Widgets\LinksInMenu;
 use Hash;
 use Input;
 use Redirect;
+use Request;
 use Validator;
 
 class AuthController extends BaseController
 {
-	public $layout = 'vanguard';
+	public $layout = 'auth';
+
+	public function registration()
+	{
+		return $this->make('registration');
+	}
+
+
 	public function postAuth()
 	{
-		$email = Input::get('email');
-		$password = Input::get('password');
+		$data = Input::all();
+		$remember = isset($data['remember']) ? true : false;
 
-		if (Auth::attempt(array('email' => $email, 'password' => $password))) {
-			$title = 'Приветствуем ' . Helper::user()->first_name;
+		$validator = Validator::make($data, WorkWithInput::rulesForInputAuth(), WorkWithInput::messagesForErrors());
+		$userMessages = $validator->messages();
+		$emailError = $userMessages->first('email');
+		$emailPassword = $userMessages->first('password');
+		$result['errors'] = array($emailError, $emailPassword);
 
-			return Redirect::back()->with('userMessage', 'Вы успешно авторизовались')
-				->with('title', $title);
+		if ($userMessages->has('email') || $userMessages->has('password')) {
+			return $result;
 		}
 
-		return Redirect::intended('registration')->with('userMessage', 'Такого пользователя нет.')
-			->with('title', 'Ошибка');
+		if (Auth::attempt(array('email' => $data['email'], 'password' => $data['password']), $remember)) {
+			$result['authOk'] = LinksInMenu::echoAuthMode();
+			return $result;
+		}
+		$result['errors']['1'] = "Нет такого пользователя";
+
+		return $result;
 	}
 
 	public function postRegistration()
 	{
 		$data = Input::all();
-		$validator = Validator::make($data, Helper::rulesForInput(), Helper::messagesForErrors());
+		$validator = Validator::make($data, WorkWithInput::rulesForInputRegistration(), WorkWithInput::messagesForErrors());
 		$userMessage = $validator->messages()->first();
 		$title = 'Ошибка';
 
 		if ($userMessage != null) {
-			return Redirect::to('registration')->with('userMessage', $userMessage)
-				->with('title', $title)
+			return Redirect::to('registration')
+				->with('userMessage', $userMessage)
+				->with('userMessageTitle', $title)
 				->withInput(Input::except('password'));
 		}
 
@@ -60,110 +78,33 @@ class AuthController extends BaseController
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
 
-		return Redirect::back()->with('userMessage', $userMessage)->with('title', $title);
+		return Redirect::back()->with('userMessage', $userMessage)->with('userMessageTitle', $title);
 
 	}
 
-	public function vk()
+	public function socialNet()
 	{
-		$client_id = Config::get('social.ID_vk'); // ID приложения
-		$client_secret = Config::get('social.key_vk'); // Защищённый ключ
-		$redirect_uri = Config::get('social.url_vk'); // Адрес сайта
-		$code = Input::get('code');
+		$current_url = basename(Request::server('REQUEST_URI'), ".php");
+		$socialNetName = explode('?', $current_url);
 
-		$result = false;
-		$params = array(
-			'client_id'     => $client_id,
-			'client_secret' => $client_secret,
-			'code'          => $code,
-			'redirect_uri'  => $redirect_uri
-		);
-
-		$token = json_decode(file_get_contents('https://oauth.vk.com/access_token' . '?' . urldecode(http_build_query($params))), true);
-
-		if (isset($token['access_token'])) {
-			$params = array(
-				'uids'         => $token['user_id'],
-				'fields' => 'uid,first_name,last_name,bdate,screen_name',
-				'access_token' => $token['access_token']
-			);
-
-			$userInfo = json_decode(file_get_contents('https://api.vk.com/method/users.get' . '?' . urldecode(http_build_query($params))), true);
-
-			if (isset($userInfo['response'][0]['uid'])) {
-				$userInfo = $userInfo['response'][0];
-				$result = true;
-			}
-		}
-
-		if (!$result) {
-			$this->resultError();
-		}
-
-
-		$userInfo['social_net_name'] = 'vk';
-		$userInfo['id'] = $userInfo['uid'];
-		$userInfo['link'] = 'https://vk.com/' . $userInfo['screen_name'];
+		$userInfo = GetSocialUser::$socialNetName[0]();
 		$user = Social::setSocialUser($userInfo);
 
 		if (is_null($user)) {
-			$this->resultError();
+			GetSocialUser::resultError();
 		}
-
 		Auth::login($user);
-		$userMessage = "Добро пожаловать на наш сайт!";
-		$title = 'Вы успешно авторизовались!';
 
-		return Redirect::back()->with('userMessage', $userMessage)->with('title', $title);
+		return Redirect::back()
+			->with('userMessage', 'Добро пожаловать на наш сайт!')
+			->with('userMessageTitle', 'Вы успешно авторизовались!');
 	}
-
-
-	public function fb()
-	{
-		$params = array(
-			'client_id'     => Config::get('social.ID_fb'),
-			'client_secret' => Config::get('social.key_fb'),
-			'code'          => Input::get('code'),
-			'redirect_uri'  => Config::get('social.url_fb')
-		);
-
-		$tokenInfo = null;
-		parse_str(file_get_contents('https://graph.facebook.com/oauth/access_token' . '?' . http_build_query($params)), $tokenInfo);
-
-		$params = array('access_token' => $tokenInfo['access_token']);
-		$userInfo = json_decode(file_get_contents('https://graph.facebook.com/me' . '?' . urldecode(http_build_query($params))), true);
-
-		if (isset($userInfo['id'])) {
-			$userInfo['social_net_name'] = 'fb';
-			$user = Social::setSocialUser($userInfo);
-			if ($user != null) {
-				Auth::login($user);
-				$userMessage = "Добро пожаловать на наш сайт!";
-				$title = 'Вы успешно авторизовались!';
-				$path = 'vanguard';
-			}
-		} else {
-			$userMessage = "Что-то не так, попробуйте ещё раз";
-			$title = 'Ошибка';
-			$path = 'register';
-		}
-
-		return Redirect::to($path)->with('userMessage', $userMessage)->with('title', $title);
-	}
-
 	public function logout()
 	{
 		Auth::logout();
 
-		return Redirect::intended('vanguard')->with('userMessage', 'Приходите к нам ещё.')
-			->with('title', 'Всего доброго');
-	}
-
-	private function resultError()
-	{
-		return Redirect::to('register')
-			->with('userMessage', "Что-то не так, попробуйте ещё раз")
-			->with('title', 'Ошибка');
+		return Redirect::back()->with('userMessage', 'Приходите к нам ещё.')
+			->with('userMessageTitle', 'Всего доброго');
 	}
 
 }

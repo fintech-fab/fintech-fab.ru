@@ -11,6 +11,9 @@
 |
 */
 
+
+use FintechFab\Models\User;
+
 App::before(function($request)
 {
 	//
@@ -35,7 +38,10 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::guest('login');
+	if (Auth::guest()) {
+		return Redirect::guest('registration');
+	}
+
 });
 
 
@@ -57,7 +63,9 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('/');
+	if (Auth::check()) {
+		return Redirect::to('profile');
+	}
 });
 
 /*
@@ -77,4 +85,14 @@ Route::filter('csrf', function()
 	{
 		throw new Illuminate\Session\TokenMismatchException;
 	}
+});
+
+Route::filter('roleAdmin', function () {
+	$user = User::find(Auth::user()->id);
+	foreach ($user->roles as $role) {
+		if ($role->role != "admin") {
+			return Redirect::to('profile');
+		}
+	}
+
 });

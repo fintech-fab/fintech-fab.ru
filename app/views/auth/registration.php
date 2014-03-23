@@ -98,9 +98,9 @@ use FintechFab\Components\Social;
 		<hr>
 		<div class="text-center">
 			<h3>Регистрация через социалные сети</h3>
-			<a href="<?= Social::vk() ?>"><img src="/assets/ico/vk48.png" alt="" /></a>
-			<a href="<?= Social::fb() ?>"><img src="/assets/ico/fb48.png" alt="" /></a>
-			<a href=""><img src="/assets/ico/gp48.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk48.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb48.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp48.png" alt="" /></a>
 		</div>
 	</div>
 </div>
