@@ -88,11 +88,16 @@ class AuthController extends BaseController
 		$socialNetName = explode('?', $current_url);
 
 		$userInfo = GetSocialUser::$socialNetName[0]();
+
 		$user = Social::setSocialUser($userInfo);
 
 		if (is_null($user)) {
 			GetSocialUser::resultError();
 		}
+		if (Auth::check()) {
+			return Redirect::to('profile');
+		}
+
 		Auth::login($user);
 
 		return Redirect::back()

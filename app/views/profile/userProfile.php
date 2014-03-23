@@ -38,29 +38,28 @@ die();*/
 			<p class="col-md-6"><?= $user['email'] ?></p><br>
 		</div>
 	</div>
-	<div class="row">
-		<h2 class="text-center">Подключенные соцсети</h2><br>
-		<?php for ($i = 0;
-		$i < count($userSocial);
-		$i++): ?>
-		<div class="col-md-offset-2 col-md-2">
-			<img src="<?= $userSocial[$i]['photo'] ?>" class="img-thumbnail" width="100">
+	<h2 class="text-center">Подключенные соцсети</h2><br>
+	<?php for ($i = 0; $i < count($userSocial); $i++): ?>
+		<div class="row">
+			<div class="col-md-offset-2 col-md-2">
+				<img src="<?= $userSocial[$i]['photo'] ?>" class="img-thumbnail" width="100">
+			</div>
+			<div class="col-md-offset-1 col-md-4">
+				<p class="col-md-6">Имя:</p>
+
+				<p class="col-md-6"><?= $userSocial[$i]['first_name'] ?></p><br>
+
+				<p class="col-md-6">Фамилия:</p>
+
+				<p class="col-md-6"><?= $userSocial[$i]['last_name'] ?></p><br><br>
+			</div>
 		</div>
-		<div class="col-md-offset-1 col-md-4">
-			<p class="col-md-6">Имя:</p>
-
-			<p class="col-md-6"><?= $userSocial[$i]['first_name'] ?></p><br>
-
-			<p class="col-md-6">Фамилия:</p>
-
-			<p class="col-md-6"><?= $userSocial[$i]['last_name'] ?></p><br><br>
-		</div>
-	</div>
-	<br>
+		<br>
 	<?php endfor ?>
 	<p>Подключить социальную сеть:
 		<a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
-		<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a> <a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
+		<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
+		<a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
 
 	</p>
 </div>

@@ -2,6 +2,7 @@
 
 namespace FintechFab\Components;
 
+use Auth;
 use Config;
 use FintechFab\Models\SocialNetwork;
 use FintechFab\Models\User;
@@ -33,6 +34,9 @@ class Social
 		$userSocialNetwork = SocialNetwork::firstOrNew(array(
 			'id_user_in_network' => $userInfo['id'],
 		));
+		if (Auth::check()) {
+			$userSocialNetwork['user_id'] = Auth::user()->id;
+		}
 
 		if ($userSocialNetwork['user_id'] != null) {
 			$user = User::find($userSocialNetwork['user_id']);
@@ -43,6 +47,7 @@ class Social
 			$user->photo = $userInfo['photo'];
 			$user->save();
 		}
+
 		$userSocialNetwork->user_id = $user['id'];
 		$userSocialNetwork->setAttribute('id_user_in_network', $userInfo['id']);
 		$userSocialNetwork->setAttribute('first_name', $userInfo['first_name']);
@@ -55,8 +60,4 @@ class Social
 		return $user;
 	}
 
-	public static function getSocialNetForUser($user)
-	{
-
-	}
 }

@@ -20,7 +20,7 @@ Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
 Route::get('admin', array(
-	'before' => 'auth|roleAdmin',
+	//'before' => 'auth|roleAdmin',
 	'as'   => 'admin',
 	'uses' => 'App\Controllers\Site\UserProfileController@showAdmin'
 ));
