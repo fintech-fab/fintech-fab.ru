@@ -10,6 +10,7 @@ namespace FintechFab\Widgets;
 
 
 use Auth;
+use FintechFab\Models\User;
 use Request;
 
 class LinksInMenu
@@ -53,5 +54,18 @@ class LinksInMenu
 		return '';
 	}
 
+
+	public static function linkForAdmin()
+	{
+		$a = '<img src="/assets/main/logo.png" height="100px" class="img" />';
+		$user = User::find(Auth::user()->id);
+		foreach ($user->roles as $role) {
+			if ($role->role == "admin") {
+				$a = '<a href ="admin">Вход в Админ панель</a>';
+			}
+		}
+
+		return $a;
+	}
 
 } 

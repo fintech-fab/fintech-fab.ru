@@ -11,6 +11,9 @@
 |
 */
 
+
+use FintechFab\Models\User;
+
 App::before(function($request)
 {
 	//
@@ -82,4 +85,14 @@ Route::filter('csrf', function()
 	{
 		throw new Illuminate\Session\TokenMismatchException;
 	}
+});
+
+Route::filter('roleAdmin', function () {
+	$user = User::find(Auth::user()->id);
+	foreach ($user->roles as $role) {
+		if ($role->role != "admin") {
+			return Redirect::to('profile');
+		}
+	}
+
 });

@@ -2,6 +2,7 @@
 /**@var array $user * */
 use FintechFab\Components\Social;
 use FintechFab\Models\User;
+use FintechFab\Widgets\LinksInMenu;
 
 $user = User::find(Auth::user()->id)->toArray();
 $userSocial = User::find($user['id'])->SocialNetworks()->get()->toArray();
@@ -15,6 +16,7 @@ die();*/
 
 ?>
 <div class="jumbotron ">
+	<?= LinksInMenu::linkForAdmin() ?>
 	<h2 class="text-center">Профиль</h2><br>
 
 	<div class="row">
@@ -56,9 +58,9 @@ die();*/
 	</div>
 	<br>
 	<?php endfor ?>
-	<p>Подкючить социаьную сеть: <a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
-		<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
-		<a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
+	<p>Подключить социальную сеть:
+		<a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
+		<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a> <a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
 
 	</p>
 </div>
