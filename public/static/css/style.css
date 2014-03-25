@@ -593,10 +593,10 @@ p.popover-label {
 
 #fastRegWidget .nav-tabs li a {
 	display: table-cell;
-	border-top: 0;
+	/*border-top: 0;*/
 	border-bottom: 1px;
-	border-left: 0;
-	border-right: 0;
+	/*border-left: 0;*/
+	/*border-right: 0;*/
 	width: 135px;
 	vertical-align: middle;
 	padding-top: 15px;
@@ -611,7 +611,7 @@ p.popover-label {
 #fastRegWidget .nav-tabs li.active a {
 	border-bottom: 3px;
 	border-bottom-style: solid;
-	border-color: #D73454;
+	border-bottom-color: #D73454;
 	background-color: #FDF5F8;
 }
 
@@ -672,4 +672,47 @@ p.popover-label {
 
 #fastRegWidget .product_name img {
 	vertical-align: middle;
+}
+
+#fastRegWidget {
+	font-size: 12pt;
+}
+
+.icon-green {
+	color: #5CD85C;
+}
+
+ul.product-info {
+	margin: 0 0 1em 0;
+	padding: 0 0 0 1em; /* make space for li's :before */
+	list-style: none;
+}
+
+ul.product-info li {
+	position: relative;
+	padding-left: 0.4em;
+	margin: 0 0 0.1em;
+}
+
+/* text distance to icon */
+ul.product-info li:before {
+	color: #5CD85C;
+	content: "";
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	/*position: relative;*/
+	top: 2px;
+	margin-right: 5px;
+
+	position: absolute;
+	left: -1em; /* same as ul padding-left */
+	/*top: 0.65em; /* depends on character, maybe use padding-top instead */
+	/*  .... more styling, maybe set width etc ... */
+}
+
+#productsTabs li a, #productsTabs li a:focus {
+	outline: 0;
 }

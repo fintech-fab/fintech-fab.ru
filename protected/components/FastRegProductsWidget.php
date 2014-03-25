@@ -18,7 +18,7 @@ class FastRegProductsWidget extends CWidget
 		$this->render('fast_reg_products',
 			array(
 				'oClientCreateForm' => $this->oClientCreateForm,
-				'aProducts' => $this->aProducts
+				'aProducts'         => $this->aProducts
 			)
 		);
 	}
@@ -80,18 +80,26 @@ class FastRegProductsWidget extends CWidget
 			<?php } else { ?>
 				<div class="product_name"><img src="/static/images/kreddy90.png" /></div>
 			<?php } ?>
+			<ul class="product-info">
+				<li>Размер одного займа - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong></li>
 
-			Размер одного займа - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong><br />
+				<li>Доступная сумма - <strong><?= $aProduct['amount'] ?>&nbsp;руб.</strong></li>
 
-			Доступная сумма - <strong><?= $aProduct['amount'] ?>&nbsp;руб.</strong><br />
+				<li>Количество займов в пакете -
+					<strong><?= Dictionaries::formatLoanLabel($aProduct['loan_count']) ?></strong></li>
 
-			Количество займов в пакете - <strong><?= $aProduct['loan_count'] ?></strong><br />
+				<li>Возврат каждого займа - в течение <strong><?= $aProduct['loan_lifetime'] / (3600 * 24) ?>
+						&nbsp;дней</strong> (с момента перечисления займа)
+				</li>
 
-			Возврат каждого займа - в течение <strong><?= $aProduct['loan_lifetime'] / (3600 * 24) ?>
-				&nbsp;дней</strong> (с момента перечисления займа)<br />
-
-			<strong>Стоимость подключения - <span class="red-font"><?= $aProduct['subscription_cost'] ?>
-					&nbsp;руб.</span></strong><br />
+				<li>Стоимость подключения пакета - <strong><span class="red-font"><?= $aProduct['subscription_cost'] ?>
+							&nbsp;руб.</span></strong></li>
+			</ul>
+			<?php
+			$sProductName = Dictionaries::createTransliteratedProductName($aProduct['name']);
+			$sAboutProducturl = Yii::app()->createUrl('/pages/view/' . $sProductName);
+			echo CHtml::link('Подробнее о пакете >', $sAboutProducturl);
+			?>
 		</div>
 	<?php } ?>
 		</div><?php

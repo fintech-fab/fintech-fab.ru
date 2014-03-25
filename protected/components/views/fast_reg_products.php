@@ -52,14 +52,15 @@
 			</div>
 			<?= $form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
 			<div class="clearfix"></div>
-			<?php $this->widget('bootstrap.widgets.TbButton', array(
+			<?php /*$this->widget('bootstrap.widgets.TbButton', array(
 				'buttonType' => 'submit',
 				'type'       => 'primary',
 				'label'       => 'Подключить пакет',
 				'htmlOptions' => array(
 					'style' => 'width: 250px; margin-top: 10px;'
 				),
-			)); ?>
+			));*/
+			?>
 			<?php
 			$this->endWidget();
 			?>
@@ -94,7 +95,7 @@
 			<?= $form->textFieldRow($oClientCreateForm, 'email'); ?><br />
 			<?php $oClientCreateForm->fast_reg = 1; ?>
 			<?= $form->hiddenField($oClientCreateForm, 'fast_reg'); ?>
-
+			<br /><br />
 			<span class="confirm">
 				<?php
 				$oClientCreateForm->agree = false;
