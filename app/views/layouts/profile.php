@@ -11,6 +11,7 @@ if (empty($content)) {
 <head>
 	<?= View::make('layouts.inc.head.head') ?>
 	<?= View::make('layouts.inc.navbar.navbar') ?>
+	<script src="/js/ActionForUser.js" type="text/javascript"></script>
 </head>
 <body>
 <?= View::make('layouts.inc.head.flash_message') ?>

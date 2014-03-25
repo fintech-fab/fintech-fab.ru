@@ -82,9 +82,14 @@ Route::filter('csrf', function () {
 
 Route::filter('roleAdmin', function () {
 	$user = User::find(Auth::user()->id);
+	$res = false;
 	foreach ($user->roles as $role) {
-		if ($role->role != "admin") {
-			return Redirect::to('profile');
+		if ($role->role == "admin") {
+			$res = true;
+			break;
 		}
+	}
+	if (!$res) {
+		return Redirect::to('profile');
 	}
 });

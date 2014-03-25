@@ -14,6 +14,10 @@ $(document).ready(function () {
 				if (data['authOk'] != null) {
 					$('.navbar-right').html(data['authOk']);
 					$('#loginModal').modal('hide');
+					var href = location.href;
+					var link = href.split('/');
+					if (link[3] == 'registration')
+						location.reload();
 				}
 			}
 		);

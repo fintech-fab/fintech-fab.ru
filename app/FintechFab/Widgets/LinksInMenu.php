@@ -34,13 +34,22 @@ class LinksInMenu
 	{
 		$first_name = Auth::user()->first_name;
 		$last_name = Auth::user()->last_name;
+		$link_admin = '';
+		$user = User::find(Auth::user()->id);
+		foreach ($user->roles as $role) {
+			if ($role->role == "admin") {
+				$link_admin = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("admin") . '>
+									<a href ="admin">Админ панель</a>
+								</li>';
+			}
+		}
 		$link_user = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("profile") . '>
 							<a href="profile">' . $first_name . ' ' . $last_name . '</a>
 						</li>';
 
 		$link_logout = '<li><a href="/logout">Выход</a></li>';
 
-		return $link_user . $link_logout;
+		return $link_admin . $link_user . $link_logout;
 	}
 
 	public static function echoActiveClassIfRequestMatches($requestUri)
@@ -54,18 +63,5 @@ class LinksInMenu
 		return '';
 	}
 
-
-	public static function linkForAdmin()
-	{
-		$a = '<img src="/assets/main/logo.png" height="100px" class="img" />';
-		$user = User::find(Auth::user()->id);
-		foreach ($user->roles as $role) {
-			if ($role->role == "admin") {
-				$a = '<a href ="admin">Вход в Админ панель</a>';
-			}
-		}
-
-		return $a;
-	}
 
 } 

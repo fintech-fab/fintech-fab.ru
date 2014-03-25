@@ -40,6 +40,10 @@ class Social
 
 		if ($userSocialNetwork['user_id'] != null) {
 			$user = User::find($userSocialNetwork['user_id']);
+			if ($user['photo'] == '/img/default_user.png') { //Не придумал как избежать вложенного if`а
+				$user->photo = $userInfo['photo'];
+				$user->save();
+			}
 		} else {
 			$user = new User();
 			$user->first_name = $userInfo['first_name'];

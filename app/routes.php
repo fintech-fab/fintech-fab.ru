@@ -11,7 +11,7 @@ Route::post('registration', array(
 Route::get('registration', array(
 	'before' => 'guest',
 	'as'     => 'registration',
-	'uses' => 'App\Controllers\Site\AuthController@registration'
+	'uses'   => 'App\Controllers\Site\AuthController@registration'
 ));
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\AuthController@logout'));
@@ -20,9 +20,9 @@ Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
 Route::get('admin', array(
-	//'before' => 'auth|roleAdmin',
-	'as'   => 'admin',
-	'uses' => 'App\Controllers\Site\UserProfileController@showAdmin'
+	'before' => 'auth|roleAdmin',
+	'as'     => 'admin',
+	'uses'   => 'App\Controllers\Site\UserProfileController@showAdmin'
 ));
 
 Route::get('TableForAdmin', array(
