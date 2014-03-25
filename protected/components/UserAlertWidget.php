@@ -11,7 +11,9 @@ class UserAlertWidget extends CWidget
 			return;
 		}
 
-		if (Yii::app()->session['alertShown']) {
+		$bAlertShown = Cookie::getDataFromCookie('alertShown');
+
+		if ($bAlertShown) {
 			return;
 		}
 
@@ -19,7 +21,6 @@ class UserAlertWidget extends CWidget
 			doOpenModalFrame(\'' . Yii::app()->createUrl('/pages/viewPartial/alert') . '\',\'Внимание!\');
 			', CClientScript::POS_READY);
 
-
-		Yii::app()->session['alertShown'] = true;
+		Cookie::saveDataToCookie('alertShown', array(true), time() + 60 * 60 * 24 * 7);
 	}
 }
