@@ -16,7 +16,7 @@
 
 			<?php
 			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-				'id'                   => get_class($oClientCreateForm),
+				'id' => get_class($oClientCreateForm) . '_fast',
 				'enableAjaxValidation' => true,
 				'type'                 => 'inline',
 				'clientOptions'        => array(
@@ -61,27 +61,11 @@
 				),
 			));*/
 			?>
-			<?php
-			$this->endWidget();
-			?>
 
 		</div>
 	</div>
 	<div class="span6 offset1">
 		<div class="row">
-			<?php
-			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-				'id'                   => get_class($oClientCreateForm) . '_fast',
-				'enableAjaxValidation' => true,
-				'type'                 => 'inline',
-				'clientOptions'        => array(
-					'validateOnChange' => true,
-					'validateOnSubmit' => false,
-				),
-				'action'               => Yii::app()->createUrl('/form/'),
-			));
-
-			?>
 			<h3>Быстрая регистрация</h3>
 			<?= $form->errorSummary($oClientCreateForm); ?>
 			<?= $form->textFieldRow($oClientCreateForm, 'last_name'); ?><br />

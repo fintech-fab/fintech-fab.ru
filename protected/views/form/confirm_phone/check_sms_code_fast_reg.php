@@ -9,6 +9,7 @@
  * Ввести код подтверждения из SMS
  */
 ?>
+<h4>Подтверждение номера телефона</h4>
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                     => "checkSmsCode",
