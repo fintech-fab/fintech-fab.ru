@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Site;
+namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use FintechFab\Components\Role;

@@ -1,0 +1,80 @@
+.photo {
+	width: 200px;
+	position: relative;
+}
+
+.photo img {
+	width: 100%;
+}
+
+.photo a {
+	background-color: rgba(0, 0, 0, 0.6);
+	display: block;
+	color: #ffffff;
+	text-decoration: none;
+	line-height: 3;
+
+}
+
+.photo .wrap {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 40px;
+	padding-top: 40px;
+	overflow: hidden;
+
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
+}
+
+.photo:hover .wrap {
+	opacity: 1;
+	padding-top: 0;
+}
+
+#dropZone {
+	color: #555;
+	font-size: 18px;
+	width: 400px;
+	height: 200px;
+	padding: 60px 0;
+	margin-left: 40px;
+
+	background: #eee;
+	border: 1px solid #ccc;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#dropZone.hover {
+	background: #ddd;
+	border-color: darkgreen;
+}
+
+#dropZone.error {
+	background: #faa;
+	border-color: #f00;
+}
+
+#dropZone.drop {
+	background: #afa;
+	border-color: darkgreen;
+}
+
+#drop-files {
+	display: none;
+}
+
+iframe {
+	display: none;
+}
+
+#profile p {
+	font-size: 20px;
+}

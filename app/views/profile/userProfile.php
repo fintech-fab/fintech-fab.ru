@@ -2,32 +2,42 @@
 /**@var array $user * */
 use FintechFab\Components\Social;
 use FintechFab\Models\User;
+use FintechFab\Widgets\UsersPhoto;
 
 $user = User::find(Auth::user()->id)->toArray();
 $userSocial = User::find($user['id'])->SocialNetworks()->get()->toArray();
 $socialNets = array();
-/*echo count($userSocial) ;
-echo'<pre>';
-print_r($userSocial);
-print_r($user);
-echo'</pre>';
-die();*/
 
 ?>
-<div class="jumbotron ">
+<script src="/js/imageuploader.js" type="text/javascript"></script>
+<div id="profile">
 	<h2 class="text-center">Профиль</h2><br>
 
 	<div class="row">
-		<div class="col-md-offset-1 col-md-3">
-			<figure class="photo">
-				<img src="<?= $user['photo'] ?>" class="img">
-
-				<div class="wrap">
-					<div class="descr text-center">
-						<a href=""> Загрузить фото</a>
-					</div>
-				</div>
-			</figure>
+		<div id="photo" class="col-md-offset-1 col-md-3">
+			<?= UsersPhoto::getPhoto() ?>
+		</div>
+		<div id="drop-files" class="col-md-4">
+			<?=
+			Form::open(array(
+				'id'     => 'formForFile',
+				'class'  => 'form-horizontal',
+				'role'   => 'form',
+				'method' => 'post',
+				'action' => 'upload/image',
+				'target' => 'iframe-name',
+			)); ?>
+			<div id="dropZone" class="text-center">
+					<span class="text">
+						Для загрузки, перетащите файл сюда, или
+					</span><br>
+				<?=
+				Form::file('image', array(
+					'id'    => 'upload_btn',
+					'class' => 'center-block',
+				))?>
+			</div>
+			<?= Form::close(); ?>
 		</div>
 		<div class="col-md-offset-1 col-md-4">
 			<p class="col-md-6">Имя:</p>
@@ -62,15 +72,16 @@ die();*/
 		</div>
 		<br>
 	<?php endfor ?>
-	<p>Подключить социальную сеть:
+	<p class="text-center">Подключить социальную сеть:
 		<?php if (!isset($socialNets['vk'])): ?>
-			<a href="<?= Social::linkForSocNet('vk') ?>"><img src="/assets/ico/vk32.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('vk') ?>"><img src="assets/ico/fb32.png" alt="" /></a>
 		<?php endif ?>
 		<?php if (!isset($socialNets['fb'])): ?>
-			<a href="<?= Social::linkForSocNet('fb') ?>"><img src="/assets/ico/fb32.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('fb') ?>"><img src="assets/ico/fb32.png" alt="" /></a>
 		<?php endif ?>
 		<?php if (!isset($socialNets['gp'])): ?>
-			<a href="<?= Social::linkForSocNet('gp') ?>"><img src="/assets/ico/gp32.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('gp') ?>"><img src="assets/ico/gp32.png" alt="" /></a>
 		<?php endif ?>
 	</p>
 </div>
+

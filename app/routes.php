@@ -22,23 +22,30 @@ Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('admin', array(
 	'before' => 'auth|roleAdmin',
 	'as'     => 'admin',
-	'uses'   => 'App\Controllers\Site\UserProfileController@showAdmin'
+	'uses' => 'App\Controllers\User\UserProfileController@showAdmin'
 ));
 
 Route::get('TableForAdmin', array(
 	'as'   => 'WorkAdmin',
-	'uses' => 'App\Controllers\Site\AdminController@TableForAdmin'
+	'uses' => 'App\Controllers\User\AdminController@TableForAdmin'
 ));
 
 Route::get('changeRole', array(
 	'as'   => 'changeRole',
-	'uses' => 'App\Controllers\Site\AdminController@changeRole'
+	'uses' => 'App\Controllers\User\AdminController@changeRole'
 ));
 
 Route::group(array('before' => 'auth'), function () {
 	Route::get('profile', array(
 		'as'   => 'profile',
-		'uses' => 'App\Controllers\Site\UserProfileController@showUserProfile'
+		'uses' => 'App\Controllers\User\UserProfileController@showUserProfile'
 	));
-
+	Route::post('upload/image', array(
+		'as'   => 'upload/image',
+		'uses' => 'App\Controllers\User\DownloadController@uploadImage',
+	));
+	Route::get('widgets/getPhoto', array(
+		'as'   => 'widgets/getPhoto',
+		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
+	));
 });
