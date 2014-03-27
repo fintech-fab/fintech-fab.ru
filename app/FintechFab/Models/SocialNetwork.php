@@ -14,8 +14,6 @@ use Illuminate\Auth\UserInterface;
  * @property integer $link_vk
  * @property string  $updated_at
  * @property string  $created_at
- *
- * @method UserVk static where($column)
  */
 class SocialNetwork extends Eloquent implements UserInterface
 {
@@ -24,9 +22,9 @@ class SocialNetwork extends Eloquent implements UserInterface
 
 	protected $table = 'users_social_networks';
 
-	public function setUserData($user)
+	public function user()
 	{
-		dd($user);
+		return $this->belongsTo(User::class);
 	}
 
 	public function getAuthIdentifier()

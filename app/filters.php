@@ -11,14 +11,15 @@
 |
 */
 
-App::before(function($request)
-{
+
+use FintechFab\Models\User;
+
+App::before(function ($request) {
 	//
 });
 
 
-App::after(function($request, $response)
-{
+App::after(function ($request, $response) {
 	//
 });
 
@@ -33,14 +34,15 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('auth', function()
-{
-	if (Auth::guest()) return Redirect::guest('login');
+Route::filter('auth', function () {
+	if (Auth::guest()) {
+		return Redirect::guest('registration');
+	}
+
 });
 
 
-Route::filter('auth.basic', function()
-{
+Route::filter('auth.basic', function () {
 	return Auth::basic();
 });
 
@@ -55,9 +57,10 @@ Route::filter('auth.basic', function()
 |
 */
 
-Route::filter('guest', function()
-{
-	if (Auth::check()) return Redirect::to('/');
+Route::filter('guest', function () {
+	if (Auth::check()) {
+		return Redirect::to('profile');
+	}
 });
 
 /*
@@ -71,10 +74,22 @@ Route::filter('guest', function()
 |
 */
 
-Route::filter('csrf', function()
-{
-	if (Session::token() != Input::get('_token'))
-	{
+Route::filter('csrf', function () {
+	if (Session::token() != Input::get('_token')) {
 		throw new Illuminate\Session\TokenMismatchException;
+	}
+});
+
+Route::filter('roleAdmin', function () {
+	$user = User::find(Auth::user()->id);
+	$res = false;
+	foreach ($user->roles as $role) {
+		if ($role->role == "admin") {
+			$res = true;
+			break;
+		}
+	}
+	if (!$res) {
+		return Redirect::to('profile');
 	}
 });

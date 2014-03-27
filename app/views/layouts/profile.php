@@ -10,8 +10,11 @@ if (empty($content)) {
 <html>
 <head>
 	<?= View::make('layouts.inc.head.head') ?>
+	<script src="/js/ActionForUser.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="css/styleForProfile.css" />
 </head>
 <body>
+<?= View::make('layouts.inc.navbar.navbar') ?>
 <?= View::make('layouts.inc.head.flash_message') ?>
 <div class="container"><?= $content ?></div>
 </body>
