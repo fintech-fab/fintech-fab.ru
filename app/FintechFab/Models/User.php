@@ -21,6 +21,25 @@ use Illuminate\Support\Collection;
  */
 class User extends Eloquent implements UserInterface, RemindableInterface
 {
+	/**
+	 * Ardent validation rules
+	 */
+	public static $rules = array(
+		'first_name'     => 'required',
+		'email'          => 'required|email|unique:users',
+		'password'       => 'required|min:4|alpha_dash',
+		'passwordRepeat' => 'same:password',
+	);
+
+	/**
+	 * Factory
+	 */
+	public static $factory = array(
+		'first_name' => 'string',
+		'email'      => 'email',
+		'password'   => 'password',
+	);
+
 
 	protected $fillable = array('first_name', 'last_name', 'email');
 
