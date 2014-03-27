@@ -14,13 +14,13 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title' => 'Информация о займе',
+	'title'   => 'Информация о займе',
 	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 $model->sendSmsCode = 1;
 echo $form->hiddenField($model, 'sendSmsCode');
 ?>
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		Для получения займа требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">

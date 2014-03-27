@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by JetBrains PhpStorm.
  * User: e.zamorskaya
@@ -32,6 +33,7 @@ class Dictionaries
 
 	/**
 	 * названия для пола
+	 *
 	 * @var array
 	 */
 	public static $aSexes = array(
@@ -44,6 +46,7 @@ class Dictionaries
 
 	/**
 	 * названия для семейного положения
+	 *
 	 * @var array
 	 */
 	public static $aMaritalStatuses = array(
@@ -74,6 +77,7 @@ class Dictionaries
 
 	/**
 	 * Подсказки для полей формы
+	 *
 	 * @var array
 	 */
 	public static $aHintsFormFields = array(
@@ -139,6 +143,7 @@ class Dictionaries
 
 	/**
 	 * названия для  образования
+	 *
 	 * @var array
 	 */
 	public static $aEducations = array(
@@ -197,6 +202,7 @@ class Dictionaries
 
 	/**
 	 * дополнительный расход
+	 *
 	 * @var array
 	 */
 	public static $aLiabilities = array(
@@ -216,6 +222,7 @@ class Dictionaries
 
 	/**
 	 * дни выдачи зарплаты/аванса
+	 *
 	 * @var array
 	 */
 	public static $aMoneyDays = array(
@@ -246,6 +253,7 @@ class Dictionaries
 
 	/**
 	 * варианты второго документа
+	 *
 	 * @var array
 	 */
 	public static $aDocuments = array(
@@ -259,6 +267,7 @@ class Dictionaries
 
 	/**
 	 * правила заполнения второго документа
+	 *
 	 * @var array
 	 */
 	public static $aDocumentsRegexps = array(
@@ -272,6 +281,7 @@ class Dictionaries
 
 	/**
 	 * Сообщения об ошибках для второго документа
+	 *
 	 * @var array
 	 */
 	public static $aDocumentsPopovers = array(
@@ -286,6 +296,7 @@ class Dictionaries
 
 	/**
 	 * названия дней недели для вывода в блоке "Выбранные условия"
+	 *
 	 * @var array
 	 */
 	public static $aDays = array(
@@ -300,6 +311,7 @@ class Dictionaries
 
 	/**
 	 * месяца года для вывода в блоке "Выбранные условия"
+	 *
 	 * @var array
 	 */
 	public static $aMonths = array(
@@ -371,6 +383,7 @@ class Dictionaries
 
 	/**
 	 * Выбор суммы займа
+	 *
 	 * @var array
 	 */
 	public static $aProducts = array(
@@ -381,6 +394,7 @@ class Dictionaries
 
 	/**
 	 * Цена за подписку
+	 *
 	 * @var array
 	 */
 	public static $aDataPrices = array(
@@ -391,6 +405,7 @@ class Dictionaries
 
 	/**
 	 * Сумма займа (просто цифры)
+	 *
 	 * @var array
 	 */
 	public static $aDataFinalPrices = array(
@@ -401,6 +416,7 @@ class Dictionaries
 
 	/**
 	 * Длительность подписки
+	 *
 	 * @var array
 	 */
 	public static $aDataPriceCounts = array(
@@ -411,6 +427,7 @@ class Dictionaries
 
 	/**
 	 * Кол-во возможных займов
+	 *
 	 * @var array
 	 */
 	public static $aDataCounts = array(
@@ -421,6 +438,7 @@ class Dictionaries
 
 	/**
 	 * Срок возврата займа
+	 *
 	 * @var array
 	 */
 	public static $aDataTimes = array(
@@ -439,6 +457,7 @@ class Dictionaries
 
 	/**
 	 * Выбор способа получения займа в зависимости от выбранной на предыдущем шаге суммы
+	 *
 	 * @param int $chosen_sum_index
 	 *
 	 * @var array
@@ -482,6 +501,7 @@ class Dictionaries
 
 	/**
 	 * варианты секретного вопроса
+	 *
 	 * @var array
 	 */
 	public static $aSecretQuestions = array(
@@ -495,6 +515,7 @@ class Dictionaries
 
 	/**
 	 * выбранный секретный вопрос
+	 *
 	 * @param $id
 	 *
 	 * @return string
@@ -565,6 +586,7 @@ class Dictionaries
 
 	/**
 	 * список регионов
+	 *
 	 * @return array
 	 */
 	public static function getRegions()
@@ -672,5 +694,73 @@ class Dictionaries
 			return true; //если не удалось узнать регион, считаем что московский
 		}
 	}
+
+	/**
+	 * @param $iLoans
+	 *
+	 * @return string
+	 */
+	public static function formatLoanLabel($iLoans)
+	{
+		switch ($iLoans) {
+			case 1:
+				$sFormattedLabel = $iLoans . ' займ';
+				break;
+			case 2:
+			case 3:
+			case 4:
+				$sFormattedLabel = $iLoans . ' займа';
+				break;
+			default:
+				$sFormattedLabel = $iLoans . ' займов';
+				break;
+		}
+		return $sFormattedLabel;
+	}
+
+	/**
+	 * @param $str
+	 *
+	 * @return string
+	 */
+	public static function translitIt($str)
+	{
+		$tr = array(
+			"А" => "a", "Б" => "b", "В" => "v", "Г" => "g",
+			"Д" => "d", "Е" => "e", "Ж" => "j", "З" => "z", "И" => "i",
+			"Й" => "y", "К" => "k", "Л" => "l", "М" => "m", "Н" => "n",
+			"О" => "o", "П" => "p", "Р" => "r", "С" => "s", "Т" => "t",
+			"У" => "u", "Ф" => "f", "Х" => "h", "Ц" => "ts", "Ч" => "ch",
+			"Ш" => "sh", "Щ" => "sch", "Ъ" => "", "Ы" => "yi", "Ь" => "",
+			"Э" => "e", "Ю" => "yu", "Я" => "ya", "а" => "a", "б" => "b",
+			"в" => "v", "г" => "g", "д" => "d", "е" => "e", "ж" => "j",
+			"з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l",
+			"м" => "m", "н" => "n", "о" => "o", "п" => "p", "р" => "r",
+			"с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "h",
+			"ц" => "ts", "ч" => "ch", "ш" => "sh", "щ" => "sch", "ъ" => "y",
+			"ы" => "yi", "ь" => "", "э" => "e", "ю" => "yu", "я" => "ya",
+			" " => "_", "." => "", "/" => "_"
+		);
+
+		return strtr($str, $tr);
+	}
+
+	/**
+	 * @param $sUrl
+	 *
+	 * @return mixed|string
+	 */
+	public static function createTransliteratedProductName($sUrl)
+	{
+		if (preg_match('/[^A-Za-z0-9]/', $sUrl)) {
+			$sUrl = self::translitIt($sUrl);
+			$sUrl = preg_replace('/[^A-Za-z0-9]/', '', $sUrl);
+		}
+		$sUrl = str_replace('kreddi', 'kreddy', $sUrl);
+		$sUrl = str_replace('dney', 'days', $sUrl);
+
+		return $sUrl;
+	}
+
 
 }

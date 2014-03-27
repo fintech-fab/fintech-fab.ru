@@ -5,7 +5,7 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сма
 ?>
 <h4>Идентификация на смартфоне</h4>
 
-<div class="alert in alert-block alert-info span7">
+<div class="alert in alert-block alert-info">
 	<div class="fright">
 		<img width="180" height="180" src="/static/images/app_google_qr_180.png" />
 	</div>
@@ -20,6 +20,6 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сма
 		<br /><br />После идентификации потребуется ввести данные документов, использованных при идентификации.
 	<?php endif; ?>
 
-	<br class="cl"/>
+	<br class="cl" />
 
 </div>

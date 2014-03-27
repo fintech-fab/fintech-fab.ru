@@ -7,7 +7,7 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сай
 ?>
 	<h4>Идентификация на сайте</h4>
 
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		<h4>Для идентификации вам потребуется веб-камера.
 			<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
 				После идентификации потребуется ввести
@@ -39,6 +39,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 ?>
 
+<?= $form->hiddenField($model, 'type', array('name' => 'type')); ?>
 <?= $form->hiddenField($model, 'client_code', array('name' => 'client_code')); ?>
 <?= $form->hiddenField($model, 'service', array('name' => 'service')); ?>
 <?= $form->hiddenField($model, 'signature', array('name' => 'signature')); ?>

@@ -97,6 +97,12 @@ class SiteParams
 		array('Идентификация', 8, 4)
 	);
 
+	public static $aContinueRegBreadCrumbs = array(
+		array('Быстрая регистрация', 1, 1),
+		array('Заполнение анкеты', 2, 2),
+		array('Идентификация', 8, 3)
+	);
+
 	/**
 	 * Опции для HTML Purifier
 	 *
@@ -161,6 +167,7 @@ class SiteParams
 
 	/**
 	 * ссылка на сайт
+	 *
 	 * @var string
 	 */
 	public $link;
@@ -174,6 +181,7 @@ class SiteParams
 
 	/**
 	 * получить текущее время
+	 *
 	 * @return int|null
 	 */
 	public static function getTime()
@@ -187,6 +195,7 @@ class SiteParams
 
 	/**
 	 * массив возрастов, в которые меняют паспорт
+	 *
 	 * @var array
 	 */
 	public static $aChangePassportAges = array(
@@ -585,6 +594,7 @@ class SiteParams
 
 	/**
 	 * Перевод первой буквы строки в верхний регистр (мультибайтовая кодировка)
+	 *
 	 * @param string $sText
 	 * @param string $sEncoding
 	 *
@@ -601,6 +611,7 @@ class SiteParams
 
 	/**
 	 * Перевод первой буквы строки в нижний регистр (мультибайтовая кодировка)
+	 *
 	 * @param string $sText
 	 * @param string $sEncoding
 	 *

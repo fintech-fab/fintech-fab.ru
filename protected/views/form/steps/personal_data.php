@@ -57,8 +57,8 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 <div class="row">
 	<div class="span12">
 		<?php
-		$oClientCreateForm->complete = false;
-		echo $form->checkBoxRow($oClientCreateForm, 'complete');
+		$oClientCreateForm->agree = false;
+		echo $form->checkBoxRow($oClientCreateForm, 'agree');
 		?>
 	</div>
 </div>
@@ -77,6 +77,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 				'id'          => 'submitButton',
 				'buttonType'  => 'ajaxSubmit',
 				'ajaxOptions' => array(
+					'complete' => 'checkBlankResponse',
 					'type'   => 'POST',
 					'update' => '#formBody',
 				),

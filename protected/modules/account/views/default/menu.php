@@ -84,6 +84,9 @@ $this->menu[] = array(
 			'label' => 'На сайте', 'url' => array('/account/default/identifySite')
 		),
 		array(
+			'label' => 'Загрузить фото', 'url' => array('/account/default/identifyPhoto')
+		),
+		array(
 			'label' => 'На смартфоне', 'url' => array('/account/default/identifyApp')
 		),
 	),

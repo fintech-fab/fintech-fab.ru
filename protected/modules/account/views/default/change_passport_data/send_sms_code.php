@@ -20,7 +20,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 $oSmsCodeForm->sendSmsCode = 1;
 echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 ?>
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		Для подачи заявки на изменение паспортных данных требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">

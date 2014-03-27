@@ -37,6 +37,7 @@ class FormProgressBarWidget extends CWidget
 						$aStep['label'],
 						array($aStep['url'])
 						, array(
+							'complete' => 'checkBlankResponseText',
 							'update' => '#formBody',
 						));
 				} elseif ($iKey == $this->iCurrentStep) {
@@ -62,6 +63,16 @@ class FormProgressBarWidget extends CWidget
 			));
 			echo '</div>';
 			echo '</div>';
+
+			Yii::app()->clientScript->registerScript('checkResponseScript', '
+			function checkBlankResponseText(xhr){
+				if(xhr.responseText == \'\'){
+					window.location.reload(true);
+					return false;
+				}
+				return true;
+			}', CClientScript::POS_HEAD);
+
 		}
 	}
 
@@ -75,6 +86,9 @@ class FormProgressBarWidget extends CWidget
 		return $iProgress;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	private function getWidgetStep()
 	{
 		return $this->aSteps[$this->iCurrentStep]['form_step'];

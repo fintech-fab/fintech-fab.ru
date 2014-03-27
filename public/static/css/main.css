@@ -204,35 +204,9 @@ div.search-form {
 	padding-right: 8px;
 }
 
-#form_selected_product, #form_selected_product_ivanovo {
-	margin: 10px 0 15px -20px;
-	padding: 0px 0 10px 35px;
-	border: 1px solid #ddd;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-}
-
-#ClientSelectProductForm {
-	padding-top: 15px;
-}
-
-#ClientFlexibleProductForm {
-	padding-top: 15px;
-}
-
-#form_selected_product #ClientSelectProductForm, #form_selected_product_ivanovo #ClientSelectProductForm {
-	background: transparent !important;
-	padding-top: 0 !important;
-}
-
-#form_selected_product {
-	padding-top: 15px;
-}
-
 #main-content {
 	margin-top: -10px;
-	padding-top: 10px;
+	padding-top: 20px;
 	position: relative;
 }
 

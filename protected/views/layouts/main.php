@@ -28,7 +28,7 @@ $this->endContent();
 //<div class="left-stars-23feb"></div>
 //<div class="right-stars-23feb"></div>
 ?>
-<!--<div class="main-bgr-8mar">-->    <!-- main content start-->
+<!--<div class="main-bgr-8mar">--><!-- main content start-->
 <?= $content; ?>
 <!-- main content end--><br />
 

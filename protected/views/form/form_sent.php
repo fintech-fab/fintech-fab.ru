@@ -3,6 +3,7 @@
 /* @var IkTbActiveForm $form */
 /* @var ClientCreateFormAbstract $oClientCreateForm */
 /* @var string $sRedirectUri */
+/* @var string $sSuccessYmGoal */
 
 $this->pageTitle = Yii::app()->name;
 
@@ -10,7 +11,7 @@ $this->pageTitle = Yii::app()->name;
 Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
-<?php $this->widget('YaMetrikaGoalsWidget', array('bRegisterComplete' => true)); ?>
+<?php $this->widget('YaMetrikaGoalsWidget', array('sForceGoal' => $sSuccessYmGoal)); ?>
 
 <div class="row">
 

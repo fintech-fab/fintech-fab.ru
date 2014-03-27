@@ -14,7 +14,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title' => 'Информация о займе',
+	'title'   => 'Информация о займе',
 	'content' => $this->renderPartial('flex_subscription/_product', array(), true)
 ));
 $model->sendSmsCode = 1;
@@ -23,7 +23,7 @@ echo $form->hiddenField($model, 'sendSmsCode');
 
 
 <?php //TODO вынести сообщения в константы ?>
-	<div class="alert in alert-block alert-error span7">
+	<div class="alert in alert-block alert-error">
 		При отправке SMS с кодом подтверждения произошла ошибка. Попробуйте снова запросить код подтверждения.<br />В
 		случае, если ошибка повторяется, обратитесь в контактный центр.
 	</div>

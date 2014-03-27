@@ -16,7 +16,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 $oSmsCodeForm->sendSmsCode = 1;
 echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 ?>
-	<div class="alert in alert-block alert-warning span7">
+	<div class="alert in alert-block alert-warning">
 		Для изменения секретного вопроса требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">

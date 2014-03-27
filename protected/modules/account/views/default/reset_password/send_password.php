@@ -14,7 +14,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 <h2 class='pay_legend' style="margin-left: 20px;">Восстановить пароль</h2>
 
 
-<div id="alertSmsSent" class="alert in alert-success span7"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
+<div id="alertSmsSent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
 	Ваш номер телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>

@@ -13,10 +13,10 @@ $this->pageTitle = Yii::app()->name . " - Изменение пароля";
 	'content' => $this->renderPartial('change_passport_data/_data', array(), true)
 ));*/
 ?>
-<div class="alert in alert-block alert-success span7">
+<div class="alert in alert-block alert-success">
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
-<div class="alert in alert-block alert-info span7">
+<div class="alert in alert-block alert-info">
 	Для подтверждения операции введите код, отправленный Вам по SMS
 </div>
 <div class="form" id="activeForm">

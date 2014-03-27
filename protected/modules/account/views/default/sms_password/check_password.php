@@ -14,7 +14,7 @@ $this->pageTitle = Yii::app()->name . " - Личный кабинет";
 
 <h4>Авторизация по SMS-паролю</h4>
 
-<div id="alertSmsSent" class="alert in alert-success span7"><?= Dictionaries::C_SMS_PASS_SUCCESS; ?></div>
+<div id="alertSmsSent" class="alert in alert-success"><?= Dictionaries::C_SMS_PASS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
 	Ваш номер телефона: +7<?= Yii::app()->user->getMaskedId(); ?>

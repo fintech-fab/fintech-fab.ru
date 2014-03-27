@@ -8,17 +8,16 @@ class YaMetrikaGoalsWidget extends CWidget
 	 * @var integer сделано шагов на данный момент
 	 */
 	private $sStep;
-	public $bRegisterComplete;
+	public $sForceGoal = null;
 
 	public function run()
 	{
 		$this->sStep = Yii::app()->clientForm->getMetrikaGoalByStep();
 
-		//если текущее представление form_sent, то регистрация завершена
-		if ($this->bRegisterComplete) {
-			$this->sStep = 'register_complete';
+		//если цель установлена "насильно", то выводим её
+		if ($this->sForceGoal) {
+			$this->sStep = $this->sForceGoal;
 		}
-
 
 		if (!empty($this->sStep)) {
 			Yii::app()->clientScript->registerScript('yaMetrikaGoal' . $this->sStep, '

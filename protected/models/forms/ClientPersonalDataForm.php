@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientPersonalDataForm
  */
@@ -16,7 +17,7 @@ class ClientPersonalDataForm extends ClientFullForm
 			'third_name',
 			'email',
 			'sex',
-			'complete',
+			'agree',
 
 			'birthday',
 			'phone',
@@ -29,7 +30,7 @@ class ClientPersonalDataForm extends ClientFullForm
 				'third_name',
 				'email',
 				'sex',
-				'complete',
+				'agree',
 
 				'birthday',
 				'phone',
@@ -56,7 +57,7 @@ class ClientPersonalDataForm extends ClientFullForm
 			'email',
 
 			'sex',
-			'complete',
+			'agree',
 		);
 	}
 }

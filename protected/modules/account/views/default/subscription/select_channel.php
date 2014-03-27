@@ -4,13 +4,14 @@
 /* @var string $sFormName */
 
 $this->pageTitle = Yii::app()->name . " - Выберите канал получения займа";
+
+$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 ?>
 	<h4>Выберите канал получения займа</h4>
 
 	<div class="alert alert-info">Ваш пакет займов -
-		&quot;<?= Yii::app()->adminKreddyApi->getProductNameById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
-		&quot;<br /> Размер первого займа
-		- <?= Yii::app()->adminKreddyApi->getProductLoanAmountById(Yii::app()->adminKreddyApi->getSubscribeSelectedProduct()) ?>
+		&quot;<?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?>
+		&quot;<br /> Размер первого займа - <?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 		руб.
 	</div>
 

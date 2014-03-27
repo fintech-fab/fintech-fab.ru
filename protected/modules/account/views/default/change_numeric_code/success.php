@@ -5,6 +5,6 @@ $this->pageTitle = Yii::app()->name . " - Изменение цифрового 
 ?>
 <h4>Изменение цифрового кода</h4>
 
-<div class="alert in alert-success span7">
+<div class="alert in alert-success">
 	Цифровой код успешно изменен.
 </div>

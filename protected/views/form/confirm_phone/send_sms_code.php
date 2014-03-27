@@ -11,6 +11,8 @@
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
+<h4>Подтверждение номера телефона</h4>
+
 Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефона:
 <strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
 
