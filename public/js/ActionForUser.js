@@ -1,8 +1,12 @@
 $(document).ready(function () {
 
-	$('.wrap .descr').click(function () {
+	$('#photo').on('click', '.wrap .descr', function () {
 		event.preventDefault();
 		$('#photo').hide();
-		$('#drop-files').show();
+		$('.photo_upload').show();
+	});
+	$('#clear-btn').click(function () {
+		$('#photo').show();
+		$('.photo_upload').hide();
 	});
 });

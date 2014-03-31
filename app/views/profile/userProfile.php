@@ -9,37 +9,63 @@ $userSocial = User::find($user['id'])->SocialNetworks()->get()->toArray();
 $socialNets = array();
 
 ?>
-<script src="/js/imageuploader.js" type="text/javascript"></script>
+<script src="/js/ActionForUser.js"></script>
+<script type="text/javascript" src="/js/jquery.damnUploader.min.js"></script>
+<script src="/js/interafce.js"></script>
+<script src="/js/uploader-setup.js"></script>
 <div id="profile">
 	<h2 class="text-center">Профиль</h2><br>
 
 	<div class="row">
-		<div id="photo" class="col-md-offset-1 col-md-3">
+		<div id="photo" class="col-md-offset-1 col-md-4">
 			<?= UsersPhoto::getPhoto() ?>
 		</div>
-		<div id="drop-files" class="col-md-4">
-			<?=
-			Form::open(array(
-				'id'     => 'formForFile',
-				'class'  => 'form-horizontal',
-				'role'   => 'form',
-				'method' => 'post',
-				'action' => 'upload/image',
-				'target' => 'iframe-name',
-			)); ?>
-			<div id="dropZone" class="text-center">
-					<span class="text">
-						Для загрузки, перетащите файл сюда, или
-					</span><br>
+		<div class="col-md-5 photo_upload">
+			<div class="well well-lg auto-tip" id="drop-box">
+				<p>Перетащите файл в эту область, или</p>
 				<?=
-				Form::file('image', array(
-					'id'    => 'upload_btn',
-					'class' => 'center-block',
-				))?>
+				Form::open(array(
+					'id'      => 'upload-form',
+					'class'   => 'form-inline',
+					'role'    => 'form',
+					'method'  => 'post',
+					'action'  => 'upload/image',
+					'enctype' => 'multipart/form-data',
+				)); ?>
+				<div class="form-group for_input_file">
+					<?=
+					Form::file('image', array(
+						'id'    => 'file-input',
+						'class' => 'form-control auto-tip',
+					))?>
+				</div>
+				<div class="row">
+					<div class="checkbox col-md-offset-1 col-md-5">
+						<label> <input type="checkbox" id="previews-checker" checked="checked"> Предпросмотр фото
+						</label> <br> <label> <input type="checkbox" id="autostart-checker"> Автостарт загрузки </label>
+					</div>
+					<button id="send-btn" type="submit" class="btn btn-primary btn-std col-md-2">Готово</button>
+					<button id="clear-btn" class="btn btn-danger btn-std col-md-2">Отмена</button>
+				</div>
+				<?= Form::close(); ?>
 			</div>
-			<?= Form::close(); ?>
+			<div class="">
+				<h3>Upload queue</h3>
+				<table class="table">
+					<thead>
+					<tr>
+						<th>Preview</th>
+						<th>Original filename</th>
+						<th>Size</th>
+						<th>Status</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody id="upload-rows"></tbody>
+				</table>
+			</div>
 		</div>
-		<div class="col-md-offset-1 col-md-4">
+		<div class="col-md-4">
 			<p class="col-md-6">Имя:</p>
 
 			<p class="col-md-6"><?= $user['first_name'] ?></p><br>

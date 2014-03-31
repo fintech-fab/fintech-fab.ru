@@ -40,6 +40,7 @@ class UserProfileController extends BaseController
 		$user->first_name = $userData['first_name'];
 		$user->last_name = $userData['last_name'];
 		$user->photo = $userData['photo'];
+		$user->email = $userData['email'];
 		$user->save();
 		Auth::login($user);
 
