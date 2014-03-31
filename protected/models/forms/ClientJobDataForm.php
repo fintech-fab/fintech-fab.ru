@@ -26,12 +26,11 @@ class ClientJobDataForm extends ClientFullForm
 				'relatives_one_phone',
 				'loan_purpose',
 				'have_past_credit',
-
-				//обязательно требуется для валидации, берется из информации предыдущих форм
-				'phone',
 			),
 			$aRequired
 		);
+
+		$aRules[] = array('phone', 'safe');
 
 		return $aRules;
 	}

@@ -356,17 +356,18 @@ class FormController extends Controller
 		//отправляем в API данные клиента
 		$bRegisterSuccess = Yii::app()->clientForm->updateFastRegClient($aClientData);
 
-		//если клиент успешно создан
+		//если клиент успешно обновил данные анкеты
 		if ($bRegisterSuccess) {
-
-			//автоматический логин юзера в личный кабинет
-			//$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
-			//$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
 
 			Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
 
 			//отключаем режим продолжения регистрации
 			Yii::app()->clientForm->setContinueReg(false);
+
+			//обновим в таблице статус записи
+			$oClientData = ClientData::model()->scopeConfirmedPhone($aClientData['phone'])->find();
+			$oClientData->complete = 1;
+			$oClientData->save();
 
 			//установим информацию о завершенной регистрации перед редиректом
 			Yii::app()->clientForm->setRegisterComplete();

@@ -289,7 +289,7 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'match', 'message' => 'Номер телефона должен начинаться на +7 9', 'pattern' => '/^9\d{' . (SiteParams::C_PHONE_LENGTH - 1) . '}$/');
 					$aRules[] = array(
 						$sFieldName, 'unique', 'className' => 'ClientData', 'attributeName' => 'phone', 'message' => 'Ошибка! Обратитесь в контактный центр.', 'criteria' => array(
-							'condition' => 'complete = :complete AND flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':complete' => 1, ':flag_sms_confirmed' => 1)
+							'condition' => 'flag_sms_confirmed = :flag_sms_confirmed', 'params' => array(':flag_sms_confirmed' => 1)
 						)
 					);
 					break;

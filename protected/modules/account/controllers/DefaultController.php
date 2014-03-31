@@ -228,6 +228,8 @@ class DefaultController extends Controller
 
 		//ставим клиенту флаг "продолжает регистрацию"
 		Yii::app()->clientForm->setContinueReg(true);
+		//сбросим шаги
+		Yii::app()->clientForm->resetSteps();
 
 		//отправляем на форму регистрации
 		$this->redirect(Yii::app()->createUrl('/form'));
