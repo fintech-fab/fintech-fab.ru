@@ -78,7 +78,9 @@ class AuthController extends BaseController
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
 
-		return Redirect::back()->with('userMessage', $userMessage)->with('userMessageTitle', $title);
+		return Redirect::to($this->getRedirectBackUrl('/profile'))
+			->with('userMessage', $userMessage)
+			->with('userMessageTitle', $title);
 
 	}
 
