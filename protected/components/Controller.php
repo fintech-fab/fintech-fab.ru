@@ -41,8 +41,7 @@ class Controller extends CController
 				'HTML.Allowed' => '',
 			);
 			$sTrackingID = $oPurifier->purify($sTrackingID);
-			$sTrackingID = preg_replace('/\s+/', '', $sTrackingID);
-			$sTrackingID = preg_replace('/[^\d]/', '', $sTrackingID);
+			$sTrackingID = preg_replace('/[^a-z\d]/i', '', $sTrackingID);
 
 			if (Yii::app()->request->cookies['TrackingID'] != $sTrackingID) {
 				$cookie = new CHttpCookie('TrackingID', $sTrackingID);
