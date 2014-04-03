@@ -89,6 +89,13 @@ $this->menu[] = array(
 		array(
 			'label' => 'На смартфоне', 'url' => array('/account/default/identifyApp')
 		),
+		array(
+			'label'       => 'Инструкция',
+			'url'         => 'http://youtu.be/MA7K12JcrEM',
+			'linkOptions' => array(
+				'target' => '_blank',
+			),
+		),
 	),
 );
 $this->menu[] = '';

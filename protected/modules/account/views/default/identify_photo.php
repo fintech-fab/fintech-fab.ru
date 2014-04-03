@@ -59,6 +59,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			)
 		));
 		?>
+		<?php
+		$this->widget('bootstrap.widgets.TbButton', array(
+			'url'   => 'http://youtu.be/MA7K12JcrEM',
+			'size'  => 'large',
+			'label' => 'Инструкция',
+			'htmlOptions' => array(
+				'class' => 'btn-warning',
+				'target'=> '_blank',
+			)
+		));
+
+		?>
 	</div>
 <?php
 $this->endWidget();
