@@ -20,5 +20,5 @@ if (SiteParams::getIsIvanovoSite()) {
 <?= $sClientInfoRender ?>
 
 <?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>
-
+	<div class="clearfix"></div>
 <?php $this->renderPartial('app_info'); ?>
