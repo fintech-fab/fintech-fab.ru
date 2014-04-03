@@ -4,20 +4,19 @@
  * @var $smsState
  * @var $sClientInfoRender
  * @var $sPassFormRender
+ * @var $sClientInfoView
  */
 
 $this->breadcrumbs = array(
 	$this->module->id,
 );
 
-if (SiteParams::getIsIvanovoSite()) {
-	$this->pageTitle = Yii::app()->name . ' - Статус займа';
-} else {
-	$this->pageTitle = Yii::app()->name . ' - Ваш Пакет займов';
-}
+
 ?>
 
-<?= $sClientInfoRender ?>
+<?php
+$this->widget('application.modules.account.components.ClientInfoWidget', array('sClientInfoView' => $sClientInfoView));
+?>
 
 <?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>
 

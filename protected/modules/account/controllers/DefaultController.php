@@ -132,13 +132,10 @@ class DefaultController extends Controller
 		//выбираем папку представления в зависимости от статуса СМС-авторизации и статуса регистрации
 		//если клиент прошел быструю регистрацию не не заполнил анкеты
 		if (Yii::app()->adminKreddyApi->isFastReg()) {
-			$sClientInfoView = 'index_fast_reg/';
 			$sIndexView = 'index_fast_reg/index';
 		} elseif (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-			$sClientInfoView = 'index_is_sms_auth/';
 			$sIndexView = 'index_is_sms_auth/index';
 		} else {
-			$sClientInfoView = 'index_not_sms_auth/';
 			$sIndexView = 'index_not_sms_auth/index';
 		}
 
@@ -146,18 +143,19 @@ class DefaultController extends Controller
 		if (Yii::app()->adminKreddyApi->getSubscriptionProduct()) { //если подписка есть
 			if (Yii::app()->adminKreddyApi->getMoratoriumLoan()
 			) { // если есть мораторий на заём
-				$sClientInfoView .= 'loan_moratorium';
+				$sClientInfoView = 'loan_moratorium';
 			} else { //если подписка есть
-				$sClientInfoView .= 'is_subscription';
+				$sClientInfoView = 'is_subscription';
 			}
 		} else { // нет подписки
 			if (Yii::app()->adminKreddyApi->getMoratoriumSubscriptionLoan()
 			) { // если есть мораторий на подписку/скоринг или заём
-				$sClientInfoView .= 'subscription_moratorium';
+				//TODO вынести в константы типы вьюх
+				$sClientInfoView = 'subscription_moratorium';
 			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
-				$sClientInfoView .= 'subscription_scoring';
+				$sClientInfoView = 'subscription_scoring';
 			} else { // можно оформить новый Пакет
-				$sClientInfoView .= 'new_subscription_available';
+				$sClientInfoView = 'new_subscription_available';
 			}
 		}
 
@@ -179,12 +177,12 @@ class DefaultController extends Controller
 		 */
 		$oSmsPassForm = new SMSPasswordForm('sendRequired');
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
-		$sClientInfoRender = $this->renderPartial($sClientInfoView, array(), true);
+		//$sClientInfoRender = $this->renderPartial($sClientInfoView, array(), true);
 
 		$this->render($sIndexView, array(
-				'sClientInfoRender' => $sClientInfoRender,
-				'sPassFormRender'   => $sPassFormRender,
-				'sIdentifyRender'   => $sIdentifyRender
+				'sClientInfoView' => $sClientInfoView,
+				'sPassFormRender' => $sPassFormRender,
+				'sIdentifyRender' => $sIdentifyRender
 			)
 		);
 
