@@ -43,6 +43,7 @@ class AdminKreddyApiComponent
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Ваша заявка отклонена';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
 
@@ -239,7 +240,7 @@ class AdminKreddyApiComponent
 	private $sLastSmsMessage = ''; //sms_message из последнего выполненного запроса
 	private $bIsCanSubscribe = null; //клиент может оформить подписку
 	private $bIsCanGetLoan = null; //клиент может взять заём
-	private $bScoringAccepted = null;
+	private $iScoringResult = null;
 	private $aCheckIdentify;
 	private $bIsNeedCard;
 
@@ -1952,18 +1953,18 @@ class AdminKreddyApiComponent
 			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			if (isset($aResult['scoring_accepted'])) {
-				$this->setScoringAccepted($aResult['scoring_accepted']);
+			if (isset($aResult['scoring_result'])) {
+				$this->setScoringResult($aResult['scoring_result']);
 			}
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
 		} else {
 			if (isset($aResult['sms_message'])) {
-				$this->setScoringAccepted(null);
+				$this->setScoringResult(null);
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setScoringAccepted(null);
+				$this->setScoringResult(null);
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
@@ -1986,18 +1987,18 @@ class AdminKreddyApiComponent
 			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId, 'custom_options' => array('loan_amount' => $iAmount, 'loan_lifetime' => $iTime)));
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			if (isset($aResult['scoring_accepted'])) {
-				$this->setScoringAccepted($aResult['scoring_accepted']);
+			if (isset($aResult['scoring_result'])) {
+				$this->setScoringResult($aResult['scoring_result']);
 			}
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
 		} else {
 			if (isset($aResult['sms_message'])) {
-				$this->setScoringAccepted(null);
+				$this->setScoringResult(null);
 				$this->setLastSmsMessage($aResult['sms_message']);
 			} else {
-				$this->setScoringAccepted(null);
+				$this->setScoringResult(null);
 				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
 			}
 
@@ -2958,19 +2959,19 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $bAccepted
+	 * @param $iResult
 	 */
-	public function setScoringAccepted($bAccepted)
+	public function setScoringResult($iResult)
 	{
-		$this->bScoringAccepted = $bAccepted;
+		$this->iScoringResult = $iResult;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getScoringAccepted()
+	public function getScoringResult()
 	{
-		return $this->bScoringAccepted;
+		return $this->iScoringResult;
 	}
 
 	/**
@@ -3068,14 +3069,24 @@ class AdminKreddyApiComponent
 	 */
 	public function getDoSubscribeMessage()
 	{
-		$bScoringAccepted = $this->getScoringAccepted();
-		if (!empty($bScoringAccepted) && !SiteParams::getIsIvanovoSite()) {
-			$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
+		$iScoringResult = $this->getScoringResult();
 
-			return $sMessage;
-		} else {
+		if(empty($iScoringResult) || SiteParams::getIsIvanovoSite()) {
 			return self::C_DO_SUBSCRIBE_MSG;
 		}
+
+		switch($iScoringResult){
+			case self::C_SCORING_ACCEPT:
+				$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
+				return $sMessage;
+				break;
+			case self::C_SCORING_CANCEL:
+				return self::C_DO_SUBSCRIBE_MSG_SCORING_CANCELED;
+				break;
+			default:
+				return self::C_DO_SUBSCRIBE_MSG;
+		}
+
 	}
 
 	/**
