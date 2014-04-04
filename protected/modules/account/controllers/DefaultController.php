@@ -982,21 +982,13 @@ class DefaultController extends Controller
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
 			// если невозможно - выводим сообщение о недоступности
-			if (SiteParams::getIsIvanovoSite()) {
-				$this->render('flex_subscription/subscribe_not_available');
-			} else {
-				$this->render('subscription/subscribe_not_available');
-			}
+			$this->render('subscription/index', array('sView' => 'subscribe_not_available', 'oModel' => null));
 			Yii::app()->end();
 		}
 
 		//проверяем ответ checkSubscribe, не нужно ли привязать карту
 		if (Yii::app()->adminKreddyApi->checkSubscribeNeedCard()) {
-			if (SiteParams::getIsIvanovoSite()) {
-				$this->render('flex_subscription/need_card');
-			} else {
-				$this->render('subscription/need_card');
-			}
+			$this->render('subscription/index', array('sView' => 'need_card', 'oModel' => null));
 			Yii::app()->end();
 		}
 
@@ -1011,10 +1003,7 @@ class DefaultController extends Controller
 					$oIdentify->setAttributes($aGetIdent);
 					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
 					//выводим форму отправки на идентификацию
-					$sView = (SiteParams::getIsIvanovoSite())
-						? 'flex_subscription/need_identify'
-						: 'subscription/need_identify';
-					$this->render($sView, array('model' => $oIdentify));
+					$this->render('subscription/index', array('sView' => 'need_identify', 'oModel' => $oIdentify));
 					Yii::app()->end();
 				}
 			} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
@@ -1033,22 +1022,20 @@ class DefaultController extends Controller
 			Yii::app()->user->setState('flex_amount', null);
 			Yii::app()->user->setState('channel_id', null);
 
-			$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
+			$sView = 'subscribe';
 		} else {
-			$sView = (SiteParams::getIsIvanovoSite())
-				? 'flex_subscription/subscribe_not_sms_auth'
-				: 'subscription/subscribe_not_sms_auth';
+			$sView = 'subscribe_not_sms_auth';
 		}
 
 
-		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientSubscribeFlexibleProductForm() : new ClientSubscribeForm();
+		$oProductForm = new ClientSubscribeForm();
 
 		/**
 		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
 		 */
-		$oSmsPassForm = new SMSPasswordForm('sendRequired');
-		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
-		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'model' => $oProductForm));
+		$this->render('subscription/index', array('sView' => $sView, 'oModel' => $oProductForm));
+
+		//TODO $this->render($sView, array('sPassFormRender' => $sPassFormRender, 'oModel' => $oProductForm));
 	}
 
 	/**
@@ -1075,14 +1062,13 @@ class DefaultController extends Controller
 				//сохраняем в сессию выбранный продукт
 				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
 
-				$sView = 'subscription/select_channel';
-				$this->render($sView, array('sFormName' => get_class($oProductForm)));
+				$this->render('subscription/index', array('sView' => 'select_channel', 'oModel' => $oProductForm));
+				//$this->render($sView, array('sFormName' => get_class($oProductForm)));
 				Yii::app()->end();
 			}
 		}
 
-		$sView = 'subscription/subscribe';
-		$this->render($sView, array('model' => $oProductForm));
+		$this->render('subscription/index', array('sView' => 'subscribe', 'oModel' => $oProductForm));
 		Yii::app()->end();
 	}
 
@@ -1111,10 +1097,7 @@ class DefaultController extends Controller
 				$oIdentify->setAttributes($aGetIdent);
 				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/doSubscribe");
 				//выводим форму отправки на идентификацию
-				$sView = (SiteParams::getIsIvanovoSite())
-					? 'flex_subscription/need_identify'
-					: 'subscription/need_identify';
-				$this->render($sView, array('model' => $oIdentify));
+				$this->render('subscription/index', array('sView' => 'need_identify', 'oModel' => $oIdentify));
 				Yii::app()->end();
 			}
 		} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) { //проверяем, нужно ли обновить паспортные данные
@@ -1156,15 +1139,13 @@ class DefaultController extends Controller
 		}
 
 		//выбираем нужную модель
-		$oProductForm = (SiteParams::getIsIvanovoSite()) ? new ClientSubscribeFlexibleProductForm() : new ClientSubscribeForm('channelRequired');
+		$oProductForm = new ClientSubscribeForm('channelRequired');
 		//если есть POST-запрос или были данные в getState перед редиректом
 		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
 			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
 			if (Yii::app()->request->getIsPostRequest()) {
 				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
-				if (!SiteParams::getIsIvanovoSite()) {
-					$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-				}
+				$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 			} else {
 				$aPost = $aData;
 			}
@@ -1175,23 +1156,14 @@ class DefaultController extends Controller
 
 				//сохраняем в сессию выбранный продукт
 				$oForm = new SMSCodeForm('sendRequired');
-				if (SiteParams::getIsIvanovoSite()) {
-					Yii::app()->adminKreddyApi->setSubscribeFlexAmount($oProductForm->amount);
-					Yii::app()->adminKreddyApi->setSubscribeFlexTime($oProductForm->time);
-					Yii::app()->adminKreddyApi->setSubscribeFlexChannelId($oProductForm->channel_id);
-					$sView = 'flex_subscription/do_subscribe';
-				} else {
-					Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
-					Yii::app()->adminKreddyApi->setSubscribeSelectedChannel($oProductForm->channel_id);
-					$sView = 'subscription/do_subscribe';
-				}
+				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+				Yii::app()->adminKreddyApi->setSubscribeSelectedChannel($oProductForm->channel_id);
 
-				$this->render($sView, array('model' => $oForm));
+				$this->render('subscription/index', array('sView' => 'do_subscribe', 'oModel' => $oForm));
 				Yii::app()->end();
 			}
 		}
-		$sView = (SiteParams::getIsIvanovoSite()) ? 'flex_subscription/subscribe' : 'subscription/subscribe';
-		$this->render($sView, array('model' => $oProductForm));
+		$this->render('subscription/index', array('sView' => 'subscribe', 'oModel' => $oProductForm));
 		Yii::app()->end();
 	}
 
@@ -1219,17 +1191,11 @@ class DefaultController extends Controller
 				unset($oForm);
 				//создаем новую форму с новым сценарием валидации - codeRequired
 				$oForm = new SMSCodeForm('codeRequired');
-				$sView = (SiteParams::getIsIvanovoSite())
-					? 'flex_subscription/do_subscribe_check_sms_code'
-					: 'subscription/do_subscribe_check_sms_code';
-				$this->render($sView, array('model' => $oForm));
+				$this->render('subscription/index', array('sView' => 'do_subscribe_check_sms_code', 'oModel' => $oForm));
 				Yii::app()->end();
 			}
 			//рисуем ошибку
-			$sView = (SiteParams::getIsIvanovoSite())
-				? 'flex_subscription/do_subscribe_error'
-				: 'subscription/do_subscribe_error';
-			$this->render($sView, array('model' => $oForm));
+			$this->render('subscription/index', array('sView' => 'do_subscribe_error', 'oModel' => $oForm));
 			Yii::app()->end();
 		}
 		$this->redirect(Yii::app()->createUrl('/account/subscribe'));
@@ -1258,19 +1224,10 @@ class DefaultController extends Controller
 		$oForm->setAttributes($aPost);
 		//валидируем
 		if ($oForm->validate()) {
-			//если точка входа не ivanovo.kreddy.ru
-			if (!SiteParams::getIsIvanovoSite()) {
-				$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-				$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
-				$iAmount = false;
-				$iTime = false;
-			} else {
-				$iProduct = Yii::app()->adminKreddyApi->getSubscribeFlexProductId();
-				$iAmount = Yii::app()->adminKreddyApi->getSubscribeFlexAmount();
-				$iChannel = Yii::app()->adminKreddyApi->getSubscribeFlexChannelId();
-				$iTime = Yii::app()->adminKreddyApi->getSubscribeFlexTime();
-			}
-
+			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+			$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
+			$iAmount = false;
+			$iTime = false;
 
 			if (($iProduct && $iChannel) || ($iProduct && $iAmount && $iChannel && $iTime)) {
 				//проверяем, не кончились ли попытки
@@ -1279,18 +1236,13 @@ class DefaultController extends Controller
 				//если попытки не кончились, пробуем оформить подписку
 				if (!$bTriesExceed) {
 					//проверяем точку входа, делаем подписку согласно точке входа
-					if (SiteParams::getIsIvanovoSite()) {
-						$bSubscribe = Yii::app()->adminKreddyApi->doSubscribeFlexible($oForm->smsCode, $iProduct, $iChannel, $iAmount, $iTime);
-						$sView = 'flex_subscription/subscribe_complete';
-					} else {
-						$bSubscribe = Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, $iChannel);
-						$sView = 'subscription/subscribe_complete';
-					}
+					$bSubscribe = Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, $iChannel);
+
 					if ($bSubscribe) {
 						//сбрасываем счетчик попыток ввода кода
 						Yii::app()->adminKreddyApi->resetSmsCodeTries();
 
-						$this->render($sView, array('message' => Yii::app()->adminKreddyApi->getDoSubscribeMessage()));
+						$this->render('subscription/index', array('sView' => 'subscribe_complete', 'oModel' => null));
 						Yii::app()->end();
 					}
 				} else {
@@ -1315,10 +1267,7 @@ class DefaultController extends Controller
 				$oForm->addError('smsCode', Dictionaries::C_ERR_SMS_TRIES);
 			}
 		}
-		$sView = (SiteParams::getIsIvanovoSite())
-			? 'flex_subscription/do_subscribe_check_sms_code'
-			: 'subscription/do_subscribe_check_sms_code';
-		$this->render($sView, array('model' => $oForm));
+		$this->render('subscription/index', array('sView' => 'do_subscribe_check_sms_code', 'oModel' => $oForm));
 	}
 
 	/**
@@ -1331,7 +1280,7 @@ class DefaultController extends Controller
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkLoan()) {
 			// если невозможно - выводим сообщение о недоступности
-			$this->render('loan/loan_not_available');
+			$this->render('loan/index', array('sView' => 'loan_not_available', 'oModel' => null));
 			Yii::app()->end();
 		}
 
@@ -1339,19 +1288,14 @@ class DefaultController extends Controller
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 
-			$sView = 'loan/loan';
+			$sView = 'loan';
 		} else {
-			$sView = 'loan/loan_not_sms_auth';
+			$sView = 'loan_not_sms_auth';
 		}
 
 		$oLoanForm = new ClientLoanForm();
+		$this->render('loan/index', array('sView' => $sView, 'oModel' => $oLoanForm));
 
-		/**
-		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
-		 */
-		$oSmsPassForm = new SMSPasswordForm('sendRequired');
-		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
-		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'model' => $oLoanForm));
 	}
 
 	/**
@@ -1375,11 +1319,11 @@ class DefaultController extends Controller
 				//сохраняем в сессию выбранный продукт
 				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
 				$oForm = new SMSCodeForm('sendRequired');
-				$this->render('loan/do_loan', array('model' => $oForm));
+				$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => $oForm));
 				Yii::app()->end();
 			}
 		}
-		$this->render('loan/loan', array('model' => $oLoanForm));
+		$this->render('loan/index', array('sView' => 'loan', 'oModel' => $oLoanForm));
 		Yii::app()->end();
 	}
 
@@ -1407,11 +1351,11 @@ class DefaultController extends Controller
 				unset($oForm);
 				//создаем новую форму с новым сценарием валидации - codeRequired
 				$oForm = new SMSCodeForm('codeRequired');
-				$this->render('loan/do_loan_check_sms_code', array('model' => $oForm));
+				$this->render('loan/index', array('sView' => 'do_loan_check_sms_code', 'oModel' => $oForm));
 				Yii::app()->end();
 			}
 			//рисуем ошибку
-			$this->render('loan/do_loan_error', array('model' => $oForm));
+			$this->render('loan/index', array('sView' => 'do_loan_error', 'oModel' => $oForm));
 			Yii::app()->end();
 		}
 		$this->redirect(Yii::app()->createUrl('/account/loan'));
@@ -1449,7 +1393,7 @@ class DefaultController extends Controller
 				if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
 					//сбрасываем счетчик попыток ввода кода
 					Yii::app()->adminKreddyApi->resetSmsCodeTries();
-					$this->render('loan/loan_complete', array('message' => Yii::app()->adminKreddyApi->getDoLoanMessage()));
+					$this->render('loan/index', array('sView' => 'loan_complete', 'oModel' => null));
 					Yii::app()->end();
 				}
 			} else {
@@ -1464,7 +1408,7 @@ class DefaultController extends Controller
 			}
 
 		}
-		$this->render('loan/do_loan_check_sms_code', array('model' => $oForm));
+		$this->render('loan/index', array('sView' => 'do_loan_check_sms_code', 'oModel' => $oForm));
 	}
 
 	public function actionCancelRequest()

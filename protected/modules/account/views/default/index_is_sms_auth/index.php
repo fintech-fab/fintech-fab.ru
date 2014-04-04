@@ -13,7 +13,7 @@ $this->breadcrumbs = array(
 
 ?>
 
-<?php
+<?
 if (SiteParams::getIsIvanovoSite()) {
 	$this->widget('application.modules.account.components.ClientInfoIvanovoWidget', array('sClientInfoView' => $sClientInfoView));
 } else {
@@ -24,4 +24,6 @@ if (SiteParams::getIsIvanovoSite()) {
 	<br />
 <?= $sIdentifyRender ?>
 	<br />
-<?php $this->renderPartial('app_info'); ?>
+<?
+$this->widget('application.modules.account.components.AppInfoWidget');
+?>

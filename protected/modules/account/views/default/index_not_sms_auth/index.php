@@ -14,10 +14,12 @@ $this->breadcrumbs = array(
 
 ?>
 
-<?php
+<?
 $this->widget('application.modules.account.components.ClientInfoWidget', array('sClientInfoView' => $sClientInfoView));
 ?>
 
 <?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>
 
-<?php $this->renderPartial('app_info'); ?>
+<?
+$this->widget('application.modules.account.components.AppInfoWidget');
+?>
