@@ -59,14 +59,14 @@ if (!$this->bUpdate):
 					$("#userCityWidget").html(html);
 				}
 			}).done(function () {
-					var host = $(location).attr("hostname");
-					if (cityAndRegion.match(/Ивановская область/i) && !host.match(/ivanovo/i)) {
-						window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('ivanovoUrl') ?>";
-					}
-					if (!cityAndRegion.match(/Ивановская область/i) && host.match(/ivanovo/i)) {
-						window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('mainUrl') ?>";
-					}
-				});
+				var host = $(location).attr("hostname");
+				if (cityAndRegion.match(/Ивановская область/i) && !host.match(/ivanovo/i)) {
+					window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('ivanovoUrl') ?>";
+				}
+				if (!cityAndRegion.match(/Ивановская область/i) && host.match(/ivanovo/i)) {
+					window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('mainUrl') ?>";
+				}
+			});
 			userLocation.popover('hide');
 		}
 	</script>
