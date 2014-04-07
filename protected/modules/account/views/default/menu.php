@@ -91,9 +91,9 @@ $this->menu[] = array(
 		),
 		array(
 			'label'       => 'Инструкция',
-			'url'         => 'http://youtu.be/MA7K12JcrEM',
+			'url'         => array(Yii::app()->request->url . '#'),
 			'linkOptions' => array(
-				'target' => '_blank',
+				'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
 			),
 		),
 	),

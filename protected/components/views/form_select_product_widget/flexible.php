@@ -46,7 +46,7 @@
 	<div class="row">
 
 		<div class="span5" style="padding: 5px 5px 10px 30px;">
-		<?php $this->widget('SliderWidget', array('form' => $form, 'model' => $oClientCreateForm)); ?>
+			<?php $this->widget('SliderWidget', array('form' => $form, 'model' => $oClientCreateForm)); ?>
 		</div>
 
 		<div class="offset1 span4" style="width:330px; padding-top:30px;">

@@ -16,7 +16,7 @@
 
 			<?php
 			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-				'id' => get_class($oClientCreateForm) . '_fast',
+				'id'                   => get_class($oClientCreateForm) . '_fast',
 				'enableAjaxValidation' => true,
 				'type'                 => 'inline',
 				'clientOptions'        => array(
