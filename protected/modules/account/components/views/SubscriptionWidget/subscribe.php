@@ -1,11 +1,12 @@
 <?php
-/* @var DefaultController $this */
-/* @var ClientSubscribeForm $model */
-/* @var IkTbActiveForm $form */
+/**
+ * @var SubscriptionWidget  $this
+ * @var IkTbActiveForm      $form
+ * @var ClientSubscribeForm $oModel
+ */
 
-$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
-	<h4>Подключение Пакета</h4>
+	<h4><?= $this->getHeader(); ?></h4>
 
 	<div class="alert in alert-block alert-info">Обращаем Ваше внимание, что обработка запроса осуществляется ежедневно
 		с 09:00 до 22:00 по московскому времени.
@@ -18,16 +19,16 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 $aClientProductList = Yii::app()->adminKreddyApi->getClientProductsList();
 
-$model->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+$oModel->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
 // если пакета в сессии нет
-if ($model->product === false) {
+if ($oModel->product === false) {
 	//устанавливаем в качестве выбранного пакета первый из массива доступных
-	$model->product = reset(array_keys($aClientProductList));
+	$oModel->product = reset(array_keys($aClientProductList));
 }
 
-echo $form->radioButtonList($model, 'product', $aClientProductList, array("class" => "all", 'uncheckValue' => $model->product));
-echo $form->error($model, 'product');
+echo $form->radioButtonList($oModel, 'product', $aClientProductList, array("class" => "all", 'uncheckValue' => $oModel->product));
+echo $form->error($oModel, 'product');
 
 ?>
 
@@ -36,7 +37,7 @@ echo $form->error($model, 'product');
 			'buttonType' => 'submit',
 			'type'       => 'primary',
 			'size'       => 'small',
-			'label'      => 'Подключить Пакет',
+			'label'      => $this->getSubscribeButtonLabel(),
 		)); ?>
 	</div>
 

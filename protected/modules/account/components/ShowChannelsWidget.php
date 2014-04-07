@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class ShowChannelsWidget
+ */
 class ShowChannelsWidget extends CWidget
 {
 	const C_MOBILE = 'mobile';
@@ -50,7 +53,7 @@ class ShowChannelsWidget extends CWidget
 				'htmlOptions' => array(
 					'disabled' => 'disabled',
 					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
-					'style' => 'width: ' . (self::BTN_WIDTH_PX - 30) . "px",
+					'style'    => 'width: ' . (self::BTN_WIDTH_PX - 30) . "px",
 				),
 			),
 			true);
@@ -74,10 +77,10 @@ class ShowChannelsWidget extends CWidget
 				'type'        => 'primary',
 				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
-					'value' => $this->aAvailableChannels[$sChannelType],
-					'name' => $this->sFormName . '[channel_id]',
+					'value'   => $this->aAvailableChannels[$sChannelType],
+					'name'    => $this->sFormName . '[channel_id]',
 					'confirm' => (!empty($mConfirm) ? $mConfirm : null),
-					'style' => 'width: ' . self::BTN_WIDTH_PX . "px",
+					'style'   => 'width: ' . self::BTN_WIDTH_PX . "px",
 
 				),
 			),
@@ -86,11 +89,17 @@ class ShowChannelsWidget extends CWidget
 		return $sButton;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getMobileSubmitButton()
 	{
 		return $this->getAvailableChannelSubmitButton(self::C_MOBILE, self::MSG_CONFIRM_CHANNEL_PHONE);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getCardSubmitButton()
 	{
 		return $this->getAvailableChannelSubmitButton(self::C_CARD);
@@ -108,11 +117,17 @@ class ShowChannelsWidget extends CWidget
 		return '<img src="/static/images/channels/' . self::$aImageNames[$sChannelType] . '" style="height:100px;" class="img-polaroid"> &nbsp; ';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getMobileImage()
 	{
 		return $this->getImage(self::C_MOBILE);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getCardImage()
 	{
 		return $this->getImage(self::C_CARD);
@@ -142,11 +157,17 @@ class ShowChannelsWidget extends CWidget
 		return $bIsAvailable;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getNoCardWarning()
 	{
 		return self::MSG_NO_CARD_WARNING;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getAddCardButton()
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',

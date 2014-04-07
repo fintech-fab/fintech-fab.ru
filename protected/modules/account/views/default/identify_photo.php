@@ -5,17 +5,17 @@
 
 $this->pageTitle = Yii::app()->name . " - Идентификация с загрузкой фотографий";
 ?>
-	<h4>Идентификация с загрузкой фотографий</h4>
+<h4>Идентификация с загрузкой фотографий</h4>
 
-	<div class="alert in alert-block alert-warning">
+<div class="alert in alert-block alert-warning">
 
-		<h4>Подготовьте документы (паспорт и второй документ), фотокамеру или мобильный телефон с фотокамерой.</h4>
-		<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
-			<br />
-			<h4>После загрузки фотографий потребуется ввести данные документов. </h4>
-		<?php endif; ?>
+	<h4>Подготовьте документы (паспорт и второй документ), фотокамеру или мобильный телефон с фотокамерой.</h4>
+	<?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
+		<br />
+		<h4>После загрузки фотографий потребуется ввести данные документов. </h4>
+	<?php endif; ?>
 
-	</div>
+</div>
 <?php
 $this->widget("CheckBrowserWidget");
 
@@ -47,22 +47,20 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'signature', array('name' => 'signature')); ?>
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
-	<div class="center">
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'          => 'submitButton',
-			'type'        => 'primary',
-			'size'        => 'large',
-			'label'       => 'Пройти идентификацию',
-			'htmlOptions' => array(
-				'onclick' => 'js: goIdentify()'
-			)
-		));
-		?>
-	</div>
+<div class="center">
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'id'          => 'submitButton',
+		'type'        => 'primary',
+		'size'        => 'large',
+		'label'       => 'Пройти идентификацию',
+		'htmlOptions' => array(
+			'onclick' => 'js: goIdentify()'
+		)
+	));
+	?>
+</div>
 <?php
 $this->endWidget();
 
 ?>
-	<br />
-<?php //$this->renderPartial('app_info'); ?>

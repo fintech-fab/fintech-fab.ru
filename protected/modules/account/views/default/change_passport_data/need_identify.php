@@ -12,7 +12,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение паспортны�
 			данные документов, использованных при идентификации.</h4>
 	</div>
 	<div class="clearfix"></div>
-<?php
+<?
 $this->widget("CheckBrowserWidget");
 
 Yii::app()->clientScript->registerScript('goIdentify', '
@@ -42,7 +42,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
 	<div class="center">
-		<?php
+		<?
 		$this->widget('bootstrap.widgets.TbButton', array(
 			'id'          => 'submitButton',
 			'type'        => 'primary',
@@ -54,9 +54,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		));
 		?>
 	</div>
-<?php
+<?
 $this->endWidget();
 
 ?>
 	<br />
-<?php $this->renderPartial('app_info'); ?>
+<?
+$this->widget('application.modules.account.components.AppInfoWidget');
+?>

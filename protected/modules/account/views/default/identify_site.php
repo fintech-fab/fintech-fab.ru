@@ -15,7 +15,7 @@ $this->pageTitle = Yii::app()->name . " - Идентификация на сай
 			<?php endif; ?>
 		</h4>
 	</div>
-<?php
+<?
 $this->widget("CheckBrowserWidget");
 
 Yii::app()->clientScript->registerScript('goIdentify', '
@@ -58,9 +58,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		));
 		?>
 	</div>
-<?php
+<?
 $this->endWidget();
 
 ?>
 	<br />
-<?php $this->renderPartial('app_info'); ?>
+<?
+$this->widget('application.modules.account.components.AppInfoWidget');

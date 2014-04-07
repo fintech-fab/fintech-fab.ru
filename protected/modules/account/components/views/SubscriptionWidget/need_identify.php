@@ -1,14 +1,15 @@
 <?php
-/* @var DefaultController $this */
-/* @var VideoIdentifyForm $model */
-/* @var IkTbActiveForm $form */
+/**
+ * @var SubscriptionWidget $this
+ * @var VideoIdentifyForm  $oModel
+ * @var IkTbActiveForm     $form
+ */
 
-$this->pageTitle = Yii::app()->name . " - Оформление займа";
 ?>
-	<h4>Требуется идентификация</h4>
+	<h4><?= $this->getNeedIdentifyHeader(); ?></h4>
 
 	<div class="alert in alert-block alert-warning">
-		<h4>Для поформления займа, необходимо пройти идентификацию.</h4>
+		<h4><?= $this->getNeedIdentifyMessage() ?></h4>
 	</div>
 	<div class="clearfix"></div>
 <?php
@@ -26,7 +27,7 @@ Yii::app()->clientScript->registerScript('goIdentify', '
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'identify-form',
-	'action'               => $model->video_url,
+	'action'               => $oModel->video_url,
 	'method'               => 'post',
 	'enableAjaxValidation' => false,
 	'clientOptions'        => array(
@@ -35,11 +36,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 ?>
 
-<?= $form->hiddenField($model, 'client_code', array('name' => 'client_code')); ?>
-<?= $form->hiddenField($model, 'service', array('name' => 'service')); ?>
-<?= $form->hiddenField($model, 'signature', array('name' => 'signature')); ?>
-<?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
-<?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
+<?= $form->hiddenField($oModel, 'client_code', array('name' => 'client_code')); ?>
+<?= $form->hiddenField($oModel, 'service', array('name' => 'service')); ?>
+<?= $form->hiddenField($oModel, 'signature', array('name' => 'signature')); ?>
+<?= $form->hiddenField($oModel, 'timestamp', array('name' => 'timestamp')); ?>
+<?= $form->hiddenField($oModel, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
 	<div class="center">
 		<?php
 		$this->widget('bootstrap.widgets.TbButton', array(
@@ -53,10 +54,14 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		));
 		?>
 	</div>
-<?php
+<?
 
 
 $this->endWidget();
 ?>
 	<br />
-<?php $this->renderPartial('app_info'); ?>
+<?
+
+$this->widget('application.modules.account.components.AppInfoWidget');
+
+?>

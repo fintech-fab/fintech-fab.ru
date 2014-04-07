@@ -356,6 +356,8 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 
+			//сбрасываем кэш инфо клиента, т.к. ранее он мог быть заполнен данными до авторизации
+			$this->aClientInfo = null;
 
 			// Если смс-авторизация не требутеся
 			if (!$this->getIsNeedSmsAuth()) {
@@ -582,42 +584,42 @@ class AdminKreddyApiComponent
 	{
 		//список полей, которые требуется передать при обновлении анкеты быстрой регистрации
 		$aRequiredFields = array(
-			'last_name'                     => null,
-			'first_name'                    => null,
-			'third_name'                    => null,
-			'sex'                           => null,
-			'prev_last_name'                => null,
-			'birthday'                      => null,
+			'last_name'           => null,
+			'first_name'          => null,
+			'third_name'          => null,
+			'sex'                 => null,
+			'prev_last_name'      => null,
+			'birthday'            => null,
 
-			'passport_series'               => null,
-			'passport_number'               => null,
-			'passport_date'                 => null,
-			'passport_code'                 => null,
-			'passport_issued'               => null,
+			'passport_series'     => null,
+			'passport_number'     => null,
+			'passport_date'       => null,
+			'passport_code'       => null,
+			'passport_issued'     => null,
 
-			'document'                      => null,
-			'document_number'               => null,
+			'document'            => null,
+			'document_number'     => null,
 
-			'relatives_one_fio'             => null,
-			'relatives_one_phone'           => null,
+			'relatives_one_fio'   => null,
+			'relatives_one_phone' => null,
 
-			'address_reg_region'            => null,
-			'address_reg_city'              => null,
-			'address_reg_address'           => null,
+			'address_reg_region'  => null,
+			'address_reg_city'    => null,
+			'address_reg_address' => null,
 
-			'address_res_region'            => null,
-			'address_res_city'              => null,
-			'address_res_address'           => null,
+			'address_res_region'  => null,
+			'address_res_city'    => null,
+			'address_res_address' => null,
 
-			'numeric_code'                  => null,
+			'numeric_code'        => null,
 
-			'secret_question'               => null,
-			'secret_answer'                 => null,
+			'secret_question'     => null,
+			'secret_answer'       => null,
 
-			'status'                        => null,
+			'status'              => null,
 
-			'loan_purpose'                  => null,
-			'birthplace'                    => null,
+			'loan_purpose'        => null,
+			'birthplace'          => null,
 		);
 
 		//получаем массив, соджержащий только заданные поля
@@ -1888,8 +1890,7 @@ class AdminKreddyApiComponent
 	{
 		if (!isset($this->bIsCanSubscribe) || !isset($this->bIsNeedCard)) {
 			$this->requestAdminKreddyApi(self::API_ACTION_CHECK_SUBSCRIBE);
-			$this->bIsCanSubscribe = (!$this->getIsNotAllowed()
-				&& !$this->getIsNeedSmsAuth());
+			$this->bIsCanSubscribe = !$this->getIsNotAllowed();
 
 			$this->bIsNeedCard = $this->getIsNeedCard();
 		}

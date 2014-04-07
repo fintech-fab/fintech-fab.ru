@@ -1030,12 +1030,7 @@ class DefaultController extends Controller
 
 		$oProductForm = new ClientSubscribeForm();
 
-		/**
-		 * Рендерим форму для запроса СМС-пароля, для последующего использования в представлении
-		 */
 		$this->render('subscription/index', array('sView' => $sView, 'oModel' => $oProductForm));
-
-		//TODO $this->render($sView, array('sPassFormRender' => $sPassFormRender, 'oModel' => $oProductForm));
 	}
 
 	/**
@@ -1111,22 +1106,16 @@ class DefaultController extends Controller
 		//TODO возможно, делать это только если есть state new_client
 		$iProduct = Yii::app()->user->getState('product');
 		$sChannelsId = Yii::app()->user->getState('channel_id');
-		$iFlexAmount = Yii::app()->user->getState('flex_amount');
-		$iFlexTime = Yii::app()->user->getState('flex_time');
 
 		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
 		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
 
+		$bIsRedirect = false;
+		$aData = array();
 		//если есть сохраненные данные в getState, то их переносим в массив $aData
 		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
 			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
 			$aData = array('product' => $iProduct, 'channel_id' => $iChannelId);
-		} elseif (!empty($iFlexAmount) && !empty($iFlexTime) && !empty($sChannelsId)) { //для ivanovo.kreddy.ru
-			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('amount' => $iFlexAmount, 'time' => $iFlexTime, 'channel_id' => $iChannelId);
-		} else {
-			$bIsRedirect = false;
-			$aData = array();
 		}
 
 		/* если был редирект с сохранением данных, но выбранный канал равен 0,
