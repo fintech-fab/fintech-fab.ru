@@ -49,3 +49,11 @@ Route::group(array('before' => 'auth'), function () {
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
 });
+
+
+Route::group(array('prefix' => 'soap', 'namespace' => 'App\Controllers\Service'), function () {
+	Route::get('/', array(
+		'as'   => 'service.soap.index',
+		'uses' => 'SoapController@index'
+	));
+});
