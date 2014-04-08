@@ -43,7 +43,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 <div class="row">
 	<div class="span4">
-		<div class="alert in alert-block alert-info" style="height: 135px;">
+		<div class="alert in alert-block alert-info" style="height: 185px;">
 			<h4>Видеоидентификация</h4>
 			Нужна веб-камера и браузер Chrome или Firefox.<br /> <a href="<?=
 			Yii::app()
@@ -69,16 +69,16 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 					'htmlOptions' => array(
 						'class'   => 'btn-warning',
 						'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
+						'style' => 'margin-top: 10px;',
 					)
 				));
-
 				?>
 			</div>
 		</div>
 	</div>
 	<div class="span4">
-		<div class="alert in alert-block alert-info" style="height: 135px;">
-			<h4>Идентификация с загрузкой фото</h4>
+		<div class="alert in alert-block alert-info" style="height: 185px;">
+		<h4>Идентификация с загрузкой фото</h4>
 			Нужен фотоаппарат или мобильный телефон с фотокамерой <br /><br />
 
 			<div class="center">
@@ -93,21 +93,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 					)
 				));
 				?>
-				<?php
-				$this->widget('bootstrap.widgets.TbButton', array(
-					'size'        => 'large',
-					'label'       => 'Инструкция',
-					'htmlOptions' => array(
-						'class'   => 'btn-warning',
-						'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
-					)
-				));
-
-				?>
 			</div>
 		</div>
 	</div>
 </div>
+<div class="clearfix"></div>
 <div class="alert in alert-block alert-info">
 	<h4>Идентификация на смартфоне</h4>
 	Нужен фотоаппарат или мобильный телефон с фотокамерой<br /><br />

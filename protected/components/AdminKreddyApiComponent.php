@@ -591,42 +591,42 @@ class AdminKreddyApiComponent
 	{
 		//список полей, которые требуется передать при обновлении анкеты быстрой регистрации
 		$aRequiredFields = array(
-			'last_name'                     => null,
-			'first_name'                    => null,
-			'third_name'                    => null,
-			'sex'                           => null,
-			'prev_last_name'                => null,
-			'birthday'                      => null,
+			'last_name'           => null,
+			'first_name'          => null,
+			'third_name'          => null,
+			'sex'                 => null,
+			'prev_last_name'      => null,
+			'birthday'            => null,
 
-			'passport_series'               => null,
-			'passport_number'               => null,
-			'passport_date'                 => null,
-			'passport_code'                 => null,
-			'passport_issued'               => null,
+			'passport_series'     => null,
+			'passport_number'     => null,
+			'passport_date'       => null,
+			'passport_code'       => null,
+			'passport_issued'     => null,
 
-			'document'                      => null,
-			'document_number'               => null,
+			'document'            => null,
+			'document_number'     => null,
 
-			'relatives_one_fio'             => null,
-			'relatives_one_phone'           => null,
+			'relatives_one_fio'   => null,
+			'relatives_one_phone' => null,
 
-			'address_reg_region'            => null,
-			'address_reg_city'              => null,
-			'address_reg_address'           => null,
+			'address_reg_region'  => null,
+			'address_reg_city'    => null,
+			'address_reg_address' => null,
 
-			'address_res_region'            => null,
-			'address_res_city'              => null,
-			'address_res_address'           => null,
+			'address_res_region'  => null,
+			'address_res_city'    => null,
+			'address_res_address' => null,
 
-			'numeric_code'                  => null,
+			'numeric_code'        => null,
 
-			'secret_question'               => null,
-			'secret_answer'                 => null,
+			'secret_question'     => null,
+			'secret_answer'       => null,
 
-			'status'                        => null,
+			'status'              => null,
 
-			'loan_purpose'                  => null,
-			'birthplace'                    => null,
+			'loan_purpose'        => null,
+			'birthplace'          => null,
 		);
 
 		//получаем массив, соджержащий только заданные поля
@@ -3111,13 +3111,14 @@ class AdminKreddyApiComponent
 	{
 		$iScoringResult = $this->getScoringResult();
 
-		if(empty($iScoringResult) || SiteParams::getIsIvanovoSite()) {
+		if (empty($iScoringResult) || SiteParams::getIsIvanovoSite()) {
 			return self::C_DO_SUBSCRIBE_MSG;
 		}
 
-		switch($iScoringResult){
+		switch ($iScoringResult) {
 			case self::C_SCORING_ACCEPT:
 				$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
+
 				return $sMessage;
 				break;
 			case self::C_SCORING_CANCEL:
