@@ -7,7 +7,7 @@ var errorHappened = false;
 $(document).ready(function () {
 	$(document).ajaxError(function (event, jqxhr, settings, exception) {
 		if (!errorHappened && exception != '' && exception != 'abort') {
-			bootbox.alert('Произошла ошибка! Перезагрузите страницу!','OK');
+			bootbox.alert('Произошла ошибка! Перезагрузите страницу!', 'OK');
 			//alertModal('Ошибка', 'Произошла ошибка! Перезагрузите страницу!', 'OK');
 			errorHappened = true;
 		}
@@ -50,5 +50,17 @@ function in_array(what, where) {
 	for (var i = 0, length_array = where.length; i < length_array; i++)
 		if (what == where[i])
 			return true;
+	return false;
+}
+
+function doOpenModalFrame(src, title) {
+	var $modal = $("#modal-frame");
+	$modal.modal({});
+	$modal.find('iframe').attr('src', src);
+	if (!title) {
+		title = '';
+	}
+	$modal.find('.modal-title').html(title);
+	$modal.modal('show');
 	return false;
 }

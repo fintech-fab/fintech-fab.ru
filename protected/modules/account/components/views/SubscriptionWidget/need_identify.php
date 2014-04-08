@@ -53,6 +53,17 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			)
 		));
 		?>
+		<?php
+		$this->widget('bootstrap.widgets.TbButton', array(
+			'size'        => 'large',
+			'label'       => 'Инструкция',
+			'htmlOptions' => array(
+				'class'   => 'btn-warning',
+				'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
+			)
+		));
+
+		?>
 	</div>
 <?
 

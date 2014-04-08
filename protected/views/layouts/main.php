@@ -66,7 +66,7 @@ $this->endContent();
 echo $content;
 $this->endContent();
 ?>
-<!-- footer start-->
+<!-- footer end-->
 <script type="text/javascript">
 
 	var _gaq = _gaq || [];

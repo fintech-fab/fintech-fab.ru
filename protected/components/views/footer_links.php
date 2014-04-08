@@ -1,17 +1,5 @@
 <div id="footerlinks">
-	<script type="text/javascript">
-		function doOpenModalFrame(src, title) {
-			var $modal = $("#modal-frame");
-			$modal.modal({});
-			$modal.find('iframe').attr('src', src);
-			if (!title) {
-				title = '';
-			}
-			$modal.find('.modal-title').html(title);
-			$modal.modal('show');
-			return false;
-		}
-	</script>
+
 	<p>
 		<?php
 		//TODO подумать насчет переноса логики кода из представления в класс виджета
@@ -21,7 +9,8 @@
 			if ($l->link_url == '') { // поле "ссылка" пусто - значит, модальное окно
 				?>
 
-				<a href="#" class="dotted" onclick="return doOpenModalFrame('<?= Yii::app()
+				<a href="#" class="dotted" onclick="return doOpenModalFrame('<?=
+				Yii::app()
 					->createAbsoluteUrl("footerLinks/view/$l->link_name"); ?>', '<?= $l->link_title ?>');"><?= $l->link_title ?></a>
 
 			<?php
@@ -38,37 +27,5 @@
 		}
 		?>
 	</p>
-
-	<?php
-
-	$this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'modal-frame'));
-	?>
-
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title"></h4>
-			</div>
-			<div class="modal-body">
-				<iframe style="width: 100%;height: 450px; border: 0;"></iframe>
-			</div>
-			<div class="modal-footer">
-				<?php
-				$this->widget('bootstrap.widgets.TbButton', array(
-					'label'       => 'Закрыть',
-					'url'         => '#',
-					'htmlOptions' => array('data-dismiss' => 'modal'),
-				));
-				?>
-			</div>
-		</div>
-	</div>
-
-
-
-
-
-
-	<?php $this->endWidget(); ?>
 
 </div>

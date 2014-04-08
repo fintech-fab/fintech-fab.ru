@@ -20,4 +20,15 @@
 		'label' => 'Пройти идентификацию',
 	));
 	?>
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'size'        => 'large',
+		'label'       => 'Инструкция',
+		'htmlOptions' => array(
+			'class'   => 'btn-warning',
+			'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
+		)
+	));
+
+	?>
 </div><br />

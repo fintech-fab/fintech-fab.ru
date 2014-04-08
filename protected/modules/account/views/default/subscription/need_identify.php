@@ -3,16 +3,15 @@
 /* @var VideoIdentifyForm $model */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Изменение паспортных данных";
+$this->pageTitle = Yii::app()->name . " - Подключение Пакета";
 ?>
-	<h4>Изменение паспортных данных</h4>
+	<h4>Требуется идентификация</h4>
 
 	<div class="alert in alert-block alert-warning">
-		<h4>Для изменения паспортных данных необходимо пройти идентификацию. После идентификации потребуется ввести
-			данные документов, использованных при идентификации.</h4>
+		<h4>Для подключения пакета займов, необходимо пройти идентификацию.</h4>
 	</div>
 	<div class="clearfix"></div>
-<?
+<?php
 $this->widget("CheckBrowserWidget");
 
 Yii::app()->clientScript->registerScript('goIdentify', '
@@ -42,7 +41,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
 	<div class="center">
-		<?
+		<?php
 		$this->widget('bootstrap.widgets.TbButton', array(
 			'id'          => 'submitButton',
 			'type'        => 'primary',
@@ -65,11 +64,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 		?>
 	</div>
-<?
-$this->endWidget();
+<?php
 
+
+$this->endWidget();
 ?>
 	<br />
-<?
-$this->widget('application.modules.account.components.AppInfoWidget');
-?>
+<?php $this->renderPartial('app_info'); ?>
