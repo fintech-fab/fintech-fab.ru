@@ -47,30 +47,19 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'signature', array('name' => 'signature')); ?>
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
-	<div class="center">
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'          => 'submitButton',
-			'type'        => 'primary',
-			'size'        => 'large',
-			'label'       => 'Пройти идентификацию',
-			'htmlOptions' => array(
-				'onclick' => 'js: goIdentify()'
-			)
-		));
-		?>
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'size'        => 'large',
-			'label'       => 'Инструкция',
-			'htmlOptions' => array(
-				'class'   => 'btn-warning',
-				'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
-			)
-		));
-
-		?>
-	</div>
+<div class="center">
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'id'          => 'submitButton',
+		'type'        => 'primary',
+		'size'        => 'large',
+		'label'       => 'Пройти идентификацию',
+		'htmlOptions' => array(
+			'onclick' => 'js: goIdentify()'
+		)
+	));
+	?>
+</div>
 <?php
 $this->endWidget();
 
