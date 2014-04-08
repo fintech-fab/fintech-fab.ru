@@ -87,7 +87,13 @@ class FaqGroup extends CActiveRecord
 		$criteria->compare('sort_order', $this->sort_order);
 
 		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
+			'criteria'   => $criteria,
+			'pagination' => array(
+				'pageSize' => 50,
+			),
+			'sort'       => array(
+				'defaultOrder' => 'sort_order ASC',
+			)
 		));
 	}
 
@@ -105,7 +111,7 @@ class FaqGroup extends CActiveRecord
 	/**
 	 * @param $iSite
 	 *
-	 * @return $this
+	 * @return FaqGroup
 	 */
 	private function scopeSiteGroups($iSite)
 	{

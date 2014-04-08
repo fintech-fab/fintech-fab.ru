@@ -19,7 +19,7 @@ class KreddyLineWidget extends SubscriptionWidget
 
 		return 'Ваша КРЕДДИтная линия - &quot;'
 		. Yii::app()->adminKreddyApi->getProductNameById($iProductId)
-		. '&quot;<br /> Размер одного займа -'
+		. '&quot;<br /> Размер одного займа - '
 		. Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) .
 		'руб.';
 	}
@@ -32,9 +32,6 @@ class KreddyLineWidget extends SubscriptionWidget
 		$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 		$iChannelId = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
 
-		$iPacketSize = Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) *
-			Yii::app()->adminKreddyApi->getProductLoanCountById($iProductId);
-
 		ob_start();
 		?>
 		<ul>
@@ -42,17 +39,15 @@ class KreddyLineWidget extends SubscriptionWidget
 				<strong><?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?></strong>
 			</li>
 			<li><strong>Сумма
-					займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
+					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 				&nbsp;рублей
 			</li>
 			<li><strong>Количество займов в КРЕДДИтной линии:</strong>&nbsp;не ограничено</li>
 
-			<?php /* TODO решить что делать
-			<li><strong>Срок
-					займа:</strong>&nbsp;от 1 до &nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanLifetimeById($iProductId) ?>
+			<li><strong>Срок займа:</strong>&nbsp;от 1 до
+				&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
 				&nbsp;дней
-			</li>*/
-			?>
+			</li>
 
 			<li>
 				<strong>Способ получения

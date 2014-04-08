@@ -6,5 +6,8 @@
  */
 
 
-$this->widget('application.modules.account.components.LoanWidget', array('sView' => $sView, 'oModel' => $oModel));
-
+if (Yii::app()->adminKreddyApi->isSubscriptionOldType()) {
+	$this->widget('application.modules.account.components.LoanWidget', array('sView' => $sView, 'oModel' => $oModel));
+} else {
+	$this->widget('application.modules.account.components.KreddyLineLoanWidget', array('sView' => $sView, 'oModel' => $oModel));
+}

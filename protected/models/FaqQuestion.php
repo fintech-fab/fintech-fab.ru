@@ -93,7 +93,13 @@ class FaqQuestion extends CActiveRecord
 		$criteria->compare('sort_order', $this->sort_order);
 
 		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
+			'criteria'   => $criteria,
+			'pagination' => array(
+				'pageSize' => 50,
+			),
+			'sort'       => array(
+				'defaultOrder' => 'sort_order ASC',
+			)
 		));
 	}
 
@@ -121,6 +127,9 @@ class FaqQuestion extends CActiveRecord
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function scopes()
 	{
 		return array(

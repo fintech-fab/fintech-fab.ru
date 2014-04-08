@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class FaqGroupController
+ */
 class FaqGroupController extends Controller
 {
 	/**
@@ -19,13 +22,20 @@ class FaqGroupController extends Controller
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function actions()
 	{
 		return array(
-			'toggle' => array(
+			'toggle'   => array(
 				'class'     => 'bootstrap.actions.TbToggleAction',
 				'modelName' => 'FaqGroup',
-			)
+			),
+			'sortable' => array(
+				'class'     => 'bootstrap.actions.TbSortableAction',
+				'modelName' => 'FaqGroup'
+			),
 		);
 	}
 
@@ -50,7 +60,7 @@ class FaqGroupController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort', 'toggle'),
+				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sortable', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
@@ -79,9 +89,6 @@ class FaqGroupController extends Controller
 	public function actionCreate()
 	{
 		$model = new FaqGroup;
-
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
 
 		if (isset($_POST['FaqGroup'])) {
 			$model->attributes = $_POST['FaqGroup'];
@@ -121,10 +128,9 @@ class FaqGroupController extends Controller
 	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param $id
 	 *
-	 * @param integer $id the ID of the model to be deleted
+	 * @throws CHttpException
 	 */
 	public function actionDelete($id)
 	{
@@ -152,19 +158,6 @@ class FaqGroupController extends Controller
 		));
 	}
 
-	public function actionSort()
-	{
-		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['items']) && is_array($_POST['items'])) {
-				foreach ($_POST['items'] as $key => $val) {
-					FaqGroup::model()->updateByPk($val, array(
-						'sort_order' => ($key + 1)
-					));
-				}
-			}
-		}
-	}
-
 	/**
 	 * Manages all models.
 	 */
@@ -182,10 +175,11 @@ class FaqGroupController extends Controller
 	}
 
 	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
+	 * @param $id
 	 *
-	 * @param integer the ID of the model to be loaded
+	 * @throws CHttpException
+	 *
+	 * @return \CActiveRecord
 	 */
 	public function loadModel($id)
 	{
@@ -200,7 +194,7 @@ class FaqGroupController extends Controller
 	/**
 	 * Performs the AJAX validation.
 	 *
-	 * @param CModel the model to be validated
+	 * @param CModel
 	 */
 	protected function performAjaxValidation($model)
 	{

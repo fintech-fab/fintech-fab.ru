@@ -114,6 +114,10 @@ class AdminKreddyApiComponent
 	const C_MOBILE = 'mobile';
 	const C_CARD = 'card';
 
+	const PRODUCT_TYPE_KREDDY = 1;
+	const PRODUCT_TYPE_IVANOVO = 2;
+	const PRODUCT_TYPE_KREDDYLINE = 3;
+
 	private static $aChannels = array(
 		self::C_MOBILE,
 		self::C_CARD,
@@ -858,6 +862,7 @@ class AdminKreddyApiComponent
 					'channels'      => array(),
 					'loan_amount'   => false,
 					'loan_lifetime' => false,
+					'type' => false,
 				),
 			),
 			'moratoriums'                     => array(
@@ -1159,6 +1164,29 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверяем, является ли текущая подписка "старой", т.е. на старые продукты до КРЕДДИтной линии
+	 *
+	 * @return bool
+	 */
+	public function isSubscriptionOldType()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		$aType = $aClientInfo['subscription']['product_info']['type'];
+
+		switch ($aType) {
+			case self::PRODUCT_TYPE_KREDDY:
+			case self::PRODUCT_TYPE_IVANOVO:
+				return true;
+				break;
+			default:
+				return false;
+				break;
+		}
+
+	}
+
+	/**
 	 * @return bool|string
 	 */
 	public function getSubscriptionChannel()
@@ -1230,6 +1258,18 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 		$sActivityTo = $aClientInfo['subscription']['activity_to'];
 		$sActivityTo = $this->formatRusDate($sActivityTo, false);
+
+		return $sActivityTo;
+	}
+
+	/**
+	 * @return string|bool
+	 */
+	public function getSubscriptionActivityToTime()
+	{
+		$aClientInfo = $this->getClientInfo();
+		$sActivityTo = $aClientInfo['subscription']['activity_to'];
+		$sActivityTo = $this->formatRusDate($sActivityTo, true);
 
 		return $sActivityTo;
 	}

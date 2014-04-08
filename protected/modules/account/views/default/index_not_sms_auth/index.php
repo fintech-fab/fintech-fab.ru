@@ -15,7 +15,11 @@ $this->breadcrumbs = array(
 ?>
 
 <?
-$this->widget('application.modules.account.components.ClientInfoWidget', array('sClientInfoView' => $sClientInfoView));
+if (Yii::app()->adminKreddyApi->isSubscriptionOldType()) {
+	$this->widget('application.modules.account.components.ClientInfoWidget', array('sClientInfoView' => $sClientInfoView));
+} else {
+	$this->widget('application.modules.account.components.ClientKreddyLineInfoWidget', array('sClientInfoView' => $sClientInfoView));
+}
 ?>
 
 <?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>

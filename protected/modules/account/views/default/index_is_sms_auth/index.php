@@ -14,12 +14,11 @@ $this->breadcrumbs = array(
 ?>
 
 <?
-if (SiteParams::getIsIvanovoSite()) {
-	$this->widget('application.modules.account.components.ClientInfoIvanovoWidget', array('sClientInfoView' => $sClientInfoView));
-} else {
+if (Yii::app()->adminKreddyApi->isSubscriptionOldType()) {
 	$this->widget('application.modules.account.components.ClientInfoWidget', array('sClientInfoView' => $sClientInfoView));
+} else {
+	$this->widget('application.modules.account.components.ClientKreddyLineInfoWidget', array('sClientInfoView' => $sClientInfoView));
 }
-
 ?>
 	<br />
 <?= $sIdentifyRender ?>

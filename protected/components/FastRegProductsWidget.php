@@ -81,18 +81,18 @@ class FastRegProductsWidget extends CWidget
 				<div class="product_name"><img src="/static/images/kreddy90.png" /></div>
 			<?php } ?>
 			<ul class="product-info">
+				<li>Срок действия линии - <strong><?= $aProduct['subscription_lifetime'] / 3600 / 24 ?>
+						&nbsp;дней</strong></li>
+
+
 				<li>Размер одного займа - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong></li>
 
-				<li>Доступная сумма - <strong><?= $aProduct['amount'] ?>&nbsp;руб.</strong></li>
+				<li>Количество займов - <strong>без ограничений</strong></li>
 
-				<li>Количество займов в пакете -
-					<strong><?= Dictionaries::formatLoanLabel($aProduct['loan_count']) ?></strong></li>
+				<li>Срок использования займа - <strong>от 1 до <?= $aProduct['subscription_lifetime'] / 3600 / 24 ?>
+						&nbsp;дней</strong></li>
 
-				<li>Возврат каждого займа - в течение <strong><?= $aProduct['loan_lifetime'] / (3600 * 24) ?>
-						&nbsp;дней</strong> (с момента перечисления займа)
-				</li>
-
-				<li>Стоимость подключения пакета - <strong><span class="red-font"><?= $aProduct['subscription_cost'] ?>
+				<li>Абонентская плата - <strong><span class="red-font"><?= $aProduct['subscription_cost'] ?>
 							&nbsp;руб.</span></strong></li>
 			</ul>
 			<?php

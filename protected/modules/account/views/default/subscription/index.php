@@ -6,5 +6,4 @@
  */
 
 
-$this->widget('application.modules.account.components.SubscriptionWidget', array('sView' => $sView, 'oModel' => $oModel));
-
+$this->widget('application.modules.account.components.KreddyLineWidget', array('sView' => $sView, 'oModel' => $oModel));

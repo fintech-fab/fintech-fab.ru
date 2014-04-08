@@ -28,12 +28,11 @@ $('.search-form form').submit(function(){
 <?php $this->widget('bootstrap.widgets.TbExtendedGridView', array(
 	'id'                    => 'tabs-grid',
 	'type'                  => 'striped bordered condensed',
-
-	'sortableRows'        => true,
-	'sortableAttribute'   => 'tab_order',
-	'sortableAjaxSave'    => true,
-	'sortableAction'      => $this->createUrl('sortable'), // Custom action we added in our controller to handle updates
-	'afterSortableUpdate' => 'js:function(){}',
+	'sortableRows'          => true,
+	'sortableAttribute'     => 'tab_order',
+	'sortableAjaxSave'      => true,
+	'sortableAction'        => $this->createUrl('sortable'), // Custom action we added in our controller to handle updates
+	'afterSortableUpdate'   => 'js:function(){}',
 	//'responsiveTable' =&gt; true,              // Mobile Optimize the table
 	'dataProvider'          => $model->search(),
 	'filter'                => $model,

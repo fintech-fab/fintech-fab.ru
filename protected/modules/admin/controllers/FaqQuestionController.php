@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class FaqQuestionController
+ */
 class FaqQuestionController extends Controller
 {
 	/**
@@ -19,6 +22,9 @@ class FaqQuestionController extends Controller
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function actions()
 	{
 		return array(
@@ -39,7 +45,11 @@ class FaqQuestionController extends Controller
 			'toggle'      => array(
 				'class'     => 'bootstrap.actions.TbToggleAction',
 				'modelName' => 'FaqQuestion',
-			)
+			),
+			'sortable'    => array(
+				'class'     => 'bootstrap.actions.TbSortableAction',
+				'modelName' => 'FaqQuestion'
+			),
 		);
 	}
 
@@ -64,7 +74,7 @@ class FaqQuestionController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sort', 'toggle'),
+				'actions' => array('admin', 'index', 'delete', 'create', 'update', 'view', 'sortable', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
@@ -141,32 +151,19 @@ class FaqQuestionController extends Controller
 		));
 	}
 
-	public function actionSort()
-	{
-		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['items']) && is_array($_POST['items'])) {
-				foreach ($_POST['items'] as $key => $val) {
-					FaqQuestion::model()->updateByPk($val, array(
-						'sort_order' => ($key + 1)
-					));
-				}
-			}
-		}
-	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param $id
 	 *
-	 * @param integer $id the ID of the model to be deleted
+	 * @throws CHttpException
 	 */
 	public function actionDelete($id)
 	{
 		if (Yii::app()->request->isPostRequest) {
-// we only allow deletion via POST request
+			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
 
-// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if (!isset($_GET['ajax'])) {
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 			}
@@ -203,10 +200,10 @@ class FaqQuestionController extends Controller
 	}
 
 	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
+	 * @param $id
 	 *
-	 * @param integer the ID of the model to be loaded
+	 * @return CActiveRecord
+	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
@@ -219,9 +216,7 @@ class FaqQuestionController extends Controller
 	}
 
 	/**
-	 * Performs the AJAX validation.
-	 *
-	 * @param CModel the model to be validated
+	 * @param $model
 	 */
 	protected function performAjaxValidation($model)
 	{

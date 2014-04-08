@@ -46,7 +46,7 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 
 		return 'Ваш пакет займов - &quot;'
 		. Yii::app()->adminKreddyApi->getProductNameById($iProductId)
-		. '&quot;<br /> Размер первого займа -'
+		. '&quot;<br /> Размер первого займа - '
 		. Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) .
 		'руб.';
 	}
@@ -69,7 +69,7 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 				<strong>Пакет:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?>
 			</li>
 			<li><strong>Сумма
-					займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
+					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 				&nbsp;рублей
 			</li>
 			<li><strong>Количество займов в

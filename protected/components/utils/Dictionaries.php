@@ -756,6 +756,8 @@ class Dictionaries
 			$sUrl = self::translitIt($sUrl);
 			$sUrl = preg_replace('/[^A-Za-z0-9]/', '', $sUrl);
 		}
+		$sUrl = str_replace('kredditnayaliniya', 'kreddyline', $sUrl);
+
 		$sUrl = str_replace('kreddi', 'kreddy', $sUrl);
 		$sUrl = str_replace('dney', 'days', $sUrl);
 
