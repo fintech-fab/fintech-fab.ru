@@ -41,7 +41,7 @@ class LoanWidget extends BaseLoanSubscriptionWidget
 		. Yii::app()->adminKreddyApi->getSubscriptionProduct()
 		. '&quot;<br /> Размер второго займа - '
 		. Yii::app()->adminKreddyApi->getSubscriptionLoanAmount()
-		. 'руб.';
+		. '&nbsp;руб.';
 	}
 
 	/**
@@ -66,11 +66,9 @@ class LoanWidget extends BaseLoanSubscriptionWidget
 			<li>
 				<strong>Пакет:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?>
 			</li>
-			<li><strong>Сумма займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?>
-				&nbsp;рублей
+			<li><strong>Сумма займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?>&nbsp;рублей
 			</li>
-			<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanLifetime() ?>
-				&nbsp;дней
+			<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanLifetime() ?>&nbsp;дней
 			</li>
 			<li><strong>Способ получения
 					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>

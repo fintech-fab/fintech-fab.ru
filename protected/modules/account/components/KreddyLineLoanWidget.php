@@ -12,9 +12,9 @@ class KreddyLineLoanWidget extends LoanWidget
 	{
 		return 'Ваша КРЕДДИтная линия - &quot;'
 		. Yii::app()->adminKreddyApi->getSubscriptionProduct()
-		. '&quot;<br /> Размер займа -'
+		. '&quot;<br /> Размер займа - '
 		. Yii::app()->adminKreddyApi->getSubscriptionLoanAmount()
-		. 'руб.';
+		. '&nbsp;руб.';
 	}
 
 	/**
@@ -31,12 +31,10 @@ class KreddyLineLoanWidget extends LoanWidget
 			<li>
 				<strong><?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?></strong>
 			</li>
-			<li><strong>Сумма займа:</strong>&nbsp; <?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?>
-				&nbsp;рублей
+			<li><strong>Сумма займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?>&nbsp;рублей
 			</li>
 			<li><strong>Вернуть займ
 					до:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionActivityToTime() ?>
-				&nbsp;дней
 			</li>
 			<li><strong>Способ получения
 					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
