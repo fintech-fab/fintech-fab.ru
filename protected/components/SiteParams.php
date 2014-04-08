@@ -67,20 +67,6 @@ class SiteParams
 	const ANTIBOT_FORM_IN_SHORT = 3; //количество за короткий период
 	const ANTIBOT_FORM_IN_LONG = 5; //количество за длинный период
 
-	const C_INVOICE_TYPE_SUBSCRIPTION = 1;
-	const C_INVOICE_TYPE_LOAN = 2;
-	const C_INVOICE_TYPE_LOAN_FINE = 3;
-	const C_INVOICE_TYPE_LOAN_PENALTY = 4;
-	const C_INVOICE_TYPE_LOAN_FINE_PENALTY = 5;
-
-	public static $aTypes = array(
-		self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата Пакета',
-		self::C_INVOICE_TYPE_LOAN              => 'Погашение займа',
-		self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, займ)',
-		self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, займ)',
-		self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, займ)',
-	);
-
 	public static $iTimeNow = null;
 
 	public static $aMainBreadCrumbs = array(

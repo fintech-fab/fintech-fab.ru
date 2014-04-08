@@ -2544,8 +2544,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-	private
-	function getData($sType)
+	private function getData($sType)
 	{
 		//проверяем, какие данные запрошены, и выбираем необходимый экшн и отправляем запрос в API
 		switch ($sType) {
@@ -2591,8 +2590,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-	private
-	function requestAdminKreddyApi($sAction, $aRequest = array())
+	private function requestAdminKreddyApi($sAction, $aRequest = array())
 	{
 		$sApiUrl = (!Yii::app()->params['bApiTestModeIsOn']) ? $this->sApiUrl : $this->sTestApiUrl;
 		$aData = array('code' => self::ERROR_AUTH, 'message' => self::ERROR_MESSAGE_UNKNOWN);
@@ -2661,8 +2659,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return mixed
 	 */
-	private
-	function getSessionToken()
+	private function getSessionToken()
 	{
 		return Yii::app()->session['akApi_token'];
 	}
@@ -2672,8 +2669,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @param $token
 	 */
-	private
-	function setSessionToken($token)
+	private function setSessionToken($token)
 	{
 		Yii::app()->session['akApi_token'] = $token;
 	}
@@ -2746,8 +2742,7 @@ class AdminKreddyApiComponent
 	/**
 	 * очищаем сессии, связанные с отправкой SMS
 	 */
-	private
-	function clearSmsState()
+	private function clearSmsState()
 	{
 		$this->clearSmsPassState();
 		$this->clearResetPassSmsCodeState();
@@ -3213,8 +3208,7 @@ class AdminKreddyApiComponent
 	/**
 	 *
 	 */
-	protected
-	function increaseSmsCodeTries()
+	protected function increaseSmsCodeTries()
 	{
 		Yii::app()->session['iSmsCodeTries'] = (Yii::app()->session['iSmsCodeTries'])
 			? (Yii::app()->session['iSmsCodeTries'] + 1)
