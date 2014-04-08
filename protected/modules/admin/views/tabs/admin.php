@@ -19,42 +19,6 @@ $('.search-form form').submit(function(){
 
 ?>
 
-<?php
-$csrf_token_name = Yii::app()->request->csrfTokenName;
-$csrf_token = Yii::app()->request->csrfToken;
-
-$str_js = "
-        var fixHelper = function(e, ui) {
-            ui.children().each(function() {
-                $(this).width($(this).width());
-            });
-            return ui;
-        };
-
-        $('#tabs-grid table.items tbody').sortable({
-            forcePlaceholderSize: true,
-            forceHelperSize: true,
-            items: 'tr',
-            update : function () {
-                serial = $('#tabs-grid table.items tbody').sortable('serialize', {key: 'items[]', attribute: 'class'}) + '&{$csrf_token_name}={$csrf_token}';
-                $.ajax({
-                    'url': '" . $this->createUrl('sort') . "',
-                    'type': 'post',
-                    'data': serial,
-                    'success': function(data){
-                    },
-                    'error': function(request, status, error){
-                        alert('We are unable to set the sort order at this time.  Please try again in a few minutes.');
-                    }
-                });
-            },
-            helper: fixHelper
-        }).disableSelection();
-    ";
-
-Yii::app()->clientScript->registerScript('sortable-project', $str_js);
-?>
-
 <h1>Управление вкладками</h1>
 
 <p>
@@ -64,6 +28,13 @@ Yii::app()->clientScript->registerScript('sortable-project', $str_js);
 <?php $this->widget('bootstrap.widgets.TbExtendedGridView', array(
 	'id'                    => 'tabs-grid',
 	'type'                  => 'striped bordered condensed',
+
+	'sortableRows'        => true,
+	'sortableAttribute'   => 'tab_order',
+	'sortableAjaxSave'    => true,
+	'sortableAction'      => $this->createUrl('sortable'), // Custom action we added in our controller to handle updates
+	'afterSortableUpdate' => 'js:function(){}',
+	//'responsiveTable' =&gt; true,              // Mobile Optimize the table
 	'dataProvider'          => $model->search(),
 	'filter'                => $model,
 	'rowCssClassExpression' => '"items[]_{$data->tab_id}"',

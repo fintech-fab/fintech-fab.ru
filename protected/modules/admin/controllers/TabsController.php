@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Class TabsController
  */
-
 class TabsController extends Controller
 {
 	/**
@@ -22,13 +22,20 @@ class TabsController extends Controller
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function actions()
 	{
 		return array(
-			'toggle' => array(
+			'toggle'   => array(
 				'class'     => 'bootstrap.actions.TbToggleAction',
 				'modelName' => 'Tabs',
-			)
+			),
+			'sortable' => array(
+				'class'     => 'bootstrap.actions.TbSortableAction',
+				'modelName' => 'Tabs'
+			),
 		);
 	}
 
@@ -53,7 +60,7 @@ class TabsController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'view', 'sort', 'toggle'),
+				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'view', 'sortable', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
@@ -164,19 +171,6 @@ class TabsController extends Controller
 		$this->render('admin', array(
 			'model' => $model,
 		));
-	}
-
-	public function actionSort()
-	{
-		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['items']) && is_array($_POST['items'])) {
-				foreach ($_POST['items'] as $key => $val) {
-					Tabs::model()->updateByPk($val, array(
-						'tab_order' => ($key + 1)
-					));
-				}
-			}
-		}
 	}
 
 	/**

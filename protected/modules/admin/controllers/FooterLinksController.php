@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class FooterLinksController
  */
@@ -41,10 +42,14 @@ class FooterLinksController extends Controller
 					'types' => 'txt, pdf, doc, docx',
 				)
 			),
-			'toggle' => array(
+			'toggle'   => array(
 				'class'     => 'bootstrap.actions.TbToggleAction',
 				'modelName' => 'FooterLinks',
-			)
+			),
+			'sortable' => array(
+				'class'     => 'bootstrap.actions.TbSortableAction',
+				'modelName' => 'FooterLinks'
+			),
 		);
 	}
 
@@ -69,7 +74,7 @@ class FooterLinksController extends Controller
 			),
 			array(
 				'allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'imageUpload', 'view', 'sort', 'toggle'),
+				'actions' => array('admin', 'delete', 'create', 'update', 'index', 'imageUpload', 'view', 'sortable', 'toggle'),
 				'users'   => array(Yii::app()->params['adminName']),
 			),
 			array(
@@ -180,19 +185,6 @@ class FooterLinksController extends Controller
 		$this->render('admin', array(
 			'model' => $model,
 		));
-	}
-
-	public function actionSort()
-	{
-		if (Yii::app()->request->isAjaxRequest) {
-			if (isset($_POST['items']) && is_array($_POST['items'])) {
-				foreach ($_POST['items'] as $key => $val) {
-					FooterLinks::model()->updateByPk($val, array(
-						'link_order' => ($key + 1)
-					));
-				}
-			}
-		}
 	}
 
 	/**
