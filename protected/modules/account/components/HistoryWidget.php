@@ -43,6 +43,8 @@ class HistoryWidget extends TbGridView
 		),
 	);
 
+	const LOAN_TRANSFER_MESSAGE = 'Получение займа';
+
 	public function run()
 	{
 		$this->setColumns();
@@ -72,7 +74,7 @@ class HistoryWidget extends TbGridView
 			array(
 				'name'   => 'type_id',
 				'header' => 'Операция',
-				'value'  => '$this->grid->formatOperation($data["type"],$data["type_id"],$data["product_type_id"])',
+				'value' => '$this->grid->formatOperation($data)',
 			),
 			array(
 				'name'   => 'amount',
@@ -84,16 +86,16 @@ class HistoryWidget extends TbGridView
 	}
 
 	/**
-	 * @param $sType
-	 * @param $iTypeId
-	 * @param $iProductTypeId
-	 *
-	 * @internal param $sOperation
+	 * @param $aData
 	 *
 	 * @return string
 	 */
-	public function formatOperation($sType, $iTypeId, $iProductTypeId)
+	public function formatOperation($aData)
 	{
-		return ($sType == "invoice") ? self::$aOperationTypes[$iProductTypeId][$iTypeId] : "Получение займа";
+		$sType = $aData['type'];
+		$iTypeId = $aData['type_id'];
+		$iProductTypeId = $aData['product_type_id'];
+
+		return ($sType == "invoice") ? self::$aOperationTypes[$iProductTypeId][$iTypeId] : self::LOAN_TRANSFER_MESSAGE;
 	}
 }
