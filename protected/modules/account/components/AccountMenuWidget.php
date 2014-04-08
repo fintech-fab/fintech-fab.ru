@@ -110,8 +110,17 @@ class AccountMenuWidget extends CWidget
 					'label' => 'На смартфоне',
 					'url'   => array('/account/default/identifyApp')
 				),
+				array(
+					'label'       => 'Инструкция',
+					'url'         => array(Yii::app()->request->url . '#'),
+					'linkOptions' => array(
+						'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
+					),
+				),
 			),
 		);
+
+
 		$this->aMenu[] = '';
 		$this->aMenu[] = array(
 			'label' => 'Выход',
