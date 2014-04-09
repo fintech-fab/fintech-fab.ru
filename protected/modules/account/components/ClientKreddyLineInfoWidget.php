@@ -56,13 +56,13 @@ class ClientKreddyLineInfoWidget extends ClientInfoWidget
 
 	protected function renderAvailableLoans()
 	{
-		?>
-		<strong>КРЕДДИтная линия активна до:</strong>  <?=
-		(Yii::app()->adminKreddyApi->getSubscriptionActivity()) ?
-			Yii::app()->adminKreddyApi->getSubscriptionActivity()
-			: "&mdash;"; ?>
-		<br />
-	<?php
+		if (Yii::app()->adminKreddyApi->getSubscriptionActivity()) {
+			?>
+			<strong>КРЕДДИтная линия активна до:</strong>
+			<?= Yii::app()->adminKreddyApi->getSubscriptionActivity() ?>
+			<br />
+		<?php
+		}
 
 
 	}

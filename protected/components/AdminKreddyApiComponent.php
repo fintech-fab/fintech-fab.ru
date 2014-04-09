@@ -42,7 +42,7 @@ class AdminKreddyApiComponent
 	const C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о статусе займа{account_url_end}";
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {do_sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Ваша заявка отклонена';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
@@ -268,8 +268,12 @@ class AdminKreddyApiComponent
 			$iProductId = $this->getSubscriptionProductId();
 		}*/
 
+		Yii::app()->adminKreddyApi->getSubscribeProductCost();
+
 		return array(
-			'{sub_pay_sum}'        => $this->getSubscriptionCost(), // стоимость подключения
+			'{sub_pay_sum}'    => $this->getSubscriptionCost(), // стоимость подключения текущего пакета
+
+			'{do_sub_pay_sum}' => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
 
 			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())), // название канала
 
@@ -361,8 +365,8 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 
-			//сбрасываем кэш инфо клиента, т.к. ранее он мог быть заполнен данными до авторизации
-			$this->aClientInfo = null;
+			//перезапросим инфо клиента
+			$this->getClientInfo(true);
 
 			// Если смс-авторизация не требутеся
 			if (!$this->getIsNeedSmsAuth()) {
@@ -823,12 +827,14 @@ class AdminKreddyApiComponent
 	/**
 	 * Получение основной информации о клиенте в виде массива
 	 *
+	 * @param bool $bForce //сделать force-запрос к API без использования кэша
+	 *
 	 * @return array|bool
 	 */
-	public function getClientInfo()
+	public function getClientInfo($bForce = false)
 	{
 		//если данные уже были сохранены - возвращаем их без повторного запроса
-		if (isset($this->aClientInfo)) {
+		if (isset($this->aClientInfo) && !$bForce) {
 			return $this->aClientInfo;
 		}
 
@@ -3757,4 +3763,18 @@ class AdminKreddyApiComponent
 	{
 		return $this->requestAdminKreddyApi(self::API_ACTION_EMAIL_INFO, $aRequest);
 	}
+
+	/**
+	 * Стоимость оформляемого продукта для процедуры оформления subscribe
+	 *
+	 * @return bool|string
+	 */
+	private function getSubscribeProductCost()
+	{
+		$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+		$iChannelId = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
+
+		return Yii::app()->adminKreddyApi->getProductCostById($iProductId, $iChannelId);
+	}
+
 }
