@@ -555,6 +555,7 @@ class AdminKreddyApiComponent
 			'phone'       => null,
 			'tracking_id' => null,
 			'ip'          => null,
+			'site_region' => null,
 		);
 
 
@@ -3071,13 +3072,14 @@ class AdminKreddyApiComponent
 	{
 		$iScoringResult = $this->getScoringResult();
 
-		if(empty($iScoringResult) || SiteParams::getIsIvanovoSite()) {
+		if (empty($iScoringResult) || SiteParams::getIsIvanovoSite()) {
 			return self::C_DO_SUBSCRIBE_MSG;
 		}
 
-		switch($iScoringResult){
+		switch ($iScoringResult) {
 			case self::C_SCORING_ACCEPT:
 				$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
+
 				return $sMessage;
 				break;
 			case self::C_SCORING_CANCEL:

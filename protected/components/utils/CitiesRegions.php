@@ -1,10 +1,34 @@
 <?php
+
 /**
  * Class CitiesRegions
  */
-
 class CitiesRegions
 {
+	/**
+	 * Возвращает id региона по названию
+	 *
+	 * @param $sRegion
+	 *
+	 * @return integer|null
+	 */
+	public static function getRegionIdByName($sRegion)
+	{
+		if (empty($sRegion)) {
+			return null;
+		}
+		$oQuery = Yii::app()->db->createCommand()->select('id')
+			->from('tbl_regions')
+			->where("`name` LIKE :region", array(':region' => $sRegion . '%'));
+
+		$aElem = $oQuery->queryRow();
+		if (isset($aElem['id'])) {
+			return $aElem['id'];
+		}
+
+		return null;
+	}
+
 	/**
 	 * Выводит города с регионами, похожие на введённый запрос (если он есть)
 	 *
