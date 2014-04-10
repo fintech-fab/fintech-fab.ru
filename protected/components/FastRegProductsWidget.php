@@ -83,6 +83,7 @@ class FastRegProductsWidget extends CWidget
 				<div class="product_name"><img src="/static/images/kreddy90.png" /></div>
 			<?php }*/
 			?>
+			<h4>Описание линии</h4>
 			<ul class="product-info">
 				<li>Срок действия линии - <strong><?= $aProduct['subscription_lifetime'] / 3600 / 24 ?>
 						&nbsp;дней</strong></li>

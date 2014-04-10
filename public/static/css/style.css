@@ -706,7 +706,7 @@ p.popover-label {
 
 ul.product-info {
 	margin: 0 0 1em 0;
-	padding: 1.2em 0 0 1em; /* make space for li's :before */
+	padding: 0 0 0 1em; /* make space for li's :before */
 	list-style: none;
 }
 
@@ -739,23 +739,6 @@ div.cost {
 	font-size: 20pt;
 	display: block;
 	margin-left: 100px;
-}
-
-div.cost:before {
-	color: #5CD85C;
-	content: "";
-	display: inline-block;
-	font-family: 'Glyphicons Halflings';
-	font-style: normal;
-	font-weight: normal;
-	font-size: 20pt;
-	line-height: 1;
-	position: relative;
-	top: 2px;
-	margin-right: 5px;
-	left: -0.3em; /* same as ul padding-left */
-	/*top: 0.65em; /* depends on character, maybe use padding-top instead */
-	/*  .... more styling, maybe set width etc ... */
 }
 
 #productsTabs li a, #productsTabs li a:focus {

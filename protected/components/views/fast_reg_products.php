@@ -10,7 +10,7 @@
 	<?php $this->renderNavTabs() ?>
 	<div class="span12">
 		<div class="row">
-			<div class="cost"><i></i>Единая стоимость абонентской платы - <strong><span class="red-font">900</span>&nbsp;руб/мес</strong>
+			<div class="cost">Единая стоимость абонентской платы - <strong><span class="red-font">900</span>&nbsp;руб/мес</strong>
 			</div>
 		</div>
 	</div>
@@ -72,7 +72,7 @@
 	</div>
 	<div class="span6 offset1">
 		<div class="row">
-			<h3>Быстрая регистрация</h3>
+			<h4>Быстрая регистрация</h4>
 			<?= $form->errorSummary($oClientCreateForm); ?>
 			<?= $form->textFieldRow($oClientCreateForm, 'last_name'); ?><br />
 

@@ -1508,6 +1508,7 @@ class AdminKreddyApiComponent
 			Yii::app()->cache->set($sCacheName, $aProductsAndChannels, 600);
 			//кэш длительного хранения, на случай отключения API
 			Yii::app()->cache->set($sCacheName . 'LongTime', $aProductsAndChannels);
+
 		} else {
 			//если вдруг при обращении к API вылезла ошибка, достаем данные из длительного кэша
 
