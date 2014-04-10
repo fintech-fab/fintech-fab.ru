@@ -13,9 +13,8 @@ class TopPageWidget extends CWidget
 		if (!SiteParams::getIsIvanovoSite()) {
 			$aItems = array(
 				array(
-					'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-90days.jpg'),
-					'label' => 'Кредди 90 дней',
-					'url'   => '/pages/view/kreddy90days'
+					'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-line-banner.png'),
+					'label' => 'КРЕДДИтная линия',
 				),
 				array(
 					'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-02.jpg'),

@@ -8,6 +8,12 @@
 ?>
 <div id="fastRegWidget">
 	<?php $this->renderNavTabs() ?>
+	<div class="span12">
+		<div class="row">
+			<div class="cost"><i></i>Единая стоимость абонентской платы - <strong><span class="red-font">900</span>&nbsp;руб/мес</strong>
+			</div>
+		</div>
+	</div>
 	<div class="span5">
 		<div class="row">
 			<?php $this->renderTabsContents(); ?>

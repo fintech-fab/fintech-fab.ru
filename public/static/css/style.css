@@ -603,13 +603,31 @@ p.popover-label {
 	/*border-right: 0;*/
 	width: 135px;
 	vertical-align: middle;
-	padding-top: 15px;
-	font-size: 35pt;
+	padding-top: 5px;
+	font-size: 30pt;
 	height: 63px;
 	font-family: Trebuchet MS, sans-serif;
 	font-weight: 100;
 	text-align: center;
 	color: #555555;
+}
+
+#fastRegWidget .nav-tabs li a.title {
+	padding-top: 10px;
+}
+
+#fastRegWidget .nav-tabs li a.title:hover {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+#fastRegWidget .nav-tabs li a span.limit-text {
+	font-size: 12pt;
+	line-height: 12pt;
+}
+
+#fastRegWidget .nav-tabs li a span.loan-amount {
+	line-height: 30pt;
 }
 
 #fastRegWidget .nav-tabs li.active a {
@@ -688,7 +706,7 @@ p.popover-label {
 
 ul.product-info {
 	margin: 0 0 1em 0;
-	padding: 0 0 0 1em; /* make space for li's :before */
+	padding: 1.2em 0 0 1em; /* make space for li's :before */
 	list-style: none;
 }
 
@@ -713,6 +731,29 @@ ul.product-info li:before {
 
 	position: absolute;
 	left: -1em; /* same as ul padding-left */
+	/*top: 0.65em; /* depends on character, maybe use padding-top instead */
+	/*  .... more styling, maybe set width etc ... */
+}
+
+div.cost {
+	font-size: 20pt;
+	display: block;
+	margin-left: 100px;
+}
+
+div.cost:before {
+	color: #5CD85C;
+	content: "";
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: normal;
+	font-size: 20pt;
+	line-height: 1;
+	position: relative;
+	top: 2px;
+	margin-right: 5px;
+	left: -0.3em; /* same as ul padding-left */
 	/*top: 0.65em; /* depends on character, maybe use padding-top instead */
 	/*  .... more styling, maybe set width etc ... */
 }

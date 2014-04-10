@@ -39,15 +39,17 @@ class FastRegProductsWidget extends CWidget
 	public function renderNavTabs()
 	{
 		?>
-		<ul id="productsTabs" class="nav nav-tabs"><?php
+		<ul id="productsTabs" class="nav nav-tabs">
+		<li><a class="title"><img src="/static/images/kreddy-line.png" /></a></li>
+		<?php
 
 		foreach ($this->aProducts as $aProduct) {
 			?>
 			<li <?= $aProduct['id'] == $this->getActiveProductId() ? 'class="active"' : '' ?>>
 				<?php if ($aProduct['name'] != 'Кредди 90 дней') { ?>
 					<a href="#product_<?= $aProduct['id'] ?>" data-toggle="tab">
-						<?= $aProduct['loan_amount'] ?>
-					</a>
+						<span class="limit-text">Лимит</span><br />
+						<span class="loan-amount"><?= $aProduct['loan_amount'] ?></span> </a>
 				<?php } else { ?>
 					<a href="#product_<?= $aProduct['id'] ?>" data-toggle="tab" style="width: 165px;">
 						<?= ($aProduct['name'] != 'Кредди 90 дней') ? $aProduct['loan_amount'] : '<img src="/static/images/kreddy90.png"/>' ?>
@@ -72,28 +74,26 @@ class FastRegProductsWidget extends CWidget
 			//'subscription_lifetime' => '2592000'
 			//'loan_lifetime' => '604800'
 
-			if ($aProduct['amount'] != 15000) {
+			/*if ($aProduct['amount'] != 15000) {
 				?>
 				<div class="product_name">
 					<img src="/static/images/kreddy_product.png" />&nbsp;<span><strong><?= $aProduct['loan_amount'] ?></strong></span>
 				</div>
 			<?php } else { ?>
 				<div class="product_name"><img src="/static/images/kreddy90.png" /></div>
-			<?php } ?>
+			<?php }*/
+			?>
 			<ul class="product-info">
 				<li>Срок действия линии - <strong><?= $aProduct['subscription_lifetime'] / 3600 / 24 ?>
 						&nbsp;дней</strong></li>
+				<li>Абонентская плата - <strong><?= $aProduct['subscription_cost'] ?>&nbsp;руб.</strong></li>
+				<li>Лимит КРЕДДИтной линии - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong></li>
 
-
-				<li>Размер одного займа - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong></li>
-
-				<li>Количество займов - <strong>без ограничений</strong></li>
-
+				<li>Размер каждого займа - <strong><?= $aProduct['loan_amount'] ?>&nbsp;руб.</strong></li>
 				<li>Срок использования займа - <strong>от 1 до <?= $aProduct['subscription_lifetime'] / 3600 / 24 ?>
 						&nbsp;дней</strong></li>
+				<li>Количество займов - <strong>без ограничений</strong></li>
 
-				<li>Абонентская плата - <strong><span class="red-font"><?= $aProduct['subscription_cost'] ?>
-							&nbsp;руб.</span></strong></li>
 			</ul>
 			<?php
 			$sProductName = Dictionaries::createTransliteratedProductName($aProduct['name']);
