@@ -21,6 +21,8 @@ Yii::app()->clientScript->registerScript('goIdentify', '
 <?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
 	<p>Уважаемый Клиент, идентификация - это процедура подтверждения Вашей личности.</p>
 	<p>После идентификации потребуется ввести данные документов, использованных при идентификации.</p>
+
+	<?php $this->widget("CheckBrowserWidget"); ?>
 <?php endif; ?>
 
 <?php
@@ -48,7 +50,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			Нужна веб-камера и браузер Chrome или Firefox.<br /> <a href="<?=
 			Yii::app()
 				->createUrl('/pages/view/browser') ?>" target="_blank">Скачать браузер >>></a> <br /> <br />
-			<?php $this->widget("CheckBrowserWidget"); ?>
 
 			<div class="center">
 				<?php
