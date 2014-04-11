@@ -10,7 +10,8 @@
 	<?php $this->renderNavTabs() ?>
 	<div class="span12">
 		<div class="row">
-			<div class="cost">Единая стоимость абонентской платы - <strong><span class="red-font">900</span>&nbsp;руб/мес</strong>
+			<div class="alert in alert-block alert-info cost">
+				Единая стоимость абонентской платы - <strong><span class="red-font">900</span></strong>&nbsp;руб/мес
 			</div>
 		</div>
 	</div>

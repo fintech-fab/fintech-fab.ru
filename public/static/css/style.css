@@ -669,11 +669,13 @@ p.popover-label {
 
 #fastRegWidget input[type="text"] {
 	width: 350px;
-	height: 35px;
 	margin-bottom: 10px;
-	font-size: 20pt;
 	font-weight: 400;
-
+	vertical-align: middle;
+	height: 28px;
+	font-size: 16pt;
+	padding-top: 5px;
+	padding-bottom: 2px;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
@@ -739,6 +741,8 @@ div.cost {
 	font-size: 20pt;
 	display: block;
 	margin-left: 100px;
+	width: 660px;
+	padding-right: 10px;
 }
 
 #productsTabs li a, #productsTabs li a:focus {
