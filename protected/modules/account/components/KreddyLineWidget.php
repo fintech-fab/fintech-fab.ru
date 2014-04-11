@@ -8,7 +8,7 @@ class KreddyLineWidget extends SubscriptionWidget
 	protected $sTitle = 'Подключение КРЕДДИтной линии';
 	protected $sSubscribeButtonLabel = 'Подключить КРЕДДИтную линию';
 	protected $sNeedIdentifyMessage = 'Для подключения КРЕДДИтной линии необходимо пройти идентификацию.';
-	protected $sNeedSmsMessage = 'Для подключения КРЕДДИтной лини требуется подтверждение одноразовым SMS-кодом';
+	protected $sNeedSmsMessage = 'Для подключения КРЕДДИтной линии требуется подтверждение одноразовым SMS-кодом';
 
 	/**
 	 * @return string
