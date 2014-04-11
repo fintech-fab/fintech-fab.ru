@@ -21,7 +21,7 @@ class KreddyLineWidget extends SubscriptionWidget
 		. Yii::app()->adminKreddyApi->getProductNameById($iProductId)
 		. '&quot;<br /> Размер одного займа - '
 		. Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) .
-		'руб.';
+		'&nbsp;руб.';
 	}
 
 	/**

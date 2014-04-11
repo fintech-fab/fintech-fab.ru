@@ -275,7 +275,7 @@ class AdminKreddyApiComponent
 
 			'{do_sub_pay_sum}' => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
 
-			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameById($this->getLoanSelectedChannel())), // название канала
+			'{channel_name}' => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
 
 			'{account_url_start}'  => CHtml::openTag("a", array(
 					"href" => Yii::app()->createUrl("/account")
@@ -1028,6 +1028,20 @@ class AdminKreddyApiComponent
 		$aChannels = $this->getProductsChannels();
 
 		return (isset($aChannels[$iChannel])) ? $aChannels[$iChannel] : false;
+	}
+
+	/**
+	 * @param $iChannel
+	 *
+	 * @return bool|mixed|string
+	 */
+	public function getChannelNameForSubscriptionLoan($iChannel)
+	{
+		$sChannelName = $this->getChannelNameById($iChannel);
+
+		$sChannelName = preg_replace('/Перевод /ui', '', $sChannelName);
+
+		return $sChannelName;
 	}
 
 	/**
