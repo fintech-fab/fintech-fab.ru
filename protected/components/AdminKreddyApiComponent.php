@@ -3778,4 +3778,20 @@ class AdminKreddyApiComponent
 		return Yii::app()->adminKreddyApi->getProductCostById($iProductId, $iChannelId);
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isSelectedChannelBankCard()
+	{
+		$iChannelId = $this->getLoanSelectedChannel();
+
+		$aAvailableChannels = $this->getAvailableChannelValues();
+
+		if (!isset($aAvailableChannels[self::C_CARD])) {
+			return false;
+		}
+
+		return $aAvailableChannels[self::C_CARD] == $iChannelId;
+	}
+
 }

@@ -145,4 +145,19 @@ class BaseLoanSubscriptionWidget extends CWidget
 		$this->controller->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), false, false);
 	}
 
+	/**
+	 * Отображаем сообщение о сроках зачисления средств в случае, если выбрана в качестве канала банковская карта
+	 */
+	protected function renderChannelSpeedMessage()
+	{
+		if (Yii::app()->adminKreddyApi->isSelectedChannelBankCard()) {
+			?>
+			<p><i>Срок зачисления средств зависит от банка, выпустившего Вашу карту, и может составить от нескольких
+					минут до нескольких дней. Многие банки зачисляют средства на банковские карты в течение 15-30 минут
+					с момента перевода. В некоторых случаях срок зачисления может составить несколько дней.</i></p>
+
+		<?php
+		}
+	}
+
 } 

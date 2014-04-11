@@ -97,10 +97,9 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
 			</li>
 		</ul>
-		<p><i>Срок зачисления средств зависит от банка, выпустившего Вашу карту, и может составить от нескольких минут
-				до нескольких дней. Многие банки зачисляют средства на банковские карты в течение 15-30 минут с момента
-				перевода. В некоторых случаях срок зачисления может составить несколько дней.</i></p>
 		<?php
+		$this->renderChannelSpeedMessage();
+
 		return ob_get_clean();
 
 	}
