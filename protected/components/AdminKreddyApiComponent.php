@@ -922,14 +922,19 @@ class AdminKreddyApiComponent
 			Yii::app()->user->setFlash('warning', $this->formatMessage(self::C_NEED_PASSPORT_DATA));
 		}
 
+		//если не авторизован, то незачем ставить warning'и, а то они потом вылезут после авторизации
+		if (!Yii::app()->adminKreddyApi->getIsAuth()) {
+			return;
+		}
+
 		//если нет привязанной карты и не установлен другой warning, то уведомляем о необходимости привязки карты
 		if (Yii::app()->user->hasFlash('warning')) {
 			return;
 		}
 
-		if ($aData['bank_card_expired'] == true) {
+		if ($aData['bank_card_expired'] === true) {
 			Yii::app()->user->setFlash('warning', self::C_CARD_WARNING_EXPIRED);
-		} elseif ($aData['bank_card_exists'] == false) {
+		} elseif ($aData['bank_card_exists'] === false) {
 			Yii::app()->user->setFlash('warning', self::C_CARD_WARNING_NO_CARD);
 		}
 
