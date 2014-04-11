@@ -99,7 +99,7 @@ class FastRegProductsWidget extends CWidget
 			<?php
 			$sProductName = Dictionaries::createTransliteratedProductName($aProduct['name']);
 			$sAboutProducturl = Yii::app()->createUrl('/pages/view/' . $sProductName);
-			echo CHtml::link('Подробнее о пакете >', $sAboutProducturl);
+			echo CHtml::link('Подробнее о КРЕДДИтной линии >', $sAboutProducturl);
 			?>
 		</div>
 	<?php } ?>
