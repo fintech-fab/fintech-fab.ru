@@ -15,7 +15,8 @@ $this->breadcrumbs = array(
 
 <?php
 
-$this->widget('application.modules.account.components.ClientInfoWidget', array('sClientInfoView' => $sClientInfoView));
+$this->widget('application.modules.account.components.ClientKreddyLineInfoWidget', array('sClientInfoView' => $sClientInfoView));
+
 ?>
 
 <?php
