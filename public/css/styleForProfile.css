@@ -51,6 +51,7 @@
 .photo_upload .for_input_file #file-input {
 	width: 100%;
 }
+
 #profile p {
 	font-size: 20px;
 }
@@ -58,4 +59,13 @@
 .highlighted {
 	background-image: none;
 	background-color: #99ff99 !important;
+}
+
+/*Отображерние таблицы пользователей и кнопки*/
+#tableRoles {
+	display: none;
+}
+
+#btnRoles, #btnBills {
+	width: 200px;
 }

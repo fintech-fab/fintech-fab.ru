@@ -27,7 +27,7 @@ Route::get('admin', array(
 
 Route::get('TableForAdmin', array(
 	'as'   => 'WorkAdmin',
-	'uses' => 'App\Controllers\User\AdminController@TableForAdmin'
+	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
 ));
 
 Route::get('changeRole', array(
@@ -49,3 +49,12 @@ Route::group(array('before' => 'auth'), function () {
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
 });
+
+//-----------------------Для Qiwi----------------------
+Route::group(array('before' => 'auth'), function () {
+	Route::resource('client-page', 'ClientController');
+	Route::resource('shop-page', 'ShopController');
+	Route::resource('/api/v2/prv/2042/bills/', 'QiwiGateController');
+});
+
+Route::put('/api/v2/prv/2042/bills/1', 'QiwiGateController@update');

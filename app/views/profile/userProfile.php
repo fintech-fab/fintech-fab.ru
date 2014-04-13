@@ -100,7 +100,7 @@ $socialNets = array();
 	<?php endfor ?>
 	<p class="text-center">Подключить социальную сеть:
 		<?php if (!isset($socialNets['vk'])): ?>
-			<a href="<?= Social::linkForSocNet('vk') ?>"><img src="assets/ico/fb32.png" alt="" /></a>
+			<a href="<?= Social::linkForSocNet('vk') ?>"><img src="assets/ico/vk32.png" alt="" /></a>
 		<?php endif ?>
 		<?php if (!isset($socialNets['fb'])): ?>
 			<a href="<?= Social::linkForSocNet('fb') ?>"><img src="assets/ico/fb32.png" alt="" /></a>

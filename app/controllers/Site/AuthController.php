@@ -35,8 +35,8 @@ class AuthController extends BaseController
 		$validator = Validator::make($data, WorkWithInput::rulesForInputAuth(), WorkWithInput::messagesForErrors());
 		$userMessages = $validator->messages();
 		$emailError = $userMessages->first('email');
-		$emailPassword = $userMessages->first('password');
-		$result['errors'] = array($emailError, $emailPassword);
+		$passwordError = $userMessages->first('password');
+		$result['errors'] = array($emailError, $passwordError);
 
 		if ($userMessages->has('email') || $userMessages->has('password')) {
 			return $result;
@@ -44,6 +44,7 @@ class AuthController extends BaseController
 
 		if (Auth::attempt(array('email' => $data['email'], 'password' => $data['password']), $remember)) {
 			$result['authOk'] = LinksInMenu::echoAuthMode();
+
 			return $result;
 		}
 		$result['errors']['1'] = "Нет такого пользователя";
@@ -106,6 +107,7 @@ class AuthController extends BaseController
 			->with('userMessage', 'Добро пожаловать на наш сайт!')
 			->with('userMessageTitle', 'Вы успешно авторизовались!');
 	}
+
 	public function logout()
 	{
 		Auth::logout();

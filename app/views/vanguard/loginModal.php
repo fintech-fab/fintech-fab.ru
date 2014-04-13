@@ -34,7 +34,7 @@ use FintechFab\Components\Social;
 						));
 						?>
 					</div>
-					<div id="errorEmail" class="errorModal text-center"></div>
+					<div id="errorEmail" class="error text-center"></div>
 				</div>
 				<div class="form-group">
 					<?= Form::label('inputPassword', 'Пароль', array('class' => 'col-sm-3 control-label')) ?>
@@ -49,14 +49,14 @@ use FintechFab\Components\Social;
 						));
 						?>
 					</div>
-					<div id="errorPassword" class="errorModal text-center"></div>
+					<div id="errorPassword" class="error text-center"></div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-3 col-sm-9 checkbox">
 						<label>
 							<?= Form::checkbox('remember', 'true'); ?>Запомнить меня </label>
 					</div>
-					<div id="errorPassword" class="errorModal text-center"></div>
+					<div id="errorPassword" class="error text-center"></div>
 				</div>
 				<div class="form-group">
 					<p class="col-sm-8">Не зарегистрирован?<br><a href="/registration">Регистрация</a></p>
