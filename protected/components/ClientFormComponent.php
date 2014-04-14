@@ -142,27 +142,27 @@ class ClientFormComponent
 			0 => array(
 				'form_step' => 1,
 				'label'     => 'Личные данные',
-				'url' => '/form/ajaxForm/1'
+				'url'       => '/form/ajaxForm/1'
 			),
 			1 => array(
 				'form_step' => 2,
 				'label'     => 'Паспортные данные',
-				'url' => '/form/ajaxForm/2'
+				'url'       => '/form/ajaxForm/2'
 			),
 			2 => array(
 				'form_step' => 3,
 				'label'     => 'Постоянная регистрация',
-				'url' => '/form/ajaxForm/3'
+				'url'       => '/form/ajaxForm/3'
 			),
 			3 => array(
 				'form_step' => 4,
 				'label'     => 'Дополнительно',
-				'url' => '/form/ajaxForm/5'
+				'url'       => '/form/ajaxForm/5'
 			),
 			4 => array(
 				'form_step' => 5,
 				'label'     => 'Отправка заявки',
-				'url' => '/form/ajaxForm/6'
+				'url'       => '/form/ajaxForm/6'
 			),
 		),
 		self::SITE2        => array(
@@ -228,30 +228,30 @@ class ClientFormComponent
 				'model'            => 'ClientFastRegForm', //TODO
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
-				'topPageWidget' => true,
+				'topPageWidget'    => true,
 			),
 			1 => array(
 				'view'             => 'client_fast_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
-					true => 'confirm_phone/check_sms_code_fast_reg',
+					true        => 'confirm_phone/check_sms_code_fast_reg',
 					false       => 'confirm_phone/send_sms_code',
 				),
 				'model'            => 'ClientConfirmPhoneViaSMSForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => array(
 					'condition' => 'getFlagSmsSent',
-					true  => 'fr_sms_code_check',
-					false => 'fr_sms_code_send',
+					true        => 'fr_sms_code_check',
+					false       => 'fr_sms_code_send',
 				),
 				'topPageWidget'    => true,
 			),
 		),
 		self::CONTINUE_REG => array(
 			0 => array(
-				'view'         => 'client_continue_form',
+				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/personal_data_continue',
-				'model'        => 'ClientPersonalDataContinueForm',
+				'model'            => 'ClientPersonalDataContinueForm',
 				'modelDbRelations' => array(
 					'phone',
 					'first_name',
@@ -260,24 +260,24 @@ class ClientFormComponent
 					'email',
 				),
 				'breadcrumbs_step' => 1,
-				'metrika_goal' => 'fr_personal_data',
+				'metrika_goal'     => 'fr_personal_data',
 			),
 			1 => array(
-				'view'         => 'client_continue_form',
+				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/passport_data',
 				'model'            => 'ClientPassportDataForm',
 				'modelDbRelations' => array(
 					'birthday'
 				),
 				'breadcrumbs_step' => 2,
-				'metrika_goal' => 'fr_passport_data',
+				'metrika_goal'     => 'fr_passport_data',
 			),
 			2 => array(
 				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/address_data',
 				'model'            => 'ClientAddressDataForm',
 				'breadcrumbs_step' => 2,
-				'metrika_goal' => 'fr_address_data',
+				'metrika_goal'     => 'fr_address_data',
 			),
 			3 => array(
 				'view'             => 'client_continue_form',
@@ -287,14 +287,14 @@ class ClientFormComponent
 					'phone'
 				),
 				'breadcrumbs_step' => 2,
-				'metrika_goal' => 'fr_job_data',
+				'metrika_goal'     => 'fr_job_data',
 			),
 			4 => array(
 				'view'             => 'client_continue_form',
 				'sub_view'         => 'steps/secret_data_continue',
 				'model'            => 'ClientSecretDataContinueForm',
 				'breadcrumbs_step' => 2,
-				'metrika_goal' => 'fr_secret_data',
+				'metrika_goal'     => 'fr_secret_data',
 			),
 			5 => array(
 				'controllerMethod' => 'continueRegSuccess', //на этом шаге требуется вызвать метод, и больше ничего не нужно делать
@@ -306,7 +306,7 @@ class ClientFormComponent
 				'model'            => 'ClientFastRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
-				'topPageWidget' => true,
+				'topPageWidget'    => true,
 			),
 			1 => array(
 				'view'             => 'infographic',
@@ -377,7 +377,7 @@ class ClientFormComponent
 				'model'            => 'ClientFlexibleProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
-				'topPageWidget' => true,
+				'topPageWidget'    => true,
 			),
 			1 => array(
 				'view'             => 'client_form',
@@ -839,10 +839,34 @@ class ClientFormComponent
 
 		//если клиент прошел быструю регистрацию, то отправляем его другим методом
 		if ($sSite == self::FAST_REG) {
+			$aClientData['site_region'] = $this->getSiteRegionId();
+
 			return Yii::app()->adminKreddyApi->createFastRegClient($aClientData);
 		}
 
 		return Yii::app()->adminKreddyApi->createClient($aClientData);
+	}
+
+	/**
+	 * Получить регион клиента из cookie
+	 *
+	 * @return string
+	 */
+	private function getSiteRegionId()
+	{
+		$sCityAndRegion = Yii::app()->request->cookies['cityAndRegion'];
+		$sRegion = '';
+		if (!empty($sCityAndRegion)) {
+			$aLocation = explode(',', $sCityAndRegion);
+			if (count($aLocation) == 2) {
+				$sRegion = trim($aLocation['1']);
+			} else {
+				$sRegion = trim($aLocation['0']);
+			}
+		}
+		$iRegion = CitiesRegions::getRegionIdByName($sRegion);
+
+		return $iRegion;
 	}
 
 	/**

@@ -566,6 +566,7 @@ class AdminKreddyApiComponent
 			'phone'       => null,
 			'tracking_id' => null,
 			'ip'          => null,
+			'site_region' => null,
 		);
 
 
