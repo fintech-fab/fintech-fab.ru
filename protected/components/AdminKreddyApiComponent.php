@@ -2489,6 +2489,9 @@ class AdminKreddyApiComponent
 		if (!$this->getIsError()) {
 			unset($aResult['code']);
 			unset($aResult['message']);
+			unset($aResult['sms_message']);
+			unset($aResult['sms_code']);
+			unset($aResult['sms_status']);
 
 			return $aResult;
 		}
