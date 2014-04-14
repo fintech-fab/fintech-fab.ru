@@ -7,18 +7,37 @@
 		<img src="/assets/main/logo.png" height="100px" class="img" />
 	</div>
 	<div class="col-md-9">
-		<h2 class="text-center">Здесь поле действия Администратора!</h2>
+		<h2 class="text-center">Страница администратора</h2>
 	</div>
 </div>
-<div class="text-center">
 
-	<button id="btnUsers">Загрузить пользователей</button>
+<div class="Roles">
+	<div class="text-center">
 
-</div><br>
-<div class="row">
-	<div class="col-xs-10 col-xs-offset-1">
-		<table class="table table-striped" id="tableUser">
-		</table>
-		<div id="message" class="row"></div>
+		<?=
+		Form::button('Загрузить таблицу ролей', array(
+			'type'  => 'button',
+			'class' => 'btn btn-primary buttonWithMargin',
+			'id'    => 'btnRoles',
+		));
+		?>
+
+	</div>
+	<div class="row" id="tableRoles">
+		<div class="col-xs-10 col-xs-offset-1">
+			<table class="table table-striped" id="tableUser"></table>
+			<div id="message" class="row"></div>
+		</div>
+	</div>
+</div>
+<div class="bills">
+	<div class="text-center">
+		<?=
+		Form::button('Загрузить таблицу счетов', array(
+			'type'  => 'button',
+			'class' => 'btn btn-primary buttonWithMargin',
+			'id'    => 'btnBills',
+		));
+		?>
 	</div>
 </div>

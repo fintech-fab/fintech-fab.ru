@@ -36,45 +36,36 @@
 	padding-top: 0;
 }
 
-#dropZone {
-	color: #555;
-	font-size: 18px;
-	width: 400px;
-	height: 200px;
-	padding: 60px 0;
-	margin-left: 40px;
-
-	background: #eee;
-	border: 1px solid #ccc;
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
-
-#dropZone.hover {
-	background: #ddd;
-	border-color: darkgreen;
-}
-
-#dropZone.error {
-	background: #faa;
-	border-color: #f00;
-}
-
-#dropZone.drop {
-	background: #afa;
-	border-color: darkgreen;
-}
-
-#drop-files {
+.photo_upload {
 	display: none;
 }
 
-iframe {
-	display: none;
+.photo_upload .btn {
+	margin: 10px;
+}
+
+.photo_upload .for_input_file {
+	width: 100%;
+}
+
+.photo_upload .for_input_file #file-input {
+	width: 100%;
 }
 
 #profile p {
 	font-size: 20px;
+}
+
+.highlighted {
+	background-image: none;
+	background-color: #99ff99 !important;
+}
+
+/*Отображерние таблицы пользователей и кнопки*/
+#tableRoles {
+	display: none;
+}
+
+#btnRoles, #btnBills {
+	width: 200px;
 }

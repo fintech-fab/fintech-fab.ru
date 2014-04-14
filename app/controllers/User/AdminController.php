@@ -10,9 +10,7 @@ use Input;
 class AdminController extends BaseController
 {
 
-	//public $layout = 'vanguard';
-
-	public function TableForAdmin()
+	public function TableForRoles()
 	{
 		$count = User::all()->count();
 		if (!$count) {
@@ -39,7 +37,7 @@ class AdminController extends BaseController
 		$roleN = Input::get('roleN');
 		$val = Input::get('val');
 		$user = User::find($userN);
-		//dd($val);
+
 		if ($val == "true") {
 			$user->roles()->attach($roleN);
 		} else {
@@ -49,5 +47,10 @@ class AdminController extends BaseController
 		$res = "Изменения произошли для пользователя с порядковым номером  $userN";
 
 		return $res;
+	}
+
+	public function TableForBills()
+	{
+
 	}
 } 

@@ -52,6 +52,18 @@ class LinksInMenu
 		return $link_admin . $link_user . $link_logout;
 	}
 
+	public static function linkForMainMenu()
+	{
+		$link_main_menu = '';
+		if (Auth::check()) {
+			$link_main_menu = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("client-page") . '>
+									<a href ="client-page">Терминал QIWI</a>
+								</li>';
+		}
+
+		return $link_main_menu;
+	}
+
 	public static function echoActiveClassIfRequestMatches($requestUri)
 	{
 		$current_file_name = basename(Request::server('REQUEST_URI'), ".php");

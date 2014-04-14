@@ -21,7 +21,7 @@ use FintechFab\Widgets\LinksInMenu;
 						<li <?= LinksInMenu::echoActiveClassIfRequestMatches("vanguard") ?>>
 							<a href="/vanguard">Стажировка</a>
 						</li>
-						<li><a href="">Ещё страница</a></li>
+						<?= LinksInMenu::linkForMainMenu() ?>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<?= LinksInMenu::echoAuthMode() ?>
