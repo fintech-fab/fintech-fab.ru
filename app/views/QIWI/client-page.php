@@ -61,8 +61,6 @@
 				));
 				?>
 			</div>
-			<div id="errorTel" class="error pull-left"></div>
-
 		</div>
 		<input id="user_id" name="userID" type="hidden" value="1">
 		<button type="button" class="btn btn-success" id="buy-operation">Купить</button>

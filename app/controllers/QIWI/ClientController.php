@@ -2,9 +2,11 @@
 
 use App\Controllers\BaseController;
 
-class ClientPageController extends BaseController {
+class ClientController extends BaseController
+{
 
-	public $layout = 'QIWI';
+	public $layout = 'Qiwi';
+
 	public function index()
 	{
 		return $this->make('client-page');
@@ -15,6 +17,7 @@ class ClientPageController extends BaseController {
 	 *
 	 * @return Response
 	 */
+
 	public function create()
 	{
 		//
@@ -33,7 +36,8 @@ class ClientPageController extends BaseController {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function show($id)
@@ -44,7 +48,8 @@ class ClientPageController extends BaseController {
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function edit($id)
@@ -55,7 +60,8 @@ class ClientPageController extends BaseController {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function update($id)
@@ -66,7 +72,8 @@ class ClientPageController extends BaseController {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function destroy($id)
