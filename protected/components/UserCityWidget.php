@@ -40,7 +40,7 @@ class UserCityWidget extends CWidget
 			$this->sCityAndRegion = $sCity;
 			$this->sCityAndRegion .= ($sCity != $sRegion) ? (', ' . $sRegion) : '';
 			if (!$oCityAndRegionCookie) {
-				Yii::app()->request->cookies['cityAndRegion'] = $this->sCityAndRegion;
+				Yii::app()->request->cookies['cityAndRegion'] = new CHttpCookie('cityAndRegion', $this->sCityAndRegion);
 			}
 		} else {
 			$this->sCityName = false;
