@@ -7,7 +7,7 @@ class ClientPageController extends BaseController {
 	public $layout = 'QIWI';
 	public function index()
 	{
-		return $this->make('userProfile');
+		return $this->make('client-page');
 	}
 
 	/**

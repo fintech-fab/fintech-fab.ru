@@ -1,6 +1,9 @@
 <?php
 
-class Qiwi/QiwiGateController extends \BaseController {
+use App\Controllers\BaseController;
+
+class QiwiGateController extends BaseController
+{
 
 	/**
 	 * Display a listing of the resource.
