@@ -39,6 +39,9 @@ class UserCityWidget extends CWidget
 			$sRegion = ids_ipGeoBase::getRegionByIP();
 			$this->sCityAndRegion = $sCity;
 			$this->sCityAndRegion .= ($sCity != $sRegion) ? (', ' . $sRegion) : '';
+			if (!$oCityAndRegionCookie) {
+				Yii::app()->request->cookies['cityAndRegion'] = $this->sCityAndRegion;
+			}
 		} else {
 			$this->sCityName = false;
 		}
