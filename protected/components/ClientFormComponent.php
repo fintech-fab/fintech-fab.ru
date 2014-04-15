@@ -1357,6 +1357,26 @@ class ClientFormComponent
 	}
 
 
+	public function setFastRegClientSession($aClientData, $iClientId)
+	{
+		$sSite = $this->getSiteConfigName();
+
+		//чистим данные форм
+		foreach (self::$aStepsInfo[$sSite] as $aStep) {
+			//var_dump($aStep);
+			if (isset($aStep['model'])) {
+				/**
+				 * @var ClientCreateFormAbstract $oForm ;
+				 */
+				$oForm = new $aStep['model'];
+				$oForm->setAttributes($aClientData, false);
+				Yii::app()->session[$aStep['model']] = $oForm->getAttributes();
+				Yii::app()->session[$aStep['model'] . '_client_id'] = $iClientId;
+			}
+
+		}
+	}
+
 	/**
 	 * @param $iLength
 	 *

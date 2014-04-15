@@ -213,13 +213,11 @@ class DefaultController extends Controller
 		$oClientData->complete = 0;
 		//обновим ФИО в базе, на случай если уже стерто
 		$aClientData = Yii::app()->adminKreddyApi->getFullClientData();
-		unset($aClientData['client_id']);
-		unset($aClientData['id']);
-		$oClientData->setAttributes($aClientData);
+		$oClientData->setAttributes($aClientData, false);
 		$oClientData->save();
 
 		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте
-		$aCookieData = $oClientData->getAttributes();
+		$aCookieData = array('client_id' => $oClientData->client_id, 'phone' => $sPhone);
 		Cookie::saveDataToCookie('client', $aCookieData);
 		//пишем в сессию ID клиента
 		Yii::app()->session['client_id'] = $oClientData->client_id;
@@ -228,6 +226,11 @@ class DefaultController extends Controller
 		Yii::app()->clientForm->setContinueReg(true);
 		//сбросим шаги
 		Yii::app()->clientForm->resetSteps();
+		//запоминаем все данные в сессию
+
+		$aClientData['birthday'] = date('d-m-Y', SiteParams::strtotime($aClientData['birthday']));
+		$aClientData['passport_date'] = date('d-m-Y', SiteParams::strtotime($aClientData['passport_date']));
+		Yii::app()->clientForm->setFastRegClientSession($aClientData, $oClientData->client_id);
 
 		//отправляем на форму регистрации
 		$this->redirect(Yii::app()->createUrl('/form'));
