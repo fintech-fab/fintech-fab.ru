@@ -837,9 +837,10 @@ class ClientFormComponent
 		//и логиним юзера
 		$sSite = $this->getSiteConfigName();
 
+		$aClientData['site_region'] = $this->getSiteRegionId();
+
 		//если клиент прошел быструю регистрацию, то отправляем его другим методом
 		if ($sSite == self::FAST_REG) {
-			$aClientData['site_region'] = $this->getSiteRegionId();
 
 			return Yii::app()->adminKreddyApi->createFastRegClient($aClientData);
 		}
@@ -852,7 +853,7 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	private function getSiteRegionId()
+	public function getSiteRegionId()
 	{
 		$sCityAndRegion = Yii::app()->request->cookies['cityAndRegion'];
 		$sRegion = '';
