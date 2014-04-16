@@ -1428,6 +1428,11 @@ class AdminKreddyApiComponent
 		return $aClientInfo['client_data']['fullname'];
 	}
 
+	/**
+	 * Получение данных клиента в статусе "быстрая регистрация", заполненных оператором КЦ
+	 *
+	 * @return array
+	 */
 	public function getFullClientData()
 	{
 		$aClientData = $this->getData('full_data');

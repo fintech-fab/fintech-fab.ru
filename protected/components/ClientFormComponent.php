@@ -1356,12 +1356,17 @@ class ClientFormComponent
 		Cookie::saveDataToCookie('client', $aCookieData);
 	}
 
-
+	/**
+	 * Устанавливает для каждого шага сессию с данными
+	 *
+	 * @param $aClientData
+	 * @param $iClientId
+	 */
 	public function setFastRegClientSession($aClientData, $iClientId)
 	{
 		$sSite = $this->getSiteConfigName();
 
-		//чистим данные форм
+		//заполяем данные сессии для каждой формы
 		foreach (self::$aStepsInfo[$sSite] as $aStep) {
 			//var_dump($aStep);
 			if (isset($aStep['model'])) {
