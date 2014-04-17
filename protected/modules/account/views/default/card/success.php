@@ -13,7 +13,7 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 <?php if (Yii::app()->adminKreddyApi->checkSubscribe() && !SiteParams::getIsIvanovoSite()): ?>
 	<div class="well">
 		<?php    $this->widget('bootstrap.widgets.TbButton', array(
-			'label' => 'Подключить Пакет', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
+			'label' => 'Подключить КРЕДДИтную линию', 'icon' => "icon-ok icon-white", 'type' => 'primary', 'size' => 'small', 'url' => Yii::app()
 					->createUrl('account/subscribe'),
 		));?>
 	</div>
