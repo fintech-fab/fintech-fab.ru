@@ -54,7 +54,6 @@ Route::group(array('before' => 'auth'), function () {
 Route::group(array('before' => 'auth'), function () {
 	Route::resource('client-page', 'ClientController');
 	Route::resource('shop-page', 'ShopController');
-	Route::resource('/api/v2/prv/2042/bills/', 'QiwiGateController');
 });
 
 Route::put('/api/v2/prv/2042/bills/', 'QiwiGateController@update');

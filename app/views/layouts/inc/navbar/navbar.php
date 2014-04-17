@@ -12,7 +12,7 @@ use FintechFab\Widgets\LinksInMenu;
 						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 						<span class="icon-bar"></span> <span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="/">Наш сайт</a>
+					<a class="navbar-brand" href="/">fintech fab</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->

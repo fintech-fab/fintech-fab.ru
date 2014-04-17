@@ -25,6 +25,10 @@
 	color: #ff0000;
 }
 
+#loginModal .modal-sm {
+	width: 500px;
+}
+
 /* ----------Стили для окна Терминала QIWI-------------*/
 
 #buy, #check-bill, #pay-bill {

@@ -39,7 +39,7 @@ return array(
 	|
 	*/
 
-	'timezone' => 'Europe/Moscow',
+	'timezone'  => 'Europe/Moscow',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -113,6 +113,7 @@ return array(
 
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
+		'FintechFab\QiwiGate\QiwiGateServiceProvider',
 
 	),
 
