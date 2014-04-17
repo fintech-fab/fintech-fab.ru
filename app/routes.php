@@ -22,7 +22,7 @@ Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('admin', array(
 	'before' => 'auth|roleAdmin',
 	'as'     => 'admin',
-	'uses' => 'App\Controllers\User\UserProfileController@showAdmin'
+	'uses'   => 'App\Controllers\User\UserProfileController@showAdmin'
 ));
 
 Route::get('TableForAdmin', array(
@@ -57,12 +57,4 @@ Route::group(array('before' => 'auth'), function () {
 	Route::resource('/api/v2/prv/2042/bills/', 'QiwiGateController');
 });
 
-Route::put('/api/v2/prv/2042/bills/1', 'QiwiGateController@update');
-
-
-Route::group(array('prefix' => 'soap', 'namespace' => 'App\Controllers\Service'), function () {
-	Route::get('/', array(
-		'as'   => 'service.soap.index',
-		'uses' => 'SoapController@index'
-	));
-});
+Route::put('/api/v2/prv/2042/bills/', 'QiwiGateController@update');
