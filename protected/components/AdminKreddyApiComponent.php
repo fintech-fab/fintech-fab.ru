@@ -275,7 +275,7 @@ class AdminKreddyApiComponent
 
 			'{do_sub_pay_sum}' => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
 
-			'{channel_name}' => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
+			'{channel_name}'   => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
 
 			'{account_url_start}'  => CHtml::openTag("a", array(
 					"href" => Yii::app()->createUrl("/account")
@@ -354,9 +354,10 @@ class AdminKreddyApiComponent
 	{
 
 		$aRequest = array(
-			'login'    => $sPhone,
-			'password' => $sPassword,
-			'ip'       => Yii::app()->request->getUserHostAddress()
+			'login'       => $sPhone,
+			'password'    => $sPassword,
+			'ip'          => Yii::app()->request->getUserHostAddress(),
+			'site_region' => Yii::app()->clientForm->getSiteRegionId(),
 		);
 
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_TOKEN_CREATE, $aRequest);
@@ -2015,9 +2016,14 @@ class AdminKreddyApiComponent
 	 */
 	public function doSubscribe($sSmsCode, $iProduct, $iChannelId)
 	{
+		$aRequestData = array(
+			'sms_code'    => $sSmsCode,
+			'product_id'  => $iProduct,
+			'channel_id'  => $iChannelId,
+			'tracking_id' => Yii::app()->request->cookies['TrackingID'],
+		);
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE,
-			array('sms_code' => $sSmsCode, 'product_id' => $iProduct, 'channel_id' => $iChannelId));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, $aRequestData);
 
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
 			if (isset($aResult['scoring_result'])) {

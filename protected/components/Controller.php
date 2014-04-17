@@ -45,7 +45,7 @@ class Controller extends CController
 
 			if (Yii::app()->request->cookies['TrackingID'] != $sTrackingID) {
 				$cookie = new CHttpCookie('TrackingID', $sTrackingID);
-				$cookie->expire = time() + 60 * 60 * 24;
+				$cookie->expire = time() + SiteParams::CTIME_YEAR * 5; //поставим срок жизни куки на 5 лет, чтоб наверняка
 				Yii::app()->request->cookies['TrackingID'] = $cookie;
 			}
 		}
