@@ -5,6 +5,8 @@ use FintechFab\QiwiGate\Models\Merchant;
 
 Route::filter('ff.qiwi.gate.auth.basic', function () {
 
+	$isSuccess = false;
+
 	$authBasicHeader = trim(Request::header('Authorization'));
 	if ($authBasicHeader) {
 
@@ -15,21 +17,24 @@ Route::filter('ff.qiwi.gate.auth.basic', function () {
 
 			$merchant = Merchant::find($login);
 			if ($merchant && $merchant->password == $password) {
-				return 'success';
+				$isSuccess = true;
 			}
 
 		}
 
 	}
 
-	$result = array(
-		'response' => array(
-			'result_code' => 150,
-		),
-	);
+	if (!$isSuccess) {
 
-	return Response::make(json_encode($result), 401);
+		$result = array(
+			'response' => array(
+				'result_code' => 150,
+			),
+		);
 
+		return Response::make(json_encode($result), 401);
+
+	}
 
 });
 
