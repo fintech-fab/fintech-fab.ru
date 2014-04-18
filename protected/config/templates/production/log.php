@@ -4,14 +4,15 @@ return array(
 	'routes' => array(
 		array(
 			'class'  => 'CFileLogRoute',
-			'levels' => 'error, warning',
+			'levels' => 'error',
 		),
 		array(
-			'class'         => 'CWebLogRoute',
-			'categories'    => 'application',
-			'levels'        => 'error, warning, trace, profile, info',
-			'showInFireBug' => true
+			'class'    => 'CEmailLogRoute',
+			'enabled'  => true,
+			'levels'   => 'error',
+			'sentFrom' => 'debug@kreddy.ru',
+			'subject'  => '[error] Kreddy.ru Error',
+			'emails'   => array('debug@kreddy.ru', 'i.popov@fintech-fab.ru', 'a.perepechaev@fintech-fab.ru'),
 		),
-
 	)
 );
