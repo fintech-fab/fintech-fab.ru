@@ -13,6 +13,8 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 
 <?php $this->widget('YaMetrikaGoalsWidget', array('sForceGoal' => $sSuccessYmGoal)); ?>
 
+<img src="https://cosmoleads.oneffect.us/affiliate/track/123/<?= time() ?>/" height="1" width="1" /> 
+
 <div class="row">
 
 	<div class="span12">
