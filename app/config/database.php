@@ -46,13 +46,24 @@ return array(
 
 	'connections' => array(
 
-		'sqlite' => array(
+		'qiwiGate' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'qiwi_gate',
+			'username'  => 'root',
+			'password'  => 'fintechfab',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
+		'sqlite'   => array(
 			'driver'   => 'sqlite',
 			'database' => __DIR__ . '/../database/production.sqlite',
 			'prefix'   => '',
 		),
 
-		'mysql'  => array(
+		'mysql'    => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'dev',
@@ -63,7 +74,7 @@ return array(
 			'prefix'    => '',
 		),
 
-		'pgsql'  => array(
+		'pgsql'    => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
 			'database' => 'database',
@@ -74,7 +85,7 @@ return array(
 			'schema'   => 'public',
 		),
 
-		'sqlsrv' => array(
+		'sqlsrv'   => array(
 			'driver'   => 'sqlsrv',
 			'host'     => 'localhost',
 			'database' => 'database',

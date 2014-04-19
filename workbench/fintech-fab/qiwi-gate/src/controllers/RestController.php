@@ -3,9 +3,11 @@
 namespace FintechFab\QiwiGate\Controllers;
 
 use Controller;
-use Illuminate\Support\Facades\Input;
+use FintechFab\QiwiGate\Components\ValidateForFields;
+use Input;
 use Request;
 use Response;
+use Validator;
 
 
 class RestController extends Controller
@@ -21,6 +23,19 @@ class RestController extends Controller
 	 */
 	public function store($provider_id, $bill_id)
 	{
+		$data = Input::all();
+		$validator = Validator::make($data, ValidateForFields::rulesForNewBill());
+		$userMessages = $validator->messages();
+
+
+		if ($userMessages->has('amount') || $userMessages->has('user')) {
+			$amountError = $userMessages->first('amount');
+			$userError = $userMessages->first('user');
+			$result['errors'] = array($amountError, $userError);
+			dd($result);
+
+			return $result;
+		}
 
 		$amount = Input::get('amount');
 		$ccy = Input::get('ccy');

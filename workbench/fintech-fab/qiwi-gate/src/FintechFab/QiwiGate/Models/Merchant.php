@@ -19,4 +19,10 @@ class Merchant extends Eloquent
 	protected $fillable = array('username', 'password', 'callback_url');
 	protected $table = 'merchants';
 	protected $connection = 'qiwiGate';
+
+	public function Bills()
+	{
+		return $this->hasMany('FintechFab\QiwiGate\Models\Bills');
+
+	}
 }
