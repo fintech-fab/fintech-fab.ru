@@ -5,7 +5,7 @@ use App\Controllers\BaseController;
 class ClientController extends BaseController
 {
 
-	public $layout = 'Qiwi';
+	public $layout = 'qiwi';
 
 	public function index()
 	{
