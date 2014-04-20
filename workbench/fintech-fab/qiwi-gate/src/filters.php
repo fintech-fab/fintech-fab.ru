@@ -14,8 +14,7 @@ Route::filter('ff.qiwi.gate.auth.basic', function () {
 			),
 		);
 
-		return Response::make(json_encode($result), 401);
-
+		return Response::json($result, 401);
 	}
 
 });

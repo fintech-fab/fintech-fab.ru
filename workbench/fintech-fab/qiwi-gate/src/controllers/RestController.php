@@ -4,6 +4,7 @@ namespace FintechFab\QiwiGate\Controllers;
 
 use Controller;
 use FintechFab\QiwiGate\Components\ValidateForFields;
+use FintechFab\QiwiGate\Components\WorkWithBill;
 use Input;
 use Request;
 use Response;
@@ -24,39 +25,38 @@ class RestController extends Controller
 	public function store($provider_id, $bill_id)
 	{
 		$data = Input::all();
+		$data['bill_id'] = $bill_id;
 		$validator = Validator::make($data, ValidateForFields::rulesForNewBill());
-		$userMessages = $validator->messages();
+		$messages = $validator->messages()->first();
 
+		if ($messages) {
+			$data['error'] = 5;
+			$code_response = 400;
 
-		if ($userMessages->has('amount') || $userMessages->has('user')) {
-			$amountError = $userMessages->first('amount');
-			$userError = $userMessages->first('user');
-			$result['errors'] = array($amountError, $userError);
-			dd($result);
-
-			return $result;
+			return $this->responseFromGate($data, $code_response);
 		}
 
-		$amount = Input::get('amount');
-		$ccy = Input::get('ccy');
-		$user = Input::get('user');
-		$comment = Input::get('comment');
-		$response = array(
-			'response' => array(
-				'result_code' => 0,
-				'bill'        => array(
-					'bill_id' => $bill_id,
-					'amount'  => $amount,
-					'ccy'     => $ccy,
-					'status'  => 'waiting',
-					'error'   => 0,
-					'user'    => $user,
-					'comment' => $comment,
-				),
-			),
-		);
+		if ($data['amount'] < 10) {
+			$data['error'] = 241;
+			$code_response = 403;
 
-		return Response::json($response);
+			return $this->responseFromGate($data, $code_response);
+		}
+
+		if ($data['amount'] > 5000) {
+			$data['error'] = 242;
+			$code_response = 403;
+
+			return $this->responseFromGate($data, $code_response);
+		}
+
+		WorkWithBill::NewBill($data);
+
+		$data['error'] = 0;
+		$data['status'] = 'waiting';
+		$code_response = 200;
+
+		return $this->responseFromGate($data, $code_response);
 
 	}
 
@@ -133,6 +133,19 @@ class RestController extends Controller
 
 		return ($method === 'PUT');
 
+	}
+
+	private function responseFromGate($data, $code_response)
+	{
+
+		$response = array(
+			'response' => array(
+				'result_code' => $data['error'],
+				'bill'        => $data,
+			),
+		);
+
+		return Response::json($response, $code_response);
 	}
 
 }

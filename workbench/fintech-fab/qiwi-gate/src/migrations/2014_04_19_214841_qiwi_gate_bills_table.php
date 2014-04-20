@@ -19,10 +19,10 @@ class QiwiGateBillsTable extends Migration
 			$table->string('user');
 			$table->decimal('amount', 15, 2);
 			$table->string('ccy', 3);
-			$table->string('comment', 255);
-			$table->string('lifetime');
+			$table->string('comment', 255)->nullable();
+			$table->string('lifetime')->nullable();
 			$table->string('pay_source')->default('qw');
-			$table->string('prv_name', 100);
+			$table->string('prv_name', 100)->nullable();
 			$table->timestamps();
 		});
 	}

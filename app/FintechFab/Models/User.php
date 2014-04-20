@@ -93,7 +93,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	 */
 	public function getRememberToken()
 	{
-		// TODO: Implement getRememberToken() method.
+		return $this->remember_token;
 	}
 
 	/**
@@ -105,7 +105,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	 */
 	public function setRememberToken($value)
 	{
-		// TODO: Implement setRememberToken() method.
+		$this->remember_token = $value;
 	}
 
 	/**
@@ -115,6 +115,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	 */
 	public function getRememberTokenName()
 	{
-		// TODO: Implement getRememberTokenName() method.
+		return 'remember_token';
 	}
 }

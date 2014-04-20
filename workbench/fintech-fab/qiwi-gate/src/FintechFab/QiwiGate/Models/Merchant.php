@@ -20,7 +20,7 @@ class Merchant extends Eloquent
 	protected $table = 'merchants';
 	protected $connection = 'qiwiGate';
 
-	public function Bills()
+	public function Bill()
 	{
 		return $this->hasMany('FintechFab\QiwiGate\Models\Bills');
 
