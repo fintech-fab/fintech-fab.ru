@@ -12,6 +12,7 @@ class WorkWithBill
 		$bill = new Bill;
 		$merchantData = InfoFromHeaders::GetMerchant();
 		$bill->merchant_id = $merchantData['login'];
+		$bill->bill_id = $data['bill_id'];
 		$bill->user = $data['user'];
 		$bill->amount = $data['amount'];
 		$bill->ccy = $data['ccy'];

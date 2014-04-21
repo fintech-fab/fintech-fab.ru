@@ -5,6 +5,7 @@ namespace FintechFab\QiwiGate\Controllers;
 use Controller;
 use FintechFab\QiwiGate\Components\ValidateForFields;
 use FintechFab\QiwiGate\Components\WorkWithBill;
+use FintechFab\QiwiGate\Models\Bill;
 use Input;
 use Request;
 use Response;
@@ -32,32 +33,41 @@ class RestController extends Controller
 		if ($messages) {
 			$data['error'] = 5;
 			$code_response = 400;
-
 			return $this->responseFromGate($data, $code_response);
 		}
 
 		if ($data['amount'] < 10) {
 			$data['error'] = 241;
 			$code_response = 403;
-
 			return $this->responseFromGate($data, $code_response);
 		}
 
 		if ($data['amount'] > 5000) {
 			$data['error'] = 242;
 			$code_response = 403;
+			return $this->responseFromGate($data, $code_response);
+		}
+
+		if (Bill::where('bill_id', '=', $bill_id)->first() != null) {
+
+			$data['error'] = 215;
+			$code_response = 403;
 
 			return $this->responseFromGate($data, $code_response);
 		}
 
-		WorkWithBill::NewBill($data);
+		if (WorkWithBill::NewBill($data)) {
 
-		$data['error'] = 0;
-		$data['status'] = 'waiting';
-		$code_response = 200;
+			$data['error'] = 0;
+			$data['status'] = 'waiting';
+			$code_response = 200;
 
+			return $this->responseFromGate($data, $code_response);
+		}
+
+		$data['error'] = 13;
+		$code_response = 500;
 		return $this->responseFromGate($data, $code_response);
-
 	}
 
 	/**

@@ -33,7 +33,11 @@ class QiwiAuthTest extends TestCase
 		$this->client->request(
 			'PUT',
 			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
-			array(),
+			array(
+				'user'   => 'tel:+79161234567',
+				'amount' => '123.34',
+				'ccy'    => 'RUB',
+			),
 			array(),
 			array(
 				'HTTP_Authorization' => 'Basic ' . base64_encode('1:password'),

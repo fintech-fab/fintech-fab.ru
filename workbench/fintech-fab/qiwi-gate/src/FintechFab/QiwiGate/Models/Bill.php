@@ -7,6 +7,7 @@ use Eloquent;
 /**
  * @property integer $id
  * @property integer $merchant_id
+ * @property integer $bill_id
  * @property string  $user
  * @property string  $amount
  * @property string  $ccy
@@ -21,7 +22,7 @@ use Eloquent;
  */
 class Bill extends Eloquent
 {
-	protected $fillable = array('merchant_id', 'user', 'amount', 'ccy', 'comment', 'lifetime', 'pay_source', 'prv_name');
+	protected $fillable = array('merchant_id', 'bill_id', 'user', 'amount', 'ccy', 'comment', 'lifetime', 'pay_source', 'prv_name');
 	protected $table = 'merchants_bills';
 	protected $connection = 'qiwiGate';
 
