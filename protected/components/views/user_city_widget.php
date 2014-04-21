@@ -58,14 +58,6 @@ if (!$this->bUpdate):
 				success: function (html) {
 					$("#userCityWidget").html(html);
 				}
-			}).done(function () {
-				var host = $(location).attr("hostname");
-				if (cityAndRegion.match(/Ивановская область/i) && !host.match(/ivanovo/i)) {
-					window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('ivanovoUrl') ?>";
-				}
-				if (!cityAndRegion.match(/Ивановская область/i) && host.match(/ivanovo/i)) {
-					window.location.href = "<?= SiteParams::getCurrentRedirectUrlForCityWidget('mainUrl') ?>";
-				}
 			});
 			userLocation.popover('hide');
 		}

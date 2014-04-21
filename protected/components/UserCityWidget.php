@@ -25,17 +25,16 @@ class UserCityWidget extends CWidget
 		$oCityAndRegionCookie = Yii::app()->request->cookies['cityAndRegion'];
 		$oCitySelectedCookie = Yii::app()->request->cookies['citySelected'];
 
-		if (!empty($oCitySelectedCookie->value)) {
+		if (!empty($oCitySelectedCookie->value) && !empty($oCityAndRegionCookie) && !empty($oCityNameCookie)) {
 			$this->bCitySelected = true;
 		}
 
-		$sCity = ids_ipGeoBase::getCityByIP();
-		if ($oCityNameCookie) { // если в куках есть город, выводим его
+		$sCity = ids_ipGeoBase::getCityByIP('46.160.10.10');
+		if ($oCityNameCookie && $oCityAndRegionCookie) { // если в куках есть город и регион, выводим его
 			$this->sCityName = $oCityNameCookie->value;
 			$this->sCityAndRegion = $oCityAndRegionCookie->value;
 		} elseif ($sCity) { // если удалось определить город по ip
 			$this->sCityName = $sCity;
-			//$this->sCityAndRegion = ids_ipGeoBase::getCityByIP('46.160.10.10') . ", " . ids_ipGeoBase::getRegionByIP('46.160.10.10');
 			$sRegion = ids_ipGeoBase::getRegionByIP();
 			$this->sCityAndRegion = $sCity;
 			$this->sCityAndRegion .= ($sCity != $sRegion) ? (', ' . $sRegion) : '';
@@ -169,16 +168,6 @@ class UserCityWidget extends CWidget
 											success: function(html){
 												$("#userCityWidget").html(html);
 											}
-										}).done(function(){
-										var host = $(location).attr("hostname");
-										if(object.cityAndRegion&&object.cityAndRegion.match(/Ивановская область/i)&&!host.match(/ivanovo/i))
-										{
-											window.location.href = "' . SiteParams::getCurrentRedirectUrlForCityWidget('ivanovoUrl') . '";
-										}
-										if(object.cityAndRegion&&!object.cityAndRegion.match(/Ивановская область/i)&&host.match(/ivanovo/i))
-										{
-											window.location.href = "' . SiteParams::getCurrentRedirectUrlForCityWidget('mainUrl') . '";
-										}
 										});
 										return object.city;
 									}',
