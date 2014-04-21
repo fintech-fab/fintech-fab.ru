@@ -1,6 +1,7 @@
 <?php
 
 
+use FintechFab\QiwiGate\Models\Bill;
 use FintechFab\QiwiGate\Models\Merchant;
 
 class QiwiAuthTest extends TestCase
@@ -28,7 +29,7 @@ class QiwiAuthTest extends TestCase
 	 */
 	public function testCreateBillSuccess()
 	{
-
+		Bill::truncate();
 		// запрос на создание счета, проверяем авторизацию с этим логином и паролем
 		$this->client->request(
 			'PUT',
