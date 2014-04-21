@@ -3,7 +3,13 @@
 <script src="/js/ActionForClient.js"></script>
 <div class="text-center">
 
-	<button type="button" class="btn btn-primary buttonWithMargin" id="buy">Купить в магазине</button>
+	<?=
+	Form::button('Купить в магазине', array(
+		'type'  => 'button',
+		'class' => 'btn btn-primary buttonWithMargin',
+		'id'    => 'buy',
+	));
+	?>
 	<br>
 
 	<div id="buy_window" class="">
@@ -11,7 +17,6 @@
 
 		<?=
 		Form::open(array(
-			'action' => 'client-page',
 			'class'  => 'form-horizontal',
 			'role'   => 'form',
 			'method' => 'post',
@@ -66,8 +71,20 @@
 		<button type="button" class="btn btn-success" id="buy-operation">Купить</button>
 		<?= Form::close(); ?>
 	</div>
-	<button type="button" class="btn btn-primary buttonWithMargin" id="check-bill">Счета для оплаты</button>
+	<?=
+	Form::button('Счета для оплаты', array(
+		'type'  => 'button',
+		'class' => 'btn btn-primary buttonWithMargin',
+		'id'    => 'check-bill',
+	));
+	?>
 	<br>
-	<button type="button" class="btn btn-primary buttonWithMargin" id="pay-bill">Оплатить</button>
+	<?=
+	Form::button('Оплатить', array(
+		'type'  => 'button',
+		'class' => 'btn btn-primary buttonWithMargin',
+		'id'    => 'pay-bill',
+	));
+	?>
 	<br>
 </div>

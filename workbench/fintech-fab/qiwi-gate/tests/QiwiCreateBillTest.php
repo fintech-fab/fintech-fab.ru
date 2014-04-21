@@ -3,7 +3,7 @@
 
 use FintechFab\QiwiGate\Models\Bill;
 
-class QiwiGateTest extends TestCase
+class QiwiCreateBillTest extends TestCase
 {
 
 
@@ -17,6 +17,7 @@ class QiwiGateTest extends TestCase
 	 *
 	 * @return void
 	 */
+
 	public function testCreateBillFailFormat()
 	{
 
@@ -32,7 +33,6 @@ class QiwiGateTest extends TestCase
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(5, $oResponse->response->bill->error);
 		$this->assertEquals(5, $oResponse->response->result_code);
 		$this->assertEquals(400, $this->client->getResponse()->getStatusCode());
 	}
@@ -57,7 +57,6 @@ class QiwiGateTest extends TestCase
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(242, $oResponse->response->bill->error);
 		$this->assertEquals(242, $oResponse->response->result_code);
 		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
 	}
@@ -82,7 +81,6 @@ class QiwiGateTest extends TestCase
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(241, $oResponse->response->bill->error);
 		$this->assertEquals(241, $oResponse->response->result_code);
 		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
 	}
@@ -100,7 +98,7 @@ class QiwiGateTest extends TestCase
 			'PUT',
 			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
 			array(
-				'user' => 'tel:+79161234567',
+				'user'    => 'tel:+79161234567',
 				'amount'  => '123.34',
 				'ccy'     => 'RUB',
 				'comment' => 'Test!'

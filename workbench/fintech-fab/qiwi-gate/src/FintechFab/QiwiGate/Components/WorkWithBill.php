@@ -1,7 +1,6 @@
 <?php
 namespace FintechFab\QiwiGate\Components;
 
-
 use FintechFab\QiwiGate\Models\Bill;
 
 class WorkWithBill
@@ -22,6 +21,7 @@ class WorkWithBill
 			$bill->pay_source = $data['pay_source'];
 		}
 		@$bill->prv_name = $data['prv_name'];
+		@$bill->status = $data['status'];
 		$bill->save();
 
 		return $bill['id'];

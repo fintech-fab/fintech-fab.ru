@@ -47,7 +47,7 @@ class RestController extends Controller
 			$code_response = 403;
 			return $this->responseFromGate($data, $code_response);
 		}
-
+		$data['status'] = 'waiting';
 		if (Bill::where('bill_id', '=', $bill_id)->first() != null) {
 
 			$data['error'] = 215;
@@ -59,10 +59,8 @@ class RestController extends Controller
 		if (WorkWithBill::NewBill($data)) {
 
 			$data['error'] = 0;
-			$data['status'] = 'waiting';
-			$code_response = 200;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data);
 		}
 
 		$data['error'] = 13;
@@ -80,7 +78,23 @@ class RestController extends Controller
 	 */
 	public function show($provider_id, $bill_id)
 	{
-		dd('show - проверка статуса ' . $provider_id . ' / ' . $bill_id);
+		$bill = Bill::where('bill_id', '=', $bill_id)->first();
+
+		if ($bill == null) {
+			$data['error'] = 210;
+			$code_response = 404;
+
+			return $this->responseFromGate($data, $code_response);
+		}
+		$data = $bill->toArray();
+		$data['error'] = 0;
+		foreach ($data as $key => $value) {
+			if ($value === null || $key == 'id' || $key == 'merchant_id') {
+				unset($bill[$key]);
+			}
+		}
+
+		return $this->responseFromGate($data);
 	}
 
 	/**
@@ -145,15 +159,17 @@ class RestController extends Controller
 
 	}
 
-	private function responseFromGate($data, $code_response)
+	private function responseFromGate($data, $code_response = 200)
 	{
 
 		$response = array(
 			'response' => array(
 				'result_code' => $data['error'],
-				'bill'        => $data,
 			),
 		);
+		if (isset($data['status'])) {
+			$response['response']['bill'] = $data;
+		}
 
 		return Response::json($response, $code_response);
 	}
