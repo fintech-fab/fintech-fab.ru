@@ -29,7 +29,7 @@ class UserCityWidget extends CWidget
 			$this->bCitySelected = true;
 		}
 
-		$sCity = ids_ipGeoBase::getCityByIP('46.160.10.10');
+		$sCity = ids_ipGeoBase::getCityByIP();
 		if ($oCityNameCookie && $oCityAndRegionCookie) { // если в куках есть город и регион, выводим его
 			$this->sCityName = $oCityNameCookie->value;
 			$this->sCityAndRegion = $oCityAndRegionCookie->value;
