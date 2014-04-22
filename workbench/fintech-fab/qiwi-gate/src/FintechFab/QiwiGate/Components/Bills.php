@@ -3,13 +3,13 @@ namespace FintechFab\QiwiGate\Components;
 
 use FintechFab\QiwiGate\Models\Bill;
 
-class WorkWithBill
+class Bills
 {
 
 	public static function NewBill($data)
 	{
 		$bill = new Bill;
-		$merchantData = InfoFromHeaders::GetMerchant();
+		$merchantData = Headers::GetMerchant();
 		$bill->merchant_id = $merchantData['login'];
 		$bill->bill_id = $data['bill_id'];
 		$bill->user = $data['user'];

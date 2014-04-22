@@ -5,7 +5,7 @@ namespace FintechFab\QiwiGate\Components;
 use FintechFab\QiwiGate\Models\Merchant;
 use Request;
 
-class InfoFromHeaders
+class Headers
 {
 
 	public static function GetMerchant()

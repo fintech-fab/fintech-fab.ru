@@ -3,8 +3,8 @@
 namespace FintechFab\QiwiGate\Controllers;
 
 use Controller;
-use FintechFab\QiwiGate\Components\ValidateForFields;
-use FintechFab\QiwiGate\Components\WorkWithBill;
+use FintechFab\QiwiGate\Components\Bills;
+use FintechFab\QiwiGate\Components\Validators;
 use FintechFab\QiwiGate\Models\Bill;
 use Input;
 use Request;
@@ -27,7 +27,7 @@ class RestController extends Controller
 	{
 		$data = Input::all();
 		$data['bill_id'] = $bill_id;
-		$validator = Validator::make($data, ValidateForFields::rulesForNewBill());
+		$validator = Validator::make($data, Validators::rulesForNewBill());
 		$messages = $validator->messages()->first();
 
 		if ($messages) {
@@ -56,7 +56,7 @@ class RestController extends Controller
 			return $this->responseFromGate($data, $code_response);
 		}
 
-		if (WorkWithBill::NewBill($data)) {
+		if (Bills::NewBill($data)) {
 
 			$data['error'] = 0;
 
@@ -83,16 +83,11 @@ class RestController extends Controller
 		if ($bill == null) {
 			$data['error'] = 210;
 			$code_response = 404;
-
 			return $this->responseFromGate($data, $code_response);
 		}
-		$data = $bill->toArray();
+
+		$data = $this->dataFromBill($bill);
 		$data['error'] = 0;
-		foreach ($data as $key => $value) {
-			if ($value === null || $key == 'id' || $key == 'merchant_id') {
-				unset($bill[$key]);
-			}
-		}
 
 		return $this->responseFromGate($data);
 	}
@@ -113,7 +108,27 @@ class RestController extends Controller
 		}
 
 		if ($this->isCancelBill()) {
-			dd('update - отмена счета ' . $provider_id . ' / ' . $bill_id);
+
+			$bill = Bill::where('bill_id', '=', $bill_id)->first();
+			if ($bill == null) {
+				$data['error'] = 210;
+				$code_response = 404;
+
+				return $this->responseFromGate($data, $code_response);
+			}
+			if ($bill['status'] == 'waiting') {
+				$bill->status = 'rejected';
+				$bill->save();
+				$data = $this->dataFromBill($bill);
+				$data['error'] = 0;
+
+				return $this->responseFromGate($data);
+			}
+
+			$data['error'] = 'Wrong status bill';
+			$code_response = 403;
+
+			return $this->responseFromGate($data, $code_response);
 		}
 
 		return null;
@@ -134,14 +149,9 @@ class RestController extends Controller
 			return false;
 		}
 
-		$content = file_get_contents('php://input');
-		$params = null;
-		@parse_str($content, $params);
+		$params = Input::all();
 
-		return (
-			!empty($params['status']) &&
-			$params['status'] === 'rejected'
-		);
+		return ($params['status'] === 'rejected');
 
 	}
 
@@ -172,6 +182,24 @@ class RestController extends Controller
 		}
 
 		return Response::json($response, $code_response);
+	}
+
+	/**
+	 * @param $bill
+	 *
+	 * @metod toArray
+	 */
+	private function dataFromBill($bill)
+	{
+		$data = $bill->toArray();
+
+		foreach ($data as $key => $value) {
+			if ($value === null || $key == 'id' || $key == 'merchant_id') {
+				unset($bill[$key]);
+			}
+		}
+
+		return $data;
 	}
 
 }

@@ -1,11 +1,11 @@
 <?php
 
 
-use FintechFab\QiwiGate\Components\InfoFromHeaders;
+use FintechFab\QiwiGate\Components\Headers;
 
 Route::filter('ff.qiwi.gate.auth.basic', function () {
 
-	$isSuccess = InfoFromHeaders::CheckAuth();
+	$isSuccess = Headers::CheckAuth();
 	if (!$isSuccess) {
 
 		$result = array(
