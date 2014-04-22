@@ -30,8 +30,13 @@ class Bill extends Eloquent
 	protected $table = 'merchants_bills';
 	protected $connection = 'qiwiGate';
 
-	public function Merchant()
+	public function merchant()
 	{
-		return $this->belongsTo('FintechFab\QiwiGate\Models\Merchant');
+		return $this->belongsTo('\FintechFab\QiwiGate\Models\Merchant');
+	}
+
+	public function refunds()
+	{
+		return $this->hasMany('FintechFab\QiwiGate\Models\Refund');
 	}
 }

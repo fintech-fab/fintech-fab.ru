@@ -33,18 +33,21 @@ class RestController extends Controller
 		if ($messages) {
 			$data['error'] = 5;
 			$code_response = 400;
+
 			return $this->responseFromGate($data, $code_response);
 		}
 
 		if ($data['amount'] < 10) {
 			$data['error'] = 241;
 			$code_response = 403;
+
 			return $this->responseFromGate($data, $code_response);
 		}
 
 		if ($data['amount'] > 5000) {
 			$data['error'] = 242;
 			$code_response = 403;
+
 			return $this->responseFromGate($data, $code_response);
 		}
 		$data['status'] = 'waiting';
@@ -65,6 +68,7 @@ class RestController extends Controller
 
 		$data['error'] = 13;
 		$code_response = 500;
+
 		return $this->responseFromGate($data, $code_response);
 	}
 
@@ -83,10 +87,11 @@ class RestController extends Controller
 		if ($bill == null) {
 			$data['error'] = 210;
 			$code_response = 404;
+
 			return $this->responseFromGate($data, $code_response);
 		}
 
-		$data = $this->dataFromBill($bill);
+		$data = $this->dataFromObj($bill);
 		$data['error'] = 0;
 
 		return $this->responseFromGate($data);
@@ -119,13 +124,13 @@ class RestController extends Controller
 			if ($bill['status'] == 'waiting') {
 				$bill->status = 'rejected';
 				$bill->save();
-				$data = $this->dataFromBill($bill);
+				$data = $this->dataFromObj($bill);
 				$data['error'] = 0;
 
 				return $this->responseFromGate($data);
 			}
 
-			$data['error'] = 'Wrong status bill';
+			$data['error'] = 'Wrong status';
 			$code_response = 403;
 
 			return $this->responseFromGate($data, $code_response);
@@ -169,6 +174,13 @@ class RestController extends Controller
 
 	}
 
+	/**
+	 * @param     $data
+	 * @param int $code_response
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+
 	private function responseFromGate($data, $code_response = 200)
 	{
 
@@ -189,7 +201,7 @@ class RestController extends Controller
 	 *
 	 * @metod toArray
 	 */
-	private function dataFromBill($bill)
+	private function dataFromObj($bill)
 	{
 		$data = $bill->toArray();
 
