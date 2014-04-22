@@ -206,8 +206,10 @@ class RestController extends Controller
 		$data = $bill->toArray();
 
 		foreach ($data as $key => $value) {
-			if ($value === null || $key == 'id' || $key == 'merchant_id') {
-				unset($bill[$key]);
+			if ($value === null || $key == 'id' || $key == 'merchant_id' ||
+				$key == 'created_at' || $key == 'updated_at'
+			) {
+				unset($data[$key]);
 			}
 		}
 

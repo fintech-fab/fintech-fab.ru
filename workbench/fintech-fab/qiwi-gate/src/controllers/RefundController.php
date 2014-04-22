@@ -139,7 +139,6 @@ class RefundController extends Controller
 
 		$data = $this->dataFromObj($refund);
 		$data['error'] = 0;
-
 		return $this->responseFromGate($data);
 
 	}
@@ -160,24 +159,26 @@ class RefundController extends Controller
 			),
 		);
 		if (isset($data['status'])) {
-			$response['response']['bill'] = $data;
+			$response['response']['refund'] = $data;
 		}
 
 		return Response::json($response, $code_response);
 	}
 
 	/**
-	 * @param $bill
+	 * @param $refund
 	 *
 	 * @metod toArray
 	 */
-	private function dataFromObj($bill)
+	private function dataFromObj($refund)
 	{
-		$data = $bill->toArray();
+		$data = $refund->toArray();
 
 		foreach ($data as $key => $value) {
-			if ($value === null || $key == 'id' || $key == 'merchant_id') {
-				unset($bill[$key]);
+			if ($value === null || $key == 'id' || $key == 'bill_id' ||
+				$key == 'created_at' || $key == 'updated_at'
+			) {
+				unset($data[$key]);
 			}
 		}
 
