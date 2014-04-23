@@ -118,6 +118,7 @@ class AdminKreddyApiComponent
 	const PRODUCT_TYPE_KREDDY = 1;
 	const PRODUCT_TYPE_IVANOVO = 2;
 	const PRODUCT_TYPE_KREDDYLINE = 3;
+	const PRODUCT_TYPE_KREDDY_LINE_POSTPAID = 4;
 
 	private static $aChannels = array(
 		self::C_MOBILE,
@@ -195,12 +196,12 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_PASSPORT = 'siteClient/doChangePassport';
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_SMS_AUTH_SETTING = 'siteClient/doChangeSmsAuthSetting';
+	const API_ACTION_GET_LOAN = 'siteClient/getLoan';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
 	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 	const API_ACTION_CANCEL_REQUEST = 'siteClient/doCancelRequest';
-
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -301,7 +302,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return string
 	 */
-
 	public function formatMessage($sMessage)
 	{
 		$aReplace = array(
@@ -477,7 +477,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 *
 	 * @param $aClientData
 	 *
 	 * @return bool
@@ -551,7 +550,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 *
 	 * @param $aClientData
 	 *
 	 * @return bool
@@ -844,10 +842,11 @@ class AdminKreddyApiComponent
 		$aData = array(
 			'code'                            => self::ERROR_AUTH,
 			'client_data'                     => array(
-				'is_debt'          => false,
-				'fullname'         => '',
-				'client_new'       => false,
-				'sms_auth_enabled' => false,
+				'is_debt'               => false,
+				'fullname'              => '',
+				'client_new'            => false,
+				'sms_auth_enabled'      => false,
+				'is_possible_take_loan' => false,
 			),
 			'status'                          => array(
 				'name' => false,
@@ -903,13 +902,11 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 *
 	 * После получения новой информации о клиенте следует обработать информацию
 	 * и соответствующим образом отреагировать на нее
 	 *
 	 * @param $aData
 	 */
-
 	protected function processNewClientInfo($aData)
 	{
 		//сохраняем полученные данные для последующих запросов
@@ -1191,17 +1188,27 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Получить тип продукта
+	 *
+	 * @return string
+	 */
+	public function getProductType()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['subscription']['product_info']['type'];
+	}
+
+	/**
 	 * Проверяем, является ли текущая подписка "старой", т.е. на старые продукты до КРЕДДИтной линии
 	 *
 	 * @return bool
 	 */
 	public function isSubscriptionOldType()
 	{
-		$aClientInfo = $this->getClientInfo();
+		$sType = $this->getProductType();
 
-		$aType = $aClientInfo['subscription']['product_info']['type'];
-
-		switch ($aType) {
+		switch ($sType) {
 			case self::PRODUCT_TYPE_KREDDY:
 			case self::PRODUCT_TYPE_IVANOVO:
 				return true;
@@ -1978,7 +1985,6 @@ class AdminKreddyApiComponent
 		return $this->bIsNeedCard;
 	}
 
-
 	/**
 	 * Отправка СМС с кодом подтверждения подписки
 	 *
@@ -2078,7 +2084,6 @@ class AdminKreddyApiComponent
 			return false;
 		}
 	}
-
 
 	/**
 	 * Заявка на смену паспортных данных, подписанная СМС-кодом
@@ -2237,7 +2242,6 @@ class AdminKreddyApiComponent
 		return $this->checkChangeResultMessage($aResult);
 	}
 
-
 	/**
 	 * Отправка СМС с кодом подтверждения для смены параметра аутентификации по СМС
 	 *
@@ -2261,6 +2265,49 @@ class AdminKreddyApiComponent
 
 			return false;
 		}
+	}
+
+	/**
+	 * Отправка СМС с кодом подтверждения для перечисления займа
+	 *
+	 * @return bool
+	 */
+	public function sendSmsGetLoan()
+	{
+		//Заглушка
+		return true;
+
+		//отправляем СМС с кодом
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_LOAN);
+
+		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
+			$this->setLastSmsMessage($aResult['sms_message']);
+
+			return true;
+		} else {
+			if (isset($aResult['sms_message'])) {
+				$this->setLastSmsMessage($aResult['sms_message']);
+			} else {
+				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Заявка на перечисление займа, подписанная СМС-кодом
+	 *
+	 * @param string $sSmsCode
+	 *
+	 * @return bool
+	 */
+	public function getLoan($sSmsCode)
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_LOAN,
+			array('sms_code' => $sSmsCode));
+
+		return 'true/false - функция проверки ответа';
 	}
 
 	/**
@@ -2454,6 +2501,11 @@ class AdminKreddyApiComponent
 		return $this->oCardVerifyStatus->bCardVerifyExists;
 	}
 
+	/**
+	 * Первая ли это идентификация будет у клиента?
+	 *
+	 * @return bool
+	 */
 	public function isFirstIdentification()
 	{
 		$aData = $this->getClientInfo();
@@ -2488,7 +2540,6 @@ class AdminKreddyApiComponent
 	/**
 	 * @return array|bool
 	 */
-
 	public function getIdentify()
 	{
 		$aResult = $this->getData('identify');
@@ -2878,7 +2929,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 *
 	 * Проверяем статус СМС-авторизации для переданного результата
 	 *
 	 * @param $aResult
@@ -2905,7 +2955,6 @@ class AdminKreddyApiComponent
 	{
 		return (!empty(Yii::app()->session['smsAuthDone']));
 	}
-
 
 	/**
 	 * Возвращаем время (в секундах), оставшееся до момента, когда можно запросить СМС-пароль повторно
@@ -3081,8 +3130,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	private
-	function getIsNeedCard()
+	private function getIsNeedCard()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_CARD);
 	}
@@ -3134,7 +3182,6 @@ class AdminKreddyApiComponent
 		return ($this->getLastCode() === self::ERROR_NEED_PASSPORT_DATA);
 	}
 
-
 	/**
 	 * @return string
 	 */
@@ -3162,7 +3209,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 *
 	 * @return string
 	 */
 	public function getDoLoanMessage()
@@ -3273,7 +3319,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return array
 	 */
-
 	public function getFlexibleProduct()
 	{
 		$aProducts = $this->getProducts();
@@ -3603,7 +3648,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-
 	public function getSubscribeFlexTime($bFormat = false)
 	{
 
@@ -3650,7 +3694,6 @@ class AdminKreddyApiComponent
 	 *
 	 * @return int
 	 */
-
 	public function getSubscribeFlexProductId()
 	{
 		$aProducts = $this->getProducts();
@@ -3821,6 +3864,21 @@ class AdminKreddyApiComponent
 		}
 
 		return $aAvailableChannels[self::C_CARD] == $iChannelId;
+	}
+
+	/**
+	 * Проверяем возможность получения займа по Типу продукта
+	 *
+	 * @param $iProductType
+	 *
+	 * @return bool
+	 */
+	public function getIsPossibleGetLoanByProductType($iProductType)
+	{
+		return (
+			Yii::app()->adminKreddyApi->checkLoan() &&
+			Yii::app()->adminKreddyApi->getProductType() == $iProductType
+		);
 	}
 
 }
