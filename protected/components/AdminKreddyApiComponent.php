@@ -2274,9 +2274,6 @@ class AdminKreddyApiComponent
 	 */
 	public function sendSmsGetLoan()
 	{
-		//Заглушка
-		return true;
-
 		//отправляем СМС с кодом
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_LOAN);
 
@@ -2307,7 +2304,7 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_LOAN,
 			array('sms_code' => $sSmsCode));
 
-		return 'true/false - функция проверки ответа';
+		$this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -3873,7 +3870,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function getIsPossibleGetLoanByProductType($iProductType)
+	public function isPossibleGetLoanByProductType($iProductType)
 	{
 		return (
 			Yii::app()->adminKreddyApi->checkLoan() &&

@@ -180,7 +180,7 @@ class DefaultController extends Controller
 
 		$bIsPossibleGetLoan = Yii::app()
 			->adminKreddyApi
-			->getIsPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID);
+			->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID);
 
 
 		$this->render($sIndexView, array(
@@ -786,6 +786,10 @@ class DefaultController extends Controller
 	 */
 	public function actionGetLoan()
 	{
+		//если клиент не является прошедшим только быструю регистрацию, то не пускаем
+		if (!Yii::app()->adminKreddyApi->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID)) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
 
 		$oSmsCodeForm = new SMSCodeForm('sendRequired');
 		if (Yii::app()->request->getIsPostRequest()) {
@@ -812,6 +816,11 @@ class DefaultController extends Controller
 	 */
 	public function actionGetLoanCheckSmsCode()
 	{
+		//если клиент не является прошедшим только быструю регистрацию, то не пускаем
+		if (!Yii::app()->adminKreddyApi->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID)) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
 		$oSmsCodeForm = new SMSCodeForm('codeRequired');
 		if (Yii::app()->request->getIsPostRequest()) {
 			$aPost = Yii::app()->request->getParam('SMSCodeForm');

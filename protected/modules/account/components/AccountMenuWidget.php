@@ -31,7 +31,7 @@ class AccountMenuWidget extends CWidget
 
 		if (
 		Yii::app()->adminKreddyApi
-			->getIsPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID)
+			->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID)
 		) {
 			$this->aMenu[] = array(
 				'label' => 'Взять займ прямо сейчас!',
