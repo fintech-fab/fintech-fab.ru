@@ -178,16 +178,13 @@ class DefaultController extends Controller
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
 		//$sClientInfoRender = $this->renderPartial($sClientInfoView, array(), true);
 
-		$bIsPossibleGetLoan = Yii::app()
-			->adminKreddyApi
-			->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID);
-
+		$bIsPossibleDoLoan = Yii::app()->adminKreddyApi->checkLoan();
 
 		$this->render($sIndexView, array(
 				'sClientInfoView'    => $sClientInfoView,
 				'sPassFormRender'    => $sPassFormRender,
 				'sIdentifyRender'    => $sIdentifyRender,
-				'bIsPossibleGetLoan' => $bIsPossibleGetLoan,
+				'bIsPossibleDoLoan' => $bIsPossibleDoLoan,
 			)
 		);
 
@@ -779,65 +776,6 @@ class DefaultController extends Controller
 		}
 
 		$this->render('change_secret_question/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
-	}
-
-	/**
-	 * Получить займ
-	 */
-	public function actionGetLoan()
-	{
-		//если клиент не является прошедшим только быструю регистрацию, то не пускаем
-		if (!Yii::app()->adminKreddyApi->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID)) {
-			$this->redirect(Yii::app()->createUrl('/account'));
-		}
-
-		$oSmsCodeForm = new SMSCodeForm('sendRequired');
-		if (Yii::app()->request->getIsPostRequest()) {
-			$aPost = Yii::app()->request->getParam('SMSCodeForm');
-			$oSmsCodeForm->setAttributes($aPost);
-			if ($oSmsCodeForm->validate()) {
-				//запрашиваем СМС-код для подтверждения
-				$bSendSms = Yii::app()->adminKreddyApi->sendSmsGetLoan();
-				if ($bSendSms) { //если СМС отправлено успешно
-					unset($oSmsCodeForm);
-					$oSmsCodeForm = new SMSCodeForm('codeRequired');
-					$this->render('get_loan/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
-				} else {
-					$this->render('get_loan/error', array('oSmsCodeForm' => $oSmsCodeForm));
-				}
-				Yii::app()->end();
-			}
-		}
-		$this->render('get_loan/send_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
-	}
-
-	/**
-	 * Проверка СМС-кода для получения займа
-	 */
-	public function actionGetLoanCheckSmsCode()
-	{
-		//если клиент не является прошедшим только быструю регистрацию, то не пускаем
-		if (!Yii::app()->adminKreddyApi->isPossibleGetLoanByProductType(AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID)) {
-			$this->redirect(Yii::app()->createUrl('/account'));
-		}
-
-		$oSmsCodeForm = new SMSCodeForm('codeRequired');
-		if (Yii::app()->request->getIsPostRequest()) {
-			$aPost = Yii::app()->request->getParam('SMSCodeForm');
-			$oSmsCodeForm->setAttributes($aPost);
-			if ($oSmsCodeForm->validate()) {
-				//отправляем данные в API
-				$bChangeSmsAuth = Yii::app()->adminKreddyApi->getLoan($oSmsCodeForm->smsCode);
-				if ($bChangeSmsAuth) { //если нет ошибок
-					$this->render('get_loan/success');
-					Yii::app()->end();
-				} else {
-					$oSmsCodeForm->addError('smsCode', Yii::app()->adminKreddyApi->getLastSmsMessage());
-				}
-			}
-		}
-
-		$this->render('get_loan/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
 	}
 
 	/**

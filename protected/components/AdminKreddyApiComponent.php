@@ -272,11 +272,11 @@ class AdminKreddyApiComponent
 		Yii::app()->adminKreddyApi->getSubscribeProductCost();
 
 		return array(
-			'{sub_pay_sum}'    => $this->getSubscriptionCost(), // стоимость подключения текущего пакета
+			'{sub_pay_sum}'        => $this->getSubscriptionCost(), // стоимость подключения текущего пакета
 
-			'{do_sub_pay_sum}' => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
+			'{do_sub_pay_sum}'     => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
 
-			'{channel_name}'   => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
+			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
 
 			'{account_url_start}'  => CHtml::openTag("a", array(
 					"href" => Yii::app()->createUrl("/account")
@@ -872,7 +872,7 @@ class AdminKreddyApiComponent
 					'channels'      => array(),
 					'loan_amount'   => false,
 					'loan_lifetime' => false,
-					'type' => false,
+					'type'          => false,
 				),
 			),
 			'moratoriums'                     => array(
@@ -1409,7 +1409,6 @@ class AdminKreddyApiComponent
 
 		return $bExpired;
 	}
-
 
 	/**
 	 * @return bool|string
@@ -2265,46 +2264,6 @@ class AdminKreddyApiComponent
 
 			return false;
 		}
-	}
-
-	/**
-	 * Отправка СМС с кодом подтверждения для перечисления займа
-	 *
-	 * @return bool
-	 */
-	public function sendSmsGetLoan()
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_LOAN);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
-	}
-
-	/**
-	 * Заявка на перечисление займа, подписанная СМС-кодом
-	 *
-	 * @param string $sSmsCode
-	 *
-	 * @return bool
-	 */
-	public function getLoan($sSmsCode)
-	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_LOAN,
-			array('sms_code' => $sSmsCode));
-
-		$this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -3861,21 +3820,6 @@ class AdminKreddyApiComponent
 		}
 
 		return $aAvailableChannels[self::C_CARD] == $iChannelId;
-	}
-
-	/**
-	 * Проверяем возможность получения займа по Типу продукта
-	 *
-	 * @param $iProductType
-	 *
-	 * @return bool
-	 */
-	public function isPossibleGetLoanByProductType($iProductType)
-	{
-		return (
-			Yii::app()->adminKreddyApi->checkLoan() &&
-			Yii::app()->adminKreddyApi->getProductType() == $iProductType
-		);
 	}
 
 }

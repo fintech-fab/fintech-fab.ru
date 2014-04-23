@@ -5,7 +5,7 @@
  * @var $sClientInfoRender
  * @var $sIdentifyRender
  * @var $sClientInfoView
- * @var $bIsPossibleGetLoan
+ * @var $bIsPossibleDoLoan
  */
 
 $this->breadcrumbs = array(
@@ -25,13 +25,13 @@ if (Yii::app()->adminKreddyApi->isSubscriptionOldType()) {
 <?= $sIdentifyRender ?>
 	<br />
 
-<?php if ($bIsPossibleGetLoan) { ?>
+<?php if ($bIsPossibleDoLoan) { ?>
 	<div class="center">
 
 		<?$this->widget('bootstrap.widgets.TbButton', array(
 			'size'        => 'large',
 			'label'       => 'Получить займ прямо сейчас',
-			'url'         => Yii::app()->createUrl('account/history'),
+			'url'         => Yii::app()->createUrl('account/loan'),
 			'htmlOptions' => array(
 				'class' => 'btn-warning',
 			)
