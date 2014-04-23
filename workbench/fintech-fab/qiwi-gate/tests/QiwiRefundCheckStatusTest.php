@@ -46,7 +46,7 @@ class QiwiRefundCheckStatusTest extends TestCase
 
 		$this->call(
 			'GET',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d/refund/456');
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d/refund/456');
 
 
 		$oResponse = $this->response()->getData();
@@ -64,7 +64,7 @@ class QiwiRefundCheckStatusTest extends TestCase
 
 		$this->call(
 			'GET',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e/refund/456');
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456');
 
 
 		$oResponse = $this->response()->getData();

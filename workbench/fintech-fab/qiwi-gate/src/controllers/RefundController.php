@@ -28,72 +28,72 @@ class RefundController extends Controller
 	public function update($provider_id, $bill_id, $refund_id)
 	{
 		//Проверяем наличие счёта
-		$bill = Bill::where('bill_id', '=', $bill_id)->first();
+		$bill = Bill::whereBillId($bill_id)->whereMerchantId($provider_id)->first();
 		if ($bill == null) {
 			$data['error'] = 210;
-			$code_response = 404;
+			$codeResponse = 404;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data, $codeResponse);
 		}
 
 		//Проверяем refund_id на уникальность в этом счёте
-		$unique_refund = Refund::where('bill_id', '=', $bill_id)
+		$existRefund = Refund::where('bill_id', '=', $bill_id)
 			->where('refund_id', '=', $refund_id)->first();
-		if ($unique_refund != null) {
-			$data['error'] = 5;
-			$code_response = 403;
+		if ($existRefund != null) {
+			$data['error'] = 215;
+			$codeResponse = 403;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data, $codeResponse);
 		}
 
 		//Проверяем статус
 		if ($bill->status != 'paid') {
-			$data['error'] = 'Wrong status';
-			$code_response = 403;
+			$data['error'] = 210;
+			$codeResponse = 403;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data, $codeResponse);
 		}
 
 		//Берём общую сумму счёта
-		$amount_bill = $bill->amount;
+		$amountBill = $bill->amount;
 		//Проверяем запрошенную сумму для отмены
-		$amount_query = Input::get('amount');
-		$validator = Validator::make(array('amount' => $amount_query), Validators::rulesForRefundBill());
+		$amountQuery = Input::get('amount');
+		$validator = Validator::make(array('amount' => $amountQuery), Validators::rulesForRefundBill());
 		$messages = $validator->messages()->first();
 
 		if ($messages) {
 			if (strpos($messages, '5000')) {
 				$data['error'] = 242;
-				$code_response = 403;
+				$codeResponse = 403;
 
-				return $this->responseFromGate($data, $code_response);
+				return $this->responseFromGate($data, $codeResponse);
 			}
 			if (strpos($messages, '10')) {
 				$data['error'] = 241;
-				$code_response = 403;
+				$codeResponse = 403;
 
-				return $this->responseFromGate($data, $code_response);
+				return $this->responseFromGate($data, $codeResponse);
 			}
 			$data['error'] = 5;
-			$code_response = 400;
+			$codeResponse = 400;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data, $codeResponse);
 		}
 		//Берём суммы прошлых возвратов
-		$refundsBefor = Refund::where('bill_id', '=', $bill_id)->get();
+		$refundsBefore = Refund::where('bill_id', '=', $bill_id)->get();
 		$amount_refund = 0;
-		foreach ($refundsBefor as $one) {
+		foreach ($refundsBefore as $one) {
 			$amount_refund += $one->amount;
 		}
 		//Вычисляем возможную сумму возвтрата и определяем возврат
-		$rest = $amount_bill - $amount_refund;
-		$amount = $amount_query > $rest ? $rest : $amount_query;
+		$rest = $amountBill - $amount_refund;
+		$amount = $amountQuery > $rest ? $rest : $amountQuery;
 
 		if ($amount <= 0) {
 			$data['error'] = 'Unknown error';
-			$code_response = 403;
+			$codeResponse = 403;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data, $codeResponse);
 		}
 
 		$data = array(
@@ -105,7 +105,7 @@ class RefundController extends Controller
 		$refund = Refunds::NewRefund($data);
 		$data['user'] = $refund->bill->user;
 		$data['error'] = 0;
-		if ($amount_refund + $amount == $amount_bill) {
+		if ($amount_refund + $amount == $amountBill) {
 			$bill->status = 'rejected';
 			$bill->save();
 		}
@@ -127,8 +127,20 @@ class RefundController extends Controller
 	 */
 	public function show($provider_id, $bill_id, $refund_id)
 	{
-		$refund = Refund::where('bill_id', '=', $bill_id)
-			->where('refund_id', '=', $refund_id)->first();
+
+		$bill = Bill::whereBillId($bill_id)
+			->whereMerchantId($provider_id)
+			->first();
+
+		if (!$bill) {
+			$data['error'] = 210;
+			$code_response = 404;
+
+			return $this->responseFromGate($data, $code_response);
+		}
+
+		$refund = Refund::whereBillId($bill_id)
+			->whereRefundId($refund_id)->first();
 
 		if ($refund == null) {
 			$data['error'] = 210;
@@ -139,6 +151,7 @@ class RefundController extends Controller
 
 		$data = $this->dataFromObj($refund);
 		$data['error'] = 0;
+
 		return $this->responseFromGate($data);
 
 	}
@@ -166,11 +179,11 @@ class RefundController extends Controller
 	}
 
 	/**
-	 * @param $refund
+	 * @param Refund $refund
 	 *
-	 * @metod toArray
+	 * @return array
 	 */
-	private function dataFromObj($refund)
+	private function dataFromObj(Refund $refund)
 	{
 		$data = $refund->toArray();
 

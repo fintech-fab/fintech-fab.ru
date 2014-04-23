@@ -38,7 +38,7 @@ class QiwiRefundBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d/refund/456',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d/refund/456',
 			array('amount' => 50)
 		);
 
@@ -58,7 +58,7 @@ class QiwiRefundBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e/refund/456',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456',
 			array('amount' => 50)
 		);
 
@@ -78,7 +78,7 @@ class QiwiRefundBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e/refund/456',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456',
 			array('amount' => 5)
 		);
 
@@ -97,7 +97,7 @@ class QiwiRefundBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e/refund/456',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456',
 			array('amount' => 9000)
 		);
 
@@ -128,12 +128,12 @@ class QiwiRefundBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e/refund/456',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456',
 			array('amount' => 50)
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals('Wrong status', $oResponse->response->result_code);
+		$this->assertEquals(210, $oResponse->response->result_code);
 		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
 	}
 
@@ -154,12 +154,12 @@ class QiwiRefundBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e/refund/456',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456',
 			array('amount' => 50)
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(5, $oResponse->response->result_code);
+		$this->assertEquals(215, $oResponse->response->result_code);
 		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
 
 	}

@@ -23,7 +23,7 @@ class QiwiCreateBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(
 
 				'amount'  => '123.34',
@@ -47,7 +47,7 @@ class QiwiCreateBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(
 				'user'    => 'tel:+79161234567',
 				'amount'  => '60000',
@@ -71,7 +71,7 @@ class QiwiCreateBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(
 				'user'    => 'tel:+79161234567',
 				'amount'  => '3',
@@ -96,7 +96,7 @@ class QiwiCreateBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(
 				'user'    => 'tel:+79161234567',
 				'amount'  => '123.34',
@@ -125,7 +125,7 @@ class QiwiCreateBillTest extends TestCase
 
 		$this->call(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(
 				'user'    => 'tel:+79161234567',
 				'amount'  => '123.34',

@@ -20,6 +20,10 @@ use Eloquent;
  * @property string  $updated_at
  *
  * @method static Merchant find()
+ * @method static Bill where()
+ * @method static Bill first()
+ * @method static Bill whereBillId($id)
+ * @method static Bill whereMerchantId($id)
  */
 class Bill extends Eloquent
 {

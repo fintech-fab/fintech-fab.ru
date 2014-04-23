@@ -28,9 +28,8 @@ class RestController extends Controller
 		$data = Input::all();
 		$data['bill_id'] = $bill_id;
 		$validator = Validator::make($data, Validators::rulesForNewBill());
-		$messages = $validator->messages()->first();
 
-		if ($messages) {
+		if (!$validator->passes()) {
 			$data['error'] = 5;
 			$code_response = 400;
 
@@ -51,7 +50,8 @@ class RestController extends Controller
 			return $this->responseFromGate($data, $code_response);
 		}
 		$data['status'] = 'waiting';
-		if (Bill::where('bill_id', '=', $bill_id)->first() != null) {
+		$existBill = Bill::whereBillId($bill_id)->whereMerchantId($provider_id)->first();
+		if ($existBill != null) {
 
 			$data['error'] = 215;
 			$code_response = 403;
@@ -59,7 +59,8 @@ class RestController extends Controller
 			return $this->responseFromGate($data, $code_response);
 		}
 
-		if (Bills::NewBill($data)) {
+		$bill = Bills::NewBill($data);
+		if ($bill) {
 
 			$data['error'] = 0;
 
@@ -82,7 +83,9 @@ class RestController extends Controller
 	 */
 	public function show($provider_id, $bill_id)
 	{
-		$bill = Bill::where('bill_id', '=', $bill_id)->first();
+		$bill = Bill::whereBillId($bill_id)
+			->whereMerchantId($provider_id)
+			->first();
 
 		if ($bill == null) {
 			$data['error'] = 210;
@@ -114,7 +117,9 @@ class RestController extends Controller
 
 		if ($this->isCancelBill()) {
 
-			$bill = Bill::where('bill_id', '=', $bill_id)->first();
+			$bill = Bill::whereBillId($bill_id)
+				->whereMerchantId($provider_id)
+				->first();
 			if ($bill == null) {
 				$data['error'] = 210;
 				$code_response = 404;
@@ -130,7 +135,7 @@ class RestController extends Controller
 				return $this->responseFromGate($data);
 			}
 
-			$data['error'] = 'Wrong status';
+			$data['error'] = 210;
 			$code_response = 403;
 
 			return $this->responseFromGate($data, $code_response);
@@ -197,11 +202,11 @@ class RestController extends Controller
 	}
 
 	/**
-	 * @param $bill
+	 * @param Bill $bill
 	 *
-	 * @metod toArray
+	 * @return array
 	 */
-	private function dataFromObj($bill)
+	private function dataFromObj(Bill $bill)
 	{
 		$data = $bill->toArray();
 

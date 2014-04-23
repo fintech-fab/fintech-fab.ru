@@ -35,7 +35,7 @@ class QiwiCheckStatusTest extends TestCase
 
 		$this->call(
 			'GET',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d');
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d');
 
 
 		$oResponse = $this->response()->getData();
@@ -53,7 +53,7 @@ class QiwiCheckStatusTest extends TestCase
 
 		$this->call(
 			'GET',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e');
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e');
 
 
 		$oResponse = $this->response()->getData();

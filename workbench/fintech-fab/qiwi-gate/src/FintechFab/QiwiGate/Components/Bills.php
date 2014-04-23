@@ -6,6 +6,11 @@ use FintechFab\QiwiGate\Models\Bill;
 class Bills
 {
 
+	/**
+	 * @param $data
+	 *
+	 * @return Bill
+	 */
 	public static function NewBill($data)
 	{
 		$bill = new Bill;
@@ -24,7 +29,7 @@ class Bills
 		$bill->status = $data['status'];
 		$bill->save();
 
-		return $bill['id'];
+		return $bill;
 
 	}
 

@@ -35,7 +35,7 @@ class QiwiCancelBillTest extends TestCase
 
 		$this->call(
 			'PATCH',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array('status' => 'rejected')
 		);
 
@@ -55,7 +55,7 @@ class QiwiCancelBillTest extends TestCase
 
 		$this->call(
 			'PATCH',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e',
 			array('status' => 'rejected')
 		);
 
@@ -87,12 +87,12 @@ class QiwiCancelBillTest extends TestCase
 
 		$this->call(
 			'PATCH',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/1q2w3e',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e',
 			array('status' => 'rejected')
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals('Wrong status', $oResponse->response->result_code);
+		$this->assertEquals(210, $oResponse->response->result_code);
 		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
 	}
 

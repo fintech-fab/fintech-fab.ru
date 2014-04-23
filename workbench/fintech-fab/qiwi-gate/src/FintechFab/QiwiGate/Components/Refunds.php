@@ -3,9 +3,15 @@ namespace FintechFab\QiwiGate\Components;
 
 use FintechFab\QiwiGate\Models\Refund;
 
+
 class Refunds
 {
 
+	/**
+	 * @param $data
+	 *
+	 * @return Refund
+	 */
 	public static function NewRefund($data)
 	{
 		$refunds = new Refund;

@@ -33,7 +33,7 @@ class QiwiAuthTest extends TestCase
 		// запрос на создание счета, проверяем авторизацию с этим логином и паролем
 		$this->client->request(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(
 				'user'   => 'tel:+79161234567',
 				'amount' => '123.34',
@@ -57,7 +57,7 @@ class QiwiAuthTest extends TestCase
 
 		$this->client->request(
 			'PUT',
-			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/123/bills/4a5s6d',
+			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/4a5s6d',
 			array(),
 			array(),
 			array(
