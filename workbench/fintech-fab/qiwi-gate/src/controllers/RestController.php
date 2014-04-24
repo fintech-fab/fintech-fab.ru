@@ -208,12 +208,18 @@ class RestController extends Controller
 	 */
 	private function dataFromObj(Bill $bill)
 	{
-		$data = $bill->toArray();
+		$data = array();
+
+		$data['bill_id'] = $bill->bill_id;
+		$data['amount'] = $bill->amount;
+		$data['ccy'] = $bill->ccy;
+		$data['status'] = $bill->status;
+		$data['user'] = $bill->user;
+		$data['comment'] = $bill->comment;
+		$data['prv_name'] = $bill->prv_name;
 
 		foreach ($data as $key => $value) {
-			if ($value === null || $key == 'id' || $key == 'merchant_id' ||
-				$key == 'created_at' || $key == 'updated_at'
-			) {
+			if ($value === null) {
 				unset($data[$key]);
 			}
 		}

@@ -28,7 +28,9 @@ class RefundController extends Controller
 	public function update($provider_id, $bill_id, $refund_id)
 	{
 		//Проверяем наличие счёта
-		$bill = Bill::whereBillId($bill_id)->whereMerchantId($provider_id)->first();
+		$bill = Bill::whereBillId($bill_id)
+			->whereMerchantId($provider_id)
+			->first();
 		if ($bill == null) {
 			$data['error'] = 210;
 			$codeResponse = 404;
@@ -37,8 +39,8 @@ class RefundController extends Controller
 		}
 
 		//Проверяем refund_id на уникальность в этом счёте
-		$existRefund = Refund::where('bill_id', '=', $bill_id)
-			->where('refund_id', '=', $refund_id)->first();
+		$existRefund = Refund::whereBillId($bill_id)
+			->whereRefundId($refund_id)->first();
 		if ($existRefund != null) {
 			$data['error'] = 215;
 			$codeResponse = 403;
@@ -80,7 +82,7 @@ class RefundController extends Controller
 			return $this->responseFromGate($data, $codeResponse);
 		}
 		//Берём суммы прошлых возвратов
-		$refundsBefore = Refund::where('bill_id', '=', $bill_id)->get();
+		$refundsBefore = Refund::whereBillId($bill_id)->get();
 		$amount_refund = 0;
 		foreach ($refundsBefore as $one) {
 			$amount_refund += $one->amount;
@@ -185,12 +187,14 @@ class RefundController extends Controller
 	 */
 	private function dataFromObj(Refund $refund)
 	{
-		$data = $refund->toArray();
+		$data = array();
+		$data['refund_id'] = $refund->refund_id;
+		$data['amount'] = $refund->amount;
+		$data['status'] = $refund->status;
+		$data['user'] = $refund->bill->user;
 
 		foreach ($data as $key => $value) {
-			if ($value === null || $key == 'id' || $key == 'bill_id' ||
-				$key == 'created_at' || $key == 'updated_at'
-			) {
+			if ($value === null) {
 				unset($data[$key]);
 			}
 		}
