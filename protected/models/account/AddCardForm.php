@@ -65,6 +65,7 @@ class AddCardForm extends CFormModel
 				'sCardValidThru', 'checkValidCardValidThru',
 				'messageInvalidMonth' => 'Проверьте срок действия карты (некорректно указан месяц)',
 				'messageInvalidYear'  => 'Проверьте срок действия карты (некорректно указан год)',
+				'messageInvalid' => 'Ошибка, проверьте введенные данные',
 			),
 			array(
 				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
@@ -103,11 +104,11 @@ class AddCardForm extends CFormModel
 			'bConfirm'       => 'Я подтверждаю согласие на заморозку случайной суммы на указанной банковской карте.',
 			'iCardType'       => 'Тип банковской карты',
 			'bAgree'         => 'Я согласен с условиями зачисления средств на банковскую карту.',
-			'sEmail'   => 'Ваш E-mail',
-			'sAddress' => 'Ваш адрес',
-			'sCity'    => 'Ваш город',
-			'sZipCode' => 'Почтовый индекс',
-			'sCountry' => 'Код страны',
+			'sEmail'         => 'Ваш E-mail',
+			'sAddress'       => 'Ваш адрес',
+			'sCity'          => 'Ваш город',
+			'sZipCode'       => 'Почтовый индекс',
+			'sCountry'       => 'Код страны',
 		);
 
 		if (!Yii::app()->adminKreddyApi->checkCardVerifyExists()) {

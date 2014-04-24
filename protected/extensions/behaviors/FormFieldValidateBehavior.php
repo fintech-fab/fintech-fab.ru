@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by JetBrains PhpStorm.
  * User: m.novikov && e.zamorskaya
@@ -8,11 +9,11 @@
  *
  * @property CFormModel|ClientCreateFormAbstract $owner
  */
-
 class FormFieldValidateBehavior extends CBehavior
 {
 	/**
 	 * проверка имени клиента
+	 *
 	 * @param string $attribute
 	 * @param array  $param
 	 */
@@ -29,6 +30,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * проверка ФИО
+	 *
 	 * @param string $attribute
 	 * @param array  $param
 	 */
@@ -45,6 +47,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * проверка телефона
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -75,6 +78,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * проверка цифрового кода
+	 *
 	 * @param $attribute
 	 * @param $param
 	 */
@@ -90,6 +94,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * проверка, что возраст в заданном диапазоне
+	 *
 	 * @param string $attribute дата
 	 * @param array  $param
 	 */
@@ -103,6 +108,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * проверка даты выдачи паспорта на валидность
+	 *
 	 * @param string $attribute дата
 	 * @param array  $param
 	 */
@@ -212,6 +218,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * форматирование фамилий и имен
+	 *
 	 * @param $strName
 	 */
 	private function formatName(&$strName)
@@ -260,6 +267,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * вспомогательная функция для нормализации фамилий и имен
+	 *
 	 * @param string $strName
 	 * @param string $delimiter
 	 */
@@ -276,6 +284,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * изменение регистра для русских букв
+	 *
 	 * @param $strWord
 	 *
 	 * @return string
@@ -292,6 +301,7 @@ class FormFieldValidateBehavior extends CBehavior
 	/**
 	 * добавляет к дате пустое значение чч:мм:сс
 	 * если дата пустая, то в атрибуте будет гггг:мм:дд чч:мм:сс
+	 *
 	 * @param $attribute
 	 *
 	 * @example ContactForm::afterValidate
@@ -312,6 +322,7 @@ class FormFieldValidateBehavior extends CBehavior
 	/**
 	 * убирает время из формата гггг:мм:дд чч:мм:сс
 	 * остается только гггг:мм:дд
+	 *
 	 * @param $attribute
 	 */
 	public function initDateFromDatetime($attribute)
@@ -621,6 +632,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * проверка, что содержит только русские буквы и знаки препинания
+	 *
 	 * @param string $attribute
 	 * @param array  $param
 	 */
@@ -675,7 +687,14 @@ class FormFieldValidateBehavior extends CBehavior
 	public function checkValidCardValidThru($attribute, $param)
 	{
 		if (!empty($this->owner->$attribute)) {
-			list($sMonth, $sYear) = explode("/", $this->owner->$attribute);
+			//на случай если в пришли неправильные данные, которые не удается обработать в list()
+			try {
+				list($sMonth, $sYear) = explode("/", $this->owner->$attribute);
+			} catch (Exception $e) {
+				$this->owner->addError($attribute, $param['messageInvalid']);
+
+				return;
+			}
 
 			if (!in_array(trim($sMonth), array_keys(Dictionaries::$aMonthsDigital))) {
 				$this->owner->addError($attribute, $param['messageInvalidMonth']);
@@ -689,6 +708,7 @@ class FormFieldValidateBehavior extends CBehavior
 
 	/**
 	 * готовит формат даты из базы к формату для маскированого поля в форме
+	 *
 	 * @param $attribute
 	 */
 	public function exportMaskedDate($attribute)
