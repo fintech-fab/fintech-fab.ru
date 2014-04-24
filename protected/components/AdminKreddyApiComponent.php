@@ -28,6 +28,7 @@ class AdminKreddyApiComponent
 	const C_SUBSCRIPTION_PAID = 'subscription_paid';
 	const C_SUBSCRIPTION_CANCEL = 'subscription_cancel';
 	const C_SUBSCRIPTION_ACTIVE = 'subscription_active';
+	const C_SUBSCRIPTION_AWAITING_CONFIRMATION = 'subscription_awaiting_confirmation';
 
 	const C_LOAN_AVAILABLE = 'loan_available';
 	const C_LOAN_CREATED = 'loan_created';

@@ -1268,6 +1268,9 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
+		if (!Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
+			$this->redirect(Yii::app()->createUrl('/account/doLoan'));
+		}
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
