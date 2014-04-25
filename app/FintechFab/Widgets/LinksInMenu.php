@@ -57,7 +57,7 @@ class LinksInMenu
 		$link_main_menu = '';
 		if (Auth::check()) {
 			$link_main_menu = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("client-page") . '>
-									<a href ="client-page">Терминал QIWI</a>
+									<a href ="fintech-fab/qiwi-shop/order">Терминал QIWI</a>
 								</li>';
 		}
 

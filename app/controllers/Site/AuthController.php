@@ -89,7 +89,7 @@ class AuthController extends BaseController
 	{
 		$current_url = basename(Request::server('REQUEST_URI'), ".php");
 		$socialNetName = explode('?', $current_url);
-
+		$url = Request::server('HTTP_REFERER') == null ? 'registration' : Request::server('HTTP_REFERER');
 		$userInfo = GetSocialUser::$socialNetName[0]();
 
 		$user = Social::setSocialUser($userInfo);
@@ -103,7 +103,7 @@ class AuthController extends BaseController
 
 		Auth::login($user);
 
-		return Redirect::back()
+		return Redirect::to($url)
 			->with('userMessage', 'Добро пожаловать на наш сайт!')
 			->with('userMessageTitle', 'Вы успешно авторизовались!');
 	}
