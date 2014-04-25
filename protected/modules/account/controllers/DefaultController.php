@@ -228,8 +228,12 @@ class DefaultController extends Controller
 		Yii::app()->clientForm->resetSteps();
 		//запоминаем все данные в сессию
 
-		$aClientData['birthday'] = date('d.m.Y', SiteParams::strtotime($aClientData['birthday']));
-		$aClientData['passport_date'] = date('d.m.Y', SiteParams::strtotime($aClientData['passport_date']));
+		if (isset($aClientData['birthday'])) {
+			$aClientData['birthday'] = date('d.m.Y', SiteParams::strtotime($aClientData['birthday']));
+		}
+		if (isset($aClientData['passport_date'])) {
+			$aClientData['passport_date'] = date('d.m.Y', SiteParams::strtotime($aClientData['passport_date']));
+		}
 		Yii::app()->clientForm->setFastRegClientSession($aClientData, $oClientData->client_id);
 
 		//отправляем на форму регистрации
