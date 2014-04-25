@@ -212,10 +212,8 @@ class DefaultController extends Controller
 		//снимаем флаг "анкеты заполнена", чтобы не создавалась новая запись
 		$oClientData->complete = 0;
 		//обновим ФИО в базе, на случай если уже стерто
-		$aClientData = Yii::app()->adminKreddyApi->getClientData();
-		$oClientData->first_name = $aClientData['first_name'];
-		$oClientData->third_name = $aClientData['third_name'];
-		$oClientData->last_name = $aClientData['last_name'];
+		$aClientData = Yii::app()->adminKreddyApi->getFullClientData();
+		$oClientData->setAttributes($aClientData);
 		$oClientData->save();
 
 		//создаем клиенту куку, которая позволит продолжить регистрацию на сайте
@@ -228,6 +226,11 @@ class DefaultController extends Controller
 		Yii::app()->clientForm->setContinueReg(true);
 		//сбросим шаги
 		Yii::app()->clientForm->resetSteps();
+		//запоминаем все данные в сессию
+
+		$aClientData['birthday'] = date('d.m.Y', SiteParams::strtotime($aClientData['birthday']));
+		$aClientData['passport_date'] = date('d.m.Y', SiteParams::strtotime($aClientData['passport_date']));
+		Yii::app()->clientForm->setFastRegClientSession($aClientData, $oClientData->client_id);
 
 		//отправляем на форму регистрации
 		$this->redirect(Yii::app()->createUrl('/form'));

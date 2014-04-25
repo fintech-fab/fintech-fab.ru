@@ -1381,6 +1381,31 @@ class ClientFormComponent
 		Cookie::saveDataToCookie('client', $aCookieData);
 	}
 
+	/**
+	 * Устанавливает для каждого шага сессию с данными
+	 *
+	 * @param $aClientData
+	 * @param $iClientId
+	 */
+	public function setFastRegClientSession($aClientData, $iClientId)
+	{
+		$sSite = $this->getSiteConfigName();
+
+		//заполяем данные сессии для каждой формы
+		foreach (self::$aStepsInfo[$sSite] as $aStep) {
+			//var_dump($aStep);
+			if (isset($aStep['model'])) {
+				/**
+				 * @var ClientCreateFormAbstract $oForm ;
+				 */
+				$oForm = new $aStep['model'];
+				$oForm->setAttributes($aClientData, false);
+				Yii::app()->session[$aStep['model']] = $oForm->getAttributes();
+				Yii::app()->session[$aStep['model'] . '_client_id'] = $iClientId;
+			}
+
+		}
+	}
 
 	/**
 	 * @param $iLength

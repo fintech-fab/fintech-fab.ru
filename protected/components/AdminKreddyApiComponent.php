@@ -189,6 +189,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
 	const API_ACTION_GET_INFO = 'siteClient/getInfo';
+	const API_ACTION_GET_FULL_CLIENT_DATA = 'siteClient/getFullClientData';
 	const API_ACTION_GET_HISTORY = 'siteClient/getPaymentHistory';
 	const API_ACTION_RESET_PASSWORD = 'siteClient/resetPassword';
 	const API_ACTION_GET_PRODUCTS = 'siteClient/getProducts';
@@ -1429,11 +1430,16 @@ class AdminKreddyApiComponent
 		return $aClientInfo['client_data']['fullname'];
 	}
 
-	public function getClientData()
+	/**
+	 * Получение данных клиента в статусе "быстрая регистрация", заполненных оператором КЦ
+	 *
+	 * @return array
+	 */
+	public function getFullClientData()
 	{
-		$aClientInfo = $this->getClientInfo();
+		$aClientData = $this->getData('full_data');
 
-		return $aClientInfo['client_data'];
+		return $aClientData['client_data'];
 	}
 
 	/**
@@ -2586,6 +2592,9 @@ class AdminKreddyApiComponent
 		switch ($sType) {
 			case 'info':
 				$sAction = self::API_ACTION_GET_INFO;
+				break;
+			case 'full_data':
+				$sAction = self::API_ACTION_GET_FULL_CLIENT_DATA;
 				break;
 			case 'history':
 				$sAction = self::API_ACTION_GET_HISTORY;
