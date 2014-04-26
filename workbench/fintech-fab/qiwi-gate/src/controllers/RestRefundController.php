@@ -11,7 +11,7 @@ use Input;
 use Response;
 use Validator;
 
-class RefundController extends Controller
+class RestRefundController extends Controller
 {
 
 	/**

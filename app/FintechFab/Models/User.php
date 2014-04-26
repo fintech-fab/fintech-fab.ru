@@ -5,7 +5,6 @@ namespace FintechFab\Models;
 use Eloquent;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\UserInterface;
-use Illuminate\Support\Collection;
 
 /**
  * @property integer         $id
@@ -15,34 +14,15 @@ use Illuminate\Support\Collection;
  * @property string          $password
  * @property string          $updated_at
  * @property string          $created_at
+ * @property string          $remember_token
  *
  * @property Role            $roles
  *
  * @property SocialNetwork[] SocialNetworks
  * @method User find() static
- * @method User
  */
 class User extends Eloquent implements UserInterface, RemindableInterface
 {
-	/**
-	 * Ardent validation rules
-	 */
-	public static $rules = array(
-		'first_name'     => 'required',
-		'email'          => 'required|email|unique:users',
-		'password'       => 'required|min:4|alpha_dash',
-		'passwordRepeat' => 'same:password',
-	);
-
-	/**
-	 * Factory
-	 */
-	public static $factory = array(
-		'first_name' => 'string',
-		'email'      => 'email',
-		'password'   => 'password',
-	);
-
 
 	protected $fillable = array('first_name', 'last_name', 'email');
 
@@ -120,4 +100,25 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	{
 		return 'remember_token';
 	}
+
+	/**
+	 * Ardent validation rules
+	 */
+	public static $rules = array(
+		'first_name'     => 'required',
+		'email'          => 'required|email|unique:users',
+		'password'       => 'required|min:4|alpha_dash',
+		'passwordRepeat' => 'same:password',
+	);
+
+	/**
+	 * Factory
+	 */
+	public static $factory = array(
+		'first_name' => 'string',
+		'email'      => 'email',
+		'password'   => 'password',
+	);
+
+
 }

@@ -35,7 +35,7 @@ class LinksInMenu
 		$first_name = Auth::user()->first_name;
 		$last_name = Auth::user()->last_name;
 		$link_admin = '';
-		$user = User::find(Auth::user()->id);
+		$user = User::find(Auth::user()->getAuthIdentifier());
 		foreach ($user->roles as $role) {
 			if ($role->role == "admin") {
 				$link_admin = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("admin") . '>
@@ -56,8 +56,9 @@ class LinksInMenu
 	{
 		$link_main_menu = '';
 		if (Auth::check()) {
+			$user_id = Auth::user()->getAuthIdentifier();
 			$link_main_menu = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("client-page") . '>
-									<a href ="fintech-fab/qiwi-shop/order">Терминал QIWI</a>
+									<a href ="qiwi/shop/' . $user_id . '/orders/create">Терминал QIWI</a>
 								</li>';
 		}
 

@@ -12,7 +12,7 @@ use Response;
 use Validator;
 
 
-class RestController extends Controller
+class RestBillController extends Controller
 {
 
 	/**

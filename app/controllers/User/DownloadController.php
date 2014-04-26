@@ -17,7 +17,7 @@ class DownloadController extends BaseController
 			return false;
 		}
 		$ext = $mime[1];
-		$user_id = Auth::user()->id;
+		$user_id = Auth::user()->getAuthIdentifier();
 		$filePath = 'img/userPhoto/' . $user_id . '/avatar';
 		$name = Input::file('image')->getClientOriginalName();
 		$name = explode('.', $name);

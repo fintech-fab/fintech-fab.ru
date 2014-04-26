@@ -35,7 +35,7 @@ class Social
 			'id_user_in_network' => $userInfo['id'],
 		));
 		if (Auth::check()) {
-			$userSocialNetwork['user_id'] = Auth::user()->id;
+			$userSocialNetwork['user_id'] = Auth::user()->getAuthIdentifier();
 		}
 
 		if ($userSocialNetwork['user_id'] != null) {

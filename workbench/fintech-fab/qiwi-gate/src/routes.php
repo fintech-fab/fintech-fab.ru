@@ -5,7 +5,7 @@ Route::group(array('before' => 'ff.qiwi.gate.auth.basic'), function () {
 
 	Route::resource(
 		'qiwi/gate/api/v2/prv/{provider_id}/bills',
-		'FintechFab\QiwiGate\Controllers\RestController',
+		'FintechFab\QiwiGate\Controllers\RestBillController',
 		array(
 			'only' => array('show', 'update')
 		)
@@ -13,7 +13,7 @@ Route::group(array('before' => 'ff.qiwi.gate.auth.basic'), function () {
 
 	Route::resource(
 		'qiwi/gate/api/v2/prv/{provider_id}/bills/{bill_id}/refund',
-		'FintechFab\QiwiGate\Controllers\RefundController',
+		'FintechFab\QiwiGate\Controllers\RestRefundController',
 		array(
 			'only' => array('show', 'update')
 		)

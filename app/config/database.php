@@ -57,6 +57,17 @@ return array(
 			'prefix'    => '',
 		),
 
+		'qiwiShop' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'qiwi_shop',
+			'username'  => 'root',
+			'password'  => 'fintechfab',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
 		'sqlite'   => array(
 			'driver'   => 'sqlite',
 			'database' => __DIR__ . '/../database/production.sqlite',
