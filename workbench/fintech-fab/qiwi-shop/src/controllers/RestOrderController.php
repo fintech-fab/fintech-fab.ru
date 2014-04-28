@@ -4,7 +4,6 @@ namespace FintechFab\QiwiShop\Controllers;
 use Config;
 use FintechFab\QiwiShop\Components\Orders;
 use FintechFab\QiwiShop\Components\Validators;
-use Illuminate\Support\Facades\Cookie;
 use Input;
 use Response;
 use Validator;
@@ -28,10 +27,16 @@ class RestOrderController extends BaseController
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @param $user_id
+	 *
+	 * @return void|Response
 	 */
-	public function create()
+	public function create($user_id)
 	{
+		if (!$this->checkAuth($user_id)) {
+			return Response::view('ff-qiwi-shop::errors.401', array(), 401);
+		}
+
 		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.createOrder');
 	}
 
@@ -39,10 +44,20 @@ class RestOrderController extends BaseController
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @return Response
+	 * @param $user_id
+	 *
+	 * @return array $result
 	 */
-	public function store()
+	public function store($user_id)
 	{
+		if (!$this->checkAuth($user_id)) {
+			$result['errors'] = array(
+				'common' => 'Ошибка авторизации',
+			);
+
+			return $result;
+		}
+
 		$data = Input::all();
 		$validator = Validator::make($data, Validators::rulesForNewOrder(), Validators::messagesForErrors());
 		$userMessages = $validator->messages();
@@ -65,12 +80,20 @@ class RestOrderController extends BaseController
 		$order = Orders::newOrder($data);
 
 		if ($order) {
-			return $order->id;
+			$response = array(
+				'result'   => 'ok',
+				'order_id' => $order->id,
+				'message'  => 'Заказ №' . $order->id . ' успешно создан.',
+			);
+
+			return $response;
 		}
 
-		$response = array('error' => 'error');
+		$result['errors'] = array(
+			'common' => 'Неизвестная ошибка. Повторите ещё раз.',
+		);
 
-		return $response;
+		return $result;
 
 	}
 
@@ -124,6 +147,14 @@ class RestOrderController extends BaseController
 	public function destroy($id)
 	{
 		//
+	}
+
+	private function checkAuth($user_id)
+	{
+		$session_id = Config::get('ff-qiwi-shop::user_id');
+
+		return $session_id == $user_id;
+
 	}
 
 

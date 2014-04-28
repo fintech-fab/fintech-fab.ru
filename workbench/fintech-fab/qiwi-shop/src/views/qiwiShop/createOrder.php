@@ -1,5 +1,5 @@
 <div class="text-center inner">
-	<h3>Сумма заказа</h3>
+	<h3>Новый заказ</h3>
 
 	<?=
 	Form::open(array(
@@ -8,7 +8,6 @@
 		'method' => 'post',
 
 	)); ?>
-	<p>Укажите, на какую сумму вы хотите сделать покупку в магазине.</p>
 
 	<div class="form-group row">
 		<?= Form::label('inputSum', 'Наименование товара:', array('class' => 'col-sm-4 control-label')) ?>
@@ -69,6 +68,8 @@
 		</div>
 		<div id="errorComment" class="error col-sm-4 text-left"></div>
 	</div>
+	<div id="errorCommon" class="error text-center"></div>
+	<br>
 	<?=
 	Form::button('Оформить заказ', array(
 		'id'    => 'createOrder',
@@ -78,3 +79,4 @@
 
 	<?= Form::close(); ?>
 </div>
+<div id="message" class="row"></div>
