@@ -1,3 +1,4 @@
+<script src="/packages/fintech-fab/qiwi-shop/js/ActionCreateOrder.js"></script>
 <div class="text-center inner">
 	<h3>Новый заказ</h3>
 

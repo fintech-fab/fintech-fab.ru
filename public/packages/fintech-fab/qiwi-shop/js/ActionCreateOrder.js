@@ -20,7 +20,11 @@ $(document).ready(function () {
 					$('#errorComment').html('');
 				}
 				if (data['result'] == 'ok') {
-					$("#message").dialog({ title: 'Сообщение', show: 'fade', hide: 'fade' }).html(data['message']);
+					$('#message').dialog({ title: 'Сообщение', show: 'fade', hide: 'fade' }).html(data['message']);
+					$('.ui-dialog *').on('click',
+						function () {
+							location.reload();
+						});
 				}
 			}
 		);

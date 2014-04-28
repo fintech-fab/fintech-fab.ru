@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
 
-<script src="/packages/fintech-fab/qiwi-shop/js/ActionCreateOrder.js"></script>
 <link type="text/css" rel="stylesheet" href="/packages/fintech-fab/qiwi-shop/css/main.css ">
 
 

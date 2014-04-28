@@ -27,8 +27,8 @@ body {
 	color: #ff0000;
 }
 
-#loginModal .modal-sm {
-	width: 500px;
+.tableBtn {
+	margin-right: 5px;
 }
 
 

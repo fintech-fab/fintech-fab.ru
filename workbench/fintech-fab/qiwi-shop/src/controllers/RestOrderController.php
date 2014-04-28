@@ -4,6 +4,7 @@ namespace FintechFab\QiwiShop\Controllers;
 use Config;
 use FintechFab\QiwiShop\Components\Orders;
 use FintechFab\QiwiShop\Components\Validators;
+use FintechFab\QiwiShop\Widgets\OrdersTable;
 use Input;
 use Response;
 use Validator;
@@ -15,12 +16,18 @@ class RestOrderController extends BaseController
 	public $layout = 'qiwiShop';
 
 	/**
-	 * Display a listing of the resource.
+	 * @param $user_id
 	 *
+	 * @return \Illuminate\Http\Response|void
 	 */
-	public function index()
+	public function index($user_id)
 	{
-		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.ordersTable');
+		if (!$this->checkAuth($user_id)) {
+			return Response::view('ff-qiwi-shop::errors.401', array(), 401);
+		}
+
+		$ordersTable = OrdersTable::displayTable($user_id);
+		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.ordersTable', array('ordersTable' => $ordersTable));
 	}
 
 

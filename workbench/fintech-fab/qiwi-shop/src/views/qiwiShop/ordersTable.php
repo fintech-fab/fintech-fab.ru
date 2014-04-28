@@ -1,4 +1,9 @@
 <?php
+/**
+ * @var string $ordersTable
+ */
 ?>
-oders table
-<table class="table table-striped" id="tableUser"></table>
+<script src="/packages/fintech-fab/qiwi-shop/js/ActionTableButtons.js"></script>
+
+<?= $ordersTable ?>
+

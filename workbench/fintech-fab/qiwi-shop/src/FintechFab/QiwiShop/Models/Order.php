@@ -18,7 +18,7 @@ use Eloquent;
  * @property string  $lifetime
  * @property string  $status
  *
- *
+ * @method static Order whereUserId()
  */
 class Order extends Eloquent
 {
