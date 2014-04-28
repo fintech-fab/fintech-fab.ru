@@ -1,4 +1,7 @@
 <?php
 return array(
-	'waiting' => 'payable'
+	'waiting'  => 'payable',
+	'paid'     => 'paid',
+	'rejected' => 'canceled',
+	'expired'  => 'expired',
 );
