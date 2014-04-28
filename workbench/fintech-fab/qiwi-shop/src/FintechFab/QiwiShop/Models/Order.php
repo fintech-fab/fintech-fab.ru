@@ -19,6 +19,9 @@ use Eloquent;
  * @property string  $status
  *
  * @method static Order whereUserId()
+ * @method static Order whereStatus()
+ * @method static Order whereId()
+ * @method static Order find()
  */
 class Order extends Eloquent
 {

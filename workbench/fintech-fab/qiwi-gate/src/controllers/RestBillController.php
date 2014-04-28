@@ -53,7 +53,7 @@ class RestBillController extends Controller
 		$existBill = Bill::whereBillId($bill_id)->whereMerchantId($provider_id)->first();
 		if ($existBill != null) {
 
-			$data['error'] = 215;
+			$data = array('error' => 215);
 			$code_response = 403;
 
 			return $this->responseFromGate($data, $code_response);
@@ -67,7 +67,7 @@ class RestBillController extends Controller
 			return $this->responseFromGate($data);
 		}
 
-		$data['error'] = 13;
+		$data = array('error' => 13);
 		$code_response = 500;
 
 		return $this->responseFromGate($data, $code_response);

@@ -7,3 +7,4 @@
 
 <?= $ordersTable ?>
 
+<div id="message" class="text-center"></div>

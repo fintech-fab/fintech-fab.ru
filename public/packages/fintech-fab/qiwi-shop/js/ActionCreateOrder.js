@@ -21,10 +21,9 @@ $(document).ready(function () {
 				}
 				if (data['result'] == 'ok') {
 					$('#message').dialog({ title: 'Сообщение', show: 'fade', hide: 'fade' }).html(data['message']);
-					$('.ui-dialog *').on('click',
-						function () {
-							location.reload();
-						});
+					$('.ui-dialog *').on('click', function () {
+						location.reload();
+					});
 				}
 			}
 		);

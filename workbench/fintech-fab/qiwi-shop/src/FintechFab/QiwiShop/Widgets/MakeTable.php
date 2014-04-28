@@ -10,7 +10,7 @@ use Form;
  *
  * @package FintechFab\QiwiShop\Widgets
  */
-class OrdersTable
+class MakeTable
 {
 
 
@@ -82,38 +82,38 @@ class OrdersTable
 		switch ($type) {
 			case 'status':
 				$button = Form::button('Статус счёта', array(
-					'id'    => 'status' . $order_id,
-					'class' => 'btn btn-info tableBtn',
+					'id'    => 'status_' . $order_id,
+					'class' => 'btn btn-info tableBtn status',
 				));
 				break;
 			case 'getBill':
 				$button = Form::button('Выставить счёт', array(
-					'id'    => 'getBill' . $order_id,
-					'class' => 'btn btn-primary tableBtn',
+					'id'    => 'getBill_' . $order_id,
+					'class' => 'btn btn-primary tableBtn getBill',
 				));
 				break;
 			case 'pay':
 				$button = Form::button('Оплатить', array(
-					'id'    => 'pay' . $order_id,
-					'class' => 'btn btn-success  tableBtn',
+					'id'    => 'pay_' . $order_id,
+					'class' => 'btn btn-success tableBtn pay',
 				));
 				break;
 			case 'cancel':
 				$button = Form::button('Отменить', array(
-					'id'    => 'cancel' . $order_id,
-					'class' => 'btn btn-warning tableBtn',
+					'id'    => 'cancel_' . $order_id,
+					'class' => 'btn btn-warning tableBtn cancel',
 				));
 				break;
 			case 'return':
 				$button = Form::button('Возврат отплаты', array(
-					'id'    => 'return' . $order_id,
-					'class' => 'btn btn-danger tableBtn',
+					'id'    => 'return_' . $order_id,
+					'class' => 'btn btn-danger tableBtn return',
 				));
 				break;
 			case 'statusReturn':
 				$button = Form::button('Статус возврата', array(
-					'id'    => 'returnStatus' . $order_id,
-					'class' => 'btn btn-primary tableBtn',
+					'id'    => 'returnStatus_' . $order_id,
+					'class' => 'btn btn-primary tableBtn statusReturn',
 				));
 				break;
 			default:
