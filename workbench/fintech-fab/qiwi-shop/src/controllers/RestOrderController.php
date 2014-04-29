@@ -18,54 +18,35 @@ class RestOrderController extends BaseController
 	public $layout = 'qiwiShop';
 
 	/**
-	 * @param $user_id
+	 * Страница таблицы заказов
 	 *
-	 * @return \Illuminate\Http\Response|void
+	 * @return mixed|void
 	 */
-	public function index($user_id)
+	public function index()
 	{
-		if (!$this->checkAuth($user_id)) {
-			return Response::view('ff-qiwi-shop::errors.401', array(), 401);
-		}
-
-		$ordersTable = MakeTable::displayTable($user_id);
+		$ordersTable = MakeTable::displayTable($this->getUser());
 		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.ordersTable', array('ordersTable' => $ordersTable));
 	}
 
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Страница создания заказа
 	 *
-	 * @param $user_id
-	 *
-	 * @return void|Response
+	 * @return void
 	 */
-	public function create($user_id)
+	public function create()
 	{
-		if (!$this->checkAuth($user_id)) {
-			return Response::view('ff-qiwi-shop::errors.401', array(), 401);
-		}
-
 		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.createOrder');
 	}
 
 
 	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param $user_id
+	 * Создание счёта.
 	 *
 	 * @return array $result
 	 */
-	public function store($user_id)
+	public function store()
 	{
-		if (!$this->checkAuth($user_id)) {
-			$result['errors'] = array(
-				'common' => 'Ошибка авторизации',
-			);
-
-			return $result;
-		}
 
 		$data = Input::all();
 		$validator = Validator::make($data, Validators::rulesForNewOrder(), Validators::messagesForErrors());
@@ -81,7 +62,7 @@ class RestOrderController extends BaseController
 
 			return $result;
 		}
-		$data['user_id'] = Config::get('ff-qiwi-shop::user_id');
+		$data['user_id'] = $this->getUser();
 		$day = Config::get('ff-qiwi-shop::lifetime');
 		$data['lifetime'] = date('Y-m-d\TH:i:s', time() + 3600 * 24 * $day);
 
@@ -105,21 +86,15 @@ class RestOrderController extends BaseController
 	/**
 	 * Статус счёта.
 	 *
-	 * @param $user_id
 	 * @param $order_id
 	 *
 	 * @internal param int $id
 	 *
 	 * @return Response
 	 */
-	public function show($user_id, $order_id)
+	public function show($order_id)
 	{
-		if (!$this->checkAuth($user_id)) {
-			return $this->errorResponse('150');
-		}
-
 		$response = $this->makeCurl($order_id);
-
 
 		if ($response->response->result_code != 0) {
 			return $this->errorResponse($response->response->result_code);
@@ -157,17 +132,12 @@ class RestOrderController extends BaseController
 	/**
 	 * Возврат оплаты
 	 *
-	 * @param $user_id
 	 * @param $order_id
 	 *
-	 * @return Response
+	 * @return mixed|void
 	 */
-	public function update($user_id, $order_id)
+	public function update($order_id)
 	{
-		if (!$this->checkAuth($user_id)) {
-			return $this->errorResponse('150');
-		}
-
 		if ($this->isCreateBill()) {
 			return $this->CreateBill($order_id);
 		}
@@ -203,10 +173,13 @@ class RestOrderController extends BaseController
 			$result['message'] = 'Счёт № ' . $order->id . ' выставлен';
 			$result['title'] = 'Сообщение';
 			$result['change'] = true;
-
 			return $result;
 		}
+		$result['message'] = 'Счёт не выставлен';
+		$result['title'] = 'Ошибка';
+		$result['change'] = true;
 
+		return $result;
 
 	}
 
@@ -214,24 +187,22 @@ class RestOrderController extends BaseController
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int $id
+	 * @param int $order_id
 	 *
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($order_id)
 	{
-		//
+		dd($order_id);
 	}
 
 	/**
-	 * @param $user_id
 	 *
-	 * @return bool
+	 * @return int $user_id
 	 */
-	private function checkAuth($user_id)
+	private function getUser()
 	{
-		$session_id = Config::get('ff-qiwi-shop::user_id');
-		return $session_id == $user_id;
+		return Config::get('ff-qiwi-shop::user_id');
 	}
 
 	/**

@@ -10,8 +10,6 @@ function echoActiveClassIfRequestMatches($requestUri)
 	return '';
 }
 
-$user = Auth::user()->getAuthIdentifier();
-
 ?>
 <div class="container">
 	<header class="row">
@@ -30,10 +28,10 @@ $user = Auth::user()->getAuthIdentifier();
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li <?= echoActiveClassIfRequestMatches("create") ?>>
-							<a href="/qiwi/shop/<?= $user ?>/orders/create">Создать заказ</a>
+							<a href="/qiwi/shop/orders/create">Создать заказ</a>
 						</li>
 						<li <?= echoActiveClassIfRequestMatches("orders") ?>>
-							<a href="/qiwi/shop/<?= $user ?>/orders">Таблица заказов</a>
+							<a href="/qiwi/shop/orders">Таблица заказов</a>
 						</li>
 
 					</ul>
