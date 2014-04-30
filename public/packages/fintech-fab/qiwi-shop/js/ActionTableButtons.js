@@ -1,7 +1,9 @@
 $(document).ready(function () {
 	$('.tableBtn').click(function () {
 		var action = this.id.split('_');
-
+		if (action[0] == 'payBill') {
+			location.href = '../../qiwi/gate/order/external/main.action?shop=' + action[1] + '&transaction=' + action[2];
+		}
 		$.ajax({
 			type: "POST",
 			url: 'orders/' + action[0],

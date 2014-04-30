@@ -93,6 +93,14 @@ class RestBillController extends Controller
 
 			return $this->responseFromGate($data, $code_response);
 		}
+		if (($bill->lifetime != '0000-00-00 00:00:00') && ($bill->lifetime <= date('Y-m-d H:i:s', time()))) {
+			$update = Bill::whereBillId($bill_id)->whereStatus('waiting')->update(array('status' => 'expired'));
+			if ($update) {
+				$bill = Bill::whereBillId($bill_id)
+					->whereMerchantId($provider_id)
+					->first();
+			}
+		}
 
 		$data = $this->dataFromObj($bill);
 		$data['error'] = 0;

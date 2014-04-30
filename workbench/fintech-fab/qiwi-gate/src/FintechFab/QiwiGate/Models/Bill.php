@@ -24,6 +24,8 @@ use Eloquent;
  * @method static Bill first()
  * @method static Bill whereBillId($id)
  * @method static Bill whereMerchantId($id)
+ * @method static Bill whereStatus($status)
+ * @method static Bill whereUser($user)
  */
 class Bill extends Eloquent
 {

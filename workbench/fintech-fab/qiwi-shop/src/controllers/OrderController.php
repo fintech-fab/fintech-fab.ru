@@ -16,6 +16,7 @@ class OrderController extends BaseController
 
 	public $layout = 'qiwiShop';
 	private $statusMap;
+	private $statusRussian;
 
 	public function __construct()
 	{
@@ -24,6 +25,15 @@ class OrderController extends BaseController
 			'paid'     => 'paid',
 			'rejected' => 'canceled',
 			'expired'  => 'expired',
+		);
+		$this->statusRussian = array(
+			'payable'   => 'К оплате',
+			'canceled'  => 'Отменён',
+			'expired'   => 'Просрочен',
+			'paid'      => 'Оплачен',
+			'returning' => 'Возврат оплаты',
+			'onReturn'  => 'на возврате',
+			'returned'  => 'возвращен',
 		);
 	}
 
@@ -37,7 +47,7 @@ class OrderController extends BaseController
 			return $this->resultMessage('Нет такого заказа');
 		}
 
-		return $this->$action($order);
+		return $this->$action($order); // вызываем метод по названию переменной (id кнопки во вьюхе)
 	}
 
 	/**
@@ -125,7 +135,7 @@ class OrderController extends BaseController
 		if ($currentOrderStatus != $newOrderStatus) {
 			Order::whereId($order->id)->whereStatus($currentOrderStatus)->update(array('status' => $newOrderStatus));
 		}
-		$message = 'Текущий статус счета - ' . $newOrderStatus;
+		$message = 'Текущий статус счета - ' . $this->statusRussian[$newOrderStatus];
 
 		return $this->resultMessage($message, 'Сообщение');
 

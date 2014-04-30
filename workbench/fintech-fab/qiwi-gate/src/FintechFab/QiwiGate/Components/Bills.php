@@ -20,12 +20,10 @@ class Bills
 		$bill->user = $data['user'];
 		$bill->amount = $data['amount'];
 		$bill->ccy = $data['ccy'];
-		@$bill->comment = $data['comment'];
-		@$bill->lifetime = $data['lifetime'];
-		if (isset($data['pay_source'])) {
-			$bill->pay_source = $data['pay_source'];
-		}
-		@$bill->prv_name = $data['prv_name'];
+		$bill->comment = isset($data['comment']) ? $data['comment'] : '';
+		$bill->lifetime = isset($data['lifetime']) ? $data['lifetime'] : 0;
+		$bill->pay_source = isset($data['pay_source']) ? $data['pay_source'] : 'qw';
+		$bill->prv_name = isset($data['prv_name']) ? $data['prv_name'] : '';
 		$bill->status = $data['status'];
 		$bill->save();
 

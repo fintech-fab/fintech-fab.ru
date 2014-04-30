@@ -1,7 +1,9 @@
 <?php
 namespace FintechFab\QiwiShop\Widgets;
 
+use Config;
 use Form;
+use URL;
 
 /**
  * Class MakeTable
@@ -28,11 +30,15 @@ class MakeButton
 				$status = 'Отменён';
 				$activity = self::buttons('showStatus', $order->id);
 				break;
+			case 'expired':
+				$status = 'Просрочен';
+				$activity = self::buttons('showStatus', $order->id);
+				break;
 			case 'paid':
 				$status = 'Оплачен';
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('payReturn', $order->id);
 				break;
-			case 'returned':
+			case 'returning':
 				$status = 'Возврат оплаты';
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('statusReturn', $order->id);
 				switch ($order->statusReturn) {
@@ -75,9 +81,15 @@ class MakeButton
 				break;
 			case 'payBill':
 				$button = Form::button('Оплатить', array(
-					'id'    => 'payBill_' . $order_id,
+					'id' => 'payBill_' . Config::get('ff-qiwi-shop::user_id') . '_' . $order_id,
 					'class' => 'btn btn-success tableBtn pay',
 				));
+				/*$button = link_to(url('qiwi/gate/order/external/main.action', array(
+					'shop' => '123',
+				)) ,'Оплатить', array(
+					'id'    => 'payBill_' . $order_id,
+					'class' => 'btn btn-success tableBtn pay',
+				));*/
 				break;
 			case 'cancelBill':
 				$button = Form::button('Отменить', array(

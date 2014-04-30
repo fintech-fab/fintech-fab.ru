@@ -21,5 +21,5 @@ Route::group(array('before' => 'ff.qiwi.gate.auth.basic'), function () {
 
 });
 
-
-Route::get('qiwi/gate/order/external/main.action', 'FintechFab\QiwiGate\Controllers\OrderController@index');
+Route::get('qiwi/gate/order/external/main.action', 'FintechFab\QiwiGate\Controllers\PayController@index');
+Route::post('qiwi/gate/order/external/main.action', 'FintechFab\QiwiGate\Controllers\PayController@postPay');
