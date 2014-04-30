@@ -139,7 +139,6 @@ class QiwiCreateBillTest extends TestCase
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(215, $oResponse->response->bill->error);
 		$this->assertEquals(215, $oResponse->response->result_code);
 		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
 	}

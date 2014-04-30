@@ -22,6 +22,7 @@ use Eloquent;
  * @method static Order whereStatus()
  * @method static Order whereId()
  * @method static Order find()
+ * @method static string links()
  */
 class Order extends Eloquent
 {

@@ -56,9 +56,8 @@ class LinksInMenu
 	{
 		$link_main_menu = '';
 		if (Auth::check()) {
-			$user_id = Auth::user()->getAuthIdentifier();
 			$link_main_menu = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("client-page") . '>
-									<a href ="qiwi/shop/' . $user_id . '/orders/create">Терминал QIWI</a>
+									<a href ="qiwi/shop/orders/create">Терминал QIWI</a>
 								</li>';
 		}
 

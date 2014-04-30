@@ -5,7 +5,7 @@ $(document).ready(function () {
 		var sum = $('#inputSum').val();
 		var tel = $('#inputTel').val();
 		var comment = $('#inputComment').val();
-		$.post('.', { item: item, sum: sum, tel: tel, comment: comment},
+		$.post('', { item: item, sum: sum, tel: tel, comment: comment},
 			function (data) {
 				if (data['errors']) {
 					$('#errorItem').html(data['errors']['item']);
@@ -20,10 +20,13 @@ $(document).ready(function () {
 					$('#errorComment').html('');
 				}
 				if (data['result'] == 'ok') {
-					$('#message').dialog({ title: 'Сообщение', show: 'fade', hide: 'fade' }).html(data['message']);
-					$('.ui-dialog *').on('click', function () {
-						location.reload();
-					});
+					$('#inputItem').val('');
+					$('#inputSum').val('');
+					$('#inputTel').val('');
+					$('#inputComment').val('');
+					$('#message').dialog({
+						title: 'Сообщение', show: 'fade', hide: 'fade', modal: true
+					}).html(data['message']);
 				}
 			}
 		);

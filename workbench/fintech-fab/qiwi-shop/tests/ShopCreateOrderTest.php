@@ -31,7 +31,7 @@ class ShopCreateOrderTest extends TestCase
 	{
 		$resp = $this->call(
 			'POST',
-			Config::get('ff-qiwi-shop::testConfig.testUrl'),
+			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/create',
 			array(
 				'item' => 'qwerty',
 				'sum'  => '123',
@@ -53,7 +53,7 @@ class ShopCreateOrderTest extends TestCase
 
 		$resp = $this->call(
 			'POST',
-			Config::get('ff-qiwi-shop::testConfig.testUrl'),
+			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/create',
 			array(
 				'item'    => 'qwerty',
 				'sum'     => '123',
