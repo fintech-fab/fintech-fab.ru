@@ -18,13 +18,15 @@ use FintechFab\QiwiGate\Models\Bill;
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js "></script>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+
+	<script src="/packages/fintech-fab/qiwi-gate/js/ActionPayment.js"></script>
 </head>
 <body>
 <h2 class="text-center">Оплата счёта</h2><br>
 
 <p class="text-center">Вы хотите оплатить счёт № <?= $bill->id ?> на сумму <?= $bill->amount ?> <?= $bill->ccy ?>.</p>
 
-<p class="text-center">Счёт выставлен на телефон  <?= $bill->user ?> .</p>
+<p class="text-center">Счёт выставлен на телефон  <?= $bill->user ?></p>
 <?=
 Form::open(array(
 	'class' => 'text-center',
@@ -42,14 +44,14 @@ Form::open(array(
 		));
 		?>
 	</div>
-	<div id="errorItem" class="error col-sm-4 text-left"></div>
+	<div id="error" class="error col-sm-4 text-left text-danger"></div>
 </div>
-<?= Form::hidden('bill_id', $bill->bill_id) ?>
 <?=
-Form::submit('Оплатить', array(
+Form::button('Оплатить', array(
 	'id'    => 'payBill',
 	'class' => 'btn btn-success',
 ));?>
 <?= Form::close() ?>
+<div id="message"></div>
 </body>
 </html>

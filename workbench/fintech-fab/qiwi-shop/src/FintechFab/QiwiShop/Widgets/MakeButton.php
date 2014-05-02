@@ -3,7 +3,7 @@ namespace FintechFab\QiwiShop\Widgets;
 
 use Config;
 use Form;
-use URL;
+
 
 /**
  * Class MakeTable
@@ -80,16 +80,20 @@ class MakeButton
 				));
 				break;
 			case 'payBill':
-				$button = Form::button('Оплатить', array(
+				/*$button = Form::button('Оплатить', array(
 					'id' => 'payBill_' . Config::get('ff-qiwi-shop::user_id') . '_' . $order_id,
 					'class' => 'btn btn-success tableBtn pay',
-				));
-				/*$button = link_to(url('qiwi/gate/order/external/main.action', array(
-					'shop' => '123',
-				)) ,'Оплатить', array(
-					'id'    => 'payBill_' . $order_id,
-					'class' => 'btn btn-success tableBtn pay',
 				));*/
+				$query_data = array(
+					'shop'        => Config::get('ff-qiwi-shop::GateAuth.merchant_id'),
+					'transaction' => $order_id,
+				);
+				$button = link_to(url('qiwi/gate/order/external/main.action?' . http_build_query($query_data)),
+					'Оплатить', array(
+						'target' => '_blank',
+						'id'     => 'payBill_' . $order_id,
+						'class'  => 'btn btn-success tableBtn pay',
+					));
 				break;
 			case 'cancelBill':
 				$button = Form::button('Отменить', array(

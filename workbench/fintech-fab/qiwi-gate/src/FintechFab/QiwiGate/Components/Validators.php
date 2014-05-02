@@ -29,4 +29,23 @@ class Validators
 		return $rules;
 	}
 
+	public static function rulesForPayment()
+	{
+		$rules = array(
+			'user' => 'required|regex:/^\+\d{1,15}$/',
+		);
+
+		return $rules;
+	}
+
+	public static function messagesPaymentErrors()
+	{
+		$rules = array(
+			'required' => 'Поле должно быть заполнено.',
+			'regex'    => 'Некорректный формат телефона',
+		);
+
+		return $rules;
+	}
+
 }
