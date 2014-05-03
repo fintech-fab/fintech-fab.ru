@@ -151,6 +151,16 @@ class RestRefundController extends Controller
 			return $this->responseFromGate($data, $code_response);
 		}
 
+		//Проводим платёж по прошествии минуты
+		if ($refund->status == 'processing') {
+			$date = date('Y-m-d H:i:s', time() - 60);
+			$dateRefund = $refund->updated_at; //даём минуту для прохождения оплаты
+			if ($date > $dateRefund) {
+				Refund::find($refund->id)->whereStatus('processing')->update(array('status' => 'success'));
+			}
+			$refund = Refund::find($refund->id);
+		}
+
 		$data = $this->dataFromObj($refund);
 		$data['error'] = 0;
 

@@ -3,9 +3,11 @@ namespace FintechFab\QiwiShop\Controllers;
 
 use Config;
 use FintechFab\QiwiShop\Components\Orders;
+use FintechFab\QiwiShop\Components\PaysReturn;
 use FintechFab\QiwiShop\Components\QiwiGateConnect;
 use FintechFab\QiwiShop\Components\Validators;
 use FintechFab\QiwiShop\Models\Order;
+use FintechFab\QiwiShop\Models\PayReturn;
 use Input;
 use Response;
 use Validator;
@@ -25,6 +27,8 @@ class OrderController extends BaseController
 			'paid'     => 'paid',
 			'rejected' => 'canceled',
 			'expired'  => 'expired',
+			'processing' => 'onReturn',
+			'success'    => 'returned',
 		);
 		$this->statusRussian = array(
 			'payable'   => 'К оплате',
@@ -129,8 +133,15 @@ class OrderController extends BaseController
 			return $this->resultMessage($oResponse['error']);
 		}
 		$currentOrderStatus = $order->status;
-		$newBillStatus = $oResponse->response->bill->status;
-		$newOrderStatus = $this->statusMap[$newBillStatus];
+		$BillStatus = $oResponse->response->bill->status;
+
+		//Не меняем статуса с "на возврате" на статус "оплачено"
+		if ($currentOrderStatus == 'returning' && $BillStatus == 'paid') {
+			$message = 'Текущий статус счета - ' . $this->statusRussian[$currentOrderStatus];
+
+			return $this->resultMessage($message, 'Сообщение');
+		}
+		$newOrderStatus = $this->statusMap[$BillStatus];
 
 		if ($currentOrderStatus != $newOrderStatus) {
 			Order::whereId($order->id)->whereStatus($currentOrderStatus)->update(array('status' => $newOrderStatus));
@@ -167,19 +178,6 @@ class OrderController extends BaseController
 
 	}
 
-
-	/**
-	 * Оплатить счёт.
-	 *
-	 * @param Order $order
-	 *
-	 * @return Response
-	 */
-	public function payBill($order)
-	{
-		dd($order->id);
-	}
-
 	/**
 	 * Отменить счёт.
 	 *
@@ -208,18 +206,78 @@ class OrderController extends BaseController
 	/**
 	 * Возврат оплаты
 	 *
-	 * @param Order $order_id
+	 * @param Order $order
 	 *
 	 * @return mixed|void
 	 */
-	public function payReturn($order_id)
+	public function payReturn($order)
 	{
+		$data = Input::all();
 
+		//Проверяем данные на валидность
+		$validator = Validator::make($data, Validators::rulesForPayReturn(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['error'] = array(
+				'sum'     => $userMessages->first('sum'),
+				'comment' => $userMessages->first('comment'),
+			);
+
+			return $result;
+		}
+
+		//Возможен ли возврат указанной суммы учитывая прошлые возвраты по этому счёту
+		$returnsBefore = PayReturn::whereOrderId($order->id)->get();
+		$sumReturn = 0;
+		foreach ($returnsBefore as $one) {
+			$sumReturn += $one->sum;
+		}
+		$possibleReturn = $order->sum - $sumReturn;
+		if ($data['sum'] > $possibleReturn) {
+			$result['error'] = array(
+				'sum' => 'Слишком большая сумма',
+			);
+
+			return $result;
+		}
+
+		//Если не закончен придыдущий возврат, то не даём сделать новый
+		if ($order->idLastReturn != null) {
+			$currentStatusReturn = $order->PayReturn()->find($order->idLastReturn)->status;
+			if ($currentStatusReturn == 'onReturn') {
+				return $this->resultMessage('Дождитесь окончания предыдущего возврата.');
+			}
+		}
+
+		//Создаём возврат в таблице и начинаем возврат
+		$payReturn = PaysReturn::newPayReturn($data);
+		if (!$payReturn) {
+			return $this->resultMessage('Возврат не создан, повторите попытку.');
+		}
+		$gate = QiwiGateConnect::Instance();
+		$oResponse = $gate->payReturn($payReturn);
+
+		//Если ошибка, то удаляем наш возврат из таблицы
+		if (array_key_exists('error', $oResponse)) {
+			PayReturn::find($payReturn->id)->delete();
+
+			return $this->resultMessage($oResponse['error']);
+		}
+
+		//Меняем статус заказа при успешном возврате
+
+		Order::whereId($order->id)->update(array('status' => 'returning', 'idLastReturn' => $payReturn->id));
+
+
+		$message = 'Сумма ' . $oResponse->response->refund->amount . ' руб. по счёту № ' . $order->id . ' отправлена на возврат';
+
+		return $this->resultMessage($message, 'Сообщение');
 
 	}
 
 	/**
-	 * Возврат оплаты
+	 * Проверка статуса возврат оплаты
 	 *
 	 * @param Order $order
 	 *
@@ -227,7 +285,24 @@ class OrderController extends BaseController
 	 */
 	public function statusReturn($order)
 	{
+		$payReturn = PayReturn::find($order->idLastReturn);
 
+		$gate = QiwiGateConnect::Instance();
+		$oResponse = $gate->checkRefundStatus($payReturn);
+		if (array_key_exists('error', $oResponse)) {
+			return $this->resultMessage($oResponse['error']);
+		}
+		$currentReturnStatus = $payReturn->status;
+
+		$newReturnStatus = $this->statusMap[$oResponse->response->refund->status];
+
+		if ($currentReturnStatus != $newReturnStatus) {
+			PayReturn::whereId($payReturn->id)->whereStatus($currentReturnStatus)
+				->update(array('status' => $newReturnStatus));
+		}
+		$message = 'Текущий статус возврата - ' . $this->statusRussian[$newReturnStatus];
+
+		return $this->resultMessage($message, 'Сообщение');
 
 	}
 

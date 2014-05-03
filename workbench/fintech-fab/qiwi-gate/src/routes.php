@@ -26,11 +26,6 @@ Route::get('qiwi/gate/order/external/main.action', array(
 	'uses' => 'FintechFab\QiwiGate\Controllers\PayController@index'
 ));
 
-Route::get('qiwi/gate/order/external/main.action/payResult', array(
-	'as'   => 'payResult',
-	'uses' => 'FintechFab\QiwiGate\Controllers\PayController@payResult'
-));
-
 Route::post('qiwi/gate/order/external/main.action', array(
 	'as'   => 'postPay',
 	'uses' => 'FintechFab\QiwiGate\Controllers\PayController@postPay'

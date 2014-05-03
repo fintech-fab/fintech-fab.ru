@@ -4,6 +4,8 @@ namespace FintechFab\QiwiShop\Components;
 
 
 use Config;
+use FintechFab\QiwiShop\Models\Order;
+use FintechFab\QiwiShop\Models\PayReturn;
 
 class QiwiGateConnect
 {
@@ -49,7 +51,7 @@ class QiwiGateConnect
 
 
 	/**
-	 * @param $order
+	 * @param Order $order
 	 *
 	 * @return array|mixed
 	 */
@@ -71,6 +73,11 @@ class QiwiGateConnect
 		return $oResponse;
 	}
 
+	/**
+	 * @param Order $order
+	 *
+	 * @return array|mixed
+	 */
 	public function cancelBill($order)
 	{
 		$reject = array('status' => 'rejected');
@@ -83,10 +90,56 @@ class QiwiGateConnect
 
 	}
 
-	private function makeCurl($order_id, $method = 'GET', $query = null)
+	/**
+	 * @param PayReturn $refund
+	 *
+	 * @return array|mixed
+	 */
+	public function payReturn($refund)
+	{
+		$amount = array('amount' => $refund->sum);
+		$url = Config::get('ff-qiwi-shop::qiwiGateUrl') . Config::get('ff-qiwi-shop::GateAuth.merchant_id') .
+			'/bills/' . $refund->order_id . '/refund/' . $refund->id;
+		$oResponse = $this->makeCurl($refund->order_id, 'PUT', $amount, $url);
+		if ($oResponse->response->result_code != 0) {
+			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+		}
+
+		return $oResponse;
+	}
+
+	/**
+	 * @param PayReturn $refund
+	 *
+	 * @return array|mixed
+	 */
+	public function checkRefundStatus($refund)
 	{
 		$url = Config::get('ff-qiwi-shop::qiwiGateUrl') . Config::get('ff-qiwi-shop::GateAuth.merchant_id') .
-			'/bills/' . $order_id;
+			'/bills/' . $refund->order_id . '/refund/' . $refund->id;
+		$oResponse = $this->makeCurl($refund->order_id, 'GET', null, $url);
+		if ($oResponse->response->result_code != 0) {
+			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+		}
+
+		return $oResponse;
+	}
+
+	/**
+	 * @param int    $order_id
+	 * @param string $method
+	 * @param null   $query
+	 * @param null   $url
+	 *
+	 * @return mixed
+	 */
+
+	private function makeCurl($order_id, $method = 'GET', $query = null, $url = null)
+	{
+		if ($url == null) {
+			$url = Config::get('ff-qiwi-shop::qiwiGateUrl') . Config::get('ff-qiwi-shop::GateAuth.merchant_id') .
+				'/bills/' . $order_id;
+		}
 
 		$headers = array(
 			"Accept: text/json",

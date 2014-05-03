@@ -27,7 +27,7 @@ body {
 	color: #ff0000;
 }
 
-.tableBtn {
+.tableBtn, .actionBtn {
 	margin-right: 5px;
 }
 

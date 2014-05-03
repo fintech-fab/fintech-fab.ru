@@ -71,6 +71,7 @@ class QiwiRefundCheckStatusTest extends TestCase
 		$this->assertEquals(0, $oResponse->response->result_code);
 		$this->assertEquals('processing', $oResponse->response->refund->status);
 		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+		Refund::truncate();
 	}
 
 	/**

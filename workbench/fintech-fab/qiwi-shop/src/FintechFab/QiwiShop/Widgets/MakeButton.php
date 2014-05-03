@@ -2,6 +2,7 @@
 namespace FintechFab\QiwiShop\Widgets;
 
 use Config;
+use FintechFab\QiwiShop\Models\Order;
 use Form;
 
 
@@ -14,8 +15,14 @@ use Form;
  */
 class MakeButton
 {
+	/**
+	 * @param Order $order
+	 *
+	 * @return array
+	 */
 	public static function displayTable($order)
 	{
+		$sumReturn = 0;
 		switch ($order->status) {
 			case 'new':
 				$status = 'Новый';
@@ -41,7 +48,17 @@ class MakeButton
 			case 'returning':
 				$status = 'Возврат оплаты';
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('statusReturn', $order->id);
-				switch ($order->statusReturn) {
+				$statusReturn = $order->PayReturn()->find($order->idLastReturn)->status;
+
+				$returnsBefore = $order->PayReturn;
+				foreach ($returnsBefore as $one) {
+					$sumReturn += $one->sum;
+				}
+				if ($sumReturn < $order->sum && $statusReturn == 'returned') {
+					$activity .= self::buttons('payReturn', $order->id);
+				}
+				$sumReturn = number_format($sumReturn, 2, '.', ' ');
+				switch ($statusReturn) {
 					case 'onReturn':
 						$status .= ' / на возврате';
 						break;
@@ -55,7 +72,7 @@ class MakeButton
 				$activity = 'Ошибка статуса';
 		}
 
-		return array('status' => $status, 'activity' => $activity);
+		return array('status' => $status, 'activity' => $activity, 'sumReturn' => $sumReturn);
 	}
 
 	/**
@@ -80,10 +97,6 @@ class MakeButton
 				));
 				break;
 			case 'payBill':
-				/*$button = Form::button('Оплатить', array(
-					'id' => 'payBill_' . Config::get('ff-qiwi-shop::user_id') . '_' . $order_id,
-					'class' => 'btn btn-success tableBtn pay',
-				));*/
 				$query_data = array(
 					'shop'        => Config::get('ff-qiwi-shop::GateAuth.merchant_id'),
 					'transaction' => $order_id,
@@ -92,7 +105,7 @@ class MakeButton
 					'Оплатить', array(
 						'target' => '_blank',
 						'id'     => 'payBill_' . $order_id,
-						'class'  => 'btn btn-success tableBtn pay',
+						'class' => 'btn btn-success actionBtn pay',
 					));
 				break;
 			case 'cancelBill':
@@ -104,7 +117,9 @@ class MakeButton
 			case 'payReturn':
 				$button = Form::button('Возврат отплаты', array(
 					'id'    => 'payReturn_' . $order_id,
-					'class' => 'btn btn-danger tableBtn return',
+					'class'       => 'btn btn-danger actionBtn return',
+					'data-toggle' => 'modal',
+					'data-target' => '#payReturn',
 				));
 				break;
 			case 'statusReturn':

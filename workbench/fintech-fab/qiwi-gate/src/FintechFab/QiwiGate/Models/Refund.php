@@ -17,12 +17,13 @@ use Eloquent;
  *
  * @property Bill    $bill
  *
- * @method static Merchant find()
+ * @method static Refund find()
  * @method static Refund where()
  * @method static Refund first()
  *
  * @method static Refund whereBillId($id)
  * @method static Refund whereRefundId($id)
+ * @method static Refund whereStatus($status)
  */
 class Refund extends Eloquent
 {

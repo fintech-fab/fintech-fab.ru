@@ -1,6 +1,7 @@
 <?php
 
 use FintechFab\QiwiShop\Models\Order;
+use FintechFab\QiwiShop\Models\PayReturn;
 
 class ShopCreateOrderTest extends TestCase
 {
@@ -50,6 +51,7 @@ class ShopCreateOrderTest extends TestCase
 	public function testCreateOrderSuccess()
 	{
 		Order::truncate();
+		PayReturn::truncate();
 
 		$resp = $this->call(
 			'POST',
