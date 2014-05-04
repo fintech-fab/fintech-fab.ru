@@ -115,6 +115,7 @@ return array(
 		'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
 		'FintechFab\QiwiGate\QiwiGateServiceProvider',
 		'FintechFab\QiwiShop\QiwiShopServiceProvider',
+		'FintechFab\QiwiAccount\QiwiAccountServiceProvider',
 
 	),
 

@@ -14,11 +14,11 @@ Route::group(array(
 		'uses' => 'OrderController@createOrder',
 	));
 	Route::post('/create', array(
-		'as'   => 'createOrder',
+		'as' => 'postCreateOrder',
 		'uses' => 'OrderController@postCreateOrder',
 	));
 	Route::post('/{action}', array(
-		'as'   => 'createOrder',
+		'as' => 'actionsOrdersTable',
 		'uses' => 'OrderController@getAction',
 	));
 

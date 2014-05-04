@@ -1,14 +1,5 @@
 <?php
-
-function echoActiveClassIfRequestMatches($requestUri)
-{
-	$current_file_name = basename(Request::server('REQUEST_URI'), ".php");
-	if ($current_file_name == $requestUri) {
-		return 'class="active"';
-	}
-
-	return '';
-}
+use FintechFab\QiwiShop\Widgets\NavbarAction;
 
 ?>
 <div class="container">
@@ -27,16 +18,21 @@ function echoActiveClassIfRequestMatches($requestUri)
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li <?= echoActiveClassIfRequestMatches("create") ?>>
-							<a href="/qiwi/shop/orders/create">Создать заказ</a>
+						<li class=" <?= NavbarAction::isActive(URL::route('createOrder')) ?> ">
+							<a href="<?= URL::route('createOrder') ?>">Создать заказ</a>
 						</li>
-						<li <?= echoActiveClassIfRequestMatches("orders") ?>>
-							<a href="/qiwi/shop/orders">Таблица заказов</a>
+						<li class=" <?= NavbarAction::isActive(URL::route('ordersTable')) ?> ">
+							<a href="<?= URL::route('ordersTable') ?>">Таблица заказов</a>
 						</li>
 
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-
+						<li>
+							<a href="<?= URL::route('ordersTable') ?>">Аккаунт QIWI</a>
+						</li>
+						<li>
+							<a href="<?= URL::route('profile') ?>">Профиль</a>
+						</li>
 					</ul>
 
 				</div>

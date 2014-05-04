@@ -1,5 +1,4 @@
 <?php
-
 ?>
 <script src="/js/ActionForAdmin.js" type="text/javascript"></script>
 <div class="row">
@@ -13,7 +12,6 @@
 
 <div class="Roles">
 	<div class="text-center">
-
 		<?=
 		Form::button('Загрузить таблицу ролей', array(
 			'type'  => 'button',
@@ -21,7 +19,6 @@
 			'id'    => 'btnRoles',
 		));
 		?>
-
 	</div>
 	<div class="row" id="tableRoles">
 		<div class="col-xs-10 col-xs-offset-1">
@@ -30,14 +27,4 @@
 		</div>
 	</div>
 </div>
-<div class="bills">
-	<div class="text-center">
-		<?=
-		Form::button('Загрузить таблицу счетов', array(
-			'type'  => 'button',
-			'class' => 'btn btn-primary buttonWithMargin',
-			'id'    => 'btnBills',
-		));
-		?>
-	</div>
-</div>
+
