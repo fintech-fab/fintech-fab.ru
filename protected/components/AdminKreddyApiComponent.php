@@ -1439,7 +1439,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientData = $this->getData('full_data');
 
-		return $aClientData['client_data'];
+		return isset($aClientData['client_data']) ? $aClientData['client_data'] : array();
 	}
 
 	/**
