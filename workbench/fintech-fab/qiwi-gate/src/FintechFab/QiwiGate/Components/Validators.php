@@ -38,14 +38,31 @@ class Validators
 		return $rules;
 	}
 
-	public static function messagesPaymentErrors()
+	public static function rulesForAccount()
 	{
 		$rules = array(
-			'required' => 'Поле должно быть заполнено.',
-			'regex'    => 'Некорректный формат телефона',
+			'username'        => 'required|alpha_dash',
+			'callback'        => 'required|url',
+			'password'        => 'required|min:4|alpha_dash',
+			'confirmPassword' => 'required|same:password',
 		);
 
 		return $rules;
 	}
+
+	public static function messagesForErrors()
+	{
+		$rules = array(
+			'required'   => 'Поле должно быть заполнено.',
+			'regex'      => 'Некорректный формат данных.',
+			'url'        => 'Некорректный адрес',
+			'min'        => 'Должен быть длиннее :min символов.',
+			'alpha_dash' => 'Только буквы, цифры, тире и подчёткивания ',
+			'same'       => 'Пароли не одинаковы',
+		);
+
+		return $rules;
+	}
+
 
 }

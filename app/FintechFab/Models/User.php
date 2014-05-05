@@ -18,7 +18,6 @@ use Illuminate\Auth\UserInterface;
  *
  * @property Role            $roles
  *
- * @property SocialNetwork[] SocialNetworks
  * @method User find() static
  */
 class User extends Eloquent implements UserInterface, RemindableInterface
@@ -26,6 +25,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
 	protected $fillable = array('first_name', 'last_name', 'email');
 
+	/**
+	 * @return SocialNetwork
+	 */
 	public function SocialNetworks()
 	{
 		return $this->hasMany('FintechFab\Models\SocialNetwork');

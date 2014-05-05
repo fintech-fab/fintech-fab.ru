@@ -58,6 +58,9 @@ class LinksInMenu
 		if (Auth::check()) {
 			$link_main_menu = '<li>
 									<a href ="' . URL::route('createOrder') . '">Терминал QIWI</a>
+								</li>
+								<li>
+									<a href="' . URL::route('accountIndex') . '" target="_blank">Аккаунт QIWI</a>
 								</li>';
 		}
 
@@ -69,6 +72,7 @@ class LinksInMenu
 		if (URL::current() == $url) {
 			return 'active';
 		}
+
 		return '';
 	}
 

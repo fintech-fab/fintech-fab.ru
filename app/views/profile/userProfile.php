@@ -1,10 +1,10 @@
 <?php
-/**@var array $user * */
+
 use FintechFab\Components\Social;
 use FintechFab\Models\User;
 use FintechFab\Widgets\UsersPhoto;
 
-$user = User::find(Auth::user()->id)->toArray();
+$user = User::find(Auth::user()->getAuthIdentifier())->toArray();
 $userSocial = User::find($user['id'])->SocialNetworks()->get()->toArray();
 $socialNets = array();
 

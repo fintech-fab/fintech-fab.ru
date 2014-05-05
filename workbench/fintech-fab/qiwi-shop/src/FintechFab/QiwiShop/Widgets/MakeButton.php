@@ -4,6 +4,7 @@ namespace FintechFab\QiwiShop\Widgets;
 use Config;
 use FintechFab\QiwiShop\Models\Order;
 use Form;
+use URL;
 
 
 /**
@@ -101,11 +102,11 @@ class MakeButton
 					'shop'        => Config::get('ff-qiwi-shop::GateAuth.merchant_id'),
 					'transaction' => $order_id,
 				);
-				$button = link_to(url('qiwi/gate/order/external/main.action?' . http_build_query($query_data)),
+				$button = link_to(url(URL::route('payIndex') . '?' . http_build_query($query_data)),
 					'Оплатить', array(
 						'target' => '_blank',
 						'id'     => 'payBill_' . $order_id,
-						'class' => 'btn btn-success actionBtn pay',
+						'class'  => 'btn btn-success actionBtn pay',
 					));
 				break;
 			case 'cancelBill':
@@ -116,7 +117,7 @@ class MakeButton
 				break;
 			case 'payReturn':
 				$button = Form::button('Возврат отплаты', array(
-					'id'    => 'payReturn_' . $order_id,
+					'id'          => 'payReturn_' . $order_id,
 					'class'       => 'btn btn-danger actionBtn return',
 					'data-toggle' => 'modal',
 					'data-target' => '#payReturn',

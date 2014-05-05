@@ -7,7 +7,7 @@ use FintechFab\QiwiShop\Widgets\MakeButton;
 
 $i = 1;
 ?>
-<?= View::make('ff-qiwi-shop::qiwiShop.payReturnModal') ?>
+<?= View::make('ff-qiwi-shop::qiwiShop.inc.payReturnModal') ?>
 <script src="/packages/fintech-fab/qiwi-shop/js/ActionTableButtons.js"></script>
 
 <table class="table table-striped table-hover" id="ordersTable">

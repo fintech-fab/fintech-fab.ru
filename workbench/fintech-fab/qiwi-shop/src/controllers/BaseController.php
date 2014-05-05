@@ -3,8 +3,7 @@
 namespace FintechFab\QiwiShop\Controllers;
 
 
-use Illuminate\Routing\Controller;
-use URL;
+use Controller;
 use View;
 
 class BaseController extends Controller

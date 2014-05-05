@@ -21,13 +21,35 @@ Route::group(array('before' => 'ff.qiwi.gate.auth.basic'), function () {
 
 });
 
-Route::get('qiwi/gate/order/external/main.action', array(
-	'as'   => 'index',
-	'uses' => 'FintechFab\QiwiGate\Controllers\PayController@index'
-));
+Route::group(array(
+	'before'    => 'ff.qiwi.gate.checkUser',
+	'prefix'    => 'qiwi/gate',
+	'namespace' => 'FintechFab\QiwiGate\Controllers'
+), function () {
+	Route::get('order/external/main.action', array(
+		'as'   => 'payIndex',
+		'uses' => 'PayController@index'
+	));
 
-Route::post('qiwi/gate/order/external/main.action', array(
-	'as'   => 'postPay',
-	'uses' => 'FintechFab\QiwiGate\Controllers\PayController@postPay'
-));
+	Route::post('order/external/main.action', array(
+		'as'   => 'postPay',
+		'uses' => 'PayController@postPay'
+	));
+
+	Route::get('account', array(
+		'as'   => 'accountIndex',
+		'uses' => 'Account\AccountController@index'
+	));
+
+	Route::post('account', array(
+		'as'   => 'postAccountReg',
+		'uses' => 'Account\AccountController@postRegistration'
+	));
+
+	Route::post('account/changeData', array(
+		'as'   => 'postChangeData',
+		'uses' => 'Account\AccountController@postChangeData'
+	));
+
+});
 

@@ -28,7 +28,7 @@ use FintechFab\QiwiShop\Widgets\NavbarAction;
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<a href="<?= URL::route('ordersTable') ?>">Аккаунт QIWI</a>
+							<a href="<?= URL::route('accountIndex') ?>" target="_blank">Аккаунт QIWI</a>
 						</li>
 						<li>
 							<a href="<?= URL::route('profile') ?>">Профиль</a>

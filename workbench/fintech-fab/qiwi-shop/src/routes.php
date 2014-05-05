@@ -1,6 +1,6 @@
 <?php
 Route::group(array(
-	'before'    => 'ff.qiwi.shop.auth',
+	'before'    => 'ff.qiwi.shop.checkUser',
 	'prefix'    => 'qiwi/shop/orders',
 	'namespace' => 'FintechFab\QiwiShop\Controllers'
 ), function () {
@@ -14,11 +14,11 @@ Route::group(array(
 		'uses' => 'OrderController@createOrder',
 	));
 	Route::post('/create', array(
-		'as' => 'postCreateOrder',
+		'as'   => 'postCreateOrder',
 		'uses' => 'OrderController@postCreateOrder',
 	));
 	Route::post('/{action}', array(
-		'as' => 'actionsOrdersTable',
+		'as'   => 'actionsOrdersTable',
 		'uses' => 'OrderController@getAction',
 	));
 

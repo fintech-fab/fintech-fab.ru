@@ -2,15 +2,16 @@
 
 namespace FintechFab\QiwiGate\Controllers;
 
-use Controller;
 use FintechFab\QiwiGate\Components\Validators;
 use FintechFab\QiwiGate\Models\Bill;
 use Input;
 use Validator;
 use View;
 
-class PayController extends Controller
+class PayController extends BaseController
 {
+	public $layout = 'payment';
+
 	/**
 	 * @return View
 	 */
@@ -18,28 +19,29 @@ class PayController extends Controller
 	{
 		$data = Input::all();
 		$bill = Bill::whereMerchantId($data['shop'])->whereBillId($data['transaction'])->first();
+
 		if (!$bill) {
 			$error = 'Такого счёта нет.';
 
-			return View::make('ff-qiwi-gate::paymentError', array('message' => $error));
+			return $this->make('error', array('message' => $error));
 		}
 		if (($bill->lifetime != '0000-00-00 00:00:00') && ($bill->lifetime <= date('Y-m-d H:i:s', time()))) {
 			$error = 'Счёт просрочен.';
 
-			return View::make('ff-qiwi-gate::paymentError', array('message' => $error));
+			return $this->make('error', array('message' => $error));
 		}
 		if ($bill->status == 'waiting') {
-			return View::make('ff-qiwi-gate::payment', array('bill' => $bill));
+			return $this->make('index', array('bill' => $bill));
 		}
 		$error = 'Счёт не может быть оплачен.';
 
-		return View::make('ff-qiwi-gate::paymentError', array('message' => $error));
+		return $this->make('error', array('message' => $error));
 	}
 
 	public function postPay()
 	{
 		$data = Input::all();
-		$validator = Validator::make($data, Validators::rulesForPayment(), Validators::messagesPaymentErrors());
+		$validator = Validator::make($data, Validators::rulesForPayment(), Validators::messagesForErrors());
 		$userMessages = $validator->messages()->first();
 
 		if ($validator->fails()) {
