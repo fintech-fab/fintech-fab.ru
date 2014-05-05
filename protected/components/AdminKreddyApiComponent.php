@@ -57,31 +57,33 @@ class AdminKreddyApiComponent
 
 	private $aAvailableStatuses = array(
 
-		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
-		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
-		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых Пакетов',
+		self::C_CLIENT_MORATORIUM_LOAN             => 'Временно недоступно получение новых займов',
+		self::C_CLIENT_MORATORIUM_SCORING          => 'Заявка отклонена',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION     => 'Временно недоступно подключение новых Пакетов',
 
-		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
-		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
-		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
-		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
+		self::C_SUBSCRIPTION_ACTIVE                => 'Подключен к Пакету',
+		self::C_SUBSCRIPTION_AVAILABLE             => 'Доступно подключение к Пакету',
+		self::C_SUBSCRIPTION_CANCEL                => 'Срок оплаты подключения истек',
+		self::C_SUBSCRIPTION_PAID                  => 'Займ доступен',
+		self::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
-		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 
-		self::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
-		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
+		self::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
+		self::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
-		self::C_LOAN_DEBT                      => 'Задолженность по займу',
-		self::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
-		self::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
-		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
-		self::C_LOAN_CREATED                   => 'Займ перечислен', //+
-		self::C_LOAN_PAID                      => 'Займ оплачен',
+		self::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Ожидание подтверждения запроса на займ',
 
-		self::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
-		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
-		self::C_CLIENT_FAST_REG                => 'Требуется заполнить анкету',
+		self::C_LOAN_DEBT                          => 'Задолженность по займу',
+		self::C_LOAN_ACTIVE                        => 'Займ перечислен', //+
+		self::C_LOAN_TRANSFER                      => 'Займ перечислен', //+
+		self::C_LOAN_AVAILABLE                     => 'Займ доступен',
+		self::C_LOAN_CREATED                       => 'Займ перечислен', //+
+		self::C_LOAN_PAID                          => 'Займ оплачен',
+
+		self::C_CLIENT_ACTIVE                      => 'Доступно подключение Пакета', //+
+		self::C_CLIENT_NEW                         => 'Выберите Пакет займов',
+		self::C_CLIENT_FAST_REG                    => 'Требуется заполнить анкету',
 	);
 
 	private $aAvailableStatusesIvanovo = array(

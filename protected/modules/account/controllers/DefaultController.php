@@ -1268,8 +1268,12 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
-		if (!Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
-			$this->redirect(Yii::app()->createUrl('/account/doLoan'));
+		if (Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
+			$oLoanForm = new ClientLoanForm();
+			Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
+			$oForm = new SMSCodeForm('sendRequired');
+			$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => $oForm));
+			Yii::app()->end();
 		}
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
