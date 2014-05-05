@@ -149,6 +149,12 @@ class FormController extends Controller
 		/**
 		 * Рендер представления
 		 */
+		$sLayout = Yii::app()->clientForm->getLayout(); //запрашиваем лэйаут
+
+		if ($sLayout) {
+			$this->layout = $sLayout;
+		}
+
 		$aView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 		$sView = $aView['view'];
 		$sSubView = $aView['sub_view'];

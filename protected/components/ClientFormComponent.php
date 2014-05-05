@@ -224,7 +224,8 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::FAST_REG     => array(
 			0 => array(
-				'view'             => 'client_fast_reg', //TODO
+				'layout' => '//layouts/main_kreddyline',
+				'view'   => 'kreddyline', //TODO
 				'model'            => 'ClientFastRegForm', //TODO
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
@@ -302,7 +303,8 @@ class ClientFormComponent
 		),
 		self::SITE1        => array(
 			0 => array(
-				'view'             => 'client_fast_reg',
+				'layout' => '//layouts/main_kreddyline',
+				'view'   => 'kreddyline',
 				'model'            => 'ClientFastRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
@@ -1068,6 +1070,22 @@ class ClientFormComponent
 		);
 
 		return $aView;
+	}
+
+	/**
+	 * Возвращает лэйаут для текущего шага, если он задан
+	 *
+	 * @return null
+	 */
+	public function getLayout()
+	{
+		$sSite = self::getSiteConfigName();
+
+		$sLayout = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['layout'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['layout']
+			: null;
+
+		return $sLayout;
 	}
 
 	/**
