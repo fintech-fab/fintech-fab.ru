@@ -245,6 +245,11 @@ class FormController extends Controller
 		}
 
 		$iClientId = Yii::app()->clientForm->getClientId();
+
+		if (!$iClientId) {
+			Yii::app()->clientForm->resetSteps();
+			$this->redirect(Yii::app()->createUrl("/form"));
+		}
 		//если клиент запрашивает СМС, значит, заполнил анкету полностью
 		$aData['complete'] = 1;
 		ClientData::saveClientDataById($aData, $iClientId);

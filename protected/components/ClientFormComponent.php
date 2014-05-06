@@ -74,7 +74,8 @@ class ClientFormComponent
 	//имя моделей, в которох сохраняется телефон клиента
 	private static $aPhoneForms = array(
 		'ClientPersonalDataForm',
-		'ClientFastRegForm'
+		'ClientFastRegForm',
+		'ClientKreddyLineRegForm',
 	);
 
 
@@ -765,8 +766,6 @@ class ClientFormComponent
 
 		//отправляем СМС
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
-
-		//$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
 
 		//отправляем СМС через API
 		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
