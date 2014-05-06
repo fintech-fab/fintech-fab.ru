@@ -28,13 +28,13 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
-	<div class="bx-viewport" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
+	<div class="bx-viewport hide" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
 		<ul class="bxslider" style="width: auto; position: relative;">
 			<li>
 				<!--Условия оплаты-->
 				<div class="terms-of-payment">
 
-					<ol>
+					<!--ol>
 						<li>
 							<img src="static/kreddyline/images/tab_text_icon1.png" alt="">
 							<input type="radio" name="labeled" value="1" id="labeled_5" /> <label for="labeled_5">Оплатить
@@ -45,7 +45,35 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 							<input type="radio" name="labeled" value="1" id="labeled_6" /> <label for="labeled_6">Оплатить
 								потом<span>абонентская плата - 1000 руб/мес</span></label>
 						</li>
+					</ol-->
+					<?php
+					$aTypes = array(
+						'3' => 'Оплатить сейчас',
+						'4' => 'Оплатить потом',
+					)
+					?>
+					<ol>
+						<?=
+						$form->radioButtonList($oClientCreateForm, 'type', $aTypes, array(
+
+							'template' => '<li><img alt="" src="/static/kreddyline/images/tab_text_icon1.png"/><label class="{labelCssClass}">{input}{label}</label></li>'
+
+						)); ?>
 					</ol>
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
+						'id'          => 'submitButton',
+						'buttonType'  => 'ajaxSubmit',
+						'ajaxOptions' => array(
+							'complete' => 'checkBlankResponse',
+							'type'     => 'POST',
+
+							'success'  => 'function(html){jQuery("#formBody").html(html);}',
+
+						),
+						'url'         => Yii::app()->createUrl('/form/ajaxForm'),
+						'type'        => 'primary',
+						'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
+					)); ?>
 				</div>
 				<!--/Условия оплаты-->
 			</li>
@@ -64,3 +92,6 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 	<a class="one-line last" data-slide-index="3" href=""><img class="act-corner act-corner-bot" src="static/kreddyline/images/tab_corner_bot.png"><img class="no-act" src="static/kreddyline/images/tab_icon4.png" alt=""><img class="act" src="static/kreddyline/images/tab_icon4_act.png" alt=""><span><em>Подключить</em></span></a>
 </div>
 <script src="static/kreddyline/js/jquery.formstyler.min.js"></script>
+<script lang="javascript">
+	jQuery(".bx-viewport").fadeIn("slow");
+</script>

@@ -235,7 +235,6 @@ class FormController extends Controller
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
-
 			//TODO тут сделать проверку, что клиент реально на нужном шаге!!!!!
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}

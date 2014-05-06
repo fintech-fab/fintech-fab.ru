@@ -32,7 +32,7 @@ class ClientFormComponent
 	public static $aSelectProductSettings = array(
 		self::FAST_REG     => array(
 			'view'  => 'main',
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientKreddyLineSelectProductForm',
 		),
 		self::CONTINUE_REG => array(
 			'view'  => 'main',
@@ -50,7 +50,7 @@ class ClientFormComponent
 
 	public static $aPhoneFormSettings = array(
 		self::FAST_REG     => array(
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientKreddyLineRegForm',
 		),
 		self::CONTINUE_REG => array(
 			'model' => 'ClientPersonalDataContinueForm',
@@ -88,7 +88,7 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::FAST_REG     => array(
-			'max'     => 1,
+			'max' => 4,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -227,7 +227,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model'            => 'ClientFastRegForm', //TODO
+				'model' => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -236,7 +236,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/pay',
-				'model'            => 'ClientFastRegForm', //TODO
+				'model' => 'ClientKreddyLineSelectPayTypeForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -245,7 +245,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/channel',
-				'model'            => 'ClientFastRegForm', //TODO
+				'model' => 'ClientKreddyLineSelectChannelForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -254,7 +254,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/submit',
-				'model'            => 'ClientFastRegForm', //TODO
+				'model' => 'ClientKreddyLineRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -334,7 +334,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model'            => 'ClientFastRegForm',
+				'model' => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -1623,6 +1623,7 @@ class ClientFormComponent
 		if ($iCurrentStep != 0) {
 			return;
 		}
+
 		//получаем модель быстрой регистрации
 		$sModel = self::$aStepsInfo[self::FAST_REG][$iCurrentStep]['model'];
 		//создаем объект формы

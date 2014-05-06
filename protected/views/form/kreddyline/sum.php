@@ -24,42 +24,45 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 Yii::app()->clientScript->registerScript('scrollAndFocus', '
 		scrollAndFocus();
 		', CClientScript::POS_LOAD);
+
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
-	<div class="bx-viewport" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
+	<div class="bx-viewport hide" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
 		<ul class="bxslider" style="width: auto; position: relative;">
 			<li>
 				<!--КРЕДДИтный  лимит-->
 				<div class="credit-limit">
 					<b>Размер каждого перевода<br />равен одобренному лимиту</b>
+
+
+					<?php
+					$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+					// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
+					if (empty($oClientCreateForm->product)) {
+						$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getKreddyLineProductsCosts()));
+					}
+					?>
 					<ol>
-						<li>
-							<input class="jq-radio" type="radio" name="labeled" value="1" id="labeled_1" />
-							<label for="labeled_1">2000</label>
-						</li>
-						<li>
-							<input type="radio" name="labeled" value="1" id="labeled_2" />
-							<label for="labeled_2">3000</label>
-						</li>
-						<li>
-							<input type="radio" name="labeled" value="1" id="labeled_3" />
-							<label for="labeled_3">5000</label>
-						</li>
-						<li>
-							<input type="radio" name="labeled" value="1" id="labeled_4" />
-							<label for="labeled_4">7500</label>
-						</li>
+						<?=
+						$form->radioButtonList($oClientCreateForm, 'product', Yii::app()->productsChannels->getKreddyLineProductsCosts(),
+							array(
+								'template' => '<li><label class="{labelCssClass}">{input}{label}</label></li>'
+							)
+						); ?>
 					</ol>
+					<?php $oClientCreateForm->fast_reg = 1; ?>
+					<?= $form->hiddenField($oClientCreateForm, 'fast_reg'); ?>
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'submitButton',
 						'buttonType'  => 'ajaxSubmit',
 						'ajaxOptions' => array(
 							'complete' => 'checkBlankResponse',
 							'type'     => 'POST',
-							'update'   => '#formBody',
-							'success'  => '$(".bx-viewport").hide().fadeIn("slow")',
+
+							'success' => 'function(html){jQuery("#formBody").html(html);}',
+
 						),
 						'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 						'type'        => 'primary',
@@ -83,3 +86,6 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 	<a class="one-line last" data-slide-index="3" href=""><img class="act-corner act-corner-bot" src="static/kreddyline/images/tab_corner_bot.png"><img class="no-act" src="static/kreddyline/images/tab_icon4.png" alt=""><img class="act" src="static/kreddyline/images/tab_icon4_act.png" alt=""><span><em>Подключить</em></span></a>
 </div>
 <script src="static/kreddyline/js/jquery.formstyler.min.js"></script>
+<script lang="javascript">
+	jQuery(".bx-viewport").fadeIn("slow");
+</script>

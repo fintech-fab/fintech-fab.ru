@@ -26,6 +26,51 @@ class ProductsChannelsComponent
 	}
 
 	/**
+	 * @return array
+	 */
+	public static function getKreddyLineProductsCosts()
+	{
+		$aProducts = Yii::app()->adminKreddyApi->getProducts();
+
+		$aProductsList = array();
+		$aProductsListByAmount = array();
+		foreach ($aProducts as $iKey => $aProduct) {
+			$iAmount = $aProduct['loan_amount'];
+			$aProductsListByAmount[$iAmount][$iKey] = $aProduct;
+		}
+
+		foreach ($aProductsListByAmount as $iAmount => $aProductsInAmount) {
+			$sProductsIds = implode('_', array_keys($aProductsInAmount));
+			$aProductsList[$sProductsIds] = $iAmount;
+		}
+
+		return $aProductsList;
+	}
+
+	/**
+	 * @param $sProductsIds
+	 * @param $iType
+	 *
+	 * @return bool
+	 */
+	public static function getProductBySelectedType($sProductsIds, $iType)
+	{
+		$aProductsIds = explode('_', $sProductsIds);
+		if (!empty($aProductsIds)) {
+			$aProducts = Yii::app()->adminKreddyApi->getProducts();
+
+			foreach ($aProductsIds as $iProductId) {
+				if ($aProducts[$iProductId]['type'] == $iType) {
+					return $iProductId;
+				}
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
 	 * Формирует массив со списком продуктов
 	 *
 	 * @param $aProducts
