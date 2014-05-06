@@ -7,19 +7,9 @@
 ?>
 <?php
 //TODO перенести сообщения куда-нибудь, минимизировать использование JS
-if (SiteParams::getIsIvanovoSite()) {
-	$select2Js = array(
-		'onchange' => 'js: if($(this).find(":selected").attr("value")!=37){'
-			. '$("#region-error").html('
-			. '"Внимание! Вы выбрали не Ивановскую область, и после заполнения заявки не сможете оформить займ,'
-			. ' выбранный на первом шаге! В личном кабинете Вам будут доступны стандартные пакеты займов КРЕДДИ.").show();'
-			. '} else {'
-			. '$("#region-error").html("").hide();'
-			. '}'
-	);
-} else {
-	$select2Js = array();
-}
+
+$select2Js = array();
+
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
@@ -99,12 +89,12 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 					'buttonType'  => 'ajaxSubmit',
 					'ajaxOptions' => array(
 						'complete' => 'checkBlankResponse',
-						'type'   => 'POST',
-						'update' => '#formBody',
+						'type'     => 'POST',
+						'update'   => '#formBody',
 					),
 					'url'         => Yii::app()->createUrl('/form/ajaxForm'),
 					'type'        => 'primary',
-					'label' => SiteParams::C_BUTTON_LABEL_NEXT,
+					'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
 				)); ?>
 			</div>
 		</div>

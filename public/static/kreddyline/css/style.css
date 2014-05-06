@@ -1583,10 +1583,10 @@ input[type="reset"].styler:active {
 }
 
 /*========================/form-style==========================*/
+.bx-controls-direction {
+	display: none;
+}
 
-
-
-
-
-
-
+.bxslider li {
+	list-style: none;
+}

@@ -1,15 +1,15 @@
 ﻿$(document).ready(function () {
 	///// ul add class
-	$('ul li:first-child').addClass('firstItem');
-	$('ul li:last-child').addClass('lastItem');
+	/*$('ul li:first-child').addClass('firstItem');
+	 $('ul li:last-child').addClass('lastItem');*/
 
 	///slider
-	$('.bxslider').bxSlider({
-		pagerCustom: '#bx-pager',
-		mode: 'fade',
-		nextText: 'далее',
-		prevText: 'назад'
-	});
+	/*$('.bxslider').bxSlider({
+	 pagerCustom: '#bx-pager',
+	 mode: 'fade',
+	 nextText: 'далее',
+	 prevText: 'назад'
+	 });*/
 
 
 	var InputClass = 'blured';

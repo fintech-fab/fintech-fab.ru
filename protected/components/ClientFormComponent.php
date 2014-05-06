@@ -224,14 +224,42 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::FAST_REG     => array(
 			0 => array(
-				'layout' => '//layouts/main_kreddyline',
-				'view'   => 'kreddyline', //TODO
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/sum',
 				'model'            => 'ClientFastRegForm', //TODO
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
 			),
 			1 => array(
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/pay',
+				'model'            => 'ClientFastRegForm', //TODO
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+				'topPageWidget'    => true,
+			),
+			2 => array(
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/channel',
+				'model'            => 'ClientFastRegForm', //TODO
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+				'topPageWidget'    => true,
+			),
+			3 => array(
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/submit',
+				'model'            => 'ClientFastRegForm', //TODO
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+				'topPageWidget'    => true,
+			),
+			4 => array(
 				'view'             => 'client_fast_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
@@ -303,8 +331,9 @@ class ClientFormComponent
 		),
 		self::SITE1        => array(
 			0 => array(
-				'layout' => '//layouts/main_kreddyline',
-				'view'   => 'kreddyline',
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/sum',
 				'model'            => 'ClientFastRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',

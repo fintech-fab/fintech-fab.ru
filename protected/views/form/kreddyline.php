@@ -1,5 +1,13 @@
-<article>
-<div class="hr-bg"></div>
+<?php
+/* @var FormController $this */
+/* @var IkTbActiveForm $form */
+/* @var ClientCreateFormAbstract $oClientCreateForm */
+/* @var $sSubView */
+
+?>
+
+	<article>
+		<div class="hr-bg"></div>
 <!--================connect-credit================-->
 <div class="connect-credit">
 	<div class="container">
@@ -57,113 +65,8 @@
 			));
 			?>
 
-			<div class="tab">
-				<ul class="bxslider">
-					<li>
-						<div class="del-bx-prev"></div>
-
-						<!--КРЕДДИтный  лимит-->
-						<div class="credit-limit">
-							<b>Размер каждого перевода<br />равен одобренному лимиту</b>
-							<ol>
-								<li>
-									<input type="radio" name="labeled" value="1" id="labeled_1" />
-									<label for="labeled_1">2000</label>
-								</li>
-								<li>
-									<input type="radio" name="labeled" value="1" id="labeled_2" />
-									<label for="labeled_2">3000</label>
-								</li>
-								<li>
-									<input type="radio" name="labeled" value="1" id="labeled_3" />
-									<label for="labeled_3">5000</label>
-								</li>
-								<li>
-									<input type="radio" name="labeled" value="1" id="labeled_4" />
-									<label for="labeled_4">7500</label>
-								</li>
-							</ol>
-						</div>
-						<!--/КРЕДДИтный  лимит-->
-					</li>
-					<li>
-						<!--Условия оплаты-->
-						<div class="terms-of-payment">
-
-							<ol>
-								<li>
-									<img src="static/kreddyline/images/tab_text_icon1.png" alt="">
-									<input type="radio" name="labeled" value="1" id="labeled_5" />
-									<label for="labeled_5">Оплатить
-										сейчас<span>абонентская плата - 900 руб/мес</span></label>
-								</li>
-								<li>
-									<img src="static/kreddyline/images/tab_text_icon2.png" alt="">
-									<input type="radio" name="labeled" value="1" id="labeled_6" />
-									<label for="labeled_6">Оплатить
-										потом<span>абонентская плата - 1000 руб/мес</span></label>
-								</li>
-							</ol>
-						</div>
-						<!--/Условия оплаты-->
-					</li>
-					<li>
-						<!--Куда перечислить деньги-->
-						<div class="transfer-money">
-
-							<ol>
-								<li>
-									<input type="radio" name="labeled" value="1" id="labeled_7" />
-									<label for="labeled_7">Банковская
-										карта<span><em>MasterCard</em>     VISA</span></label>
-								</li>
-								<li>
-									<input type="radio" name="labeled" value="1" id="labeled_8" />
-									<label for="labeled_8">Мобильный телефон<span><em>МТС</em>  <em>Билайн</em>   <em>Мегафон</em>  <em>ТЕЛЕ2</em></span></label>
-								</li>
-							</ol>
-						</div>
-						<!--/Куда перечислить деньги-->
-					</li>
-					<li>
-
-						<!--Подключить-->
-						<div class="hook-up">
-
-							<span>Быстрая регистрация</span>
-
-							<div class="row-input">
-								<input class="w1 blured" type="text" value="Фамилия">
-								<input class="w2 blured" type="text" value="Имя">
-								<input class="w3 blured" type="text" value="Отчество">
-							</div>
-							<div class="row-input">
-								<input class="w4 blured" type="text" value="Мобильный телефон">
-								<input class="w5 blured" type="text" value="E-mail">
-							</div>
-							<p>
-								<input type="checkbox" name="labeled" value="1" id="labeled_1" />
-								<label for="labeled_1"> Я подтверждаю достоверность введенных данных и<br />даю согласие
-									на их обработку (подробная информация) </label>
-							</p>
-							<input type="submit" value="Подключить">
-						</div>
-						<!--/Подключить-->
-						<div class="del-bx-next"></div>
-					</li>
-				</ul>
-
-				<div id="bx-pager">
-					<div class="del-tal-left-col"></div>
-					<a class="del-left-but" data-slide-index="0" href=""><img class="act-corner act-corner-top" src="static/kreddyline/images/tab_corner_top.png"><img class="no-act" src="static/kreddyline/images/tab_icon1.png" alt=""><img class="act" src="static/kreddyline/images/tab_icon1_act.png" alt=""><span><em>КРЕДДИтный<br />
-								лимит</em></span></a>
-					<a class="one-line" data-slide-index="1" href=""><img class="act-corner" src="static/kreddyline/images/tab_corner.png"><img class="no-act" src="static/kreddyline/images/tab_icon2.png" alt=""><img class="act" src="static/kreddyline/images/tab_icon2_act.png" alt=""><span><em>Условия
-								оплаты</em></span></a>
-					<a data-slide-index="2" href=""><img class="act-corner" src="static/kreddyline/images/tab_corner.png"><img class="no-act" src="static/kreddyline/images/tab_icon3.png" alt=""><img class="act" src="static/kreddyline/images/tab_icon3_act.png" alt=""><span><em>Куда
-								перечислить<br /> деньги</em></span></a>
-					<a class="one-line last" data-slide-index="3" href=""><img class="act-corner act-corner-bot" src="static/kreddyline/images/tab_corner_bot.png"><img class="no-act" src="static/kreddyline/images/tab_icon4.png" alt=""><img class="act" src="static/kreddyline/images/tab_icon4_act.png" alt=""><span><em>Подключить</em></span></a>
-				</div>
-
+			<div class="tab" id="formBody">
+				<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
 			</div>
 			<?php
 			$this->endWidget();
@@ -245,3 +148,8 @@
 <!--================/data-box================-->
 
 </article>
+<?php
+$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/ajax_form.js';
+Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_BEGIN);
+
+$this->widget('YaMetrikaGoalsWidget');

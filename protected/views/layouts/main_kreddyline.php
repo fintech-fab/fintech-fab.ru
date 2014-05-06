@@ -25,7 +25,7 @@
 	?>
 
 	<script src="static/kreddyline/js/main.js"></script>
-	<script src="static/kreddyline/js/jquery.bxslider.min.js"></script>
+
 	<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=5"></script>
 
 
@@ -51,7 +51,8 @@
 		<div class="container">
 			<div class="row-fluid">
 				<div class="span5 logo">
-					<a href="<?= Yii::app()
+					<a href="<?=
+					Yii::app()
 						->createAbsoluteUrl('/') ?>"><img src="static/kreddyline/images/logo.png" alt=""></a>
 				</div>
 				<div class="span3 telephone">
@@ -138,10 +139,6 @@ $this->beginWidget('bootstrap.widgets.TbModal', array('id' => 'modal-frame'));
 	</div>
 </div>
 <?php $this->endWidget(); ?>
-
-
-<script src="static/kreddyline/js/jquery.formstyler.min.js"></script>
-
 
 <script type="text/javascript">
 
