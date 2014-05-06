@@ -113,8 +113,6 @@ return array(
 
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
-		'FintechFab\QiwiGate\QiwiGateServiceProvider',
-		'FintechFab\QiwiShop\QiwiShopServiceProvider',
 
 	),
 

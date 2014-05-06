@@ -4,14 +4,39 @@ return array(
 
 	'connections' => array(
 
-		'mysql' => array(
+		// основной коннект к базе данных
+		'mysql'    => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => '%database%',
-			'username'  => '%username%',
-			'password'  => '%password%',
+			'database'  => '',
+			'username'  => '',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_general_ci',
+			'prefix'    => '',
+		),
+
+		// для пакетов эмулятора платежного гейта
+		'qiwiGate' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => '',
+			'username'  => '',
+			'password'  => '',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
+		// для пакетов эмулятора интернет-магазина
+		'qiwiShop' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => '',
+			'username'  => '',
+			'password'  => '',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
 
