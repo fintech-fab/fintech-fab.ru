@@ -63,7 +63,7 @@ class QiwiGateConnect
 			'ccy'      => 'RUB',
 			'comment'  => $order->comment,
 			'lifetime' => date('Y-m-d\TH:i:s', strtotime($order->lifetime)),
-			'prv_name' => Config::get('ff-qiwi-shop::prv_name'),
+			'prv_name' => Config::get('ff-qiwi-shop::provider.name'),
 		);
 		$oResponse = $this->makeCurl($order->id, 'PUT', $bill);
 		if ($oResponse->response->result_code != 0) {
@@ -98,7 +98,7 @@ class QiwiGateConnect
 	public function payReturn($refund)
 	{
 		$amount = array('amount' => $refund->sum);
-		$url = Config::get('ff-qiwi-shop::qiwiGateUrl') . Config::get('ff-qiwi-shop::GateAuth.merchant_id') .
+		$url = Config::get('ff-qiwi-shop::gate_url') . Config::get('ff-qiwi-shop::provider.id') .
 			'/bills/' . $refund->order_id . '/refund/' . $refund->id;
 		$oResponse = $this->makeCurl($refund->order_id, 'PUT', $amount, $url);
 		if ($oResponse->response->result_code != 0) {
@@ -115,7 +115,7 @@ class QiwiGateConnect
 	 */
 	public function checkRefundStatus($refund)
 	{
-		$url = Config::get('ff-qiwi-shop::qiwiGateUrl') . Config::get('ff-qiwi-shop::GateAuth.merchant_id') .
+		$url = Config::get('ff-qiwi-shop::gate_url') . Config::get('ff-qiwi-shop::provider.id') .
 			'/bills/' . $refund->order_id . '/refund/' . $refund->id;
 		$oResponse = $this->makeCurl($refund->order_id, 'GET', null, $url);
 		if ($oResponse->response->result_code != 0) {
@@ -137,7 +137,7 @@ class QiwiGateConnect
 	private function makeCurl($order_id, $method = 'GET', $query = null, $url = null)
 	{
 		if ($url == null) {
-			$url = Config::get('ff-qiwi-shop::qiwiGateUrl') . Config::get('ff-qiwi-shop::GateAuth.merchant_id') .
+			$url = Config::get('ff-qiwi-shop::gate_url') . Config::get('ff-qiwi-shop::provider.id') .
 				'/bills/' . $order_id;
 		}
 
@@ -149,8 +149,11 @@ class QiwiGateConnect
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-		curl_setopt($ch, CURLOPT_USERPWD,
-			Config::get('ff-qiwi-shop::GateAuth.merchant_id') . ':' . Config::get('ff-qiwi-shop::GateAuth.password'));
+		curl_setopt(
+			$ch,
+			CURLOPT_USERPWD,
+			Config::get('ff-qiwi-shop::provider.id') . ':' . Config::get('ff-qiwi-shop::provider.password')
+		);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
@@ -159,15 +162,25 @@ class QiwiGateConnect
 		}
 
 		$httpResponse = curl_exec($ch);
-		if (!$httpResponse) {
+		$httpError = curl_error($ch);
+		$info = curl_getinfo($ch);
+		$response = @json_decode($httpResponse);
 
-			$res = curl_error($ch) . '(' . curl_errno($ch) . ')';
-			dd($res);
+		if (!$response || !$httpResponse || $httpError) {
+
+			$aResponse = array(
+				'url'      => $url,
+				'code'     => $info['http_code'],
+				'error'    => $httpError,
+				'response' => $httpResponse,
+			);
+
+			echo json_encode($aResponse);
+			die();
 		}
 
-		$httpResponse = json_decode($httpResponse);
 
-		return $httpResponse;
+		return $response;
 	}
 
 } 

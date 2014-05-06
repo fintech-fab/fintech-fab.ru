@@ -99,7 +99,7 @@ class MakeButton
 				break;
 			case 'payBill':
 				$query_data = array(
-					'shop'        => Config::get('ff-qiwi-shop::GateAuth.merchant_id'),
+					'shop'        => Config::get('ff-qiwi-shop::provider.id'),
 					'transaction' => $order_id,
 				);
 				$button = link_to(url(URL::route('payIndex') . '?' . http_build_query($query_data)),

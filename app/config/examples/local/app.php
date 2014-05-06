@@ -16,6 +16,7 @@ return [
 	 */
 	'providers' => [
 		//'FintechFab\QiwiGate\QiwiGateServiceProvider',
+		//'FintechFab\QiwiShop\QiwiShopServiceProvider',
 	],
 
 ];

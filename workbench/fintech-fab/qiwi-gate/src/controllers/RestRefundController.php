@@ -64,7 +64,7 @@ class RestRefundController extends Controller
 		$messages = $validator->messages()->first();
 
 		if ($messages) {
-			if (strpos($messages, '5000')) {
+			if (strpos($messages, '15000')) {
 				$data['error'] = 242;
 				$codeResponse = 403;
 

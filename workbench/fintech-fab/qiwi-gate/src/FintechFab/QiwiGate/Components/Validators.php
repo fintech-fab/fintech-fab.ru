@@ -13,7 +13,7 @@ class Validators
 			'ccy'        => 'required|regex:/^[a-zA-Z]{3}$/',
 			'comment'    => 'regex:/^.{0,255}$/',
 			'lifetime'   => 'regex:/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/',
-			'pay_source' => 'regex:/^((mobile)|(qw)){1}$/',
+			'pay_source' => 'in:mobile,qw',
 			'prv_name'   => 'regex:/^.{1,100}$/',
 		);
 
@@ -23,7 +23,7 @@ class Validators
 	public static function rulesForRefundBill()
 	{
 		$rules = array(
-			'amount' => 'required|numeric|min:10|max:5000|regex:/^\d+(.\d{0,2})?$/',
+			'amount' => 'required|numeric|min:10|max:15000|regex:/^\d+(.\d{0,2})?$/',
 		);
 
 		return $rules;

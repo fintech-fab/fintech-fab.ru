@@ -43,7 +43,7 @@ class RestBillController extends Controller
 			return $this->responseFromGate($data, $code_response);
 		}
 
-		if ($data['amount'] > 5000) {
+		if ($data['amount'] > 15000) {
 			$data['error'] = 242;
 			$code_response = 403;
 

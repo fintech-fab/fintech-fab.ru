@@ -1,9 +1,12 @@
 <?php
 
+
+/**
+ * этот конфиг не используется,
+ * вам необходимо добавить коннект к базе в ваш локальный конфиг database
+ */
 return array(
 
-	'fetch'       => PDO::FETCH_CLASS,
-	'default'     => 'mysql',
 	'connections' => array(
 
 		'qiwiGate' => array(

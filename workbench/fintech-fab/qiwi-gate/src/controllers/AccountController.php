@@ -1,11 +1,10 @@
 <?php
-namespace FintechFab\QiwiGate\Controllers\Account;
+namespace FintechFab\QiwiGate\Controllers;
 
 
 use Config;
 use FintechFab\QiwiGate\Components\Merchants;
 use FintechFab\QiwiGate\Components\Validators;
-use FintechFab\QiwiGate\Controllers\BaseController;
 use FintechFab\QiwiGate\Models\Merchant;
 use Input;
 use Validator;

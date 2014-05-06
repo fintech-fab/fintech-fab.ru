@@ -1,6 +1,7 @@
 <?php
 namespace FintechFab\QiwiGate\Components;
 
+use Config;
 use FintechFab\QiwiGate\Models\Merchant;
 
 class Merchants
@@ -15,6 +16,7 @@ class Merchants
 	public static function NewMerchant($merchant, $data)
 	{
 
+		$merchant->id = Config::get('ff-qiwi-gate::user_id');
 		$merchant->username = $data['username'];
 		$merchant->callback_url = $data['callback'];
 		$merchant->password = $data['password'];

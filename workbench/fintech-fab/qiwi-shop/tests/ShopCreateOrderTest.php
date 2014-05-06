@@ -2,6 +2,7 @@
 
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
+use Illuminate\Auth\UserInterface;
 
 class ShopCreateOrderTest extends TestCase
 {
@@ -11,15 +12,13 @@ class ShopCreateOrderTest extends TestCase
 	{
 		parent::setUp();
 
+		/**
+		 * @var UserInterface|Mockery\MockInterface $mock
+		 */
+		$mock = \Mockery::mock(UserInterface::class);
+		$mock->shouldReceive('getAuthIdentifier')->andReturn(5);
+		Auth::login($mock);
 
-		$this->call(
-			'POST',
-			'/auth',
-			array(
-				'email'    => 'vasya@example.com',
-				'password' => '123123',
-			)
-		);
 	}
 
 	/**
