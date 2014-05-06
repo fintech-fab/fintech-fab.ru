@@ -48,6 +48,7 @@ class DefaultController extends Controller
 					'cancelRequest',
 					'returnFrom3DSecurity',
 					'continueForm',
+					'takeLoan', 'takeLoanCheckSmsCode',
 				),
 				'users'   => array('@'),
 			),
@@ -63,7 +64,6 @@ class DefaultController extends Controller
 	 *
 	 * @return bool|void
 	 */
-
 	protected function beforeAction(\CAction $aAction)
 	{
 		$sActionId = $this->action->getId();
@@ -128,7 +128,6 @@ class DefaultController extends Controller
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account'));
 
-
 		//выбираем папку представления в зависимости от статуса СМС-авторизации и статуса регистрации
 		//если клиент прошел быструю регистрацию не не заполнил анкеты
 		if (Yii::app()->adminKreddyApi->isFastReg()) {
@@ -179,16 +178,21 @@ class DefaultController extends Controller
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true);
 		//$sClientInfoRender = $this->renderPartial($sClientInfoView, array(), true);
 
+		$bIsPossibleDoLoan = Yii::app()->adminKreddyApi->checkLoan();
+
 		$this->render($sIndexView, array(
-				'sClientInfoView' => $sClientInfoView,
-				'sPassFormRender' => $sPassFormRender,
-				'sIdentifyRender' => $sIdentifyRender
+				'sClientInfoView'    => $sClientInfoView,
+				'sPassFormRender'    => $sPassFormRender,
+				'sIdentifyRender'    => $sIdentifyRender,
+				'bIsPossibleDoLoan' => $bIsPossibleDoLoan,
 			)
 		);
 
-
 	}
 
+	/**
+	 * Заполнение анкеты клиента со статусом "быстрая регистрация"
+	 */
 	public function actionContinueForm()
 	{
 		//если клиент не является прошедшим только быструю регистрацию, то не пускаем
@@ -290,7 +294,6 @@ class DefaultController extends Controller
 	/**
 	 * История операций
 	 */
-
 	public function actionHistory()
 	{
 		Yii::app()->user->setReturnUrl(Yii::app()->createUrl('/account/history'));
@@ -311,7 +314,6 @@ class DefaultController extends Controller
 		$sPassFormRender = $this->renderPartial('sms_password/send_password', array('model' => $oSmsPassForm), true, false);
 		$this->render($sView, array('sPassFormRender' => $sPassFormRender, 'historyProvider' => $oHistoryDataProvider));
 	}
-
 
 	public function actionReturnFrom3DSecurity()
 	{
@@ -390,7 +392,6 @@ class DefaultController extends Controller
 	/**
 	 * Верификация банковской карты
 	 */
-
 	public function actionVerifyCard()
 	{
 		Yii::app()->user->getFlash('warning'); //удаляем warning
@@ -563,7 +564,6 @@ class DefaultController extends Controller
 	/**
 	 * Проверка СМС-кода для смены паспортных данных
 	 */
-
 	public function actionChangePassportCheckSmsCode()
 	{
 		Yii::app()->user->getFlash('warning'); //удаляем warning
@@ -672,7 +672,6 @@ class DefaultController extends Controller
 	/**
 	 * Проверка СМС-кода для смены цифрового кода
 	 */
-
 	public function actionChangeNumericCodeCheckSmsCode()
 	{
 		$oSmsCodeForm = new SMSCodeForm('codeRequired');
@@ -763,7 +762,6 @@ class DefaultController extends Controller
 	/**
 	 * Проверка СМС-кода для смены паспортных данных
 	 */
-
 	public function actionChangeSecretQuestionCheckSmsCode()
 	{
 		$oSmsCodeForm = new SMSCodeForm('codeRequired');
@@ -786,7 +784,6 @@ class DefaultController extends Controller
 
 		$this->render('change_secret_question/check_sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
 	}
-
 
 	/**
 	 * Смена настройки двухфакторной аутентификации, выводим форму и проверяем введенные данные если есть POST-запрос
@@ -852,7 +849,6 @@ class DefaultController extends Controller
 	/**
 	 * Проверка СМС-кода для смены настройки двухфакторной аутентификации
 	 */
-
 	public function actionChangeSmsAuthSettingCheckSmsCode()
 	{
 		$oSmsCodeForm = new SMSCodeForm('codeRequired');
@@ -944,7 +940,6 @@ class DefaultController extends Controller
 	/**
 	 * Проверка СМС-кода для смены цифрового кода
 	 */
-
 	public function actionChangePasswordCheckSmsCode()
 	{
 		$oSmsCodeForm = new SMSCodeForm('codeRequired');
@@ -1280,6 +1275,13 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
+		if (Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
+			$oLoanForm = new ClientLoanForm();
+			Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
+			$oForm = new SMSCodeForm('sendRequired');
+			$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => $oForm));
+			Yii::app()->end();
+		}
 
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
@@ -1450,7 +1452,6 @@ class DefaultController extends Controller
 	/**
 	 * Авторизация по СМС-паролю
 	 */
-
 	public function actionSmsPassAuth()
 	{
 		//если уже авторизованы по СМС, то редирект на главную страницу ЛК
