@@ -32,7 +32,7 @@ class ClientFormComponent
 	public static $aSelectProductSettings = array(
 		self::FAST_REG     => array(
 			'view'  => 'main',
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientKreddyLineSelectProductForm',
 		),
 		self::CONTINUE_REG => array(
 			'view'  => 'main',
@@ -50,7 +50,7 @@ class ClientFormComponent
 
 	public static $aPhoneFormSettings = array(
 		self::FAST_REG     => array(
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientKreddyLineRegForm',
 		),
 		self::CONTINUE_REG => array(
 			'model' => 'ClientPersonalDataContinueForm',
@@ -74,7 +74,8 @@ class ClientFormComponent
 	//имя моделей, в которох сохраняется телефон клиента
 	private static $aPhoneForms = array(
 		'ClientPersonalDataForm',
-		'ClientFastRegForm'
+		'ClientFastRegForm',
+		'ClientKreddyLineRegForm',
 	);
 
 
@@ -88,7 +89,7 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::FAST_REG     => array(
-			'max'     => 1,
+			'max' => 4,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -224,13 +225,42 @@ class ClientFormComponent
 	private static $aStepsInfo = array(
 		self::FAST_REG     => array(
 			0 => array(
-				'view'             => 'client_fast_reg', //TODO
-				'model'            => 'ClientFastRegForm', //TODO
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/sum',
+				'model' => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
 			),
 			1 => array(
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/pay',
+				'model' => 'ClientKreddyLineSelectPayTypeForm',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+				'topPageWidget'    => true,
+			),
+			2 => array(
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/channel',
+				'model' => 'ClientKreddyLineSelectChannelForm',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+				'topPageWidget'    => true,
+			),
+			3 => array(
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/submit',
+				'model' => 'ClientKreddyLineRegForm',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'select_product',
+				'topPageWidget'    => true,
+			),
+			4 => array(
 				'view'             => 'client_fast_form',
 				'sub_view'         => array(
 					'condition' => 'getFlagSmsSent',
@@ -302,8 +332,10 @@ class ClientFormComponent
 		),
 		self::SITE1        => array(
 			0 => array(
-				'view'             => 'client_fast_reg',
-				'model'            => 'ClientFastRegForm',
+				'layout'           => '//layouts/main_kreddyline',
+				'view'             => 'kreddyline',
+				'sub_view'         => 'kreddyline/sum',
+				'model' => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -735,8 +767,6 @@ class ClientFormComponent
 		//отправляем СМС
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 
-		//$bSmsSentOk = SmsGateSender::getInstance()->send('7' . $sPhone, $sMessage);
-
 		//отправляем СМС через API
 		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
 
@@ -1068,6 +1098,22 @@ class ClientFormComponent
 		);
 
 		return $aView;
+	}
+
+	/**
+	 * Возвращает лэйаут для текущего шага, если он задан
+	 *
+	 * @return null
+	 */
+	public function getLayout()
+	{
+		$sSite = self::getSiteConfigName();
+
+		$sLayout = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['layout'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['layout']
+			: null;
+
+		return $sLayout;
 	}
 
 	/**
@@ -1576,6 +1622,7 @@ class ClientFormComponent
 		if ($iCurrentStep != 0) {
 			return;
 		}
+
 		//получаем модель быстрой регистрации
 		$sModel = self::$aStepsInfo[self::FAST_REG][$iCurrentStep]['model'];
 		//создаем объект формы
@@ -1706,8 +1753,8 @@ class ClientFormComponent
 	public function clearSessionClientData(&$aSessionClientData)
 	{
 		unset($aSessionClientData['client_id']);
-		unset($aSessionClientData['product']);
-		unset($aSessionClientData['channel_id']);
+		//unset($aSessionClientData['product']);
+		//unset($aSessionClientData['channel_id']);
 		unset($aSessionClientData['entry_point']);
 		unset($aSessionClientData['flex_amount']);
 		unset($aSessionClientData['flex_time']);

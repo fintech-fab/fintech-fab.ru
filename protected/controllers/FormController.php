@@ -92,6 +92,7 @@ class FormController extends Controller
 		 */
 		$oClientForm = Yii::app()->clientForm->getFormModel();
 
+
 		/**
 		 * AJAX валидация
 		 */
@@ -134,8 +135,8 @@ class FormController extends Controller
 		 */
 
 		if ($oClientForm
-			&& Cookie::compareDataInCookie('client', 'client_id', $iClientId)
-			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
+			//&& Cookie::compareDataInCookie('client', 'client_id', $iClientId)
+			//&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (!empty($oClientForm)) {
 				$aSessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
@@ -149,6 +150,12 @@ class FormController extends Controller
 		/**
 		 * Рендер представления
 		 */
+		$sLayout = Yii::app()->clientForm->getLayout(); //запрашиваем лэйаут
+
+		if ($sLayout) {
+			$this->layout = $sLayout;
+		}
+
 		$aView = Yii::app()->clientForm->getView(); //запрашиваем имя текущего представления
 		$sView = $aView['view'];
 		$sSubView = $aView['sub_view'];
@@ -229,7 +236,6 @@ class FormController extends Controller
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
-
 			//TODO тут сделать проверку, что клиент реально на нужном шаге!!!!!
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
@@ -240,6 +246,11 @@ class FormController extends Controller
 		}
 
 		$iClientId = Yii::app()->clientForm->getClientId();
+
+		if (!$iClientId) {
+			Yii::app()->clientForm->resetSteps();
+			$this->redirect(Yii::app()->createUrl("/form"));
+		}
 		//если клиент запрашивает СМС, значит, заполнил анкету полностью
 		$aData['complete'] = 1;
 		ClientData::saveClientDataById($aData, $iClientId);

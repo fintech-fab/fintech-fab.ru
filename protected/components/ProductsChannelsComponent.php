@@ -26,6 +26,51 @@ class ProductsChannelsComponent
 	}
 
 	/**
+	 * @return array
+	 */
+	public static function getKreddyLineProductsCosts()
+	{
+		$aProducts = Yii::app()->adminKreddyApi->getProducts();
+
+		$aProductsList = array();
+		$aProductsListByAmount = array();
+		foreach ($aProducts as $iKey => $aProduct) {
+			$iAmount = $aProduct['loan_amount'];
+			$aProductsListByAmount[$iAmount][$iKey] = $aProduct;
+		}
+
+		foreach ($aProductsListByAmount as $iAmount => $aProductsInAmount) {
+			$sProductsIds = implode('_', array_keys($aProductsInAmount));
+			$aProductsList[$sProductsIds] = $iAmount;
+		}
+
+		return $aProductsList;
+	}
+
+	/**
+	 * @param $sProductsIds
+	 * @param $iType
+	 *
+	 * @return bool
+	 */
+	public static function getProductBySelectedType($sProductsIds, $iType)
+	{
+		$aProductsIds = explode('_', $sProductsIds);
+		if (!empty($aProductsIds)) {
+			$aProducts = Yii::app()->adminKreddyApi->getProducts();
+
+			foreach ($aProductsIds as $iProductId) {
+				if ($aProducts[$iProductId]['type'] == $iType) {
+					return $iProductId;
+				}
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
 	 * Формирует массив со списком продуктов
 	 *
 	 * @param $aProducts
@@ -179,6 +224,41 @@ class ProductsChannelsComponent
 		}
 		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
 			$aChannelsList[$sMobileChannels] = '<span data-card="0">' . SiteParams::mb_ucfirst(self::formatChannelName($sMobileChannelName)) . '</span>';
+		}
+
+
+		return $aChannelsList;
+	}
+
+	public function getChannelsKreddyLine()
+	{
+		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
+		$aChannelsList = array();
+		$sMobileChannels = '';
+		$sCardChannels = '';
+		foreach ($aChannels as $iKey => $sChannelName) {
+			if (strpos($sChannelName, 'Кредди')) {
+				continue;
+			}
+			if (strpos($sChannelName, 'карт')) {
+				if (!empty($sCardChannels)) {
+					$sCardChannels .= '_';
+				}
+				$sCardChannels .= $iKey;
+				$sCardChannelName = $sChannelName;
+			} elseif (strpos($sChannelName, 'мобильный')) {
+				if (!empty($sMobileChannels)) {
+					$sMobileChannels .= '_';
+				}
+				$sMobileChannels .= $iKey;
+				$sMobileChannelName = $sChannelName;
+			}
+		}
+		if (!empty($sCardChannels) && !empty($sCardChannelName)) {
+			$aChannelsList[$sCardChannels] = 'Банковская карта<br/><span style="font-size: 14pt;">MasterCard, VISA</span>';
+		}
+		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
+			$aChannelsList[$sMobileChannels] = 'Мобильный телефон<br/><span style="font-size: 14pt;">МТС, Билайн, Мегафон, ТЕЛЕ2</span>';
 		}
 
 
