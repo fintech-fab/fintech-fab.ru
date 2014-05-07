@@ -72,9 +72,10 @@
 
 					<div class="div-center">Данные строго защищены стандартом информационной безопасности</div>
 					<p>
-						<a href="https://kreddy.ru/static/docs/pcidss.pdf"><img src="static/kreddyline/images/card_img1.png" alt=""></a> <a href="#"><img src="static/kreddyline/images/card_img2.png" alt=""></a>
-						<a href="#"><img src="static/kreddyline/images/card_img3.png" alt=""></a>
-						<a href="#"><img src="static/kreddyline/images/card_img4.png" alt=""></a>
+						<a target="_blank" href="https://kreddy.ru/static/docs/pcidss.pdf"><img src="static/kreddyline/images/card_img1.png" alt=""></a>
+						<a onclick="return false;" href="#"><img src="static/kreddyline/images/card_img2.png" alt=""></a>
+						<a onclick="return false;" href="#"><img src="static/kreddyline/images/card_img3.png" alt=""></a>
+						<a onclick="return false;" href="#"><img src="static/kreddyline/images/card_img4.png" alt=""></a>
 					</p>
 
 				</div>
