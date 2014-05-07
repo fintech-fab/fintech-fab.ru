@@ -26,30 +26,55 @@ $oModel->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 if ($oModel->product === false) {
 	//устанавливаем в качестве выбранного пакета первый из массива доступных
 	$oModel->product = reset(array_keys($aClientPostProductList));
-}?>
+}
+
+?>
 
 	<div class="product_selection">
-		<h2>Предоплата</h2>
+		<h2>Оплатить сейчас</h2>
+		<h5 style="margin-bottom: 30px;">(абонентская плата - <strong>900 руб/мес</strong>)</h5>
 		<?php
-		echo $form->radioButtonList($oModel, 'product', $aClientPreProductList, array(
-			"class"        => "all",
-			'uncheckValue' => $oModel->product,
-			'baseID'       => get_class($oModel) . '_product_pre',
-		));
-		echo $form->error($oModel, 'product');
+
+		foreach ($aClientPreProductList as $id => $name) {
+			?>
+			<div style="margin: 6px 0">
+				<?php
+				echo CHtml::radioButton('ClientSubscribeForm[product]', ($id == $oModel->product), array(
+					'id'    => 'prod' . $id,
+					'value' => $id,
+				));
+				echo CHtml::label($name, 'prod' . $id, array(
+					'style' => 'display: inline; margin-left: 10px; font-size: 1.1em;'
+				));
+				?>
+			</div>
+		<?php
+		}
 		?>
 	</div>
 	<div class="product_selection">
-		<h2>Постоплата</h2>
+		<h2>Оплатить потом</h2>
+		<h5 style="margin-bottom: 30px;">(абонентская плата - <strong>1000 руб/мес</strong>)</h5>
 		<?php
-		echo $form->radioButtonList($oModel, 'product', $aClientPostProductList, array(
-			"class"        => "all",
-			'uncheckValue' => $oModel->product,
-			'baseID'       => get_class($oModel) . '_product_post',
-		));
-		echo $form->error($oModel, 'product');
+		foreach ($aClientPostProductList as $id => $name) {
+			?>
+			<div style="margin: 6px 0;">
+				<?php
+				echo CHtml::radioButton('ClientSubscribeForm[product]', ($id == $oModel->product), array(
+					'id'    => 'prod' . $id,
+					'value' => $id,
+				));
+				echo CHtml::label($name, 'prod' . $id, array(
+					'style' => 'display: inline; margin-left: 10px; font-size: 1.1em;'
+				));
+				?>
+			</div>
+		<?php
+		}
 		?>
 	</div>
+	<div class="clearfix"></div>
+	<div><?= $form->error($oModel, 'product'); ?></div>
 	<div class="clearfix"></div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(

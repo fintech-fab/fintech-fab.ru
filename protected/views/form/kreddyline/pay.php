@@ -21,15 +21,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 Yii::app()->clientScript->registerScript('ajaxForm', '
 		updateAjaxForm();
 		');
-Yii::app()->clientScript->registerScript('scrollAndFocus', '
-		scrollAndFocus();
-		', CClientScript::POS_LOAD);
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
 	<div class="formErrors" style="position: absolute; right: -300px; width: 280px;">
-	<?= $form->errorSummary($oClientCreateForm, ''); ?>
+		<?= $form->errorSummary($oClientCreateForm, ''); ?>
 	</div>
 	<div class="bx-viewport hide" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
 		<ul class="bxslider" style="width: auto; position: relative;">
@@ -62,7 +59,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'backButton',
 						'buttonType'  => 'ajaxButton',
-						'type' => 'primary',
+						'type'        => 'primary',
 						'ajaxOptions' => array(
 							'update' => '#formBody',
 						),
