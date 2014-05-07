@@ -1,5 +1,5 @@
 <?php
-use FintechFab\QiwiShop\Widgets\NavbarAction;
+use FintechFab\QiwiGate\Widgets\NavbarAction;
 
 ?>
 <div class="container">
@@ -18,15 +18,13 @@ use FintechFab\QiwiShop\Widgets\NavbarAction;
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class=" <?= NavbarAction::isActive(URL::route('createOrder')) ?> ">
-							<a href="<?= URL::route('createOrder') ?>">Создать заказ</a>
+						<li class=" <?= NavbarAction::isActive(URL::route('accountIndex')) ?> ">
+							<a href="<?= URL::route('accountIndex') ?>">Аккаунт QIWI</a>
 						</li>
 						<li class=" <?= NavbarAction::isActive(URL::route('ordersTable')) ?> ">
 							<a href="<?= URL::route('ordersTable') ?>">Таблица заказов</a>
 						</li>
-						<li>
-							<a href="<?= URL::route('accountIndex') ?>">Аккаунт QIWI</a>
-						</li>
+
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 

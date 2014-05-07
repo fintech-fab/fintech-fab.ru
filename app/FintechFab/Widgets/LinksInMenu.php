@@ -60,7 +60,7 @@ class LinksInMenu
 									<a href ="' . URL::route('createOrder') . '">Терминал QIWI</a>
 								</li>
 								<li>
-									<a href="' . URL::route('accountIndex') . '" target="_blank">Аккаунт QIWI</a>
+									<a href="' . URL::route('accountIndex') . '">Аккаунт QIWI</a>
 								</li>';
 		}
 
