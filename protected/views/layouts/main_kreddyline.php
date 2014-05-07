@@ -38,9 +38,14 @@
 <div class="soc_icon">
 	<div id="fixed">
 		<ul>
-			<li class="soc_icon1"><a href="#"><img src="static/kreddyline/images/soc_icon1.png" alt=""></a></li>
-			<li class="soc_icon2"><a href="#"><img src="static/kreddyline/images/soc_icon2.png" alt=""></a></li>
-			<li class="soc_icon3"><a href="#"><img src="static/kreddyline/images/soc_icon3.png" alt=""></a></li>
+			<li class="soc_icon1">
+				<a href="https://vk.com/kreddyru"><img src="static/kreddyline/images/soc_icon1.png" alt=""></a></li>
+			<li class="soc_icon2">
+				<a href="https://www.facebook.com/pages/%D0%9A%D1%80%D0%B5%D0%B4%D0%B4%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%B2-%D1%82%D0%B2%D0%BE%D0%B5%D0%BC-%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%B5/560011590772925?fref=ts"><img src="static/kreddyline/images/soc_icon2.png" alt=""></a>
+			</li>
+			<li class="soc_icon3">
+				<a href="http://www.odnoklassniki.ru/group/53026435498223"><img src="static/kreddyline/images/soc_icon3.png" alt=""></a>
+			</li>
 		</ul>
 	</div>
 </div>
