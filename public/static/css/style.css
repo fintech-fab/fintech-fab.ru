@@ -774,3 +774,7 @@ div.cost {
 #form_selected_product {
 	padding-top: 15px;
 }
+
+#detail_balance_info {
+	padding: 0 0 15px 7px;
+}

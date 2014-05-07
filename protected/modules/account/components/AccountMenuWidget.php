@@ -136,7 +136,16 @@ class AccountMenuWidget extends CWidget
 		}
 
 		if (Yii::app()->adminKreddyApi->getBalance() < 0) {
-			echo '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
+			echo '
+			<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб.
+			<a href="#" class="dashed" onclick="$(\'#detail_balance_info\').toggle(); return false;">детализация</a><br/>';
+			echo '<div id="detail_balance_info" class="hide">';
+			echo '<strong>Займ:</strong> ' . Yii::app()->adminKreddyApi->getAbsLoanBalance() . ' руб. <br/>';
+			echo '<strong>Абонентская плата:</strong> ' . Yii::app()->adminKreddyApi->getAbsSubscriptionBalance() . ' руб. <br/>';
+			if (Yii::app()->adminKreddyApi->getAbsFineAndPenalty() != 0) {
+				echo '<strong>Пени/штраф:</strong> ' . Yii::app()->adminKreddyApi->getAbsFineAndPenalty() . ' руб. <br/>';
+			}
+			echo '</div>';
 			echo '<strong>Вернуть:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() . '<br/>';
 		} else {
 			echo '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
