@@ -7,7 +7,7 @@ use FintechFab\Widgets\UsersPhoto;
 $user = User::find(Auth::user()->getAuthIdentifier())->toArray();
 $userSocial = User::find($user['id'])->SocialNetworks()->get()->toArray();
 $socialNets = array();
-
+dd(URL::route('createOrder'));
 ?>
 <script src="/js/ActionForUser.js"></script>
 <script type="text/javascript" src="/js/jquery.damnUploader.min.js"></script>

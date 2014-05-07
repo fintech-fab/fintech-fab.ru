@@ -1,4 +1,5 @@
 <?php
+
 Route::group(array(
 	'before'    => 'ff.qiwi.shop.checkUser',
 	'prefix'    => 'qiwi/shop/orders',

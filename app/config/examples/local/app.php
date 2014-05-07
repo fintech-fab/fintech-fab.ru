@@ -1,11 +1,11 @@
 <?php
-return [
+return array(
 
 	'url'       => 'http://fintech-fab.dev',
 
-	'vanguard'  => [
+	'vanguard'  => array(
 		'recipient_order_form' => 'post@example.com',
-	],
+	),
 
 	/**
 	 * при первом запуске:
@@ -14,9 +14,9 @@ return [
 	 * 3. Запустить php artisan dump-autoload
 	 * 4. Раскомментировать нужные пакеты для их работы
 	 */
-	'providers' => [
+	'providers' => array(
 		//'FintechFab\QiwiGate\QiwiGateServiceProvider',
 		//'FintechFab\QiwiShop\QiwiShopServiceProvider',
-	],
+	),
 
-];
+);

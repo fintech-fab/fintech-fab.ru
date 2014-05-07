@@ -2,9 +2,7 @@
 if (empty($content)) {
 	$content = '';
 }
-/**
- * @var string $userMessage
- */
+
 ?>
 <!DOCTYPE html>
 <html>

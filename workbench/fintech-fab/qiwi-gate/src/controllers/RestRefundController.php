@@ -61,21 +61,8 @@ class RestRefundController extends Controller
 		//Проверяем запрошенную сумму для отмены
 		$amountQuery = Input::get('amount');
 		$validator = Validator::make(array('amount' => $amountQuery), Validators::rulesForRefundBill());
-		$messages = $validator->messages()->first();
 
-		if ($messages) {
-			if (strpos($messages, '15000')) {
-				$data['error'] = 242;
-				$codeResponse = 403;
-
-				return $this->responseFromGate($data, $codeResponse);
-			}
-			if (strpos($messages, '10')) {
-				$data['error'] = 241;
-				$codeResponse = 403;
-
-				return $this->responseFromGate($data, $codeResponse);
-			}
+		if (!$validator->passes()) {
 			$data['error'] = 5;
 			$codeResponse = 400;
 

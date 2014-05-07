@@ -69,7 +69,7 @@ class QiwiRefundBillTest extends TestCase
 	}
 
 	/**
-	 * Сумма слишком мала
+	 * Неформат суммы
 	 *
 	 * @return void
 	 */
@@ -79,16 +79,16 @@ class QiwiRefundBillTest extends TestCase
 		$this->call(
 			'PUT',
 			Config::get('ff-qiwi-gate::app.url') . '/qiwi/gate/api/v2/prv/1/bills/1q2w3e/refund/456',
-			array('amount' => 5)
+			array('amount' => '234etds')
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(241, $oResponse->response->result_code);
-		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+		$this->assertEquals(5, $oResponse->response->result_code);
+		$this->assertEquals(400, $this->client->getResponse()->getStatusCode());
 	}
 
 	/**
-	 * Сумма слишком велика
+	 * Большая сумма уменьшается до суммы счёта
 	 *
 	 * @return void
 	 */
@@ -102,8 +102,9 @@ class QiwiRefundBillTest extends TestCase
 		);
 
 		$oResponse = $this->response()->getData();
-		$this->assertEquals(242, $oResponse->response->result_code);
-		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+		$this->assertEquals(0, $oResponse->response->result_code);
+		$this->assertEquals(123.45, $oResponse->response->refund->amount);
+		$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 	}
 
 	/**

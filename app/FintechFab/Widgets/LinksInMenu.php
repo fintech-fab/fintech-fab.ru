@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 13.03.14
- * Time: 14:16
- */
-
 namespace FintechFab\Widgets;
 
 

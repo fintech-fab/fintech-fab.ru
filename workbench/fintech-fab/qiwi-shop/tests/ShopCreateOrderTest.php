@@ -15,7 +15,7 @@ class ShopCreateOrderTest extends TestCase
 		/**
 		 * @var UserInterface|Mockery\MockInterface $mock
 		 */
-		$mock = \Mockery::mock(UserInterface::class);
+		$mock = \Mockery::mock('Illuminate\Auth\UserInterface');
 		$mock->shouldReceive('getAuthIdentifier')->andReturn(5);
 		Auth::login($mock);
 

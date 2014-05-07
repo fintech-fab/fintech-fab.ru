@@ -23,7 +23,7 @@ class Validators
 	public static function rulesForRefundBill()
 	{
 		$rules = array(
-			'amount' => 'required|numeric|min:10|max:15000|regex:/^\d+(.\d{0,2})?$/',
+			'amount' => 'required|numeric|regex:/^\d+(.\d{0,2})?$/',
 		);
 
 		return $rules;
