@@ -857,10 +857,13 @@ class AdminKreddyApiComponent
 			'loan_request'                    => false,
 			'first_identification'            => false,
 			'active_loan'                     => array(
-				'channel_id' => false,
-				'balance'    => 0,
-				'expired'    => false,
-				'expired_to' => false
+				'channel_id'               => false,
+				'balance'                  => 0,
+				'loan_balance'             => 0,
+				'subscription_balance'     => 0,
+				'fine_and_penalty_balance' => 0,
+				'expired'                  => false,
+				'expired_to'               => false
 			),
 			'subscription_request'            => false,
 			'subscription_request_can_cancel' => false,
@@ -1144,6 +1147,27 @@ class AdminKreddyApiComponent
 		return abs($aClientInfo['active_loan']['balance']);
 	}
 
+	public function getAbsLoanBalance()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['active_loan']['loan_balance']);
+	}
+
+	public function getAbsSubscriptionBalance()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['active_loan']['subscription_balance']);
+	}
+
+	public function getAbsFineAndPenalty()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['active_loan']['fine_and_penalty_balance']);
+	}
+
 	/**
 	 * @return bool|string
 	 */
@@ -1305,7 +1329,12 @@ class AdminKreddyApiComponent
 	public function getSubscriptionActivityToTime()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sActivityTo = $aClientInfo['subscription']['activity_to'];
+		if (!$aClientInfo['subscription']['activity_to']) {
+			$sActivityTo = SiteParams::getTime() + $aClientInfo['subscription']['product_info']['subscription_lifetime'];
+
+		} else {
+			$sActivityTo = $aClientInfo['subscription']['activity_to'];
+		}
 		$sActivityTo = $this->formatRusDate($sActivityTo, true);
 
 		return $sActivityTo;
@@ -1878,6 +1907,18 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->bIsCanGetLoan;
+	}
+
+	/**
+	 * Получение канала, выбранного клиентом по умолчанию
+	 *
+	 * @return int
+	 */
+	public function getSelectedChannelId()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['subscription']['channel_id'];
 	}
 
 	/**

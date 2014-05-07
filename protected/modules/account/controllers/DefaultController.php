@@ -1269,8 +1269,8 @@ class DefaultController extends Controller
 		}
 
 		if (Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
-			$oLoanForm = new ClientLoanForm();
-			Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
+			$iChannelId = Yii::app()->adminKreddyApi->getSelectedChannelId();
+			Yii::app()->adminKreddyApi->setLoanSelectedChannel($iChannelId);
 			$oForm = new SMSCodeForm('sendRequired');
 			$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => $oForm));
 			Yii::app()->end();
