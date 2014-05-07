@@ -77,6 +77,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'backButton',
 						'buttonType'  => 'ajaxButton',
+						'type' => 'primary',
 						'ajaxOptions' => array(
 							'update' => '#formBody',
 						),

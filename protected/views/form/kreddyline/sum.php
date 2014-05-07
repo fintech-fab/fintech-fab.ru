@@ -36,14 +36,6 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 				<div class="credit-limit">
 					<b>Размер каждого перевода<br />равен одобренному лимиту</b>
 
-
-					<?php
-					//$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
-					// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
-					if (empty($oClientCreateForm->product)) {
-						$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getKreddyLineProductsCosts()));
-					}
-					?>
 					<ol>
 						<?=
 						$form->radioButtonList($oClientCreateForm, 'product', Yii::app()->productsChannels->getKreddyLineProductsCosts(),

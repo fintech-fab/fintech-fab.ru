@@ -529,12 +529,18 @@
 	position: absolute;
 	top: 190px;
 	left: 20px;
+	background-color: #C92129;
+	background-image: linear-gradient(to bottom, #f9544f, #C92129);
+	background-repeat: repeat-x;
 }
 
 .bxslider .btn-right {
 	position: absolute;
 	top: 190px;
 	right: 50px;
+	background-color: #C92129;
+	background-image: linear-gradient(to bottom, #f9544f, #C92129);
+	background-repeat: repeat-x;
 }
 
 /*/tab-content*/
