@@ -1106,11 +1106,12 @@ class DefaultController extends Controller
 
 		//получаем сохраненные при регистрации данные займа (если есть)
 		//TODO возможно, делать это только если есть state new_client
-		$iProduct = Yii::app()->user->getState('product');
-		$sChannelsId = Yii::app()->user->getState('channel_id');
+		//TODO сделать получение и обработку
+		$iProduct = null; //Yii::app()->user->getState('product');
+		$sChannelsId = null; //Yii::app()->user->getState('channel_id');
 
 		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
-		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
+		$iChannelId = null; //Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
 
 		$bIsRedirect = false;
 		$aData = array();
