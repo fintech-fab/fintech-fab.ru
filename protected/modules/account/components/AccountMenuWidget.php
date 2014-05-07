@@ -55,7 +55,10 @@ class AccountMenuWidget extends CWidget
 				'url'   => array('/account/default/loan')
 			);
 		}
-		if (Yii::app()->adminKreddyApi->getBalance() < 0) {
+		if (
+			Yii::app()->adminKreddyApi->getBalance() < 0 &&
+			!Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+		) {
 			$this->aMenu[] = array(
 				'label' => 'Оплатить задолженность',
 				'url'   => 'https://pay.kreddy.ru/'
@@ -131,6 +134,11 @@ class AccountMenuWidget extends CWidget
 
 	protected function renderBalanceInfo()
 	{
+
+		if (Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()) {
+			return;
+		}
+
 		if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
 			echo '<strong>Платеж просрочен!</strong><br/>';
 		}

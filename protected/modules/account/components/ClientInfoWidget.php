@@ -74,7 +74,10 @@ class ClientInfoWidget extends CWidget
 
 	protected function renderBalance()
 	{
-		if (Yii::app()->adminKreddyApi->getBalance() != 0) {
+		if (
+			Yii::app()->adminKreddyApi->getBalance() != 0 &&
+			Yii::app()->adminKreddyApi->getClientStatus() != AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION
+		) {
 			// выводим сообщение, если баланс не равен 0
 			?>
 			<strong>Баланс:</strong>  <?= Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
