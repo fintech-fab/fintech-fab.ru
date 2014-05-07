@@ -7,7 +7,7 @@
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
 	'enableAjaxValidation' => true,
-	'type' => 'inline',
+	'type'                 => 'inline',
 	'clientOptions'        => array(
 		'hideErrorMessage' => true,
 		'validateOnChange' => true,
@@ -25,7 +25,6 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 		scrollAndFocus();
 		', CClientScript::POS_LOAD);
 ?>
-<div id="scrollAnchor"></div>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
@@ -81,7 +80,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'backButton',
 						'buttonType'  => 'ajaxButton',
-						'type' => 'primary',
+						'type'        => 'primary',
 						'ajaxOptions' => array(
 							'update' => '#formBody',
 						),
