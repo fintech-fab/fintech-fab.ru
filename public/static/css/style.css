@@ -778,3 +778,8 @@ div.cost {
 #detail_balance_info {
 	padding: 0 0 15px 7px;
 }
+
+.product_selection {
+	float: left;
+	width: 50%;
+}
