@@ -52,7 +52,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 					<ol>
 						<?=
-						$form->radioButtonList($oClientCreateForm, 'type', Dictionaries::$aPayTypes, array(
+						$form->radioButtonList($oClientCreateForm, 'pay_type', Dictionaries::$aPayTypes, array(
 
 							'template' => '<li><img alt="" src="/static/kreddyline/images/tab_text_icon1.png"/><label class="{labelCssClass}">{input}{label}</label></li>'
 

@@ -181,9 +181,9 @@ class DefaultController extends Controller
 		$bIsPossibleDoLoan = Yii::app()->adminKreddyApi->checkLoan();
 
 		$this->render($sIndexView, array(
-				'sClientInfoView'    => $sClientInfoView,
-				'sPassFormRender'    => $sPassFormRender,
-				'sIdentifyRender'    => $sIdentifyRender,
+				'sClientInfoView' => $sClientInfoView,
+				'sPassFormRender' => $sPassFormRender,
+				'sIdentifyRender' => $sIdentifyRender,
 				'bIsPossibleDoLoan' => $bIsPossibleDoLoan,
 			)
 		);
@@ -1106,12 +1106,18 @@ class DefaultController extends Controller
 
 		//получаем сохраненные при регистрации данные займа (если есть)
 		//TODO возможно, делать это только если есть state new_client
-		//TODO сделать получение и обработку
-		$iProduct = null; //Yii::app()->user->getState('product');
-		$sChannelsId = null; //Yii::app()->user->getState('channel_id');
+		$sProduct = Yii::app()->user->getState('product');
+		$sChannelsId = Yii::app()->user->getState('channel_id');
+		$iPayType = Yii::app()->user->getState('pay_type');
+
 
 		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
-		$iChannelId = null; //Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
+		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
+		if ($iPayType) {
+			$iProduct = Yii::app()->productsChannels->getProductBySelectedType($sProduct, $iPayType);
+		} else {
+			$iProduct = (int)$sProduct;
+		}
 
 		$bIsRedirect = false;
 		$aData = array();

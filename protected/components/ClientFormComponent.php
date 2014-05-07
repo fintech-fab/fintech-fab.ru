@@ -48,6 +48,44 @@ class ClientFormComponent
 		),
 	);
 
+	public static $aSelectChannelSettings = array(
+		self::FAST_REG     => array(
+			'view'  => 'main',
+			'model' => 'ClientKreddyLineSelectChannelForm',
+		),
+		self::CONTINUE_REG => array(
+			'view'  => 'main',
+			'model' => 'ClientSelectProductForm',
+		),
+		self::SITE1        => array(
+			'view'  => 'main',
+			'model' => 'ClientFastRegForm',
+		),
+		self::SITE2        => array(
+			'view'  => 'flexible',
+			'model' => 'ClientFlexibleProductForm',
+		),
+	);
+
+	public static $aSelectPayTypeSettings = array(
+		self::FAST_REG     => array(
+			'view'  => 'main',
+			'model' => 'ClientKreddyLineSelectPayTypeForm',
+		),
+		self::CONTINUE_REG => array(
+			'view'  => 'main',
+			'model' => 'ClientSelectProductForm',
+		),
+		self::SITE1        => array(
+			'view'  => 'main',
+			'model' => 'ClientFastRegForm',
+		),
+		self::SITE2        => array(
+			'view'  => 'flexible',
+			'model' => 'ClientFlexibleProductForm',
+		),
+	);
+
 	public static $aPhoneFormSettings = array(
 		self::FAST_REG     => array(
 			'model' => 'ClientKreddyLineRegForm',
@@ -686,6 +724,9 @@ class ClientFormComponent
 				}
 				if (empty($aClientFormData['channel_id'])) {
 					$aClientFormData['channel_id'] = $this->getSessionChannel();
+				}
+				if (empty($aClientFormData['pay_type'])) {
+					$aClientFormData['pay_type'] = $this->getSessionPayType();
 				}
 				if (empty($aClientFormData['flex_amount'])) {
 					$aClientFormData['flex_amount'] = $this->getSessionFlexibleProductAmount();
@@ -1345,10 +1386,24 @@ class ClientFormComponent
 	{
 		$sSite = $this->getSiteConfigName();
 
-		$sModel = self::$aSelectProductSettings[$sSite]['model'];
+		$sModel = self::$aSelectChannelSettings[$sSite]['model'];
 
 		return isset(Yii::app()->session[$sModel]['channel_id'])
 			? Yii::app()->session[$sModel]['channel_id']
+			: false;
+	}
+
+	/**
+	 * @return string|bool
+	 */
+	public function getSessionPayType()
+	{
+		$sSite = $this->getSiteConfigName();
+
+		$sModel = self::$aSelectPayTypeSettings[$sSite]['model'];
+
+		return isset(Yii::app()->session[$sModel]['pay_type'])
+			? Yii::app()->session[$sModel]['pay_type']
 			: false;
 	}
 
@@ -1682,6 +1737,9 @@ class ClientFormComponent
 		if (!empty($aClientData['channel_id'])) {
 			Yii::app()->user->setState('channel_id', $aClientData['channel_id']);
 		}
+		if (!empty($aClientData['pay_type'])) {
+			Yii::app()->user->setState('pay_type', $aClientData['pay_type']);
+		}
 		if (!empty($aClientData['flex_amount'])) {
 			Yii::app()->user->setState('flex_amount', $aClientData['flex_amount']);
 		}
@@ -1743,23 +1801,6 @@ class ClientFormComponent
 		}
 
 		return null;
-	}
-
-	/**
-	 * @param $aSessionClientData
-	 *
-	 * @return mixed
-	 */
-	public function clearSessionClientData(&$aSessionClientData)
-	{
-		unset($aSessionClientData['client_id']);
-		//unset($aSessionClientData['product']);
-		//unset($aSessionClientData['channel_id']);
-		unset($aSessionClientData['entry_point']);
-		unset($aSessionClientData['flex_amount']);
-		unset($aSessionClientData['flex_time']);
-
-		return $aSessionClientData;
 	}
 
 	/**

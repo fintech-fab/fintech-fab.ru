@@ -141,7 +141,9 @@ class FormController extends Controller
 			if (!empty($oClientForm)) {
 				$aSessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);
 				//удаляем лишние данные перед загрузкой в форму (во избежание warning)
-				Yii::app()->clientForm->clearSessionClientData($aSessionClientData);
+				if (is_array($aSessionClientData)) {
+					$aSessionClientData = array_intersect_key($aSessionClientData, array_flip($oClientForm->attributeNames()));
+				}
 
 				$oClientForm->setAttributes($aSessionClientData);
 			}
@@ -370,7 +372,7 @@ class FormController extends Controller
 		//если клиент успешно обновил данные анкеты
 		if ($bRegisterSuccess) {
 
-			Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
+			Yii::app()->clientForm->saveDataBeforeRedirectToAccount($aClientData);
 
 			//отключаем режим продолжения регистрации
 			Yii::app()->clientForm->setContinueReg(false);

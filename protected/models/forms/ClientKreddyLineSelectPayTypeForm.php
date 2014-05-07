@@ -7,7 +7,7 @@
  */
 class ClientKreddyLineSelectPayTypeForm extends ClientCreateFormAbstract
 {
-	public $type;
+	public $pay_type;
 
 	/**
 	 * @return array
@@ -16,8 +16,8 @@ class ClientKreddyLineSelectPayTypeForm extends ClientCreateFormAbstract
 	{
 
 		// всегда обязательные поля
-		$aRules[] = array('type', 'required');
-		$aRules[] = array('type', 'in', 'range' => array_keys(Dictionaries::$aPayTypes), 'message' => 'Выберите метод оплаты');
+		$aRules[] = array('pay_type', 'required');
+		$aRules[] = array('pay_type', 'in', 'range' => array_keys(Dictionaries::$aPayTypes), 'message' => 'Выберите метод оплаты');
 
 		return $aRules;
 
@@ -28,7 +28,7 @@ class ClientKreddyLineSelectPayTypeForm extends ClientCreateFormAbstract
 	 */
 	public function attributeLabels()
 	{
-		return array('type' => 'Выберите метод оплаты');
+		return array('pay_type' => 'Выберите метод оплаты');
 
 	}
 
@@ -38,7 +38,7 @@ class ClientKreddyLineSelectPayTypeForm extends ClientCreateFormAbstract
 	public function attributeNames()
 	{
 		return array(
-			'type',
+			'pay_type',
 		);
 	}
 }
