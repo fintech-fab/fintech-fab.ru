@@ -43,10 +43,26 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 								телефон<span><em>МТС</em>  <em>Билайн</em>   <em>Мегафон</em>  <em>ТЕЛЕ2</em></span></label>
 						</li>
 					</ol-->
-					<?= $form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannels(), array("class" => "all")); ?>
+					<?= $form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsKreddyLine(), array("class" => "all")); ?>
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
+						'id'          => 'backButton',
+						'buttonType'  => 'ajaxButton',
+						'ajaxOptions' => array(
+							'update' => '#formBody',
+						),
+						'htmlOptions' => array(
+							'class' => 'btn-left',
+						),
+						'url'         => Yii::app()
+								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+						'label'       => SiteParams::C_BUTTON_LABEL_BACK,
+					)); ?>
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'submitButton',
 						'buttonType'  => 'ajaxSubmit',
+						'htmlOptions' => array(
+							'class' => 'btn-right',
+						),
 						'ajaxOptions' => array(
 							'complete' => 'checkBlankResponse',
 							'type'     => 'POST',

@@ -1753,8 +1753,8 @@ class ClientFormComponent
 	public function clearSessionClientData(&$aSessionClientData)
 	{
 		unset($aSessionClientData['client_id']);
-		unset($aSessionClientData['product']);
-		unset($aSessionClientData['channel_id']);
+		//unset($aSessionClientData['product']);
+		//unset($aSessionClientData['channel_id']);
 		unset($aSessionClientData['entry_point']);
 		unset($aSessionClientData['flex_amount']);
 		unset($aSessionClientData['flex_time']);

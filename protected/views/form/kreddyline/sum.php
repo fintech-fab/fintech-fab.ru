@@ -38,7 +38,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 
 					<?php
-					$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
+					//$oClientCreateForm->product = Yii::app()->clientForm->getSessionProduct();
 					// если в сессии продукта нет, по умолчанию показываем первый продукт из массива доступных (ключ первого элемента)
 					if (empty($oClientCreateForm->product)) {
 						$oClientCreateForm->product = reset(array_keys(Yii::app()->productsChannels->getKreddyLineProductsCosts()));
@@ -57,11 +57,14 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'submitButton',
 						'buttonType'  => 'ajaxSubmit',
+						'htmlOptions' => array(
+							'class' => 'btn-right',
+						),
 						'ajaxOptions' => array(
 							'complete' => 'checkBlankResponse',
 							'type'     => 'POST',
 
-							'success' => 'function(html){jQuery("#formBody").html(html);}',
+							'success'  => 'function(html){jQuery("#formBody").html(html);}',
 
 						),
 						'url'         => Yii::app()->createUrl('/form/ajaxForm'),

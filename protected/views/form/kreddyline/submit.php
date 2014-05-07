@@ -51,7 +51,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 							информация) </label>
 					</p>
 					<input type="submit" value="Подключить"-->
-					<?= $form->errorSummary($oClientCreateForm); ?>
+
 					<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('style' => 'width: 105px;')); ?>
 					&nbsp;
 
@@ -74,19 +74,32 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 				echo $form->label($oClientCreateForm, 'agree', array('style' => 'width: 320px;'));
 				?>
 			</span>
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
+						'id'          => 'backButton',
+						'buttonType'  => 'ajaxButton',
+						'ajaxOptions' => array(
+							'update' => '#formBody',
+						),
+						'htmlOptions' => array(
+							'class' => 'btn-left',
+						),
+						'url'         => Yii::app()
+								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+						'label'       => SiteParams::C_BUTTON_LABEL_BACK,
+					)); ?>
 
 					<div class="clearfix"></div>
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'buttonType'  => 'submit',
 						'type'        => 'primary',
-						'label'       => 'Зарегистрироваться',
+						'label'       => 'Подтвердить',
+
 						'htmlOptions' => array(
-							'style' => 'width: 250px; margin-top: 10px;'
+							'class' => 'btn-right',
 						),
 					)); ?>
 				</div>
 				<!--/Подключить-->
-				<div class="del-bx-next"></div>
 			</li>
 		</ul>
 	</div>

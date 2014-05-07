@@ -503,8 +503,8 @@
 .bxslider li label {
 	display: inline-block;
 	color: #ffffff;
-	font-size: 30px;
-	line-height: 1.1em;
+	font-size: 28px;
+	line-height: 1em;
 	vertical-align: middle;
 	padding: 0 0 0 20px;
 	margin: 0;
@@ -523,6 +523,18 @@
 	font-style: normal;
 	display: inline;
 	padding: 0 19px 0 0;
+}
+
+.bxslider .btn-left {
+	position: absolute;
+	top: 190px;
+	left: 20px;
+}
+
+.bxslider .btn-right {
+	position: absolute;
+	top: 190px;
+	right: 50px;
 }
 
 /*/tab-content*/
@@ -604,7 +616,7 @@
 
 .hook-up span {
 	padding: 0 21px 13px 0;
-	font-size: 34px;
+	font-size: 30px;
 	line-height: 1.2em;
 	color: #FFF;
 	display: block;
@@ -1589,4 +1601,8 @@ input[type="reset"].styler:active {
 
 .bxslider li {
 	list-style: none;
+}
+
+.terms-of-payment li {
+	height: 51px;
 }

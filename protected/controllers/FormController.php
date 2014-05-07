@@ -92,6 +92,7 @@ class FormController extends Controller
 		 */
 		$oClientForm = Yii::app()->clientForm->getFormModel();
 
+
 		/**
 		 * AJAX валидация
 		 */
@@ -134,8 +135,8 @@ class FormController extends Controller
 		 */
 
 		if ($oClientForm
-			&& Cookie::compareDataInCookie('client', 'client_id', $iClientId)
-			&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
+			//&& Cookie::compareDataInCookie('client', 'client_id', $iClientId)
+			//&& Yii::app()->clientForm->getSessionFormClientId($oClientForm) == $iClientId
 		) {
 			if (!empty($oClientForm)) {
 				$aSessionClientData = Yii::app()->clientForm->getSessionFormData($oClientForm);

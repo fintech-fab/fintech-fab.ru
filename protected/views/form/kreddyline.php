@@ -52,26 +52,11 @@
 					<h3>Выбери свою КРЕДДИтную линию</h3>
 
 					<!--tab-->
-					<?php
-					$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-						'id'                   => get_class($oClientCreateForm) . '_fast',
-						'enableAjaxValidation' => true,
-						'type'                 => 'inline',
-						'clientOptions'        => array(
-							'validateOnChange' => true,
-							'validateOnSubmit' => false,
-						),
-						'action'               => Yii::app()->createUrl('/form/'),
-					));
-					?>
 
 					<div class="tab" id="formBody">
 
 						<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
 					</div>
-					<?php
-					$this->endWidget();
-					?>
 					<!--/tab-->
 				</div>
 			</div>

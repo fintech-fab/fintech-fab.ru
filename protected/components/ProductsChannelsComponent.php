@@ -230,6 +230,41 @@ class ProductsChannelsComponent
 		return $aChannelsList;
 	}
 
+	public function getChannelsKreddyLine()
+	{
+		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
+		$aChannelsList = array();
+		$sMobileChannels = '';
+		$sCardChannels = '';
+		foreach ($aChannels as $iKey => $sChannelName) {
+			if (strpos($sChannelName, 'Кредди')) {
+				continue;
+			}
+			if (strpos($sChannelName, 'карт')) {
+				if (!empty($sCardChannels)) {
+					$sCardChannels .= '_';
+				}
+				$sCardChannels .= $iKey;
+				$sCardChannelName = $sChannelName;
+			} elseif (strpos($sChannelName, 'мобильный')) {
+				if (!empty($sMobileChannels)) {
+					$sMobileChannels .= '_';
+				}
+				$sMobileChannels .= $iKey;
+				$sMobileChannelName = $sChannelName;
+			}
+		}
+		if (!empty($sCardChannels) && !empty($sCardChannelName)) {
+			$aChannelsList[$sCardChannels] = 'Банковская карта<br/><span style="font-size: 14pt;">MasterCard, VISA</span>';
+		}
+		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
+			$aChannelsList[$sMobileChannels] = 'Мобильный телефон<br/><span style="font-size: 14pt;">МТС, Билайн, Мегафон, ТЕЛЕ2</span>';
+		}
+
+
+		return $aChannelsList;
+	}
+
 	/**
 	 * @return array
 	 */

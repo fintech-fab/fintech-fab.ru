@@ -26,7 +26,7 @@ class ClientKreddyLineSelectChannelForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выберите правильный способ получения');
+		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannelsKreddyLine()), 'message' => 'Выберите правильный способ получения');
 
 		return $aRules;
 

@@ -60,9 +60,26 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 						)); ?>
 					</ol>
+					<br />
+					<?php $this->widget('bootstrap.widgets.TbButton', array(
+						'id'          => 'backButton',
+						'buttonType'  => 'ajaxButton',
+						'ajaxOptions' => array(
+							'update' => '#formBody',
+						),
+						'htmlOptions' => array(
+							'class' => 'btn-left',
+						),
+						'url'         => Yii::app()
+								->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
+						'label'       => SiteParams::C_BUTTON_LABEL_BACK,
+					)); ?>
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'submitButton',
 						'buttonType'  => 'ajaxSubmit',
+						'htmlOptions' => array(
+							'class' => 'btn-right',
+						),
 						'ajaxOptions' => array(
 							'complete' => 'checkBlankResponse',
 							'type'     => 'POST',
