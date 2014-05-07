@@ -49,15 +49,10 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 								потом<span>абонентская плата - 1000 руб/мес</span></label>
 						</li>
 					</ol-->
-					<?php
-					$aTypes = array(
-						'3' => 'Оплатить сейчас',
-						'4' => 'Оплатить потом',
-					)
-					?>
+
 					<ol>
 						<?=
-						$form->radioButtonList($oClientCreateForm, 'type', $aTypes, array(
+						$form->radioButtonList($oClientCreateForm, 'type', Dictionaries::$aPayTypes, array(
 
 							'template' => '<li><img alt="" src="/static/kreddyline/images/tab_text_icon1.png"/><label class="{labelCssClass}">{input}{label}</label></li>'
 

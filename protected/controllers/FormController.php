@@ -330,7 +330,7 @@ class FormController extends Controller
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
 				if ($oLogin->validate() && $oLogin->login()) {
 					//сохраняем данные перед редиректом в ЛК
-					Yii::app()->clientForm->saveDataBeforeRedirectToAccount();
+					Yii::app()->clientForm->saveDataBeforeRedirectToAccount($aClientData);
 
 					//установим информацию о завершенной регистрации перед редиректом
 					Yii::app()->clientForm->setRegisterComplete();

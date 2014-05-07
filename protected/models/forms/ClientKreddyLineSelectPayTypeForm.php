@@ -17,7 +17,7 @@ class ClientKreddyLineSelectPayTypeForm extends ClientCreateFormAbstract
 
 		// всегда обязательные поля
 		$aRules[] = array('type', 'required');
-		$aRules[] = array('type', 'in', 'range' => array(3, 4), 'message' => 'Выберите метод оплаты');
+		$aRules[] = array('type', 'in', 'range' => array_keys(Dictionaries::$aPayTypes), 'message' => 'Выберите метод оплаты');
 
 		return $aRules;
 

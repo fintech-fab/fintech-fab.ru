@@ -1674,7 +1674,7 @@ class ClientFormComponent
 	/**
 	 * сохраняем данные перед редиректом в ЛК
 	 */
-	public function saveDataBeforeRedirectToAccount()
+	public function saveDataBeforeRedirectToAccount($aClientData)
 	{
 		if (!empty($aClientData['product'])) {
 			Yii::app()->user->setState('product', $aClientData['product']);
