@@ -28,6 +28,9 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
+	<div class="formErrors" style="position: absolute; right: -300px; width: 280px;">
+	<?= $form->errorSummary($oClientCreateForm, ''); ?>
+	</div>
 	<div class="bx-viewport hide" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
 		<ul class="bxslider" style="width: auto; position: relative;">
 			<li>
@@ -46,15 +49,10 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 								потом<span>абонентская плата - 1000 руб/мес</span></label>
 						</li>
 					</ol-->
-					<?php
-					$aTypes = array(
-						'3' => 'Оплатить сейчас',
-						'4' => 'Оплатить потом',
-					)
-					?>
+
 					<ol>
 						<?=
-						$form->radioButtonList($oClientCreateForm, 'type', $aTypes, array(
+						$form->radioButtonList($oClientCreateForm, 'pay_type', Dictionaries::$aPayTypes, array(
 
 							'template' => '<li><img alt="" src="/static/kreddyline/images/tab_text_icon1.png"/><label class="{labelCssClass}">{input}{label}</label></li>'
 
@@ -64,6 +62,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'backButton',
 						'buttonType'  => 'ajaxButton',
+						'type' => 'primary',
 						'ajaxOptions' => array(
 							'update' => '#formBody',
 						),

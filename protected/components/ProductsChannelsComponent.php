@@ -64,7 +64,6 @@ class ProductsChannelsComponent
 					return $iProductId;
 				}
 			}
-
 		}
 
 		return false;

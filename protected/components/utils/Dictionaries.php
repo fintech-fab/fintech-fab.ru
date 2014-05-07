@@ -30,6 +30,10 @@ class Dictionaries
 
 	const C_SEX_FEMALE = 1;
 	const C_SEX_MALE = 2;
+	public static $aPayTypes = array(
+		3 => 'Оплатить сейчас<br/><span style="font-size: 10pt;">абонентскяя плата - 900 руб/мес</span>',
+		4 => 'Оплатить потом<br/><span style="font-size: 10pt;">абонентскяя плата - 1000 руб/мес</span>',
+	);
 
 	/**
 	 * названия для пола

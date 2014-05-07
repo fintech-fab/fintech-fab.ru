@@ -1317,6 +1317,10 @@ class AdminKreddyApiComponent
 	 */
 	public function getSubscriptionActivity()
 	{
+		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
+			return false;
+		}
+
 		$aClientInfo = $this->getClientInfo();
 		$sActivityTo = $aClientInfo['subscription']['activity_to'];
 		$sActivityTo = $this->formatRusDate($sActivityTo, false);
@@ -1330,15 +1334,15 @@ class AdminKreddyApiComponent
 	public function getSubscriptionActivityToTime()
 	{
 		$aClientInfo = $this->getClientInfo();
-		if (!$aClientInfo['subscription']['activity_to']) {
-			$sActivityTo = SiteParams::getTime() + $aClientInfo['subscription']['product_info']['subscription_lifetime'];
-
-		} else {
+		if ($aClientInfo['subscription']['activity_to']) {
 			$sActivityTo = $aClientInfo['subscription']['activity_to'];
-		}
-		$sActivityTo = $this->formatRusDate($sActivityTo, true);
+			$sActivityTo = $this->formatRusDate($sActivityTo, true);
 
-		return $sActivityTo;
+			return $sActivityTo;
+		}
+
+		return false;
+
 	}
 
 	/**
@@ -1435,8 +1439,19 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
+	public function isSubscriptionAwaitingConfirmationStatus()
+	{
+		return $this->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION;
+	}
+
+	/**
+	 * @return bool
+	 */
 	public function getActiveLoanExpired()
 	{
+		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
+			return false;
+		}
 		$aClientInfo = $this->getClientInfo();
 		$bExpired = $aClientInfo['active_loan']['expired'];
 
@@ -1448,7 +1463,12 @@ class AdminKreddyApiComponent
 	 */
 	public function getActiveLoanExpiredTo()
 	{
+		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
+			return false;
+		}
+
 		$aClientInfo = $this->getClientInfo();
+
 		$sExpiredTo = $aClientInfo['active_loan']['expired_to'];
 
 		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);

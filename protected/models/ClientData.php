@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This is the model class for table "tbl_client".
  *
@@ -47,6 +48,7 @@
  * @property integer $numeric_code
  * @property integer $sms_code
  * @property integer $product
+ * @property integer $pay_type
  * @property string  $channel_id
  * @property string  $flex_amount
  * @property string  $flex_time
@@ -60,7 +62,6 @@
  * @method ClientData find()
  *
  */
-
 class ClientData extends CActiveRecord
 {
 
@@ -91,7 +92,7 @@ class ClientData extends CActiveRecord
 	{
 
 		return array(
-			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
+			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, pay_type, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
 		);
 	}
 
@@ -146,6 +147,7 @@ class ClientData extends CActiveRecord
 
 	/**
 	 * Проверяем, если ли клиент с таким же номером телефона и заполненной анкетой
+	 *
 	 * @param $phone
 	 *
 	 * @return bool
@@ -327,6 +329,7 @@ class ClientData extends CActiveRecord
 			'numeric_code'        => 'Numeric Code',
 			'sms_code'            => 'SMS Code',
 			'product'             => 'Product',
+			'pay_type'   => 'Pay Type',
 			'channel_id'          => 'Channel ID',
 			'complete'            => 'Complete',
 			'dt_add'              => 'Dt Add',
@@ -391,6 +394,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('numeric_code', $this->numeric_code);
 		$criteria->compare('sms_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
+		$criteria->compare('pay_type', $this->pay_type);
 		$criteria->compare('channel_id', $this->channel_id);
 		$criteria->compare('flex_amount', $this->flex_amount);
 		$criteria->compare('flex_time', $this->flex_time);
