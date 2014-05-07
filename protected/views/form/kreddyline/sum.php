@@ -30,7 +30,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
 	<div style="position: absolute; right: -300px; width: 280px;">
-		<?= $form->errorSummary($oClientCreateForm); ?>
+		<?= $form->errorSummary($oClientCreateForm, ''); ?>
 	</div>
 	<div class="bx-viewport hide" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
 		<ul class="bxslider" style="width: auto; position: relative;">

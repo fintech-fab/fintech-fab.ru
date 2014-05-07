@@ -28,8 +28,8 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 <div class="bx-wrapper" style="max-width: 100%;">
-	<div style="position: absolute; right: -300px; width: 280px;">
-		<?= $form->errorSummary($oClientCreateForm); ?>
+	<div class="formErrors" style="position: absolute; right: -300px; width: 280px;">
+		<?= $form->errorSummary($oClientCreateForm, ''); ?>
 	</div>
 	<div class="bx-viewport hide" style="width: 100%; overflow: hidden; position: relative; height: 213px;">
 		<ul class="bxslider" style="width: auto; position: relative;">
@@ -74,7 +74,7 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 				<?php
 				$oClientCreateForm->agree = false;
 				echo $form->checkBox($oClientCreateForm, 'agree');
-				echo $form->label($oClientCreateForm, 'agree', array('style' => 'width: 320px;'));
+				echo $form->label($oClientCreateForm, 'agree', array('class' => 'agree', 'style' => 'width: 320px;'));
 				?>
 			</span>
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
