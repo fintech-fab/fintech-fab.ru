@@ -17,21 +17,40 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'action' => Yii::app()->createUrl('/account/selectChannel'),
 ));
 
-$aClientProductList = Yii::app()->adminKreddyApi->getClientProductsList();
+$aClientPreProductList = Yii::app()->adminKreddyApi->getClientProductsList(false, true);
+$aClientPostProductList = Yii::app()->adminKreddyApi->getClientProductsList(true, false);
 
 $oModel->product = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
 
 // если пакета в сессии нет
 if ($oModel->product === false) {
 	//устанавливаем в качестве выбранного пакета первый из массива доступных
-	$oModel->product = reset(array_keys($aClientProductList));
-}
+	$oModel->product = reset(array_keys($aClientPostProductList));
+}?>
 
-echo $form->radioButtonList($oModel, 'product', $aClientProductList, array("class" => "all", 'uncheckValue' => $oModel->product));
-echo $form->error($oModel, 'product');
-
-?>
-
+	<div class="product_selection">
+		<h2>Предоплата</h2>
+		<?php
+		echo $form->radioButtonList($oModel, 'product', $aClientPreProductList, array(
+			"class"        => "all",
+			'uncheckValue' => $oModel->product,
+			'baseID'       => get_class($oModel) . '_product_pre',
+		));
+		echo $form->error($oModel, 'product');
+		?>
+	</div>
+	<div class="product_selection">
+		<h2>Постоплата</h2>
+		<?php
+		echo $form->radioButtonList($oModel, 'product', $aClientPostProductList, array(
+			"class"        => "all",
+			'uncheckValue' => $oModel->product,
+			'baseID'       => get_class($oModel) . '_product_post',
+		));
+		echo $form->error($oModel, 'product');
+		?>
+	</div>
+	<div class="clearfix"></div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',

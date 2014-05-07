@@ -1607,9 +1607,12 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @param bool $bPostPaid
+	 * @param bool $bPrePaid
+	 *
 	 * @return array
 	 */
-	public function getClientProductsList()
+	public function getClientProductsList($bPostPaid = true, $bPrePaid = true)
 	{
 		//получаем список продуктов
 		$aProducts = $this->getProducts();
@@ -1623,6 +1626,15 @@ class AdminKreddyApiComponent
 
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
+				//Если тип продукта - постоплата и нам не нужны пост-оплатные продукты - пропускаем
+				if ($aProduct['type'] == self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID && !$bPostPaid) {
+					continue;
+				}
+				//Если тип продукта - не постоплата (предоплата) и нам не нужны предоплатные продукты - пропускаем
+				if ($aProduct['type'] != self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID && !$bPrePaid) {
+					continue;
+				}
+
 				//получаем из продукта каналы, по которым его можно получить
 				$aProductChannels = (isset($aProduct['channels']) && is_array($aProduct['channels']))
 					? $aProduct['channels']
