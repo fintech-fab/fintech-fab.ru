@@ -44,6 +44,7 @@ class AdminKreddyApiComponent
 	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {do_sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Ваша заявка одобрена, теперь Вы можете взять займ {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Ваша заявка отклонена';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
@@ -3236,7 +3237,7 @@ class AdminKreddyApiComponent
 
 		switch ($iScoringResult) {
 			case self::C_SCORING_ACCEPT:
-				$sMessage = strtr(self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED, $this->formatStatusMessage());
+				$sMessage = strtr($this->getAutomaticScoringMessage(), $this->formatStatusMessage());
 
 				return $sMessage;
 				break;
@@ -3247,6 +3248,24 @@ class AdminKreddyApiComponent
 				return self::C_DO_SUBSCRIBE_MSG;
 		}
 
+	}
+
+	/**
+	 * Достаем сообщение для автоматического скоринга в зависимости от типа продукта
+	 *
+	 * @return string
+	 */
+	private function getAutomaticScoringMessage()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		$iProductType = $aClientInfo['subscription']['product_info']['type'];
+
+		if ($iProductType == AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID) {
+			return self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID;
+		}
+
+		return self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED;
 	}
 
 	/**
