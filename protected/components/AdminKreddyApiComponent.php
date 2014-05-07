@@ -57,31 +57,33 @@ class AdminKreddyApiComponent
 
 	private $aAvailableStatuses = array(
 
-		self::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
-		self::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
-		self::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых Пакетов',
+		self::C_CLIENT_MORATORIUM_LOAN             => 'Временно недоступно получение новых займов',
+		self::C_CLIENT_MORATORIUM_SCORING          => 'Заявка отклонена',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION     => 'Временно недоступно подключение новых Пакетов',
 
-		self::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
-		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
-		self::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
-		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
-		self::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
+		self::C_SUBSCRIPTION_ACTIVE                => 'Подключен к Пакету',
+		self::C_SUBSCRIPTION_AVAILABLE             => 'Доступно подключение к Пакету',
+		self::C_SUBSCRIPTION_CANCEL                => 'Срок оплаты подключения истек',
+		self::C_SUBSCRIPTION_PAID                  => 'Займ доступен',
+		self::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
-		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 
-		self::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
-		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
+		self::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
+		self::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
-		self::C_LOAN_DEBT                      => 'Задолженность по займу',
-		self::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
-		self::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
-		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
-		self::C_LOAN_CREATED                   => 'Займ перечислен', //+
-		self::C_LOAN_PAID                      => 'Займ оплачен',
+		self::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Ожидание подтверждения запроса на займ',
 
-		self::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
-		self::C_CLIENT_NEW                     => 'Выберите Пакет займов',
-		self::C_CLIENT_FAST_REG                => 'Требуется заполнить анкету',
+		self::C_LOAN_DEBT                          => 'Задолженность по займу',
+		self::C_LOAN_ACTIVE                        => 'Займ перечислен', //+
+		self::C_LOAN_TRANSFER                      => 'Займ перечислен', //+
+		self::C_LOAN_AVAILABLE                     => 'Займ доступен',
+		self::C_LOAN_CREATED                       => 'Займ перечислен', //+
+		self::C_LOAN_PAID                          => 'Займ оплачен',
+
+		self::C_CLIENT_ACTIVE                      => 'Доступно подключение Пакета', //+
+		self::C_CLIENT_NEW                         => 'Выберите Пакет займов',
+		self::C_CLIENT_FAST_REG                    => 'Требуется заполнить анкету',
 	);
 
 	private $aAvailableStatusesIvanovo = array(
@@ -856,10 +858,13 @@ class AdminKreddyApiComponent
 			'loan_request'                    => false,
 			'first_identification'            => false,
 			'active_loan'                     => array(
-				'channel_id' => false,
-				'balance'    => 0,
-				'expired'    => false,
-				'expired_to' => false
+				'channel_id'               => false,
+				'balance'                  => 0,
+				'loan_balance'             => 0,
+				'subscription_balance'     => 0,
+				'fine_and_penalty_balance' => 0,
+				'expired'                  => false,
+				'expired_to'               => false
 			),
 			'subscription_request'            => false,
 			'subscription_request_can_cancel' => false,
@@ -1143,6 +1148,27 @@ class AdminKreddyApiComponent
 		return abs($aClientInfo['active_loan']['balance']);
 	}
 
+	public function getAbsLoanBalance()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['active_loan']['loan_balance']);
+	}
+
+	public function getAbsSubscriptionBalance()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['active_loan']['subscription_balance']);
+	}
+
+	public function getAbsFineAndPenalty()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['active_loan']['fine_and_penalty_balance']);
+	}
+
 	/**
 	 * @return bool|string
 	 */
@@ -1304,7 +1330,12 @@ class AdminKreddyApiComponent
 	public function getSubscriptionActivityToTime()
 	{
 		$aClientInfo = $this->getClientInfo();
-		$sActivityTo = $aClientInfo['subscription']['activity_to'];
+		if (!$aClientInfo['subscription']['activity_to']) {
+			$sActivityTo = SiteParams::getTime() + $aClientInfo['subscription']['product_info']['subscription_lifetime'];
+
+		} else {
+			$sActivityTo = $aClientInfo['subscription']['activity_to'];
+		}
 		$sActivityTo = $this->formatRusDate($sActivityTo, true);
 
 		return $sActivityTo;
@@ -1882,6 +1913,18 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->bIsCanGetLoan;
+	}
+
+	/**
+	 * Получение канала, выбранного клиентом по умолчанию
+	 *
+	 * @return int
+	 */
+	public function getSelectedChannelId()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['subscription']['channel_id'];
 	}
 
 	/**

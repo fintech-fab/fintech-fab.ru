@@ -15,31 +15,33 @@ class ClientInfoWidget extends CWidget
 	protected $sErrorMessage = 'Ошибка!';
 	protected $aAvailableStatuses = array(
 
-		AdminKreddyApiComponent::C_CLIENT_MORATORIUM_LOAN         => 'Временно недоступно получение новых займов',
-		AdminKreddyApiComponent::C_CLIENT_MORATORIUM_SCORING      => 'Заявка отклонена',
-		AdminKreddyApiComponent::C_CLIENT_MORATORIUM_SUBSCRIPTION => 'Временно недоступно подключение новых Пакетов',
+		AdminKreddyApiComponent::C_CLIENT_MORATORIUM_LOAN             => 'Временно недоступно получение новых займов',
+		AdminKreddyApiComponent::C_CLIENT_MORATORIUM_SCORING          => 'Заявка отклонена',
+		AdminKreddyApiComponent::C_CLIENT_MORATORIUM_SUBSCRIPTION     => 'Временно недоступно подключение новых Пакетов',
 
-		AdminKreddyApiComponent::C_SUBSCRIPTION_ACTIVE            => 'Подключен к Пакету',
-		AdminKreddyApiComponent::C_SUBSCRIPTION_AVAILABLE         => 'Доступно подключение к Пакету',
-		AdminKreddyApiComponent::C_SUBSCRIPTION_CANCEL            => 'Срок оплаты подключения истек',
-		AdminKreddyApiComponent::C_SUBSCRIPTION_PAID              => 'Займ доступен',
-		AdminKreddyApiComponent::C_SUBSCRIPTION_PAYMENT           => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
+		AdminKreddyApiComponent::C_SUBSCRIPTION_ACTIVE                => 'Подключен к Пакету',
+		AdminKreddyApiComponent::C_SUBSCRIPTION_AVAILABLE             => 'Доступно подключение к Пакету',
+		AdminKreddyApiComponent::C_SUBSCRIPTION_CANCEL                => 'Срок оплаты подключения истек',
+		AdminKreddyApiComponent::C_SUBSCRIPTION_PAID                  => 'Займ доступен',
+		AdminKreddyApiComponent::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
-		AdminKreddyApiComponent::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		AdminKreddyApiComponent::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 
-		AdminKreddyApiComponent::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
-		AdminKreddyApiComponent::C_SCORING_CANCEL                 => 'Заявка отклонена',
+		AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Заявка одобрена, теперь Вы можете взять займ',
 
-		AdminKreddyApiComponent::C_LOAN_DEBT                      => 'Задолженность по займу',
-		AdminKreddyApiComponent::C_LOAN_ACTIVE                    => 'Займ перечислен', //+
-		AdminKreddyApiComponent::C_LOAN_TRANSFER                  => 'Займ перечислен', //+
-		AdminKreddyApiComponent::C_LOAN_AVAILABLE                 => 'Займ доступен',
-		AdminKreddyApiComponent::C_LOAN_CREATED                   => 'Займ перечислен', //+
-		AdminKreddyApiComponent::C_LOAN_PAID                      => 'Займ оплачен',
+		AdminKreddyApiComponent::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
+		AdminKreddyApiComponent::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
-		AdminKreddyApiComponent::C_CLIENT_ACTIVE                  => 'Доступно подключение Пакета', //+
-		AdminKreddyApiComponent::C_CLIENT_NEW                     => 'Выберите Пакет займов',
-		AdminKreddyApiComponent::C_CLIENT_FAST_REG                => 'Требуется заполнить анкету',
+		AdminKreddyApiComponent::C_LOAN_DEBT                          => 'Задолженность по займу',
+		AdminKreddyApiComponent::C_LOAN_ACTIVE                        => 'Займ перечислен', //+
+		AdminKreddyApiComponent::C_LOAN_TRANSFER                      => 'Займ перечислен', //+
+		AdminKreddyApiComponent::C_LOAN_AVAILABLE                     => 'Займ доступен',
+		AdminKreddyApiComponent::C_LOAN_CREATED                       => 'Займ перечислен', //+
+		AdminKreddyApiComponent::C_LOAN_PAID                          => 'Займ оплачен',
+
+		AdminKreddyApiComponent::C_CLIENT_ACTIVE                      => 'Доступно подключение Пакета', //+
+		AdminKreddyApiComponent::C_CLIENT_NEW                         => 'Выберите Пакет займов',
+		AdminKreddyApiComponent::C_CLIENT_FAST_REG                    => 'Требуется заполнить анкету',
 	);
 
 	public function run()
