@@ -689,7 +689,9 @@ class FormFieldValidateBehavior extends CBehavior
 		if (!empty($this->owner->$attribute)) {
 			//на случай если в пришли неправильные данные, которые не удается обработать в list()
 			try {
-				list($sMonth, $sYear) = explode("/", $this->owner->$attribute);
+				$aData = explode("/", $this->owner->$attribute);
+				$sMonth = (isset($aData[0])) ? $aData[0] : '';
+				$sYear = (isset($aData[1])) ? $aData[1] : '';
 			} catch (Exception $e) {
 				$this->owner->addError($attribute, $param['messageInvalid']);
 

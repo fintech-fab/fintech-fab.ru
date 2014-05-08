@@ -14,20 +14,33 @@
 				<div class="row-fluid">
 					<h2>Как подключить КРЕДДИтную линию?</h2>
 					<ul>
-						<li>
+						<li id="asdaaa" class="tooltip_notice">
 							<img src="static/kreddyline/images/connect_icon1.png" alt="">
 
-							<p>Заполни анкету<br />(потребуется 2 документа)</p>
+							<p><a onclick="return false;" href="#">Заполни анкету<br />(потребуется 2 документа)</a></p>
+
+							<p class="hidden">
+								Паспорт гражданина РФ и любой другой из следующего списка:<br /> - Водительское
+								удостоверение<br /> - Заграничный паспорт<br /> - Военный билет<br /> - Свидетельство
+								СНИЛС<br />
+							</p>
 						</li>
-						<li>
+						<li class="tooltip_notice">
 							<img src="static/kreddyline/images/connect_icon2.png" alt="">
 
-							<p>Пройди идентификацию<br /> любым из 3 способов</p>
+							<p><a onclick="return false;" href="#">Пройди идентификацию<br /> любым из 3 способов</a>
+							</p>
+
+							<p class="hidden">
+								- Видеоидентификация<br /> - Фотоидентификация<br /> - Через Android-приложение<br />
+							</p>
 						</li>
-						<li>
+						<li class="tooltip_notice">
 							<img src="static/kreddyline/images/connect_icon3.png" alt="">
 
-							<p>Получи решение</p>
+							<p><a onclick="return false;" href="#">Получи решение</a></p>
+
+							<p class="hidden">Одобренный лимит может отличаться от запрашиваемого</p>
 						</li>
 						<li>
 							<img src="static/kreddyline/images/connect_icon4.png" alt="">
@@ -98,7 +111,7 @@
 			<div class="container">
 				<div class="row-fluid">
 					<h6 class="inner3"><img src="static/kreddyline/images/info-credit-icon3.png" alt="">SMS-инфо</h6>
-			<span><a href="<?= Yii::app()->createUrl('pages/view/smsinfo'); ?>">Отправь соответствующий запрос на
+			<span><a href="<?= Yii::app()->createUrl('pages/view/smsinfopost'); ?>">Отправь соответствующий запрос на
 					короткий номер 7570 (для КРЕДДИтной линии,<br /> для клиентов с Пакетом КРЕДДИ)</a></span>
 				</div>
 			</div>
@@ -148,3 +161,5 @@ $sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets
 Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_BEGIN);
 
 $this->widget('YaMetrikaGoalsWidget');
+?>
+

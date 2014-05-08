@@ -24,7 +24,7 @@
 	Yii::app()->clientScript->registerCoreScript('yiiactiveform');
 	?>
 
-	<script src="static/kreddyline/js/main.js"></script>
+	<script src="static/kreddyline/js/main.js?v=1"></script>
 
 	<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=5"></script>
 
@@ -52,31 +52,14 @@
 </div>
 <!--===============================header===============================-->
 <header>
-	<!--header-top-->
-	<div class="tail-border">
-		<div class="container">
-			<div class="row-fluid">
-				<div class="span5 logo">
-					<a href="<?=
-					Yii::app()
-						->createAbsoluteUrl('/') ?>"><img src="static/kreddyline/images/logo.png" alt=""></a>
-				</div>
-				<div class="span3 telephone">
-					<address>8 800 555 75 78</address>
-				</div>
-				<div class="span4">
-					<div class="private-office">
-						<a href="<?= Yii::app()->createAbsoluteUrl('/account/login'); ?>">Личный кабинет</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	<!--  header navbar start -->
+	<?php $this->renderPartial('//layouts/main_navbar_top'); ?>
+
 	<!--/header-top-->    <!--big-foto-->
 	<div class="big-foto">
 		<div class="extra-style1 hidden-phone">
 			<div class="extra-style2">
-				<div class="extra-style3"><img src="static/kreddyline/images/big-foto.png" alt=""></div>
+				<div class="extra-style3"><img src="static/kreddyline/images/big-foto2.png" alt=""></div>
 			</div>
 		</div>
 		<div class="container">

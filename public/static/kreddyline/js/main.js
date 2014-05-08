@@ -31,6 +31,15 @@
 			$(this).attr('blurvalue', blurvalue);
 	});
 
+	$('.tooltip_notice').each(function () {
+		var content = $(this).find('.hidden').html();
+		$(this).popover({
+			'selector': '',
+			'placement': 'top',
+			'content': content,
+			'html': 'true'
+		});
+	});
 
 });
 

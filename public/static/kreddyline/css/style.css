@@ -1,78 +1,101 @@
-/*========================header==========================*/
-.tail-border {
-	border-bottom: 2px solid #ababac;
-	padding: 0 0 3px 0;
-}
 
-@media (max-width: 767px) {
-	.tail-border {
-		min-height: 260px;
-	}
-}
-
-.telephone address {
-	color: #18204b;
-	font-size: 30px;
-	line-height: 1.2em;
-	padding: 26px 0 0 0;
+.navbar-top div.navbar-inner-main {
+	background: url('../../img/kreddy_bg.png');
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+	filter: 0;
 	position: relative;
-	margin-left: -20px;
-	font-family: Tahoma, Geneva, sans-serif;
+	z-index: 100000;
+	font: normal 10pt Trebuchet MS, sans-serif;
 }
 
-@media (max-width: 979px) {
-	.telephone address {
-		margin-left: 0px;
-	}
-}
-
-.logo a {
-	display: inline-block;
-	margin-left: 65px;
-}
-
-@media (max-width: 979px) {
-	.logo a {
-		margin-left: 0px;
-	}
-}
-
-.private-office {
-	background: #c2c2c2 url(../images/icon_key.png) 8px 5px no-repeat;
-	width: 235px;
-	height: 34px;
-	border-top: 1px solid #d1d1d1;
-	border-left: 1px solid #f0f0f0;
-	border-bottom: 1px solid #f0f0f0;
-	position: relative;
-	top: 26px;
-}
-
-.private-office a {
+.navbar .brand {
+	padding-bottom: 5px;
+	width: 200px;
 	display: block;
-	position: relative;
-	top: 2px;
-	left: 36px;
-	width: 196px;
-	height: 29px;
-	background: #c92127;
-	text-align: center;
-	color: #d9d9d9;
-	font-size: 14px;
-	line-height: 2em;
-	text-decoration: none;
-
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-
-	-moz-transition: background 0.4s 0.02s ease;
-	-o-transition: background 0.4s 0.02s ease;
-	-webkit-transition: background 0.4s 0.02s ease;
 }
 
-.private-office a:hover {
-	background: #32489a;
+nav .hotline {
+	color: white;
+	margin-top: 10px;
+	margin-right: 10px;
+	font-size: 18pt;
+	font-weight: 400;
+	display: inline-block;
+}
+
+nav .hotline small {
+	font-size: 14px;
+}
+
+small {
+	font-size: 11px;
+}
+
+nav div.nav-collapse {
+	margin-top: 12px;
+}
+
+.btn-link.location,
+.btn-link.location:active,
+.btn-link.location[disabled] {
+	background-color: transparent;
+	background-image: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn-link.location {
+	padding: 0;
+	font-size: 12pt;
+	border-color: transparent;
+	text-decoration: none;
+	border-bottom: 1px dashed;
+	cursor: pointer;
+	color: #ffffff;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.btn-link.location:hover,
+.btn-link.location:focus {
+	color: #ffffff;
+	text-decoration: none;
+	background-color: transparent;
+}
+
+.btn-link .location[disabled]:hover,
+.btn-link .location[disabled]:focus {
+	color: #333333;
+	text-decoration: none;
+}
+
+.caret-white {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 2px;
+	vertical-align: middle;
+	border-top: 4px solid #FFFFFF;
+	border-right: 4px solid transparent;
+	border-bottom: 0 dotted;
+	border-left: 4px solid transparent;
+	content: "";
+}
+
+.select2-drop {
+	z-index: 110000;
+}
+
+nav .account {
+	margin-top: 10px;
+	color: #8a2547;
+	display: inline-block;
+}
+
+nav .account .btn {
+	color: #8a2547;
 }
 
 /*big-foto*/
