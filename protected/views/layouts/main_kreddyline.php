@@ -59,28 +59,7 @@
 	<div class="big-foto">
 		<div class="extra-style1 hidden-phone">
 			<div class="extra-style2">
-				<div class="extra-style3"><img src="static/kreddyline/images/big-foto2.png" alt=""></div>
-			</div>
-		</div>
-		<div class="container">
-			<div class="row-fluid">
-				<div class="span6 offset6 credit-line">
-					<h1>Что такое<br />КРЕДДИтная линия?</h1>
-					<ul>
-						<li>
-							<img src="static/kreddyline/images/list_icon1.png" alt=""> Бери деньги столько раз,<br />
-							сколько тебе нужно
-						</li>
-						<li>
-							<img src="static/kreddyline/images/list_icon2.png" alt=""> Возвращай ровно столько, сколько
-							берешь -<br /> без переплат и комиссий
-						</li>
-						<li>
-							<img src="static/kreddyline/images/list_icon3.png" alt=""> Внеси абонентскую плату сразу или
-							потом
-						</li>
-					</ul>
-				</div>
+				<div class="extra-style3" style="width: 1234px; height: 450px; background: url(/static/img/landing/7.png ) -150px 0;"></div>
 			</div>
 		</div>
 	</div>

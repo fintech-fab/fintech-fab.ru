@@ -101,12 +101,12 @@ nav .account .btn {
 /*big-foto*/
 .big-foto {
 	position: relative;
-	min-height: 412px;
+	min-height: 450px;
 
 }
 
 .extra-style1 {
-	height: 412px;
+	height: 450px;
 	left: 0;
 	min-width: 1000px;
 	overflow: hidden;
@@ -551,7 +551,7 @@ nav .account .btn {
 .bxslider .btn-left {
 	position: absolute;
 	top: 190px;
-	left: 20px;
+	left: 0px;
 	background-color: #C92129;
 	background-image: linear-gradient(to bottom, #f9544f, #C92129);
 	background-repeat: repeat-x;
@@ -560,7 +560,7 @@ nav .account .btn {
 .bxslider .btn-right {
 	position: absolute;
 	top: 190px;
-	right: 50px;
+	right: 20px;
 	background-color: #C92129;
 	background-image: linear-gradient(to bottom, #f9544f, #C92129);
 	background-repeat: repeat-x;
@@ -1646,4 +1646,10 @@ label.agree.error {
 
 .dotted {
 	border-bottom: 1px dotted;
+	text-decoration: none;
+}
+
+.dotted:hover {
+	border-bottom: 1px dotted;
+	text-decoration: none;
 }

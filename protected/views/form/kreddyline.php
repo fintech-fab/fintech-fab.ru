@@ -16,7 +16,8 @@
 					<li id="asdaaa" class="tooltip_notice">
 						<img src="static/kreddyline/images/connect_icon1.png" alt="">
 
-						<p><a onclick="return false;" href="#">Заполни анкету<br />(потребуется 2 документа)</a></p>
+						<p><a onclick="return false;" href="#" class="dotted">Заполни анкету<br />(потребуется 2
+								документа)</a></p>
 
 						<p class="hidden">
 							Паспорт гражданина РФ и любой другой из следующего списка:<br /> - Водительское
@@ -27,7 +28,8 @@
 					<li class="tooltip_notice">
 						<img src="static/kreddyline/images/connect_icon2.png" alt="">
 
-						<p><a onclick="return false;" href="#">Пройди идентификацию<br /> любым из 3 способов</a>
+						<p><a onclick="return false;" href="#" class="dotted">Пройди идентификацию<br /> любым из 3
+								способов</a>
 						</p>
 
 						<p class="hidden">
@@ -37,19 +39,28 @@
 					<li class="tooltip_notice">
 						<img src="static/kreddyline/images/connect_icon3.png" alt="">
 
-						<p><a onclick="return false;" href="#">Получи решение</a></p>
+						<p><a onclick="return false;" href="#" class="dotted">Получи решение</a></p>
 
 						<p class="hidden">Одобренный лимит может отличаться от запрашиваемого</p>
 					</li>
-					<li>
+					<li class="tooltip_notice">
 						<img src="static/kreddyline/images/connect_icon4.png" alt="">
 
-						<p>Оплати подключение<br />сразу или потом</p>
+						<p><a onclick="return false;" href="#" class="dotted">Оплати подключение<br />сразу или
+								потом</a></p>
+
+						<p class="hidden">
+							Только абонентская плата за подключение! <br>Плати сразу 900 руб. за месяц или потом - 1000
+							руб. за месяц </p>
 					</li>
-					<li>
+					<li class="tooltip_notice">
 						<img src="static/kreddyline/images/connect_icon5.png" alt="">
 
-						<p>Получи деньги на карту<br /> или на мобильный телефон</p>
+						<p><a onclick="return false;" href="#" class="dotted">Получи деньги на карту<br /> или на
+								мобильный телефон</a></p>
+
+						<p class="hidden">Выбери удобный для тебя способ получения</p>
+
 					</li>
 				</ul>
 			</div>
@@ -61,7 +72,7 @@
 	<div class="select-credit">
 		<div class="container">
 			<div class="row-fluid">
-				<h3>Выбери свою КРЕДДИтную линию
+				<h3>Подключи свою КРЕДДИтную линию
 					<small>(<a href="/pages/view/kreddylinedetails" target="_blank">узнать подробности</a>)</small>
 				</h3>
 

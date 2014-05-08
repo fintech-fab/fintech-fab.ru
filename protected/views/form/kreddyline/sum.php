@@ -35,7 +35,9 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 			<li>
 				<!--КРЕДДИтный  лимит-->
 				<div class="credit-limit">
-					<b>Размер каждого перевода<br />равен одобренному лимиту</b>
+					<b style="font-size: 24px; margin: 0; padding: 20px 0 0 30px; text-align: center;">Тебе может быть
+						одобрен:</b> <b style="font-size: 10pt; font-weight: normal; padding: 0 0 10px 20px;">(размер
+						каждого перевода равен одобренному лимиту)</small></b>
 
 					<ol>
 						<?=
