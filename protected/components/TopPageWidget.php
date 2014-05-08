@@ -12,11 +12,19 @@ class TopPageWidget extends CWidget
 	{
 		$aItems = array(
 			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-line-banner.png'),
+				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-02.jpg'),
 				'label' => 'КРЕДДИтная линия',
 			),
 			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy-line-banner2.png'),
+				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-03.jpg'),
+				'label' => 'КРЕДДИтная линия',
+			),
+			array(
+				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-05.jpg'),
+				'label' => 'КРЕДДИтная линия',
+			),
+			array(
+				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-06.jpg'),
 				'label' => 'КРЕДДИтная линия',
 			),
 

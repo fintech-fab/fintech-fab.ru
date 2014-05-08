@@ -80,7 +80,7 @@ class ClientInfoWidget extends CWidget
 		) {
 			// выводим сообщение, если баланс не равен 0
 			?>
-			<strong>Баланс:</strong>  <?= Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
+			<strong>Задолженность:</strong>  <?= -Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
 		<?php
 		}
 	}
@@ -119,7 +119,8 @@ class ClientInfoWidget extends CWidget
 		if (Yii::app()->adminKreddyApi->getActiveLoanExpiredTo()) {
 			// если есть займ, выводим дату возврата
 			?>
-			<strong>Возврат займа:</strong> <?= Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() ?><br />
+			<strong>Возврат займа (в любое время)
+				до:</strong> <?= Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() ?><br />
 		<?php
 		}
 

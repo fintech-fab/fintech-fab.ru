@@ -62,7 +62,9 @@
 		<div class="select-credit">
 			<div class="container">
 				<div class="row-fluid">
-					<h3>Выбери свою КРЕДДИтную линию</h3>
+					<h3>Выбери свою КРЕДДИтную линию
+						<small>(<a href="/pages/view/kreddylinedetails" target="_blank">узнать подробности</a>)</small>
+					</h3>
 
 					<!--tab-->
 
@@ -112,7 +114,7 @@
 				<div class="row-fluid">
 					<h6 class="inner3"><img src="static/kreddyline/images/info-credit-icon3.png" alt="">SMS-инфо</h6>
 			<span><a href="<?= Yii::app()->createUrl('pages/view/smsinfopost'); ?>">Отправь соответствующий запрос на
-					короткий номер 7570 (для КРЕДДИтной линии,<br /> для клиентов с Пакетом КРЕДДИ)</a></span>
+					короткий номер 7570</a></span>
 				</div>
 			</div>
 			<div class="container">
