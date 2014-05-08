@@ -908,6 +908,7 @@ class TbActiveForm extends CActiveForm
 					'{labelCssClass}' => $labelCssClass,
 					'{input}' => $option,
 					'{label}' => $label,
+					'{index_number}' => $id,
 				)
 			);
 		}

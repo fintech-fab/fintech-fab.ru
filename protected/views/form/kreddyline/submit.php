@@ -55,19 +55,19 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					</p>
 					<input type="submit" value="Подключить"-->
 
-					<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('style' => 'width: 105px;')); ?>
+					<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('style' => 'width: 103px;')); ?>
 					&nbsp;
 
-					<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('style' => 'width: 105px;')); ?>
+					<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('style' => 'width: 103px;')); ?>
 					&nbsp;
 
-					<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('style' => 'width: 105px;')); ?>
+					<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('style' => 'width: 103px;')); ?>
 					<br /> <br />
 
-					<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('style' => 'width: 170px;', 'size' => '15')); ?>
+					<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('style' => 'width: 168px;', 'size' => '15')); ?>
 					&nbsp;
 
-					<?= $form->textFieldRow($oClientCreateForm, 'email', array('style' => 'width: 170px;')); ?><br />
+					<?= $form->textFieldRow($oClientCreateForm, 'email', array('style' => 'width: 168px;')); ?><br />
 
 
 			<span class="confirm">

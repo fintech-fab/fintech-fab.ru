@@ -43,7 +43,13 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 								телефон<span><em>МТС</em>  <em>Билайн</em>   <em>Мегафон</em>  <em>ТЕЛЕ2</em></span></label>
 						</li>
 					</ol-->
-					<?= $form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsKreddyLine(), array("class" => "all")); ?>
+					<?=
+					$form->radioButtonList($oClientCreateForm, 'channel_id', Yii::app()->productsChannels->getChannelsKreddyLine(), array(
+						"class"        => "all",
+						'labelOptions' => array(
+							'style' => 'margin-bottom: 6px;',
+						)
+					)); ?>
 					<?php $this->widget('bootstrap.widgets.TbButton', array(
 						'id'          => 'backButton',
 						'buttonType'  => 'ajaxButton',

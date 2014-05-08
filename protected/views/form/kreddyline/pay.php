@@ -51,7 +51,7 @@ Yii::app()->clientScript->registerScript('ajaxForm', '
 						<?=
 						$form->radioButtonList($oClientCreateForm, 'pay_type', Dictionaries::$aPayTypes, array(
 
-							'template' => '<li><img alt="" src="/static/kreddyline/images/tab_text_icon1.png"/><label class="{labelCssClass}">{input}{label}</label></li>'
+							'template' => '<li><img alt="" src="/static/kreddyline/images/tab_text_icon{index_number}.png"/><label class="{labelCssClass}">{input}{label}</label></li>'
 
 						)); ?>
 					</ol>

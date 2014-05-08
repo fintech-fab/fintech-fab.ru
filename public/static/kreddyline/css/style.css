@@ -873,7 +873,7 @@
 .info-credit a {
 	color: #58595b;
 	display: inline-block;
-
+	text-decoration: underline;
 	-moz-transition: color 0.4s 0.02s ease;
 	-o-transition: color 0.4s 0.02s ease;
 	-webkit-transition: color 0.4s 0.02s ease;
@@ -881,7 +881,7 @@
 
 .info-credit a:hover {
 	color: #32489a;
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 .info-credit .div-center {
@@ -986,8 +986,7 @@
 
 .info-credit ul li a {
 	color: #58595b;
-	text-decoration: none;
-
+	text-decoration: underline;
 	-moz-transition: color 0.4s 0.02s ease;
 	-o-transition: color 0.4s 0.02s ease;
 	-webkit-transition: color 0.4s 0.02s ease;
@@ -995,7 +994,7 @@
 
 .info-credit ul li a:hover {
 	color: #32489a;
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 .info-credit p img {
@@ -1620,4 +1619,8 @@ input[type="reset"].styler:active {
 
 label.agree.error {
 	color: white;
+}
+
+.dotted {
+	border-bottom: 1px dotted;
 }

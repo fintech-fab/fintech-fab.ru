@@ -70,12 +70,13 @@
 					<h6 class="inner1"><img src="static/kreddyline/images/info-credit-icon1.png" alt="">Безопасность
 					</h6>
 
-					<div class="div-center">Данные строго защищены стандартом информационной безопасности</div>
+					<div class="div-center">Данные и подключение строго защищены стандартом информационной безопасности
+					</div>
 					<p>
 						<a target="_blank" href="https://kreddy.ru/static/docs/pcidss.pdf"><img src="static/kreddyline/images/card_img1.png" alt=""></a>
-						<a onclick="return false;" href="#"><img src="static/kreddyline/images/card_img2.png" alt=""></a>
-						<a onclick="return false;" href="#"><img src="static/kreddyline/images/card_img3.png" alt=""></a>
-						<a onclick="return false;" href="#"><img src="static/kreddyline/images/card_img4.png" alt=""></a>
+						<img src="static/kreddyline/images/card_img2.png" alt="">
+						<img src="static/kreddyline/images/card_img3.png" alt="">
+						<img src="static/kreddyline/images/card_img4.png" alt="">
 					</p>
 
 				</div>
