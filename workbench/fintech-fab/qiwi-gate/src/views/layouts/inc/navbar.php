@@ -21,13 +21,15 @@ use FintechFab\QiwiGate\Widgets\NavbarAction;
 						<li class=" <?= NavbarAction::isActive(URL::route('accountIndex')) ?> ">
 							<a href="<?= URL::route('accountIndex') ?>">Аккаунт QIWI</a>
 						</li>
-						<li class=" <?= NavbarAction::isActive(URL::route('ordersTable')) ?> ">
-							<a href="<?= URL::route('ordersTable') ?>">Таблица заказов</a>
+						<li class=" <?= NavbarAction::isActive(URL::route('billsTable')) ?> ">
+							<a href="<?= URL::route('billsTable') ?>">Счета</a>
 						</li>
 
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-
+						<li class=" <?= NavbarAction::isActive(URL::route('ordersTable')) ?> ">
+							<a href="<?= URL::route('ordersTable') ?>">Таблица заказов</a>
+						</li>
 						<li>
 							<a href="<?= URL::route('profile') ?>">Профиль</a>
 						</li>

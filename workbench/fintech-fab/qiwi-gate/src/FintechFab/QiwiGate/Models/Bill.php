@@ -19,13 +19,14 @@ use Eloquent;
  * @property string  $created_at
  * @property string  $updated_at
  *
- * @method static Merchant find()
+ * @method static Bill find()
  * @method static Bill where()
  * @method static Bill first()
  * @method static Bill whereBillId($id)
  * @method static Bill whereMerchantId($id)
  * @method static Bill whereStatus($status)
  * @method static Bill whereUser($user)
+ * @method static Bill links()
  */
 class Bill extends Eloquent
 {
@@ -36,11 +37,17 @@ class Bill extends Eloquent
 	protected $table = 'merchants_bills';
 	protected $connection = 'qiwiGate';
 
+	/**
+	 * @return Merchant
+	 */
 	public function merchant()
 	{
 		return $this->belongsTo('\FintechFab\QiwiGate\Models\Merchant');
 	}
 
+	/**
+	 * @return Refund
+	 */
 	public function refunds()
 	{
 		return $this->hasMany('FintechFab\QiwiGate\Models\Refund');

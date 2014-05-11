@@ -5,14 +5,12 @@
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Widgets\MakeButton;
 
-$i = 1;
 ?>
 <?= View::make('ff-qiwi-shop::qiwiShop.inc.payReturnModal') ?>
 <script src="/packages/fintech-fab/qiwi-shop/js/ActionTableButtons.js"></script>
 
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
-		<td><b>№</b></td>
 		<td><b>ID</b></td>
 		<td><b>Название</b></td>
 		<td><b>Сумма</b></td>
@@ -24,7 +22,6 @@ $i = 1;
 	<?php foreach ($orders as $order): ?>
 		<?php $arr = MakeButton::displayTable($order) ?>
 		<tr>
-			<td><?= $i ?></td>
 			<td><?= $order->id ?></td>
 			<td><?= $order->item ?></td>
 			<td><?= $order->sum ?></td>
@@ -34,8 +31,7 @@ $i = 1;
 			<td><?= $arr['activity'] ?></td>
 		</tr>
 
-		<?php $i++;
-	endforeach ?>
+	<?php endforeach ?>
 </table>
 <?= $orders->links() ?>
 <div id="message" class="text-center"></div>

@@ -23,7 +23,7 @@ class Validators
 	public static function rulesForNewOrder()
 	{
 		$rules = array(
-			'item'    => 'required|alpha_dash|regex:/^.{0,255}$/',
+			'item'    => 'required|regex:/^.{0,255}$/',
 			'sum'     => 'required|numeric|regex:/^\d+(.\d{0,2})?$/',
 			'tel'     => 'required|regex:/^\+\d{1,15}$/',
 			'comment' => 'regex:/^.{0,255}$/',

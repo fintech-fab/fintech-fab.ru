@@ -9,9 +9,7 @@ use Eloquent;
  * @property integer $bill_id
  * @property integer $refund_id
  * @property string  $amount
- * @property string  $error
  * @property string  $status
- * @property string  $user
  * @property string  $created_at
  * @property string  $updated_at
  *
@@ -28,7 +26,7 @@ use Eloquent;
 class Refund extends Eloquent
 {
 	protected $fillable = array(
-		'bill_id', 'refund_id', 'amount', 'status', 'user',
+		'bill_id', 'refund_id', 'amount', 'status',
 	);
 	protected $table = 'bills_refund';
 	protected $connection = 'qiwiGate';

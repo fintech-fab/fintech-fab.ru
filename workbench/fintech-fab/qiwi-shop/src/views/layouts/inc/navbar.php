@@ -24,12 +24,12 @@ use FintechFab\QiwiShop\Widgets\NavbarAction;
 						<li class=" <?= NavbarAction::isActive(URL::route('ordersTable')) ?> ">
 							<a href="<?= URL::route('ordersTable') ?>">Таблица заказов</a>
 						</li>
+
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
 						<li>
 							<a href="<?= URL::route('accountIndex') ?>">Аккаунт QIWI</a>
 						</li>
-					</ul>
-					<ul class="nav navbar-nav navbar-right">
-
 						<li>
 							<a href="<?= URL::route('profile') ?>">Профиль</a>
 						</li>

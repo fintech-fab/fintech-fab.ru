@@ -55,6 +55,15 @@ Route::group(
 			'uses' => 'AccountController@postChangeData'
 		));
 
+		Route::get('account/billsTable', array(
+			'as'   => 'billsTable',
+			'uses' => 'AccountController@billsTable'
+		));
+		Route::get('account/billsTable/getRefund/{bill_id}', array(
+			'as'   => 'GetRefundTable',
+			'uses' => 'AccountController@GetRefundTable'
+		));
+
 	}
 
 );

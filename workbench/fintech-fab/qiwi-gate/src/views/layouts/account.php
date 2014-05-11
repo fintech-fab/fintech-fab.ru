@@ -10,6 +10,6 @@ if (empty($content)) {
 </head>
 <body>
 <?= View::make('ff-qiwi-gate::layouts.inc.navbar') ?>
-<div><?= $content ?></div>
+<div class="container"><?= $content ?></div>
 </body>
 </html>

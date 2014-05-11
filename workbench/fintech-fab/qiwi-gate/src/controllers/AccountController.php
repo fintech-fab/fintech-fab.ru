@@ -5,6 +5,7 @@ namespace FintechFab\QiwiGate\Controllers;
 use Config;
 use FintechFab\QiwiGate\Components\Merchants;
 use FintechFab\QiwiGate\Components\Validators;
+use FintechFab\QiwiGate\Models\Bill;
 use FintechFab\QiwiGate\Models\Merchant;
 use Input;
 use Validator;
@@ -90,6 +91,35 @@ class AccountController extends BaseController
 
 		return $result;
 
+	}
+
+	/**
+	 * @return \Illuminate\View\View
+	 */
+	public function billsTable()
+	{
+		$user_id = Config::get('ff-qiwi-gate::user_id');
+		$bills = Bill::whereMerchantId($user_id)->orderBy('id', 'desc')->paginate(10);
+		if (!$bills) {
+			return $this->make('newMerchant', array('user_id' => $user_id));
+		}
+
+		return $this->make('billsTable', array('bills' => $bills));
+	}
+
+	public function GetRefundTable($bill_id)
+	{
+		$user_id = Config::get('ff-qiwi-gate::user_id');
+		$bill = Bill::whereMerchantId($user_id)->find($bill_id);
+		if (!$bill) {
+			return 'Нет такого счёта';
+		}
+		$refunds = $bill->refunds()->get();
+		if (count($refunds) == 0) {
+			return 'Возвратов нет';
+		}
+
+		return $this->make('refundsTable', array('refunds' => $refunds));
 	}
 
 	/**
