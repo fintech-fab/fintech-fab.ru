@@ -3929,6 +3929,13 @@ class AdminKreddyApiComponent
 		return $aAvailableChannels[self::C_CARD] == $iChannelId;
 	}
 
+	/**
+	 * Условия погашения абонентской платы в зависимости от типа продукта
+	 *
+	 * @param $iProductId
+	 *
+	 * @return string
+	 */
 	public function getPaymentRuleByProduct($iProductId)
 	{
 		$aProducts = $this->getProducts();
