@@ -80,7 +80,20 @@ class ClientInfoWidget extends CWidget
 		) {
 			// выводим сообщение, если баланс не равен 0
 			?>
-			<strong>Задолженность:</strong>  <?= -Yii::app()->adminKreddyApi->getBalance(); ?> руб. <br />
+			<strong>Задолженность:</strong>  <?= -Yii::app()->adminKreddyApi->getBalance(); ?> руб.
+			<a href="#" class="dashed" onclick="$('#detail_balance_main_info').toggle(); return false;">детализация</a>
+			<br />
+			<div id="detail_balance_main_info" class="hide">
+				<strong>Займ:</strong> <?= Yii::app()->adminKreddyApi->getAbsLoanBalance() ?> руб. <br /> <strong>Абонентская
+					плата:</strong> <?= Yii::app()->adminKreddyApi->getAbsSubscriptionBalance() ?> руб. <br />
+				<?php
+				if (Yii::app()->adminKreddyApi->getAbsFineAndPenalty() != 0) {
+					?>
+					<strong>Пени/штраф:</strong> <?= Yii::app()->adminKreddyApi->getAbsFineAndPenalty() ?> руб. <br />
+				<?php
+				}
+				?>
+			</div>
 		<?php
 		}
 	}
