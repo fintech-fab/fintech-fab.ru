@@ -41,7 +41,7 @@ class AdminKreddyApiComponent
 
 	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
 	const C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о статусе займа{account_url_end}";
-	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. Попробуйте отправить запрос на перевод через 1 минуту. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
+	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. Попробуйте повторить запрос на перевод через 1 минуту. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
 
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {do_sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Заявка одобрена. Для получения денег {do_loan_url_start}отправьте запрос на перевод.{do_loan_url_end} {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
