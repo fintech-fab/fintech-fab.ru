@@ -56,6 +56,16 @@ class AdminKreddyApiComponent
 			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
 			  и затем вернитесь к получению займа.';
 
+	private $aSubscriptionActiveStates = array(
+		self::C_SUBSCRIPTION_ACTIVE,
+		self::C_LOAN_AVAILABLE,
+		self::C_LOAN_CREATED,
+		self::C_LOAN_TRANSFER,
+		self::C_LOAN_DEBT,
+		self::C_LOAN_PAID,
+		self::C_CLIENT_MORATORIUM_LOAN,
+	);
+
 	private $aAvailableStatuses = array(
 
 		self::C_CLIENT_MORATORIUM_LOAN             => 'Временно недоступно получение новых займов',
@@ -1114,7 +1124,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return bool
+	 * @return string
 	 */
 	public function getClientStatus()
 	{
@@ -1160,6 +1170,9 @@ class AdminKreddyApiComponent
 		return abs($aClientInfo['active_loan']['balance']);
 	}
 
+	/**
+	 * @return number
+	 */
 	public function getAbsLoanBalance()
 	{
 		$aClientInfo = $this->getClientInfo();
@@ -1167,6 +1180,9 @@ class AdminKreddyApiComponent
 		return abs($aClientInfo['active_loan']['loan_balance']);
 	}
 
+	/**
+	 * @return number
+	 */
 	public function getAbsSubscriptionBalance()
 	{
 		$aClientInfo = $this->getClientInfo();
@@ -1174,6 +1190,9 @@ class AdminKreddyApiComponent
 		return abs($aClientInfo['active_loan']['subscription_balance']);
 	}
 
+	/**
+	 * @return number
+	 */
 	public function getAbsFineAndPenalty()
 	{
 		$aClientInfo = $this->getClientInfo();
@@ -3972,4 +3991,13 @@ class AdminKreddyApiComponent
 		return self::C_KREDDY_LINE_PAY_RULES;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isSubscriptionActive()
+	{
+		$cClientStatus = $this->getClientStatus();
+
+		return in_array($cClientStatus, $this->$aSubscriptionActiveStates);
+	}
 }

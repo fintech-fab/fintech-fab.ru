@@ -143,10 +143,10 @@ class AccountMenuWidget extends CWidget
 			echo '<strong>Платеж просрочен!</strong><br/>';
 		}
 
-		if (Yii::app()->adminKreddyApi->getBalance() < 0) {
-			echo '
-			<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб.
-			<a href="#" class="dashed" onclick="$(\'#detail_balance_info\').toggle(); return false;">детализация</a><br/>';
+		// если баланс отрицательный и подписка активна, выводим информацию о задолженности
+		if (Yii::app()->adminKreddyApi->getBalance() < 0 && Yii::app()->adminKreddyApi->isSubscriptionActive()) {
+			echo '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб.';
+			echo '<a href="#" class="dashed" onclick="$(\'#detail_balance_info\').toggle(); return false;">детализация</a><br/>';
 			echo '<div id="detail_balance_info" class="hide">';
 			echo '<strong>Займ:</strong> ' . Yii::app()->adminKreddyApi->getAbsLoanBalance() . ' руб. <br/>';
 			echo '<strong>Абонентская плата:</strong> ' . Yii::app()->adminKreddyApi->getAbsSubscriptionBalance() . ' руб. <br/>';

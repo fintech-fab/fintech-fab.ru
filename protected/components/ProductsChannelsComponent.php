@@ -60,7 +60,7 @@ class ProductsChannelsComponent
 			$aProducts = Yii::app()->adminKreddyApi->getProducts();
 
 			foreach ($aProductsIds as $iProductId) {
-				if ($aProducts[$iProductId]['type'] == $iType) {
+				if (isset($aProducts[$iProductId]['type']) && $aProducts[$iProductId]['type'] == $iType) {
 					return $iProductId;
 				}
 			}
@@ -229,6 +229,11 @@ class ProductsChannelsComponent
 		return $aChannelsList;
 	}
 
+	/**
+	 * Получение списка каналов для "КРЕДДИтной линии"
+	 *
+	 * @return array
+	 */
 	public function getChannelsKreddyLine()
 	{
 		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
