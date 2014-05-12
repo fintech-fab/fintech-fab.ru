@@ -64,6 +64,10 @@ class KreddyLineWidget extends SubscriptionWidget
 			<li><strong>Время перечисления
 					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
 			</li>
+			<li>
+				<strong>Условия внесения абонентской
+					платы:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getPaymentRuleByProduct($iProductId); ?>
+			</li>
 		</ul>
 		<?php
 		$this->renderChannelSpeedMessage();

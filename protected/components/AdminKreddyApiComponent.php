@@ -124,6 +124,9 @@ class AdminKreddyApiComponent
 	const PRODUCT_TYPE_KREDDYLINE = 3;
 	const PRODUCT_TYPE_KREDDY_LINE_POSTPAID = 4;
 
+	const C_KREDDY_LINE_POSTPAID_PAY_RULES = 'до окончания действия КРЕДДИтной линии';
+	const C_KREDDY_LINE_PAY_RULES = 'перед началом использования КРЕДДИтной линии';
+
 	private static $aChannels = array(
 		self::C_MOBILE,
 		self::C_CARD,
@@ -3943,6 +3946,30 @@ class AdminKreddyApiComponent
 		}
 
 		return $aAvailableChannels[self::C_CARD] == $iChannelId;
+	}
+
+	/**
+	 * Условия погашения абонентской платы в зависимости от типа продукта
+	 *
+	 * @param $iProductId
+	 *
+	 * @return string
+	 */
+	public function getPaymentRuleByProduct($iProductId)
+	{
+		$aProducts = $this->getProducts();
+
+		if (!isset($aProducts[$iProductId]['type'])) {
+			return '';
+		}
+
+		$iProductType = $aProducts[$iProductId]['type'];
+
+		if ($iProductType == self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID) {
+			return self::C_KREDDY_LINE_POSTPAID_PAY_RULES;
+		}
+
+		return self::C_KREDDY_LINE_PAY_RULES;
 	}
 
 }
