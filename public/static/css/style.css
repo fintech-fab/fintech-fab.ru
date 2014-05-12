@@ -775,8 +775,8 @@ div.cost {
 	padding-top: 15px;
 }
 
-#detail_balance_info {
-	padding: 0 0 15px 7px;
+#detail_balance_info, #detail_balance_main_info {
+	padding: 0 0 12px 10px;
 }
 
 .product_selection {
