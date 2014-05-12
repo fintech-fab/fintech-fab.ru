@@ -30,12 +30,28 @@ use Eloquent;
  */
 class Bill extends Eloquent
 {
+
+	const C_STATUS_WAITING = 'waiting';
+	const C_STATUS_PAID = 'paid';
+
+
 	protected $fillable = array(
 		'merchant_id', 'bill_id', 'user', 'amount', 'ccy', 'comment', 'lifetime',
 		'pay_source', 'prv_name', 'status'
 	);
 	protected $table = 'merchants_bills';
 	protected $connection = 'qiwiGate';
+
+	/**
+	 * @param integer $shopId
+	 * @param string  $billId
+	 *
+	 * @return Bill
+	 */
+	public static function getByShopAndBill($shopId, $billId)
+	{
+		return Bill::whereMerchantId($shopId)->whereBillId($billId)->first();
+	}
 
 	/**
 	 * @return Merchant
@@ -52,4 +68,61 @@ class Bill extends Eloquent
 	{
 		return $this->hasMany('FintechFab\QiwiGate\Models\Refund');
 	}
+
+
+	/**
+	 * счет просрочен?
+	 *
+	 * @return bool
+	 */
+	public function isExpired()
+	{
+
+		if (
+			$this->status == 'waiting' &&
+			$this->lifetime != '0000-00-00 00:00:00' &&
+			strtotime($this->lifetime) <= time()
+		) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+
+	/**
+	 * платеж в ожидании?
+	 *
+	 * @return bool
+	 */
+	public function isWaiting()
+	{
+		return $this->status == self::C_STATUS_WAITING;
+	}
+
+	/**
+	 * отбор по ожидающим счетам
+	 *
+	 * @return Bill
+	 */
+	public function scopeWaiting()
+	{
+		$this->whereStatus(self::C_STATUS_WAITING);
+
+		return $this;
+	}
+
+	/**
+	 * оплатить найденные счета
+	 */
+	public static function update2Paid($billId)
+	{
+		return self::whereBillId($billId)
+			->scopeWaiting()
+			->update(
+				array('status' => self::C_STATUS_PAID)
+			);
+	}
+
 }

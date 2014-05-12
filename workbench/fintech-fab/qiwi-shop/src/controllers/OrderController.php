@@ -17,37 +17,33 @@ class OrderController extends BaseController
 {
 
 	public $layout = 'qiwiShop';
-	private $statusMap;
-	private $statusRussian;
 
-	public function __construct()
-	{
-		$this->statusMap = array(
-			'waiting'  => 'payable',
-			'paid'     => 'paid',
-			'rejected' => 'canceled',
-			'expired'  => 'expired',
-			'processing' => 'onReturn',
-			'success'    => 'returned',
-		);
-		$this->statusRussian = array(
-			'payable'   => 'К оплате',
-			'canceled'  => 'Отменён',
-			'expired'   => 'Просрочен',
-			'paid'      => 'Оплачен',
-			'returning' => 'Возврат оплаты',
-			'onReturn'  => 'на возврате',
-			'returned'  => 'возвращен',
-		);
-	}
+	private $statusMap = array(
+		'waiting'    => 'payable',
+		'paid'       => 'paid',
+		'rejected'   => 'canceled',
+		'expired'    => 'expired',
+		'processing' => 'onReturn',
+		'success'    => 'returned',
+	);
+
+	private $statusRussian = array(
+		'payable'   => 'К оплате',
+		'canceled'  => 'Отменён',
+		'expired'   => 'Просрочен',
+		'paid'      => 'Оплачен',
+		'returning' => 'Возврат оплаты',
+		'onReturn'  => 'на возврате',
+		'returned'  => 'возвращен',
+	);
 
 	public function getAction($action)
 	{
 
 		$order_id = Input::get('order_id');
-		$order = Order::find($order_id);
+		$order = Order::whereUserId(Config::get('ff-qiwi-shop::user_id'))->find($order_id);
 
-		if ($order->user_id != Config::get('ff-qiwi-shop::user_id')) {
+		if (!$order) {
 			return $this->resultMessage('Нет такого заказа');
 		}
 
@@ -94,6 +90,7 @@ class OrderController extends BaseController
 				'tel'     => $userMessages->first('tel'),
 				'comment' => $userMessages->first('comment'),
 			);
+
 			return $result;
 		}
 		$data['user_id'] = Config::get('ff-qiwi-shop::user_id');
@@ -113,6 +110,7 @@ class OrderController extends BaseController
 		$result['errors'] = array(
 			'common' => 'Неизвестная ошибка. Повторите ещё раз.',
 		);
+
 		return $result;
 	}
 

@@ -1,11 +1,8 @@
 $(document).ready(function () {
 	$('button#payBill').click(function () {
-		var user = $('#inputTel').val();
-		$.ajax({
-			type: "POST",
-			url: '',
-			data: {user: user},
-			success: function (data) {
+		$.post(
+			function (data) {
+
 				if (data['error']) {
 					$('#error').html(data['error']);
 					return;
@@ -17,7 +14,8 @@ $(document).ready(function () {
 						window.close();
 					}
 				}).html(data['message']);
+
 			}
-		});
+		);
 	});
 });

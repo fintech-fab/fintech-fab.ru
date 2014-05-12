@@ -1,10 +1,14 @@
 $(document).ready(function () {
 	$('button.tableBtn').click(function () {
-		var action = this.id.split('_');
+
+		var $btn = $(this);
+		var action = $btn.data('action');
+		var id = $btn.data('id');
+
 		$.ajax({
 			type: "POST",
-			url: 'orders/' + action[0],
-			data: {order_id: action[1]},
+			url: 'orders/' + action,
+			data: {order_id: id},
 			success: function (data) {
 				$('#message').dialog({
 					title: data['title'], show: 'fade', hide: 'fade', modal: true, close: function () {
@@ -14,18 +18,28 @@ $(document).ready(function () {
 			}
 		});
 	});
+
 	$('button.actionBtn').click(function () {
-		var action = this.id.split('_');
-		$('.payReturnModal').attr('id', 'payReturn_' + action[1]);
+		var $btn = $(this);
+		var $modal = $('#payReturn');
+		$modal.data('id', $btn.data('id'));
+		$modal.data('action', $btn.data('action'));
 	});
+
 	$('button.payReturnModal').click(function () {
-		var action = this.id.split('_');
-		var sum = $('#inputSum').val();
-		var comment = $('#inputComment').val();
-		var data = {order_id: action[1], sum: sum, comment: comment};
+
+		var $modal = $(this).parents('#payReturn');
+		var action = $modal.data('action');
+		var id = $modal.data('id');
+
+		var sum = $modal.find('#inputSum').val();
+		var comment = $modal.find('#inputComment').val();
+		var url = 'orders/' + action;
+		var data = {order_id: id, sum: sum, comment: comment};
+
 		$.ajax({
 			type: "POST",
-			url: 'orders/' + action[0],
+			url: url,
 			data: data,
 			success: function (data) {
 				if (data['error']) {

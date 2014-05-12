@@ -29,20 +29,11 @@ class Validators
 		return $rules;
 	}
 
-	public static function rulesForPayment()
-	{
-		$rules = array(
-			'user' => 'required|regex:/^\+\d{1,15}$/',
-		);
-
-		return $rules;
-	}
-
 	public static function rulesForAccount()
 	{
 		$rules = array(
 			'username'        => 'required|alpha_dash',
-			'callback'        => 'required|url',
+			'callback'        => 'url',
 			'password'        => 'required|min:4|alpha_dash',
 			'confirmPassword' => 'required|same:password',
 		);

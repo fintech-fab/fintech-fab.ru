@@ -87,14 +87,16 @@ class MakeButton
 		switch ($type) {
 			case 'showStatus':
 				$button = Form::button('Статус счёта', array(
-					'id'    => 'showStatus_' . $order_id,
-					'class' => 'btn btn-info tableBtn status',
+					'class'       => 'btn btn-info tableBtn',
+					'data-action' => 'showStatus',
+					'data-id'     => $order_id,
 				));
 				break;
 			case 'createBill':
 				$button = Form::button('Выставить счёт', array(
-					'id'    => 'createBill_' . $order_id,
-					'class' => 'btn btn-primary tableBtn getBill',
+					'class'       => 'btn btn-primary tableBtn',
+					'data-action' => 'createBill',
+					'data-id'     => $order_id,
 				));
 				break;
 			case 'payBill':
@@ -105,28 +107,30 @@ class MakeButton
 				$button = link_to(url(URL::route('payIndex') . '?' . http_build_query($query_data)),
 					'Оплатить', array(
 						'target' => '_blank',
-						'id'     => 'payBill_' . $order_id,
-						'class'  => 'btn btn-success actionBtn pay',
+						'class'  => 'btn btn-success',
 					));
 				break;
 			case 'cancelBill':
 				$button = Form::button('Отменить', array(
-					'id'    => 'cancelBill_' . $order_id,
-					'class' => 'btn btn-warning tableBtn cancel',
+					'class'       => 'btn btn-warning tableBtn',
+					'data-action' => 'cancelBill',
+					'data-id'     => $order_id,
 				));
 				break;
 			case 'payReturn':
 				$button = Form::button('Возврат отплаты', array(
-					'id'          => 'payReturn_' . $order_id,
-					'class'       => 'btn btn-danger actionBtn return',
+					'class'       => 'btn btn-danger actionBtn',
 					'data-toggle' => 'modal',
 					'data-target' => '#payReturn',
+					'data-action' => 'payReturn',
+					'data-id'     => $order_id,
 				));
 				break;
 			case 'statusReturn':
 				$button = Form::button('Статус возврата', array(
-					'id'    => 'statusReturn_' . $order_id,
-					'class' => 'btn btn-primary tableBtn statusReturn',
+					'class'       => 'btn btn-primary tableBtn',
+					'data-action' => 'statusReturn',
+					'data-id'     => $order_id,
 				));
 				break;
 			default:
