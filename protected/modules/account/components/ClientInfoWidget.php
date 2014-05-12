@@ -59,7 +59,7 @@ class ClientInfoWidget extends CWidget
 	public function renderProductRequest()
 	{
 		?>
-		<strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?><br />
+		<strong>Пакет:</strong> <?= Yii::app()->adminKreddyApi->getSubscriptionRequestName() ?><br />
 	<?php
 
 	}

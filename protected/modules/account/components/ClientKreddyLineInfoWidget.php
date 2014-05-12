@@ -51,7 +51,7 @@ class ClientKreddyLineInfoWidget extends ClientInfoWidget
 	public function renderProductRequest()
 	{
 		?>
-		<strong><?= Yii::app()->adminKreddyApi->getSubscriptionRequest() ?></strong><br />
+		<strong><?= Yii::app()->adminKreddyApi->getSubscriptionRequestName() ?></strong><br />
 	<?php
 
 	}

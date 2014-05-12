@@ -39,12 +39,12 @@ class AdminKreddyApiComponent
 
 	const C_STATUS_ERROR = 'Ошибка!';
 
-	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
 	const C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о статусе займа{account_url_end}";
-	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о Пакете{account_url_end}";
+	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. Попробуйте отправить запрос на перевод через 1 минуту. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
 
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {do_sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Ваша заявка одобрена, теперь Вы можете взять займ {account_url_start}Посмотреть информацию о Пакете{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {do_sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Заявка одобрена. Для получения денег {do_loan_url_start}отправьте запрос на перевод.{do_loan_url_end} {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Ваша заявка отклонена';
 	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
 	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
@@ -287,6 +287,11 @@ class AdminKreddyApiComponent
 					"href" => Yii::app()->createUrl("/account")
 				)), // ссылка на инфо о пакете
 			'{account_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о пакете
+
+			'{do_loan_url_start}' => CHtml::openTag("a", array(
+					"href" => Yii::app()->createUrl("/account/loan")
+				)), // ссылка на получение займа
+			'{do_loan_url_end}'   => CHtml::closeTag("a"), // /ссылка на получение займа
 
 			'{payments_url_start}' => CHtml::openTag("a", array(
 					"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
@@ -845,20 +850,20 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'                            => self::ERROR_AUTH,
-			'client_data'                     => array(
+			'code'                 => self::ERROR_AUTH,
+			'client_data'          => array(
 				'is_debt'               => false,
 				'fullname'              => '',
 				'client_new'            => false,
 				'sms_auth_enabled'      => false,
 				'is_possible_take_loan' => false,
 			),
-			'status'                          => array(
+			'status'               => array(
 				'name' => false,
 			),
-			'loan_request'                    => false,
-			'first_identification'            => false,
-			'active_loan'                     => array(
+			'loan_request'         => false,
+			'first_identification' => false,
+			'active_loan'          => array(
 				'channel_id'               => false,
 				'balance'                  => 0,
 				'loan_balance'             => 0,
@@ -867,9 +872,12 @@ class AdminKreddyApiComponent
 				'expired'                  => false,
 				'expired_to'               => false
 			),
-			'subscription_request'            => false,
-			'subscription_request_can_cancel' => false,
-			'subscription'                    => array(
+			'subscription_request' => array(
+				'name'       => false,
+				'can_cancel' => false,
+				'type'       => 0
+			),
+			'subscription'         => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -883,16 +891,16 @@ class AdminKreddyApiComponent
 					'type'          => false,
 				),
 			),
-			'moratoriums'                     => array(
+			'moratoriums'          => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'                        => array(),
-			'slow_channels'                   => array(),
-			'bank_card_exists'                => false,
-			'bank_card_expired'               => false,
-			'bank_card_pan'                   => false,
+			'channels'             => array(),
+			'slow_channels'        => array(),
+			'bank_card_exists'     => false,
+			'bank_card_expired'    => false,
+			'bank_card_pan'        => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -962,7 +970,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['subscription_request_can_cancel'];
+		return $aClientInfo['subscription_request']['can_cancel'];
 	}
 
 	/**
@@ -1173,12 +1181,23 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool|string
 	 */
-	public function getSubscriptionRequest()
+	public function getSubscriptionRequestName()
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['subscription_request'];
+		return $aClientInfo['subscription_request']['name'];
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getSubscriptionRequestType()
+	{
+		$aClientInfo = $this->getClientInfo(true);
+
+		return $aClientInfo['subscription_request']['type'];
+	}
+
 
 	/**
 	 * Получаем сумму из имени пакета, не работает для пакетов типа "Покупки", использовать только для Иваново
@@ -1188,7 +1207,7 @@ class AdminKreddyApiComponent
 	public function getSubscriptionRequestLoan()
 	{
 
-		$sProduct = $this->getSubscriptionRequest();
+		$sProduct = $this->getSubscriptionRequestName();
 		$iProductLoan = preg_replace('/[^\d]+/', '', $sProduct);
 
 		return ($iProductLoan) ? $iProductLoan : false;
@@ -3257,9 +3276,9 @@ class AdminKreddyApiComponent
 	 */
 	private function getAutomaticScoringMessage()
 	{
-		$aClientInfo = $this->getClientInfo();
+		$iProductType = $this->getSubscriptionRequestType();
 
-		$iProductType = $aClientInfo['subscription']['product_info']['type'];
+		mail("d.laptev@fintech-fab.ru", "adasda", "----" . $iProductType . "----");
 
 		if ($iProductType == AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID) {
 			return self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID;

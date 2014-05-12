@@ -151,7 +151,7 @@ class DefaultController extends Controller
 			) { // если есть мораторий на подписку/скоринг или заём
 				//TODO вынести в константы типы вьюх
 				$sClientInfoView = 'subscription_moratorium';
-			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequest()) { //если подписка "висит" на скоринге
+			} elseif (Yii::app()->adminKreddyApi->getSubscriptionRequestName()) { //если подписка "висит" на скоринге
 				$sClientInfoView = 'subscription_scoring';
 			} else { // можно оформить новый Пакет
 				$sClientInfoView = 'new_subscription_available';
