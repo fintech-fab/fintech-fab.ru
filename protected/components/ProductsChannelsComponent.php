@@ -259,7 +259,7 @@ class ProductsChannelsComponent
 			}
 		}
 		if (!empty($sCardChannels) && !empty($sCardChannelName)) {
-			$aChannelsList[$sCardChannels] = 'Банковская карта<br/><span style="font-size: 10pt;">MasterCard, VISA</span>';
+			$aChannelsList[$sCardChannels] = 'Банковская карта<br/><span style="font-size: 10pt;">MasterCard, VISA, Maestro, VISA Electron</span>';
 		}
 		if (!empty($sMobileChannels) && !empty($sMobileChannelName)) {
 			$aChannelsList[$sMobileChannels] = 'Мобильный телефон<br/><span style="font-size: 10pt;">МТС, Билайн, Мегафон, ТЕЛЕ2</span>';
