@@ -48,9 +48,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'type'        => 'primary',
 			'size'        => 'large',
 			'label'       => 'Пройти идентификацию',
-			'htmlOptions' => array(
-				'onclick' => 'js: goIdentify()'
-			)
+			'url' => $this->controller->createUrl('identify'),
 		));
 		?>
 		<?php
