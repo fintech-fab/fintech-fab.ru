@@ -3996,6 +3996,6 @@ class AdminKreddyApiComponent
 	{
 		$cClientStatus = $this->getClientStatus();
 
-		return in_array($cClientStatus, $this->$aSubscriptionActiveStates);
+		return in_array($cClientStatus, $this->aSubscriptionActiveStates);
 	}
 }
