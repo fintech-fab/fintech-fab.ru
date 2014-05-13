@@ -301,10 +301,10 @@ class AdminKreddyApiComponent
 				)), // ссылка на инфо о пакете
 			'{account_url_end}'    => CHtml::closeTag("a"), // /ссылка на инфо о пакете
 
-			'{do_loan_url_start}' => CHtml::openTag("a", array(
+			'{do_loan_url_start}'  => CHtml::openTag("a", array(
 					"href" => Yii::app()->createUrl("/account/loan")
 				)), // ссылка на получение займа
-			'{do_loan_url_end}'   => CHtml::closeTag("a"), // /ссылка на получение займа
+			'{do_loan_url_end}'    => CHtml::closeTag("a"), // /ссылка на получение займа
 
 			'{payments_url_start}' => CHtml::openTag("a", array(
 					"href" => Yii::app()->createUrl("pages/view/payments"), "target" => "_blank"
@@ -3300,8 +3300,6 @@ class AdminKreddyApiComponent
 	{
 		$iProductType = $this->getSubscriptionRequestType();
 
-		mail("d.laptev@fintech-fab.ru", "adasda", "----" . $iProductType . "----");
-
 		if ($iProductType == AdminKreddyApiComponent::PRODUCT_TYPE_KREDDY_LINE_POSTPAID) {
 			return self::C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID;
 		}
@@ -3998,6 +3996,6 @@ class AdminKreddyApiComponent
 	{
 		$cClientStatus = $this->getClientStatus();
 
-		return in_array($cClientStatus, $this->$aSubscriptionActiveStates);
+		return in_array($cClientStatus, $this->aSubscriptionActiveStates);
 	}
 }
