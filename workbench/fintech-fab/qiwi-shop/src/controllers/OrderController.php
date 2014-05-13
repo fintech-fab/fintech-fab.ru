@@ -11,7 +11,6 @@ use FintechFab\QiwiShop\Models\PayReturn;
 use Input;
 use Response;
 use Validator;
-use View;
 
 class OrderController extends BaseController
 {
@@ -39,7 +38,7 @@ class OrderController extends BaseController
 
 	public function getAction($action)
 	{
-
+		//Получаем заказ по id пользователя и номеру заказа
 		$order_id = Input::get('order_id');
 		$order = Order::whereUserId(Config::get('ff-qiwi-shop::user_id'))->find($order_id);
 
@@ -59,7 +58,7 @@ class OrderController extends BaseController
 	{
 		$user_id = Config::get('ff-qiwi-shop::user_id');
 		$orders = Order::whereUserId($user_id)->orderBy('id', 'desc')->paginate(10);
-		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.ordersTable', array('orders' => $orders));
+		$this->make('ordersTable', array('orders' => $orders));
 	}
 
 	/**
@@ -69,7 +68,7 @@ class OrderController extends BaseController
 	 */
 	public function createOrder()
 	{
-		$this->layout->content = View::make('ff-qiwi-shop::qiwiShop.createOrder');
+		$this->make('createOrder');
 	}
 
 	/**
@@ -80,9 +79,15 @@ class OrderController extends BaseController
 	public function postCreateOrder()
 	{
 		$data = Input::all();
-		$validator = Validator::make($data, Validators::rulesForNewOrder(), Validators::messagesForErrors());
+		//Проверяем данные на валидность
+		$validator = Validator::make(
+			$data,
+			Validators::rulesForNewOrder(),
+			Validators::messagesForErrors()
+		);
 		$userMessages = $validator->messages();
 
+		//Если есть ошибки, возвращаем
 		if ($validator->fails()) {
 			$result['errors'] = array(
 				'item'    => $userMessages->first('item'),
@@ -93,10 +98,17 @@ class OrderController extends BaseController
 
 			return $result;
 		}
+
+		//Собираем данные и отдаём на создание заказа
 		$data['user_id'] = Config::get('ff-qiwi-shop::user_id');
 		$day = Config::get('ff-qiwi-shop::lifetime');
 		$data['lifetime'] = date('Y-m-d H:i:s', time() + 3600 * 24 * $day);
 		$order = Orders::newOrder($data);
+
+		//Предполагем ошибку, и если её нет то отдаём "ОК" и данные заказа
+		$result['errors'] = array(
+			'common' => 'Неизвестная ошибка. Повторите ещё раз.',
+		);
 
 		if ($order) {
 			$result = array(
@@ -104,19 +116,14 @@ class OrderController extends BaseController
 				'order_id' => $order->id,
 				'message'  => 'Заказ №' . $order->id . ' успешно создан.',
 			);
-
-			return $result;
 		}
-		$result['errors'] = array(
-			'common' => 'Неизвестная ошибка. Повторите ещё раз.',
-		);
 
 		return $result;
 	}
 
 
 	/**
-	 * Статус счёта.
+	 * Проверка статуса счёта.
 	 *
 	 * @param Order $order
 	 *
@@ -124,27 +131,16 @@ class OrderController extends BaseController
 	 */
 	public function showStatus($order)
 	{
-		$gate = QiwiGateConnect::Instance();
-		$oResponse = $gate->checkStatus($order->id);
+		$gate = new QiwiGateConnect;
+		$response = $gate->checkStatus($order->id);
 
-		if (array_key_exists('error', $oResponse)) {
-			return $this->resultMessage($oResponse['error']);
+		if (isset($response['error'])) {
+			return $this->resultMessage($response['error']);
 		}
-		$currentOrderStatus = $order->status;
-		$BillStatus = $oResponse->response->bill->status;
 
-		//Не меняем статуса с "на возврате" на статус "оплачено"
-		if ($currentOrderStatus == 'returning' && $BillStatus == 'paid') {
-			$message = 'Текущий статус счета - ' . $this->statusRussian[$currentOrderStatus];
+		$newStatus = $order->changeStatus($response['status']);
 
-			return $this->resultMessage($message, 'Сообщение');
-		}
-		$newOrderStatus = $this->statusMap[$BillStatus];
-
-		if ($currentOrderStatus != $newOrderStatus) {
-			Order::whereId($order->id)->whereStatus($currentOrderStatus)->update(array('status' => $newOrderStatus));
-		}
-		$message = 'Текущий статус счета - ' . $this->statusRussian[$newOrderStatus];
+		$message = 'Текущий статус счета - ' . $this->statusRussian[$newStatus];
 
 		return $this->resultMessage($message, 'Сообщение');
 
@@ -159,15 +155,17 @@ class OrderController extends BaseController
 	 */
 	public function createBill($order)
 	{
-		$gate = QiwiGateConnect::Instance();
-		$oResponse = $gate->getBill($order);
+		$gate = new QiwiGateConnect;
+		$response = $gate->getBill($order);
 
-		if (array_key_exists('error', $oResponse)) {
-			return $this->resultMessage($oResponse['error']);
+		if (isset($response['error'])) {
+			return $this->resultMessage($response['error']);
 		}
-		$update = Order::whereId($order->id)->whereStatus('new')->update(array('status' => 'payable'));
-		if ($update) {
-			$message = 'Счёт № ' . $order->id . ' выставлен';
+
+		$newStatus = $order->changeStatus(Order::C_ORDER_STATUS_PAYABLE);
+
+		if ($newStatus == Order::C_ORDER_STATUS_PAYABLE) {
+			$message = 'Счёт № ' . $response['billId'] . ' выставлен';
 
 			return $this->resultMessage($message, 'Сообщение');
 		}
@@ -185,7 +183,7 @@ class OrderController extends BaseController
 	 */
 	public function cancelBill($order)
 	{
-		$gate = QiwiGateConnect::Instance();
+		$gate = new QiwiGateConnect;
 		$oResponse = $gate->cancelBill($order);
 		if (array_key_exists('error', $oResponse)) {
 			return $this->resultMessage($oResponse['error']);
@@ -253,7 +251,7 @@ class OrderController extends BaseController
 		if (!$payReturn) {
 			return $this->resultMessage('Возврат не создан, повторите попытку.');
 		}
-		$gate = QiwiGateConnect::Instance();
+		$gate = new QiwiGateConnect;
 		$oResponse = $gate->payReturn($payReturn);
 
 		//Если ошибка, то удаляем наш возврат из таблицы
@@ -285,7 +283,7 @@ class OrderController extends BaseController
 	{
 		$payReturn = PayReturn::find($order->idLastReturn);
 
-		$gate = QiwiGateConnect::Instance();
+		$gate = new QiwiGateConnect;
 		$oResponse = $gate->checkRefundStatus($payReturn);
 		if (array_key_exists('error', $oResponse)) {
 			return $this->resultMessage($oResponse['error']);

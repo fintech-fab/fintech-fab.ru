@@ -107,7 +107,7 @@ class MakeButton
 				$button = link_to(url(URL::route('payIndex') . '?' . http_build_query($query_data)),
 					'Оплатить', array(
 						'target' => '_blank',
-						'class'  => 'btn btn-success',
+						'class'  => 'btn btn-success margin-likeTableBtn',
 					));
 				break;
 			case 'cancelBill':

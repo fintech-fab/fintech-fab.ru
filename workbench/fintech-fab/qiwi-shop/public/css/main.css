@@ -27,7 +27,7 @@ body {
 	color: #ff0000;
 }
 
-.tableBtn, .actionBtn {
+.tableBtn, .actionBtn, .margin-likeTableBtn {
 	margin-right: 5px;
 }
 

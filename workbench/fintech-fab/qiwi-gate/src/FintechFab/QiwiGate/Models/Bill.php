@@ -102,24 +102,16 @@ class Bill extends Eloquent
 	}
 
 	/**
-	 * отбор по ожидающим счетам
+	 * оплатить найденный счёт
 	 *
-	 * @return Bill
+	 * @param $billId
+	 *
+	 * @return mixed
 	 */
-	public function scopeWaiting()
-	{
-		$this->whereStatus(self::C_STATUS_WAITING);
-
-		return $this;
-	}
-
-	/**
-	 * оплатить найденные счета
-	 */
-	public static function update2Paid($billId)
+	public static function doPay($billId)
 	{
 		return self::whereBillId($billId)
-			->scopeWaiting()
+			->whereStatus(self::C_STATUS_WAITING)
 			->update(
 				array('status' => self::C_STATUS_PAID)
 			);

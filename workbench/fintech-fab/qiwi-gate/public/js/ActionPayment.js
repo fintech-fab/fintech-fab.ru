@@ -1,7 +1,6 @@
 $(document).ready(function () {
 	$('button#payBill').click(function () {
-		$.post(
-			function (data) {
+		$.post('', function (data) {
 
 				if (data['error']) {
 					$('#error').html(data['error']);

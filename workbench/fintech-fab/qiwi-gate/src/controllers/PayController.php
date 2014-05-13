@@ -49,7 +49,7 @@ class PayController extends BaseController
 
 		if ($bill) {
 
-			$isUpdate = Bill::update2Paid($bill->bill_id);
+			$isUpdate = Bill::doPay($bill->bill_id);
 
 			if ($isUpdate) {
 

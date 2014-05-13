@@ -11,13 +11,6 @@
 				<h4 class="modal-title" id="myModalLabel">Возврат оплаты</h4>
 			</div>
 			<div class="modal-body">
-				<?=
-				Form::open(array(
-					'class'  => 'form-horizontal',
-					'role'   => 'form',
-					'method' => 'post',
-
-				)); ?>
 				<div class="form-group row">
 					<?= Form::label('inputSum', 'Сумма', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">
@@ -49,11 +42,9 @@
 				<div class="text-center">
 					<?=
 					Form::button('Возврат отплаты', array(
-						'id'    => '',
 						'class' => 'btn btn-danger payReturnModal',
 					)); ?>
 				</div>
-				<?= Form::close(); ?>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -2,14 +2,6 @@
 <div class="text-center inner">
 	<h3>Новый заказ</h3>
 
-	<?=
-	Form::open(array(
-		'class'  => 'form-horizontal',
-		'role'   => 'form',
-		'method' => 'post',
-
-	)); ?>
-
 	<div class="form-group row">
 		<?= Form::label('inputSum', 'Наименование товара:', array('class' => 'col-sm-4 control-label')) ?>
 
@@ -78,6 +70,5 @@
 	));
 	?>
 
-	<?= Form::close(); ?>
 </div>
 <div id="message" class="row"></div>

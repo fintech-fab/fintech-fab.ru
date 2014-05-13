@@ -10,31 +10,26 @@ use FintechFab\QiwiShop\Models\PayReturn;
 class QiwiGateConnect
 {
 
-	private static $instance = null;
-	private $errorMap;
-
-	public function __construct()
-	{
-		$this->errorMap = array(
-			'5'   => 'Неверный формат параметров запроса',
-			'150' => 'Ошибка авторизации',
-			'210' => 'Счет не найден',
-			'215' => 'Счет с таким bill_id уже существует',
-			'241' => 'Сумма слишком мала',
-			'242' => 'Сумма слишком велика',
-		);
-	}
-
-	public static function Instance()
-	{
-		if (self::$instance == null) {
-			self::$instance = new QiwiGateConnect();
-		}
-
-		return self::$instance;
-	}
+	private $statusMap = array(
+		'waiting'    => 'payable',
+		'paid'       => 'paid',
+		'rejected'   => 'canceled',
+		'expired'    => 'expired',
+		'processing' => 'onReturn',
+		'success'    => 'returned',
+	);
+	private $errorMap = array(
+		'5'   => 'Неверный формат параметров запроса',
+		'150' => 'Ошибка авторизации',
+		'210' => 'Счет не найден',
+		'215' => 'Счет с таким bill_id уже существует',
+		'241' => 'Сумма слишком мала',
+		'242' => 'Сумма слишком велика',
+	);
 
 	/**
+	 * Проверка статуса
+	 *
 	 * @param $bill_id
 	 *
 	 * @return array|mixed
@@ -42,18 +37,23 @@ class QiwiGateConnect
 	public function checkStatus($bill_id)
 	{
 		$oResponse = $this->makeCurl($bill_id);
-		if ($oResponse->response->result_code != 0) {
-			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+		$result_code = $oResponse->response->result_code;
+		if ($result_code != 0) {
+			return array('error' => $this->errorMap[$result_code]);
 		}
 
-		return $oResponse;
+		$status = $oResponse->response->bill->status;
+
+		return array('status' => $this->statusMap[$status]);
 	}
 
 
 	/**
+	 * Получение счёта
+	 *
 	 * @param Order $order
 	 *
-	 * @return array|mixed
+	 * @return array
 	 */
 	public function getBill($order)
 	{
@@ -66,11 +66,12 @@ class QiwiGateConnect
 			'prv_name' => Config::get('ff-qiwi-shop::provider.name'),
 		);
 		$oResponse = $this->makeCurl($order->id, 'PUT', $bill);
-		if ($oResponse->response->result_code != 0) {
-			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+		$result_code = $oResponse->response->result_code;
+		if ($result_code != 0) {
+			return array('error' => $this->errorMap[$result_code]);
 		}
 
-		return $oResponse;
+		return array('billId' => $oResponse->response->bill->bill_id);
 	}
 
 	/**
