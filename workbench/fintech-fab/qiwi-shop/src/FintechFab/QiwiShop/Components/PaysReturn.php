@@ -23,4 +23,21 @@ class PaysReturn
 		return $order;
 	}
 
+	/**
+	 * @param $order
+	 * @param $sumReturn
+	 *
+	 * @return bool
+	 */
+	public static function isAllowedSum($order, $sumReturn)
+	{
+		$returnsBefore = PayReturn::whereOrderId($order->id)->get();
+		$sumOldReturn = 0;
+		foreach ($returnsBefore as $one) {
+			$sumOldReturn += $one->sum;
+		}
+		$possibleReturn = $order->sum - $sumOldReturn;
+
+		return $sumReturn <= $possibleReturn;
+	}
 } 

@@ -37,4 +37,19 @@ class PayReturn extends Eloquent
 		return $this->belongsTo('\FintechFab\QiwiShop\Models\Order');
 	}
 
+	public function changeStatus($newReturnStatus)
+	{
+		if ($this->status != $newReturnStatus) {
+			$isUpdate = PayReturn::whereId($this->id)
+				->whereStatus($this->status)
+				->update(array('status' => $newReturnStatus));
+
+			if ($isUpdate) {
+				return $newReturnStatus;
+			}
+		}
+
+		return $this->status;
+	}
+
 } 

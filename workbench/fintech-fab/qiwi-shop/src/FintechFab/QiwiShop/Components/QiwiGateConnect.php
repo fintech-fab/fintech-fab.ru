@@ -77,7 +77,7 @@ class QiwiGateConnect
 	/**
 	 * @param Order $order
 	 *
-	 * @return array|mixed
+	 * @return array
 	 */
 	public function cancelBill($order)
 	{
@@ -87,7 +87,7 @@ class QiwiGateConnect
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
 
-		return $oResponse;
+		return array('billId' => $oResponse->response->bill->bill_id);
 
 	}
 
@@ -106,7 +106,7 @@ class QiwiGateConnect
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
 
-		return $oResponse;
+		return array('sum' => $oResponse->response->refund->amount);
 	}
 
 	/**
@@ -123,7 +123,9 @@ class QiwiGateConnect
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
 
-		return $oResponse;
+		$status = $oResponse->response->refund->status;
+
+		return array('status' => $this->statusMap[$status]);
 	}
 
 	/**

@@ -52,9 +52,15 @@ class Order extends Eloquent
 		return $this->hasMany('FintechFab\QiwiShop\Models\PayReturn');
 	}
 
+	/**
+	 * Смена статуса заказа
+	 *
+	 * @param $newStatus
+	 *
+	 * @return string
+	 */
 	public function changeStatus($newStatus)
 	{
-
 		//Не меняем статус с "на возврате" на статус "оплачено"
 		if ($this->status == self::C_ORDER_STATUS_RETURNING &&
 			$newStatus == self::C_ORDER_STATUS_PAID
@@ -71,7 +77,36 @@ class Order extends Eloquent
 				return $newStatus;
 			}
 		}
-
 		return $this->status;
+	}
+
+	/**
+	 * Закончен ли придыдущий возврат?
+	 *
+	 * @return bool
+	 */
+	public function isOnReturn()
+	{
+		if ($this->idLastReturn != null) {
+			$currentStatusReturn = $this->PayReturn()->find($this->idLastReturn)->status;
+
+			return $currentStatusReturn == 'onReturn';
+		}
+
+		return false;
+	}
+
+	/**
+	 * Изменяем id последнего возврата
+	 *
+	 * @param $IdPayReturn
+	 */
+	public function changeAfterReturn($IdPayReturn)
+	{
+		Order::whereId($this->id)
+			->update(array(
+				'status'       => 'returning',
+				'idLastReturn' => $IdPayReturn
+			));
 	}
 } 

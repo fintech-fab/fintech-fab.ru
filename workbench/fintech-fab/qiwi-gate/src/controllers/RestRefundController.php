@@ -94,10 +94,6 @@ class RestRefundController extends Controller
 		$refund = Refunds::NewRefund($data);
 		$data['user'] = $refund->bill->user;
 		$data['error'] = 0;
-		if ($amount_refund + $amount == $amountBill) {
-			$bill->status = 'rejected';
-			$bill->save();
-		}
 
 		return $this->responseFromGate($data);
 
