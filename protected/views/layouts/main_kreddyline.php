@@ -1,3 +1,9 @@
+<?php
+/**
+ * @var            $content
+ * @var Controller $this
+ */
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,17 +12,17 @@
 	<meta name="language" content="Russian" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="description" content="КРЕДДИ - ты всегда при деньгах. Как просто получить и вернуть займ? Простая и удобная услуга займов. Сколько взял – столько вернул!" />
+	<meta name="description" content="КРЕДДИ - сколько взял – столько вернул!" />
 	<meta name="keywords" content="" />
-	<meta name="author" content="деньги, наличные, электронные деньги, срочно нужны, где взять, взаймы, займу, быстрые, в займы, займ, заём, займы, микрофинансовая организация, кредит, долг, вдолг, потребительские, денежный, частный, беспроцентный, ссуда, за час, кредитование, без справок, доход, срочный, экспресс, проценты, до зарплаты, неотложные, по паспорту, под расписку, выгодный, кредитные карты, кредитные системы, кредитные организации, кредитные истории, занять, краткосрочные, физическим лицам" />
+	<meta name="author" content="деньги, наличные, электронные деньги, срочно нужны, где взять, взаймы, быстрые, микрофинансовая организация, кредит, долг, вдолг, потребительские, денежный, частный, беспроцентный, ссуда, за час, кредитование, без справок, доход, срочный, экспресс, проценты, до зарплаты, неотложные, по паспорту, под расписку, выгодный, кредитные карты, кредитные системы, кредитные организации, кредитные истории, занять, краткосрочные, физическим лицам" />
 
 	<title>Кредди - Сервис в твоем формате</title>
 	<!-- Bootstrap -->
 	<link href="static/kreddyline/css/bootstrap-responsive.css" rel="stylesheet">
 	<!-- add style -->
 	<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/bootstrap-overload.css?v=6" />
-	<link href="static/kreddyline/css/style.css" rel="stylesheet">
-
+	<link href="static/kreddyline/css/style.css?v=12" rel="stylesheet">
+	<link href="static/css/carousel.css?v=1.css" rel="stylesheet">
 
 	<?php
 	Yii::app()->clientScript->registerCoreScript('jquery');
@@ -55,14 +61,17 @@
 	<!--  header navbar start -->
 	<?php $this->renderPartial('//layouts/main_navbar_top'); ?>
 
-	<!--/header-top-->    <!--big-foto-->
-	<div class="big-foto">
-		<div class="extra-style1 hidden-phone">
+	<!--/header-top-->    <!--big-foto-->    <!--div class="big-foto">
+		<!--div class="extra-style1 hidden-phone">
 			<div class="extra-style2">
 				<div class="extra-style3" style="width: 1234px; height: 450px; background: url(/static/img/landing/7.png ) -150px 0;"></div>
 			</div>
 		</div>
-	</div>
+
+	</div-->
+	<?php
+	$this->widget('application.components.CarouselWidget');
+	?>
 	<!--/big-foto-->
 </header>
 <!--===============================content==============================-->

@@ -56,7 +56,35 @@ class TopPageWidget extends CWidget
 		);
 
 		if ($this->show) {
-			$this->render('top_page', array('aItems' => $aItems));
+			?>
+			<div class="container top_page">
+				<div class="row">
+					<?php
+
+					$this->widget(
+						'application.components.utils.IkTbCarousel',
+						array(
+							'slide'              => true,
+							'displayPrevAndNext' => false,
+							'options'            => array(
+								'interval' => 5000
+							),
+							'items'              => $aItems,
+							'htmlOptions'        => array(
+								'style' => 'margin-bottom: 0; width: 930px; margin-left: 15px;',
+							)
+
+						)
+					);
+
+
+					//TODO сделать управление виджетом из админки: добавление картинок, ссылки и прочее
+					?>
+
+				</div>
+			</div>
+			<div class="page-divider"></div>
+		<?php
 		}
 	}
 }
