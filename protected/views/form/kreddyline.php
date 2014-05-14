@@ -107,12 +107,36 @@
 			<div class="row-fluid">
 				<h6 class="inner2"><img src="static/kreddyline/images/info-credit-icon2.png" alt="">Способы оплаты </h6>
 				<ul>
-					<li><a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>">Банковская карта</a></li>
-					<li><a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>">Мобильный телефон</a></li>
-					<li><a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">Яндекс-деньги</a></li>
-					<li><a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">QIWI-кошелек</a></li>
-					<li><a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>">Терминал Элекснет</a></li>
-					<li><a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>">Терминал МКБ</a></li>
+					<li>
+						<a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>">
+							<img src="static/kreddyline/images/info_payment_icon1.png" width="45" height="52"><br />
+							Банковская карта </a>
+					</li>
+					<li>
+						<a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>">
+							<img src="static/kreddyline/images/info_payment_icon2.png" width="45" height="52"><br />
+							Мобильный телефон </a>
+					</li>
+					<li>
+						<a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">
+							<img src="static/kreddyline/images/info_payment_icon3.png" width="45" height="52"><br />
+							Яндекс-деньги </a>
+					</li>
+					<li>
+						<a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">
+							<img src="static/kreddyline/images/info_payment_icon6.png" width="45" height="52"><br />
+							QIWI-кошелек </a>
+					</li>
+					<li>
+						<a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>">
+							<img src="static/kreddyline/images/info_payment_icon4.png" width="45" height="52"><br />
+							Терминал Элекснет </a>
+					</li>
+					<li>
+						<a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>">
+							<img src="static/kreddyline/images/info_payment_icon5.png" width="45" height="52"><br />
+							Терминал МКБ </a>
+					</li>
 				</ul>
 			</div>
 		</div>
