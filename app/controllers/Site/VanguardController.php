@@ -31,16 +31,21 @@ class VanguardController extends BaseController
 		if (0 == count(Mail::failures())) {
 
 			$userMessage = Helper::ucwords($data['name']);
+			$title = 'Все получилось';
 			$userMessage .= ',
 				вы поразительно инициативны! :-)
 				Мы ответим вам не позже следующего рабочего дня.
 			';
 
+			Mail::send('emails.replyToNewImprover', $data, function (Message $message) {
+				$message->to(Input::get('email'), Input::get('name'))->subject('Ваша заявка принята');
+			});
+
 		} else {
+			$title = 'Все получилось';
 			$userMessage = 'Что-то сломалось, но вы можете попробовать еще раз';
 		}
 
-		$title = 'Все получилось';
 
 		return Redirect::to('vanguard')
 			->with('userMessage', $userMessage)
