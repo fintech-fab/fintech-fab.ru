@@ -1,6 +1,7 @@
 <?php
 
 
+use FintechFab\QiwiGate\Components\Catalog;
 use FintechFab\QiwiGate\Components\Headers;
 
 Route::filter('ff.qiwi.gate.auth.basic', function () {
@@ -10,11 +11,14 @@ Route::filter('ff.qiwi.gate.auth.basic', function () {
 
 		$result = array(
 			'response' => array(
-				'result_code' => 150,
+				'result_code' => Catalog::C_WRONG_AUTH,
 			),
 		);
 
-		return Response::json($result, 401);
+		return Response::json(
+			$result,
+			Catalog::serverCode(Catalog::C_WRONG_AUTH)
+		);
 	}
 
 });

@@ -2,6 +2,7 @@
 namespace FintechFab\QiwiShop\Widgets;
 
 use Config;
+use FintechFab\QiwiShop\Components\Dictionary;
 use FintechFab\QiwiShop\Models\Order;
 use Form;
 use URL;
@@ -24,49 +25,42 @@ class MakeButton
 	public static function displayTable($order)
 	{
 		$sumReturn = 0;
+		$status = Dictionary::statusRussian($order->status);
 		switch ($order->status) {
-			case 'new':
-				$status = 'Новый';
+			case Order::C_ORDER_STATUS_NEW:
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('createBill', $order->id);
 				break;
-			case 'payable':
-				$status = 'К оплате';
+			case Order::C_ORDER_STATUS_PAYABLE:
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('payBill', $order->id) .
 					self::buttons('cancelBill', $order->id);
 				break;
-			case 'canceled':
-				$status = 'Отменён';
+			case Order::C_ORDER_STATUS_CANCELED:
 				$activity = self::buttons('showStatus', $order->id);
 				break;
-			case 'expired':
-				$status = 'Просрочен';
+			case Order::C_ORDER_STATUS_EXPIRED:
 				$activity = self::buttons('showStatus', $order->id);
 				break;
-			case 'paid':
-				$status = 'Оплачен';
+			case Order::C_ORDER_STATUS_PAID:
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('payReturn', $order->id);
 				break;
-			case 'returning':
-				$status = 'Возврат оплаты';
+			case Order::C_ORDER_STATUS_RETURNING:
 				$activity = self::buttons('showStatus', $order->id) . self::buttons('statusReturn', $order->id);
-				$statusReturn = $order->PayReturn()->find($order->idLastReturn)->status;
+				$statusReturn = $order->PayReturn->find($order->idLastReturn)->status;
 
+				//Вычисляем сумму для
 				$returnsBefore = $order->PayReturn;
 				foreach ($returnsBefore as $one) {
 					$sumReturn += $one->sum;
 				}
-				if ($sumReturn < $order->sum && $statusReturn == 'returned') {
+				if (
+					$sumReturn < $order->sum &&
+					$statusReturn == Order::C_RETURN_STATUS_RETURNED
+				) {
 					$activity .= self::buttons('payReturn', $order->id);
 				}
 				$sumReturn = number_format($sumReturn, 2, '.', ' ');
-				switch ($statusReturn) {
-					case 'onReturn':
-						$status .= ' / на возврате';
-						break;
-					case 'returned':
-						$status .= ' / возвращен';
-						break;
-				}
+				$status .= ' / ' . Dictionary::statusRussian($statusReturn);
+
 				break;
 			default:
 				$status = 'Ошибка';

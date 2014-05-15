@@ -18,6 +18,7 @@ use Eloquent;
  * @property string  $lifetime
  * @property string  $status
  * @property integer $idLastReturn
+ * @property PayReturn $PayReturn
  *
  * @method static Order whereUserId()
  * @method static Order whereStatus()

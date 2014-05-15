@@ -33,6 +33,8 @@ class Bill extends Eloquent
 
 	const C_STATUS_WAITING = 'waiting';
 	const C_STATUS_PAID = 'paid';
+	const C_STATUS_REJECTED = 'rejected';
+	const C_STATUS_EXPIRED = 'expired';
 
 
 	protected $fillable = array(
@@ -80,9 +82,14 @@ class Bill extends Eloquent
 
 		if (
 			$this->status == 'waiting' &&
+			$this->lifetime != null &&
 			$this->lifetime != '0000-00-00 00:00:00' &&
 			strtotime($this->lifetime) <= time()
 		) {
+			Bill::whereBillId($this->bill_id)
+				->whereStatus(self::C_STATUS_WAITING)
+				->update(array('status' => self::C_STATUS_EXPIRED));
+
 			return true;
 		}
 
@@ -102,6 +109,16 @@ class Bill extends Eloquent
 	}
 
 	/**
+	 * платеж оплачен?
+	 *
+	 * @return bool
+	 */
+	public function isPaid()
+	{
+		return $this->status == self::C_STATUS_PAID;
+	}
+
+	/**
 	 * оплатить найденный счёт
 	 *
 	 * @param $billId
@@ -115,6 +132,44 @@ class Bill extends Eloquent
 			->update(
 				array('status' => self::C_STATUS_PAID)
 			);
+	}
+
+	/**
+	 * Отменить найденный счёт
+	 *
+	 * @param $billId
+	 *
+	 * @return Bill
+	 */
+	public static function doCancel($billId)
+	{
+		self::whereBillId($billId)
+			->whereStatus(self::C_STATUS_WAITING)
+			->update(
+				array('status' => self::C_STATUS_REJECTED)
+			);
+
+		return Bill::find($billId);
+	}
+
+	/**
+	 * Счёт существует?
+	 *
+	 * @param $bill_id
+	 * @param $provider_id
+	 *
+	 * @return bool|Bill
+	 */
+	public static function isBillExist($bill_id, $provider_id)
+	{
+		$existBill = Bill::whereBillId($bill_id)
+			->whereMerchantId($provider_id)
+			->first();
+		if ($existBill != null) {
+			return $existBill;
+		}
+
+		return false;
 	}
 
 }

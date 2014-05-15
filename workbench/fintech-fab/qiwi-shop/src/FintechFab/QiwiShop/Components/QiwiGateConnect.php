@@ -11,12 +11,12 @@ class QiwiGateConnect
 {
 
 	private $statusMap = array(
-		'waiting'    => 'payable',
-		'paid'       => 'paid',
-		'rejected'   => 'canceled',
-		'expired'    => 'expired',
-		'processing' => 'onReturn',
-		'success'    => 'returned',
+		'waiting'    => Order::C_ORDER_STATUS_PAYABLE,
+		'paid'       => Order::C_ORDER_STATUS_PAID,
+		'rejected'   => Order::C_ORDER_STATUS_CANCELED,
+		'expired'    => Order::C_ORDER_STATUS_EXPIRED,
+		'processing' => Order::C_RETURN_STATUS_ON_RETURN,
+		'success'    => Order::C_RETURN_STATUS_RETURNED,
 	);
 	private $errorMap = array(
 		'5'   => 'Неверный формат параметров запроса',
@@ -25,6 +25,7 @@ class QiwiGateConnect
 		'215' => 'Счет с таким bill_id уже существует',
 		'241' => 'Сумма слишком мала',
 		'242' => 'Сумма слишком велика',
+		'300' => 'Техническая ошибка, повторите запрос позже',
 	);
 
 	/**

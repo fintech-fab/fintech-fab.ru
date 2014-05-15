@@ -93,7 +93,7 @@ class QiwiCancelBillTest extends TestCase
 
 		$oResponse = $this->response()->getData();
 		$this->assertEquals(210, $oResponse->response->result_code);
-		$this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+		$this->assertEquals(404, $this->client->getResponse()->getStatusCode());
 	}
 
 	/**

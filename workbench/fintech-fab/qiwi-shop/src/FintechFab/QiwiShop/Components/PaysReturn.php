@@ -2,6 +2,7 @@
 
 namespace FintechFab\QiwiShop\Components;
 
+use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
 
 class PaysReturn
@@ -17,7 +18,7 @@ class PaysReturn
 		$order->order_id = $data['order_id'];
 		$order->sum = $data['sum'];
 		$order->comment = isset($data['comment']) ? $data['comment'] : '';
-		$order->status = 'onReturn';
+		$order->status = Order::C_RETURN_STATUS_ON_RETURN;
 		$order->save();
 
 		return $order;

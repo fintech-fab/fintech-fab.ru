@@ -4,6 +4,7 @@ namespace FintechFab\QiwiGate\Controllers;
 
 use Controller;
 use FintechFab\QiwiGate\Components\Bills;
+use FintechFab\QiwiGate\Components\Catalog;
 use FintechFab\QiwiGate\Components\Validators;
 use FintechFab\QiwiGate\Models\Bill;
 use Input;
@@ -16,7 +17,7 @@ class RestBillController extends Controller
 {
 
 	/**
-	 * создание нового счета
+	 * Создание нового счета
 	 *
 	 * @param int    $provider_id
 	 * @param string $bill_id
@@ -29,48 +30,47 @@ class RestBillController extends Controller
 		$data['bill_id'] = $bill_id;
 		$validator = Validator::make($data, Validators::rulesForNewBill());
 
+		//Если не пройдена валидация - отдаём ошибку формата
 		if (!$validator->passes()) {
-			$data['error'] = 5;
-			$code_response = 400;
+			$data['error'] = Catalog::C_WRONG_FORMAT;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data);
 		}
 
+		//Если сумма мала - отдаём ошибку маленькой суммы
 		if ($data['amount'] < 10) {
-			$data['error'] = 241;
-			$code_response = 403;
+			$data['error'] = Catalog::C_SMALL_AMOUNT;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data);
 		}
 
+		//Если сумма велика - отдаём ошибку большой суммы
 		if ($data['amount'] > 15000) {
-			$data['error'] = 242;
-			$code_response = 403;
+			$data['error'] = Catalog::C_BIG_AMOUNT;
 
-			return $this->responseFromGate($data, $code_response);
-		}
-		$data['status'] = 'waiting';
-		$existBill = Bill::whereBillId($bill_id)->whereMerchantId($provider_id)->first();
-		if ($existBill != null) {
-
-			$data = array('error' => 215);
-			$code_response = 403;
-
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data);
 		}
 
+		//Отдаём ошибку если счёт уже существует
+		if (Bill::isBillExist($bill_id, $provider_id)) {
+			$data = array('error' => Catalog::C_BILL_ALREADY_EXIST);
+
+			return $this->responseFromGate($data);
+		}
+
+		//Создаём счёт и возвращаем его
 		$bill = Bills::NewBill($data);
 		if ($bill) {
-
+			$data = $this->dataFromObj($bill);
 			$data['error'] = 0;
 
 			return $this->responseFromGate($data);
 		}
 
-		$data = array('error' => 13);
-		$code_response = 500;
+		//Если не создан счёт, то отдаём техническую ошибку
+		$data = array('error' => Catalog::C_TECHNICAL_ERROR);
 
-		return $this->responseFromGate($data, $code_response);
+		return $this->responseFromGate($data);
 	}
 
 	/**
@@ -83,25 +83,26 @@ class RestBillController extends Controller
 	 */
 	public function show($provider_id, $bill_id)
 	{
+		//Находим счёт
 		$bill = Bill::whereBillId($bill_id)
 			->whereMerchantId($provider_id)
 			->first();
 
+		//Отдаём ошибку если счёт не найден
 		if ($bill == null) {
-			$data['error'] = 210;
-			$code_response = 404;
+			$data['error'] = Catalog::C_BILL_NOT_FOUND;
 
-			return $this->responseFromGate($data, $code_response);
-		}
-		if (($bill->lifetime != '0000-00-00 00:00:00') && ($bill->lifetime <= date('Y-m-d H:i:s', time()))) {
-			$update = Bill::whereBillId($bill_id)->whereStatus('waiting')->update(array('status' => 'expired'));
-			if ($update) {
-				$bill = Bill::whereBillId($bill_id)
-					->whereMerchantId($provider_id)
-					->first();
-			}
+			return $this->responseFromGate($data);
 		}
 
+		//Если счёт просрочен - обновляем счёт
+		if ($bill->isExpired()) {
+			$bill = Bill::whereBillId($bill_id)
+				->whereMerchantId($provider_id)
+				->first();
+		}
+
+		//Фотмируем ответ и возвращаем
 		$data = $this->dataFromObj($bill);
 		$data['error'] = 0;
 
@@ -109,7 +110,7 @@ class RestBillController extends Controller
 	}
 
 	/**
-	 * Выставление счета
+	 * Отмена счёта (или отправить на создание счёта)
 	 *
 	 * @param  int    $provider_id
 	 * @param  string $bill_id
@@ -118,35 +119,34 @@ class RestBillController extends Controller
 	 */
 	public function update($provider_id, $bill_id)
 	{
-
+		//Если это создание - счёта отправляем на создание
 		if ($this->isCreateBill()) {
 			return $this->store($provider_id, $bill_id);
 		}
 
 		if ($this->isCancelBill()) {
-
+			//Находим счёт
 			$bill = Bill::whereBillId($bill_id)
 				->whereMerchantId($provider_id)
 				->first();
+			//Если не нашли - ошибка "Счёт не найден"
 			if ($bill == null) {
-				$data['error'] = 210;
-				$code_response = 404;
+				$data['error'] = Catalog::C_BILL_NOT_FOUND;
 
-				return $this->responseFromGate($data, $code_response);
+				return $this->responseFromGate($data);
 			}
-			if ($bill['status'] == 'waiting') {
-				$bill->status = 'rejected';
-				$bill->save();
-				$data = $this->dataFromObj($bill);
+			//Если статус waiting - отменяем счёт и отдаём его в ответе
+			if ($bill->isWaiting()) {
+				$canceledBill = $bill->doCancel($bill_id);
+				$data = $this->dataFromObj($canceledBill);
 				$data['error'] = 0;
 
 				return $this->responseFromGate($data);
 			}
 
-			$data['error'] = 210;
-			$code_response = 403;
+			$data['error'] = Catalog::C_BILL_NOT_FOUND;
 
-			return $this->responseFromGate($data, $code_response);
+			return $this->responseFromGate($data);
 		}
 
 		return null;
@@ -160,17 +160,14 @@ class RestBillController extends Controller
 	 */
 	private function isCancelBill()
 	{
-
 		$method = Request::method();
 
 		if ($method !== 'PATCH') {
 			return false;
 		}
-
 		$params = Input::all();
 
 		return ($params['status'] === 'rejected');
-
 	}
 
 	/**
@@ -180,21 +177,18 @@ class RestBillController extends Controller
 	 */
 	private function isCreateBill()
 	{
-
 		$method = Request::method();
 
 		return ($method === 'PUT');
-
 	}
 
 	/**
 	 * @param     $data
-	 * @param int $code_response
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 
-	private function responseFromGate($data, $code_response = 200)
+	private function responseFromGate($data)
 	{
 
 		$response = array(
@@ -202,9 +196,11 @@ class RestBillController extends Controller
 				'result_code' => $data['error'],
 			),
 		);
-		if (isset($data['status'])) {
+		//Если код ошибки 0 - добавляем к ответу данные счёта
+		if ($data['error'] == Catalog::C_WITHOUT_ERRORS) {
 			$response['response']['bill'] = $data;
 		}
+		$code_response = Catalog::serverCode($data['error']);
 
 		return Response::json($response, $code_response);
 	}
@@ -224,6 +220,8 @@ class RestBillController extends Controller
 		$data['status'] = $bill->status;
 		$data['user'] = $bill->user;
 		$data['comment'] = $bill->comment;
+		$data['lifetime'] = $bill->lifetime;
+		$data['pay_source'] = $bill->pay_source;
 		$data['prv_name'] = $bill->prv_name;
 
 		foreach ($data as $key => $value) {

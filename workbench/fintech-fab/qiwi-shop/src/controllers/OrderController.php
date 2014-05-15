@@ -2,6 +2,7 @@
 namespace FintechFab\QiwiShop\Controllers;
 
 use Config;
+use FintechFab\QiwiShop\Components\Dictionary;
 use FintechFab\QiwiShop\Components\Orders;
 use FintechFab\QiwiShop\Components\PaysReturn;
 use FintechFab\QiwiShop\Components\QiwiGateConnect;
@@ -15,16 +16,6 @@ class OrderController extends BaseController
 {
 
 	public $layout = 'qiwiShop';
-
-	private $statusRussian = array(
-		'payable'   => 'К оплате',
-		'canceled'  => 'Отменён',
-		'expired'   => 'Просрочен',
-		'paid'      => 'Оплачен',
-		'returning' => 'Возврат оплаты',
-		'onReturn'  => 'на возврате',
-		'returned'  => 'возвращен',
-	);
 
 	public function getAction($action)
 	{
@@ -47,7 +38,9 @@ class OrderController extends BaseController
 	public function ordersTable()
 	{
 		$user_id = Config::get('ff-qiwi-shop::user_id');
-		$orders = Order::whereUserId($user_id)->orderBy('id', 'desc')->paginate(10);
+		$orders = Order::whereUserId($user_id)
+			->orderBy('id', 'desc')
+			->paginate(10);
 		$this->make('ordersTable', array('orders' => $orders));
 	}
 
@@ -130,7 +123,8 @@ class OrderController extends BaseController
 
 		$newStatus = $order->changeStatus($response['status']);
 
-		$message = 'Текущий статус счета - ' . $this->statusRussian[$newStatus];
+		$message = 'Текущий статус счета - '
+			. Dictionary::statusRussian($newStatus);
 
 		return $this->resultMessage($message, 'Сообщение');
 
@@ -186,7 +180,6 @@ class OrderController extends BaseController
 		}
 
 		return $this->resultMessage('Счёт не отменён');
-
 	}
 
 	/**
@@ -213,16 +206,19 @@ class OrderController extends BaseController
 				'sum'     => $userMessages->first('sum'),
 				'comment' => $userMessages->first('comment'),
 			);
+
 			return $result;
 		}
 
-		//Возможен ли возврат указанной суммы учитывая прошлые возвраты по этому счёту
+		//Возможен ли возврат указанной суммы
+		//учитывая прошлые возвраты по этому счёту
 		$isAllowedSum = PaysReturn::isAllowedSum($order, $data['sum']);
 
 		if (!$isAllowedSum) {
 			$result['error'] = array(
 				'sum' => 'Слишком большая сумма',
 			);
+
 			return $result;
 		}
 
@@ -273,7 +269,8 @@ class OrderController extends BaseController
 		}
 		$newReturnStatus = $payReturn->changeStatus($response['status']);
 
-		$message = 'Текущий статус возврата - ' . $this->statusRussian[$newReturnStatus];
+		$message = 'Текущий статус возврата - '
+			. Dictionary::statusRussian($newReturnStatus);
 
 		return $this->resultMessage($message, 'Сообщение');
 
