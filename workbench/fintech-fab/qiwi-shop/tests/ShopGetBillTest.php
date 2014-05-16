@@ -3,7 +3,7 @@
 use FintechFab\QiwiShop\Models\Order;
 use Illuminate\Auth\UserInterface;
 
-class ShopGetBillTest extends TestCase
+class ShopGetBillTest extends ShopTestCase
 {
 
 

@@ -4,7 +4,7 @@ use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
 use Illuminate\Auth\UserInterface;
 
-class ShopCreateOrderTest extends TestCase
+class ShopCreateOrderTest extends ShopTestCase
 {
 
 

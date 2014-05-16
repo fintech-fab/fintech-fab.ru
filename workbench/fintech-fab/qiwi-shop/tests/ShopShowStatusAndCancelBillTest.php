@@ -2,7 +2,7 @@
 
 use Illuminate\Auth\UserInterface;
 
-class ShopShowStatusAndCancelBillTest extends TestCase
+class ShopShowStatusAndCancelBillTest extends ShopTestCase
 {
 
 

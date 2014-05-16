@@ -1,4 +1,5 @@
 #!/bin/bash
+
 php artisan dump-autoload
 php artisan migrate
 php artisan migrate --bench="fintech-fab/qiwi-gate"
