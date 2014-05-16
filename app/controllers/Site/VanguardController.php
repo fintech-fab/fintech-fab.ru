@@ -24,15 +24,13 @@ class VanguardController extends BaseController
 	public function postOrder()
 	{
 		$mailSender = new MailSender();
-
 		$data = $this->getOrderFormData();
 
-		/*Mail::send('emails.newImprover', $data, function (Message $message) {
-			$message->to(Config::get('mail.recipient_order_form'))->subject('Новая заявка');
-		});
-
-		if (0 == count(Mail::failures())) {*/
 		if ($mailSender->doVanguardOrder($data)) {
+			$mailSender->doVanguardOrderAuthor(array(
+				'to' => $data['email'],
+				'name' => $data['name']
+			));
 
 			$title = 'Все получилось';
 			$userMessage = Helper::ucwords($data['name']);
@@ -40,11 +38,6 @@ class VanguardController extends BaseController
 				вы поразительно инициативны! :-)
 				Мы ответим вам не позже следующего рабочего дня.
 			';
-
-			$mailSender->doVanguardOrderAuthor(array(
-				'to' => $data['email'],
-				'name' => $data['name']
-			));
 
 		} else {
 			$title = 'Отправка заявки';
