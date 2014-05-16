@@ -5,18 +5,15 @@ $(document).ready(function () {
 		var action = $btn.data('action');
 		var id = $btn.data('id');
 
-		$.ajax({
-			type: "POST",
-			url: 'orders/' + action,
-			data: {order_id: id},
-			success: function (data) {
+		$.post('orders/' + action, {order_id: id},
+			function (data) {
 				$('#message').dialog({
 					title: data['title'], show: 'fade', hide: 'fade', modal: true, close: function () {
 						location.reload();
 					}
 				}).html(data['message']);
 			}
-		});
+		);
 	});
 
 	$('button.actionBtn').click(function () {
@@ -34,14 +31,9 @@ $(document).ready(function () {
 
 		var sum = $modal.find('#inputSum').val();
 		var comment = $modal.find('#inputComment').val();
-		var url = 'orders/' + action;
-		var data = {order_id: id, sum: sum, comment: comment};
 
-		$.ajax({
-			type: "POST",
-			url: url,
-			data: data,
-			success: function (data) {
+		$.post('orders/' + action, {order_id: id, sum: sum, comment: comment},
+			function (data) {
 				if (data['error']) {
 					$('#errorSum').html(data['error']['sum']);
 					$('#errorComment').html(data['error']['comment']);
@@ -54,6 +46,6 @@ $(document).ready(function () {
 					}
 				}).html(data['message']);
 			}
-		});
+		);
 	});
 });

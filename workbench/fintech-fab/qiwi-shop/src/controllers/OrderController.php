@@ -81,18 +81,14 @@ class OrderController extends BaseController
 
 			return $result;
 		}
-
-		//Собираем данные и отдаём на создание заказа
-		$data['user_id'] = Config::get('ff-qiwi-shop::user_id');
-		$day = Config::get('ff-qiwi-shop::lifetime');
-		$data['lifetime'] = date('Y-m-d H:i:s', time() + 3600 * 24 * $day);
+		//Предполагаем ошибку
+		$result['errors'] = array(
+			'common' => 'Ошибка. Повторите ещё раз.',
+		);
+		//Создаём заказ
 		$order = Orders::newOrder($data);
 
-		//Предполагем ошибку, и если её нет то отдаём "ОК" и данные заказа
-		$result['errors'] = array(
-			'common' => 'Неизвестная ошибка. Повторите ещё раз.',
-		);
-
+		//Если заказ создан, то вместо ошибки отдаём ОК
 		if ($order) {
 			$result = array(
 				'result'   => 'ok',
@@ -103,7 +99,6 @@ class OrderController extends BaseController
 
 		return $result;
 	}
-
 
 	/**
 	 * Проверка статуса счёта.
@@ -127,7 +122,6 @@ class OrderController extends BaseController
 			. Dictionary::statusRussian($newStatus);
 
 		return $this->resultMessage($message, 'Сообщение');
-
 	}
 
 	/**
@@ -139,6 +133,10 @@ class OrderController extends BaseController
 	 */
 	public function createBill($order)
 	{
+		if (!$order->isNew()) {
+			return $this->resultMessage('Статус заказа не "Новый"');
+		}
+
 		$gate = new QiwiGateConnect;
 		$response = $gate->getBill($order);
 
@@ -154,7 +152,6 @@ class OrderController extends BaseController
 		}
 
 		return $this->resultMessage('Счёт не выставлен');
-
 	}
 
 	/**

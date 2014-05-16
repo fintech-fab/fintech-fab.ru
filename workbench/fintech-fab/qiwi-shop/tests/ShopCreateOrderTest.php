@@ -15,9 +15,11 @@ class ShopCreateOrderTest extends TestCase
 		/**
 		 * @var UserInterface|Mockery\MockInterface $mock
 		 */
-		$mock = \Mockery::mock('Illuminate\Auth\UserInterface');
+		$mock = Mockery::mock('Illuminate\Auth\UserInterface');
 		$mock->shouldReceive('getAuthIdentifier')->andReturn(5);
 		Auth::login($mock);
+
+		Order::truncate();
 
 	}
 
@@ -27,13 +29,13 @@ class ShopCreateOrderTest extends TestCase
 	 * @return void
 	 */
 
-	public function testCreateOrderFailFormat()
+	public function testCreateOrderFailTelFormat()
 	{
 		$resp = $this->call(
 			'POST',
 			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/create',
 			array(
-				'item' => 'qwerty',
+				'item' => 'Новая штука',
 				'sum'  => '123',
 				'tel'  => '123',
 			)
@@ -49,7 +51,6 @@ class ShopCreateOrderTest extends TestCase
 
 	public function testCreateOrderSuccess()
 	{
-		Order::truncate();
 		PayReturn::truncate();
 
 		$resp = $this->call(

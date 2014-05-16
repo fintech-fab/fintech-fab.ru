@@ -143,13 +143,13 @@ class Bill extends Eloquent
 	 */
 	public static function doCancel($billId)
 	{
-		self::whereBillId($billId)
+		Bill::whereBillId($billId)
 			->whereStatus(self::C_STATUS_WAITING)
 			->update(
 				array('status' => self::C_STATUS_REJECTED)
 			);
 
-		return Bill::find($billId);
+		return Bill::whereBillId($billId)->first();
 	}
 
 	/**

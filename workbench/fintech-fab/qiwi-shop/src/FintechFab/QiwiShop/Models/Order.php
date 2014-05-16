@@ -9,15 +9,15 @@ use Eloquent;
  *
  * @package FintechFab\QiwiShop\Models
  *
- * @property integer $user_id
- * @property integer $id
- * @property string  $item
- * @property string  $sum
- * @property string  $tel
- * @property string  $comment
- * @property string  $lifetime
- * @property string  $status
- * @property integer $idLastReturn
+ * @property integer   $user_id
+ * @property integer   $id
+ * @property string    $item
+ * @property string    $sum
+ * @property string    $tel
+ * @property string    $comment
+ * @property string    $lifetime
+ * @property string    $status
+ * @property integer   $idLastReturn
  * @property PayReturn $PayReturn
  *
  * @method static Order whereUserId()
@@ -78,7 +78,13 @@ class Order extends Eloquent
 				return $newStatus;
 			}
 		}
+
 		return $this->status;
+	}
+
+	public function isNew()
+	{
+		return $this->status == self::C_ORDER_STATUS_NEW;
 	}
 
 	/**
