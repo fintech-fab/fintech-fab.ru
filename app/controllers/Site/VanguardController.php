@@ -9,6 +9,7 @@ use Illuminate\Mail\Message;
 use Input;
 use Mail;
 use Redirect;
+use FintechFab\Components\MailSender;
 
 class VanguardController extends BaseController
 {
@@ -24,14 +25,14 @@ class VanguardController extends BaseController
 	{
 		$mailSender = new MailSender();
 
-		/*$data = $this->getOrderFormData();
+		$data = $this->getOrderFormData();
 
-		Mail::send('emails.newImprover', $data, function (Message $message) {
+		/*Mail::send('emails.newImprover', $data, function (Message $message) {
 			$message->to(Config::get('mail.recipient_order_form'))->subject('Новая заявка');
 		});
 
 		if (0 == count(Mail::failures())) {*/
-		if ($mailSender->doVanguardOrder($this->getOrderFormData())) {
+		if ($mailSender->doVanguardOrder($data)) {
 
 			$title = 'Все получилось';
 			$userMessage = Helper::ucwords($data['name']);
@@ -40,8 +41,13 @@ class VanguardController extends BaseController
 				Мы ответим вам не позже следующего рабочего дня.
 			';
 
+			$mailSender->doVanguardOrderAuthor(array(
+				'to' => $data['email'],
+				'name' => $data['name']
+			));
+
 		} else {
-			$title = 'Все получилось';
+			$title = 'Отправка заявки';
 			$userMessage = 'Что-то сломалось, но вы можете попробовать еще раз';
 		}
 
