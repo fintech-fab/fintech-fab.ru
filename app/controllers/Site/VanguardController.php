@@ -22,14 +22,18 @@ class VanguardController extends BaseController
 
 	public function postOrder()
 	{
-		$data = $this->getOrderFormData();
+		$mailSender = new MailSender();
+
+		/*$data = $this->getOrderFormData();
 
 		Mail::send('emails.newImprover', $data, function (Message $message) {
 			$message->to(Config::get('mail.recipient_order_form'))->subject('Новая заявка');
 		});
 
-		if (0 == count(Mail::failures())) {
+		if (0 == count(Mail::failures())) {*/
+		if ($mailSender->doVanguardOrder($this->getOrderFormData())) {
 
+			$title = 'Все получилось';
 			$userMessage = Helper::ucwords($data['name']);
 			$userMessage .= ',
 				вы поразительно инициативны! :-)
@@ -37,10 +41,10 @@ class VanguardController extends BaseController
 			';
 
 		} else {
+			$title = 'Все получилось';
 			$userMessage = 'Что-то сломалось, но вы можете попробовать еще раз';
 		}
 
-		$title = 'Все получилось';
 
 		return Redirect::to('vanguard')
 			->with('userMessage', $userMessage)
