@@ -2,31 +2,42 @@
 
 namespace FintechFab\Components;
 
-use Illuminate\Mail\Message;
 use Config;
+use Illuminate\Mail\Message;
 use Mail;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 class MailSender
 {
 	private $to;
 	private $name;
 
+	/**
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
 	public function doVanguardOrder(array $data)
 	{
-		$this->to = isset($data['to']) ? $data['to'] : Config::get('mail.recipient_order_form');
+		$this->initTo($data, true);
 
 		Mail::send('emails.newImprover', $data, function (Message $message) {
 			$message->to($this->to)->subject('Новая заявка');
 		});
 
-		return (0 == count(Mail::failures()));
+		$cntFails = count(Mail::failures());
+		return (0 == $cntFails);
 	}
+	/**
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
 	public function doVanguardOrderAuthor(array $data)
 	{
-		if (! isset($data['to']))
-			return false;
-		$this->to = $data['to'];
-		$this->name = isset($data['name']) ? $data['name'] : $data['to'];
+		$this->initTo($data);
 
 		/*
 		 *
@@ -34,9 +45,43 @@ class MailSender
 		 *
 		 */
 
-		//return (0 == count(Mail::failures()));
+		//$cntFails = count(Mail::failures());
+		//return (0 == $cntFails);
 		return (true);
 	}
 
 
+	/**
+	 *
+	 * @param      $data
+	 * @param bool $defaultTo
+	 *
+	 * @throws Exception
+	 */
+	private function initTo($data, $defaultTo = false)
+	{
+		if (empty($data['to'])) {
+			if (! $defaultTo) {
+				// на то, чего не должно быть, кидаем искючение
+				throw new Exception('Не определен адрес получателя');
+			}
+			$data['to'] = Config::get('mail.recipient_order_form');
+		}
+		$this->to = $data['to'];
+		$this->name = empty($data['name'])
+			? $this->getNameFromTo()
+			: $data['name'];
+
+	}
+	/**
+	 * Получим имя из адреса эл. почты
+	 *
+	 * @return mixed
+	 */
+	private function getNameFromTo()
+	{
+		$list = explode('@', $this->to);
+
+		return $list[0];
+	}
 }
