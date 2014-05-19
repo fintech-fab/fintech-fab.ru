@@ -61,11 +61,13 @@ class MailSender
 	private function initTo($data, $defaultTo = false)
 	{
 		if (empty($data['to'])) {
-			if (! $defaultTo) {
+			if ($defaultTo) {
+				$data['to'] = Config::get('mail.recipient_order_form');
+			}
+			if (empty($data['to'])) {
 				// на то, чего не должно быть, кидаем искючение
 				throw new Exception('Не определен адрес получателя');
 			}
-			$data['to'] = Config::get('mail.recipient_order_form');
 		}
 		$this->to = $data['to'];
 		$this->name = empty($data['name'])
