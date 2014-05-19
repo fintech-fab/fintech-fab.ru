@@ -5,7 +5,7 @@
 
 $this->pageTitle = Yii::app()->name . " - Изменение пароля";
 ?>
-<h4>Изменение пароля</h4>
+	<h4>Изменение пароля</h4>
 
 
 
@@ -19,23 +19,23 @@ $this->pageTitle = Yii::app()->name . " - Изменение пароля";
 	'action'               => Yii::app()->createUrl('/account/changePassword'),
 ));
 ?>
-<div class="row">
-	<div class="span5">
-		<?= $form->passwordFieldRow($oChangePasswordForm, 'old_password'); ?>
-		<?= $form->passwordFieldRow($oChangePasswordForm, 'password'); ?>
-		<?= $form->passwordFieldRow($oChangePasswordForm, 'password_repeat'); ?>
+	<div class="row">
+		<div class="span5">
+			<?= $form->passwordFieldRow($oChangePasswordForm, 'old_password', array('autocomplete' => 'off')); ?>
+			<?= $form->passwordFieldRow($oChangePasswordForm, 'password', array('autocomplete' => 'off')); ?>
+			<?= $form->passwordFieldRow($oChangePasswordForm, 'password_repeat', array('autocomplete' => 'off')); ?>
+		</div>
 	</div>
-</div>
 
-<div class="clearfix"></div>
-<div class="form-actions">
-	<?php $this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType' => 'submit',
-		'type'       => 'primary',
-		'size'       => 'small',
-		'label'      => 'Отправить',
-	)); ?>
-</div>
+	<div class="clearfix"></div>
+	<div class="form-actions">
+		<?php $this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType' => 'submit',
+			'type'       => 'primary',
+			'size'       => 'small',
+			'label'      => 'Отправить',
+		)); ?>
+	</div>
 
 <?php
 $this->endWidget();
