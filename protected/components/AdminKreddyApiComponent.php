@@ -3892,6 +3892,13 @@ class AdminKreddyApiComponent
 			return true;
 		}
 
+		// в случае если потеряна сессия с API, то sms_status не придет, надо проверить
+		if (!isset($aResult['sms_status'])) {
+			$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+
+			return false;
+		}
+
 		// смс не ок - отображаем ошибку смс
 		if ($aResult['sms_status'] !== self::SMS_AUTH_OK && $aResult['sms_message']) {
 
