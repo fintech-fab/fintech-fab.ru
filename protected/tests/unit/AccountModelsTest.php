@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ModelsTest
  * @method assertEmpty
@@ -6,7 +7,6 @@
  *
  * @package \Codeception\TestCase\Test
  */
-
 class AccountModelsTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -245,7 +245,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	public
 	function  testCheckPassportFieldsOnSuccess($field, $strRowValue, $strCleanValue)
 	{
-		$oForm = new ChangePassportDataForm();
+		$oForm = new ChangePassportForm();
 
 		$oForm->$field = $strRowValue;
 		$oForm->validate();
@@ -260,7 +260,7 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 	public
 	function  testCheckPassportFieldsOnError($field, $value, $method)
 	{
-		$oForm = new ChangePassportDataForm();
+		$oForm = new ChangePassportForm();
 
 		$oForm->$field = $value;
 		$oForm->validate();
@@ -628,9 +628,9 @@ class AccountModelsTest extends \PHPUnit_Framework_TestCase
 
 		return array(
 			array(
-				'sCardPan'       => substr($sCardPan, 1),
-				'sCardValidThru' => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
-				'sCardCvc'       => substr((rand(1000, 1999)), 1),
+				'sCardPan'        => substr($sCardPan, 1),
+				'sCardValidThru'  => array_rand($aMonths, 1) . ' / ' . array_rand($aYears, 1),
+				'sCardCvc'        => substr((rand(1000, 1999)), 1),
 				'sCardHolderName' => self::getValidCardHolderName(),
 			)
 		);

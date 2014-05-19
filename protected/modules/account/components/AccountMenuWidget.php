@@ -89,6 +89,10 @@ class AccountMenuWidget extends CWidget
 					'label' => 'Изменение пароля',
 					'url'   => array('/account/default/changePassword')
 				),
+				array(
+					'label' => 'Изменение адреса электронной почты',
+					'url'   => array('/account/default/changeEmail')
+				),
 			),
 		);
 

@@ -1,6 +1,6 @@
 <?php
 /* @var DefaultController $this */
-/* @var ChangePassportDataForm $oChangePassportForm */
+/* @var ChangePassportForm $oChangePassportForm */
 /* @var IkTbActiveForm $form */
 
 $this->pageTitle = Yii::app()->name . " - Изменение паспортных данных";

@@ -220,6 +220,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
 	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 	const API_ACTION_CANCEL_REQUEST = 'siteClient/doCancelRequest';
+	const API_ACTION_CHANGE_EMAIL = 'siteClient/doChangeEmail';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -2265,29 +2266,20 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $cApiAction
-	 * @param $sSmsCode
-	 * @param $aData
+	 * @param        $cApiAction
+	 * @param        $sSmsCode
+	 * @param        $aData
+	 *
+	 * @param string $sFormName
 	 *
 	 * @return bool
 	 */
-	public function changeClientData($cApiAction, $sSmsCode, $aData)
+	public function changeClientData($cApiAction, $sSmsCode, $aData, $sFormName)
 	{
-		// если смена пароля - нужен другой экшн, там немного другой процесс
+		// если смена пароля - нужен другой экшн, там другой процесс
 		if ($cApiAction == self::API_ACTION_CHANGE_PASSWORD) {
 			return $this->changePassword($sSmsCode, $aData);
 		}
-
-		$aForms = array(
-			self::API_ACTION_CHANGE_NUMERIC_CODE     => 'ChangeNumericCodeForm',
-			self::API_ACTION_CHANGE_PASSPORT         => 'ChangePassportForm',
-			self::API_ACTION_CHANGE_SECRET_QUESTION  => 'ChangeSecretQuestionForm',
-			self::API_ACTION_CHANGE_SMS_AUTH_SETTING => 'ChangeSmsAuthSettingForm',
-		);
-		if (!isset($aForms[$cApiAction])) {
-			return false;
-		}
-		$sFormName = $aForms[$cApiAction];
 
 		$aResult = $this->requestAdminKreddyApi($cApiAction,
 			array('sms_code' => $sSmsCode, $sFormName => $aData));

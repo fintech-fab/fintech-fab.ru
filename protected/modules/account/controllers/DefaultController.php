@@ -41,6 +41,7 @@ class DefaultController extends Controller
 					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
 					'addCard', 'verifyCard', 'successCard', 'refresh',
 					'changePassport', 'changePassportSendSmsCode', 'changePassportCheckSmsCode',
+					'changeEmail', 'changeEmailSendSmsCode', 'changeEmailCheckSmsCode',
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
@@ -504,7 +505,7 @@ class DefaultController extends Controller
 		 * потому когда он возвращает false, мы просто предлагаем пройти идентификацию
 		 */
 
-		$oChangePassportForm = new ChangePassportDataForm();
+		$oChangePassportForm = new ChangePassportForm();
 
 		$this->changeClientData($oChangePassportForm, 'change_passport_data');
 
@@ -552,7 +553,7 @@ class DefaultController extends Controller
 
 					Yii::app()->user->setFlash('error', 'Невозможно изменить паспортные данные. Возможно, такие паспортные данные уже присутствуют в системе Кредди.');
 
-					$oChangePassportForm = new ChangePassportDataForm();
+					$oChangePassportForm = new ChangePassportForm();
 					$oChangePassportForm->setAttributes($aPassportData);
 
 					$this->render('change_passport_data/passport_form', array('oChangePassportForm' => $oChangePassportForm));
@@ -707,6 +708,43 @@ class DefaultController extends Controller
 		$oChangePasswordForm = new ChangePasswordForm();
 
 		$this->changeClientDataCheckSmsCode($oChangePasswordForm, AdminKreddyApiComponent::API_ACTION_CHANGE_PASSWORD, 'change_password');
+	}
+
+	/**
+	 * Смена пароля, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeEmail()
+	{
+		//проверяем, авторизован ли клиент по СМС-паролю
+		$this->checkNeedSmsAuth('/account/changeEmail', 'change_email');
+
+		$oChangeEmailForm = new ChangeEmailForm();
+
+		$this->changeClientData($oChangeEmailForm, 'change_email');
+
+		$this->render('change_email/email_form', array('oChangeEmailForm' => $oChangeEmailForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeEmailSendSmsCode()
+	{
+		$oChangeEmailForm = new ChangeEmailForm();
+		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeEmailForm);
+
+		$this->changeClientDataSendSmsCode(AdminKreddyApiComponent::API_ACTION_CHANGE_EMAIL, 'change_email', $aData);
+	}
+
+	/**
+	 * Проверка СМС-кода для смены цифрового кода
+	 */
+	public function actionChangeEmailCheckSmsCode()
+	{
+
+		$oChangeEmailForm = new ChangeEmailForm();
+
+		$this->changeClientDataCheckSmsCode($oChangeEmailForm, AdminKreddyApiComponent::API_ACTION_CHANGE_EMAIL, 'change_email');
 	}
 
 
@@ -1510,8 +1548,7 @@ class DefaultController extends Controller
 				//забираем сохраненные в сессию данные о цифровом коде
 				$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeForm);
 				//отправляем данные в API
-
-				$bChangeSecret = Yii::app()->adminKreddyApi->changeClientData($cApiAction, $oSmsCodeForm->smsCode, $aData);
+				$bChangeSecret = Yii::app()->adminKreddyApi->changeClientData($cApiAction, $oSmsCodeForm->smsCode, $aData, get_class($oChangeForm));
 				if ($bChangeSecret) { //если нет ошибок
 					$this->render($sViewsPath . '/success');
 					Yii::app()->end();
