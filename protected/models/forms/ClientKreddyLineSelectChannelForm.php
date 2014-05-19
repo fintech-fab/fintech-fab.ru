@@ -15,18 +15,17 @@ class ClientKreddyLineSelectChannelForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 		// всегда обязательные поля
-		$aRequired = array(
+		$aRules[] = array('channel_id', 'required', 'message' => 'Куда перевести деньги? На карту или мобильный?');
+
+		$aRulesFields = array(
 			'channel_id',
 		);
 
-		$aRules = $this->getRulesByFields(
-
-			array(
-				'channel_id',
-			),
-			$aRequired
-		);
 		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannelsKreddyLine()), 'message' => 'Выберите правильный способ получения');
+
+		$aRules = CMap::mergeArray(
+			$this->getRulesByFields($aRulesFields),
+			$aRules);
 
 		return $aRules;
 

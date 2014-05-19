@@ -15,10 +15,9 @@ class ClientKreddyLineSelectProductForm extends ClientCreateFormAbstract
 	 */
 	public function rules()
 	{
-
 		// всегда обязательные поля
-		$aRules[] = array('product', 'required');
-		$aRules[] = array('product', 'in', 'range' => array_keys(ProductsChannelsComponent::getKreddyLineProductsCosts()), 'message' => 'Выберите сумму займа');
+		$aRules[] = array('product', 'required', 'message' => 'Какой КРЕДДИтный лимит интересует?');
+		$aRules[] = array('product', 'in', 'range' => array_keys(ProductsChannelsComponent::getKreddyLineProductsCosts()), 'message' => 'Какой КРЕДДИтный лимит интересует?');
 
 		return $aRules;
 
@@ -29,7 +28,7 @@ class ClientKreddyLineSelectProductForm extends ClientCreateFormAbstract
 	 */
 	public function attributeLabels()
 	{
-		return array('product' => 'Выберите Пакет займов');
+		return array('product' => 'Какой КРЕДДИтный лимит интересует?');
 	}
 
 	/**

@@ -14,30 +14,25 @@ class ClientKreddyLineRegForm extends ClientFullForm
 	 */
 	public function rules()
 	{
-		$aRequired = array(
-			'first_name',
-			'last_name',
-			'third_name',
-			'email',
-			'agree',
-			'phone',
-		);
+		$aRules[] = array('first_name', 'required', 'message' => 'Как тебя зовут?');
+		$aRules[] = array('last_name', 'required', 'message' => 'Какая у тебя фамилия?');
+		$aRules[] = array('third_name', 'required', 'message' => 'Какое у тебя отчество?');
+		$aRules[] = array('email', 'required', 'message' => 'Какой у тебя Email?');
+		$aRules[] = array('agree', 'required', 'requiredValue' => 1, 'message' => 'Согласен на обработку твоих данных?');
+		$aRules[] = array('phone', 'required', 'message' => 'Какой твой действующий номер телефона?');
 
 		$aRulesFields = array(
-			'product',
-			'channel_id',
 			'first_name',
 			'last_name',
 			'third_name',
 			'email',
 			'phone',
-			'agree',
 		);
 
-		$aRules = $this->getRulesByFields(
-			$aRulesFields,
-			$aRequired
-		);
+		$aRules = CMap::mergeArray(
+			$this->getRulesByFields($aRulesFields),
+			$aRules);
+
 
 		$aRules[] = array('fast_reg', 'safe');
 
