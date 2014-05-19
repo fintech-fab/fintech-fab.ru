@@ -1,13 +1,11 @@
 <?php
-
 namespace FintechFab\QiwiShop\Components;
-
 
 use Config;
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
 
-class QiwiGateConnect
+class QiwiGateConnector
 {
 
 	private $statusMap = array(
@@ -37,7 +35,7 @@ class QiwiGateConnect
 	 */
 	public function checkStatus($bill_id)
 	{
-		$oResponse = $this->makeCurl($bill_id);
+		$oResponse = CurlMaker::makeCurl($bill_id);
 		$result_code = $oResponse->response->result_code;
 		if ($result_code != 0) {
 			return array('error' => $this->errorMap[$result_code]);
@@ -52,21 +50,31 @@ class QiwiGateConnect
 	/**
 	 * Получение счёта
 	 *
-	 * @param Order $order
+	 * @param        $orderId
+	 * @param string $tel
+	 * @param string $sum
+	 * @param string $comment
+	 * @param string $lifetime
+	 *
+	 * @internal param string $order_id
+	 * @internal param $
 	 *
 	 * @return array
 	 */
-	public function getBill($order)
+	public function createBill(
+		$orderId, $tel, $sum, $comment = null, $lifetime = null
+	)
 	{
+		$dateExpired = $lifetime = null ? null : date('Y-m-d\TH:i:s', strtotime($lifetime));
 		$bill = array(
-			'user'     => 'tel:' . $order->tel,
-			'amount'   => $order->sum,
+			'user'     => 'tel:' . $tel,
+			'amount'   => $sum,
 			'ccy'      => 'RUB',
-			'comment'  => $order->comment,
-			'lifetime' => date('Y-m-d\TH:i:s', strtotime($order->lifetime)),
+			'comment'  => $comment,
+			'lifetime' => $dateExpired,
 			'prv_name' => Config::get('ff-qiwi-shop::provider.name'),
 		);
-		$oResponse = $this->makeCurl($order->id, 'PUT', $bill);
+		$oResponse = CurlMaker::makeCurl($orderId, 'PUT', $bill);
 		$result_code = $oResponse->response->result_code;
 		if ($result_code != 0) {
 			return array('error' => $this->errorMap[$result_code]);
@@ -76,14 +84,14 @@ class QiwiGateConnect
 	}
 
 	/**
-	 * @param Order $order
+	 * @param $orderId
 	 *
 	 * @return array
 	 */
-	public function cancelBill($order)
+	public function cancelBill($orderId)
 	{
 		$reject = array('status' => 'rejected');
-		$oResponse = $this->makeCurl($order->id, 'PATCH', $reject);
+		$oResponse = CurlMaker::makeCurl($orderId, 'PATCH', $reject);
 		if ($oResponse->response->result_code != 0) {
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
@@ -93,16 +101,20 @@ class QiwiGateConnect
 	}
 
 	/**
-	 * @param PayReturn $refund
+	 * @param $orderId
+	 * @param $payReturnId
+	 * @param $sum
+	 *
+	 * @internal param \FintechFab\QiwiShop\Models\PayReturn $refund
 	 *
 	 * @return array|mixed
 	 */
-	public function payReturn($refund)
+	public function payReturn($orderId, $payReturnId, $sum)
 	{
-		$amount = array('amount' => $refund->sum);
-		$url = Config::get('ff-qiwi-shop::gate_url') . Config::get('ff-qiwi-shop::provider.id') .
-			'/bills/' . $refund->order_id . '/refund/' . $refund->id;
-		$oResponse = $this->makeCurl($refund->order_id, 'PUT', $amount, $url);
+		$amount = array('amount' => $sum);
+		$url = CurlMaker::getConfig('gate_url') . CurlMaker::getConfig('provider.id') .
+			'/bills/' . $orderId . '/refund/' . $payReturnId;
+		$oResponse = CurlMaker::makeCurl($orderId, 'PUT', $amount, $url);
 		if ($oResponse->response->result_code != 0) {
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
@@ -115,11 +127,11 @@ class QiwiGateConnect
 	 *
 	 * @return array|mixed
 	 */
-	public function checkRefundStatus($refund)
+	public function checkReturnStatus($refund)
 	{
-		$url = Config::get('ff-qiwi-shop::gate_url') . Config::get('ff-qiwi-shop::provider.id') .
+		$url = CurlMaker::getConfig('gate_url') . CurlMaker::getConfig('provider.id') .
 			'/bills/' . $refund->order_id . '/refund/' . $refund->id;
-		$oResponse = $this->makeCurl($refund->order_id, 'GET', null, $url);
+		$oResponse = CurlMaker::makeCurl($refund->order_id, 'GET', null, $url);
 		if ($oResponse->response->result_code != 0) {
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
@@ -127,64 +139,6 @@ class QiwiGateConnect
 		$status = $oResponse->response->refund->status;
 
 		return array('status' => $this->statusMap[$status]);
-	}
-
-	/**
-	 * @param int    $order_id
-	 * @param string $method
-	 * @param null   $query
-	 * @param null   $url
-	 *
-	 * @return mixed
-	 */
-
-	private function makeCurl($order_id, $method = 'GET', $query = null, $url = null)
-	{
-		if ($url == null) {
-			$url = Config::get('ff-qiwi-shop::gate_url') . Config::get('ff-qiwi-shop::provider.id') .
-				'/bills/' . $order_id;
-		}
-
-		$headers = array(
-			"Accept: text/json",
-			"Content-Type: application/x-www-form-urlencoded; charset=utf-8",
-		);
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-		curl_setopt(
-			$ch,
-			CURLOPT_USERPWD,
-			Config::get('ff-qiwi-shop::provider.id') . ':' . Config::get('ff-qiwi-shop::provider.password')
-		);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-		if ($query != null) {
-			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($query));
-		}
-
-		$httpResponse = curl_exec($ch);
-		$httpError = curl_error($ch);
-		$info = curl_getinfo($ch);
-		$response = @json_decode($httpResponse);
-
-		if (!$response || !$httpResponse || $httpError) {
-
-			$aResponse = array(
-				'url'      => $url,
-				'code'     => $info['http_code'],
-				'error'    => $httpError,
-				'response' => $httpResponse,
-			);
-
-			echo json_encode($aResponse);
-			die();
-		}
-
-
-		return $response;
 	}
 
 } 

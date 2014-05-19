@@ -5,7 +5,7 @@ use Config;
 use FintechFab\QiwiShop\Components\Dictionary;
 use FintechFab\QiwiShop\Components\Orders;
 use FintechFab\QiwiShop\Components\PaysReturn;
-use FintechFab\QiwiShop\Components\QiwiGateConnect;
+use FintechFab\QiwiShop\Components\QiwiGateConnector;
 use FintechFab\QiwiShop\Components\Validators;
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
@@ -109,7 +109,7 @@ class OrderController extends BaseController
 	 */
 	public function showStatus($order)
 	{
-		$gate = new QiwiGateConnect;
+		$gate = new QiwiGateConnector;
 		$response = $gate->checkStatus($order->id);
 
 		if (isset($response['error'])) {
@@ -137,8 +137,10 @@ class OrderController extends BaseController
 			return $this->resultMessage('Статус заказа не "Новый"');
 		}
 
-		$gate = new QiwiGateConnect;
-		$response = $gate->getBill($order);
+		$gate = new QiwiGateConnector;
+		$response = $gate->createBill(
+			$order->id, $order->tel, $order->sum, $order->comment, $order->lifetime
+		);
 
 		if (isset($response['error'])) {
 			return $this->resultMessage($response['error']);
@@ -163,8 +165,8 @@ class OrderController extends BaseController
 	 */
 	public function cancelBill($order)
 	{
-		$gate = new QiwiGateConnect;
-		$response = $gate->cancelBill($order);
+		$gate = new QiwiGateConnector;
+		$response = $gate->cancelBill($order->id);
 		if (isset($response['error'])) {
 			return $this->resultMessage($response['error']);
 		}
@@ -229,8 +231,8 @@ class OrderController extends BaseController
 		if (!$payReturn) {
 			return $this->resultMessage('Возврат не создан, повторите попытку.');
 		}
-		$gate = new QiwiGateConnect;
-		$response = $gate->payReturn($payReturn);
+		$gate = new QiwiGateConnector;
+		$response = $gate->payReturn($payReturn->order_id, $payReturn->id, $payReturn->sum);
 
 		//Если ошибка, то удаляем наш возврат из таблицы
 		if (isset($response['error'])) {
@@ -259,8 +261,8 @@ class OrderController extends BaseController
 	{
 		$payReturn = PayReturn::find($order->idLastReturn);
 
-		$gate = new QiwiGateConnect;
-		$response = $gate->checkRefundStatus($payReturn);
+		$gate = new QiwiGateConnector();
+		$response = $gate->checkReturnStatus($payReturn);
 		if (isset($response['error'])) {
 			return $this->resultMessage($response['error']);
 		}
