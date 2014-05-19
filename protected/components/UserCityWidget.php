@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class UserCityWidget
  */
@@ -45,7 +46,6 @@ class UserCityWidget extends CWidget
 			$this->sCityName = false;
 		}
 
-		//$sCityName = ids_ipGeoBase::getCityByIP('46.38.98.106');
 		//TODO возможно, вынести в отдельные представления
 		if (!$oCityNameCookie && $this->sCityName) {
 			$sDataContent = 'Мы автоматически определили ваш город: ';
