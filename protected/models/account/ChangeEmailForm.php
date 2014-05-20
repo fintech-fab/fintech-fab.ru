@@ -15,8 +15,7 @@ class ChangeEmailForm extends ClientFullForm
 		$aRequired = array(
 			'email',
 		);
-		$aMyRules =
-			array();
+		$aMyRules = array();
 		$aRules = array_merge($this->getRulesByFields(
 			array(
 				'email'

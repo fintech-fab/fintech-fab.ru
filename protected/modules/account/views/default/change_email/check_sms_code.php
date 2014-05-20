@@ -8,10 +8,6 @@ $this->pageTitle = Yii::app()->name . " - Изменение адреса эле
 <h4>Изменение адреса электронной почты</h4>
 <?php
 
-/* $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Информация о подключении',
-	'content' => $this->renderPartial('change_passport_data/_data', array(), true)
-));*/
 ?>
 <div class="alert in alert-block alert-success">
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
