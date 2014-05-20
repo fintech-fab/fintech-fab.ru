@@ -9,6 +9,7 @@ use Illuminate\Mail\Message;
 use Input;
 use Mail;
 use Redirect;
+use FintechFab\Components\MailSender;
 
 class VanguardController extends BaseController
 {
@@ -22,14 +23,16 @@ class VanguardController extends BaseController
 
 	public function postOrder()
 	{
+		$mailSender = new MailSender();
 		$data = $this->getOrderFormData();
 
-		Mail::send('emails.newImprover', $data, function (Message $message) {
-			$message->to(Config::get('mail.recipient_order_form'))->subject('Новая заявка');
-		});
+		if ($mailSender->doVanguardOrder($data)) {
+			$mailSender->doVanguardOrderAuthor(array(
+				'to' => $data['email'],
+				'name' => $data['name']
+			));
 
-		if (0 == count(Mail::failures())) {
-
+			$title = 'Все получилось';
 			$userMessage = Helper::ucwords($data['name']);
 			$userMessage .= ',
 				вы поразительно инициативны! :-)
@@ -37,10 +40,10 @@ class VanguardController extends BaseController
 			';
 
 		} else {
+			$title = 'Отправка заявки';
 			$userMessage = 'Что-то сломалось, но вы можете попробовать еще раз';
 		}
 
-		$title = 'Все получилось';
 
 		return Redirect::to('vanguard')
 			->with('userMessage', $userMessage)
