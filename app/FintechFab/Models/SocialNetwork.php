@@ -3,7 +3,6 @@
 namespace FintechFab\Models;
 
 use Eloquent;
-use Illuminate\Auth\UserInterface;
 
 /**
  * @property integer $id
@@ -15,7 +14,7 @@ use Illuminate\Auth\UserInterface;
  * @property string  $updated_at
  * @property string  $created_at
  */
-class SocialNetwork extends Eloquent implements UserInterface
+class SocialNetwork extends Eloquent
 {
 
 	protected $fillable = array('id_network', 'social_net_name', 'first_name', 'last_name', 'email', 'link');

@@ -49,11 +49,3 @@ Route::group(array('before' => 'auth'), function () {
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
 });
-
-//-----------------------Для Qiwi----------------------
-Route::group(array('before' => 'auth'), function () {
-	Route::resource('client-page', 'ClientController');
-	Route::resource('shop-page', 'ShopController');
-});
-
-Route::put('/api/v2/prv/2042/bills/', 'QiwiGateController@update');

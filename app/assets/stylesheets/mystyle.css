@@ -28,18 +28,3 @@
 #loginModal .modal-sm {
 	width: 500px;
 }
-
-/* ----------Стили для окна Терминала QIWI-------------*/
-
-#buy, #check-bill, #pay-bill {
-	width: 200px;
-}
-
-.buttonWithMargin {
-	margin: 15px;
-}
-
-#buy_window {
-	display: none;
-}
-
