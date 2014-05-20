@@ -534,8 +534,9 @@ class DefaultController extends Controller
 			$aPost = Yii::app()->request->getParam('SMSCodeForm');
 			$oSmsCodeForm->setAttributes($aPost);
 			if ($oSmsCodeForm->validate()) {
+				$oChangePassportForm = new ChangePassportForm();
 				//забираем сохраненные в сессию данные нового паспорта
-				$aPassportData = Yii::app()->adminKreddyApi->getPassportData();
+				$aPassportData = Yii::app()->adminKreddyApi->getClientChangeData($oChangePassportForm);
 
 				//отправляем данные в API
 				$bSuccess = Yii::app()->adminKreddyApi->changePassport($oSmsCodeForm->smsCode, $aPassportData);

@@ -3378,30 +3378,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param array $aPassportData
-	 */
-	public function setPassportData(array $aPassportData)
-	{
-		Yii::app()->session['aPassportData'] = $aPassportData;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getPassportData()
-	{
-		return Yii::app()->session['aPassportData'];
-	}
-
-	/**
-	 * @param array $aNumericCode
-	 */
-	public function setNumericCode(array $aNumericCode)
-	{
-		Yii::app()->session['aNumericCode'] = $aNumericCode;
-	}
-
-	/**
 	 * @param       $oChangeForm
 	 * @param array $aData
 	 */
@@ -3424,60 +3400,23 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getNumericCode()
-	{
-		return Yii::app()->session['aNumericCode'];
-	}
-
-	/**
-	 * @param array $aSecretQuestion
-	 */
-	public function setSecretQuestion(array $aSecretQuestion)
-	{
-		Yii::app()->session['aSecretQuestion'] = $aSecretQuestion;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getSecretQuestion()
-	{
-		return Yii::app()->session['aSecretQuestion'];
-	}
-
-	/**
-	 * @param array $aSmsAuthSetting
-	 */
-	public function setSmsAuthSetting(array $aSmsAuthSetting)
-	{
-		Yii::app()->session['aSmsAuthSetting'] = $aSmsAuthSetting;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getSmsAuthSetting()
-	{
-		return Yii::app()->session['aSmsAuthSetting'];
-	}
-
-	/**
 	 * @param $sField
 	 *
 	 * @return string|bool
 	 */
 	public function getPassportDataField($sField)
 	{
-		if ($sField === 'passport_change_reason' && !empty(Yii::app()->session['aPassportData'][$sField])) {
-			return (!empty(Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]))
-				? Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]
+		$oChangePassportForm = new ChangePassportForm();
+
+		$aData = $this->getClientChangeData($oChangePassportForm);
+		if ($sField === 'passport_change_reason' && !$aData[$sField]) {
+			return (!empty(Dictionaries::$aChangePassportReasons[$aData[$sField]]))
+				? Dictionaries::$aChangePassportReasons[$aData[$sField]]
 				: false;
 		}
 
-		return (!empty(Yii::app()->session['aPassportData'][$sField]))
-			? Yii::app()->session['aPassportData'][$sField]
+		return (!empty($aData[$sField]))
+			? $aData[$sField]
 			: false;
 	}
 
