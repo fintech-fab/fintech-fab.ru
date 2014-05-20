@@ -2,43 +2,32 @@
 namespace FintechFab\QiwiShop\Components;
 
 
-class CurlMaker
+class Curl
 {
 
-	public static function getConfig($key)
-	{
-		$keyArray = explode('.', $key);
-		$config = array(
-			'gate_url' => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
-			'provider' => array(
-				'name'     => 'Fintech-Fab',
-				'id'       => '1',
-				'password' => '1234',
-			),
-		);
 
-		for ($i = 0; $i < count($keyArray); $i++) {
-			$config = $config[$keyArray[$i]];
+	public static function  setUrl($orderId, $payReturnId)
+	{
+		$url = QiwiGateConnector::getConfig('gate_url') . QiwiGateConnector::getConfig('provider.id')
+			. '/bills/' . $orderId;
+		if ($payReturnId != null) {
+			$url .= '/refund/' . $payReturnId;
 		}
 
-		return $config;
-
+		return $url;
 	}
 
 	/**
 	 * @param int    $order_id
 	 * @param string $method
 	 * @param null   $query
-	 * @param null   $url
+	 * @param null   $payReturnId
 	 *
 	 * @return mixed
 	 */
-	public static function makeCurl($order_id, $method = 'GET', $query = null, $url = null)
+	public static function makeCurl($order_id, $method = 'GET', $query = null, $payReturnId = null)
 	{
-		if ($url == null) {
-			$url = self::getConfig('gate_url') . self::getConfig('provider.id') .
-				'/bills/' . $order_id;
-		}
+		$url = self::setUrl($order_id, $payReturnId);
 
 		$headers = array(
 			"Accept: text/json",
@@ -51,7 +40,8 @@ class CurlMaker
 		curl_setopt(
 			$ch,
 			CURLOPT_USERPWD,
-			self::getConfig('provider.id') . ':' . self::getConfig('provider.password')
+			QiwiGateConnector::getConfig('provider.id') . ':'
+			. QiwiGateConnector::getConfig('provider.password')
 		);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

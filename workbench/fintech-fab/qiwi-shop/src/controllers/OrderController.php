@@ -262,7 +262,7 @@ class OrderController extends BaseController
 		$payReturn = PayReturn::find($order->idLastReturn);
 
 		$gate = new QiwiGateConnector();
-		$response = $gate->checkReturnStatus($payReturn);
+		$response = $gate->checkReturnStatus($payReturn->order_id, $payReturn->id);
 		if (isset($response['error'])) {
 			return $this->resultMessage($response['error']);
 		}
