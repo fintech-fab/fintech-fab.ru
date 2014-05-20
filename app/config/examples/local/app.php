@@ -15,7 +15,12 @@ return [
 	 * 4. Раскомментировать нужные пакеты для их работы
 	 */
 	'providers' => [
-		//'FintechFab\QiwiGate\QiwiGateServiceProvider',
+		//100500 => 'FintechFab\QiwiGate\QiwiGateServiceProvider',
+		//100501 => 'FintechFab\QiwiShop\QiwiShopServiceProvider',
+		//100502 => 'FintechFab\BankEmulator\BankEmulatorServiceProvider',
 	],
+
+	'logglykey' => '',
+	'logglytag' => '',
 
 ];

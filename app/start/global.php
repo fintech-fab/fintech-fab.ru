@@ -33,6 +33,13 @@ ClassLoader::addDirectories(array(
 
 Log::useFiles(storage_path() . '/logs/laravel.log');
 
+if (Config::get('app.logglykey') && Config::get('app.logglytag')) {
+	$handler = new \Monolog\Handler\LogglyHandler(Config::get('app.logglykey'), \Monolog\Logger::DEBUG);
+	$handler->setTag(Config::get('app.logglytag'));
+	$logger = Log::getMonolog();
+	$logger->pushHandler($handler);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Application Error Handler
@@ -46,6 +53,7 @@ Log::useFiles(storage_path() . '/logs/laravel.log');
 |
 */
 
+/** @noinspection PhpUnusedParameterInspection */
 App::error(function (Exception $exception, $code) {
 	Log::error($exception);
 });
@@ -76,4 +84,5 @@ App::down(function () {
 |
 */
 
+/** @noinspection PhpIncludeInspection */
 require app_path() . '/filters.php';
