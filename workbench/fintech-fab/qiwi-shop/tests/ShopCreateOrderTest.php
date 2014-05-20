@@ -1,8 +1,6 @@
 <?php
 
-use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
-use Illuminate\Auth\UserInterface;
 
 class ShopCreateOrderTest extends ShopTestCase
 {
@@ -11,15 +9,6 @@ class ShopCreateOrderTest extends ShopTestCase
 	public function setUp()
 	{
 		parent::setUp();
-
-		/**
-		 * @var UserInterface|Mockery\MockInterface $mock
-		 */
-		$mock = Mockery::mock('Illuminate\Auth\UserInterface');
-		$mock->shouldReceive('getAuthIdentifier')->andReturn(5);
-		Auth::login($mock);
-
-		Order::truncate();
 
 	}
 

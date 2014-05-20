@@ -1,20 +1,25 @@
 <?php
-namespace FintechFab\QiwiShop\Components;
+namespace FintechFab\QiwiShop\Components\Sdk;
 
 
 class Curl
 {
+	public $url;
+	public $curlError;
 
-
-	public static function  setUrl($orderId, $payReturnId)
+	/**
+	 * @param $orderId
+	 * @param $payReturnId
+	 *
+	 */
+	public function  setUrl($orderId, $payReturnId = null)
 	{
-		$url = QiwiGateConnector::getConfig('gate_url') . QiwiGateConnector::getConfig('provider.id')
+		$this->url = QiwiGateConnector::getConfig('gate_url') . QiwiGateConnector::getConfig('provider.id')
 			. '/bills/' . $orderId;
 		if ($payReturnId != null) {
-			$url .= '/refund/' . $payReturnId;
+			$this->url .= '/refund/' . $payReturnId;
 		}
 
-		return $url;
 	}
 
 	/**
@@ -25,9 +30,9 @@ class Curl
 	 *
 	 * @return mixed
 	 */
-	public static function makeCurl($order_id, $method = 'GET', $query = null, $payReturnId = null)
+	public function makeCurl($order_id, $method = 'GET', $query = null, $payReturnId = null)
 	{
-		$url = self::setUrl($order_id, $payReturnId);
+		$this->setUrl($order_id, $payReturnId);
 
 		$headers = array(
 			"Accept: text/json",
@@ -35,7 +40,7 @@ class Curl
 		);
 
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_URL, $this->url);
 		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		curl_setopt(
 			$ch,
@@ -57,17 +62,14 @@ class Curl
 
 		if (!$response || !$httpResponse || $httpError) {
 
-			$aResponse = array(
-				'url'      => $url,
+			$this->curlError = array(
 				'code'     => $info['http_code'],
 				'error'    => $httpError,
 				'response' => $httpResponse,
 			);
 
-			echo json_encode($aResponse);
-			die();
+			return ($this->curlError);
 		}
-
 
 		return $response;
 	}

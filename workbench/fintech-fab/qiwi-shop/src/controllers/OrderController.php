@@ -5,7 +5,7 @@ use Config;
 use FintechFab\QiwiShop\Components\Dictionary;
 use FintechFab\QiwiShop\Components\Orders;
 use FintechFab\QiwiShop\Components\PaysReturn;
-use FintechFab\QiwiShop\Components\QiwiGateConnector;
+use FintechFab\QiwiShop\Components\Sdk\QiwiGateConnector;
 use FintechFab\QiwiShop\Components\Validators;
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
@@ -260,6 +260,9 @@ class OrderController extends BaseController
 	public function statusReturn($order)
 	{
 		$payReturn = PayReturn::find($order->idLastReturn);
+		if (!$payReturn) {
+			return $this->resultMessage('Нет такого возврата');
+		}
 
 		$gate = new QiwiGateConnector();
 		$response = $gate->checkReturnStatus($payReturn->order_id, $payReturn->id);

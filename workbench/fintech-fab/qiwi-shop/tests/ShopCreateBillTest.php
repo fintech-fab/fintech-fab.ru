@@ -1,22 +1,14 @@
 <?php
 
 use FintechFab\QiwiShop\Models\Order;
-use Illuminate\Auth\UserInterface;
 
-class ShopGetBillTest extends ShopTestCase
+class ShopCreateBillTest extends ShopTestCase
 {
 
 
 	public function setUp()
 	{
 		parent::setUp();
-
-		/**
-		 * @var UserInterface|Mockery\MockInterface $mock
-		 */
-		$mock = Mockery::mock('Illuminate\Auth\UserInterface');
-		$mock->shouldReceive('getAuthIdentifier')->andReturn(5);
-		Auth::login($mock);
 
 	}
 
@@ -74,10 +66,10 @@ class ShopGetBillTest extends ShopTestCase
 			'POST',
 			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/createBill',
 			array(
-				'order_id' => '2',
+				'order_id' => '1',
 			)
 		);
-		$this->assertContains('Счёт № 2 выставлен', $resp->original['message']);
+		$this->assertContains('Счёт № 1 выставлен', $resp->original['message']);
 	}
 
 
