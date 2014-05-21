@@ -35,6 +35,8 @@ class IdentifyApiComponent
 
 	public $bTest = false;
 
+	private $aNeedDocuments = array();
+
 	public static $aIdentifySteps = array(
 		self::STEP_FACE      => array(
 			'type'        => self::C_TYPE_PHOTO,
@@ -99,6 +101,10 @@ class IdentifyApiComponent
 	{
 		$this->bTest = $bTest;
 
+		if ($bTest) {
+			$this->setUpTest();
+		}
+
 		// некорректный POST-запрос - ошибка
 		if (empty($aRequest['token']) && empty($aRequest['image'])
 			&& empty($aRequest['phone']) && empty($aRequest['password'])
@@ -141,6 +147,13 @@ class IdentifyApiComponent
 		$iStepNumber = self::STEP_FACE;
 		// авторизация успешна; генерируем соответствующий токен
 		$sToken = $this->generateToken($sApiToken, $iStepNumber);
+
+		$aIdentify = Yii::app()->adminKreddyApi->getIdentify();
+
+		// если передан список документов на идентификацию
+		if (!$this->bTest && isset($aIdentify['documents']) && empty($this->aNeedDocuments)) {
+			$this->aNeedDocuments = explode('.', $aIdentify['documents']);
+		}
 
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
 		return $this->formatResponse($sToken, array(
@@ -205,11 +218,11 @@ class IdentifyApiComponent
 	{
 		$iNextStepNumber = (int)$iStepNumber + 1;
 
-		$aIdentify = Yii::app()->adminKreddyApi->getIdentify();
-
 		// если передан список документов на идентификацию
-		if (isset($aIdentify['documents'])) {
-			$aDocuments = explode('.', $aIdentify['documents']);
+		$aDocuments = $this->aNeedDocuments;
+		mail('i.popov@fintech-fab.ru', 'error', '1.' . print_r($aDocuments, true));
+		if (isset($aDocuments[0])) {
+
 			// если существует данный шаг и тип, проверим наличие типа в массиве требуемых документов
 			// если тип текущего шага не находится в списке требуемых,
 			// и следующий шаг не последний, идем дальше
@@ -451,5 +464,19 @@ class IdentifyApiComponent
 		return isset(self::$aIdentifySteps[$iStepNumber]['example'])
 			? self::$aIdentifySteps[$iStepNumber]['example']
 			: null;
+	}
+
+	/**
+	 * В случае теста нам может быть нужно установить список документов
+	 */
+	private function setUpTest()
+	{
+		// для теста используем файл в качестве источника списка документов
+		if ($this->bTest && !$this->aNeedDocuments && file_exists(Yii::app()
+				->getBasePath() . '/tests/files/documents.txt')
+		) {
+			$this->aNeedDocuments = explode(".", file_get_contents(Yii::app()
+				->getBasePath() . '/tests/files/documents.txt'));
+		}
 	}
 }

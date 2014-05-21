@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class IdentifyModuleTest
  * @method assertEmpty
@@ -6,7 +7,6 @@
  * @method assertTrue
  * @method assertEquals
  */
-
 class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -27,6 +27,9 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		YiiBase::$enableIncludePath = false;
+		if (file_exists(Yii::app()->getBasePath() . '/tests/files/documents.txt')) {
+			unlink(Yii::app()->getBasePath() . '/tests/files/documents.txt');
+		}
 	}
 
 	public function tearDown()
@@ -55,7 +58,7 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		//проверяем успешность логина
 		$this->assertEquals(0, $aResult['code'], ('Код результата не равен 0: code=' . $aResult['code']));
 		//проверяем наличие токена
-		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		$this->assertNotEmpty($sToken, 'Токен не получен! ' . $sResult);
 		//проверяем наличие инструкции
 		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
 
@@ -432,4 +435,273 @@ class IdentifyModuleTest extends \PHPUnit_Framework_TestCase
 		return curl_exec($ch);
 
 	}
+
+	// проверка процедуры повторной идентификации
+	public function testReIdentifyOne()
+	{
+
+		//процедура логина
+		$aRequest = array(
+			'login'    => $this->login,
+			'password' => $this->password,
+		);
+
+		// задаем список файлов для повторной идентификации
+		file_put_contents(
+			Yii::app()->getBasePath() . '/tests/files/documents.txt',
+			'passport_last'
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+
+		$aResult = CJSON::decode($sResult);
+
+		$sToken = $aResult['result']['token'];
+
+		//проверяем успешность логина
+		$this->assertEquals(0, $aResult['code'], ('Код результата не равен 0: code=' . $aResult['code']));
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен! ' . $sResult);
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
+
+
+		//процедура загрузки фото клиента
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+
+		$sToken = $aResult['result']['token'];
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
+		//проверяем наличие document=1
+		$this->assertEquals(4, $aResult['result']['document'], "Документ не равен 4: document=" . $aResult['result']['document']);
+		//проверяем наличие title
+		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
+		//проверяем наличие example
+		$this->assertNotEmpty($aResult['result']['example'], "Нет примера");
+		//проверяем наличие description
+		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
+
+		//процедура загрузки последнего документа
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
+		//проверяем наличие done=1 - идентификация завершена
+		$this->assertEquals(1, $aResult['result']['done'], 'Нет флажка, что идентификация завершена');
+		//*/
+	}
+
+	// проверка процедуры повторной идентификации
+	public function testReIdentify_Two()
+	{
+
+		//процедура логина
+		$aRequest = array(
+			'login'    => $this->login,
+			'password' => $this->password,
+		);
+
+		// задаем список файлов для повторной идентификации
+		file_put_contents(
+			Yii::app()->getBasePath() . '/tests/files/documents.txt',
+			'passport_front_second.document'
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+
+		$aResult = CJSON::decode($sResult);
+
+		$sToken = $aResult['result']['token'];
+
+		//проверяем успешность логина
+		$this->assertEquals(0, $aResult['code'], ('Код результата не равен 0: code=' . $aResult['code']));
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен! ' . $sResult);
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
+
+
+		//процедура загрузки фото клиента
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+
+		$sToken = $aResult['result']['token'];
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
+		//проверяем наличие document=1
+		$this->assertEquals(2, $aResult['result']['document'], "Документ не равен 2: document=" . $aResult['result']['document']);
+		//проверяем наличие title
+		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
+		//проверяем наличие example
+		$this->assertNotEmpty($aResult['result']['example'], "Нет примера");
+		//проверяем наличие description
+		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
+
+		//процедура загрузки документа 2
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+		$sToken = $aResult['result']['token'];
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
+		//проверяем наличие document=4
+		$this->assertEquals(5, $aResult['result']['document'], "Документ не равен 5: document=" . $aResult['result']['document']);
+		//проверяем наличие title
+		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
+		//проверяем наличие example
+		$this->assertNotEmpty($aResult['result']['example'], "Нет примера");
+		//проверяем наличие description
+		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
+
+		//процедура загрузки последнего документа
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
+		//проверяем наличие done=1 - идентификация завершена
+		$this->assertEquals(1, $aResult['result']['done'], 'Нет флажка, что идентификация завершена');
+	}
+
+	// проверка процедуры повторной идентификации
+	public function testReIdentify_Three()
+	{
+
+		//процедура логина
+		$aRequest = array(
+			'login'    => $this->login,
+			'password' => $this->password,
+		);
+
+		// задаем список файлов для повторной идентификации
+		file_put_contents(
+			Yii::app()->getBasePath() . '/tests/files/documents.txt',
+			'photo.passport_notification.passport_last'
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+
+		$aResult = CJSON::decode($sResult);
+
+		$sToken = $aResult['result']['token'];
+
+		//проверяем успешность логина
+		$this->assertEquals(0, $aResult['code'], ('Код результата не равен 0: code=' . $aResult['code']));
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен! ' . $sResult);
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
+
+
+		//процедура загрузки фото клиента
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+
+		$sToken = $aResult['result']['token'];
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
+		//проверяем наличие document=1
+		$this->assertEquals(3, $aResult['result']['document'], "Документ не равен 3: document=" . $aResult['result']['document']);
+		//проверяем наличие title
+		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
+		//проверяем наличие example
+		$this->assertNotEmpty($aResult['result']['example'], "Нет примера");
+		//проверяем наличие description
+		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
+
+		//процедура загрузки документа 3
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+		$sToken = $aResult['result']['token'];
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], "Нет инструкции!");
+		//проверяем наличие document=4
+		$this->assertEquals(4, $aResult['result']['document'], "Документ не равен 4: document=" . $aResult['result']['document']);
+		//проверяем наличие title
+		$this->assertNotEmpty($aResult['result']['title'], "Нет заголовка");
+		//проверяем наличие example
+		$this->assertNotEmpty($aResult['result']['example'], "Нет примера");
+		//проверяем наличие description
+		$this->assertNotEmpty($aResult['result']['description'], "Нет описания");
+
+		//процедура загрузки последнего документа
+		$aRequest = array(
+			'token' => $sToken,
+			'image' => self::IMAGE,
+		);
+
+		$sResult = $this->_requestToCallback($aRequest);
+		$aResult = CJSON::decode($sResult);
+
+		$this->assertEquals(0, $aResult['code'], 'Код результата не равен 0: code=' . $aResult['code']);
+		//проверяем наличие токена
+		$this->assertNotEmpty($sToken, 'Токен не получен!');
+		//проверяем наличие инструкции
+		$this->assertNotEmpty($aResult['result']['instruction'], 'Нет инструкции');
+		//проверяем наличие done=1 - идентификация завершена
+		$this->assertEquals(1, $aResult['result']['done'], 'Нет флажка, что идентификация завершена');
+	}
+
 }
