@@ -1,14 +1,23 @@
 <?php
 
+use FintechFab\QiwiShop\Components\Sdk\Curl;
+use FintechFab\QiwiShop\Components\Sdk\QiwiGateConnector;
 use FintechFab\QiwiShop\Models\Order;
 
 class ShopCreateBillTest extends ShopTestCase
 {
 
 
+	/**
+	 * @var Mockery\MockInterface|Curl
+	 */
+	private $mock;
+
 	public function setUp()
 	{
 		parent::setUp();
+		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
+		$this->mock->shouldReceive('setUrl');
 
 	}
 
@@ -51,6 +60,37 @@ class ShopCreateBillTest extends ShopTestCase
 
 	public function testGetBillSuccess()
 	{
+		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+
+			$bill = array(
+				'user'     => 'tel:+7123',
+				'amount'   => 543.21,
+				'ccy'      => 'RUB',
+				'comment'  => 'without',
+				'lifetime' => date('Y-m-d\TH:i:s', time() + 3600 * 24 * 3),
+				'prv_name' => QiwiGateConnector::getConfig('provider.name'),
+			);
+
+			$args = array(
+				1, 'PUT', $bill
+			);
+
+			$this->mock
+				->shouldReceive('request')
+				->withArgs($args)
+				->andReturn((object)array(
+					'response' => (object)array(
+							'result_code' => 0,
+							'bill'        => (object)array(
+									'bill_id' => 123,
+								),
+						)
+				));
+
+			return $this->mock;
+		});
+
+
 		$order = new Order();
 		$order->create(array(
 			'user_id'  => 5,
@@ -69,7 +109,7 @@ class ShopCreateBillTest extends ShopTestCase
 				'order_id' => '1',
 			)
 		);
-		$this->assertContains('Счёт № 1 выставлен', $resp->original['message']);
+		$this->assertContains('Счёт выставлен', $resp->original['message']);
 	}
 
 

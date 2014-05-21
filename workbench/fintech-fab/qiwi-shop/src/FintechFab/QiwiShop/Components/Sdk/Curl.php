@@ -30,7 +30,7 @@ class Curl
 	 *
 	 * @return mixed
 	 */
-	public function makeCurl($order_id, $method = 'GET', $query = null, $payReturnId = null)
+	public function request($order_id, $method = 'GET', $query = null, $payReturnId = null)
 	{
 		$this->setUrl($order_id, $payReturnId);
 

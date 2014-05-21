@@ -4,6 +4,12 @@ namespace FintechFab\QiwiShop\Components\Sdk;
 
 class QiwiGateConnector
 {
+
+	/**
+	 * @var Curl
+	 */
+	private $curl;
+
 	private static $config = array(
 		'gate_url' => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
 		'provider' => array(
@@ -32,6 +38,17 @@ class QiwiGateConnector
 		'300' => 'Техническая ошибка, повторите запрос позже',
 	);
 
+	/**
+	 * @var string
+	 */
+	private $errorMessage;
+
+	public function __construct(Curl $curl)
+	{
+		$this->curl = $curl;
+	}
+
+
 	public static function getConfig($key)
 	{
 		$keyArray = explode('.', $key);
@@ -54,8 +71,7 @@ class QiwiGateConnector
 	 */
 	public function checkStatus($bill_id)
 	{
-		$curl = CurlFactory::create();
-		$oResponse = $curl->makeCurl($bill_id);
+		$oResponse = $this->curl->request($bill_id);
 		if ($this->parseError($oResponse)) {
 			return array('error' => 'Ошибка сервера Qiwi');
 		}
@@ -88,7 +104,10 @@ class QiwiGateConnector
 		$orderId, $tel, $sum, $comment = null, $lifetime = null
 	)
 	{
-		$dateExpired = $lifetime = null ? null : date('Y-m-d\TH:i:s', strtotime($lifetime));
+		$dateExpired = (null == $lifetime)
+			? null
+			: date('Y-m-d\TH:i:s', strtotime($lifetime));
+
 		$bill = array(
 			'user'     => 'tel:' . $tel,
 			'amount'   => $sum,
@@ -97,17 +116,23 @@ class QiwiGateConnector
 			'lifetime' => $dateExpired,
 			'prv_name' => self::getConfig('provider.name'),
 		);
-		$curl = CurlFactory::create();
-		$oResponse = $curl->makeCurl($orderId, 'PUT', $bill);
+		$oResponse = $this->curl->request($orderId, 'PUT', $bill);
+
 		if ($this->parseError($oResponse)) {
-			return array('error' => 'Ошибка сервера Qiwi');
-		}
-		$result_code = $oResponse->response->result_code;
-		if ($result_code != 0) {
-			return array('error' => $this->errorMap[$result_code]);
+			$this->setError('Ошибка сервера Qiwi');
+
+			return false;
 		}
 
-		return array('billId' => $oResponse->response->bill->bill_id);
+		$result_code = $oResponse->response->result_code;
+
+		if ($result_code != 0) {
+			$this->setError($this->errorMap[$result_code]);
+
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -118,8 +143,7 @@ class QiwiGateConnector
 	public function cancelBill($orderId)
 	{
 		$reject = array('status' => 'rejected');
-		$curl = CurlFactory::create();
-		$oResponse = $curl->makeCurl($orderId, 'PATCH', $reject);
+		$oResponse = $this->curl->request($orderId, 'PATCH', $reject);
 		if ($this->parseError($oResponse)) {
 			return array('error' => 'Ошибка сервера Qiwi');
 		}
@@ -141,8 +165,7 @@ class QiwiGateConnector
 	public function payReturn($orderId, $payReturnId, $sum)
 	{
 		$amount = array('amount' => $sum);
-		$curl = CurlFactory::create();
-		$oResponse = $curl->makeCurl($orderId, 'PUT', $amount, $payReturnId);
+		$oResponse = $this->curl->request($orderId, 'PUT', $amount, $payReturnId);
 		if ($oResponse->response->result_code != 0) {
 			return array('error' => $this->errorMap[$oResponse->response->result_code]);
 		}
@@ -158,8 +181,7 @@ class QiwiGateConnector
 	 */
 	public function checkReturnStatus($orderId, $payReturnId)
 	{
-		$curl = CurlFactory::create();
-		$oResponse = $curl->makeCurl($orderId, 'GET', null, $payReturnId);
+		$oResponse = $this->curl->request($orderId, 'GET', null, $payReturnId);
 		if ($this->parseError($oResponse)) {
 			return array('error' => 'Ошибка сервера Qiwi');
 		}
@@ -175,5 +197,15 @@ class QiwiGateConnector
 	private function parseError($aResponse)
 	{
 		return array_key_exists('curlError', $aResponse);
+	}
+
+	public function getError()
+	{
+		return $this->errorMessage;
+	}
+
+	private function setError($message)
+	{
+		$this->errorMessage = $message;
 	}
 } 
