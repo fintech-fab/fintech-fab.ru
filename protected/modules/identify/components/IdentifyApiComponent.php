@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Class IdentifyApiComponent
  *
  * @property bool bTest
  */
-
 class IdentifyApiComponent
 {
 	/**
@@ -183,7 +183,8 @@ class IdentifyApiComponent
 		}
 
 		// если не получилось сохранить изображение - ошибка
-		if (!$this->saveImage($sApiToken, $sImageBase64, $iStepNumber)) {
+		$bImageSaved = $this->saveImage($sApiToken, $sImageBase64, $iStepNumber);
+		if (!$bImageSaved) {
 			return $this->formatErrorResponse('Не удалось сохранить изображение');
 		}
 
@@ -203,6 +204,24 @@ class IdentifyApiComponent
 	private function getProcessResultByStep($iStepNumber, $sApiToken)
 	{
 		$iNextStepNumber = (int)$iStepNumber + 1;
+
+		$aIdentify = Yii::app()->adminKreddyApi->getIdentify();
+
+		// если передан список документов на идентификацию
+		if (isset($aIdentify['documents'])) {
+			$aDocuments = explode('.', $aIdentify['documents']);
+			// если существует данный шаг и тип, проверим наличие типа в массиве требуемых документов
+			// если тип текущего шага не находится в списке требуемых,
+			// и следующий шаг не последний, идем дальше
+			if (
+				isset(self::$aIdentifySteps[$iNextStepNumber]['type'])
+				&& !in_array(self::$aIdentifySteps[$iNextStepNumber]['type'], $aDocuments)
+				&& $iNextStepNumber != self::STEP_DONE
+			) {
+				$this->getProcessResultByStep($iNextStepNumber, $sApiToken);
+			}
+		}
+
 		$sToken = $this->generateToken($sApiToken, $iNextStepNumber);
 
 		switch ($iStepNumber) {
