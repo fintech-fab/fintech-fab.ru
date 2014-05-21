@@ -179,7 +179,7 @@ class QiwiGateConnector
 			return $this->errorResultCode($result_code);
 		}
 
-		return array('billId' => $oResponse->response->bill->bill_id);
+		return true;
 
 	}
 

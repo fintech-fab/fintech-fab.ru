@@ -51,10 +51,9 @@ class ConnectorTest extends ShopTestCase
 
 		$isSuccess = $connector->createBill(123, '+7910000', 123.45, 'SomeComment');
 		$this->assertTrue($isSuccess);
-
 	}
 
-	public function testCreateBillFail()
+	public function testCreateBillFailFormat()
 	{
 
 		$connector = new QiwiGateConnector($this->mock);
@@ -84,9 +83,128 @@ class ConnectorTest extends ShopTestCase
 		$isSuccess = $connector->createBill(123, '+', 123.45);
 		$this->assertFalse($isSuccess);
 		$this->assertEquals('Неверный формат параметров запроса', $connector->getError());
-
-
 	}
 
+	public function testCreateBillFailSum()
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$isSuccess = $connector->createBill(123, '+', 0);
+		$this->assertFalse($isSuccess);
+		$this->assertEquals('Сумма слишком мала', $connector->getError());
+	}
+
+	public function testCheckStatus()
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$args = array(123);
+
+		$this->mock
+			->shouldReceive('request')
+			->withArgs($args)
+			->andReturn((object)array(
+				'response' => (object)array(
+						'result_code' => 0,
+						'bill'        => (object)array(
+								'status' => 'waiting',
+							),
+					)
+			));
+
+		$isSuccess = $connector->checkStatus(123);
+		$this->assertTrue($isSuccess);
+		$this->assertEquals('payable', $connector->getStatus());
+	}
+
+	public function testCancelBill()
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$reject = array('status' => 'rejected');
+
+		$args = array(
+			123, 'PATCH', $reject
+		);
+
+		$this->mock
+			->shouldReceive('request')
+			->withArgs($args)
+			->andReturn((object)array(
+				'response' => (object)array(
+						'result_code' => 0,
+						'bill'        => (object)array(
+								'bill_id' => 123,
+							),
+					)
+			));
+
+		$isSuccess = $connector->cancelBill(123);
+		$this->assertTrue($isSuccess);
+	}
+
+
+	public function testPayReturn()
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$amount = array('amount' => 23);
+
+		$args = array(
+			123, 'PUT', $amount, 1
+		);
+
+		$this->mock
+			->shouldReceive('request')
+			->withArgs($args)
+			->andReturn((object)array(
+				'response' => (object)array(
+						'result_code' => 0,
+					)
+			));
+
+		$isSuccess = $connector->payReturn(123, 1, 23);
+		$this->assertTrue($isSuccess);
+	}
+
+	public function testPayReturnFailSum()
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$isSuccess = $connector->payReturn(123, 1, 0);
+		$this->assertFalse($isSuccess);
+		$this->assertEquals('Сумма слишком мала', $connector->getError());
+	}
+
+	public function testCheckReturnStatus()
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$args = array(
+			123, 'GET', null, 1
+		);
+
+		$this->mock
+			->shouldReceive('request')
+			->withArgs($args)
+			->andReturn((object)array(
+				'response' => (object)array(
+						'result_code' => 0,
+						'refund'      => (object)array(
+								'status' => 'processing',
+							),
+					)
+			));
+
+		$isSuccess = $connector->checkReturnStatus(123, 1);
+		$this->assertTrue($isSuccess);
+		$this->assertEquals('onReturn', $connector->getStatus());
+	}
 
 }
