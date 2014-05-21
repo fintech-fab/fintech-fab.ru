@@ -65,6 +65,21 @@ class QiwiGateConnector
 	}
 
 	/**
+	 * @param $config
+	 */
+	public static function setConfig($config)
+	{
+		foreach ($config as $key => $value) {
+			if (is_array($value)) {
+				foreach ($config as $subKey => $subValue) {
+					self::$config[$key][$subKey] = $subValue;
+				}
+			}
+			self::$config[$key] = $value;
+		}
+	}
+
+	/**
 	 * Проверка статуса
 	 *
 	 * @param $bill_id
