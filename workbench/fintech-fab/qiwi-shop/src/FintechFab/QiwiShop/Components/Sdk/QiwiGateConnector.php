@@ -10,6 +10,7 @@ class QiwiGateConnector
 	 */
 	private $curl;
 
+
 	private static $config = array(
 		'gate_url' => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
 		'provider' => array(
@@ -42,6 +43,7 @@ class QiwiGateConnector
 	 * @var string
 	 */
 	private $errorMessage;
+	private $status;
 
 	public function __construct(Curl $curl)
 	{
@@ -67,43 +69,50 @@ class QiwiGateConnector
 	 *
 	 * @param $bill_id
 	 *
-	 * @return array|mixed
+	 * @return bool
 	 */
 	public function checkStatus($bill_id)
 	{
 		$oResponse = $this->curl->request($bill_id);
 		if ($this->parseError($oResponse)) {
-			return array('error' => 'Ошибка сервера Qiwi');
+			$this->setError('Ошибка соединения');
+
+			return false;
 		}
+
 		$result_code = $oResponse->response->result_code;
+
 		if ($result_code != 0) {
-			return array('error' => $this->errorMap[$result_code]);
+			return $this->errorResultCode($result_code);
 		}
 
 		$status = $oResponse->response->bill->status;
+		$this->setStatus($this->statusMap[$status]);
 
-		return array('status' => $this->statusMap[$status]);
+		return true;
 	}
 
 
 	/**
 	 * Получение счёта
 	 *
-	 * @param        $orderId
+	 * @param string $orderId
 	 * @param string $tel
 	 * @param string $sum
 	 * @param string $comment
 	 * @param string $lifetime
 	 *
-	 * @internal param string $order_id
-	 * @internal param $
-	 *
-	 * @return array
+	 * @return bool
 	 */
 	public function createBill(
 		$orderId, $tel, $sum, $comment = null, $lifetime = null
 	)
 	{
+		if ($sum <= 0) {
+			$this->setError($this->errorMap['241']);
+
+			return false;
+		}
 		$dateExpired = (null == $lifetime)
 			? null
 			: date('Y-m-d\TH:i:s', strtotime($lifetime));
@@ -119,7 +128,7 @@ class QiwiGateConnector
 		$oResponse = $this->curl->request($orderId, 'PUT', $bill);
 
 		if ($this->parseError($oResponse)) {
-			$this->setError('Ошибка сервера Qiwi');
+			$this->setError('Ошибка соединения');
 
 			return false;
 		}
@@ -127,9 +136,7 @@ class QiwiGateConnector
 		$result_code = $oResponse->response->result_code;
 
 		if ($result_code != 0) {
-			$this->setError($this->errorMap[$result_code]);
-
-			return false;
+			return $this->errorResultCode($result_code);
 		}
 
 		return true;
@@ -138,17 +145,23 @@ class QiwiGateConnector
 	/**
 	 * @param $orderId
 	 *
-	 * @return array
+	 * @return bool
 	 */
 	public function cancelBill($orderId)
 	{
 		$reject = array('status' => 'rejected');
 		$oResponse = $this->curl->request($orderId, 'PATCH', $reject);
+
 		if ($this->parseError($oResponse)) {
-			return array('error' => 'Ошибка сервера Qiwi');
+			$this->setError('Ошибка соединения');
+
+			return false;
 		}
-		if ($oResponse->response->result_code != 0) {
-			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+
+		$result_code = $oResponse->response->result_code;
+
+		if ($result_code != 0) {
+			return $this->errorResultCode($result_code);
 		}
 
 		return array('billId' => $oResponse->response->bill->bill_id);
@@ -160,17 +173,30 @@ class QiwiGateConnector
 	 * @param $payReturnId
 	 * @param $sum
 	 *
-	 * @return array|mixed
+	 * @return bool
 	 */
 	public function payReturn($orderId, $payReturnId, $sum)
 	{
-		$amount = array('amount' => $sum);
-		$oResponse = $this->curl->request($orderId, 'PUT', $amount, $payReturnId);
-		if ($oResponse->response->result_code != 0) {
-			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+		if ($sum <= 0) {
+			$this->setError($this->errorMap['241']);
+
+			return false;
 		}
 
-		return array('sum' => $oResponse->response->refund->amount);
+		$amount = array('amount' => $sum);
+		$oResponse = $this->curl->request($orderId, 'PUT', $amount, $payReturnId);
+		if ($this->parseError($oResponse)) {
+			$this->setError('Ошибка соединения');
+
+			return false;
+		}
+		$result_code = $oResponse->response->result_code;
+
+		if ($result_code != 0) {
+			return $this->errorResultCode($result_code);
+		}
+
+		return true;
 	}
 
 	/**
@@ -183,15 +209,32 @@ class QiwiGateConnector
 	{
 		$oResponse = $this->curl->request($orderId, 'GET', null, $payReturnId);
 		if ($this->parseError($oResponse)) {
-			return array('error' => 'Ошибка сервера Qiwi');
+			$this->setError('Ошибка соединения');
+
+			return false;
 		}
-		if ($oResponse->response->result_code != 0) {
-			return array('error' => $this->errorMap[$oResponse->response->result_code]);
+		$result_code = $oResponse->response->result_code;
+
+		if ($result_code != 0) {
+			return $this->errorResultCode($result_code);
 		}
 
 		$status = $oResponse->response->refund->status;
+		$this->setStatus($this->statusMap[$status]);
 
-		return array('status' => $this->statusMap[$status]);
+		return true;
+	}
+
+	/**
+	 * @param $result_code
+	 *
+	 * @return bool
+	 */
+	private function errorResultCode($result_code)
+	{
+		$this->setError($this->errorMap[$result_code]);
+
+		return false;
 	}
 
 	private function parseError($aResponse)
@@ -207,5 +250,15 @@ class QiwiGateConnector
 	private function setError($message)
 	{
 		$this->errorMessage = $message;
+	}
+
+	public function getStatus()
+	{
+		return $this->status;
+	}
+
+	private function setStatus($status)
+	{
+		$this->status = $status;
 	}
 } 

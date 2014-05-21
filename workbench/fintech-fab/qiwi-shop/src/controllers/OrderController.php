@@ -107,23 +107,24 @@ class OrderController extends BaseController
 	 *
 	 * @param Order $order
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function showStatus($order)
 	{
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$response = $gate->checkStatus($order->id);
+		$isSuccess = $gate->checkStatus($order->id);
 
-		if (isset($response['error'])) {
-			return $this->resultMessage($response['error']);
+		if ($isSuccess) {
+			$newStatus = $order->changeStatus($gate->getStatus());
+
+			$message = 'Текущий статус счета - '
+				. Dictionary::statusRussian($newStatus);
+
+			return $this->resultMessage($message, 'Сообщение');
+
 		}
 
-		$newStatus = $order->changeStatus($response['status']);
-
-		$message = 'Текущий статус счета - '
-			. Dictionary::statusRussian($newStatus);
-
-		return $this->resultMessage($message, 'Сообщение');
+		return $this->resultMessage($gate->getError());
 	}
 
 	/**
@@ -140,12 +141,12 @@ class OrderController extends BaseController
 		}
 
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$response = $gate->createBill(
-			$order->id, $order->tel, $order->sum, $order->comment, $order->lifetime
+		$isSuccess = $gate->createBill(
+		$order->id, $order->tel, $order->sum, $order->comment, $order->lifetime
 		);
 
-		if (isset($response['error'])) {
-			return $this->resultMessage($response['error']);
+		if (!$isSuccess) {
+			return $this->resultMessage($gate->getError());
 		}
 		$newStatus = $order->changeStatus(Order::C_ORDER_STATUS_PAYABLE);
 
@@ -168,14 +169,14 @@ class OrderController extends BaseController
 	public function cancelBill($order)
 	{
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$response = $gate->cancelBill($order->id);
-		if (isset($response['error'])) {
-			return $this->resultMessage($response['error']);
+		$isSuccess = $gate->cancelBill($order->id);
+		if (!$isSuccess) {
+			return $this->resultMessage($gate->getError());
 		}
 		$newStatus = $order->changeStatus(Order::C_ORDER_STATUS_CANCELED);
 
 		if ($newStatus == Order::C_ORDER_STATUS_CANCELED) {
-			$message = 'Счёт № ' . $response['billId'] . ' отменён.';
+			$message = 'Счёт отменён.';
 
 			return $this->resultMessage($message, 'Сообщение');
 		}
@@ -234,18 +235,18 @@ class OrderController extends BaseController
 			return $this->resultMessage('Возврат не создан, повторите попытку.');
 		}
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$response = $gate->payReturn($payReturn->order_id, $payReturn->id, $payReturn->sum);
+		$isSuccess = $gate->payReturn($payReturn->order_id, $payReturn->id, $payReturn->sum);
 
 		//Если ошибка, то удаляем наш возврат из таблицы
-		if (isset($response['error'])) {
+		if (!$isSuccess) {
 			PayReturn::find($payReturn->id)->delete();
 
-			return $this->resultMessage($response['error']);
+			return $this->resultMessage($gate->getError());
 		}
 
 		//Меняем статус заказа при успешном возврате
 		$order->changeAfterReturn($payReturn->id);
-		$message = 'Сумма ' . $response['sum'] .
+		$message = 'Сумма ' . $data['sum'] .
 			' руб. по счёту № ' . $order->id . ' отправлена на возврат';
 
 		return $this->resultMessage($message, 'Сообщение');
@@ -267,11 +268,11 @@ class OrderController extends BaseController
 		}
 
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$response = $gate->checkReturnStatus($payReturn->order_id, $payReturn->id);
-		if (isset($response['error'])) {
-			return $this->resultMessage($response['error']);
+		$isSuccess = $gate->checkReturnStatus($payReturn->order_id, $payReturn->id);
+		if (!$isSuccess) {
+			return $this->resultMessage($gate->getError());
 		}
-		$newReturnStatus = $payReturn->changeStatus($response['status']);
+		$newReturnStatus = $payReturn->changeStatus($gate->getStatus());
 
 		$message = 'Текущий статус возврата - '
 			. Dictionary::statusRussian($newReturnStatus);
@@ -280,7 +281,12 @@ class OrderController extends BaseController
 
 	}
 
-
+	/**
+	 * @param string $messages
+	 * @param string $title
+	 *
+	 * @return array
+	 */
 	private function resultMessage($messages, $title = 'Ошибка')
 	{
 		$result['message'] = $messages;
