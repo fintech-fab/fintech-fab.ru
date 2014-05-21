@@ -218,7 +218,7 @@ class IdentifyApiComponent
 				&& !in_array(self::$aIdentifySteps[$iNextStepNumber]['type'], $aDocuments)
 				&& $iNextStepNumber != self::STEP_DONE
 			) {
-				$this->getProcessResultByStep($iNextStepNumber, $sApiToken);
+				return $this->getProcessResultByStep($iNextStepNumber, $sApiToken);
 			}
 		}
 
