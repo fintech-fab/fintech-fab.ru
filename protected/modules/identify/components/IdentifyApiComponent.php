@@ -220,7 +220,7 @@ class IdentifyApiComponent
 
 		// если передан список документов на идентификацию
 		$aDocuments = $this->aNeedDocuments;
-		mail('i.popov@fintech-fab.ru', 'error', '1.' . print_r($aDocuments, true));
+
 		if (isset($aDocuments[0])) {
 
 			// если существует данный шаг и тип, проверим наличие типа в массиве требуемых документов
