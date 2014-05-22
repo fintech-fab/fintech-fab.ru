@@ -1,29 +1,27 @@
 <?php
 /* @var DefaultController $this */
-/* @var ChangePasswordForm $oChangePasswordForm */
+/* @var ChangeEmailForm $oChangeEmailForm */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Изменение пароля";
+$this->pageTitle = Yii::app()->name . " - Изменение адреса электронной почты";
 ?>
-	<h4>Изменение пароля</h4>
+	<h4>Изменение адреса электронной почты</h4>
 
 
 
 <?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'                   => 'password-form',
+	'id'                   => 'numeric-code-form',
 	'enableAjaxValidation' => true,
 	'type'                 => 'horizontal',
 	'clientOptions'        => array(
 		'validateOnChange' => true,
 	),
-	'action'               => Yii::app()->createUrl('/account/changePassword'),
+	'action'               => Yii::app()->createUrl('/account/changeEmail'),
 ));
 ?>
 	<div class="row">
 		<div class="span5">
-			<?= $form->passwordFieldRow($oChangePasswordForm, 'old_password', array('autocomplete' => 'off')); ?>
-			<?= $form->passwordFieldRow($oChangePasswordForm, 'password', array('autocomplete' => 'off')); ?>
-			<?= $form->passwordFieldRow($oChangePasswordForm, 'password_repeat', array('autocomplete' => 'off')); ?>
+			<?= $form->textFieldRow($oChangeEmailForm, 'email'); ?>
 		</div>
 	</div>
 

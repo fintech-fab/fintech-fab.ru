@@ -6,12 +6,12 @@
  */
 
 ?>
-	<h4><?= $this->getNeedIdentifyHeader(); ?></h4>
+<h4><?= $this->getNeedIdentifyHeader(); ?></h4>
 
-	<div class="alert in alert-block alert-warning">
-		<h4><?= $this->getNeedIdentifyMessage() ?></h4>
-	</div>
-	<div class="clearfix"></div>
+<div class="alert in alert-block alert-warning">
+	<h4><?= $this->getNeedIdentifyMessage() ?></h4>
+</div>
+<div class="clearfix"></div>
 <?php
 $this->widget("CheckBrowserWidget");
 
@@ -41,34 +41,23 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($oModel, 'signature', array('name' => 'signature')); ?>
 <?= $form->hiddenField($oModel, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($oModel, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
-	<div class="center">
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'id'          => 'submitButton',
-			'type'        => 'primary',
-			'size'        => 'large',
-			'label'       => 'Пройти идентификацию',
-			'url' => $this->controller->createUrl('identify'),
-		));
-		?>
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'size'        => 'large',
-			'label'       => 'Инструкция',
-			'htmlOptions' => array(
-				'class'   => 'btn-warning',
-				'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
-			)
-		));
-
-		?>
-	</div>
+<div class="center">
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'id'    => 'submitButton',
+		'type'  => 'primary',
+		'size'  => 'large',
+		'label' => 'Пройти идентификацию',
+		'url'   => $this->controller->createUrl('identify'),
+	));
+	?>
+</div>
 <?
 
 
 $this->endWidget();
 ?>
-	<br />
+<br />
 <?
 
 $this->widget('application.modules.account.components.AppInfoWidget');

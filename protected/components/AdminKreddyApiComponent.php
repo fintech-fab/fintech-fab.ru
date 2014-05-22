@@ -220,6 +220,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
 	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 	const API_ACTION_CANCEL_REQUEST = 'siteClient/doCancelRequest';
+	const API_ACTION_CHANGE_EMAIL = 'siteClient/doChangeEmail';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -2219,7 +2220,6 @@ class AdminKreddyApiComponent
 	 */
 	public function changePassport($sSmsCode, $aPassportData)
 	{
-
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
 			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
 
@@ -2237,14 +2237,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС с кодом подтверждения смены паспорта
+	 * Отправка СМС для действия смены клиентских данных
+	 *
+	 * @param       $cApiAction
+	 *
+	 * @param array $aData
 	 *
 	 * @return bool
 	 */
-	public function sendSmsChangePassport()
+	public function sendSmsChangeClientData($cApiAction, $aData = array())
 	{
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT);
+		$aResult = $this->requestAdminKreddyApi($cApiAction, $aData);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -2262,132 +2266,25 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Заявка на смену цифрового кода, подписанная СМС-кодом
+	 * @param        $cApiAction
+	 * @param        $sSmsCode
+	 * @param        $aData
 	 *
-	 * @param string $sSmsCode
-	 *
-	 * @param        $aNumericCode
-	 *
+	 * @param string $sFormName
 	 *
 	 * @return bool
 	 */
-	public function changeNumericCode($sSmsCode, $aNumericCode)
+	public function changeClientData($cApiAction, $sSmsCode, $aData, $sFormName)
 	{
+		// если смена пароля - нужен другой экшн, там другой процесс
+		if ($cApiAction == self::API_ACTION_CHANGE_PASSWORD) {
+			return $this->changePassword($sSmsCode, $aData);
+		}
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_NUMERIC_CODE,
-			array('sms_code' => $sSmsCode, 'ChangeNumericCodeForm' => $aNumericCode));
+		$aResult = $this->requestAdminKreddyApi($cApiAction,
+			array('sms_code' => $sSmsCode, $sFormName => $aData));
 
 		return $this->checkChangeResultMessage($aResult);
-	}
-
-	/**
-	 * Отправка СМС с кодом подтверждения смены цифрового кода
-	 *
-	 * @return bool
-	 */
-	public function sendSmsChangeNumericCode()
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_NUMERIC_CODE);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
-	}
-
-	/**
-	 * Заявка на смену секретного вопроса, подписанная СМС-кодом
-	 *
-	 * @param string $sSmsCode
-	 *
-	 * @param        $aSecretQuestion
-	 *
-	 * @return bool
-	 */
-	public function changeSecretQuestion($sSmsCode, $aSecretQuestion)
-	{
-
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION,
-			array('sms_code' => $sSmsCode, 'ChangeSecretQuestionForm' => $aSecretQuestion));
-
-		return $this->checkChangeResultMessage($aResult);
-	}
-
-	/**
-	 * Отправка СМС с кодом подтверждения смены секретного вопроса
-	 *
-	 * @return bool
-	 */
-	public function sendSmsChangeSecretQuestion()
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SECRET_QUESTION);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
-	}
-
-	/**
-	 * Заявка на смену параметра СМС-аутентификации, подписанная СМС-кодом
-	 *
-	 * @param string $sSmsCode
-	 *
-	 * @param        $aSmsAuthSetting
-	 *
-	 * @return bool
-	 */
-	public function changeSmsAuthSetting($sSmsCode, $aSmsAuthSetting)
-	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SMS_AUTH_SETTING,
-			array('sms_code' => $sSmsCode, 'ChangeSmsAuthSettingForm' => $aSmsAuthSetting));
-
-		return $this->checkChangeResultMessage($aResult);
-	}
-
-	/**
-	 * Отправка СМС с кодом подтверждения для смены параметра аутентификации по СМС
-	 *
-	 * @return bool
-	 */
-	public function sendSmsChangeSmsAuthSetting()
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_SMS_AUTH_SETTING);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
 	}
 
 	/**
@@ -2400,7 +2297,6 @@ class AdminKreddyApiComponent
 	 */
 	public function changePassword($sSmsCode, $aData)
 	{
-
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code' => $sSmsCode));
 
 		$bResult = $this->checkChangeResultMessage($aResult);
@@ -2414,33 +2310,6 @@ class AdminKreddyApiComponent
 		}
 
 		return $bResult;
-	}
-
-	/**
-	 * Отправка СМС с кодом подтверждения смены пароля
-	 *
-	 * @param array $aData
-	 *
-	 * @return bool
-	 */
-	public function sendSmsChangePassword(array $aData)
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
 	}
 
 	/**
@@ -3509,67 +3378,25 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param array $aPassportData
+	 * @param       $oChangeForm
+	 * @param array $aData
 	 */
-	public function setPassportData(array $aPassportData)
+	public function setClientChangeData($oChangeForm, array $aData)
 	{
-		Yii::app()->session['aPassportData'] = $aPassportData;
+		$sSessionName = get_class($oChangeForm);
+		Yii::app()->session[$sSessionName] = $aData;
 	}
 
 	/**
-	 * @return array
+	 * @param $oChangeForm
+	 *
+	 * @return mixed
 	 */
-	public function getPassportData()
+	public function getClientChangeData($oChangeForm)
 	{
-		return Yii::app()->session['aPassportData'];
-	}
+		$sSessionName = get_class($oChangeForm);
 
-	/**
-	 * @param array $aNumericCode
-	 */
-	public function setNumericCode(array $aNumericCode)
-	{
-		Yii::app()->session['aNumericCode'] = $aNumericCode;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getNumericCode()
-	{
-		return Yii::app()->session['aNumericCode'];
-	}
-
-	/**
-	 * @param array $aSecretQuestion
-	 */
-	public function setSecretQuestion(array $aSecretQuestion)
-	{
-		Yii::app()->session['aSecretQuestion'] = $aSecretQuestion;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getSecretQuestion()
-	{
-		return Yii::app()->session['aSecretQuestion'];
-	}
-
-	/**
-	 * @param array $aSmsAuthSetting
-	 */
-	public function setSmsAuthSetting(array $aSmsAuthSetting)
-	{
-		Yii::app()->session['aSmsAuthSetting'] = $aSmsAuthSetting;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getSmsAuthSetting()
-	{
-		return Yii::app()->session['aSmsAuthSetting'];
+		return Yii::app()->session[$sSessionName];
 	}
 
 	/**
@@ -3579,14 +3406,17 @@ class AdminKreddyApiComponent
 	 */
 	public function getPassportDataField($sField)
 	{
-		if ($sField === 'passport_change_reason' && !empty(Yii::app()->session['aPassportData'][$sField])) {
-			return (!empty(Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]))
-				? Dictionaries::$aChangePassportReasons[Yii::app()->session['aPassportData'][$sField]]
+		$oChangePassportForm = new ChangePassportForm();
+
+		$aData = $this->getClientChangeData($oChangePassportForm);
+		if ($sField === 'passport_change_reason' && !$aData[$sField]) {
+			return (!empty(Dictionaries::$aChangePassportReasons[$aData[$sField]]))
+				? Dictionaries::$aChangePassportReasons[$aData[$sField]]
 				: false;
 		}
 
-		return (!empty(Yii::app()->session['aPassportData'][$sField]))
-			? Yii::app()->session['aPassportData'][$sField]
+		return (!empty($aData[$sField]))
+			? $aData[$sField]
 			: false;
 	}
 

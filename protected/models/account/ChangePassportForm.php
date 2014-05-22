@@ -4,8 +4,7 @@
  *
  *
  */
-
-class ChangePassportDataForm extends ClientFullForm
+class ChangePassportForm extends ClientFullForm
 {
 
 	public $old_passport_series;
