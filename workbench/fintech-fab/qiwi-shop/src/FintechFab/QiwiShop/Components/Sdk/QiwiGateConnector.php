@@ -30,7 +30,7 @@ class QiwiGateConnector
 	);
 	private $errorMap = array(
 		'5'   => 'Неверный формат параметров запроса',
-		'13' => 'Сервер занят, повторите запрос позже',
+		'13'  => 'Сервер занят, повторите запрос позже',
 		'150' => 'Ошибка авторизации',
 		'210' => 'Счет не найден',
 		'215' => 'Счет с таким bill_id уже существует',
@@ -218,7 +218,7 @@ class QiwiGateConnector
 	 * @param $orderId
 	 * @param $payReturnId
 	 *
-	 * @return array|mixed
+	 * @return bool
 	 */
 	public function checkReturnStatus($orderId, $payReturnId)
 	{

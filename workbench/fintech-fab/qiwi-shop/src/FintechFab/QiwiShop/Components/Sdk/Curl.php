@@ -4,7 +4,7 @@ namespace FintechFab\QiwiShop\Components\Sdk;
 
 class Curl
 {
-	public $url;
+	private $url;
 	public $curlError;
 
 	/**
@@ -12,7 +12,7 @@ class Curl
 	 * @param $payReturnId
 	 *
 	 */
-	public function  setUrl($orderId, $payReturnId = null)
+	private function  setUrl($orderId, $payReturnId = null)
 	{
 		$this->url = QiwiGateConnector::getConfig('gate_url') . QiwiGateConnector::getConfig('provider.id')
 			. '/bills/' . $orderId;

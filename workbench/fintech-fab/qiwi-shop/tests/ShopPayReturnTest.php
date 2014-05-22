@@ -1,12 +1,17 @@
 <?php
 
 
+use FintechFab\QiwiShop\Components\Sdk\Curl;
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
 
 class ShopPayReturnTest extends ShopTestCase
 {
 
+	/**
+	 * @var Mockery\MockInterface|Curl
+	 */
+	private $mock;
 
 	public function setUp()
 	{
@@ -21,6 +26,7 @@ class ShopPayReturnTest extends ShopTestCase
 			'status'   => 'new',
 			'lifetime' => date('Y-m-d H:i:s', time() + 3600 * 24 * 3),
 		));
+		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
 
 	}
 
@@ -50,6 +56,27 @@ class ShopPayReturnTest extends ShopTestCase
 
 	public function testPayReturnSuccess()
 	{
+
+		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+
+			$amount = array('amount' => 15);
+
+			$args = array(
+				1, 'PUT', $amount, 1
+			);
+
+			$this->mock
+				->shouldReceive('request')
+				->withArgs($args)
+				->andReturn((object)array(
+					'response' => (object)array(
+							'result_code' => 0,
+						)
+				));
+
+			return $this->mock;
+		});
+
 		$resp = $this->call(
 			'POST',
 			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/payReturn',
@@ -84,6 +111,27 @@ class ShopPayReturnTest extends ShopTestCase
 	 */
 	public function testShowStatusPayReturn()
 	{
+		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+
+			$args = array(
+				1, 'GET', null, 1
+			);
+
+			$this->mock
+				->shouldReceive('request')
+				->withArgs($args)
+				->andReturn((object)array(
+					'response' => (object)array(
+							'result_code' => 0,
+							'refund'      => (object)array(
+									'status' => 'processing',
+								),
+						)
+				));
+
+			return $this->mock;
+		});
+
 		$order = Order::find(1);
 		$order->idLastReturn = 1;
 		$order->save();

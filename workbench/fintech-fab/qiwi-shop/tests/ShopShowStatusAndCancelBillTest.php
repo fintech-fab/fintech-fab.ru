@@ -1,11 +1,15 @@
 <?php
 
 
+use FintechFab\QiwiShop\Components\Sdk\Curl;
 use FintechFab\QiwiShop\Models\Order;
 
 class ShopShowStatusAndCancelBillTest extends ShopTestCase
 {
-
+	/**
+	 * @var Mockery\MockInterface|Curl
+	 */
+	private $mock;
 
 	public function setUp()
 	{
@@ -20,6 +24,7 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 			'status'   => 'new',
 			'lifetime' => date('Y-m-d H:i:s', time() + 3600 * 24 * 3),
 		));
+		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
 
 	}
 
@@ -50,6 +55,25 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 
 	public function testShowStatusPayable()
 	{
+		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+
+			$args = array(1);
+
+			$this->mock
+				->shouldReceive('request')
+				->withArgs($args)
+				->andReturn((object)array(
+					'response' => (object)array(
+							'result_code' => 0,
+							'bill'        => (object)array(
+									'status' => 'waiting',
+								),
+						)
+				));
+
+			return $this->mock;
+		});
+
 		$resp = $this->call(
 			'POST',
 			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/showStatus',
@@ -66,6 +90,25 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 	 */
 	public function testCancelBill()
 	{
+		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+
+			$reject = array('status' => 'rejected');
+			$args = array(
+				1, 'PATCH', $reject
+			);
+
+			$this->mock
+				->shouldReceive('request')
+				->withArgs($args)
+				->andReturn((object)array(
+					'response' => (object)array(
+							'result_code' => 0,
+						)
+				));
+
+			return $this->mock;
+		});
+
 		$resp = $this->call(
 			'POST',
 			Config::get('ff-qiwi-shop::testConfig.testUrl') . '/cancelBill',
@@ -74,7 +117,7 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 			)
 		);
 
-		$this->assertContains('Счёт № 1 отменён.', $resp->original['message']);
+		$this->assertContains('Счёт отменён.', $resp->original['message']);
 	}
 
 

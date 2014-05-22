@@ -17,7 +17,6 @@ class ShopCreateBillTest extends ShopTestCase
 	{
 		parent::setUp();
 		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
-		$this->mock->shouldReceive('setUrl');
 
 	}
 
