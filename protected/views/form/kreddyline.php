@@ -13,8 +13,8 @@
 			<div class="row-fluid">
 				<h2>Как подключить КРЕДДИтную линию?</h2>
 				<ul>
-					<li id="asdaaa" class="tooltip_notice">
-						<img src="static/kreddyline/images/connect_icon1.png" alt="">
+					<li class="tooltip_notice">
+					<img src="static/kreddyline/images/connect_icon1.png" alt="">
 
 						<p><a onclick="return false;" href="#" class="dotted">Заполни анкету<br />(потребуется 2
 								документа)</a></p>

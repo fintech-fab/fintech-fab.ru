@@ -20,6 +20,7 @@ class AdminKreddyApiComponent
 	const C_CLIENT_MORATORIUM_SCORING = 'client_moratorium_scoring';
 
 	const C_SCORING_PROGRESS = 'scoring_progress';
+	const C_SCORING_AWAITING_REIDENTIFY = 'scoring_awaiting_reidentify';
 	const C_SCORING_CANCEL = 'scoring_cancel';
 	const C_SCORING_ACCEPT = 'scoring_accept';
 
@@ -79,7 +80,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
 		self::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-
+		self::C_SCORING_AWAITING_REIDENTIFY => 'Необходимо пройти повторную идентификацию',
 		self::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		self::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
@@ -2491,6 +2492,16 @@ class AdminKreddyApiComponent
 	 */
 	public function getIdentify()
 	{
+		$aRequiredFields = array(
+			'client_code'    => null,
+			'service'        => null,
+			'signature'      => null,
+			'video_url'      => null,
+			'documents'      => null,
+			'documents_sign' => null,
+			'timestamp'      => null,
+		);
+
 		$aResult = $this->getData('identify');
 
 		if (!$this->getIsError()) {
@@ -2499,6 +2510,8 @@ class AdminKreddyApiComponent
 			unset($aResult['sms_message']);
 			unset($aResult['sms_code']);
 			unset($aResult['sms_status']);
+
+			$aResult = array_intersect_key($aResult, $aRequiredFields);
 
 			return $aResult;
 		}
@@ -3720,6 +3733,13 @@ class AdminKreddyApiComponent
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
+		}
+
+		// в случае если потеряна сессия с API, то sms_status не придет, надо проверить
+		if (!isset($aResult['sms_status'])) {
+			$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
+
+			return false;
 		}
 
 		// смс не ок - отображаем ошибку смс

@@ -43,6 +43,8 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <?= $form->hiddenField($model, 'client_code', array('name' => 'client_code')); ?>
 <?= $form->hiddenField($model, 'service', array('name' => 'service')); ?>
 <?= $form->hiddenField($model, 'signature', array('name' => 'signature')); ?>
+<?= $form->hiddenField($model, 'documents', array('name' => 'documents')); ?>
+<?= $form->hiddenField($model, 'documents_sign', array('name' => 'documents_sign')); ?>
 <?= $form->hiddenField($model, 'timestamp', array('name' => 'timestamp')); ?>
 <?= $form->hiddenField($model, 'redirect_back_url', array('name' => 'redirect_back_url')); ?>
 	<div class="center">

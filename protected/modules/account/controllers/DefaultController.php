@@ -1425,6 +1425,8 @@ class DefaultController extends Controller
 
 		$this->layout = '/layouts/column1';
 
+		$sReturnUrl = Yii::app()->user->getReturnUrl("/account");
+
 		if (Yii::app()->user->getIsGuest()) {
 			$oModel = new AccountLoginForm;
 
@@ -1438,7 +1440,7 @@ class DefaultController extends Controller
 			$oModel->setAttributes($aPostData);
 
 			if (Yii::app()->request->isPostRequest && $oModel->validate() && $oModel->login()) {
-				$this->redirect(Yii::app()->createUrl("/account"));
+				$this->redirect(Yii::app()->createUrl($sReturnUrl));
 				Yii::app()->end();
 			}
 			// display the login form
@@ -1448,7 +1450,8 @@ class DefaultController extends Controller
 			if (Yii::app()->user->getState('new_client')) {
 				$this->redirect(Yii::app()->createUrl("/account/doSubscribe"));
 			}
-			$this->redirect(Yii::app()->createUrl("/account"));
+
+			$this->redirect(Yii::app()->createUrl($sReturnUrl));
 		}
 	}
 

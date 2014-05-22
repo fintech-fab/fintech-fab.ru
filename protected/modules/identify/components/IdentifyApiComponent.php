@@ -1,10 +1,10 @@
 <?php
+
 /**
  * Class IdentifyApiComponent
  *
  * @property bool bTest
  */
-
 class IdentifyApiComponent
 {
 	/**
@@ -34,6 +34,8 @@ class IdentifyApiComponent
 	const C_TYPE_DOCUMENT = 'document';
 
 	public $bTest = false;
+
+	private $aNeedDocuments = array();
 
 	public static $aIdentifySteps = array(
 		self::STEP_FACE      => array(
@@ -99,6 +101,10 @@ class IdentifyApiComponent
 	{
 		$this->bTest = $bTest;
 
+		if ($bTest) {
+			$this->setUpTest();
+		}
+
 		// некорректный POST-запрос - ошибка
 		if (empty($aRequest['token']) && empty($aRequest['image'])
 			&& empty($aRequest['phone']) && empty($aRequest['password'])
@@ -142,6 +148,13 @@ class IdentifyApiComponent
 		// авторизация успешна; генерируем соответствующий токен
 		$sToken = $this->generateToken($sApiToken, $iStepNumber);
 
+		$aIdentify = Yii::app()->adminKreddyApi->getIdentify();
+
+		// если передан список документов на идентификацию
+		if (!$this->bTest && isset($aIdentify['documents']) && empty($this->aNeedDocuments)) {
+			$this->aNeedDocuments = explode('.', $aIdentify['documents']);
+		}
+
 		// ответ: ошибки нет, всё ок, посылаем дальнейшую инструкцию.
 		return $this->formatResponse($sToken, array(
 				'instruction' => $this->getInstructionByStep($iStepNumber),
@@ -183,7 +196,8 @@ class IdentifyApiComponent
 		}
 
 		// если не получилось сохранить изображение - ошибка
-		if (!$this->saveImage($sApiToken, $sImageBase64, $iStepNumber)) {
+		$bImageSaved = $this->saveImage($sApiToken, $sImageBase64, $iStepNumber);
+		if (!$bImageSaved) {
 			return $this->formatErrorResponse('Не удалось сохранить изображение');
 		}
 
@@ -203,6 +217,24 @@ class IdentifyApiComponent
 	private function getProcessResultByStep($iStepNumber, $sApiToken)
 	{
 		$iNextStepNumber = (int)$iStepNumber + 1;
+
+		// если передан список документов на идентификацию
+		$aDocuments = $this->aNeedDocuments;
+
+		if (isset($aDocuments[0])) {
+
+			// если существует данный шаг и тип, проверим наличие типа в массиве требуемых документов
+			// если тип текущего шага не находится в списке требуемых,
+			// и следующий шаг не последний, идем дальше
+			if (
+				isset(self::$aIdentifySteps[$iNextStepNumber]['type'])
+				&& !in_array(self::$aIdentifySteps[$iNextStepNumber]['type'], $aDocuments)
+				&& $iNextStepNumber != self::STEP_DONE
+			) {
+				return $this->getProcessResultByStep($iNextStepNumber, $sApiToken);
+			}
+		}
+
 		$sToken = $this->generateToken($sApiToken, $iNextStepNumber);
 
 		switch ($iStepNumber) {
@@ -432,5 +464,19 @@ class IdentifyApiComponent
 		return isset(self::$aIdentifySteps[$iStepNumber]['example'])
 			? self::$aIdentifySteps[$iStepNumber]['example']
 			: null;
+	}
+
+	/**
+	 * В случае теста нам может быть нужно установить список документов
+	 */
+	private function setUpTest()
+	{
+		// для теста используем файл в качестве источника списка документов
+		if ($this->bTest && !$this->aNeedDocuments && file_exists(Yii::app()
+				->getBasePath() . '/tests/files/documents.txt')
+		) {
+			$this->aNeedDocuments = explode(".", file_get_contents(Yii::app()
+				->getBasePath() . '/tests/files/documents.txt'));
+		}
 	}
 }
