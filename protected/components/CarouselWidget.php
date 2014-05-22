@@ -19,6 +19,10 @@ class CarouselWidget extends CWidget
 				'image' => CHtml::encode('/static/img/kreddyline-carousel/banner2.png'),
 				'label' => 'КРЕДДИтная линия',
 			),
+			array(
+				'image' => CHtml::encode('/static/img/kreddyline-carousel/banner3.png'),
+				'label' => 'КРЕДДИтная линия',
+			),
 		);
 		?>
 		<div class="container carouselWidget">
