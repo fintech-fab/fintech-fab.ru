@@ -40,5 +40,5 @@ if (Yii::app()->adminKreddyApi->isSubscriptionOldType()) {
 	<br />
 <?
 }
-$this->widget('application.modules.account.components.AppInfoWidget');
+$this->widget('application.modules.account.components.BannerWidget');
 ?>
