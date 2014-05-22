@@ -2492,6 +2492,16 @@ class AdminKreddyApiComponent
 	 */
 	public function getIdentify()
 	{
+		$aRequiredFields = array(
+			'client_code'    => null,
+			'service'        => null,
+			'signature'      => null,
+			'video_url'      => null,
+			'documents'      => null,
+			'documents_sign' => null,
+			'timestamp'      => null,
+		);
+
 		$aResult = $this->getData('identify');
 
 		if (!$this->getIsError()) {
@@ -2500,6 +2510,8 @@ class AdminKreddyApiComponent
 			unset($aResult['sms_message']);
 			unset($aResult['sms_code']);
 			unset($aResult['sms_status']);
+
+			$aResult = array_intersect_key($aResult, $aRequiredFields);
 
 			return $aResult;
 		}

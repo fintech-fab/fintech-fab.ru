@@ -13,6 +13,8 @@ class VideoIdentifyForm extends CFormModel
 	public $timestamp;
 	public $redirect_back_url;
 	public $video_url;
+	public $documents;
+	public $documents_sign;
 
 	/**
 	 * @return array
@@ -20,7 +22,7 @@ class VideoIdentifyForm extends CFormModel
 	public function rules()
 	{
 		$aRules = array(
-			array('client_code, service, signature, timestamp, video_url', 'required'),
+			array('client_code, service, signature, timestamp, video_url, documents, documents_sign', 'required'),
 		);
 
 		return $aRules;
@@ -36,6 +38,8 @@ class VideoIdentifyForm extends CFormModel
 		array('client_code' => 'Client Code');
 		array('service' => 'Service');
 		array('signature' => 'Signature');
+		array('documents' => 'Documents List');
+		array('documents_sign' => 'Documents List Signature');
 		array('timestamp' => 'Timestamp');
 		array('redirect_back_url' => 'Redirect Back Url');
 		array('video_url' => 'Video URL');
