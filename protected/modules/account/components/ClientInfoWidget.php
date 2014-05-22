@@ -24,11 +24,10 @@ class ClientInfoWidget extends CWidget
 		AdminKreddyApiComponent::C_SUBSCRIPTION_CANCEL                => 'Срок оплаты подключения истек',
 		AdminKreddyApiComponent::C_SUBSCRIPTION_PAID                  => 'Займ доступен',
 		AdminKreddyApiComponent::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
-
-		AdminKreddyApiComponent::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-
 		AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Заявка одобрена, теперь Вы можете взять займ',
 
+		AdminKreddyApiComponent::C_SCORING_PROGRESS            => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		AdminKreddyApiComponent::C_SCORING_AWAITING_REIDENTIFY => 'Необходимо пройти повторную идентификацию',
 		AdminKreddyApiComponent::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		AdminKreddyApiComponent::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
