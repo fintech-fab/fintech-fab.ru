@@ -115,10 +115,10 @@ class OrderController extends BaseController
 		$isSuccess = $gate->checkStatus($order->id);
 
 		if ($isSuccess) {
-			$newStatus = $order->changeStatus($gate->getStatus());
+			$order->changeStatus($gate->getStatus());
 
 			$message = 'Текущий статус счета - '
-				. Dictionary::statusRussian($newStatus);
+				. Dictionary::statusRussian($order->status);
 
 			return $this->resultMessage($message, 'Сообщение');
 
@@ -148,9 +148,9 @@ class OrderController extends BaseController
 		if (!$isSuccess) {
 			return $this->resultMessage($gate->getError());
 		}
-		$newStatus = $order->changeStatus(Order::C_ORDER_STATUS_PAYABLE);
+		$order->changeStatus(Order::C_ORDER_STATUS_PAYABLE);
 
-		if ($newStatus == Order::C_ORDER_STATUS_PAYABLE) {
+		if ($order->status == Order::C_ORDER_STATUS_PAYABLE) {
 			$message = 'Счёт выставлен';
 
 			return $this->resultMessage($message, 'Сообщение');
@@ -173,9 +173,9 @@ class OrderController extends BaseController
 		if (!$isSuccess) {
 			return $this->resultMessage($gate->getError());
 		}
-		$newStatus = $order->changeStatus(Order::C_ORDER_STATUS_CANCELED);
+		$order->changeStatus(Order::C_ORDER_STATUS_CANCELED);
 
-		if ($newStatus == Order::C_ORDER_STATUS_CANCELED) {
+		if ($order->status == Order::C_ORDER_STATUS_CANCELED) {
 			$message = 'Счёт отменён.';
 
 			return $this->resultMessage($message, 'Сообщение');

@@ -89,16 +89,10 @@ class QiwiGateConnector
 	public function checkStatus($bill_id)
 	{
 		$oResponse = $this->curl->request($bill_id);
-		if ($this->parseError($oResponse)) {
-			$this->setError('Ошибка соединения');
+		$this->parseError($oResponse);
 
+		if ($this->getError()) {
 			return false;
-		}
-
-		$result_code = $oResponse->response->result_code;
-
-		if ($result_code != 0) {
-			return $this->errorResultCode($result_code);
 		}
 
 		$status = $oResponse->response->bill->status;
@@ -123,11 +117,11 @@ class QiwiGateConnector
 		$orderId, $tel, $sum, $comment = null, $lifetime = null
 	)
 	{
-		if ($sum <= 0) {
-			$this->setError($this->errorMap['241']);
-
+		$this->checkSum($sum);
+		if ($this->getError()) {
 			return false;
 		}
+
 		$dateExpired = (null == $lifetime)
 			? null
 			: date('Y-m-d\TH:i:s', strtotime($lifetime));
@@ -141,20 +135,12 @@ class QiwiGateConnector
 			'prv_name' => self::getConfig('provider.name'),
 		);
 		$oResponse = $this->curl->request($orderId, 'PUT', $bill);
+		$this->parseError($oResponse);
 
-		if ($this->parseError($oResponse)) {
-			$this->setError('Ошибка соединения');
+		return $this->getError()
+			? false
+			: true;
 
-			return false;
-		}
-
-		$result_code = $oResponse->response->result_code;
-
-		if ($result_code != 0) {
-			return $this->errorResultCode($result_code);
-		}
-
-		return true;
 	}
 
 	/**
@@ -166,20 +152,11 @@ class QiwiGateConnector
 	{
 		$reject = array('status' => 'rejected');
 		$oResponse = $this->curl->request($orderId, 'PATCH', $reject);
+		$this->parseError($oResponse);
 
-		if ($this->parseError($oResponse)) {
-			$this->setError('Ошибка соединения');
-
-			return false;
-		}
-
-		$result_code = $oResponse->response->result_code;
-
-		if ($result_code != 0) {
-			return $this->errorResultCode($result_code);
-		}
-
-		return true;
+		return $this->getError()
+			? false
+			: true;
 
 	}
 
@@ -192,26 +169,20 @@ class QiwiGateConnector
 	 */
 	public function payReturn($orderId, $payReturnId, $sum)
 	{
-		if ($sum <= 0) {
-			$this->setError($this->errorMap['241']);
 
+		$this->checkSum($sum);
+		if ($this->getError()) {
 			return false;
 		}
 
 		$amount = array('amount' => $sum);
 		$oResponse = $this->curl->request($orderId, 'PUT', $amount, $payReturnId);
-		if ($this->parseError($oResponse)) {
-			$this->setError('Ошибка соединения');
+		$this->parseError($oResponse);
 
-			return false;
-		}
-		$result_code = $oResponse->response->result_code;
+		return $this->getError()
+			? false
+			: true;
 
-		if ($result_code != 0) {
-			return $this->errorResultCode($result_code);
-		}
-
-		return true;
 	}
 
 	/**
@@ -223,15 +194,10 @@ class QiwiGateConnector
 	public function checkReturnStatus($orderId, $payReturnId)
 	{
 		$oResponse = $this->curl->request($orderId, 'GET', null, $payReturnId);
-		if ($this->parseError($oResponse)) {
-			$this->setError('Ошибка соединения');
+		$this->parseError($oResponse);
 
+		if ($this->getError()) {
 			return false;
-		}
-		$result_code = $oResponse->response->result_code;
-
-		if ($result_code != 0) {
-			return $this->errorResultCode($result_code);
 		}
 
 		$status = $oResponse->response->refund->status;
@@ -240,21 +206,33 @@ class QiwiGateConnector
 		return true;
 	}
 
-	/**
-	 * @param $result_code
-	 *
-	 * @return bool
-	 */
-	private function errorResultCode($result_code)
+	private function parseError($oResponse)
 	{
-		$this->setError($this->errorMap[$result_code]);
 
-		return false;
-	}
+		if (!empty($oResponse->curlError)) {
+			$this->setError($oResponse->curlError);
 
-	private function parseError($aResponse)
-	{
-		return array_key_exists('curlError', $aResponse);
+			return;
+		}
+
+		if (
+			$oResponse->response->result_code !== 0 &&
+			$oResponse->response->result_code !== '0' &&
+			empty($oResponse->response->result_code)
+		) {
+			$this->setError('Error response format');
+
+			return;
+		}
+
+		// код ответа от гейта
+		$code = $oResponse->response->result_code;
+		if ($code != 0) {
+			$this->setError($this->errorMap[$code]);
+
+			return;
+		}
+
 	}
 
 	public function getError()
@@ -276,4 +254,12 @@ class QiwiGateConnector
 	{
 		$this->status = $status;
 	}
+
+	private function checkSum($sum)
+	{
+		if ($sum <= 0) {
+			$this->setError($this->errorMap['241']);
+		}
+	}
+
 } 

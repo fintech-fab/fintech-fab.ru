@@ -2,6 +2,8 @@
 namespace FintechFab\QiwiShop\Components\Sdk;
 
 
+use stdClass;
+
 class Curl
 {
 	private $url;
@@ -28,7 +30,7 @@ class Curl
 	 * @param null   $query
 	 * @param null   $payReturnId
 	 *
-	 * @return mixed
+	 * @return stdClass
 	 */
 	public function request($order_id, $method = 'GET', $query = null, $payReturnId = null)
 	{
@@ -62,7 +64,7 @@ class Curl
 
 		if (!$response || !$httpResponse || $httpError) {
 
-			$this->curlError = array(
+			$this->curlError = (object)array(
 				'code'     => $info['http_code'],
 				'error'    => $httpError,
 				'response' => $httpResponse,

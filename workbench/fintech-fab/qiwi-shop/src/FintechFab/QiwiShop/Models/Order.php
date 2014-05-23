@@ -55,10 +55,7 @@ class Order extends Eloquent
 
 	/**
 	 * Смена статуса заказа
-	 *
 	 * @param $newStatus
-	 *
-	 * @return string
 	 */
 	public function changeStatus($newStatus)
 	{
@@ -66,20 +63,20 @@ class Order extends Eloquent
 		if ($this->status == self::C_ORDER_STATUS_RETURNING &&
 			$newStatus == self::C_ORDER_STATUS_PAID
 		) {
-
-			return $this->status;
+			return;
 		}
 
 		if ($this->status != $newStatus) {
-			$isUpdate = Order::whereId($this->id)
+
+			Order::whereId($this->id)
 				->whereStatus($this->status)
 				->update(array('status' => $newStatus));
-			if ($isUpdate) {
-				return $newStatus;
-			}
+
 		}
 
-		return $this->status;
+		$order = Order::find($this->id);
+		$this->status = $order->status;
+
 	}
 
 	public function isNew()

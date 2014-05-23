@@ -49,7 +49,7 @@ class ConnectorTest extends ShopTestCase
 			));
 
 		$isSuccess = $connector->createBill(123, '+7910000', 123.45, 'SomeComment');
-		$this->assertTrue($isSuccess);
+		$this->assertTrue($isSuccess, $connector->getError());
 	}
 
 	public function testCreateBillFailFormat()
