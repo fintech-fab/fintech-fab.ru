@@ -25,5 +25,5 @@ if (Yii::app()->adminKreddyApi->isSubscriptionOldType()) {
 <?= $sPassFormRender // отображаем форму запроса SMS-пароля ?>
 
 <?
-$this->widget('application.modules.account.components.AppInfoWidget');
+$this->widget('application.modules.account.components.BannerWidget');
 ?>
