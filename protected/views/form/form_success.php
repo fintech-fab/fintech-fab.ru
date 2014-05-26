@@ -2,7 +2,7 @@
 /**
  * Отображается страница "Вы успешно зарегистрировались в системе."
  *
- * Клиент попадает на страницу после быстрой регистрации
+ * Клиент попадает на страницу после заполнения анкеты полностью.
  *
  */
 /* @var FormController $this */
@@ -17,7 +17,7 @@ $this->pageTitle = Yii::app()->name;
 Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
-<?php $this->widget('YaMetrikaGoalsWidget', array('sForceGoal' => $sSuccessYmGoal)); ?>
+<img src="https://cosmoleads.oneffect.us/affiliate/track/123/<?= time() ?>/" height="1" width="1" /> 
 
 <div class="row">
 
