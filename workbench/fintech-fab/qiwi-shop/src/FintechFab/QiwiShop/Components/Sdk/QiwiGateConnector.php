@@ -11,14 +11,7 @@ class QiwiGateConnector
 	private $curl;
 
 
-	private static $config = array(
-		'gate_url' => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
-		'provider' => array(
-			'name'     => 'Fintech-Fab',
-			'id'       => '1',
-			'password' => '1234',
-		),
-	);
+	private static $config;
 
 	private $statusMap = array(
 		'waiting'    => 'payable',
@@ -43,7 +36,8 @@ class QiwiGateConnector
 	 * @var string
 	 */
 	private $errorMessage;
-	private $status;
+	private $billStatus;
+	private $payReturnStatus;
 
 	public function __construct(Curl $curl)
 	{
@@ -65,30 +59,25 @@ class QiwiGateConnector
 	}
 
 	/**
-	 * @param $config
+	 * Установить настройки перед использованием
+	 *
+*@param $config
 	 */
 	public static function setConfig($config)
 	{
-		foreach ($config as $key => $value) {
-			if (is_array($value)) {
-				foreach ($config as $subKey => $subValue) {
-					self::$config[$key][$subKey] = $subValue;
-				}
-			}
-			self::$config[$key] = $value;
-		}
+		self::$config = $config;
 	}
 
 	/**
 	 * Проверка статуса
 	 *
-	 * @param $bill_id
+	 * @param $orderId
 	 *
 	 * @return bool
 	 */
-	public function checkStatus($bill_id)
+	public function getBillStatus($orderId)
 	{
-		$oResponse = $this->curl->request($bill_id);
+		$oResponse = $this->curl->request($orderId);
 		$this->parseError($oResponse);
 
 		if ($this->getError()) {
@@ -96,7 +85,7 @@ class QiwiGateConnector
 		}
 
 		$status = $oResponse->response->bill->status;
-		$this->setStatus($this->statusMap[$status]);
+		$this->setValueBillStatus($this->statusMap[$status]);
 
 		return true;
 	}
@@ -191,7 +180,7 @@ class QiwiGateConnector
 	 *
 	 * @return bool
 	 */
-	public function checkReturnStatus($orderId, $payReturnId)
+	public function getPayReturnStatus($orderId, $payReturnId)
 	{
 		$oResponse = $this->curl->request($orderId, 'GET', null, $payReturnId);
 		$this->parseError($oResponse);
@@ -201,7 +190,7 @@ class QiwiGateConnector
 		}
 
 		$status = $oResponse->response->refund->status;
-		$this->setStatus($this->statusMap[$status]);
+		$this->setValuePayReturnStatus($this->statusMap[$status]);
 
 		return true;
 	}
@@ -245,14 +234,24 @@ class QiwiGateConnector
 		$this->errorMessage = $message;
 	}
 
-	public function getStatus()
+	public function getValueBillStatus()
 	{
-		return $this->status;
+		return $this->billStatus;
 	}
 
-	private function setStatus($status)
+	private function setValueBillStatus($status)
 	{
-		$this->status = $status;
+		$this->billStatus = $status;
+	}
+
+	public function getValuePayReturnStatus()
+	{
+		return $this->payReturnStatus;
+	}
+
+	private function setValuePayReturnStatus($status)
+	{
+		$this->payReturnStatus = $status;
 	}
 
 	private function checkSum($sum)

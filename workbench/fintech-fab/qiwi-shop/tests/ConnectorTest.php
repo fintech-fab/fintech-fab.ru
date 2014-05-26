@@ -94,7 +94,7 @@ class ConnectorTest extends ShopTestCase
 		$this->assertEquals('Сумма слишком мала', $connector->getError());
 	}
 
-	public function testCheckStatus()
+	public function testGetBillStatus()
 	{
 
 		$connector = new QiwiGateConnector($this->mock);
@@ -113,12 +113,12 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->checkStatus(123);
+		$isSuccess = $connector->getBillStatus(123);
 		$this->assertTrue($isSuccess);
-		$this->assertEquals('payable', $connector->getStatus());
+		$this->assertEquals('payable', $connector->getValueBillStatus());
 	}
 
-	public function testCheckStatusFail()
+	public function testGetBillStatusFail()
 	{
 
 		$connector = new QiwiGateConnector($this->mock);
@@ -137,7 +137,7 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->checkStatus(123);
+		$isSuccess = $connector->getBillStatus(123);
 		$this->assertFalse($isSuccess);
 		$this->assertEquals('Счет не найден', $connector->getError());
 	}
@@ -253,7 +253,7 @@ class ConnectorTest extends ShopTestCase
 		$this->assertEquals('Сумма слишком мала', $connector->getError());
 	}
 
-	public function testCheckReturnStatus()
+	public function testGetPayReturnStatus()
 	{
 
 		$connector = new QiwiGateConnector($this->mock);
@@ -274,12 +274,12 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->checkReturnStatus(123, 1);
+		$isSuccess = $connector->getPayReturnStatus(123, 1);
 		$this->assertTrue($isSuccess);
-		$this->assertEquals('onReturn', $connector->getStatus());
+		$this->assertEquals('onReturn', $connector->getValuePayReturnStatus());
 	}
 
-	public function testCheckReturnStatusFail()
+	public function testGetPayReturnStatusFail()
 	{
 
 		$connector = new QiwiGateConnector($this->mock);
@@ -297,7 +297,7 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->checkReturnStatus(123, 1);
+		$isSuccess = $connector->getPayReturnStatus(123, 1);
 		$this->assertFalse($isSuccess);
 		$this->assertEquals('Счет не найден', $connector->getError());
 	}

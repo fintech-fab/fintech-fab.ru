@@ -19,6 +19,19 @@ class OrderController extends BaseController
 
 	public $layout = 'qiwiShop';
 
+	//Передаём настройки в QiwiGateConnector
+	public function __construct()
+	{
+		$this->beforeFilter(function () {
+			$config = array(
+				'gateUrl'  => Config::get('ff-qiwi-shop::gateUrl'),
+				'provider' => Config::get('ff-qiwi-shop::provider'),
+			);
+			QiwiGateConnector::setConfig($config);
+		});
+	}
+
+	//Определяем метод по $action переданному в url
 	public function getAction($action)
 	{
 		//Получаем заказ по id пользователя и номеру заказа
@@ -29,7 +42,8 @@ class OrderController extends BaseController
 			return $this->resultMessage('Нет такого заказа');
 		}
 
-		return $this->$action($order); // вызываем метод по названию переменной (id кнопки во вьюхе)
+		// вызываем метод по названию переменной (data-action кнопки на странице)
+		return $this->$action($order);
 	}
 
 	/**
@@ -112,10 +126,10 @@ class OrderController extends BaseController
 	public function showStatus($order)
 	{
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$isSuccess = $gate->checkStatus($order->id);
+		$isSuccess = $gate->getBillStatus($order->id);
 
 		if ($isSuccess) {
-			$order->changeStatus($gate->getStatus());
+			$order->changeStatus($gate->getValueBillStatus());
 
 			$message = 'Текущий статус счета - '
 				. Dictionary::statusRussian($order->status);
@@ -268,11 +282,11 @@ class OrderController extends BaseController
 		}
 
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$isSuccess = $gate->checkReturnStatus($payReturn->order_id, $payReturn->id);
+		$isSuccess = $gate->getPayReturnStatus($payReturn->order_id, $payReturn->id);
 		if (!$isSuccess) {
 			return $this->resultMessage($gate->getError());
 		}
-		$newReturnStatus = $payReturn->changeStatus($gate->getStatus());
+		$newReturnStatus = $payReturn->changeStatus($gate->getValuePayReturnStatus());
 
 		$message = 'Текущий статус возврата - '
 			. Dictionary::statusRussian($newReturnStatus);

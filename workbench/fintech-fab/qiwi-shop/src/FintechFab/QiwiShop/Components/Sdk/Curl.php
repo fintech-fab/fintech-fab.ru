@@ -16,7 +16,7 @@ class Curl
 	 */
 	private function  setUrl($orderId, $payReturnId = null)
 	{
-		$this->url = QiwiGateConnector::getConfig('gate_url') . QiwiGateConnector::getConfig('provider.id')
+		$this->url = QiwiGateConnector::getConfig('gateUrl') . QiwiGateConnector::getConfig('provider.id')
 			. '/bills/' . $orderId;
 		if ($payReturnId != null) {
 			$this->url .= '/refund/' . $payReturnId;

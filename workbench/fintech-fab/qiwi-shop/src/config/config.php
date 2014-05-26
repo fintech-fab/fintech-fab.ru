@@ -13,6 +13,6 @@ return array(
 	// Срок действия заказа в днях
 	'lifetime' => 3,
 
-	'gate_url' => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
+	'gateUrl'  => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
 
 );
