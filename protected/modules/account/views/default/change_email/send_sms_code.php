@@ -17,7 +17,7 @@ $oSmsCodeForm->sendSmsCode = 1;
 echo $form->hiddenField($oSmsCodeForm, 'sendSmsCode');
 ?>
 	<div class="alert in alert-block alert-warning">
-		Для изменения цифрового кода требуется подтверждение одноразовым SMS-кодом
+		Для изменения адреса электронной почты требуется подтверждение одноразовым SMS-кодом
 	</div>
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
