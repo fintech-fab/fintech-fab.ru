@@ -15,6 +15,7 @@ use Hash;
 use Input;
 use Redirect;
 use Request;
+use Session;
 use Validator;
 
 class AuthController extends BaseController
@@ -44,6 +45,7 @@ class AuthController extends BaseController
 
 		if (Auth::attempt(array('email' => $data['email'], 'password' => $data['password']), $remember)) {
 			$result['authOk'] = LinksInMenu::echoAuthMode();
+			$result['backUrl'] = $this->getBackUrl();
 
 			return $result;
 		}
@@ -79,7 +81,7 @@ class AuthController extends BaseController
 		$userMessage = "Спасибо за регистрацию";
 		$title = 'Регистрация прошла успешно';
 
-		return Redirect::to($this->getRedirectBackUrl('/profile'))
+		return Redirect::to($this->getBackUrl())
 			->with('userMessage', $userMessage)
 			->with('userMessageTitle', $title);
 
@@ -89,7 +91,7 @@ class AuthController extends BaseController
 	{
 		$current_url = basename(Request::server('REQUEST_URI'), ".php");
 		$socialNetName = explode('?', $current_url);
-		$url = Request::server('HTTP_REFERER') == null ? 'registration' : Request::server('HTTP_REFERER');
+		$url = $this->getBackUrl();
 		$userInfo = GetSocialUser::$socialNetName[0]();
 
 		$user = Social::setSocialUser($userInfo);
@@ -98,7 +100,7 @@ class AuthController extends BaseController
 			GetSocialUser::resultError();
 		}
 		if (Auth::check()) {
-			return Redirect::to('profile');
+			return Redirect::to($url);
 		}
 
 		Auth::login($user);
@@ -114,6 +116,36 @@ class AuthController extends BaseController
 
 		return Redirect::back()->with('userMessage', 'Приходите к нам ещё.')
 			->with('userMessageTitle', 'Всего доброго');
+	}
+
+	/**
+	 * url для редиректа после авторизации/регистрации
+	 *
+	 * @return string
+	 */
+	private function getBackUrl()
+	{
+
+		$url = Session::get('authReferrerUrl');
+		if ($url) {
+			Session::remove('authReferrerUrl');
+
+			return $url;
+		}
+
+		$url = Request::server('HTTP_REFERER');
+		if ($url) {
+			$validator = Validator::make(
+				array('url' => $url),
+				array('url' => 'required|url')
+			);
+			if ($validator->passes()) {
+				return $url;
+			}
+		}
+
+		return 'registration';
+
 	}
 
 }

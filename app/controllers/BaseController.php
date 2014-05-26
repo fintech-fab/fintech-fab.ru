@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use Controller;
 use Request;
-use URL;
 use View;
 
 class BaseController extends Controller
@@ -32,20 +31,6 @@ class BaseController extends Controller
 	protected function makePartial($sTemplate, $aParams = array())
 	{
 		return View::make($this->sLayoutFolderName . '.' . $sTemplate, $aParams);
-	}
-
-
-	protected function getRedirectBackUrl($default = null)
-	{
-		$url = URL::previous();
-		if (!$url && $default) {
-			$url = $default;
-		}
-		if (!$url) {
-			$url = '/';
-		}
-
-		return $url;
 	}
 
 }

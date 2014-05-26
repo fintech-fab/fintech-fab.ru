@@ -11,7 +11,11 @@ $(document).ready(function () {
 			function (data) {
 				$('#errorEmail').html(data['errors'][0]);
 				$('#errorPassword').html(data['errors'][1]);
-				if (data['authOk'] != null) {
+				if (data['authOk']) {
+					if (data['backUrl']) {
+						window.location.replace(data['backUrl']);
+						return;
+					}
 					$('.navbar-right').html(data['authOk']);
 					$('#loginModal').modal('hide');
 					var href = location.href;

@@ -41,6 +41,20 @@ Route::filter('auth', function () {
 
 });
 
+// запоминание обратного url при переходе на авторизацию или регистрацию
+Route::filter('referrer', function () {
+	$backUrl = urldecode(Input::get('back'));
+	if ($backUrl) {
+		$validator = Validator::make(
+			array('url' => $backUrl),
+			array('url' => 'required|url')
+		);
+		if ($validator->passes()) {
+			Session::set('authReferrerUrl', $backUrl);
+		}
+	}
+});
+
 
 Route::filter('auth.basic', function () {
 	return Auth::basic();
