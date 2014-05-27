@@ -14,3 +14,6 @@
 
 	</div>
 </div>
+
+
+<? $this->widget('ext.linkprofit.LinkprofitWidget') ?>
