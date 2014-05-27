@@ -22,6 +22,18 @@ class FormController extends Controller
 	}
 
 	/**
+	 * @return array
+	 */
+	public function filters()
+	{
+		return array(
+			array(
+				'ext.linkprofit.LinkprofitFilter',
+			),
+		);
+	}
+
+	/**
 	 * TODO этот экшен и его не-ajax аналог переделать, вынести смену шага в отдельный метод, его вызывать тут
 	 *
 	 * @param $step
@@ -463,19 +475,7 @@ class FormController extends Controller
 	}
 
 
-	// Uncomment the following methods and override them if needed
 	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
 
 	public function actions()
 	{
