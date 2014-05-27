@@ -27,6 +27,8 @@ class Refunds
 	}
 
 	/**
+	 * Если сумма возврата больше возможного, то сумма возарвта равна возможной
+	 *
 	 * @param Bill   $bill
 	 * @param string $amountQuery
 	 *
@@ -44,7 +46,9 @@ class Refunds
 		}
 		//Вычисляем возможную сумму возвтрата и отдаём её
 		$rest = $amountBill - $amount_refund;
-		$amount = $amountQuery > $rest ? $rest : $amountQuery;
+		$amount = ($amountQuery > $rest)
+			? $rest
+			: $amountQuery;
 
 		return $amount;
 	}

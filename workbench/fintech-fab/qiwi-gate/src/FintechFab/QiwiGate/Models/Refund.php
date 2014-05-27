@@ -48,7 +48,7 @@ class Refund extends Eloquent
 	 * @param $bill_id
 	 * @param $refund_id
 	 *
-	 * @return bool|Refund
+	 * @return bool
 	 */
 	public static function isRefundExist($bill_id, $refund_id)
 	{
@@ -56,7 +56,7 @@ class Refund extends Eloquent
 			->whereRefundId($refund_id)
 			->first();
 		if ($existRefund != null) {
-			return $existRefund;
+			return true;
 		}
 
 		return false;
@@ -73,7 +73,8 @@ class Refund extends Eloquent
 	}
 
 	/**
-	 * Провести возварт по прошествии минуты
+	 * Проводит возварт по прошествии минуты
+	 * Отдаёт новый счётё
 	 *
 	 * @return Refund
 	 */

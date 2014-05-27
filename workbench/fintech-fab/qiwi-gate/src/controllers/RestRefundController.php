@@ -28,8 +28,9 @@ class RestRefundController extends Controller
 	 */
 	public function update($provider_id, $bill_id, $refund_id)
 	{
+		$bill = Bill::getBill($bill_id, $provider_id);
 		//Проверяем наличие счёта
-		if (!$bill = Bill::isBillExist($bill_id, $provider_id)) {
+		if (!$bill) {
 			$data['error'] = Catalog::C_BILL_NOT_FOUND;
 
 			return $this->responseFromGate($data);
@@ -61,6 +62,7 @@ class RestRefundController extends Controller
 			return $this->responseFromGate($data);
 		}
 
+		//Вычисляем сууму для возврата
 		$refundAmount = Refunds::calculateAmount($bill, $amountQuery);
 
 		$data = array(
@@ -90,14 +92,15 @@ class RestRefundController extends Controller
 	 */
 	public function show($provider_id, $bill_id, $refund_id)
 	{
-		if (!$bill = Bill::isBillExist($bill_id, $provider_id)) {
+		if (!Bill::getBill($bill_id, $provider_id)) {
 			$data['error'] = Catalog::C_BILL_NOT_FOUND;
 
 			return $this->responseFromGate($data);
 		}
 
 		$refund = Refund::whereBillId($bill_id)
-			->whereRefundId($refund_id)->first();
+			->whereRefundId($refund_id)
+			->first();
 
 		if ($refund == null) {
 			$data['error'] = Catalog::C_BILL_NOT_FOUND;
@@ -118,6 +121,8 @@ class RestRefundController extends Controller
 	}
 
 	/**
+	 * Формирует ответ от сервера
+	 *
 	 * @param     $data
 	 *
 	 * @return \Illuminate\Http\JsonResponse
@@ -140,6 +145,8 @@ class RestRefundController extends Controller
 	}
 
 	/**
+	 * Формирует массив ответа из объекта счёта
+	 *
 	 * @param Refund $refund
 	 *
 	 * @return array

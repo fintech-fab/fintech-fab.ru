@@ -10,6 +10,14 @@ class QiwiGateConnector
 	 */
 	private $curl;
 
+	const C_ERROR_FORMAT = '5';
+	const C_ERROR_SERVER_BUSY = '13';
+	const C_AUTH_ERROR = '150';
+	const C_BILL_NOT_FOUND = '210';
+	const C_BILL_ALREADY_EXIST = '215';
+	const C_SMALL_AMOUNT = '241';
+	const C_BIG_AMOUNT = '242';
+	const C_TECHNICAL_ERROR = '242';
 
 	private static $config;
 
@@ -22,14 +30,14 @@ class QiwiGateConnector
 		'success'    => 'returned',
 	);
 	private $errorMap = array(
-		'5'   => 'Неверный формат параметров запроса',
-		'13'  => 'Сервер занят, повторите запрос позже',
-		'150' => 'Ошибка авторизации',
-		'210' => 'Счет не найден',
-		'215' => 'Счет с таким bill_id уже существует',
-		'241' => 'Сумма слишком мала',
-		'242' => 'Сумма слишком велика',
-		'300' => 'Техническая ошибка, повторите запрос позже',
+		self::C_ERROR_FORMAT       => 'Неверный формат параметров запроса',
+		self::C_ERROR_SERVER_BUSY  => 'Сервер занят, повторите запрос позже',
+		self::C_AUTH_ERROR         => 'Ошибка авторизации',
+		self::C_BILL_NOT_FOUND     => 'Счет не найден',
+		self::C_BILL_ALREADY_EXIST => 'Счет с таким bill_id уже существует',
+		self::C_SMALL_AMOUNT       => 'Сумма слишком мала',
+		self::C_BIG_AMOUNT         => 'Сумма слишком велика',
+		self::C_TECHNICAL_ERROR    => 'Техническая ошибка, повторите запрос позже',
 	);
 
 	/**
@@ -45,6 +53,13 @@ class QiwiGateConnector
 	}
 
 
+	/**
+	 * Возвращает значение конфига по ключу
+	 *
+	 * @param $key
+	 *
+	 * @return string
+	 */
 	public static function getConfig($key)
 	{
 		$keyArray = explode('.', $key);
@@ -59,9 +74,9 @@ class QiwiGateConnector
 	}
 
 	/**
-	 * Установить настройки перед использованием
+	 * Установить конфиг перед использованием
 	 *
-*@param $config
+	 * @param $config
 	 */
 	public static function setConfig($config)
 	{
@@ -69,7 +84,8 @@ class QiwiGateConnector
 	}
 
 	/**
-	 * Проверка статуса
+	 * Если статус получен - возвращает true
+	 * Значение полученного статуса счёта - getValueBillStatus()
 	 *
 	 * @param $orderId
 	 *
@@ -92,7 +108,7 @@ class QiwiGateConnector
 
 
 	/**
-	 * Получение счёта
+	 * Если счёт создан - возвращает true
 	 *
 	 * @param string $orderId
 	 * @param string $tel
@@ -133,6 +149,8 @@ class QiwiGateConnector
 	}
 
 	/**
+	 * Если счёт отменён - возвращает true
+	 *
 	 * @param $orderId
 	 *
 	 * @return bool
@@ -150,6 +168,8 @@ class QiwiGateConnector
 	}
 
 	/**
+	 * Если возврат оплаты создан - возвращает true
+	 *
 	 * @param $orderId
 	 * @param $payReturnId
 	 * @param $sum
@@ -175,6 +195,9 @@ class QiwiGateConnector
 	}
 
 	/**
+	 * Если статус возврата получен - возвращает true
+	 * Значение полученного статуса возврата - getValuePayReturnStatus()
+	 *
 	 * @param $orderId
 	 * @param $payReturnId
 	 *
@@ -195,6 +218,12 @@ class QiwiGateConnector
 		return true;
 	}
 
+	/**
+	 * Парсинг ошибок
+	 * Получить значение ошибки - getError()
+	 *
+	 * @param $oResponse
+	 */
 	private function parseError($oResponse)
 	{
 
@@ -224,40 +253,76 @@ class QiwiGateConnector
 
 	}
 
+	/**
+	 * Отдаёт ошибки
+	 *
+	 * @return string
+	 */
+
 	public function getError()
 	{
 		return $this->errorMessage;
 	}
 
+	/**
+	 * Устанавливает ошибки
+	 *
+	 * @param $message
+	 */
 	private function setError($message)
 	{
 		$this->errorMessage = $message;
 	}
 
+	/**
+	 * Отдаёт значение статуса полученного статуса счёта
+	 *
+	 * @return string
+	 */
 	public function getValueBillStatus()
 	{
 		return $this->billStatus;
 	}
 
+	/**
+	 * Устанавливает полученное значение статуса счёта
+	 *
+	 * @param $status
+	 */
 	private function setValueBillStatus($status)
 	{
 		$this->billStatus = $status;
 	}
 
+	/**
+	 * Отдаёт значение статуса полученного статуса возврата
+	 *
+	 * @return string
+	 */
 	public function getValuePayReturnStatus()
 	{
 		return $this->payReturnStatus;
 	}
 
+	/**
+	 * Устанавливает полученное значение статуса возврата
+	 *
+	 * @param $status
+	 */
 	private function setValuePayReturnStatus($status)
 	{
 		$this->payReturnStatus = $status;
 	}
 
+	/**
+	 * Проверяет что сумма > 0
+	 *
+	 * @param $sum
+	 */
 	private function checkSum($sum)
 	{
 		if ($sum <= 0) {
-			$this->setError($this->errorMap['241']);
+			$this->setError($this->errorMap[self::C_SMALL_AMOUNT]);
 		}
 	}
 

@@ -36,7 +36,8 @@ class OrderController extends BaseController
 	{
 		//Получаем заказ по id пользователя и номеру заказа
 		$order_id = Input::get('order_id');
-		$order = Order::whereUserId(Config::get('ff-qiwi-shop::user_id'))->find($order_id);
+		$order = Order::whereUserId(Config::get('ff-qiwi-shop::user_id'))
+			->find($order_id);
 
 		if (!$order) {
 			return $this->resultMessage('Нет такого заказа');
@@ -156,7 +157,7 @@ class OrderController extends BaseController
 
 		$gate = new QiwiGateConnector($this->makeCurl());
 		$isSuccess = $gate->createBill(
-		$order->id, $order->tel, $order->sum, $order->comment, $order->lifetime
+			$order->id, $order->tel, $order->sum, $order->comment, $order->lifetime
 		);
 
 		if (!$isSuccess) {
@@ -226,7 +227,7 @@ class OrderController extends BaseController
 			return $result;
 		}
 
-		//Возможен ли возврат указанной суммы
+		//Возможен ли возврат указанной суммы,
 		//учитывая прошлые возвраты по этому счёту
 		$isAllowedSum = PaysReturn::isAllowedSum($order, $data['sum']);
 

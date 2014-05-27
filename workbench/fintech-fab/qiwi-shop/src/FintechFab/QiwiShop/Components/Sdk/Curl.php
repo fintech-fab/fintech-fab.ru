@@ -10,6 +10,8 @@ class Curl
 	public $curlError;
 
 	/**
+	 * Определяет URL для curl запроса
+	 *
 	 * @param $orderId
 	 * @param $payReturnId
 	 *
@@ -25,6 +27,9 @@ class Curl
 	}
 
 	/**
+	 * Получает параметры для запроса и возвращает объект с ответом от сервера
+	 * или с ошибками curl
+	 *
 	 * @param int    $order_id
 	 * @param string $method
 	 * @param null   $query

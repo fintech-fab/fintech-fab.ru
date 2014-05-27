@@ -52,7 +52,7 @@ class RestBillController extends Controller
 		}
 
 		//Отдаём ошибку если счёт уже существует
-		if (Bill::isBillExist($bill_id, $provider_id)) {
+		if (Bill::getBill($bill_id, $provider_id)) {
 			$data = array('error' => Catalog::C_BILL_ALREADY_EXIST);
 
 			return $this->responseFromGate($data);
@@ -84,9 +84,7 @@ class RestBillController extends Controller
 	public function show($provider_id, $bill_id)
 	{
 		//Находим счёт
-		$bill = Bill::whereBillId($bill_id)
-			->whereMerchantId($provider_id)
-			->first();
+		$bill = Bill::getBill($bill_id, $provider_id);
 
 		//Отдаём ошибку если счёт не найден
 		if ($bill == null) {
@@ -95,11 +93,9 @@ class RestBillController extends Controller
 			return $this->responseFromGate($data);
 		}
 
-		//Если счёт просрочен - обновляем счёт
+		//Если счёт стал просроченным - обновляем счёт (т.к. изменился статус)
 		if ($bill->isExpired()) {
-			$bill = Bill::whereBillId($bill_id)
-				->whereMerchantId($provider_id)
-				->first();
+			$bill = Bill::find($bill->id);
 		}
 
 		//Фотмируем ответ и возвращаем
@@ -126,9 +122,7 @@ class RestBillController extends Controller
 
 		if ($this->isCancelBill()) {
 			//Находим счёт
-			$bill = Bill::whereBillId($bill_id)
-				->whereMerchantId($provider_id)
-				->first();
+			$bill = Bill::getBill($bill_id, $provider_id);
 			//Если не нашли - ошибка "Счёт не найден"
 			if ($bill == null) {
 				$data['error'] = Catalog::C_BILL_NOT_FOUND;
@@ -183,7 +177,9 @@ class RestBillController extends Controller
 	}
 
 	/**
-	 * @param     $data
+	 * Формирует ответ от сервера
+	 *
+	 * @param  $data
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
@@ -206,6 +202,8 @@ class RestBillController extends Controller
 	}
 
 	/**
+	 * Формирует массив ответа из объекта счёта
+	 *
 	 * @param Bill $bill
 	 *
 	 * @return array

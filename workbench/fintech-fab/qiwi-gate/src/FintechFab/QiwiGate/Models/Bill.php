@@ -45,14 +45,20 @@ class Bill extends Eloquent
 	protected $connection = 'qiwiGate';
 
 	/**
-	 * @param integer $shopId
-	 * @param string  $billId
+	 * Отдаёт счёт по id счёта и id магазина
+	 *
+	 * @param $bill_id
+	 * @param $provider_id
 	 *
 	 * @return Bill
 	 */
-	public static function getByShopAndBill($shopId, $billId)
+	public static function getBill($bill_id, $provider_id)
 	{
-		return Bill::whereMerchantId($shopId)->whereBillId($billId)->first();
+		$bill = Bill::whereBillId($bill_id)
+			->whereMerchantId($provider_id)
+			->first();
+
+		return $bill;
 	}
 
 	/**
@@ -73,7 +79,7 @@ class Bill extends Eloquent
 
 
 	/**
-	 * счет просрочен?
+	 * счет просрочен? Если да то меняем статус счёта
 	 *
 	 * @return bool
 	 */
@@ -123,53 +129,38 @@ class Bill extends Eloquent
 	 *
 	 * @param $billId
 	 *
-	 * @return mixed
+	 * @return bool
 	 */
 	public static function doPay($billId)
 	{
-		return self::whereBillId($billId)
+		$isUpdate = self::whereBillId($billId)
 			->whereStatus(self::C_STATUS_WAITING)
 			->update(
 				array('status' => self::C_STATUS_PAID)
 			);
+		if ($isUpdate) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
-	 * Отменить найденный счёт
+	 * Отменяет найденный счёт, и отдаёт отменённвй счёт
 	 *
-	 * @param $billId
+	 * @param $bill_id
 	 *
 	 * @return Bill
 	 */
-	public static function doCancel($billId)
+	public static function doCancel($bill_id)
 	{
-		Bill::whereBillId($billId)
+		Bill::whereBillId($bill_id)
 			->whereStatus(self::C_STATUS_WAITING)
 			->update(
 				array('status' => self::C_STATUS_REJECTED)
 			);
 
-		return Bill::whereBillId($billId)->first();
-	}
-
-	/**
-	 * Счёт существует?
-	 *
-	 * @param $bill_id
-	 * @param $provider_id
-	 *
-	 * @return bool|Bill
-	 */
-	public static function isBillExist($bill_id, $provider_id)
-	{
-		$existBill = Bill::whereBillId($bill_id)
-			->whereMerchantId($provider_id)
-			->first();
-		if ($existBill != null) {
-			return $existBill;
-		}
-
-		return false;
+		return Bill::whereBillId($bill_id)->first();
 	}
 
 }

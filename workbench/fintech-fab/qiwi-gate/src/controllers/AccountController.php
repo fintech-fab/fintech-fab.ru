@@ -99,7 +99,9 @@ class AccountController extends BaseController
 	public function billsTable()
 	{
 		$user_id = Config::get('ff-qiwi-gate::user_id');
-		$bills = Bill::whereMerchantId($user_id)->orderBy('id', 'desc')->paginate(10);
+		$bills = Bill::whereMerchantId($user_id)
+			->orderBy('id', 'desc')
+			->paginate(10);
 		if (!$bills) {
 			return $this->make('newMerchant', array('user_id' => $user_id));
 		}

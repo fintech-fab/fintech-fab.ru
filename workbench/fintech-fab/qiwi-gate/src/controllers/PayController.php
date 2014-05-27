@@ -16,9 +16,9 @@ class PayController extends BaseController
 	public function index()
 	{
 
-		$billId = Input::get('transaction');
-		$shopId = Input::get('shop');
-		$bill = Bill::getByShopAndBill($shopId, $billId);
+		$bill_id = Input::get('transaction');
+		$provider_id = Input::get('shop');
+		$bill = Bill::getBill($bill_id, $provider_id);
 
 		if ($bill && $bill->isWaiting()) {
 			return $this->make('index', array('bill' => $bill));
@@ -41,17 +41,15 @@ class PayController extends BaseController
 	public function postPay()
 	{
 
-		$shopId = Input::get('shop');
-		$billId = Input::get('transaction');
-		$bill = Bill::getByShopAndBill($shopId, $billId);
+		$bill_id = Input::get('transaction');
+		$provider_id = Input::get('shop');
+		$bill = Bill::getBill($bill_id, $provider_id);
 
 		$error = 'Ошибка оплаты, проверьте статус.';
 
 		if ($bill) {
 
-			$isUpdate = Bill::doPay($bill->bill_id);
-
-			if ($isUpdate) {
+			if (Bill::doPay($bill->bill_id)) {
 
 				return array(
 					'message' => 'Счёт успешно оплачен.',
