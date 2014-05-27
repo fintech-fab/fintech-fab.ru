@@ -337,7 +337,7 @@ class FormController extends Controller
 					//установим информацию о завершенной регистрации перед редиректом
 					Yii::app()->clientForm->setRegisterComplete();
 					Yii::app()->clientForm->clearClientSession();
-					$this->redirect(Yii::app()->createUrl('form/success'));
+					$this->redirect(Yii::app()->createUrl('form/fastSuccess'));
 				}
 
 
@@ -395,7 +395,32 @@ class FormController extends Controller
 		}
 	}
 
+	/**
+	 * Страница поздравления клиента при полном заполнении анкеты
+	 */
 	public function actionSuccess()
+	{
+		$sRedirectUrl = Yii::app()->createUrl('account/doSubscribe');
+		$this->success('form_success', $sRedirectUrl);
+	}
+
+	/**
+	 * Страница поздравления клиента при законченной быстрой регистрации
+	 */
+	public function actionFastSuccess()
+	{
+		$sRedirectUrl = Yii::app()->createUrl('account/doSubscribe');
+		$this->success('form_sent', $sRedirectUrl);
+	}
+
+	/**
+	 * Страница поздравления клиента
+	 *
+	 *
+	 * @param $sTemplateName Имя шаблона для рендеринга
+	 * @param $sRedirectUrl Страница на которую будет перенаправлен пользователь
+	 */
+	private function success($sTemplateName, $sRedirectUrl)
 	{
 		$bNewClient = Yii::app()->user->getState('new_client', false);
 
@@ -418,9 +443,9 @@ class FormController extends Controller
 		//сотрем информацию о завершении регистрации
 		Yii::app()->clientForm->setRegisterComplete(false);
 
-		$this->render('form_sent',
+		$this->render($sTemplateName,
 			array(
-				'sRedirectUri'   => Yii::app()->createUrl('account/doSubscribe'),
+				'sRedirectUri'   => $sRedirectUrl,
 				'sSuccessYmGoal' => $sSuccessYmGoal
 			)
 		);
