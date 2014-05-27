@@ -159,8 +159,8 @@ class AccountMenuWidget extends CWidget
 			}
 			echo '</div>';
 			echo '<strong>Вернуть:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() . '<br/>';
-		} else {
-			echo '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб. <br/>';
+		} elseif (Yii::app()->adminKreddyApi->getBalance() >= 0) {
+			echo '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getBalance() . ' руб. <br/>';
 		}
 
 	}
