@@ -1183,8 +1183,7 @@ class DefaultController extends Controller
 				if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
 					//сбрасываем счетчик попыток ввода кода
 					Yii::app()->adminKreddyApi->resetSmsCodeTries();
-					$this->render('loan/index', array('sView' => 'loan_complete', 'oModel' => null));
-					Yii::app()->end();
+					$this->redirect(Yii::app()->createUrl('/account/loanComplete'));
 				}
 			} else {
 				//устанвливаем сообщение об ошибке
@@ -1199,6 +1198,14 @@ class DefaultController extends Controller
 
 		}
 		$this->render('loan/index', array('sView' => 'do_loan_check_sms_code', 'oModel' => $oForm));
+	}
+
+	/**
+	 * Сообщение об успешной выдаче займа
+	 */
+	public function actionLoanComplete()
+	{
+		$this->render('loan/index', array('sView' => 'loan_complete', 'oModel' => null));
 	}
 
 	public function actionCancelRequest()
