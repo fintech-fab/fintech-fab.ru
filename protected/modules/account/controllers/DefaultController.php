@@ -48,7 +48,7 @@ class DefaultController extends Controller
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
 					'cancelRequest',
 					'returnFrom3DSecurity',
-					'continueForm',
+					'continueForm', 'loanComplete',
 					'goIdentify',
 					'takeLoan', 'takeLoanCheckSmsCode',
 				),
