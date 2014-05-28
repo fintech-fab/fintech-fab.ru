@@ -9,3 +9,8 @@ Thumbs.db
 .idea
 tmp
 _ide_*
+public/.htaccess
+public/*.html
+public/files
+public/google
+*.sh
