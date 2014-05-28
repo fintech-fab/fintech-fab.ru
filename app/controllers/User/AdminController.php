@@ -13,6 +13,7 @@ class AdminController extends BaseController
 	public function TableForRoles()
 	{
 		$count = User::all()->count();
+		$x = null;
 		if (!$count) {
 			$x = "В Базе данных еще нет пользователей";
 		} else {
@@ -49,8 +50,5 @@ class AdminController extends BaseController
 		return $res;
 	}
 
-	public function TableForBills()
-	{
 
-	}
 } 

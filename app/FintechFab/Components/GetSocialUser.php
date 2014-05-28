@@ -75,10 +75,37 @@ class GetSocialUser
 		return $userInfo;
 	}
 
+	public static function gp()
+	{
+		$params = array(
+			'code'          => Input::get('code'),
+			'grant_type'    => 'authorization_code',
+			'client_id'     => Config::get('social.gp.ID'),
+			'client_secret' => Config::get('social.gp.key'),
+			'redirect_uri'  => Config::get('social.gp.redirect_url'),
+		);
+
+		$tokenInfo = null;
+
+		$ch = curl_init("https://accounts.google.com/o/oauth2/token");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result = curl_exec($ch);
+		$error = curl_error($ch);
+
+		if (!$result || $error) {
+			return false;
+		}
+
+		return false;
+
+	}
+
 	public static function resultError()
 	{
-		return Redirect::to('register')
-			->with('userMessage', "Что-то не так, попробуйте ещё раз")
+		return Redirect::to('registration')
+			->with('userMessage', "Что-то пошло не так :-(")
 			->with('userMessageTitle', 'Ошибка');
 	}
 }
