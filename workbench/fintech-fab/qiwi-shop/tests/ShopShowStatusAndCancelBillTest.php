@@ -1,7 +1,7 @@
 <?php
 
 
-use FintechFab\QiwiShop\Components\Sdk\Curl;
+use FintechFab\QiwiSdk\Curl;
 use FintechFab\QiwiShop\Models\Order;
 
 class ShopShowStatusAndCancelBillTest extends ShopTestCase
@@ -24,7 +24,7 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 			'status'   => 'new',
 			'lifetime' => date('Y-m-d H:i:s', time() + 3600 * 24 * 3),
 		));
-		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
+		$this->mock = Mockery::mock('FintechFab\QiwiSdk\Curl');
 
 	}
 
@@ -55,7 +55,7 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 
 	public function testShowStatusPayable()
 	{
-		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+		App::bind('FintechFab\QiwiSdk\Curl', function () {
 
 			$args = array(1);
 
@@ -90,7 +90,7 @@ class ShopShowStatusAndCancelBillTest extends ShopTestCase
 	 */
 	public function testCancelBill()
 	{
-		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+		App::bind('FintechFab\QiwiSdk\Curl', function () {
 
 			$reject = array('status' => 'rejected');
 			$args = array(

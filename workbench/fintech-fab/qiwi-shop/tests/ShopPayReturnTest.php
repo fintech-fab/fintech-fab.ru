@@ -1,7 +1,7 @@
 <?php
 
 
-use FintechFab\QiwiShop\Components\Sdk\Curl;
+use FintechFab\QiwiSdk\Curl;
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
 
@@ -26,7 +26,7 @@ class ShopPayReturnTest extends ShopTestCase
 			'status'   => 'new',
 			'lifetime' => date('Y-m-d H:i:s', time() + 3600 * 24 * 3),
 		));
-		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
+		$this->mock = Mockery::mock('FintechFab\QiwiSdk\Curl');
 
 	}
 
@@ -57,7 +57,7 @@ class ShopPayReturnTest extends ShopTestCase
 	public function testPayReturnSuccess()
 	{
 
-		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+		App::bind('FintechFab\QiwiSdk\Curl', function () {
 
 			$amount = array('amount' => 15);
 
@@ -111,7 +111,7 @@ class ShopPayReturnTest extends ShopTestCase
 	 */
 	public function testShowStatusPayReturn()
 	{
-		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+		App::bind('FintechFab\QiwiSdk\Curl', function () {
 
 			$args = array(
 				1, 'GET', null, 1

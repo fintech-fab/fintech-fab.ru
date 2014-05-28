@@ -1,7 +1,7 @@
 <?php
 
-use FintechFab\QiwiShop\Components\Sdk\Curl;
-use FintechFab\QiwiShop\Components\Sdk\QiwiGateConnector;
+use FintechFab\QiwiSdk\Curl;
+use FintechFab\QiwiSdk\Gateway;
 use FintechFab\QiwiShop\Models\Order;
 
 class ShopCreateBillTest extends ShopTestCase
@@ -16,7 +16,7 @@ class ShopCreateBillTest extends ShopTestCase
 	public function setUp()
 	{
 		parent::setUp();
-		$this->mock = Mockery::mock('FintechFab\QiwiShop\Components\Sdk\Curl');
+		$this->mock = Mockery::mock('FintechFab\QiwiSdk\Curl');
 
 	}
 
@@ -59,7 +59,7 @@ class ShopCreateBillTest extends ShopTestCase
 
 	public function testGetBillSuccess()
 	{
-		App::bind('FintechFab\QiwiShop\Components\Sdk\Curl', function () {
+		App::bind('FintechFab\QiwiSdk\Curl', function () {
 
 			$bill = array(
 				'user'     => 'tel:+7123',
@@ -67,7 +67,7 @@ class ShopCreateBillTest extends ShopTestCase
 				'ccy'      => 'RUB',
 				'comment'  => 'without',
 				'lifetime' => date('Y-m-d\TH:i:s', time() + 3600 * 24 * 3),
-				'prv_name' => QiwiGateConnector::getConfig('provider.name'),
+				'prv_name' => Gateway::getConfig('provider.name'),
 			);
 
 			$args = array(

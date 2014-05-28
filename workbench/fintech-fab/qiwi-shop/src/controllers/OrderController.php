@@ -3,11 +3,11 @@ namespace FintechFab\QiwiShop\Controllers;
 
 use App;
 use Config;
+use FintechFab\QiwiSdk\Curl;
+use FintechFab\QiwiSdk\Gateway;
 use FintechFab\QiwiShop\Components\Dictionary;
 use FintechFab\QiwiShop\Components\Orders;
 use FintechFab\QiwiShop\Components\PaysReturn;
-use FintechFab\QiwiShop\Components\Sdk\Curl;
-use FintechFab\QiwiShop\Components\Sdk\QiwiGateConnector;
 use FintechFab\QiwiShop\Components\Validators;
 use FintechFab\QiwiShop\Models\Order;
 use FintechFab\QiwiShop\Models\PayReturn;
@@ -19,7 +19,7 @@ class OrderController extends BaseController
 
 	public $layout = 'qiwiShop';
 
-	//Передаём настройки в QiwiGateConnector
+	//Передаём настройки в Gateway
 	public function __construct()
 	{
 		$this->beforeFilter(function () {
@@ -27,7 +27,7 @@ class OrderController extends BaseController
 				'gateUrl'  => Config::get('ff-qiwi-shop::gateUrl'),
 				'provider' => Config::get('ff-qiwi-shop::provider'),
 			);
-			QiwiGateConnector::setConfig($config);
+			Gateway::setConfig($config);
 		});
 	}
 
@@ -126,7 +126,7 @@ class OrderController extends BaseController
 	 */
 	public function showStatus($order)
 	{
-		$gate = new QiwiGateConnector($this->makeCurl());
+		$gate = new Gateway($this->makeCurl());
 		$isSuccess = $gate->doRequestBillStatus($order->id);
 
 		if ($isSuccess) {
@@ -155,7 +155,7 @@ class OrderController extends BaseController
 			return $this->resultMessage('Статус заказа не "Новый"');
 		}
 
-		$gate = new QiwiGateConnector($this->makeCurl());
+		$gate = new Gateway($this->makeCurl());
 		$isSuccess = $gate->createBill(
 			$order->id, $order->tel, $order->sum, $order->comment, $order->lifetime
 		);
@@ -183,7 +183,7 @@ class OrderController extends BaseController
 	 */
 	public function cancelBill($order)
 	{
-		$gate = new QiwiGateConnector($this->makeCurl());
+		$gate = new Gateway($this->makeCurl());
 		$isSuccess = $gate->cancelBill($order->id);
 		if (!$isSuccess) {
 			return $this->resultMessage($gate->getError());
@@ -249,7 +249,7 @@ class OrderController extends BaseController
 		if (!$payReturn) {
 			return $this->resultMessage('Возврат не создан, повторите попытку.');
 		}
-		$gate = new QiwiGateConnector($this->makeCurl());
+		$gate = new Gateway($this->makeCurl());
 		$isSuccess = $gate->payReturn($payReturn->order_id, $payReturn->id, $payReturn->sum);
 
 		//Если ошибка, то удаляем наш возврат из таблицы
@@ -282,7 +282,7 @@ class OrderController extends BaseController
 			return $this->resultMessage('Нет такого возврата');
 		}
 
-		$gate = new QiwiGateConnector($this->makeCurl());
+		$gate = new Gateway($this->makeCurl());
 		$isSuccess = $gate->doRequestReturnStatus($payReturn->order_id, $payReturn->id);
 		if (!$isSuccess) {
 			return $this->resultMessage($gate->getError());
@@ -315,7 +315,7 @@ class OrderController extends BaseController
 	 */
 	private function makeCurl()
 	{
-		return App::make('FintechFab\QiwiShop\Components\Sdk\Curl');
+		return App::make('FintechFab\QiwiSdk\Curl');
 	}
 
 
