@@ -8,7 +8,8 @@
 		"codesleeve/asset-pipeline": "dev-master",
 		"iron-io/iron_mq": "dev-master",
 		"fintech-fab/bank-emulator": "dev-master",
-		"fintech-fab/bank-emulator-sdk": "dev-master"
+		"fintech-fab/bank-emulator-sdk": "dev-master",
+		"fintech-fab/qiwi-sdk": "dev-master"
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "1.*",
