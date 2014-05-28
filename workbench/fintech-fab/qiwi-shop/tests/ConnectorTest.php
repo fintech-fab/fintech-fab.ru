@@ -301,4 +301,105 @@ class ConnectorTest extends ShopTestCase
 		$this->assertFalse($isSuccess);
 		$this->assertEquals('Счет не найден', $connector->getError());
 	}
+
+	/**
+	 * @dataProvider callbacks
+	 */
+	public function testCallback($post, $error, $xml, $message = null)
+	{
+
+		$connector = new QiwiGateConnector($this->mock);
+
+		$result = $connector->doParseCallback($post);
+
+		if ($error) {
+			$this->assertFalse($result, print_r($post, true));
+
+		} else {
+
+			$this->assertTrue($result, print_r($post, true));
+			$this->assertEquals($post['bill_id'], $connector->getCallbackOrderId());
+			$this->assertEquals($post['amount'], $connector->getCallbackAmount());
+			$this->assertEquals($post['status'], $connector->getValueBillStatus());
+			$this->assertEquals($message, $connector->getError());
+		}
+
+		$this->assertEquals($xml, $connector->getCallbackResponse());
+
+	}
+
+	/**
+	 * @return array
+	 *
+	 * @dataProvider
+	 */
+	public static function callbacks()
+	{
+		return array(
+
+			__LINE__ => array(
+				'post'  => array(
+					'bill_id'  => 12345,
+					'status'   => 'paid',
+					'error'    => 0,
+					'amount'   => 123.45,
+					'user'     => 'tel:+79000000000',
+					'prv_name' => 'Provider Name',
+					'ccy'      => 'RUB',
+					'comment'  => 'Comment',
+					'command'  => 'bill',
+				),
+				'error' => false,
+				'xml'   => '<?xml version="1.0"?><result><result_code>0</result_code></result>',
+			),
+
+			__LINE__ => array(
+				'post'  => array(
+					'bill_id' => 12345,
+					'status'  => 'paid',
+					'error'   => 0,
+					'amount'  => 123.45,
+					'user'    => 'tel:+79000000000',
+					'ccy'     => 'RUB',
+					'command' => 'bill',
+				),
+				'error' => false,
+				'xml'   => '<?xml version="1.0"?><result><result_code>0</result_code></result>',
+			),
+
+			__LINE__ => array(
+				'post'  => array(
+					'bill_id'  => 12345,
+					'status'   => 'paid',
+					'error'    => 0,
+					'amount'   => 123.45,
+					'prv_name' => 'Provider Name',
+					'ccy'      => 'RUB',
+					'comment'  => 'Comment',
+					'command'  => 'bill',
+				),
+				'error' => true,
+				'xml'   => '<?xml version="1.0"?><result><result_code>5</result_code></result>',
+			),
+
+			__LINE__ => array(
+				'post'    => array(
+					'bill_id'  => 12345,
+					'status'   => 'paid',
+					'error'    => 300,
+					'amount'   => 123.45,
+					'user'     => 'tel:+79000000000',
+					'prv_name' => 'Provider Name',
+					'ccy'      => 'RUB',
+					'comment'  => 'Comment',
+					'command'  => 'bill',
+				),
+				'error'   => false,
+				'xml'     => '<?xml version="1.0"?><result><result_code>0</result_code></result>',
+				'message' => 'Неизвестная ошибка',
+			),
+
+		);
+	}
+
 }

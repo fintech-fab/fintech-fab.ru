@@ -47,6 +47,28 @@ class QiwiGateConnector
 		self::C_TECHNICAL_ERROR    => 'Техническая ошибка, повторите запрос позже',
 	);
 
+	/**
+	 * текст ответа для коллбека киви
+	 *
+	 * @var string
+	 */
+	private $callbackResponse;
+
+	/**
+	 * сумма счета/заказа
+	 *
+	 * @var string
+	 */
+	private $callbackAmount;
+
+	/**
+	 * номер счета/заказа
+	 *
+	 * @var string
+	 */
+	private $callbackOrderId;
+
+
 	public function __construct(Curl $curl)
 	{
 		$this->curl = $curl;
@@ -75,8 +97,16 @@ class QiwiGateConnector
 
 	/**
 	 * Установить конфиг перед использованием
+	 * $config format array(
+	 *      'gateUrl'  => 'url-to-qiwi-gate',
+	 *      'provider' => array (
+	 *          'id'       => 'your-qiwi-account-id',
+	 *          'password' => 'your-qiwi-account-password',
+	 *       )
+	 *  )
 	 *
-	 * @param $config
+	 *
+	 * @param $config array
 	 */
 	public static function setConfig($config)
 	{
@@ -254,6 +284,86 @@ class QiwiGateConnector
 	}
 
 	/**
+	 * Разбирает коллбэк-запрос от гейта
+	 *
+	 * После разбора
+	 * - получить номер заказа getCallbackOrderId и сумму getCallbackAmount
+	 * - получить статус заказа/счета getValueBillStatus
+	 *
+	 * Если были ошибки - текст ошибки в getError
+	 *
+	 * Если в коллбэке пришла ошибка error, то
+	 * - разбор считается успешным (возвращает true)
+	 * - но в getError вернет текст ошибки
+	 *
+	 * @param array|null $requestParams массив параметров в запросе или будет использован $_POST
+	 *
+	 * @return bool разбор прошел без ошибок или с ошибками
+	 */
+	public function doParseCallback($requestParams = null)
+	{
+
+		if (null === $requestParams && !empty($_POST)) {
+			$requestParams = $_POST;
+		}
+
+		$fields = array(
+			'bill_id',
+			'status',
+			'error',
+			'amount',
+			'user',
+			'prv_name',
+			'ccy',
+			'comment',
+			'command',
+		);
+
+		// формирование параметров
+		$params = array();
+		foreach ($fields as $name) {
+			if (isset($requestParams[$name])) {
+				$params[$name] = urldecode($requestParams[$name]);
+			} else {
+				// на некоторых полях - не ошибка
+				if (!in_array($name, array('comment', 'prv_name'))) {
+					$this->setError('Parameter ' . $name . ' is required');
+				}
+			}
+		}
+
+		if ($this->getError()) {
+			$this->createCallbackResponse(self::C_ERROR_FORMAT);
+
+			return false;
+		}
+
+		// номер телефона
+		$params['user'] = str_replace('tel:', '', $params['user']);
+
+		// статус
+		$this->setValueBillStatus($params['status']);
+
+		// данные
+		$this->setCallbackAmount($params['amount']);
+		$this->setCallbackOrderId($params['bill_id']);
+
+		// ответ
+		$this->createCallbackResponse();
+
+		// ошибка от гейта
+		if ($params['error'] !== '0') {
+			$errorMessage = isset($this->errorMap[$params['error']])
+				? $this->errorMap[$params['error']]
+				: 'Неизвестная ошибка';
+			$this->setError($errorMessage);
+		}
+
+		return true;
+
+	}
+
+	/**
 	 * Отдаёт ошибки
 	 *
 	 * @return string
@@ -324,6 +434,82 @@ class QiwiGateConnector
 		if ($sum <= 0) {
 			$this->setError($this->errorMap[self::C_SMALL_AMOUNT]);
 		}
+	}
+
+	/**
+	 * Сформировать ответ для коллбэка
+	 *
+	 * @param int $code код ответа
+	 */
+	public function createCallbackResponse($code = 0)
+	{
+		$this->callbackResponse = '<?xml version="1.0"?><result><result_code>' . $code . '</result_code></result>';
+	}
+
+	/**
+	 * Ответ для коллбэка
+	 *
+	 * @return string
+	 */
+	public function getCallbackResponse()
+	{
+		return $this->callbackResponse;
+	}
+
+	/**
+	 * ответить на вызов коллбэка и завершить выполнение скрипта
+	 *
+	 * @param bool $endApp завершить выполнение скрипта?
+	 */
+	public function doCallbackResponse($endApp = true)
+	{
+
+		header('Content-type: text/xml');
+		echo $this->getCallbackResponse();
+		if ($endApp) {
+			die();
+		}
+
+	}
+
+	/**
+	 * Сумма счета/заказа
+	 *
+	 * @return string
+	 */
+	public function getCallbackAmount()
+	{
+		return $this->callbackAmount;
+	}
+
+	/**
+	 * Сумма счета/заказа
+	 *
+	 * @param string $amount
+	 */
+	private function setCallbackAmount($amount)
+	{
+		$this->callbackAmount = $amount;
+	}
+
+	/**
+	 * Идентификатор счета/заказа
+	 *
+	 * @return string
+	 */
+	public function getCallbackOrderId()
+	{
+		return $this->callbackOrderId;
+	}
+
+	/**
+	 * Идентификатор счета/заказа
+	 *
+	 * @param string $orderId
+	 */
+	private function setCallbackOrderId($orderId)
+	{
+		$this->callbackOrderId = $orderId;
 	}
 
 } 
