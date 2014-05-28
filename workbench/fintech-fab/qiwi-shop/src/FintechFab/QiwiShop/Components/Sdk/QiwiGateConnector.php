@@ -10,6 +10,13 @@ class QiwiGateConnector
 	 */
 	private $curl;
 
+	/**
+	 * @var string
+	 */
+	private $errorMessage;
+	private $billStatus;
+	private $payReturnStatus;
+
 	const C_ERROR_FORMAT = '5';
 	const C_ERROR_SERVER_BUSY = '13';
 	const C_AUTH_ERROR = '150';
@@ -39,13 +46,6 @@ class QiwiGateConnector
 		self::C_BIG_AMOUNT         => 'Сумма слишком велика',
 		self::C_TECHNICAL_ERROR    => 'Техническая ошибка, повторите запрос позже',
 	);
-
-	/**
-	 * @var string
-	 */
-	private $errorMessage;
-	private $billStatus;
-	private $payReturnStatus;
 
 	public function __construct(Curl $curl)
 	{
@@ -87,7 +87,9 @@ class QiwiGateConnector
 	 * Если статус получен - возвращает true
 	 * Значение полученного статуса счёта - getValueBillStatus()
 	 *
-	 * @param $orderId
+	 * Получает уникальный в магазине id заказа
+	 *
+	 * @param string $orderId
 	 *
 	 * @return bool
 	 */
@@ -110,11 +112,11 @@ class QiwiGateConnector
 	/**
 	 * Если счёт создан - возвращает true
 	 *
-	 * @param string $orderId
-	 * @param string $tel
-	 * @param string $sum
-	 * @param string $comment
-	 * @param string $lifetime
+	 * @param string $orderId  - Уникальный в магазине id заказа
+	 * @param string $tel      - Номер телефона клиента
+	 * @param float  $sum      - Сумма заказа
+	 * @param string $comment  - Комментарий к заказу
+	 * @param string $lifetime - Срок действия заказа
 	 *
 	 * @return bool
 	 */
@@ -151,7 +153,7 @@ class QiwiGateConnector
 	/**
 	 * Если счёт отменён - возвращает true
 	 *
-	 * @param $orderId
+	 * @param string $orderId - Уникальный в магазине id заказа
 	 *
 	 * @return bool
 	 */
@@ -170,9 +172,9 @@ class QiwiGateConnector
 	/**
 	 * Если возврат оплаты создан - возвращает true
 	 *
-	 * @param $orderId
-	 * @param $payReturnId
-	 * @param $sum
+	 * @param string $orderId     - Уникальный в магазине id заказа
+	 * @param string $payReturnId - Уникальный для заказа id возврата
+	 * @param float  $sum         - Сумма возврата
 	 *
 	 * @return bool
 	 */
@@ -198,8 +200,8 @@ class QiwiGateConnector
 	 * Если статус возврата получен - возвращает true
 	 * Значение полученного статуса возврата - getValuePayReturnStatus()
 	 *
-	 * @param $orderId
-	 * @param $payReturnId
+	 * @param string $orderId     - Уникальный в магазине id заказа
+	 * @param string $payReturnId - Уникальный для заказа id возврата
 	 *
 	 * @return bool
 	 */
@@ -287,7 +289,7 @@ class QiwiGateConnector
 	/**
 	 * Устанавливает полученное значение статуса счёта
 	 *
-	 * @param $status
+	 * @param string $status
 	 */
 	private function setValueBillStatus($status)
 	{
@@ -307,7 +309,7 @@ class QiwiGateConnector
 	/**
 	 * Устанавливает полученное значение статуса возврата
 	 *
-	 * @param $status
+	 * @param string $status
 	 */
 	private function setValuePayReturnStatus($status)
 	{
@@ -317,7 +319,7 @@ class QiwiGateConnector
 	/**
 	 * Проверяет что сумма > 0
 	 *
-	 * @param $sum
+	 * @param float $sum
 	 */
 	private function checkSum($sum)
 	{

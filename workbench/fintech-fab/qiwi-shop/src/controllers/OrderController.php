@@ -74,7 +74,7 @@ class OrderController extends BaseController
 	/**
 	 * Создание счёта.
 	 *
-	 * @return array $result
+	 * @return array
 	 */
 	public function postCreateOrder()
 	{
@@ -147,7 +147,7 @@ class OrderController extends BaseController
 	 *
 	 * @param Order $order
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function createBill($order)
 	{
@@ -179,7 +179,7 @@ class OrderController extends BaseController
 	 *
 	 * @param Order $order
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function cancelBill($order)
 	{
@@ -204,7 +204,7 @@ class OrderController extends BaseController
 	 *
 	 * @param Order $order
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function payReturn($order)
 	{
@@ -273,7 +273,7 @@ class OrderController extends BaseController
 	 *
 	 * @param Order $order
 	 *
-	 * @return mixed|void
+	 * @return array
 	 */
 	public function statusReturn($order)
 	{
