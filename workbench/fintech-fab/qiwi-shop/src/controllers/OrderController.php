@@ -127,7 +127,7 @@ class OrderController extends BaseController
 	public function showStatus($order)
 	{
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$isSuccess = $gate->getBillStatus($order->id);
+		$isSuccess = $gate->doRequestBillStatus($order->id);
 
 		if ($isSuccess) {
 			$order->changeStatus($gate->getValueBillStatus());
@@ -283,7 +283,7 @@ class OrderController extends BaseController
 		}
 
 		$gate = new QiwiGateConnector($this->makeCurl());
-		$isSuccess = $gate->getPayReturnStatus($payReturn->order_id, $payReturn->id);
+		$isSuccess = $gate->doRequestReturnStatus($payReturn->order_id, $payReturn->id);
 		if (!$isSuccess) {
 			return $this->resultMessage($gate->getError());
 		}

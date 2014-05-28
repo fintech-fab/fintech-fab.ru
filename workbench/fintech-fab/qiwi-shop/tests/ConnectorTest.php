@@ -113,7 +113,7 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->getBillStatus(123);
+		$isSuccess = $connector->doRequestBillStatus(123);
 		$this->assertTrue($isSuccess);
 		$this->assertEquals('payable', $connector->getValueBillStatus());
 	}
@@ -137,7 +137,7 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->getBillStatus(123);
+		$isSuccess = $connector->doRequestBillStatus(123);
 		$this->assertFalse($isSuccess);
 		$this->assertEquals('Счет не найден', $connector->getError());
 	}
@@ -274,7 +274,7 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->getPayReturnStatus(123, 1);
+		$isSuccess = $connector->doRequestReturnStatus(123, 1);
 		$this->assertTrue($isSuccess);
 		$this->assertEquals('onReturn', $connector->getValuePayReturnStatus());
 	}
@@ -297,7 +297,7 @@ class ConnectorTest extends ShopTestCase
 					)
 			));
 
-		$isSuccess = $connector->getPayReturnStatus(123, 1);
+		$isSuccess = $connector->doRequestReturnStatus(123, 1);
 		$this->assertFalse($isSuccess);
 		$this->assertEquals('Счет не найден', $connector->getError());
 	}

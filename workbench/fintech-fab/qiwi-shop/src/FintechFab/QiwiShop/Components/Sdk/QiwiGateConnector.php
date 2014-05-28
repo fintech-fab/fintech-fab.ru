@@ -87,13 +87,11 @@ class QiwiGateConnector
 	 * Если статус получен - возвращает true
 	 * Значение полученного статуса счёта - getValueBillStatus()
 	 *
-	 * Получает уникальный в магазине id заказа
-	 *
-	 * @param string $orderId
+	 * @param string $orderId уникальный в магазине id заказа
 	 *
 	 * @return bool
 	 */
-	public function getBillStatus($orderId)
+	public function doRequestBillStatus($orderId)
 	{
 		$oResponse = $this->curl->request($orderId);
 		$this->parseError($oResponse);
@@ -205,7 +203,7 @@ class QiwiGateConnector
 	 *
 	 * @return bool
 	 */
-	public function getPayReturnStatus($orderId, $payReturnId)
+	public function doRequestReturnStatus($orderId, $payReturnId)
 	{
 		$oResponse = $this->curl->request($orderId, 'GET', null, $payReturnId);
 		$this->parseError($oResponse);
