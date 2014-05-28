@@ -35,12 +35,12 @@ class Social
 			'id_user_in_network' => $userInfo['id'],
 		));
 		if (Auth::check()) {
-			$userSocialNetwork['user_id'] = Auth::user()->id;
+			$userSocialNetwork['user_id'] = Auth::user()->getAuthIdentifier();
 		}
 
 		if ($userSocialNetwork['user_id'] != null) {
 			$user = User::find($userSocialNetwork['user_id']);
-			if ($user['photo'] == '/img/default_user.png') { //Не придумал как избежать вложенного if`а
+			if ($user['photo'] == '/img/default_user.png') {
 				$user->photo = $userInfo['photo'];
 				$user->save();
 			}

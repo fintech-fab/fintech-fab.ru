@@ -15,6 +15,7 @@ use Hash;
 use Input;
 use Redirect;
 use Request;
+use Route;
 use Session;
 use Validator;
 
@@ -89,15 +90,23 @@ class AuthController extends BaseController
 
 	public function socialNet()
 	{
-		$current_url = basename(Request::server('REQUEST_URI'), ".php");
-		$socialNetName = explode('?', $current_url);
 		$url = $this->getBackUrl();
-		$userInfo = GetSocialUser::$socialNetName[0]();
+		$route = Route::current();
+		$socialNetCode = $route->uri();
+
+		if (!in_array($socialNetCode, get_class_methods(GetSocialUser::class))) {
+			return GetSocialUser::resultError();
+		}
+
+		$userInfo = GetSocialUser::$socialNetCode();
+		if (!$userInfo) {
+			return GetSocialUser::resultError();
+		}
 
 		$user = Social::setSocialUser($userInfo);
 
 		if (is_null($user)) {
-			GetSocialUser::resultError();
+			return GetSocialUser::resultError();
 		}
 		if (Auth::check()) {
 			return Redirect::to($url);

@@ -34,6 +34,7 @@ Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\Aut
 
 Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
+Route::get('gp', 'App\Controllers\Site\AuthController@socialNet');
 
 Route::get('admin', array(
 	'before' => 'auth|roleAdmin',
