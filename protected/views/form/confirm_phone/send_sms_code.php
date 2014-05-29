@@ -5,24 +5,25 @@
  */
 
 /*
- * Отправить код подтверждения на телефон
+ * Отправить код подтверждения на телефон и e-mail
  */
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
 
-<h4>Подтверждение номера телефона</h4>
+<h4>Подтверждение контактных данных</h4>
 
-Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /> Ваш номер телефона:
-<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br /><br />
+Для завершения регистрации Вам необходимо подтвердить свой номер телефона. <br /><br />Ваш номер телефона:
+<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br />Ваш адрес электронной почты:
+<strong><?= Yii::app()->clientForm->getSessionEmail() ?></strong> <br /><br />
 
 <div class="clearfix"></div>
 <div class="span12">
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'     => 'sendSmsCode',
+		'id'     => 'sendCodes',
 		'type'   => 'horizontal',
-		'action' => Yii::app()->createUrl('/form/sendSmsCode'),
+		'action' => Yii::app()->createUrl('/form/sendCodes'),
 	));
 	?>
 
@@ -43,7 +44,8 @@
 				'type'       => 'primary',
 				'size'       => 'small',
 				'buttonType' => 'submit',
-				'label'      => 'Отправить на +7' . Yii::app()->clientForm->getSessionPhone() . ' SMS с кодом подтверждения',
+
+				'label'      => 'Отправить коды подтверждения'
 			));
 			?>
 		</div>

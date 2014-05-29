@@ -87,7 +87,6 @@ class FormController extends Controller
 		 * @var array                    $aPost
 		 * @var string                   $sView
 		 */
-		$iClientId = Yii::app()->clientForm->getClientId();
 
 		//пробуем получить метод, который требуется вызвать на этом шаге, если он задан
 		$sMethod = Yii::app()->clientForm->getControllerMethod();
@@ -131,7 +130,6 @@ class FormController extends Controller
 					$this->redirect(Yii::app()->createUrl("/form"));
 				} else {
 					//если это ajaxForm-запрос, то заново после обработки данных получаем ID клиента и модель
-					$iClientId = Yii::app()->clientForm->getClientId();
 					$oClientForm = Yii::app()->clientForm->getFormModel();
 				}
 			} else {
@@ -246,7 +244,7 @@ class FormController extends Controller
 	/**
 	 * Отправка SMS с кодом
 	 */
-	public function actionSendSmsCode()
+	public function actionSendCodes()
 	{
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
@@ -270,7 +268,7 @@ class FormController extends Controller
 		ClientData::saveClientDataById($aData, $iClientId);
 
 		// отправляем SMS с кодом. если $oAnswer !== true, то ошибка
-		$oAnswer = Yii::app()->clientForm->sendSmsCode();
+		$oAnswer = Yii::app()->clientForm->sendCodes();
 
 		// если были ошибки при отправке, то добавляем в сессию сообщение об ошибке
 		if ($oAnswer !== true) {
@@ -294,25 +292,35 @@ class FormController extends Controller
 	/**
 	 * проверка кода, введённого пользователем
 	 */
-	public function actionCheckSmsCode()
+	public function actionCheckCodes()
 	{
-		// забираем данные из POST и заносим в форму ClientConfirmPhoneViaSMSForm
-		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneViaSMSForm');
+		// забираем данные из POST и заносим в форму ClientConfirmPhoneAndEmailForm
+		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneAndEmailForm');
 		$iClientId = Yii::app()->clientForm->getClientId();
 
 		// если не было POST запроса либо если флага, что SMS отправлялось, нет - перенаправляем на form
-		if (empty($aPostData) || !Yii::app()->clientForm->getFlagSmsSent()) {
+		if (empty($aPostData) || !Yii::app()->clientForm->getFlagCodesSent()) {
 			$this->redirect(Yii::app()->createUrl("form"));
 		}
 
+		$oCheckResult = new stdClass();
+		$oCheckResult->bEmailError = false;
+		$oCheckResult->bSmsError = false;
+
 		// сверяем код. если $oAnswer !== true, то ошибка
-		$mAnswer = Yii::app()->clientForm->checkSmsCode($aPostData);
+		$mAnswer = Yii::app()->clientForm->checkCodes($aPostData, $oCheckResult);
 
 		// если был POST запрос и код неверен - добавляем текст ошибки к атрибуту
 		if ($mAnswer !== true) {
-			$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
+			$oClientSmsForm = new ClientConfirmPhoneAndEmailForm();
 			$oClientSmsForm->setAttributes($aPostData);
-			$oClientSmsForm->addError('sms_code', $mAnswer);
+
+			if ($oCheckResult->bSmsError) {
+				$oClientSmsForm->addError('sms_code', $mAnswer);
+			}
+			if ($oCheckResult->bEmailError) {
+				$oClientSmsForm->addError('email_code', $mAnswer);
+			}
 
 
 			//получаем view для проверки смс-кода
@@ -356,7 +364,7 @@ class FormController extends Controller
 			} else {
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе Кредди. Обратитесь в контактный центр';
-				Yii::app()->clientForm->setFlagSmsSent(false); //сбрасываем флаг отправленного СМС
+				Yii::app()->clientForm->setFlagCodesSent(false); //сбрасываем флаг отправленного СМС
 				Yii::app()->clientForm->clearClientSession(); //чистим сессию
 				$this->actionStep(1); //переходим на шаг 1
 			}

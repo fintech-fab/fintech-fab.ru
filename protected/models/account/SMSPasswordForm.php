@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class SMSPasswordForm
  */
@@ -22,8 +23,8 @@ class SMSPasswordForm extends CFormModel
 		$aRules[] = array('sendSmsPassword', 'required', 'requiredValue' => 1, 'on' => 'sendRequired');
 		$aRules[] = array('sendSmsPassword', 'safe', 'on' => 'passRequired');
 
-		//$aRules[] = array('smsPassword', 'match', 'message' => 'SMS-код состоит из '.SiteParams::C_SMSCODE_LENGTH.' цифр',
-		//	'pattern' => '/^\d{'.SiteParams::C_SMSCODE_LENGTH.'}$/');
+		//$aRules[] = array('smsPassword', 'match', 'message' => 'SMS-код состоит из '.SiteParams::C_SMS_CODE_LENGTH.' цифр',
+		//	'pattern' => '/^\d{'.SiteParams::C_SMS_CODE_LENGTH.'}$/');
 
 		return $aRules;
 

@@ -23,6 +23,8 @@ class Dictionaries
 	const C_SMS_PASS_SUCCESS = 'SMS с паролем успешно отправлено';
 	const C_SMS_RESET_PASSWORD_SUCCESS = "SMS с паролем отправлено на указанный Вами номер";
 
+	const C_EMAIL_SUCCESS = 'Электронное письмо с кодом успешно отправлено на адрес';
+
 	const C_INFO_MOSCOWTIME = "Указано московское время";
 
 	const C_FAQ_SUBJECT_SENT = "Вопрос с Kreddy.ru";

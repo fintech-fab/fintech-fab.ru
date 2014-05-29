@@ -232,6 +232,9 @@ class AdminKreddyApiComponent
 
 	const API_ACTION_EMAIL_INFO = 'siteEmail/emailLinkHandler';
 
+	const API_ACTION_SEND_SMS = 'siteClient/sendSms';
+	const API_ACTION_SEND_EMAIL_CODE = 'siteClient/sendEmailCode';
+
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
 
@@ -3488,9 +3491,36 @@ class AdminKreddyApiComponent
 	{
 		if (!Yii::app()->params['bSmsGateIsOff']) {
 
-			$this->requestAdminKreddyApi('siteClient/sendSms', array(
+			$this->requestAdminKreddyApi(self::API_ACTION_SEND_SMS, array(
 				'number'  => $sPhone,
 				'message' => $sMessage,
+			));
+			if ($this->getIsError()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Отправка СМС сообщения через API (для регистрации)
+	 *
+	 * @param $sEmail
+	 * @param $sEmailCode
+	 *
+	 * @internal param $sPhone
+	 * @internal param $sMessage
+	 *
+	 * @return bool
+	 */
+	public function sendEmailCode($sEmail, $sEmailCode)
+	{
+		if (!Yii::app()->params['bEmailGateIsOff']) {
+
+			$this->requestAdminKreddyApi(self::API_ACTION_SEND_EMAIL_CODE, array(
+				'email'      => $sEmail,
+				'email_code' => $sEmailCode,
 			));
 			if ($this->getIsError()) {
 				return false;

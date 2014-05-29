@@ -47,6 +47,7 @@
  * @property string  $secret_answer  ;
  * @property integer $numeric_code
  * @property integer $sms_code
+ * @property integer $email_code
  * @property integer $product
  * @property integer $pay_type
  * @property string  $channel_id
@@ -92,7 +93,7 @@ class ClientData extends CActiveRecord
 	{
 
 		return array(
-			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, product, pay_type, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
+			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, email_code, product, pay_type, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
 		);
 	}
 
@@ -242,6 +243,19 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
+	 * @param string  $sCode
+	 * @param integer $client_id
+	 *
+	 * @return bool
+	 */
+	public static function compareEmailCodeByClientId($sCode, $client_id)
+	{
+		$aClientData = self::model()->getClientDataById($client_id);
+
+		return ($aClientData['email_code'] == $sCode);
+	}
+
+	/**
 	 * @param $aClientFormData
 	 * @param $client_id
 	 *
@@ -341,6 +355,7 @@ class ClientData extends CActiveRecord
 			'secret_answer'       => 'Secret  Answer',
 			'numeric_code'        => 'Numeric Code',
 			'sms_code'            => 'SMS Code',
+			'email_code' => 'Email Code',
 			'product'             => 'Product',
 			'pay_type'   => 'Pay Type',
 			'channel_id'          => 'Channel ID',
@@ -406,6 +421,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('secret_answer', $this->secret_answer);
 		$criteria->compare('numeric_code', $this->numeric_code);
 		$criteria->compare('sms_code', $this->sms_code);
+		$criteria->compare('email_code', $this->sms_code);
 		$criteria->compare('product', $this->product);
 		$criteria->compare('pay_type', $this->pay_type);
 		$criteria->compare('channel_id', $this->channel_id);
