@@ -1,4 +1,6 @@
-<script src="/packages/fintech-fab/qiwi-shop/js/ActionCreateOrder.js"></script>
+<script type="application/javascript">
+	<?php require(__DIR__ . '/../layouts/inc/js/ActionCreateOrder.js') ?>
+</script>
 <div class="text-center inner">
 	<h3>Новый заказ</h3>
 

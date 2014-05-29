@@ -8,6 +8,6 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
 
-<link type="text/css" rel="stylesheet" href="/packages/fintech-fab/qiwi-shop/css/main.css ">
-
-
+<style type="text/css">
+	<?php require(__DIR__ . '/css/main.css') ?>
+</style>

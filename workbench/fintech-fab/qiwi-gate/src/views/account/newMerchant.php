@@ -3,7 +3,9 @@
  * @var int $user_id
  */
 ?>
-<script src="/packages/fintech-fab/qiwi-gate/js/ActionAccountReg.js"></script>
+<script type="application/javascript">
+	<?php require(__DIR__ . '/../layouts/inc/js/ActionAccountReg.js') ?>
+</script>
 <div id="message"></div>
 <div class="col-sm-offset-3 col-md-6 inner">
 	<div class="content">

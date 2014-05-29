@@ -26,7 +26,7 @@ Route::filter('ff.qiwi.gate.auth.basic', function () {
 Route::filter('ff.qiwi.gate.checkUser', function () {
 	$user = Config::get('ff-qiwi-shop::user_id');
 	if (!isset($user)) {
-		dd('В сессии нет пользователя!');
+		return Redirect::route('gateAuthError');
 	}
 
 });

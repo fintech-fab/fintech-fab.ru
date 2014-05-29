@@ -2,9 +2,7 @@
 if (empty($content)) {
 	$content = '';
 }
-/**
- * @var string $userMessage
- */
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,6 +11,6 @@ if (empty($content)) {
 </head>
 <body>
 <?= View::make('ff-qiwi-shop::layouts.inc.navbar') ?>
-<div class="container"><?= $content ?></div>
+<div class="content"><?= $content ?></div>
 </body>
 </html>

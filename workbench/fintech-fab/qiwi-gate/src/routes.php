@@ -68,3 +68,8 @@ Route::group(
 
 );
 
+Route::get('qiwi/gate/authError', array(
+	'as'   => 'gateAuthError',
+	'uses' => 'FintechFab\QiwiGate\Controllers\AccountController@authError',
+));
+

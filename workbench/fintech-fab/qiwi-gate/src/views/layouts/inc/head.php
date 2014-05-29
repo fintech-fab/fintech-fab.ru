@@ -8,5 +8,7 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
 
-<script src="/packages/fintech-fab/qiwi-gate/js/ActionPayment.js"></script>
 
+<style type="text/css">
+	<?php require(__DIR__ . '/css/main.css') ?>
+</style>

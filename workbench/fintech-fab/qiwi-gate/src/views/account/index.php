@@ -6,7 +6,9 @@ use FintechFab\QiwiGate\Models\Merchant;
  */
 
 ?>
-<script src="/packages/fintech-fab/qiwi-gate/js/ActionAccountQiwi.js"></script>
+<script type="application/javascript">
+	<?php require(__DIR__ . '/../layouts/inc/js/ActionAccountQiwi.js') ?>
+</script>
 <?= View::make('ff-qiwi-gate::account.inc.changeDataModal', array('merchant' => $merchant)) ?>
 <div id="account">
 	<h2 class="text-center">Профиль</h2><br>

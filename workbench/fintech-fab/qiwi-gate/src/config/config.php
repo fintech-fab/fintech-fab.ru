@@ -1,4 +1,4 @@
 <?php
 return array(
-	'user_id' => Auth::user()->getAuthIdentifier(),
+	'user_id' => Auth::user() ? Auth::user()->getAuthIdentifier() : null,
 );

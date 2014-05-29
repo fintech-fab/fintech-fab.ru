@@ -30,6 +30,14 @@ class AccountController extends BaseController
 	}
 
 	/**
+	 * Страница ошибки авторизации
+	 */
+	public function authError()
+	{
+		$this->make('authError');
+	}
+
+	/**
 	 * @return array
 	 */
 	public function postRegistration()

@@ -6,7 +6,9 @@ use FintechFab\QiwiGate\Models\Bill;
 
 ?>
 <?= View::make('ff-qiwi-shop::qiwiShop.inc.payReturnModal') ?>
-<script src="/packages/fintech-fab/qiwi-gate/js/ActionAccountBillsTable.js"></script>
+<script type="application/javascript">
+	<?php require(__DIR__ . '/../layouts/inc/js/ActionAccountBillsTable.js') ?>
+</script>
 
 <table class="table table-striped table-hover" id="billsTable">
 	<tr>

@@ -25,4 +25,9 @@ Route::group(array(
 
 });
 
+Route::get('qiwi/shop/authError', array(
+	'as'   => 'shopAuthError',
+	'uses' => 'FintechFab\QiwiShop\Controllers\OrderController@authError',
+));
+
 

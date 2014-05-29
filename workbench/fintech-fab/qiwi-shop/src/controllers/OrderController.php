@@ -62,6 +62,14 @@ class OrderController extends BaseController
 	}
 
 	/**
+	 * Страница ошибки авторизации
+	 */
+	public function authError()
+	{
+		$this->make('authError');
+	}
+
+	/**
 	 * Страница создания заказа
 	 *
 	 * @return void

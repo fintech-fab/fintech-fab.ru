@@ -8,7 +8,7 @@ return array(
 		'password' => '',
 	),
 
-	'user_id'  => Auth::user()->getAuthIdentifier(),
+	'user_id'  => Auth::user() ? Auth::user()->getAuthIdentifier() : null,
 
 	// Срок действия заказа в днях
 	'lifetime' => 3,
