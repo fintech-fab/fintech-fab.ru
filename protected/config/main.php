@@ -55,6 +55,9 @@ $a = array(
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
 		),
+		'landingApi'       => array(
+			'class' => 'application.components.LandingApiComponent',
+		),
 		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
 			'sApiUrl'     => 'https://admin.kreddy.ru:8081/siteApi/',
@@ -155,7 +158,8 @@ $a = array(
 			'csrfTokenName'               => 'stcs',
 			'aIgnoreCsrfValidationRoutes' => array(
 				'identify/default/index',
-				'account/default/returnFrom3DSecurity'
+				'account/default/returnFrom3DSecurity',
+				'api/index',
 			),
 		),
 	),

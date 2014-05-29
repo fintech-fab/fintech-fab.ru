@@ -589,6 +589,10 @@ nav .account .btn {
 	top: 0;
 }
 
+.del-left-but.active {
+	border-top-left-radius: 8px;
+}
+
 /*terms-of-payment*/
 .terms-of-payment {
 	padding: 39px 0 0 0;

@@ -1,14 +1,20 @@
 <?php
+
 /**
  * Class DefaultController
  */
 class DefaultController extends Controller
 {
-	public function actionIndex()
+	public function init()
 	{
 		$this->disableDebugToolbar();
 		$this->_disableLog();
 
+		Yii::app()->errorHandler->errorAction = 'identify/default/error';
+	}
+
+	public function actionIndex()
+	{
 		header('Content-Type: application/json');
 
 		// Заполняем массив request
@@ -25,6 +31,18 @@ class DefaultController extends Controller
 
 		echo CJSON::encode($aResponse);
 
+		Yii::app()->end();
+	}
+
+	public function actionError()
+	{
+		header('Content-Type: application/json');
+
+		/** @var IdentifyModule $oModule */
+		$oModule = Yii::app()->getModule('identify');
+		$aResponse = $oModule->identifyApi->formatErrorResponse();
+
+		echo CJSON::encode($aResponse);
 		Yii::app()->end();
 	}
 }

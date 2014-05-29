@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @property CPhpMessageSource          $coreMessages
  *
@@ -25,6 +26,7 @@
  * @property ProductsChannelsComponent  $productsChannels
  * @property AdminKreddyApiComponent    $adminKreddyApi
  * @property AntiBotComponent           $antiBot
+ * @property LandingApiComponent        $landingApi
  *
  *
  * @property CDbAuthManager             $authManager

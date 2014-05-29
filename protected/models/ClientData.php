@@ -216,6 +216,19 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
+	 * @param $client_id
+	 *
+	 * @return ClientData
+	 */
+	public static function getClientById($client_id)
+	{
+		$oClientData = self::model()->scopeClientId($client_id)->find();
+
+		return $oClientData;
+
+	}
+
+	/**
 	 * @param string  $sCode
 	 * @param integer $client_id
 	 *
