@@ -3,6 +3,12 @@ Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainContr
 Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
 Route::post('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
+Route::get('notices', array(
+	'before' => 'testRole:messageSender',
+	'as' => 'notices',
+	'uses' => 'App\Controllers\Site\NoticesController@notices')
+);
+
 Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
 Route::post('registration', array(
 	'as'   => 'registration',
