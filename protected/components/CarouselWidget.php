@@ -20,7 +20,7 @@ class CarouselWidget extends CWidget
 				'label' => 'КРЕДДИтная линия',
 			),
 			array(
-				'image' => CHtml::encode('/static/img/kreddyline-carousel/banner3.png'),
+				'image' => CHtml::encode('/static/img/kreddyline-carousel/banner4.png'),
 				'label' => 'КРЕДДИтная линия',
 			),
 		);
