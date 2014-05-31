@@ -9,7 +9,7 @@ return array(
 
 	'connections' => array(
 
-		'qiwiGate' => array(
+		'ff-qiwi-gate' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'qiwi_gate',

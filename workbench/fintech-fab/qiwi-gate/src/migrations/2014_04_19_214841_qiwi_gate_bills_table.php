@@ -13,7 +13,7 @@ class QiwiGateBillsTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiGate')->create('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->create('merchants_bills', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('merchant_id');
 			$table->string('user');
@@ -34,7 +34,7 @@ class QiwiGateBillsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiGate')->drop('merchants_bills');
+		Schema::connection('ff-qiwi-gate')->drop('merchants_bills');
 	}
 
 }

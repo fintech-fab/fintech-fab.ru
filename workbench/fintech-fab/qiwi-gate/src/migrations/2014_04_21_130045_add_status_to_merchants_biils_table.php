@@ -13,7 +13,7 @@ class AddStatusToMerchantsBiilsTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->string('status', 50)->after('prv_name');
 		});
 	}
@@ -25,7 +25,7 @@ class AddStatusToMerchantsBiilsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->dropColumn('status');
 		});
 	}

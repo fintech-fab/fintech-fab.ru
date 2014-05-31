@@ -13,10 +13,10 @@ class ChangeTypeColumnLifetimeToTimestampe extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->dropColumn('lifetime');
 		});
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->timestamp('lifetime')->after('comment');
 		});
 	}
@@ -28,10 +28,10 @@ class ChangeTypeColumnLifetimeToTimestampe extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiShop')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-shop')->table('merchants_bills', function (Blueprint $table) {
 			$table->dropColumn('lifetime');
 		});
-		Schema::connection('qiwiShop')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-shop')->table('merchants_bills', function (Blueprint $table) {
 			$table->string('lifetime')->after('comment');
 		});
 	}

@@ -13,7 +13,7 @@ class QiwiGateRefundTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiGate')->create('bills_refund', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->create('bills_refund', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('bill_id');
 			$table->integer('refund_id');
@@ -30,7 +30,7 @@ class QiwiGateRefundTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiGate')->drop('bills_refund');
+		Schema::connection('ff-qiwi-gate')->drop('bills_refund');
 	}
 
 }

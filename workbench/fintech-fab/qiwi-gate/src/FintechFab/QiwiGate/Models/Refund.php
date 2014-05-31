@@ -32,7 +32,7 @@ class Refund extends Eloquent
 		'bill_id', 'refund_id', 'amount', 'status',
 	);
 	protected $table = 'bills_refund';
-	protected $connection = 'qiwiGate';
+	protected $connection = 'ff-qiwi-gate';
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|Bill

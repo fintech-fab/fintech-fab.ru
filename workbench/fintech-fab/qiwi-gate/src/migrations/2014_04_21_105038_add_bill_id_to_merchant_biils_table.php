@@ -13,7 +13,7 @@ class AddBillIdToMerchantBiilsTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->string('bill_id', 100)->after('merchant_id');
 		});
 	}
@@ -25,7 +25,7 @@ class AddBillIdToMerchantBiilsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->dropColumn('bill_id');
 		});
 	}

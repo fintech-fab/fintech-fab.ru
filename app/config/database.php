@@ -46,7 +46,7 @@ return array(
 
 	'connections' => array(
 
-		'qiwiGate' => array(
+		'qiwiGate'     => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'qiwi_gate',
@@ -57,7 +57,7 @@ return array(
 			'prefix'    => '',
 		),
 
-		'qiwiShop' => array(
+		'ff-qiwi-shop' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'qiwi_shop',
@@ -68,13 +68,13 @@ return array(
 			'prefix'    => '',
 		),
 
-		'sqlite'   => array(
+		'sqlite'       => array(
 			'driver'   => 'sqlite',
 			'database' => __DIR__ . '/../database/production.sqlite',
 			'prefix'   => '',
 		),
 
-		'mysql'    => array(
+		'mysql'        => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'dev',
@@ -85,7 +85,7 @@ return array(
 			'prefix'    => '',
 		),
 
-		'pgsql'    => array(
+		'pgsql'        => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
 			'database' => 'database',
@@ -96,7 +96,7 @@ return array(
 			'schema'   => 'public',
 		),
 
-		'sqlsrv'   => array(
+		'sqlsrv'       => array(
 			'driver'   => 'sqlsrv',
 			'host'     => 'localhost',
 			'database' => 'database',

@@ -13,10 +13,10 @@ class SetPaySourseToNullable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->dropColumn('pay_source');
 		});
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->string('pay_source')->after('lifetime')->nullable();
 		});
 	}
@@ -28,10 +28,10 @@ class SetPaySourseToNullable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->dropColumn('pay_source');
 		});
-		Schema::connection('qiwiGate')->table('merchants_bills', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-gate')->table('merchants_bills', function (Blueprint $table) {
 			$table->string('pay_source')->after('lifetime')->default('qw');;
 		});
 	}

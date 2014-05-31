@@ -18,7 +18,7 @@ class Merchant extends Eloquent
 {
 	protected $fillable = array('username', 'password', 'callback_url');
 	protected $table = 'merchants';
-	protected $connection = 'qiwiGate';
+	protected $connection = 'ff-qiwi-gate';
 
 	public function bill()
 	{

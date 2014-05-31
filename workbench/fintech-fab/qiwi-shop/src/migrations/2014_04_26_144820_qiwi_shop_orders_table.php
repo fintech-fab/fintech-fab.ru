@@ -13,7 +13,7 @@ class QiwiShopOrdersTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiShop')->create('orders', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-shop')->create('orders', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('user_id');
 			$table->string('item');
@@ -33,7 +33,7 @@ class QiwiShopOrdersTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiShop')->drop('orders');
+		Schema::connection('ff-qiwi-shop')->drop('orders');
 	}
 
 }

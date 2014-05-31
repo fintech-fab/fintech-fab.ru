@@ -42,7 +42,7 @@ class Bill extends Eloquent
 		'pay_source', 'prv_name', 'status'
 	);
 	protected $table = 'merchants_bills';
-	protected $connection = 'qiwiGate';
+	protected $connection = 'ff-qiwi-gate';
 
 	/**
 	 * Отдаёт счёт по id счёта и id магазина

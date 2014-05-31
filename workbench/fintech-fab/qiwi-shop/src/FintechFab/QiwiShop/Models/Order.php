@@ -43,7 +43,7 @@ class Order extends Eloquent
 		'user_id', 'item', 'sum', 'tel', 'comment', 'lifetime', 'status', 'idLastReturn'
 	);
 	protected $table = 'orders';
-	protected $connection = 'qiwiShop';
+	protected $connection = 'ff-qiwi-shop';
 
 	/**
 	 * @return PayReturn
@@ -55,6 +55,7 @@ class Order extends Eloquent
 
 	/**
 	 * Смена статуса заказа
+	 *
 	 * @param $newStatus
 	 */
 	public function changeStatus($newStatus)

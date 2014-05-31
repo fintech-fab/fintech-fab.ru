@@ -27,7 +27,7 @@ class PayReturn extends Eloquent
 		'order_id', 'sum', 'comment', 'status'
 	);
 	protected $table = 'orders_pay_return';
-	protected $connection = 'qiwiShop';
+	protected $connection = 'ff-qiwi-shop';
 
 	/**
 	 * @return Order

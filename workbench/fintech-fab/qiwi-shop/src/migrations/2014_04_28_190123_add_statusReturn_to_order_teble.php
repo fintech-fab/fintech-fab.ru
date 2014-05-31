@@ -13,7 +13,7 @@ class AddStatusReturnToOrderTeble extends Migration
 	 */
 	public function up()
 	{
-		Schema::connection('qiwiShop')->table('orders', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-shop')->table('orders', function (Blueprint $table) {
 			$table->string('statusReturn')->nullable()->after('status')->default(null);
 		});
 	}
@@ -25,7 +25,7 @@ class AddStatusReturnToOrderTeble extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('qiwiShop')->table('orders', function (Blueprint $table) {
+		Schema::connection('ff-qiwi-shop')->table('orders', function (Blueprint $table) {
 			$table->dropColumn('statusReturn');
 		});
 	}
