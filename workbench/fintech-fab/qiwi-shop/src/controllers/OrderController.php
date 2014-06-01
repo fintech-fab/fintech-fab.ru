@@ -17,7 +17,7 @@ use Validator;
 class OrderController extends BaseController
 {
 
-	public $layout = 'ff-qiwi-shop';
+	public $layout = 'qiwiShop';
 
 	//Передаём настройки в Gateway
 	public function __construct()
