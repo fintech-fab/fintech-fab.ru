@@ -9,7 +9,9 @@
 		"iron-io/iron_mq": "dev-master",
 		"fintech-fab/bank-emulator": "dev-master",
 		"fintech-fab/bank-emulator-sdk": "dev-master",
-		"fintech-fab/qiwi-sdk": "dev-master"
+		"fintech-fab/qiwi-sdk": "dev-master",
+		"fintech-fab/qiwi-shop": "dev-master",
+		"fintech-fab/qiwi-gate": "dev-master"
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "1.*",
