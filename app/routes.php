@@ -3,32 +3,22 @@ Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainContr
 Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
 Route::post('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
-Route::post(
-	'auth',
-	array(
-		'before' => 'referrer',
-		'as'     => 'auth',
-		'uses'   => 'App\Controllers\Site\AuthController@postAuth'
-	)
+Route::get('notices', array(
+	'before' => 'testRole:messageSender',
+	'as' => 'notices',
+	'uses' => 'App\Controllers\Site\NoticesController@notices')
 );
 
-Route::post(
-	'registration',
-	array(
-		'before' => 'referrer',
-		'as'     => 'registration',
-		'uses'   => 'App\Controllers\Site\AuthController@postRegistration'
-	)
-);
-
-Route::get(
-	'registration',
-	array(
-		'before' => 'guest|referrer',
-		'as'     => 'registration',
-		'uses'   => 'App\Controllers\Site\AuthController@registration'
-	)
-);
+Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
+Route::post('registration', array(
+	'as'   => 'registration',
+	'uses' => 'App\Controllers\Site\AuthController@postRegistration'
+));
+Route::get('registration', array(
+	'before' => 'guest',
+	'as'     => 'registration',
+	'uses'   => 'App\Controllers\Site\AuthController@registration'
+));
 
 Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\AuthController@logout'));
 
@@ -36,12 +26,14 @@ Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
 Route::get('admin', array(
-	'before' => 'auth|roleAdmin',
+	//'before' => 'auth|roleAdmin',
+	'before' => 'testRole:admin',
 	'as'     => 'admin',
 	'uses'   => 'App\Controllers\User\UserProfileController@showAdmin'
 ));
 
 Route::get('TableForAdmin', array(
+	'before' => 'testRole:admin', //Добавлено
 	'as'   => 'WorkAdmin',
 	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
 ));

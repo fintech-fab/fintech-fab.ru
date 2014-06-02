@@ -14,6 +14,7 @@
 
 use FintechFab\Models\User;
 
+
 App::before(function ($request) {
 	//
 });
@@ -104,6 +105,15 @@ Route::filter('roleAdmin', function () {
 		}
 	}
 	if (!$res) {
+		return Redirect::to('profile');
+	}
+});
+
+Route::filter('testRole', function ($route, $request, $value = '') {
+	if (Auth::guest()) {
+		return Redirect::guest('registration');
+	}
+	if(! Auth::user()->isCompetent($value)) {
 		return Redirect::to('profile');
 	}
 });

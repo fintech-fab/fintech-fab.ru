@@ -69,3 +69,12 @@
 #btnRoles, #btnBills {
 	width: 200px;
 }
+
+/*Кнопки постраничной навигации для таблицы пользователей*/
+#UserPages   {
+	list-style: none;
+}
+#UserPages  li {
+	display: inline-block;
+	margin-left: 4px;
+}
