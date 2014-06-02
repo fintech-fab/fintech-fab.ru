@@ -26,12 +26,15 @@ Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
 Route::get('admin', array(
-	'before' => 'auth|roleAdmin',
+	//'before' => 'auth|roleAdmin',
+	'before' => 'testRole:admin',
 	'as'     => 'admin',
 	'uses'   => 'App\Controllers\User\UserProfileController@showAdmin'
 ));
 
 Route::get('TableForAdmin', array(
+	'before' => 'testRole:admin',
+//Route::get('TableForAdmin', array(
 	'as'   => 'WorkAdmin',
 	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
 ));
