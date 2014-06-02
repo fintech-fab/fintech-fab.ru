@@ -437,8 +437,8 @@ class FormController extends Controller
 	 * Страница поздравления клиента
 	 *
 	 *
-	 * @param $sTemplateName Имя шаблона для рендеринга
-	 * @param $sRedirectUrl Страница на которую будет перенаправлен пользователь
+	 * @param $sTemplateName string Имя шаблона для рендеринга
+	 * @param $sRedirectUrl  string Страница на которую будет перенаправлен пользователь
 	 */
 	private function success($sTemplateName, $sRedirectUrl)
 	{

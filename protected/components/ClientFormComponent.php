@@ -131,7 +131,7 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::FAST_REG     => array(
-			'max' => 4,
+			'max'     => 4,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -270,7 +270,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model' => 'ClientKreddyLineSelectProductForm',
+				'model'            => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -279,7 +279,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/pay',
-				'model' => 'ClientKreddyLineSelectPayTypeForm',
+				'model'            => 'ClientKreddyLineSelectPayTypeForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -288,7 +288,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/channel',
-				'model' => 'ClientKreddyLineSelectChannelForm',
+				'model'            => 'ClientKreddyLineSelectChannelForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -297,7 +297,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/submit',
-				'model' => 'ClientKreddyLineRegForm',
+				'model'            => 'ClientKreddyLineRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -377,7 +377,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model' => 'ClientKreddyLineSelectProductForm',
+				'model'            => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -821,7 +821,7 @@ class ClientFormComponent
 		// если номер в сессии (форма) не равен номеру, на который уже отправили СМС (если отправили)
 		if (!$bSessionAndSentPhonesEquals) {
 			// генерируем Code
-			$sSmsCode = $this->generateSMSCode(SiteParams::C_SMS_CODE_LENGTH);
+			$sSmsCode = $this->generateCode(SiteParams::C_SMS_CODE_LENGTH);
 			//отправляем СМС
 			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 			//отправляем СМС через API
@@ -832,7 +832,7 @@ class ClientFormComponent
 		$bEmailSentOk = true;
 		// если адрес в сессии (форма) не равен адресу, на который уже отправили письмо (если отправили)
 		if (!$bSessionAndSentEmailsEquals) {
-			$sEmailCode = $this->generateSMSCode(SiteParams::C_EMAIL_CODE_LENGTH);
+			$sEmailCode = $this->generateCode(SiteParams::C_EMAIL_CODE_LENGTH);
 			$bEmailSentOk = Yii::app()->adminKreddyApi->sendEmailCode($sEmail, $sEmailCode);
 			$aClientForm['email_code'] = $sEmailCode;
 		}
@@ -1608,7 +1608,7 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	private function generateSMSCode($iLength = SiteParams::C_SMS_CODE_LENGTH)
+	public function generateCode($iLength = SiteParams::C_SMS_CODE_LENGTH)
 	{
 		// генерация рандомного кода
 		list($usec, $sec) = explode(' ', microtime());
