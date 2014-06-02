@@ -3,7 +3,7 @@
 namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
-use FintechFab\Components\Role;
+//use FintechFab\Components\Role; // Удалить файл. Он нигде больше не используется, и есть другой класс с тем же названием, в каталоге Models.
 use FintechFab\Models\User;
 use Input;
 use Illuminate\Support\Facades\DB;
@@ -35,8 +35,10 @@ class AdminController extends BaseController
 		$users = DB::select($sql, array( ( ($curPage-1)*$rowsOnPage), $rowsOnPage));
 
 		$x = null;
+		$countRows = count($users);
+		//$count = User::all()->count();
 		//if (!$count) {
-		if (count($users) == 0) {
+		if ($countRows == 0) {
 			$x = "В Базе данных еще нет пользователей";
 		} else {
 			//$users = User::all();
@@ -57,8 +59,7 @@ class AdminController extends BaseController
 			}
 		}
 		$y['pageNum'] = $curPage;
-		$count = User::all()->count();
-		$y['pageMax'] = intval(ceil($count/$rowsOnPage));
+		$y['pageMax'] = intval(ceil($countRows/$rowsOnPage));
 		$y['userRoles'] = $x;
 
 		return $y;

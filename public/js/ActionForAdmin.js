@@ -58,7 +58,6 @@ $(document).ready(function () {
 
 				$("input[type=checkbox]").click(function (event) {
 					var tr = $(event.target).closest("tr");
-					//var userN = tr.prevAll().length;
 					var userN = tr.children("td:first").html();
 					var roleN = this.value;
 					var val = this.checked;

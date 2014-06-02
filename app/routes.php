@@ -33,8 +33,7 @@ Route::get('admin', array(
 ));
 
 Route::get('TableForAdmin', array(
-	'before' => 'testRole:admin',
-//Route::get('TableForAdmin', array(
+	'before' => 'testRole:admin', //Добавлено
 	'as'   => 'WorkAdmin',
 	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
 ));
