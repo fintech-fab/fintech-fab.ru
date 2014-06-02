@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
  *
  * @package App\Controllers\User
  *
- * @method select
  */
 class AdminController extends BaseController
 {

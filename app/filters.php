@@ -118,9 +118,9 @@ Route::filter('roleAdmin', function () {
 });
 
 Route::filter('testRole', function ($route, $request, $value = '') {
-	if (Auth::guest()) {
-		return Redirect::guest('registration');
-	}
+	//if (Auth::guest()) {
+	//	return Redirect::guest('registration');
+	//}
 	if(! Auth::user()->isCompetent($value)) {
 		return Redirect::to('profile');
 	}

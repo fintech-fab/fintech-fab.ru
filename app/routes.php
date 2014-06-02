@@ -4,9 +4,14 @@ Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site
 Route::post('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
 Route::get('notices', array(
-	'before' => 'testRole:messageSender',
-	'as' => 'notices',
-	'uses' => 'App\Controllers\Site\NoticesController@notices')
+		'before' => 'auth|testRole:messageSender',
+		'as' => 'notices',
+		'uses' => 'App\Controllers\Site\NoticesController@notices')
+);
+Route::post('notices', array(
+		'before' => 'auth|testRole:messageSender',
+		'as' => 'notices',
+		'uses' => 'App\Controllers\Site\NoticesController@sendNotice')
 );
 
 Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
@@ -32,7 +37,7 @@ Route::get('admin', array(
 ));
 
 Route::get('TableForAdmin', array(
-	'before' => 'testRole:admin', //Добавлено
+	'before' => 'auth|testRole:admin', //Добавлено
 	'as'   => 'WorkAdmin',
 	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
 ));

@@ -11,6 +11,7 @@ class MailSender
 {
 	private $to;
 	private $name;
+	private $subject;
 
 	/**
 	 *
@@ -49,12 +50,34 @@ class MailSender
 		//return (0 == $cntFails);
 		return (true);
 	}
+	/**
+	 * @param array $data
+	 * $data['baseMessage']
+	 * $data['themeName']
+	 * $data['comment']
+	 *
+	 * @return bool
+	 */
+	public function doNoticeTheme(array $data)
+	{
+		$this->initTo($data);
+
+		Mail::send('emails.themes', $data, function (Message $message) {
+			$message->to($this->to)->subject($this->subject);
+		});
+
+		$cntFails = count(Mail::failures());
+		return (0 == $cntFails);
+	}
 
 
 	/**
 	 *
 	 * @param      $data
 	 * @param bool $defaultTo
+	 * $data['to']
+	 * $data['toName']
+	 * $data['subject']
 	 *
 	 * @throws Exception
 	 */
@@ -70,9 +93,12 @@ class MailSender
 			}
 		}
 		$this->to = $data['to'];
-		$this->name = empty($data['name'])
+		$this->name = empty($data['toName'])
 			? $this->getNameFromTo()
-			: $data['name'];
+			: $data['toName'];
+		$this->subject = isset($data['subject'])
+			? $data['subject']
+			: "";
 
 	}
 	/**

@@ -1,6 +1,12 @@
+<?php
+/**
+ * @var array $themes
+ * @var array $users
+ */
+?>
 <div class="jumbotron">
 	<h2>Отправка сообщений</h2>
-
+<pre><?php print_r($subscribers); ?></pre>
 
 </div>
 
@@ -8,23 +14,41 @@
 
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab1" data-toggle="tab">Для кого</a>
+		<a href="#tab1" data-toggle="tab">Темы сообщений</a>
+	</li>
+	<li>
+		<a href="#tab2" data-toggle="tab">Подписчики</a>
+	</li>
+	<li>
+		<a href="#tab3" data-toggle="tab">Новая тема</a>
 	</li>
 </ul>
 
-
+	<?=
+	Form::open(array(
+		'action' => 'notices',
+		'class'  => 'form-horizontal',
+		'role'   => 'form',
+		'method' => 'post',
+	)); ?>
 <div class="tab-content">
-	<div class="tab-pane active" id="tab1">
+		<div class="tab-pane active" id="tab1">
 
 		<div class="row">
-			<div class="pull-right col-xs-5">
-				<img src="http://fintech-lab.com/images/information_items_128.jpeg" class="img-thumbnail">
-			</div>
+			<!--<div class="pull-right col-xs-5">
+				<div id="themeComment"></div>
+			</div>-->
 
 			<div class="col-xs-7">
+				<table class="table table-striped">
+					<?php foreach($themes as $theme): ?>
+						<tr>
+							<td> <label><input type="radio" name="themes" value=<?=$theme->id;?>>&nbsp;<?=$theme->name;?></label> </td>
+							<td><?=$theme->comment;?></td>
 
-
-
+						</tr>
+					<?php endforeach; ?>
+				</table>
 			</div>
 		</div>
 
@@ -33,53 +57,33 @@
 	<div class="tab-pane" id="tab2">
 
 		<div class="row">
-
-			<div class="pull-right col-xs-5">
-				<img src="https://irs2.4sqi.net/img/general/width960/6648164_jV8TbAARapLx3x2hUtDtvK3UK5JSN7omQHhLhFHwxZg.jpg" class="img-thumbnail">
-				<img src="/assets/classroom.01.jpg" class="img-thumbnail">
-			</div>
-
 			<div class="col-xs-7">
 
+				<table class="table table-striped">
+					<?php foreach($users as $user): ?>
+						<tr>
+							<td><input type='checkbox' name="subscriber<?=$user->id;?>"  value=<?=$user->id;?> ></td><td><?=trim($user->first_name).'  '.$user->last_name;?></td><td></td>
+						</tr>
 
-
+					<?php endforeach; ?>
+				</table>
 			</div>
+
+
 		</div>
 
 	</div>
 	<div class="tab-pane" id="tab3">
 
-		<div class="row">
-
-			<div class="pull-right col-xs-5">
-				<img src="https://irs0.4sqi.net/img/general/width960/6648164_7Amj1qKyTFSUqXnhCn2lXzCFt5IcIhjzNI3EQHtdoAQ.jpg" class="img-thumbnail">
-			</div>
-
-			<div class="col-xs-7">
 
 
-
-			</div>
-		</div>
-
-	</div>
-	<div class="tab-pane" id="tab4">
-
-
-		<?=
-		Form::open(array(
-			'action' => 'vanguard',
-			'class'  => 'form-horizontal',
-			'role'   => 'form',
-			'method' => 'post',
-		)); ?>
 		<div class="form-group">
-			<label for="inputName" class="col-sm-3 control-label">Как звать-величать</label>
+			<label for="inputName" class="col-sm-3 control-label">Название</label>
 
 			<div class="col-sm-8">
 				<?=
 				Form::input('text', 'name', '', array(
-					'placeholder' => 'Имя. Лучше с фамилией.',
+					'placeholder' => 'Название темы.',
 					'class'       => 'form-control',
 					'id'          => 'inputName',
 					'required'    => 'required',
@@ -88,12 +92,12 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputAbout" class="col-sm-3 control-label">О себе</label>
+			<label for="inputAbout" class="col-sm-3 control-label">Сообщение</label>
 
 			<div class="col-sm-8">
 				<?=
-				Form::textarea('about', '', array(
-					'placeholder' => 'Расскажите про себя в свободной форме, но обязательно на тему сотрудничества',
+				Form::textarea('message', '', array(
+					'placeholder' => 'Текст сообщения',
 					'class'       => 'form-control',
 					'id'          => 'inputAbout',
 					'required'    => 'required',
@@ -103,16 +107,15 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputEmail" class="col-sm-3 control-label">Email для получения ответа</label>
+			<label for="comment" class="col-sm-3 control-label">Комментарий</label>
 
 			<div class="col-sm-8">
 
 				<?=
-				Form::input('email', 'email', '', array(
-					'placeholder' => 'your@mail.com',
+				Form::input('comment', 'comment', '', array(
+					'placeholder' => 'Комментарий к теме',
 					'class'       => 'form-control',
-					'id'          => 'inputEmail',
-					'required'    => 'required',
+					'id'          => 'inputComment'
 				));
 				?>
 			</div>
@@ -127,11 +130,10 @@
 				?>
 			</div>
 		</div>
-		<?= Form::close(); ?>
 	</div>
 </div>
+	<?= Form::close(); ?>
 
-	<pre class="pull-right"><small><?= "&lt;?php echo " ?>"для ленивых - главный пейдж
-			<a href="/">здесь</a>"<?= " ?>" ?></small></pre>
+
 
 </div>
