@@ -18,6 +18,7 @@ return [
 		//100500 => 'FintechFab\QiwiGate\QiwiGateServiceProvider',
 		//100501 => 'FintechFab\QiwiShop\QiwiShopServiceProvider',
 		//100502 => 'FintechFab\BankEmulator\BankEmulatorServiceProvider',
+		//100503 => 'FintechFab\MoneyTransferEmulator\MoneyTransferEmulatorServiceProvider',
 	],
 
 	'logglykey' => '',
