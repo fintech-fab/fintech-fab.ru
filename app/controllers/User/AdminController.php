@@ -8,9 +8,20 @@ use FintechFab\Models\User;
 use Input;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class AdminController
+ *
+ * @package App\Controllers\User
+ *
+ * @method select
+ */
 class AdminController extends BaseController
 {
 
+	/**
+	 *
+	 * @return mixed
+	 */
 	public function TableForRoles()
 	{
 		$curPage = 1;
@@ -34,11 +45,9 @@ class AdminController extends BaseController
 
 		$users = DB::select($sql, array( ( ($curPage-1)*$rowsOnPage), $rowsOnPage));
 
-		$x = null;
-		$countRows = count($users);
-		//$count = User::all()->count();
-		//if (!$count) {
-		if ($countRows == 0) {
+		/*$x = null;
+		$count = User::all()->count();
+		if (!$count) {
 			$x = "В Базе данных еще нет пользователей";
 		} else {
 			//$users = User::all();
@@ -47,24 +56,29 @@ class AdminController extends BaseController
 					'id'         => $user->id,
 					'first_name' => $user->first_name,
 					'last_name'  => $user->last_name,
-					//'admin'      => Role::userRole((int)$user->id, "admin"),
-					//'moderator'  => Role::userRole((int)$user->id, "moderator"),
-					//'user'       => Role::userRole((int)$user->id, "user"),
-					'admin'      => $user->admin,
-					'moderator'  => $user->moderator,
-					'user'       => $user->user,
-					'messageSender'       => $user->messageSender,
-					'messageSubscriber'   => $user->messageSubscriber,
+					'admin'      => Role::userRole((int)$user->id, "admin"),
+					'moderator'  => Role::userRole((int)$user->id, "moderator"),
+					'user'       => Role::userRole((int)$user->id, "user"),
 				);
 			}
-		}
+		}*/
+		//$y['userRoles'] = $x;
+
+		$countRows = count($users);
 		$y['pageNum'] = $curPage;
 		$y['pageMax'] = intval(ceil($countRows/$rowsOnPage));
-		$y['userRoles'] = $x;
+		if ($countRows == 0) {
+			$y['userRoles'] = "В Базе данных еще нет пользователей";
+		} else	{
+			$y['userRoles'] = $users;
+		}
 
 		return $y;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function changeRole()
 	{
 		$userN = Input::get('userN');

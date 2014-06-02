@@ -18,8 +18,7 @@ $(document).ready(function () {
 
 
 	/**
-	 *
-	 * @param integer $pageNum
+	 * Получение таблицы ролей
 	 */
 	function getRoleUsersTable($pageNum)
 	{
@@ -94,8 +93,6 @@ $(document).ready(function () {
 	/**
 	 * Navigation of pages
 	 *
-	 * @param integer curPage
-	 * @param integer maxPage
 	 */
 	function pageNavigation(curPage, maxPage)
 	{

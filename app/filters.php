@@ -13,7 +13,7 @@
 
 
 use FintechFab\Models\User;
-
+use Illuminate\Support\Facades\DB;
 
 App::before(function ($request) {
 	//
@@ -96,7 +96,7 @@ Route::filter('csrf', function () {
 });
 
 Route::filter('roleAdmin', function () {
-	$user = User::find(Auth::user()->id);
+/*	$user = User::find(Auth::user()->id);
 	$res = false;
 	foreach ($user->roles as $role) {
 		if ($role->role == "admin") {
@@ -104,7 +104,15 @@ Route::filter('roleAdmin', function () {
 			break;
 		}
 	}
+
 	if (!$res) {
+*/
+	$res = DB::select(
+		"SELECT count(role_id) AS cntRole FROM  role_user WHERE role_id = 1 and user_id = ?"
+		, array(Auth::user()->id)
+		)[0];
+
+	if ($res->cntRole != 1) {
 		return Redirect::to('profile');
 	}
 });
