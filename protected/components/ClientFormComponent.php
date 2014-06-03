@@ -875,6 +875,14 @@ class ClientFormComponent
 			// ставим флаг успешной отправки
 			$this->setFlagCodesSent(true);
 
+			// сохраняем время успешной отправки
+			if ($bSmsSend) {
+				$this->setCodeSentTime('sms', SiteParams::getTime());
+			}
+			if ($bEmailSend) {
+				$this->setCodeSentTime('email', SiteParams::getTime());
+			}
+
 			// возвращаем true
 			return true;
 		}
@@ -898,6 +906,25 @@ class ClientFormComponent
 
 		$oClientSmsForm = new ClientConfirmPhoneAndEmailForm();
 		$oClientSmsForm->setAttributes($aPostData);
+
+		// получим время отправки кодов
+		$iSmsSentTime = $this->getCodeSentTime('sms');
+		$iEmailSentTime = $this->getCodeSentTime('email');
+
+		// получим время, прошедшее с момента отправки
+		$iSmsTime = SiteParams::getTime() - $iSmsSentTime;
+		$iEmailTime = SiteParams::getTime() - $iEmailSentTime;
+
+
+		// если время больше, чем 1 час, значит, время действия кодов истекло
+		$bSmsTimeExpire = $iSmsTime > SiteParams::CTIME_HOUR;
+		$bEmailTimeExpire = $iEmailTime > SiteParams::CTIME_HOUR;
+		if ($bSmsTimeExpire || $bEmailTimeExpire) {
+			$oCheckResult->bSmsError = $bSmsTimeExpire;
+			$oCheckResult->bEmailError = $bEmailTimeExpire;
+
+			return Dictionaries::C_ERR_CODE_TIME_EXPIRED;
+		}
 
 		// если число попыток ввода кода меньше максимально допустимых
 		if (!$this->isSmsCodeTriesExceed()) {
@@ -939,6 +966,9 @@ class ClientFormComponent
 				}
 			}
 		} else {
+			$oCheckResult->bEmailError = true;
+			$oCheckResult->bSmsError = true;
+
 			// возвращаем сообщение о превышении числа попыток
 			return Dictionaries::C_ERR_CODE_TRIES;
 		}
@@ -1976,6 +2006,25 @@ class ClientFormComponent
 	public function getRegisterComplete()
 	{
 		return Yii::app()->session['register_complete'];
+	}
+
+	/**
+	 * @param $sName
+	 * @param $iTime
+	 */
+	public function setCodeSentTime($sName, $iTime)
+	{
+		Yii::app()->session[$sName . 'CodeSentTime'] = $iTime;
+	}
+
+	/**
+	 * @param $sName
+	 *
+	 * @return mixed
+	 */
+	public function getCodeSentTime($sName)
+	{
+		return Yii::app()->session[$sName . 'CodeSentTime'];
 	}
 
 }
