@@ -11,6 +11,58 @@ class FormController extends Controller
 	public $showTopPageWidget = false;
 
 
+	public function actionResendSms()
+	{
+		$iResendTime = $this->getResendTime('sms');
+		$sResendText = 'Повторно запросить SMS с кодом можно через:';
+
+		if ($iResendTime <= 0) {
+			$mResendResult = Yii::app()->clientForm->sendCodes(true, false, true);
+			$this->setResendTime('sms', SiteParams::getTime());
+			if ($mResendResult === true) {
+				$sResendText = 'Код успешно отправлен! ' . $sResendText;
+			} else {
+				$sResendText = $mResendResult . ' ' . $sResendText;;
+			}
+		}
+
+		$this->widget('application.modules.account.components.ResendCodeWidget',
+			array(
+				'sUrl'        => '/form/resendSms',
+				'sId'         => 'Sms',
+				'sResendText' => $sResendText,
+				'iTime'       => $this->getResendTime('sms'),
+			)
+		);
+		Yii::app()->end();
+	}
+
+	public function actionResendEmail()
+	{
+		$iResendTime = $this->getResendTime('email');
+		$sResendText = 'Повторно запросить SMS с кодом можно через:';
+
+		if ($iResendTime <= 0) {
+			$mResendResult = Yii::app()->clientForm->sendCodes(false, true, true);
+			$this->setResendTime('email', SiteParams::getTime());
+			if ($mResendResult === true) {
+				$sResendText = 'Код успешно отправлен! ' . $sResendText;
+			} else {
+				$sResendText = $mResendResult . ' ' . $sResendText;;
+			}
+		}
+
+		$this->widget('application.modules.account.components.ResendCodeWidget',
+			array(
+				'sUrl'        => '/form/resendEmail',
+				'sId'         => 'Email',
+				'sResendText' => $sResendText,
+				'iTime'       => $this->getResendTime('email'),
+			)
+		);
+		Yii::app()->end();
+	}
+
 	public function actionIndex()
 	{
 		$this->index();
@@ -445,6 +497,37 @@ class FormController extends Controller
 		Yii::app()->clientscript->scriptMap['jquery.yiiactiveform.min.js'] = false;
 	}
 
+	/**
+	 * @param $sName
+	 *
+	 * @return int
+	 */
+	public function getResendTime($sName)
+	{
+		$iCurTime = time();
+
+		if (empty(Yii::app()->session[$sName . 'ResendTime'])) {
+			$iLeftTime = $iCurTime;
+			$this->setResendTime($sName, $iLeftTime);
+		} else {
+			$iLeftTime = Yii::app()->session[$sName . 'ResendTime'];
+		}
+
+		$iLeftTime = $iCurTime - $iLeftTime;
+		$iLeftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $iLeftTime;
+
+
+		return $iLeftTime;
+	}
+
+	/**
+	 * @param $sName
+	 * @param $iTime
+	 */
+	public function setResendTime($sName, $iTime)
+	{
+		Yii::app()->session[$sName . 'ResendTime'] = $iTime;
+	}
 
 	// Uncomment the following methods and override them if needed
 	/*

@@ -1030,7 +1030,7 @@ class DefaultController extends Controller
 					}
 				} else {
 					//устанвливаем сообщение об ошибке
-					$oForm->addError('smsCode', Dictionaries::C_ERR_SMS_TRIES);
+					$oForm->addError('smsCode', Dictionaries::C_ERR_CODE_TRIES);
 
 				}
 			} else {
@@ -1047,7 +1047,7 @@ class DefaultController extends Controller
 			//если попытки ввода кода закончились
 			if ($bTriesExceed) {
 				//устанвливаем сообщение об ошибке
-				$oForm->addError('smsCode', Dictionaries::C_ERR_SMS_TRIES);
+				$oForm->addError('smsCode', Dictionaries::C_ERR_CODE_TRIES);
 			}
 		}
 		$this->render('subscription/index', array('sView' => 'do_subscribe_check_sms_code', 'oModel' => $oForm));
@@ -1188,7 +1188,7 @@ class DefaultController extends Controller
 				}
 			} else {
 				//устанвливаем сообщение об ошибке
-				$oForm->addError('smsCode', Dictionaries::C_ERR_SMS_TRIES);
+				$oForm->addError('smsCode', Dictionaries::C_ERR_CODE_TRIES);
 			}
 
 			if (!Yii::app()->adminKreddyApi->getIsNotAllowed() && !Yii::app()->adminKreddyApi->getIsError()) {

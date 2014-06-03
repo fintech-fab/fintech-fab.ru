@@ -782,9 +782,14 @@ class ClientFormComponent
 	/**
 	 * Делает запрос на отправку SMS и возвращает true либо текст ошибки
 	 *
+	 * @param bool $bSmsSend
+	 * @param bool $bEmailSend
+	 *
+	 * @param bool $bResend
+	 *
 	 * @return bool|string
 	 */
-	public function sendCodes()
+	public function sendCodes($bSmsSend = true, $bEmailSend = true, $bResend = false)
 	{
 		// если с данного ip нельзя запросить SMS, выдаём ошибку
 		if (!Yii::app()->antiBot->checkSmsRequest()) {
@@ -797,9 +802,9 @@ class ClientFormComponent
 		$bSessionAndSentPhonesEquals = $this->compareSessionAndSentPhones();
 		$bSessionAndSentEmailsEquals = $this->compareSessionAndSentEmails();
 
-		// если коды уже есть в базе, и номер телефона и email не менялись в форме,ставим флаг и вовзращаем true
-		if (
-			!empty($aClientForm['sms_code'])
+		// если не затребована переотправка, и если коды уже есть в базе, и номер телефона и email не менялись в форме,ставим флаг и вовзращаем true
+		if (!$bResend
+			&& !empty($aClientForm['sms_code'])
 			&& $bSessionAndSentPhonesEquals
 			&& !empty($aClientForm['email_code'])
 			&& $bSessionAndSentEmailsEquals
@@ -814,14 +819,24 @@ class ClientFormComponent
 
 		// если в сессии нет телефона, ошибка - некуда отправлять
 		if (empty($sPhone) || empty($sEmail)) {
-			return Dictionaries::C_ERR_SMS_CANT_SEND;
+			return Dictionaries::C_ERR_CODE_CANT_SEND;
 		}
 
 		$bSmsSentOk = true;
 		// если номер в сессии (форма) не равен номеру, на который уже отправили СМС (если отправили)
-		if (!$bSessionAndSentPhonesEquals) {
-			// генерируем Code
-			$sSmsCode = $this->generateSMSCode(SiteParams::C_SMS_CODE_LENGTH);
+		// или требуется переотправка
+		// и при этом запрошена отправка SMS
+		if (
+			(!$bSessionAndSentPhonesEquals || $bResend)
+			&& $bSmsSend
+		) {
+			$sSmsCode = $aClientForm['sms_code']; // запишем старый код из БД
+			// старый код используем в случае переотправки, чтобы не получилось так, что клиенту дошла старая СМС с кодом
+			// и клиент пробует его ввести, а уже запрошен новый код - и СМС с ним еще не пришла
+			// если не запрошена переотправка, то генерируем новый код
+			if (!$bResend) {
+				$sSmsCode = $this->generateSMSCode(SiteParams::C_SMS_CODE_LENGTH);
+			}
 			//отправляем СМС
 			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 			//отправляем СМС через API
@@ -831,8 +846,17 @@ class ClientFormComponent
 
 		$bEmailSentOk = true;
 		// если адрес в сессии (форма) не равен адресу, на который уже отправили письмо (если отправили)
-		if (!$bSessionAndSentEmailsEquals) {
-			$sEmailCode = $this->generateSMSCode(SiteParams::C_EMAIL_CODE_LENGTH);
+		if (
+			(!$bSessionAndSentEmailsEquals || $bResend)
+			&& $bEmailSend
+		) {
+			$sEmailCode = $aClientForm['email_code']; // запишем старый код из БД
+			// старый код используем в случае переотправки, чтобы не получилось так, что клиенту дошел старый e-mail с кодом
+			// и клиент пробует его ввести, а уже запрошен новый код - и e-mail с ним еще не пришел
+			// если не запрошена переотправка, то генерируем новый код
+			if (!$bResend) {
+				$sEmailCode = $this->generateSMSCode(SiteParams::C_EMAIL_CODE_LENGTH);
+			}
 			$bEmailSentOk = Yii::app()->adminKreddyApi->sendEmailCode($sEmail, $sEmailCode);
 			$aClientForm['email_code'] = $sEmailCode;
 		}
@@ -842,7 +866,6 @@ class ClientFormComponent
 			Yii::app()->antiBot->addSmsRequest();
 			$this->setSmsSentPhone($sPhone); //записываем, на какой номер было отправлено СМС
 			$this->setEmailSentAddress($sEmail); // записываем, на какой адрес было отправлено письмо
-
 
 			// если не удалось записать в БД - общая ошибка
 			if (!ClientData::saveClientDataById($aClientForm, $iClientId)) {
@@ -856,7 +879,7 @@ class ClientFormComponent
 			return true;
 		}
 
-		return Dictionaries::C_ERR_SMS_CANT_SEND;
+		return Dictionaries::C_ERR_CODE_CANT_SEND;
 	}
 
 
@@ -907,17 +930,17 @@ class ClientFormComponent
 				// если это была последняя попытка
 				if ($iSmsCountTries == SiteParams::MAX_SMSCODE_TRIES) {
 					// возвращаем сообщение о превышении числа попыток
-					return Dictionaries::C_ERR_SMS_TRIES;
+					return Dictionaries::C_ERR_CODE_TRIES;
 				} else {
 					// выводим сообщение - код неверен + сколько осталось попыток
 					$iTriesLeft = SiteParams::MAX_SMSCODE_TRIES - $iSmsCountTries;
 
-					return (Dictionaries::C_ERR_SMS_WRONG . ' ' . Dictionaries::C_ERR_TRIES_LEFT . $iTriesLeft);
+					return (Dictionaries::C_ERR_CODE_WRONG . ' ' . Dictionaries::C_ERR_TRIES_LEFT . $iTriesLeft);
 				}
 			}
 		} else {
 			// возвращаем сообщение о превышении числа попыток
-			return Dictionaries::C_ERR_SMS_TRIES;
+			return Dictionaries::C_ERR_CODE_TRIES;
 		}
 	}
 

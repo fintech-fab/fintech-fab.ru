@@ -35,13 +35,34 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 </div>
 
 
-<div class="clearfix"></div>    <label>Введите код из SMS:</label>
+<div class="clearfix"></div><label>Введите код из SMS:</label>
 <?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
 <?= $form->error($oClientCreateForm, 'sms_code'); ?>
+<?php
+$this->widget('application.modules.account.components.ResendCodeWidget',
+	array(
+		'sUrl'        => '/form/resendSms',
+		'sId'         => 'Sms',
+		'sResendText' => 'Повторно запросить SMS с кодом можно через:',
+		'iTime'       => $this->getResendTime('sms'),
+	)
+);
+?>
+<br />
 <div class="clearfix"></div>    <label>Введите код из электронного письма:</label>
 <?= $form->textField($oClientCreateForm, 'email_code', array('class' => 'span4')); ?>
 <?= $form->error($oClientCreateForm, 'email_code'); ?>
-
+<?php
+$this->widget('application.modules.account.components.ResendCodeWidget',
+	array(
+		'sUrl'        => '/form/resendEmail',
+		'sId'         => 'Email',
+		'sResendText' => 'Повторно запросить e-mail с кодом можно через:',
+		'iTime'       => $this->getResendTime('email'),
+	)
+);
+?>
+<br />
 <div class="clearfix"></div>
 <div class="span12">
 
