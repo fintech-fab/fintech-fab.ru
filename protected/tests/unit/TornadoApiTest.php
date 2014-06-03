@@ -93,12 +93,8 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'email_back_url' => 'https://kreddy.ru',
 		);
 
-		// соберем данные для проверки подписи
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
 		// генерируем подпись
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		$aRequest['sign'] = $sSign;
 
@@ -119,11 +115,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'token' => $sToken,
 		);
 
-		// соберем данные для проверки подписи
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		$aRequest['sign'] = $sSign;
 
@@ -150,10 +142,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'token'      => $sToken,
 		);
 
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		$aRequest['sign'] = $sSign;
 
@@ -178,10 +167,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'token'      => $sToken,
 		);
 
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		$aRequest['sign'] = $sSign;
 
@@ -224,12 +210,8 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 
 		);
 
-		// соберем данные для проверки подписи
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
 		// генерируем подпись
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		$aRequest['sign'] = $sSign;
 
@@ -268,12 +250,8 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 
 		);
 
-		// соберем данные для проверки подписи
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
 		// генерируем подпись
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		$aRequest['sign'] = $sSign;
 
@@ -322,12 +300,8 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 
 		);
 
-		// соберем данные для проверки подписи
-		ksort($aRequest);
-		$sData = implode('', $aRequest);
-
 		// генерируем подпись
-		$sSign = Yii::app()->tornadoApi->generateSign($sData);
+		$sSign = Yii::app()->tornadoApi->generateSign($aRequest);
 
 		// подменим данные
 		$aRequest['last_name'] = 'Иванов';

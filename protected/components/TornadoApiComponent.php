@@ -120,25 +120,30 @@ class TornadoApiComponent
 	}
 
 	/**
-	 * @param $sData
+	 * @param $aData
 	 * @param $sSign
 	 *
 	 * @return bool
 	 */
-	public function checkSign($sData, $sSign)
+	public function checkSign($aData, $sSign)
 	{
-		$sTempSign = $this->generateSign($sData);
+
+		$sTempSign = $this->generateSign($aData);
 
 		return $sSign == $sTempSign;
 	}
 
 	/**
-	 * @param $sData
+	 * @param $aData
 	 *
 	 * @return string
 	 */
-	public function generateSign($sData)
+	public function generateSign($aData)
 	{
+		// соберем данные для проверки подписи
+		ksort($aData);
+		$sData = implode('', $aData);
+
 		return sha1($sData . $this->sSecretKey);
 	}
 

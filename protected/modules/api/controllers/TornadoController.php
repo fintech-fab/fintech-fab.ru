@@ -43,12 +43,8 @@ class TornadoController extends Controller
 		$aClientRegisterForm = Yii::app()->tornadoApi->getClientPostData();
 		$sSign = Yii::app()->tornadoApi->getPostSign();
 
-		// соберем данные для проверки подписи
-		ksort($aClientRegisterForm);
-		$sData = implode('', $aClientRegisterForm);
-
 		// проверим подпись
-		if (!Yii::app()->tornadoApi->checkSign($sData, $sSign)) {
+		if (!Yii::app()->tornadoApi->checkSign($aClientRegisterForm, $sSign)) {
 			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_SIGN);
 
 			return;
@@ -123,23 +119,12 @@ class TornadoController extends Controller
 
 		$sSign = Yii::app()->tornadoApi->getPostSign();
 
-		// подготовим данные для проверки подписи
-		ksort($aClientCodesForm);
-		$sData = implode('', $aClientCodesForm);
-
-
 		// проверим подпись
-		if (!Yii::app()->tornadoApi->checkSign($sData, $sSign)) {
+		if (!Yii::app()->tornadoApi->checkSign($aClientCodesForm, $sSign)) {
 			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_SIGN);
 
 			return;
 		}
-
-		/**
-		 * получаем ID в виде int, если вдруг код расшифрован неверно, но приведение к int даст валидный результат,
-		 * то ничего страшного, дальше прежде чем что-то делать мы проверим коды по БД, и для неправильного ID они не
-		 * пройдут проверку
-		 */
 
 		$aTokenData = CryptArray::decrypt($aClientCodesForm['token']);
 
@@ -151,6 +136,11 @@ class TornadoController extends Controller
 			return;
 		}
 
+		/**
+		 * получаем ID в виде int, если вдруг код расшифрован неверно, но приведение к int даст валидный результат,
+		 * то ничего страшного, дальше прежде чем что-то делать мы проверим коды по БД, и для неправильного ID они не
+		 * пройдут проверку
+		 */
 		$iClientId = (int)$sClientId;
 		$iTimestamp = (int)$sTimestamp;
 
@@ -232,191 +222,20 @@ class TornadoController extends Controller
 		return;
 	}
 
+	/**
+	 * Повторная отправка СМС кода
+	 */
 	public function actionReSendSms()
 	{
-		$aResendCodesData = Yii::app()->tornadoApi->getResendCodesPostData();
-
-		$sSign = Yii::app()->tornadoApi->getPostSign();
-
-		// подготовим данные для проверки подписи
-		ksort($aResendCodesData);
-		$sData = implode('', $aResendCodesData);
-
-
-		// проверим подпись
-		if (!Yii::app()->tornadoApi->checkSign($sData, $sSign)) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_SIGN);
-
-			return;
-		}
-
-		$aTokenData = CryptArray::decrypt($aResendCodesData['token']);
-
-		try {
-			list($sClientId, $sTimestamp, $sSmsTimestamp, $sEmailTimestamp) = $aTokenData;
-		} catch (Exception $e) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
-
-			return;
-		}
-
-		$iClientId = (int)$sClientId;
-		$iTimestamp = (int)$sTimestamp;
-		$iSmsTimestamp = (int)$sSmsTimestamp;
-		$iEmailTimestamp = (int)$sEmailTimestamp;
-
-		// при правильно расшифрованном коде сравнение должно пройти успешно, т.к. это не строгое сравнение
-		if ($sClientId != $iClientId) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
-
-			return;
-		}
-
-		// время действия токена 1 час
-		if ($iTimestamp + SiteParams::CTIME_HOUR < SiteParams::getTime()) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_TOKEN_TIMEOUT);
-
-			return;
-		}
-
-		// если со времени отправки прошло менее 3 минут
-		$iSecondsToResend = ($iSmsTimestamp + 3 * 60) - SiteParams::getTime();
-
-		if ($iSecondsToResend > 0) {
-			$this->aResponse = array(
-				'code'              => TornadoApiComponent::RESPONSE_CODE_ERROR_RESEND,
-				'seconds_to_resend' => $iSecondsToResend, // секунд до возможности переотправки СМС
-			);
-
-			return;
-		}
-
-		// ищем в базе клиента
-		$oClient = ClientData::getClientById($iClientId);
-
-		if (!$oClient) {
-			$this->responseUnknownError();
-
-			return;
-		}
-
-
-		$sMessage = "Ваш код подтверждения: " . $oClient->sms_code;
-		// отправляем СМС через API
-		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($oClient->phone, $sMessage);
-
-		// проверим, вдруг что пошло не так, поругаемся ошибкой
-		if (!$bSmsSentOk) {
-			$this->responseUnknownError();
-
-			return;
-		}
-
-		$sToken = CryptArray::encrypt(
-			array(
-				'id'              => $iClientId,
-				'timestamp'       => SiteParams::getTime(),
-				'sms_timestamp'   => SiteParams::getTime(),
-				'email_timestamp' => $iEmailTimestamp, // время отправки e-mail оставим прежним, т.к его не переотправляли
-			)
-		);
-
-		$this->aResponse = array(
-			'code'  => TornadoApiComponent::RESPONSE_CODE_SUCCESS,
-			'token' => $sToken,
-		);
+		$this->resendCode();
 	}
 
+	/**
+	 * Повторная отправка e-mail кода
+	 */
 	public function actionReSendEmail()
 	{
-		$aResendCodesData = Yii::app()->tornadoApi->getResendCodesPostData();
-
-		$sSign = Yii::app()->tornadoApi->getPostSign();
-
-		// подготовим данные для проверки подписи
-		ksort($aResendCodesData);
-		$sData = implode('', $aResendCodesData);
-
-
-		// проверим подпись
-		if (!Yii::app()->tornadoApi->checkSign($sData, $sSign)) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_SIGN);
-
-			return;
-		}
-
-		$aTokenData = CryptArray::decrypt($aResendCodesData['token']);
-
-		try {
-			list($sClientId, $sTimestamp, $sSmsTimestamp, $sEmailTimestamp) = $aTokenData;
-		} catch (Exception $e) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
-
-			return;
-		}
-
-		$iClientId = (int)$sClientId;
-		$iTimestamp = (int)$sTimestamp;
-		$iSmsTimestamp = (int)$sSmsTimestamp;
-		$iEmailTimestamp = (int)$sEmailTimestamp;
-
-		// при правильно расшифрованном коде сравнение должно пройти успешно, т.к. это не строгое сравнение
-		if ($sClientId != $iClientId) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
-
-			return;
-		}
-
-		// время действия токена 1 час
-		if ($iTimestamp + SiteParams::CTIME_HOUR < SiteParams::getTime()) {
-			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_TOKEN_TIMEOUT);
-
-			return;
-		}
-
-		// если со времени отправки прошло менее 3 минут
-		$iSecondsToResend = ($iEmailTimestamp + 3 * 60) - SiteParams::getTime();
-		if ($iSecondsToResend > 0) {
-			$this->aResponse = array(
-				'code'              => TornadoApiComponent::RESPONSE_CODE_ERROR_RESEND,
-				'seconds_to_resend' => $iSecondsToResend, // секунд до возможности переотправки СМС
-			);
-
-			return;
-		}
-
-		// ищем в базе клиента
-		$oClient = ClientData::getClientById($iClientId);
-
-		if (!$oClient) {
-			$this->responseUnknownError();
-
-			return;
-		}
-
-		// отправляем СМС через API
-		$bEmailSentOk = Yii::app()->adminKreddyApi->sendEmailCode($oClient->email, $oClient->email_code);
-
-		// проверим, вдруг что пошло не так, поругаемся ошибкой
-		if (!$bEmailSentOk) {
-			$this->responseUnknownError();
-
-			return;
-		}
-
-		$sToken = CryptArray::encrypt(
-			array(
-				'id'              => $iClientId,
-				'timestamp'       => SiteParams::getTime(),
-				'sms_timestamp'   => $iSmsTimestamp, // время отправки sms оставим прежним, т.к его не переотправляли
-				'email_timestamp' => SiteParams::getTime(),
-			)
-		);
-
-		$this->aResponse = array(
-			'code'  => TornadoApiComponent::RESPONSE_CODE_SUCCESS,
-			'token' => $sToken,
-		);
+		$this->resendCode(true);
 	}
 
 	public function actionError()
@@ -433,6 +252,124 @@ class TornadoController extends Controller
 		);
 
 		return;
+	}
+
+	/**
+	 * Функция повторной посылки кодов, по-умолчанию СМС, при параметре true - email
+	 *
+	 * @param bool $bResendEmail
+	 */
+	protected function resendCode($bResendEmail = false)
+	{
+		$aResendCodesData = Yii::app()->tornadoApi->getResendCodesPostData();
+
+		$sSign = Yii::app()->tornadoApi->getPostSign();
+
+		// проверим подпись
+		if (!Yii::app()->tornadoApi->checkSign($aResendCodesData, $sSign)) {
+			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_SIGN);
+
+			return;
+		}
+
+		$aTokenData = CryptArray::decrypt($aResendCodesData['token']);
+
+		try {
+			list($sClientId, $sTimestamp, $sSmsTimestamp, $sEmailTimestamp) = $aTokenData;
+		} catch (Exception $e) {
+			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
+
+			return;
+		}
+
+		$iClientId = (int)$sClientId;
+		$iTimestamp = (int)$sTimestamp;
+		$iSmsTimestamp = (int)$sSmsTimestamp;
+		$iEmailTimestamp = (int)$sEmailTimestamp;
+
+		// при правильно расшифрованном коде сравнение должно пройти успешно, т.к. это не строгое сравнение
+		if ($sClientId != $iClientId) {
+			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
+
+			return;
+		}
+
+		// время действия токена 1 час
+		if ($iTimestamp + SiteParams::CTIME_HOUR < SiteParams::getTime()) {
+			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_TOKEN_TIMEOUT);
+
+			return;
+		}
+
+		// определим, по какому времени нужно сделать проверку, исходя из запрошенного кода
+		if ($bResendEmail) {
+			$iCheckTimestamp = $iEmailTimestamp;
+		} else {
+			$iCheckTimestamp = $iSmsTimestamp;
+		}
+
+
+		// если со времени отправки прошло менее 3 минут
+		$iSecondsToResend = ($iCheckTimestamp + 3 * 60) - SiteParams::getTime();
+
+		if ($iSecondsToResend > 0) {
+			$this->aResponse = array(
+				'code'              => TornadoApiComponent::RESPONSE_CODE_ERROR_RESEND,
+				'seconds_to_resend' => $iSecondsToResend, // секунд до возможности переотправки кода
+			);
+
+			return;
+		}
+
+		// ищем в базе клиента
+		$oClient = ClientData::getClientById($iClientId);
+
+		if (!$oClient) {
+			$this->responseUnknownError();
+
+			return;
+		}
+
+		if ($bResendEmail) {
+			// отправляем email через API
+			$bSentOk = Yii::app()->adminKreddyApi->sendEmailCode($oClient->email, $oClient->email_code);
+		} else {
+			$sMessage = "Ваш код подтверждения: " . $oClient->sms_code;
+			// отправляем СМС через API
+			$bSentOk = Yii::app()->adminKreddyApi->sendSms($oClient->phone, $sMessage);
+
+		}
+		// проверим, вдруг что пошло не так, поругаемся ошибкой
+		if (!$bSentOk) {
+			$this->responseUnknownError();
+
+			return;
+		}
+
+		// установим по-умолчанию старое время отправки
+		$iSmsNewTimestamp = $iSmsTimestamp;
+		$iEmailNewTimestamp = $iEmailTimestamp;
+
+		// в зависимости от запрошенного кода, ставим новое время - текущее
+		if ($bResendEmail) {
+			$iEmailNewTimestamp = SiteParams::getTime();
+		} else {
+			$iSmsNewTimestamp = SiteParams::getTime();
+		}
+
+		$sToken = CryptArray::encrypt(
+			array(
+				'id'              => $iClientId,
+				'timestamp'       => SiteParams::getTime(),
+				'sms_timestamp'   => $iSmsNewTimestamp,
+				'email_timestamp' => $iEmailNewTimestamp,
+			)
+		);
+
+		$this->aResponse = array(
+			'code'  => TornadoApiComponent::RESPONSE_CODE_SUCCESS,
+			'token' => $sToken,
+		);
 	}
 
 	protected function responseUnknownError()
