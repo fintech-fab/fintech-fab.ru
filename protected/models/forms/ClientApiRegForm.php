@@ -22,7 +22,8 @@ class ClientApiRegForm extends ClientFastRegForm
 			'phone',
 			'product',
 			'channel_id',
-			'pay_type'
+			'pay_type',
+			'birthday'
 		);
 
 		$aRulesFields = array(
@@ -33,6 +34,7 @@ class ClientApiRegForm extends ClientFastRegForm
 			'third_name',
 			'email',
 			'phone',
+			'birthday',
 		);
 
 		$aRules = $this->getRulesByFields(
@@ -62,6 +64,7 @@ class ClientApiRegForm extends ClientFastRegForm
 			'product',
 			'channel_id',
 			'pay_type',
+			'birthday',
 		);
 	}
 

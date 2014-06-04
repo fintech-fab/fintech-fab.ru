@@ -44,6 +44,7 @@ class TornadoApiComponent
 		$aClientRegisterForm['product'] = trim(Yii::app()->request->getPost('product'));
 		$aClientRegisterForm['pay_type'] = trim(Yii::app()->request->getPost('pay_type'));
 		$aClientRegisterForm['channel'] = trim(Yii::app()->request->getPost('channel'));
+		$aClientRegisterForm['birthday'] = trim(Yii::app()->request->getPost('birthday'));
 		$aClientRegisterForm['email_back_url'] = trim(Yii::app()->request->getPost('email_back_url'));
 
 		return $aClientRegisterForm;
