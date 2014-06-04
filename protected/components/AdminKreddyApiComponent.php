@@ -1515,6 +1515,10 @@ class AdminKreddyApiComponent
 
 		$sExpiredTo = $aClientInfo['active_loan']['expired_to'];
 
+		if ($sExpiredTo == SiteParams::EMPTY_DATETIME) {
+			return false;
+		}
+
 		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
