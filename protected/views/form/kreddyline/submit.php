@@ -42,16 +42,16 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 					<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('style' => 'width: 168px;')); ?>
 					&nbsp;
 
-					<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('style' => 'width: 168px;')); ?>
-					<br />
-
-					<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('style' => 'width: 168px;')); ?>
-					&nbsp;
-
 					<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('style' => 'width: 168px;')); ?>
 					<br />
 
+					<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('style' => 'width: 168px;')); ?>
+					&nbsp;
+
 					<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('style' => 'width: 168px;', 'size' => '15')); ?>
+					<br />
+
+					<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('style' => 'width: 168px;')); ?>
 					&nbsp;
 
 					<?= $form->textFieldRow($oClientCreateForm, 'email', array('style' => 'width: 168px;')); ?>
