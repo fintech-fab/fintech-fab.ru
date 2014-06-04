@@ -17,6 +17,7 @@ class ClientKreddyLineRegForm extends ClientFullForm
 		$aRules[] = array('first_name', 'required', 'message' => 'Как тебя зовут?');
 		$aRules[] = array('last_name', 'required', 'message' => 'Какая у тебя фамилия?');
 		$aRules[] = array('third_name', 'required', 'message' => 'Какое у тебя отчество?');
+		$aRules[] = array('birthday', 'required', 'message' => 'Какая дата твоего рождения?');
 		$aRules[] = array('email', 'required', 'message' => 'Какой у тебя Email?');
 		$aRules[] = array('agree', 'required', 'requiredValue' => 1, 'message' => 'Согласен на обработку твоих данных?');
 		$aRules[] = array('phone', 'required', 'message' => 'Какой твой действующий номер телефона?');
@@ -27,6 +28,7 @@ class ClientKreddyLineRegForm extends ClientFullForm
 			'third_name',
 			'email',
 			'phone',
+			'birthday'
 		);
 
 		$aRules = CMap::mergeArray(
@@ -52,6 +54,7 @@ class ClientKreddyLineRegForm extends ClientFullForm
 			'email',
 			'agree',
 			'phone',
+			'birthday',
 		);
 	}
 
