@@ -90,6 +90,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'product'        => '3000',
 			'pay_type'       => 'postpaid',
 			'channel'        => 'card',
+			'birthday' => '04.07.1987',
 			'email_back_url' => 'https://kreddy.ru',
 		);
 
@@ -206,6 +207,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'product'        => '30004',
 			'pay_type'       => 'postpaid',
 			'channel'        => 'card',
+			'birthday' => '04.07.1987',
 			'email_back_url' => 'https://kreddy.ru',
 
 		);
@@ -247,7 +249,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 			'pay_type'       => '',
 			'channel'        => '',
 			'email_back_url' => '',
-
+			'birthday' => '',
 		);
 
 		// генерируем подпись
@@ -274,6 +276,7 @@ class TornadoApiTest extends \PHPUnit_Framework_TestCase
 		$this->assertContains('product', $aNoValid);
 		$this->assertContains('pay_type', $aNoValid);
 		$this->assertContains('channel', $aNoValid);
+		$this->assertContains('birthday', $aNoValid);
 
 	}
 
