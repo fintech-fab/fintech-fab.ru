@@ -408,7 +408,7 @@ class ClientData extends CActiveRecord
 		$criteria->compare('secret_answer', $this->secret_answer);
 		$criteria->compare('numeric_code', $this->numeric_code);
 		$criteria->compare('sms_code', $this->sms_code);
-		$criteria->compare('email_code', $this->sms_code);
+		$criteria->compare('email_code', $this->email_code);
 		$criteria->compare('product', $this->product);
 		$criteria->compare('pay_type', $this->pay_type);
 		$criteria->compare('channel_id', $this->channel_id);

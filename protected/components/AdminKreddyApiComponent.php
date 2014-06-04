@@ -80,7 +80,7 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 
 		self::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-		self::C_SCORING_AWAITING_REIDENTIFY => 'Необходимо пройти повторную идентификацию',
+		self::C_SCORING_AWAITING_REIDENTIFY        => 'Необходимо пройти повторную идентификацию',
 		self::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		self::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
@@ -3504,7 +3504,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС сообщения через API (для регистрации)
+	 * Отправка Email сообщения через API (для регистрации)
 	 *
 	 * @param $sEmail
 	 * @param $sEmailCode
