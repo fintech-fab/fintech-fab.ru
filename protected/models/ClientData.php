@@ -177,7 +177,7 @@ class ClientData extends CActiveRecord
 			$oClientData = new self;
 		}
 
-		if ($oClientData && $oClientData->complete == 1) { //TODO в формах complete сменить на agree, а complete ставить руками после завершения реги!
+		if ($oClientData && $oClientData->complete == 1) {
 			$oClientData->flag_archived = 1;
 			$oClientData->save();
 			$oClientData = new self;

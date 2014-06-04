@@ -131,7 +131,7 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::FAST_REG     => array(
-			'max' => 4,
+			'max'     => 4,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -270,7 +270,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model' => 'ClientKreddyLineSelectProductForm',
+				'model'            => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -279,7 +279,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/pay',
-				'model' => 'ClientKreddyLineSelectPayTypeForm',
+				'model'            => 'ClientKreddyLineSelectPayTypeForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -288,7 +288,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/channel',
-				'model' => 'ClientKreddyLineSelectChannelForm',
+				'model'            => 'ClientKreddyLineSelectChannelForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -297,7 +297,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/submit',
-				'model' => 'ClientKreddyLineRegForm',
+				'model'            => 'ClientKreddyLineRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -377,7 +377,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model' => 'ClientKreddyLineSelectProductForm',
+				'model'            => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -940,10 +940,6 @@ class ClientFormComponent
 				$bSmsCodeIsCorrect
 				&& $bEmailCodeIsCorrect
 			) {
-				// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
-				$aData['flag_sms_confirmed'] = 1;
-				ClientData::saveClientDataById($aData, $iClientId);
-
 				// успешная проверка
 				return true;
 			} else {

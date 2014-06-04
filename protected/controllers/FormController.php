@@ -387,6 +387,10 @@ class FormController extends Controller
 			//если клиент успешно создан
 			if ($bRegisterSuccess) {
 
+				// подтверждение по SMS и регистрация выполнены успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
+				// ставим этот флаг только после успешной регистрации, т.е. он не будет поставлен в случае повторного использования номера
+				$aData['flag_sms_confirmed'] = 1;
+				ClientData::saveClientDataById($aData, $iClientId);
 				//автоматический логин юзера в личный кабинет
 				$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
 				$oLogin->setAttributes(array('username' => $aClientData['phone'])); //устанавливаем аттрибуты логина
