@@ -39,38 +39,27 @@ Yii::app()->clientScript->registerScript('scrollAndFocus', '
 
 					<span>Быстрая регистрация</span>
 
-					<!--div class="row-input">
-						<input class="w1 blured" type="text" value="Фамилия">
-						<input class="w2 blured" type="text" value="Имя">
-						<input class="w3 blured" type="text" value="Отчество">
-					</div>
-					<div class="row-input">
-						<input class="w4 blured" type="text" value="Мобильный телефон">
-						<input class="w5 blured" type="text" value="E-mail">
-					</div>
-					<p>
-						<input type="checkbox" name="labeled" value="1" id="labeled_1" /> <label for="labeled_1"> Я
-							подтверждаю достоверность введенных данных и<br />даю согласие на их обработку (подробная
-							информация) </label>
-					</p>
-					<input type="submit" value="Подключить"-->
-
-					<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('style' => 'width: 103px;')); ?>
+					<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('style' => 'width: 168px;')); ?>
 					&nbsp;
 
-					<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('style' => 'width: 103px;')); ?>
-					&nbsp;
+					<?= $form->dateMaskedRow($oClientCreateForm, 'birthday', array('style' => 'width: 168px;')); ?>
+					<br />
 
-					<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('style' => 'width: 103px;')); ?>
-					<br /> <br />
+					<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('style' => 'width: 168px;')); ?>
+					&nbsp;
 
 					<?= $form->phoneMaskedRow($oClientCreateForm, 'phone', array('style' => 'width: 168px;', 'size' => '15')); ?>
+					<br />
+
+					<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('style' => 'width: 168px;')); ?>
 					&nbsp;
 
-					<?= $form->textFieldRow($oClientCreateForm, 'email', array('style' => 'width: 168px;')); ?><br />
+					<?= $form->textFieldRow($oClientCreateForm, 'email', array('style' => 'width: 168px;')); ?>
 
 
-			<span class="confirm">
+
+
+					<span class="confirm">
 				<?php
 				$oClientCreateForm->agree = false;
 				echo $form->checkBox($oClientCreateForm, 'agree');

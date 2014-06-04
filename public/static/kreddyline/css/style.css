@@ -637,15 +637,15 @@ nav .account .btn {
 
 /*hook-up*/
 .hook-up {
-	padding: 22px 0 0 0;
+	padding: 17px 0 0 0;
 	position: relative;
 	left: -11px;
 	z-index: 1;
 }
 
 .hook-up span {
-	padding: 0 21px 13px 0;
-	font-size: 30px;
+	padding: 0 21px 5px 0;
+	font-size: 20px;
 	line-height: 1.2em;
 	color: #FFF;
 	display: block;
@@ -654,6 +654,10 @@ nav .account .btn {
 
 .hook-up .row-input {
 	padding-bottom: 4px;
+}
+
+.hook-up input {
+	margin-bottom: 5px;
 }
 
 .hook-up .row-input input {
