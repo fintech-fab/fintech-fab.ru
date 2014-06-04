@@ -29,6 +29,7 @@ class FormController extends Controller
 		return array(
 			array(
 				'ext.linkprofit.LinkprofitFilter',
+				'ext.banki_ru.BankiRuFilter',
 			),
 		);
 	}
@@ -430,7 +431,7 @@ class FormController extends Controller
 	 *
 	 *
 	 * @param $sTemplateName Имя шаблона для рендеринга
-	 * @param $sRedirectUrl Страница на которую будет перенаправлен пользователь
+	 * @param $sRedirectUrl  Страница на которую будет перенаправлен пользователь
 	 */
 	private function success($sTemplateName, $sRedirectUrl)
 	{
