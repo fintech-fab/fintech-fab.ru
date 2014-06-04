@@ -21,6 +21,10 @@ class ClientFormComponent
 	private $iCurrentStep;
 	private $iDoneSteps;
 
+	public $bFlagCodesSent; // флаг "коды отправлены"
+	public $sSentPhone; // номер, на который отправлен код
+	public $sEmailSentAddress; // адрес, на который отправлен код
+
 	/**
 	 * Массив свойств для виджета сквозной выбор продукта
 	 * Этот же массив определяет, где хранится информация о выбранном продукте,
@@ -127,7 +131,7 @@ class ClientFormComponent
 
 	public static $aSteps = array(
 		self::FAST_REG     => array(
-			'max' => 4,
+			'max'     => 4,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -266,7 +270,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model' => 'ClientKreddyLineSelectProductForm',
+				'model'            => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -275,7 +279,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/pay',
-				'model' => 'ClientKreddyLineSelectPayTypeForm',
+				'model'            => 'ClientKreddyLineSelectPayTypeForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -284,7 +288,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/channel',
-				'model' => 'ClientKreddyLineSelectChannelForm',
+				'model'            => 'ClientKreddyLineSelectChannelForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -293,7 +297,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/submit',
-				'model' => 'ClientKreddyLineRegForm',
+				'model'            => 'ClientKreddyLineRegForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -301,14 +305,14 @@ class ClientFormComponent
 			4 => array(
 				'view'             => 'client_fast_form',
 				'sub_view'         => array(
-					'condition' => 'getFlagSmsSent',
+					'condition' => 'getFlagCodesSent',
 					true        => 'confirm_phone/check_sms_code_fast_reg',
 					false       => 'confirm_phone/send_sms_code',
 				),
-				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'model'            => 'ClientConfirmPhoneAndEmailForm',
 				'breadcrumbs_step' => 2,
 				'metrika_goal'     => array(
-					'condition' => 'getFlagSmsSent',
+					'condition' => 'getFlagCodesSent',
 					true        => 'fr_sms_code_check',
 					false       => 'fr_sms_code_send',
 				),
@@ -373,7 +377,7 @@ class ClientFormComponent
 				'layout'           => '//layouts/main_kreddyline',
 				'view'             => 'kreddyline',
 				'sub_view'         => 'kreddyline/sum',
-				'model' => 'ClientKreddyLineSelectProductForm',
+				'model'            => 'ClientKreddyLineSelectProductForm',
 				'breadcrumbs_step' => 1,
 				'metrika_goal'     => 'select_product',
 				'topPageWidget'    => true,
@@ -428,14 +432,14 @@ class ClientFormComponent
 			7 => array(
 				'view'             => 'client_form',
 				'sub_view'         => array(
-					'condition' => 'getFlagSmsSent',
+					'condition' => 'getFlagCodesSent',
 					true        => 'confirm_phone/check_sms_code',
 					false       => 'confirm_phone/send_sms_code',
 				),
-				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'model'            => 'ClientConfirmPhoneAndEmailForm',
 				'breadcrumbs_step' => 3,
 				'metrika_goal'     => array(
-					'condition' => 'getFlagSmsSent',
+					'condition' => 'getFlagCodesSent',
 					true        => 'sms_code_check',
 					false       => 'sms_code_send',
 				)
@@ -498,14 +502,14 @@ class ClientFormComponent
 			6 => array(
 				'view'             => 'client_form',
 				'sub_view'         => array(
-					'condition' => 'getFlagSmsSent',
+					'condition' => 'getFlagCodesSent',
 					true        => 'confirm_phone/check_sms_code',
 					false       => 'confirm_phone/send_sms_code',
 				),
-				'model'            => 'ClientConfirmPhoneViaSMSForm',
+				'model'            => 'ClientConfirmPhoneAndEmailForm',
 				'breadcrumbs_step' => 3,
 				'metrika_goal'     => array(
-					'condition' => 'getFlagSmsSent',
+					'condition' => 'getFlagCodesSent',
 					true        => 'sms_code_check',
 					false       => 'sms_code_send',
 				)
@@ -744,16 +748,18 @@ class ClientFormComponent
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
 
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
+
+
 			}
 
 			/**
-			 * если номер, на который отправлялось СМС, не совпадает с введенным,
-			 * т.е. клиент вернулся на анкету и ввел другой номер,
-			 * то позволяем снова отправить СМС с кодом водтверждения
+			 * если номер/адрес, на который отправлялось СМС/email, не совпадает с введенным,
+			 * т.е. клиент вернулся на анкету и ввел другой номер/адрес,
+			 * то позволяем снова отправить СМС/email с кодом подтверждения
 			 */
 
-			if (!$this->compareSessionAndSentPhones()) {
-				$this->setFlagSmsSent(false);
+			if (!$this->compareThisAndSentPhones($oClientForm['phone']) || !$this->compareThisAndSentEmails($oClientForm['email'])) {
+				$this->setFlagCodesSent(false);
 			}
 		} else {
 			if ($this->iClientId) {
@@ -776,9 +782,14 @@ class ClientFormComponent
 	/**
 	 * Делает запрос на отправку SMS и возвращает true либо текст ошибки
 	 *
+	 * @param bool $bSmsSend
+	 * @param bool $bEmailSend
+	 *
+	 * @param bool $bResend
+	 *
 	 * @return bool|string
 	 */
-	public function sendSmsCode()
+	public function sendCodes($bSmsSend = true, $bEmailSend = true, $bResend = false)
 	{
 		// если с данного ip нельзя запросить SMS, выдаём ошибку
 		if (!Yii::app()->antiBot->checkSmsRequest()) {
@@ -788,48 +799,95 @@ class ClientFormComponent
 		$iClientId = $this->getClientId();
 		$aClientForm = ClientData::getClientDataById($iClientId);
 
-		// если код уже есть в базе, ставим флаг и вовзращаем true
-		if (!empty($aClientForm['sms_code']) && $this->compareSessionAndSentPhones()) {
-			$this->setFlagSmsSent(true);
+		$bSessionAndSentPhonesEquals = $this->compareSessionAndSentPhones();
+		$bSessionAndSentEmailsEquals = $this->compareSessionAndSentEmails();
+
+		// если не затребована переотправка, и если коды уже есть в базе, и номер телефона и email не менялись в форме,ставим флаг и вовзращаем true
+		if (!$bResend
+			&& !empty($aClientForm['sms_code'])
+			&& $bSessionAndSentPhonesEquals
+			&& !empty($aClientForm['email_code'])
+			&& $bSessionAndSentEmailsEquals
+		) {
+			$this->setFlagCodesSent(true);
 
 			return true;
 		}
 
 		$sPhone = $this->getSessionPhone();
+		$sEmail = $this->getSessionEmail();
 
 		// если в сессии нет телефона, ошибка - некуда отправлять
-		if ($sPhone === false) {
-			return Dictionaries::C_ERR_SMS_CANT_SEND;
+		if (empty($sPhone) || empty($sEmail)) {
+			return Dictionaries::C_ERR_CODE_CANT_SEND;
 		}
 
-		// генерируем Code
-		$sSmsCode = $this->generateSMSCode(SiteParams::C_SMSCODE_LENGTH);
+		$bSmsSentOk = true;
+		// если номер в сессии (форма) не равен номеру, на который уже отправили СМС (если отправили)
+		// или требуется переотправка
+		// и при этом запрошена отправка SMS
+		if (
+			(!$bSessionAndSentPhonesEquals || $bResend)
+			&& $bSmsSend
+		) {
+			$sSmsCode = $aClientForm['sms_code']; // запишем старый код из БД
+			// старый код используем в случае переотправки, чтобы не получилось так, что клиенту дошла старая СМС с кодом
+			// и клиент пробует его ввести, а уже запрошен новый код - и СМС с ним еще не пришла
+			// если не запрошена переотправка, то генерируем новый код
+			if (!$bResend) {
+				$sSmsCode = $this->generateSMSCode(SiteParams::C_SMS_CODE_LENGTH);
+			}
+			//отправляем СМС
+			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+			//отправляем СМС через API
+			$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
+			$aClientForm['sms_code'] = $sSmsCode;
+		}
 
-		//отправляем СМС
-		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+		$bEmailSentOk = true;
+		// если адрес в сессии (форма) не равен адресу, на который уже отправили письмо (если отправили)
+		if (
+			(!$bSessionAndSentEmailsEquals || $bResend)
+			&& $bEmailSend
+		) {
+			$sEmailCode = $aClientForm['email_code']; // запишем старый код из БД
+			// старый код используем в случае переотправки, чтобы не получилось так, что клиенту дошел старый e-mail с кодом
+			// и клиент пробует его ввести, а уже запрошен новый код - и e-mail с ним еще не пришел
+			// если не запрошена переотправка, то генерируем новый код
+			if (!$bResend) {
+				$sEmailCode = $this->generateSMSCode(SiteParams::C_EMAIL_CODE_LENGTH);
+			}
+			$bEmailSentOk = Yii::app()->adminKreddyApi->sendEmailCode($sEmail, $sEmailCode);
+			$aClientForm['email_code'] = $sEmailCode;
+		}
 
-		//отправляем СМС через API
-		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
-
-		if ($bSmsSentOk) {
+		if ($bSmsSentOk && $bEmailSentOk) {
 			//добавляем в лог запрос sms с этого ip
 			Yii::app()->antiBot->addSmsRequest();
 			$this->setSmsSentPhone($sPhone); //записываем, на какой номер было отправлено СМС
+			$this->setEmailSentAddress($sEmail); // записываем, на какой адрес было отправлено письмо
 
-			$aClientForm['sms_code'] = $sSmsCode;
 			// если не удалось записать в БД - общая ошибка
 			if (!ClientData::saveClientDataById($aClientForm, $iClientId)) {
 				return Dictionaries::C_ERR_GENERAL;
 			}
 
 			// ставим флаг успешной отправки
-			$this->setFlagSmsSent(true);
+			$this->setFlagCodesSent(true);
+
+			// сохраняем время успешной отправки
+			if ($bSmsSend) {
+				$this->setCodeSentTime('sms', SiteParams::getTime());
+			}
+			if ($bEmailSend) {
+				$this->setCodeSentTime('email', SiteParams::getTime());
+			}
 
 			// возвращаем true
 			return true;
 		}
 
-		return Dictionaries::C_ERR_SMS_CANT_SEND;
+		return Dictionaries::C_ERR_CODE_CANT_SEND;
 	}
 
 
@@ -838,28 +896,56 @@ class ClientFormComponent
 	 *
 	 * @param array $aPostData
 	 *
+	 * @param       $oCheckResult
+	 *
 	 * @return string|integer
 	 */
-	public function checkSmsCode($aPostData)
+	public function checkCodes($aPostData, &$oCheckResult)
 	{
 		$iClientId = $this->getClientId();
 
-		$oClientSmsForm = new ClientConfirmPhoneViaSMSForm();
+		$oClientSmsForm = new ClientConfirmPhoneAndEmailForm();
 		$oClientSmsForm->setAttributes($aPostData);
+
+		// получим время отправки кодов
+		$iSmsSentTime = $this->getCodeSentTime('sms');
+		$iEmailSentTime = $this->getCodeSentTime('email');
+
+		// получим время, прошедшее с момента отправки
+		$iSmsTime = SiteParams::getTime() - $iSmsSentTime;
+		$iEmailTime = SiteParams::getTime() - $iEmailSentTime;
+
+
+		// если время больше, чем 1 час, значит, время действия кодов истекло
+		$bSmsTimeExpire = $iSmsTime > SiteParams::CTIME_HOUR;
+		$bEmailTimeExpire = $iEmailTime > SiteParams::CTIME_HOUR;
+		if ($bSmsTimeExpire || $bEmailTimeExpire) {
+			$oCheckResult->bSmsError = $bSmsTimeExpire;
+			$oCheckResult->bEmailError = $bEmailTimeExpire;
+
+			return Dictionaries::C_ERR_CODE_TIME_EXPIRED;
+		}
 
 		// если число попыток ввода кода меньше максимально допустимых
 		if (!$this->isSmsCodeTriesExceed()) {
 			// если введённые данные валидны и совпадают с кодом из базы
-			if ($oClientSmsForm->validate()
-				&& ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $iClientId)
-			) {
-				// подтверждение по SMS выполнено успешно. помечаем запись в базе, очищаем сессию и выводим сообщение
-				$aData['flag_sms_confirmed'] = 1;
-				ClientData::saveClientDataById($aData, $iClientId);
+			$bSmsCodeIsCorrect = false;
+			$bEmailCodeIsCorrect = false;
 
+			if ($oClientSmsForm->validate()) {
+				$bSmsCodeIsCorrect = ClientData::compareSMSCodeByClientId($oClientSmsForm->sms_code, $iClientId);
+				$bEmailCodeIsCorrect = ClientData::compareEmailCodeByClientId($oClientSmsForm->email_code, $iClientId);
+			}
+			if (
+				$bSmsCodeIsCorrect
+				&& $bEmailCodeIsCorrect
+			) {
 				// успешная проверка
 				return true;
 			} else {
+				$oCheckResult->bEmailError = !$bEmailCodeIsCorrect;
+				$oCheckResult->bSmsError = !$bSmsCodeIsCorrect;
+
 				$iSmsCountTries = $this->getSmsCountTries();
 				$iSmsCountTries += 1;
 				$this->setSmsCountTries($iSmsCountTries);
@@ -867,17 +953,20 @@ class ClientFormComponent
 				// если это была последняя попытка
 				if ($iSmsCountTries == SiteParams::MAX_SMSCODE_TRIES) {
 					// возвращаем сообщение о превышении числа попыток
-					return Dictionaries::C_ERR_SMS_TRIES;
+					return Dictionaries::C_ERR_CODE_TRIES;
 				} else {
 					// выводим сообщение - код неверен + сколько осталось попыток
 					$iTriesLeft = SiteParams::MAX_SMSCODE_TRIES - $iSmsCountTries;
 
-					return (Dictionaries::C_ERR_SMS_WRONG . ' ' . Dictionaries::C_ERR_TRIES_LEFT . $iTriesLeft);
+					return (Dictionaries::C_ERR_CODE_WRONG . ' ' . Dictionaries::C_ERR_TRIES_LEFT . $iTriesLeft);
 				}
 			}
 		} else {
+			$oCheckResult->bEmailError = true;
+			$oCheckResult->bSmsError = true;
+
 			// возвращаем сообщение о превышении числа попыток
-			return Dictionaries::C_ERR_SMS_TRIES;
+			return Dictionaries::C_ERR_CODE_TRIES;
 		}
 	}
 
@@ -1273,6 +1362,29 @@ class ClientFormComponent
 	}
 
 	/**
+	 * @return bool|string
+	 */
+	public function getSessionEmail()
+	{
+		$sSite = $this->getSiteConfigName();
+
+		//если у нас продолжение регистрации - то телефон берем из userId
+		if ($sSite == self::CONTINUE_REG) {
+			return Yii::app()->user->getId();
+		}
+
+		$sModel = self::$aPhoneFormSettings[$sSite]['model'];
+
+		if (isset(Yii::app()->session[$sModel]['email'])) {
+			$sEmail = Yii::app()->session[$sModel]['email'];
+		} else {
+			$sEmail = false;
+		}
+
+		return $sEmail;
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getClientId()
@@ -1412,7 +1524,7 @@ class ClientFormComponent
 	 */
 	public function getSmsCountTries()
 	{
-		return (isset(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['smsCountTries'])) ? Yii::app()->session['ClientConfirmPhoneViaSMSForm']['smsCountTries'] : 0;
+		return (isset(Yii::app()->session['ClientConfirmPhoneAndEmailForm']['smsCountTries'])) ? Yii::app()->session['ClientConfirmPhoneAndEmailForm']['smsCountTries'] : 0;
 	}
 
 	/**
@@ -1420,27 +1532,33 @@ class ClientFormComponent
 	 */
 	public function setSmsCountTries($iSmsCountTries)
 	{
-		$array = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
+		$array = Yii::app()->session['ClientConfirmPhoneAndEmailForm'];
 		$array['smsCountTries'] = $iSmsCountTries;
-		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
+		Yii::app()->session['ClientConfirmPhoneAndEmailForm'] = $array;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function getFlagSmsSent()
+	public function getFlagCodesSent()
 	{
-		return (!empty(Yii::app()->session['ClientConfirmPhoneViaSMSForm']['flagSmsSent']));
+		if (isset($this->bFlagCodesSent)) {
+			return $this->bFlagCodesSent;
+		}
+
+		return (!empty(Yii::app()->session['ClientConfirmPhoneAndEmailForm']['flagCodesSent']));
 	}
 
 	/**
-	 * @param bool $bFlagSmsSent
+	 * @param $bFlagCodesSent
+	 *
 	 */
-	public function setFlagSmsSent($bFlagSmsSent)
+	public function setFlagCodesSent($bFlagCodesSent)
 	{
-		$array = Yii::app()->session['ClientConfirmPhoneViaSMSForm'];
-		$array['flagSmsSent'] = $bFlagSmsSent;
-		Yii::app()->session['ClientConfirmPhoneViaSMSForm'] = $array;
+		$this->bFlagCodesSent = $bFlagCodesSent;
+		$array = Yii::app()->session['ClientConfirmPhoneAndEmailForm'];
+		$array['flagCodesSent'] = $bFlagCodesSent;
+		Yii::app()->session['ClientConfirmPhoneAndEmailForm'] = $array;
 	}
 
 	/**
@@ -1448,6 +1566,7 @@ class ClientFormComponent
 	 */
 	public function setSmsSentPhone($sPhone)
 	{
+		$this->sSentPhone = $sPhone;
 		Yii::app()->session['sSmsSentPhone'] = $sPhone;
 	}
 
@@ -1456,7 +1575,32 @@ class ClientFormComponent
 	 */
 	public function getSmsSentPhone()
 	{
+		if (isset($this->sSentPhone)) {
+			return $this->sSentPhone;
+		}
+
 		return Yii::app()->session['sSmsSentPhone'];
+	}
+
+	/**
+	 * @param $sEmail
+	 */
+	public function setEmailSentAddress($sEmail)
+	{
+		$this->sEmailSentAddress = $sEmail;
+		Yii::app()->session['sEmailSentAddress'] = $sEmail;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmailSentAddress()
+	{
+		if (isset($this->sEmailSentAddress)) {
+			return $this->sEmailSentAddress;
+		}
+
+		return Yii::app()->session['sEmailSentAddress'];
 	}
 
 	public function clearClientSession()
@@ -1513,7 +1657,7 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	private function generateSMSCode($iLength = SiteParams::C_SMSCODE_LENGTH)
+	private function generateSMSCode($iLength = SiteParams::C_SMS_CODE_LENGTH)
 	{
 		// генерация рандомного кода
 		list($usec, $sec) = explode(' ', microtime());
@@ -1560,6 +1704,34 @@ class ClientFormComponent
 	public function compareSessionAndSentPhones()
 	{
 		return (Yii::app()->clientForm->getSmsSentPhone() === Yii::app()->clientForm->getSessionPhone());
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function compareSessionAndSentEmails()
+	{
+		return (Yii::app()->clientForm->getEmailSentAddress() === Yii::app()->clientForm->getSessionEmail());
+	}
+
+	/**
+	 * @param $sPhone
+	 *
+	 * @return bool
+	 */
+	public function compareThisAndSentPhones($sPhone)
+	{
+		return (Yii::app()->clientForm->getSmsSentPhone() === $sPhone);
+	}
+
+	/**
+	 * @param $sEmailAddress
+	 *
+	 * @return bool
+	 */
+	public function compareThisAndSentEmails($sEmailAddress)
+	{
+		return (Yii::app()->clientForm->getEmailSentAddress() === $sEmailAddress);
 	}
 
 	/**
@@ -1830,6 +2002,25 @@ class ClientFormComponent
 	public function getRegisterComplete()
 	{
 		return Yii::app()->session['register_complete'];
+	}
+
+	/**
+	 * @param $sName
+	 * @param $iTime
+	 */
+	public function setCodeSentTime($sName, $iTime)
+	{
+		Yii::app()->session[$sName . 'CodeSentTime'] = $iTime;
+	}
+
+	/**
+	 * @param $sName
+	 *
+	 * @return mixed
+	 */
+	public function getCodeSentTime($sName)
+	{
+		return Yii::app()->session[$sName . 'CodeSentTime'];
 	}
 
 }

@@ -9,19 +9,23 @@
  */
 class Dictionaries
 {
-
 	const C_ERR_GENERAL = 'Ошибка: обратитесь в контактный центр.';
-	const C_ERR_SMS_SENT = 'Ошибка: SMS уже отправлено';
-	const C_ERR_SMS_CANT_SEND = "Ошибка при отправке SMS";
-	const C_ERR_SMS_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в контактный центр.';
-	const C_ERR_SMS_PASS_TRIES = 'Вы превысили число допустимых попыток ввода пароля. Обратитесь в контактный центр.';
-	const C_ERR_SMS_WRONG = 'Неверный код подтверждения!';
+	const C_ERR_CODE_SENT = 'Ошибка: код уже отправлен';
+	const C_ERR_CODE_CANT_SEND = "Ошибка при отправке кода";
+	const C_ERR_CODE_TRIES = 'Вы превысили число допустимых попыток ввода кода. Обратитесь в контактный центр.';
 	const C_ERR_TRIES_LEFT = 'Осталось попыток: ';
+
+	const C_ERR_CODE_TIME_EXPIRED = 'Истекло время действия кода. Повторите запрос кода';
+
+	const C_ERR_SMS_PASS_TRIES = 'Вы превысили число допустимых попыток ввода пароля. Обратитесь в контактный центр.';
+	const C_ERR_CODE_WRONG = 'Неверный код подтверждения!';
 
 	const C_SMS_SUCCESS_NUM = 'SMS с кодом успешно отправлено на номер';
 	const C_SMS_SUCCESS = 'SMS с кодом успешно отправлено';
 	const C_SMS_PASS_SUCCESS = 'SMS с паролем успешно отправлено';
 	const C_SMS_RESET_PASSWORD_SUCCESS = "SMS с паролем отправлено на указанный Вами номер";
+
+	const C_EMAIL_SUCCESS = 'Электронное письмо с кодом успешно отправлено на адрес';
 
 	const C_INFO_MOSCOWTIME = "Указано московское время";
 

@@ -121,7 +121,12 @@ class SiteParams
 	/**
 	 * длина кода подтверждения, отправляемого по SMS
 	 */
-	const C_SMSCODE_LENGTH = 6;
+	const C_SMS_CODE_LENGTH = 4;
+
+	/**
+	 * длина кода подтверждения, отправляемого по email
+	 */
+	const C_EMAIL_CODE_LENGTH = 4;
 
 	/**
 	 * длины серии и номера паспорта
