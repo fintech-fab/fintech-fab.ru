@@ -29,6 +29,8 @@ class FormController extends Controller
 		return array(
 			array(
 				'ext.linkprofit.LinkprofitFilter',
+			),
+			array(
 				'ext.banki_ru.BankiRuFilter',
 			),
 		);
