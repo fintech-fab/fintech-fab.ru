@@ -30,7 +30,7 @@ class DefaultController extends Controller
 		return array(
 			array(
 				'allow',
-				'actions' => array('login', 'resetPassword', 'resetPassSendPass', 'resetPassSmsSentSuccess', 'resetPasswordResendSmsCode'),
+				'actions' => array('login', 'redirect', 'resetPassword', 'resetPassSendPass', 'resetPassSmsSentSuccess', 'resetPasswordResendSmsCode'),
 				'users'   => array('*'),
 			),
 			array(
@@ -72,6 +72,7 @@ class DefaultController extends Controller
 
 		$aActionsNotNeedAuth = array(
 			'login',
+			'redirect',
 			'resetPassword',
 			'resetPassSendPass',
 			'resetPassSmsSentSuccess',
@@ -95,6 +96,7 @@ class DefaultController extends Controller
 			'history',
 			'login',
 			'logout',
+			'redirect',
 			'continueForm',
 			'resetPassword',
 			'resetPassSendPass',
@@ -183,9 +185,9 @@ class DefaultController extends Controller
 		$bIsPossibleDoLoan = Yii::app()->adminKreddyApi->checkLoan();
 
 		$this->render($sIndexView, array(
-				'sClientInfoView' => $sClientInfoView,
-				'sPassFormRender' => $sPassFormRender,
-				'sIdentifyRender' => $sIdentifyRender,
+				'sClientInfoView'   => $sClientInfoView,
+				'sPassFormRender'   => $sPassFormRender,
+				'sIdentifyRender'   => $sIdentifyRender,
 				'bIsPossibleDoLoan' => $bIsPossibleDoLoan,
 			)
 		);
@@ -1470,6 +1472,55 @@ class DefaultController extends Controller
 		Yii::app()->adminKreddyApi->logout();
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+
+	/**
+	 * Экшн, осуществляющий логин и редирект клиента по специальному токену, созданному при регистрации в Tornado Api
+	 */
+	public function actionRedirect()
+	{
+		// получаем данные
+		$sClientCryptData = Yii::app()->request->getParam('client');
+		$aClientData = CryptArray::decrypt($sClientCryptData);
+
+		$iClientId = 0;
+		$sClientPhone = '';
+
+		try {
+			list($sClientId, $sClientPhone) = $aClientData;
+			$iClientId = (int)$sClientId;
+		} catch (Exception $e) {
+
+		}
+
+		$oClient = ClientData::model()->findByPk($iClientId);
+
+		if ($oClient && $oClient->phone == $sClientPhone && $oClient->api_token) {
+			// логинимся с использованием токена из БД, это токен siteApi
+			$bLoginSuccess = Yii::app()->adminKreddyApi->loginWithToken($oClient->api_token);
+
+			if ($bLoginSuccess) {
+				//автоматический логин юзера в личный кабинет
+				$oLogin = new AutoLoginForm(); //модель для автоматического логина в систему
+				$oLogin->setAttributes(array('username' => $oClient->phone)); //устанавливаем аттрибуты логина
+				if ($oLogin->validate() && $oLogin->login()) {
+					//сохраняем данные перед редиректом в ЛК
+					$aClientData = $oClient->getAttributes();
+					Yii::app()->clientForm->saveDataBeforeRedirectToAccount($aClientData);
+
+					//установим информацию о завершенной регистрации перед редиректом
+					Yii::app()->clientForm->setRegisterComplete();
+					Yii::app()->clientForm->clearClientSession();
+
+					// удаляем токен из БД
+					$oClient->api_token = '***********';
+					$oClient->save();
+				}
+			}
+		}
+
+		// при любом результате логина редиректим клиента на подписку
+		$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
 	}
 
 	/**

@@ -54,6 +54,7 @@
  * @property string  $flex_amount
  * @property string  $flex_time
  * @property integer $complete
+ * @property string  $api_token
  * @property string  $dt_add
  * @property string  $dt_update
  * @property int     $flag_sms_confirmed
@@ -93,7 +94,7 @@ class ClientData extends CActiveRecord
 	{
 
 		return array(
-			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, email_code, product, pay_type, channel_id, flex_amount, flex_time, complete, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
+			array('client_id, ip, entry_point, tracking_id, phone, password, job_phone, first_name, last_name, third_name, sex, birthday, email, passport_series, passport_number, passport_issued, passport_code, passport_date, document, document_number, address_reg_region, address_reg_city, address_reg_address, address_res_region, address_res_city, address_res_address, address_reg_as_res, relatives_one_fio, relatives_one_phone, friends_fio, friends_phone, job_company, job_position, job_time, job_monthly_income, job_monthly_outcome, have_past_credit, secret_question, secret_answer, numeric_code, sms_code, email_code, product, pay_type, channel_id, flex_amount, flex_time, complete, api_token, dt_add, dt_update, flag_sms_confirmed, flag_archived, income_source, educational_institution_name, educational_institution_phone, status, loan_purpose, birthplace', 'safe'),
 		);
 	}
 
@@ -105,9 +106,9 @@ class ClientData extends CActiveRecord
 	public function scopePhone($sPhone)
 	{
 		$this->getDbCriteria()->addColumnCondition(array(
-			'phone'              => $sPhone,
-			'flag_sms_confirmed' => 0,
-			'flag_archived'      => 0,
+			'phone'         => $sPhone,
+			//'flag_sms_confirmed' => 0,
+			'flag_archived' => 0,
 		));
 
 		return $this;
@@ -217,6 +218,19 @@ class ClientData extends CActiveRecord
 	}
 
 	/**
+	 * @param $client_id
+	 *
+	 * @return ClientData
+	 */
+	public static function getClientById($client_id)
+	{
+		$oClientData = self::model()->scopeClientId($client_id)->find();
+
+		return $oClientData;
+
+	}
+
+	/**
 	 * @param string  $sCode
 	 * @param integer $client_id
 	 *
@@ -312,7 +326,7 @@ class ClientData extends CActiveRecord
 			'third_name'          => 'Third Name',
 			'sex'                 => 'Sex',
 			'birthday'            => 'Birthday',
-			'birthplace' => 'Birthday',
+			'birthplace'          => 'Birthplace',
 			'email'               => 'Email',
 			'passport_series'     => 'Passport Series',
 			'passport_number'     => 'Passport Number',
@@ -342,11 +356,12 @@ class ClientData extends CActiveRecord
 			'secret_answer'       => 'Secret  Answer',
 			'numeric_code'        => 'Numeric Code',
 			'sms_code'            => 'SMS Code',
-			'email_code' => 'Email Code',
+			'email_code'          => 'Email Code',
 			'product'             => 'Product',
-			'pay_type'   => 'Pay Type',
+			'pay_type'            => 'Pay Type',
 			'channel_id'          => 'Channel ID',
 			'complete'            => 'Complete',
+			'api_token'           => 'API Token',
 			'dt_add'              => 'Dt Add',
 			'dt_update'           => 'Dt Update',
 			'flag_sms_confirmed'  => 'Flag SMS Confirmed',

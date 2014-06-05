@@ -28,7 +28,7 @@ class ProductsChannelsComponent
 	/**
 	 * @return array
 	 */
-	public static function getKreddyLineProductsCosts()
+	public static function getKreddyLineProductsAmounts()
 	{
 		$aProducts = Yii::app()->adminKreddyApi->getProducts();
 
@@ -45,6 +45,18 @@ class ProductsChannelsComponent
 		}
 
 		return $aProductsList;
+	}
+
+	/**
+	 * @param $iAmount
+	 *
+	 * @return mixed
+	 */
+	public static function getProductsByAmount($iAmount)
+	{
+		$aProducts = self::getKreddyLineProductsAmounts();
+
+		return array_search($iAmount, $aProducts);
 	}
 
 	/**
@@ -67,6 +79,20 @@ class ProductsChannelsComponent
 		}
 
 		return false;
+	}
+
+	/**
+	 * @param $iAmount
+	 * @param $iType
+	 *
+	 * @return bool
+	 */
+	public function getProductByAmountAndType($iAmount, $iType)
+	{
+		$sProducts = $this->getProductsByAmount($iAmount);
+		$iProductId = Yii::app()->productsChannels->getProductBySelectedType($sProducts, $iType);
+
+		return $iProductId;
 	}
 
 	/**
@@ -227,6 +253,43 @@ class ProductsChannelsComponent
 
 
 		return $aChannelsList;
+	}
+
+	/**
+	 * @param $sChannel
+	 *
+	 * @return bool|string
+	 */
+	public function getChannelsForTornadoApi($sChannel)
+	{
+		$aChannels = Yii::app()->adminKreddyApi->getProductsChannels();
+		$sMobileChannels = '';
+		$sCardChannels = '';
+		foreach ($aChannels as $iKey => $sChannelName) {
+			if (strpos($sChannelName, 'Кредди')) {
+				continue;
+			}
+			if (strpos($sChannelName, 'карт')) {
+				if (!empty($sCardChannels)) {
+					$sCardChannels .= '_';
+				}
+				$sCardChannels .= $iKey;
+			} elseif (strpos($sChannelName, 'мобильный')) {
+				if (!empty($sMobileChannels)) {
+					$sMobileChannels .= '_';
+				}
+				$sMobileChannels .= $iKey;
+			}
+		}
+
+		if ($sChannel == 'mobile') {
+			return $sMobileChannels;
+		}
+		if ($sChannel == 'card') {
+			return $sCardChannels;
+		}
+
+		return false;
 	}
 
 	/**

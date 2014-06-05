@@ -33,6 +33,7 @@ $a = array(
 			'ipFilters' => array('127.0.0.1', '::1'),
 		),
 		'account' => array(),
+		'api'     => array(),
 	),
 
 	'params'         => array(),
@@ -45,6 +46,9 @@ $a = array(
 		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
+		),
+		'tornadoApi'       => array(
+			'class' => 'application.components.TornadoApiComponent',
 		),
 		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
@@ -125,7 +129,7 @@ $a = array(
 		),
 
 		'request'          => array(
-			'class'                  => 'CodeceptionHttpRequest',
+			'class' => 'CodeceptionHttpRequest',
 			/*'enableCsrfValidation'   => true,
 			'enableCookieValidation' => true,
 			'csrfTokenName'          => 'stcs',*/
