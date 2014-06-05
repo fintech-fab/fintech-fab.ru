@@ -82,6 +82,9 @@ class FormController extends Controller
 			array(
 				'ext.linkprofit.LinkprofitFilter',
 			),
+			array(
+				'ext.banki_ru.BankiRuFilter',
+			),
 		);
 	}
 
