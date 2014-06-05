@@ -421,14 +421,18 @@ class FormController extends Controller
 
 
 			} elseif (Yii::app()->adminKreddyApi->getIsClientExistsError()) {
+
+				// Клиент существует по email-у или телефону
 				$this->render('client_exists');
+
 			} else {
+
 				//если не удалось создать нового клиента, то выводим ошибку
 				Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе Кредди. Обратитесь в контактный центр';
 				Yii::app()->clientForm->setFlagCodesSent(false); //сбрасываем флаг отправленного СМС
 				Yii::app()->clientForm->clearClientSession(); //чистим сессию
-				$this->actionStep(1); //переходим на шаг 1
 				$this->render('error');
+
 			}
 		}
 
@@ -471,10 +475,13 @@ class FormController extends Controller
 			$this->redirect(Yii::app()->createUrl('form/success'));
 
 		} else {
+
 			//если не удалось создать нового клиента, то выводим ошибку
+			// Например паспортные данные уже существуют или сетевые проблемы
 			Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе КРЕДДИ. Обратитесь в контактный центр.';
 			Yii::app()->clientForm->clearClientSession(); //чистим сессию
-			$this->actionStep(1); //переходим на шаг 1
+			$this->render('error');
+
 		}
 	}
 
