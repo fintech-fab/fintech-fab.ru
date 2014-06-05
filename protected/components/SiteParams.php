@@ -33,6 +33,11 @@ class SiteParams
 	const U_ACTION_TYPE_LOGIN = 10;
 
 	/**
+	 * Время перед повторной отправкой sms и email кодов
+	 */
+	const CODE_RESEND_TIME = 180;
+
+	/**
 	 * Время проверки для антибота, в минутах
 	 */
 	const ANTIBOT_SMS_TIME_SHORT = 10; //время проверки для короткого периода

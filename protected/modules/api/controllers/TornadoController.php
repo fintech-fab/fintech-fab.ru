@@ -136,20 +136,14 @@ class TornadoController extends Controller
 			return;
 		}
 
-		/**
-		 * получаем ID в виде int, если вдруг код расшифрован неверно, но приведение к int даст валидный результат,
-		 * то ничего страшного, дальше прежде чем что-то делать мы проверим коды по БД, и для неправильного ID они не
-		 * пройдут проверку
-		 */
-		$iClientId = (int)$sClientId;
-		$iTimestamp = (int)$sTimestamp;
-
-		// при правильно расшифрованном коде сравнение должно пройти успешно, т.к. это не строгое сравнение
-		if ($sClientId != $iClientId) {
+		if (!is_numeric($sClientId) || !is_numeric($sTimestamp)) {
 			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
 
 			return;
 		}
+
+		$iClientId = (int)$sClientId;
+		$iTimestamp = (int)$sTimestamp;
 
 		// время действия токена 1 час
 		if ($iTimestamp + SiteParams::CTIME_HOUR < SiteParams::getTime()) {
@@ -159,7 +153,7 @@ class TornadoController extends Controller
 		}
 
 		// ищем в базе клиента
-		$oClient = ClientData::getClientById($iClientId);
+		$oClient = ClientData::model()->findByPk($iClientId);
 
 		if (!$oClient) {
 			$this->responseUnknownError();
@@ -282,17 +276,17 @@ class TornadoController extends Controller
 			return;
 		}
 
-		$iClientId = (int)$sClientId;
-		$iTimestamp = (int)$sTimestamp;
-		$iSmsTimestamp = (int)$sSmsTimestamp;
-		$iEmailTimestamp = (int)$sEmailTimestamp;
-
 		// при правильно расшифрованном коде сравнение должно пройти успешно, т.к. это не строгое сравнение
-		if ($sClientId != $iClientId) {
+		if (!is_numeric($sClientId) || !is_numeric($sTimestamp)) {
 			$this->aResponse = Yii::app()->tornadoApi->generateErrorResponse(TornadoApiComponent::RESPONSE_CODE_ERROR_CHECK_TOKEN);
 
 			return;
 		}
+
+		$iClientId = (int)$sClientId;
+		$iTimestamp = (int)$sTimestamp;
+		$iSmsTimestamp = (int)$sSmsTimestamp;
+		$iEmailTimestamp = (int)$sEmailTimestamp;
 
 		// время действия токена 1 час
 		if ($iTimestamp + SiteParams::CTIME_HOUR < SiteParams::getTime()) {
@@ -310,7 +304,7 @@ class TornadoController extends Controller
 
 
 		// если со времени отправки прошло менее 3 минут
-		$iSecondsToResend = ($iCheckTimestamp + 3 * 60) - SiteParams::getTime();
+		$iSecondsToResend = ($iCheckTimestamp + SiteParams::CODE_RESEND_TIME) - SiteParams::getTime();
 
 		if ($iSecondsToResend > 0) {
 			$this->aResponse = array(
@@ -322,7 +316,7 @@ class TornadoController extends Controller
 		}
 
 		// ищем в базе клиента
-		$oClient = ClientData::getClientById($iClientId);
+		$oClient = ClientData::model()->findByPk($iClientId);
 
 		if (!$oClient) {
 			$this->responseUnknownError();

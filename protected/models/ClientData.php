@@ -62,6 +62,7 @@
  * @method ClientData[] findAll()
  * @method ClientData[] findAllByAttributes()
  * @method ClientData find()
+ * @method ClientData findByPk($iClientId)
  *
  */
 class ClientData extends CActiveRecord
@@ -214,19 +215,6 @@ class ClientData extends CActiveRecord
 		$oClientData = self::model()->scopeClientId($client_id)->find();
 
 		return ($oClientData) ? $oClientData->getAttributes() : null;
-
-	}
-
-	/**
-	 * @param $client_id
-	 *
-	 * @return ClientData
-	 */
-	public static function getClientById($client_id)
-	{
-		$oClientData = self::model()->scopeClientId($client_id)->find();
-
-		return $oClientData;
 
 	}
 
