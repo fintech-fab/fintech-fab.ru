@@ -1491,6 +1491,9 @@ class DefaultController extends Controller
 			$iClientId = (int)$sClientId;
 		} catch (Exception $e) {
 
+			Yii::log($e->getMessage(), CLogger::LEVEL_ERROR);
+			$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
+
 		}
 
 		$oClient = ClientData::model()->findByPk($iClientId);
