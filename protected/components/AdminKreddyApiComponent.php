@@ -164,7 +164,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
 	const ERROR_VALIDATION = 24; //ошибка валидации
-	const ERROR_PHONE_ERROR = 15; //ошибка номера телефона (такой номер уже есть)
+	const ERROR_CLIENT_EXISTS = 15; //ошибка номера телефона или email (такой номер или email уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
 	const ERROR_NEED_REDIRECT = 18; //требуется редирект на основной домен сайта
@@ -566,7 +566,7 @@ class AdminKreddyApiComponent
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_CLIENT, $aRequest);
 
-		if (!self::getIsError() && !self::getIsPhoneError()) {
+		if (!self::getIsError() && !self::getIsClientExistsError()) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 			$this->setSmsAuthDone(true);
@@ -591,7 +591,7 @@ class AdminKreddyApiComponent
 			'third_name'  => null,
 			'email'       => null,
 			'phone'       => null,
-			'birthday' => null,
+			'birthday'    => null,
 			'tracking_id' => null,
 			'ip'          => null,
 			'site_region' => null,
@@ -604,12 +604,47 @@ class AdminKreddyApiComponent
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_FAST_REG_CLIENT, $aRequest);
 
-		if (!self::getIsError() && !self::getIsPhoneError()) {
+		if (!self::getIsError() && !self::getIsClientExistsError()) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
 			$this->setSmsAuthDone(true);
 
 			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Регистрация клиента через TornadoApi
+	 *
+	 * @param $aClientData
+	 *
+	 * @return bool|string
+	 */
+	public function createTornadoApiClient($aClientData)
+	{
+		//список полей, которые требуется передать при быстрой регистрации
+		$aRequiredFields = array(
+			'first_name'  => null,
+			'last_name'   => null,
+			'third_name'  => null,
+			'email'       => null,
+			'phone'       => null,
+			'birthday'    => null,
+			'tracking_id' => null,
+			'ip'          => null,
+			'site_region' => null,
+		);
+
+		//получаем массив, соджержащий только заданные поля
+		$aClientData = array_intersect_key($aClientData, $aRequiredFields);
+
+		$aRequest = array('clientData' => CJSON::encode($aClientData));
+		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_FAST_REG_CLIENT, $aRequest);
+
+		if (!self::getIsError() && !self::getIsClientExistsError()) {
+			return $aTokenData['token'];
 		}
 
 		return false;
@@ -2735,6 +2770,20 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * @param $sToken
+	 *
+	 * @return bool
+	 */
+	public function loginWithToken($sToken)
+	{
+		$this->setSessionToken($sToken);
+		$bResult = $this->updateClientToken();
+		$this->getClientInfo(true);
+
+		return $bResult;
+	}
+
+	/**
 	 * Логаут, чистит данные в сессии и удаляет токен
 	 */
 	public function logout()
@@ -3130,9 +3179,9 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public function getIsPhoneError()
+	public function getIsClientExistsError()
 	{
-		return $this->getLastCode() === self::ERROR_PHONE_ERROR;
+		return $this->getLastCode() === self::ERROR_CLIENT_EXISTS;
 	}
 
 	/**
@@ -3511,21 +3560,20 @@ class AdminKreddyApiComponent
 	/**
 	 * Отправка Email сообщения через API (для регистрации)
 	 *
-	 * @param $sEmail
-	 * @param $sEmailCode
-	 *
-	 * @internal param $sPhone
-	 * @internal param $sMessage
+	 * @param string $sEmail
+	 * @param string $sEmailCode
+	 * @param null   $sEmailBackUrl
 	 *
 	 * @return bool
 	 */
-	public function sendEmailCode($sEmail, $sEmailCode)
+	public function sendEmailCode($sEmail, $sEmailCode, $sEmailBackUrl = null)
 	{
 		if (!Yii::app()->params['bEmailGateIsOff']) {
 
 			$this->requestAdminKreddyApi(self::API_ACTION_SEND_EMAIL_CODE, array(
-				'email'      => $sEmail,
-				'email_code' => $sEmailCode,
+				'email'          => $sEmail,
+				'email_code'     => $sEmailCode,
+				'email_back_url' => $sEmailBackUrl,
 			));
 			if ($this->getIsError()) {
 				return false;

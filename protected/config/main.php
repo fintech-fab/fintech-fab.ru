@@ -40,6 +40,7 @@ $a = array(
 				),
 			)
 		),
+		'api'      => array(),
 	),
 
 	'params'         => array(
@@ -54,6 +55,9 @@ $a = array(
 		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
+		),
+		'tornadoApi'       => array(
+			'class' => 'application.components.TornadoApiComponent',
 		),
 		'adminKreddyApi'   => array(
 			'class'       => 'application.components.AdminKreddyApiComponent',
@@ -122,6 +126,11 @@ $a = array(
 				'form/<step:\d+>'                                   => 'form/step',
 				'form/ajaxForm/<step:\d+>'                          => 'form/ajaxStep',
 
+				'api/tornado/signup'                                => 'api/tornado/signup',
+				'api/tornado/client/code'                           => 'api/tornado/clientCode',
+				'api/tornado/resend/sms'                            => 'api/tornado/reSendSms',
+				'api/tornado/resend/email'                          => 'api/tornado/reSendEmail',
+
 				'<controller:\w+>/<action:\w+>/<id:\d+>'            => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>/<name:\w+>'          => '<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'                     => '<controller>/<action>',
@@ -155,7 +164,12 @@ $a = array(
 			'csrfTokenName'               => 'stcs',
 			'aIgnoreCsrfValidationRoutes' => array(
 				'identify/default/index',
-				'account/default/returnFrom3DSecurity'
+				'account/default/returnFrom3DSecurity',
+				'api/tornado/signup',
+				'api/tornado/clientCode',
+				'api/tornado/reSendSms',
+				'api/tornado/reSendEmail',
+				'account/default/redirect',
 			),
 		),
 	),

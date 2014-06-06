@@ -835,7 +835,7 @@ class ClientFormComponent
 			// и клиент пробует его ввести, а уже запрошен новый код - и СМС с ним еще не пришла
 			// если не запрошена переотправка, то генерируем новый код
 			if (!$bResend) {
-				$sSmsCode = $this->generateSMSCode(SiteParams::C_SMS_CODE_LENGTH);
+				$sSmsCode = $this->generateCode(SiteParams::C_SMS_CODE_LENGTH);
 			}
 			//отправляем СМС
 			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
@@ -855,7 +855,7 @@ class ClientFormComponent
 			// и клиент пробует его ввести, а уже запрошен новый код - и e-mail с ним еще не пришел
 			// если не запрошена переотправка, то генерируем новый код
 			if (!$bResend) {
-				$sEmailCode = $this->generateSMSCode(SiteParams::C_EMAIL_CODE_LENGTH);
+				$sEmailCode = $this->generateCode(SiteParams::C_EMAIL_CODE_LENGTH);
 			}
 			$bEmailSentOk = Yii::app()->adminKreddyApi->sendEmailCode($sEmail, $sEmailCode);
 			$aClientForm['email_code'] = $sEmailCode;
@@ -1657,7 +1657,7 @@ class ClientFormComponent
 	 *
 	 * @return string
 	 */
-	private function generateSMSCode($iLength = SiteParams::C_SMS_CODE_LENGTH)
+	public function generateCode($iLength = SiteParams::C_SMS_CODE_LENGTH)
 	{
 		// генерация рандомного кода
 		list($usec, $sec) = explode(' ', microtime());

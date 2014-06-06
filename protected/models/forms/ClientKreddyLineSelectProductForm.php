@@ -17,7 +17,7 @@ class ClientKreddyLineSelectProductForm extends ClientCreateFormAbstract
 	{
 		// всегда обязательные поля
 		$aRules[] = array('product', 'required', 'message' => 'Какой КРЕДДИтный лимит интересует?');
-		$aRules[] = array('product', 'in', 'range' => array_keys(ProductsChannelsComponent::getKreddyLineProductsCosts()), 'message' => 'Какой КРЕДДИтный лимит интересует?');
+		$aRules[] = array('product', 'in', 'range' => array_keys(ProductsChannelsComponent::getKreddyLineProductsAmounts()), 'message' => 'Какой КРЕДДИтный лимит интересует?');
 
 		return $aRules;
 
