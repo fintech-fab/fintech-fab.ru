@@ -425,6 +425,8 @@ class FormController extends Controller
 				// Клиент существует по email-у или телефону
 				$this->render('client_exists');
 
+				return;
+
 			} else {
 
 				//если не удалось создать нового клиента, то выводим ошибку
@@ -432,6 +434,8 @@ class FormController extends Controller
 				Yii::app()->clientForm->setFlagCodesSent(false); //сбрасываем флаг отправленного СМС
 				Yii::app()->clientForm->clearClientSession(); //чистим сессию
 				$this->render('error');
+
+				return;
 
 			}
 		}
