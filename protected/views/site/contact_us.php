@@ -14,7 +14,7 @@
 <?php if (Yii::app()->user->hasFlash('contact')): ?>
 
 	<div class="alert alert-success in alert-block">
-	<?php echo Yii::app()->user->getFlash('contact'); ?>
+		<?php echo Yii::app()->user->getFlash('contact'); ?>
 	</div>
 
 <?php else: ?>
@@ -32,6 +32,7 @@
 
 		<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'id'                     => 'contact-form',
+			'action' => Yii::app()->createUrl('/site/faq/'),
 			'enableClientValidation' => true,
 			'clientOptions'          => array(
 				'validateOnSubmit' => true,
