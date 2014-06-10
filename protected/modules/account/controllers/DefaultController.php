@@ -45,6 +45,7 @@ class DefaultController extends Controller
 					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
 					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
 					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
+					'changeAutoDebitingSetting', 'changeAutoDebitingSettingSendSmsCode', 'changeAutoDebitingSettingCheckSmsCode',
 					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
 					'cancelRequest',
 					'returnFrom3DSecurity',
@@ -673,6 +674,46 @@ class DefaultController extends Controller
 
 
 		$this->changeClientDataCheckSmsCode($oChangeSmsAuthSettingForm, AdminKreddyApiComponent::API_ACTION_CHANGE_SMS_AUTH_SETTING, 'change_sms_auth_setting');
+
+	}
+
+	/**
+	 * Смена настройки двухфакторной аутентификации, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeAutoDebitingSetting()
+	{
+
+		//проверяем, авторизован ли клиент по СМС-паролю
+		$this->checkNeedSmsAuth('/account/changeAutoDebitingSetting', 'change_auto_debiting_setting');
+
+		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+
+		$this->changeClientData($oChangeAutoDebitingSettingForm, 'change_auto_debiting_setting');
+
+		if ($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = $aClientInfo['client_data']['auto_debiting_enabled'];
+		}
+		$this->render('change_auto_debiting_setting/sms_auth_setting_form', array('oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeAutoDebitingSettingSendSmsCode()
+	{
+		$this->changeClientDataSendSmsCode(AdminKreddyApiComponent::API_ACTION_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting');
+	}
+
+	/**
+	 * Проверка СМС-кода для смены настройки двухфакторной аутентификации
+	 */
+	public function actionChangeAutoDebitingSettingCheckSmsCode()
+	{
+
+		$oChangeSmsAuthSettingForm = new ChangeAutoDebitingSettingForm();
+
+
+		$this->changeClientDataCheckSmsCode($oChangeSmsAuthSettingForm, AdminKreddyApiComponent::API_ACTION_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting');
 
 	}
 

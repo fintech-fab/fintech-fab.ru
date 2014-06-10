@@ -101,6 +101,11 @@ class AccountMenuWidget extends CWidget
 			'url'   => array('/account/default/changeSmsAuthSetting')
 		);
 
+		$this->aMenu[] = array(
+			'label' => 'Настройки профиля',
+			'url'   => array('/account/default/changeAutoDebitingSetting')
+		);
+
 		$this->aMenu[] = '';
 		$this->aMenu[] = array(
 			'label' => 'Идентификация',
