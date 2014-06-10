@@ -25,7 +25,6 @@ class TornadoController extends Controller
 
 	protected $bTest;
 
-
 	public function init()
 	{
 		$this->disableDebugToolbar();
@@ -36,6 +35,10 @@ class TornadoController extends Controller
 		Yii::app()->errorHandler->errorAction = 'api/tornado/error';
 
 		$this->bTest = Yii::app()->request->getPost('test', false);
+
+		if (!empty(Yii::app()->params['bTornadoTestMode'])) {
+			$this->bTest = true;
+		}
 	}
 
 	public function actionSignup()
@@ -72,9 +75,11 @@ class TornadoController extends Controller
 
 		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
 		// отправляем СМС через API
-		$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($aClientData['phone'], $sMessage);
+		$bSmsSentOk = $this->sendSms($aClientData['phone'], $sMessage);
+
+
 		// отправляем email через API
-		$bEmailSentOk = Yii::app()->adminKreddyApi->sendEmailCode($aClientData['email'], $sEmailCode, $aClientRegisterForm['email_back_url']);
+		$bEmailSentOk = $this->sendEmailCode($aClientData['email'], $sEmailCode, $aClientRegisterForm['email_back_url']);
 
 		// пишем данные в БД
 		$oClient = ClientData::addClient($oClientFastRegForm->phone);
@@ -326,11 +331,11 @@ class TornadoController extends Controller
 
 		if ($bResendEmail) {
 			// отправляем email через API
-			$bSentOk = Yii::app()->adminKreddyApi->sendEmailCode($oClient->email, $oClient->email_code);
+			$bSentOk = $this->sendEmailCode($oClient->email, $oClient->email_code);
 		} else {
 			$sMessage = "Ваш код подтверждения: " . $oClient->sms_code;
 			// отправляем СМС через API
-			$bSentOk = Yii::app()->adminKreddyApi->sendSms($oClient->phone, $sMessage);
+			$bSentOk = $this->sendSms($oClient->phone, $sMessage);
 
 		}
 		// проверим, вдруг что пошло не так, поругаемся ошибкой
@@ -409,6 +414,37 @@ class TornadoController extends Controller
 		echo CJSON::encode($this->aResponse);
 
 		parent::afterAction($action);
+	}
+
+	/**
+	 * @param $sPhone
+	 * @param $sMessage
+	 *
+	 * @return bool
+	 */
+	private function sendSms($sPhone, $sMessage)
+	{
+		if ($this->bTest) {
+			return true;
+		}
+
+		return Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
+	}
+
+	/**
+	 * @param $sEmail
+	 * @param $sEmailCode
+	 * @param $sEmailBackUrl
+	 *
+	 * @return mixed
+	 */
+	private function sendEmailCode($sEmail, $sEmailCode, $sEmailBackUrl = '')
+	{
+		if ($this->bTest) {
+			return true;
+		}
+
+		return Yii::app()->adminKreddyApi->sendEmailCode($sEmail, $sEmailCode, $sEmailBackUrl);
 	}
 
 	// Uncomment the following methods and override them if needed
