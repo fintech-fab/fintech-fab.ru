@@ -2497,6 +2497,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Включено ли автосписание
+	 *
+	 * @return bool
+	 */
+	public function isAutoDebitingEnabled()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (bool)$aClientInfo['client_data']['auto_debiting_enabled'];
+	}
+
+	/**
 	 * Первая ли это идентификация будет у клиента?
 	 *
 	 * @return bool

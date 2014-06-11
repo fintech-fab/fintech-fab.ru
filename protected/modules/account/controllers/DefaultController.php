@@ -403,8 +403,12 @@ class DefaultController extends Controller
 
 		//если есть статус "верификация карты успешно выполнена" то рендерим соответствующее представление
 		if (Yii::app()->user->getState('verifyCardSuccess')) {
+			$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = Yii::app()->adminKreddyApi->isAutoDebitingEnabled();
+
 			$this->render('card/success', array(
 				'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
+				'oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm,
 			));
 			Yii::app()->user->setState('verifyCardSuccess', null);
 			Yii::app()->end();
@@ -682,7 +686,6 @@ class DefaultController extends Controller
 	 */
 	public function actionChangeAutoDebitingSetting()
 	{
-
 		//проверяем, авторизован ли клиент по СМС-паролю
 		$this->checkNeedSmsAuth('/account/changeAutoDebitingSetting', 'change_auto_debiting_setting');
 
@@ -691,9 +694,9 @@ class DefaultController extends Controller
 		$this->changeClientData($oChangeAutoDebitingSettingForm, 'change_auto_debiting_setting');
 
 		if ($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
-			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = $aClientInfo['client_data']['auto_debiting_enabled'];
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = Yii::app()->adminKreddyApi->isAutoDebitingEnabled();
 		}
-		$this->render('change_auto_debiting_setting/sms_auth_setting_form', array('oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm));
+		$this->render('change_auto_debiting_setting/auto_debiting_setting_form', array('oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm));
 	}
 
 	/**
