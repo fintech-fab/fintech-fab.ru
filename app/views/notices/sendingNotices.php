@@ -6,7 +6,6 @@
 ?>
 <div class="jumbotron">
 	<h2>Отправка сообщений</h2>
-<pre><?php print_r($subscribers); ?></pre>
 
 </div>
 
@@ -35,9 +34,35 @@
 		<div class="tab-pane active" id="tab1">
 
 		<div class="row">
-			<!--<div class="pull-right col-xs-5">
+			<div class="pull-right col-xs-5">
+				<div class="form-group">
+					<label for="comment" class="col-sm-3 control-label">Комментарий</label>
+
+					<div class="col-sm-8">
+
+						<?=
+						Form::input('comment', 'comment', '', array(
+							'placeholder' => 'Комментарий к сообщению',
+							'class'       => 'form-control',
+							'id'          => 'inputComment'
+						));
+						?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-3 col-sm-10">
+						<?=
+						Form::button('Отправить', array(
+							'type'  => 'submit',
+							'name' => 'btnSelectedTheme',
+							'class' => 'btn btn-default',
+						));
+						?>
+					</div>
+				</div>
 				<div id="themeComment"></div>
-			</div>-->
+			</div>
+
 
 			<div class="col-xs-7">
 				<table class="table table-striped">
@@ -78,44 +103,44 @@
 
 
 		<div class="form-group">
-			<label for="inputName" class="col-sm-3 control-label">Название</label>
+			<label for="inputThemeName" class="col-sm-3 control-label">Название</label>
 
 			<div class="col-sm-8">
 				<?=
-				Form::input('text', 'name', '', array(
+				Form::input('text', 'themeName', '', array(
 					'placeholder' => 'Название темы.',
 					'class'       => 'form-control',
-					'id'          => 'inputName',
-					'required'    => 'required',
+					'id'          => 'inputThemeName',
+					//'required'    => 'required',
 				));
 				?>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputAbout" class="col-sm-3 control-label">Сообщение</label>
+			<label for="inputTheme" class="col-sm-3 control-label">Сообщение</label>
 
 			<div class="col-sm-8">
 				<?=
-				Form::textarea('message', '', array(
+				Form::textarea('themeText', '', array(
 					'placeholder' => 'Текст сообщения',
 					'class'       => 'form-control',
-					'id'          => 'inputAbout',
-					'required'    => 'required',
+					'id'          => 'inputTheme',
+					//'required'    => 'required',
 					'rows'        => '10',
 				));
 				?>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="comment" class="col-sm-3 control-label">Комментарий</label>
+			<label for="inputThemeComment" class="col-sm-3 control-label">Примечание</label>
 
 			<div class="col-sm-8">
 
 				<?=
-				Form::input('comment', 'comment', '', array(
-					'placeholder' => 'Комментарий к теме',
+				Form::input('text', 'themeComment', '', array(
+					'placeholder' => 'Примечание к новой теме сообщений',
 					'class'       => 'form-control',
-					'id'          => 'inputComment'
+					'id'          => 'inputThemeComment'
 				));
 				?>
 			</div>
@@ -125,7 +150,8 @@
 				<?=
 				Form::button('Отправить', array(
 					'type'  => 'submit',
-					'class' => 'btn btn-default',
+					'name' => 'btnNewTheme',
+					'class' => 'btn',
 				));
 				?>
 			</div>

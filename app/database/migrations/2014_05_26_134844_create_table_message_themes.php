@@ -18,8 +18,8 @@ class CreateTableMessageThemes extends Migration {
 			$table->string('theme', 64);
 			$table->string('name', 32);
 			$table->string('message', 255)->default('');
-			$table->string('comment', 255)->default('');
-
+			$table->string('comment', 100)->default('');
+			$table->timestamps();
 		});
 	}
 
