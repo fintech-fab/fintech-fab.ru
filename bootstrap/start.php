@@ -24,20 +24,11 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(function () {
+$env = $app->detectEnvironment(array(
 
-	$sEnv = 'local';
+	'local' => array('fintech-fab', '*local', 'homestead'),
 
-	if (
-		preg_match('/^.*phpunit.*$/', @$_SERVER['argv'][0]) ||
-		preg_match('/^.*test.*$/', @$_SERVER['HTTP_HOST'])
-	) {
-		$sEnv = 'testing';
-	}
-
-	return $sEnv;
-
-});
+));
 /*
 |--------------------------------------------------------------------------
 | Bind Paths
