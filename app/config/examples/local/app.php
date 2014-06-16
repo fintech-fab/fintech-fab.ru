@@ -1,7 +1,7 @@
 <?php
 return [
 
-	'url'       => 'http://fintech-fab.dev',
+	'url'       => 'http://fintech-fab.dev:8000',
 
 	'vanguard'  => [
 		'recipient_order_form' => 'post@example.com',
@@ -18,6 +18,7 @@ return [
 		//100500 => 'FintechFab\QiwiGate\QiwiGateServiceProvider',
 		//100501 => 'FintechFab\QiwiShop\QiwiShopServiceProvider',
 		//100502 => 'FintechFab\BankEmulator\BankEmulatorServiceProvider',
+		//100503 => 'FintechFab\MoneyTransferEmulator\MoneyTransferServiceProvider',
 	],
 
 	'logglykey' => '',
