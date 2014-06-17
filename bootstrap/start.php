@@ -29,7 +29,6 @@ $env = $app->detectEnvironment(array(
 	'local' => array('fintech-fab', '*local', 'homestead'),
 
 ));
-
 /*
 |--------------------------------------------------------------------------
 | Bind Paths

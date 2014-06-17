@@ -18,8 +18,8 @@ use FintechFab\Widgets\LinksInMenu;
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li <?= LinksInMenu::echoActiveClassIfRequestMatches("vanguard") ?>>
-							<a href="/vanguard">Стажировка</a>
+						<li <?= LinksInMenu::isActive(URL::route('vanguard')) ?>>
+							<a href="<?= URL::route('vanguard') ?>">Стажировка</a>
 						</li>
 						<?= LinksInMenu::linkForMainMenu() ?>
 					</ul>

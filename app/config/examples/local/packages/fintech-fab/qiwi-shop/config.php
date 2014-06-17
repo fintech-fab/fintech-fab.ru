@@ -4,15 +4,16 @@ return array(
 
 	'provider' => array(
 		'name'     => 'Fintech-Fab',
-		'id'       => '',
-		'password' => '',
+		'id'       => '1',
+		'password' => '1234',
+		'key'      => '',
 	),
 
-	'user_id'  => Auth::user()->getAuthIdentifier(),
+	'user_id'  => Auth::user() ? Auth::user()->getAuthIdentifier() : null,
 
-	'lifetime' => 3,
+	'lifetime' => 3, // Срок действия заказа в днях
 
-	'gate_url' => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
+	'gateUrl'  => 'http://fintech-fab.dev/qiwi/gate/api/v2/prv/',
+	'payUrl'   => 'http://fintech-fab.dev:8080/qiwi/gate/order/external/main.action',
 
 );
-

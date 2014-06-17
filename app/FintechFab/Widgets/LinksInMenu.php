@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 13.03.14
- * Time: 14:16
- */
-
 namespace FintechFab\Widgets;
 
 
 use Auth;
 use FintechFab\Models\User;
-use Request;
+use URL;
 
 class LinksInMenu
 {
@@ -20,8 +13,8 @@ class LinksInMenu
 		if (Auth::check()) {
 			return LinksInMenu::linkForUserProfile();
 		}
-		$link_registration = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("registration") . '>
-								<a href="/registration">Регистрация</a>
+		$link_registration = '<li class="' . LinksInMenu::isActive(URL::route('registration')) . '">
+								<a href="' . URL::route('registration') . '">Регистрация</a>
 							</li>';
 		$link_login = '<li>
 							<a href="" data-toggle="modal" data-target="#loginModal">Вход</a>
@@ -35,16 +28,16 @@ class LinksInMenu
 		$first_name = Auth::user()->first_name;
 		$last_name = Auth::user()->last_name;
 		$link_admin = '';
-		$user = User::find(Auth::user()->id);
+		$user = User::find(Auth::user()->getAuthIdentifier());
 		foreach ($user->roles as $role) {
 			if ($role->role == "admin") {
-				$link_admin = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("admin") . '>
-									<a href ="admin">Админ панель</a>
+				$link_admin = '<li class="' . LinksInMenu::isActive(URL::route('admin')) . '">
+									<a href ="' . URL::route('admin') . '">Админ панель</a>
 								</li>';
 			}
 		}
-		$link_user = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("profile") . '>
-							<a href="profile">' . $first_name . ' ' . $last_name . '</a>
+		$link_user = '<li class="' . LinksInMenu::isActive(URL::route('profile')) . '">
+							<a href="' . URL::route('profile') . '">' . $first_name . ' ' . $last_name . '</a>
 						</li>';
 
 		$link_logout = '<li><a href="/logout">Выход</a></li>';
@@ -56,24 +49,25 @@ class LinksInMenu
 	{
 		$link_main_menu = '';
 		if (Auth::check()) {
-			$link_main_menu = '<li ' . LinksInMenu::echoActiveClassIfRequestMatches("client-page") . '>
-									<a href ="client-page">Терминал QIWI</a>
+			$link_main_menu = '<li>
+									<a href ="' . URL::route('createOrder') . '">Терминал QIWI</a>
+								</li>
+								<li>
+									<a href="' . URL::route('accountIndex') . '">Аккаунт QIWI</a>
 								</li>';
 		}
 
 		return $link_main_menu;
 	}
 
-	public static function echoActiveClassIfRequestMatches($requestUri)
+	public static function isActive($url)
 	{
-		$current_file_name = basename(Request::server('REQUEST_URI'), ".php");
-
-		if ($current_file_name == $requestUri) {
-			return 'class="active"';
+		if (URL::current() == $url) {
+			return 'active';
 		}
 
 		return '';
 	}
 
 
-} 
+}

@@ -4,21 +4,23 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*",
+		
+		"laravel/framework": "4.2.*",
 		"codesleeve/asset-pipeline": "dev-master",
 		"iron-io/iron_mq": "dev-master",
+		
 		"fintech-fab/bank-emulator": "dev-master",
-		"money-transfer-emulator": "dev-master"
-	},
-	"require-examples": {
-
+		
+		"money-transfer-emulator": "dev-master",
+		
 		"fintech-fab/qiwi-shop": "dev-master",
 		"fintech-fab/qiwi-gate": "dev-master",
-		"fintech-fab/qiwi-sdk": "dev-master",
-
+		"fintech-fab/qiwi-sdk": "dev-master"
+		
+	},
+	"require-examples": {
 		"fintech-fab/bank-emulator-sdk": "dev-master",
 		"money-transfer-emulator-sdk": "dev-master"
-
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "1.*",

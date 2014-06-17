@@ -12,7 +12,7 @@ class Role extends Eloquent
 
 	public function users()
 	{
-		return $this->belongsToMany(User::class);
+		return $this->belongsToMany('FintechFab\Models\User');
 	}
 
 }
