@@ -58,37 +58,46 @@ class Cookie
 	/**
 	 * Шифрует и сериализует массив $data и записывает в куку $cookieName
 	 *
-	 * @param      $cookieName string
-	 * @param      $data       array
-	 * @param null $expire
+	 * @param      $sCookieName string
+	 * @param      $aData       array
+	 * @param null $iExpireTime
 	 */
-	public static function saveDataToCookie($cookieName, $data, $expire = null)
+	public static function saveDataToCookie($sCookieName, $aData, $iExpireTime = null)
 	{
-		$sEncrypt = serialize($data);
-		$cookieData = CryptArray::encryptVal($sEncrypt);
+		$sEncrypt = serialize($aData);
+		$aCookieData = CryptArray::encryptVal($sEncrypt);
 
 		$aCookieOptions = Yii::app()->session->getCookieParams();
 		if (!empty($aCookieOptions['domain'])) {
 			$aCookieOptions = array(
 				'domain' => $aCookieOptions['domain']
 			);
-			if (isset($expire)) {
-				$aCookieOptions['expire'] = $expire;
+			if (isset($iExpireTime)) {
+				$aCookieOptions['expire'] = $iExpireTime;
 			}
 		} else {
-			if (is_null($expire)) {
+			if (is_null($iExpireTime)) {
 				$aCookieOptions = array(
 					'expire' => time() + 60 * 60 * 24
 				);
 			} else {
 				$aCookieOptions = array(
-					'expire' => $expire
+					'expire' => $iExpireTime
 				);
 			}
 		}
 
-		$cookie = new CHttpCookie($cookieName, $cookieData, $aCookieOptions);
+		$oCookie = new CHttpCookie($sCookieName, $aCookieData, $aCookieOptions);
 
-		Yii::app()->request->cookies[$cookieName] = $cookie;
+		Yii::app()->request->cookies[$sCookieName] = $oCookie;
 	}
+
+	/**
+	 * @param $sCookieName
+	 */
+	public static function removeCookie($sCookieName)
+	{
+		Yii::app()->request->cookies[$sCookieName] = null;
+	}
+
 }

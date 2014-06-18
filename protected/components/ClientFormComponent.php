@@ -1622,8 +1622,7 @@ class ClientFormComponent
 		}
 
 		//удаляем данные из куки
-		$aCookieData = array('client_id' => null, 'phone' => null);
-		Cookie::saveDataToCookie('client', $aCookieData);
+		Cookie::removeCookie('client');
 	}
 
 	/**

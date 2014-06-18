@@ -1,6 +1,9 @@
 <?php
 
 
+/**
+ * Class LinkprofitWidget
+ */
 class LinkprofitWidget extends CWidget
 {
 
@@ -14,7 +17,7 @@ class LinkprofitWidget extends CWidget
 		$sWid = Yii::app()->request->cookies['linkprofit'];
 
 		if ($sWid) {
-			Yii::app()->request->cookies->remove('linkprofit');
+			Yii::app()->request->cookies['linkprofit'] = null;
 
 			$this->render('pixel', ['sWid' => $sWid->value, 'sOrderId' => time()]);
 		}
