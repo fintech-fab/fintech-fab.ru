@@ -13,4 +13,4 @@ public/.htaccess
 public/*.html
 public/files
 public/google
-*.sh
+/*.sh
