@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"require": {
 
-		"laravel/framework": "4.2",
+		"laravel/framework": "4.2.*",
 		"codesleeve/asset-pipeline": "dev-master",
 		"iron-io/iron_mq": "dev-master",
 		"pda/pheanstalk": "dev-master",
