@@ -84,14 +84,15 @@
 		<div class="row">
 			<div class="col-xs-7">
 
-				<table class="table table-striped">
-					<?php foreach($users as $user): ?>
-						<tr>
-							<td><input type='checkbox' name="subscriber<?=$user->id;?>"  value=<?=$user->id;?> ></td><td><?=trim($user->first_name).'  '.$user->last_name;?></td><td></td>
-						</tr>
+				<?php foreach($users as $user): ?>
 
-					<?php endforeach; ?>
-				</table>
+					<label>
+						<input type='checkbox' name="subscriber<?=$user->id;?>"  value=<?=$user->id;?> >
+						&nbsp;<?=trim($user->first_name).'  '.$user->last_name;?>
+					</label><br>
+
+				<?php endforeach; ?>
+
 			</div>
 
 

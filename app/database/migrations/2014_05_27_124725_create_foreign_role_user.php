@@ -12,28 +12,25 @@ class CreateForeignRoleUser extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('role_user', function(Blueprint $table)
-		{
-
-			Schema::table('role_user', function (Blueprint $table) {
-				$table->renameColumn('user_id', 'user_id0');
-				$table->renameColumn('role_id', 'role_id0');
-			});
-			Schema::table('role_user', function (Blueprint $table) {
-				$table->integer('user_id')->unsigned();
-				$table->integer('role_id')->unsigned();
-			});
-			DB::update("UPDATE  `role_user` SET  `user_id` =  `user_id0`,  `role_id`= `role_id0`");
-			Schema::table('role_user', function (Blueprint $table) {
-				$table->dropColumn('user_id0');
-				$table->dropColumn('role_id0');
-			});
-
-			Schema::table('role_user', function (Blueprint $table) {
-				$table->foreign('user_id')->references('id')->on('users');
-				$table->foreign('role_id')->references('id')->on('roles');
-			});
+		Schema::table('role_user', function (Blueprint $table) {
+			$table->renameColumn('user_id', 'user_id0');
+			$table->renameColumn('role_id', 'role_id0');
 		});
+		Schema::table('role_user', function (Blueprint $table) {
+			$table->integer('user_id')->unsigned();
+			$table->integer('role_id')->unsigned();
+		});
+		DB::update("UPDATE  " . DB::getTablePrefix() . "role_user SET  user_id = user_id0,  role_id = role_id0");
+		Schema::table('role_user', function (Blueprint $table) {
+			$table->dropColumn('user_id0');
+			$table->dropColumn('role_id0');
+		});
+
+		Schema::table('role_user', function (Blueprint $table) {
+			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('role_id')->references('id')->on('roles');
+		});
+
 	}
 
 	/**
@@ -56,7 +53,7 @@ class CreateForeignRoleUser extends Migration {
 			$table->integer('user_id');
 			$table->integer('role_id');
 		});
-		DB::update("UPDATE  `role_user` SET  `user_id` =  `user_id0`,  `role_id`= `role_id0`");
+		DB::update("UPDATE  " . DB::getTablePrefix() . "role_user SET  user_id = user_id0,  role_id = role_id0");
 		Schema::table('role_user', function (Blueprint $table) {
 			$table->dropColumn('user_id0');
 			$table->dropColumn('role_id0');

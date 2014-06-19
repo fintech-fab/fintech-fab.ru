@@ -5,7 +5,6 @@ namespace FintechFab\Models;
 use Eloquent;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\UserInterface;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @property integer         $id
@@ -124,21 +123,21 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	);
 
 	/**
-	 * The check of roles
+	 * Проверка прав пользователя для указаной роли
 	 *
-	 * @param  string $role
+	 * @param  string $strRole
 	 *
 	 * @return bool
 	 */
-	public function isCompetent($role)
+	public function isCompetent($strRole)
 	{
-		$sql =
-			"SELECT count( * ) AS cnt
-			FROM roles INNER JOIN
-				role_user ON roles.id = role_user.role_id
-			WHERE (role_user.user_id = ?) AND (roles.role ='Admin' OR roles.role = ?)";
-		$res = DB::select($sql, array($this->id, $role))[0];
+		$role = Role::whereRole($strRole)->first();
+		$res = RoleUser::
+			whereUserId($this->id)->
+			whereIn('role_id', array(1, $role->id))->
+			count();
 
-		return ($res->cnt > 0);
+		return ($res > 0);
 	}
+
 }

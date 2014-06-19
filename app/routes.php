@@ -30,19 +30,26 @@ Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\Aut
 Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
-Route::get('admin', array(
+Route::get('admin0', array( //-----
 	'before' => 'auth|roleAdmin',
-	'as'     => 'admin',
+	'as'     => 'admin0',
 	'uses'   => 'App\Controllers\User\UserProfileController@showAdmin'
 ));
 
-Route::get('TableForAdmin', array(
-	'before' => 'auth|testRole:admin', //Добавлено
+Route::get('TableForAdmin', array( //-------
+	'before' => 'auth|testRole:admin',
 	'as'   => 'WorkAdmin',
 	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
 ));
 
+Route::get('admin', array( //Взамен маршрутам: AdminController@TableForRoles (TableForAdmin), UserProfileController@showAdmin (admin)
+	'before' => 'auth|roleAdmin',
+	'as'     => 'admin',
+	'uses'   => 'App\Controllers\User\AdminController@userRoles'
+));
+
 Route::get('changeRole', array(
+	'before' => 'auth|roleAdmin',
 	'as'   => 'changeRole',
 	'uses' => 'App\Controllers\User\AdminController@changeRole'
 ));

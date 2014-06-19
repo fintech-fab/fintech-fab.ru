@@ -1,7 +1,10 @@
 <?php
-
+/**
+ * @var array $userTable
+ * @var mixed $pageLinks
+ */
 ?>
-<script src="/js/ActionForAdmin.js" type="text/javascript"></script>
+<script src="/js/ActionForRoles.js" type="text/javascript"></script>
 <div class="row">
 	<div class="col-md-3">
 		<img src="/assets/main/logo.png" height="100px" class="img" />
@@ -12,57 +15,50 @@
 </div>
 
 <div class="Roles">
-	<div class="text-center">
 
-		<?=
-		Form::button('Показать таблицу ролей', array(
-			'type'  => 'button',
-			'class' => 'btn btn-primary buttonWithMargin',
-			'id'    => 'btnRoles',
-		));
-		?>
-
-	</div>
-	<div class="row mt20" id="tableRoles">
+	<div class="row mt20" id="tblRoles">
 		<div class="col-xs-10 col-xs-offset-1">
-			<table class="table table-striped" id="tableUser"></table>
+			<table class="table table-striped" id="tableUser">
+				<tr>
+					<td><b>№</b></td>
+					<td><b>Имя</b></td>
+					<td><b>Фамилия</b></td>
+					<td><b>Админ</b></td>
+					<td><b>Модератор</b></td>
+					<td><b>Пользователь</b></td>
+					<td><b>Рассыльный</b></td>
+					<td><b>Подписчик</b></td>
+				</tr>
+				<?php foreach($userTable as $user):?>
+
+					<tr>
+						<td><?=$user['id']; ?></td>
+						<td><?=$user['first_name']; ?></td>
+						<td><?=$user['last_name']; ?></td>
+						<td>
+							<input id="Checkbox1" type="checkbox" <?=$user['admin']; ?> value="1">
+						</td>
+						<td>
+							<input id="Checkbox2" type="checkbox" <?=$user['moderator']; ?> value="2">
+						</td>
+						<td>
+							<input id="Checkbox3" type="checkbox" <?=$user['user']; ?> value="3">
+						</td>
+						<td>
+							<input id="Checkbox4" type="checkbox" <?=$user['messageSender']; ?> value="4">
+						</td>
+						<td>
+							<input id="Checkbox5" type="checkbox" <?=$user['messageSubscriber']; ?> value="5">
+						</td>
+					</tr>
+				<?php endforeach;?>
+
+			</table>
+
+			<?=$pageLinks; ?>
+
 			<div id="message" class="row"></div>
 
-			<ul id="UserPages"  style="display:none;">
-				<span id="btnsPLeft"  style="display:none;">
-					<li>
-						<button id="btnPFirst" class="btn buttonWithMargin"  type="button">1</button>
-					</li>
-					<li>
-						<button id="btnPLeft" class="btn buttonWithMargin" type="button">&laquo;-</button>
-					</li>
-					<li>...</li>
-				</span>
-				<li>
-					<button id="btnP1" class="btn buttonWithMargin" type="button">1</button>
-				</li>
-				<li>
-					<button id="btnP2" class="btn buttonWithMargin"  type="button">2</button>
-				</li>
-				<li>
-					<button id="btnP3" class="btn buttonWithMargin" type="button">3</button>
-				</li>
-				<li>
-					<button id="btnP4" class="btn buttonWithMargin" type="button">4</button>
-				</li>
-				<li>
-					<button id="btnP5" class="btn buttonWithMargin" type="button">5</button>
-				</li>
-				<span id="btnsPRight" style="display:none;">
-					<li>...</li>
-					<li>
-						<button id="btnPRight" class="btn buttonWithMargin" type="button">-&raquo;</button>
-					</li>
-					<li>
-						<button id="btnPEnd" class="btn buttonWithMargin" type="button">10</button>
-					</li>
-				</span>
-			</ul>
 		</div>
 	</div>
 </div>
