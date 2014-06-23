@@ -10,9 +10,11 @@ use Eloquent;
  * @package FintechFab\Models
  *
  * @property integer id
+ * @property User[]  users
  *
  * @method Role whereRole static
  * @method Role first static
+ * @method Role find($id) static
  */
 class Role extends Eloquent
 {
@@ -22,8 +24,7 @@ class Role extends Eloquent
 
 	public function users()
 	{
-		//return $this->belongsToMany(User::class);
-		return $this->belongsToMany('FintechFab\Models\User');
+		return $this->belongsToMany(User::class);
 	}
 
 }

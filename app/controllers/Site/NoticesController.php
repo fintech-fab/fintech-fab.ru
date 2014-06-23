@@ -5,6 +5,7 @@ namespace App\Controllers\Site;
 use App\Controllers\BaseController;
 use FintechFab\Models\MessageThemes;
 //use FintechFab\Models\User;
+use FintechFab\Models\Role;
 use Input;
 use Redirect;
 use FintechFab\Components\MailSender;
@@ -17,27 +18,14 @@ class NoticesController extends BaseController
 
 	public function notices()
 	{
-		$users =
-			DB::table('users')
-				->join('role_user', 'users.id', '=', 'role_user.user_id')
-				->join('roles', 'role_user.role_id', '=', 'roles.id')
-			->where('roles.role', 'messageSubscriber')
-			->select('users.id', 'users.first_name', 'users.last_name')
-			->get();
 
-		$pr = DB::getTablePrefix();
-		$users1 = DB::select("
-			SELECT u.id, u.first_name, u.last_name
-			fROM {$pr}users AS u INNER JOIN
-				{$pr}role_user AS ru ON ru.user_id = u.id INNER JOIN
-				{$pr}roles AS r ON r.id = ru.role_id
-			WHERE r.role = 'messageSubscriber'");
-
+		$role = Role::whereRole('messageSubscriber')->first();
 
 		return $this->make(
 			'sendingNotices'
 			, array('themes' => MessageThemes::all(array('id', 'name', 'comment'))
-			, 'users' => $users1 )
+			, 'users' => $role->users
+			)
 		);
 	}
 

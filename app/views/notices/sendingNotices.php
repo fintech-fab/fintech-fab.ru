@@ -83,12 +83,12 @@
 
 		<div class="row">
 			<div class="col-xs-7">
-
 				<?php foreach($users as $user): ?>
 
 					<label>
-						<input type='checkbox' name="subscriber<?=$user->id;?>"  value=<?=$user->id;?> >
-						&nbsp;<?=trim($user->first_name).'  '.$user->last_name;?>
+
+						<input type='checkbox' name="subscriber[]" value=<?= $user->id ?>>
+						&nbsp;<?= trim(e($user->first_name)) . '  ' . $user->last_name; ?>
 					</label><br>
 
 				<?php endforeach; ?>

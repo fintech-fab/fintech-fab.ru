@@ -27,7 +27,7 @@ class AdminController extends BaseController
 	{
 		$userTable = array();
 
-		$users = User::orderBy('last_name')->orderBy('first_name')->paginate(1);
+		$users = User::orderBy('last_name')->orderBy('first_name')->paginate(10);
 		foreach($users as $user)
 		{
 			$roles = $user->roles;

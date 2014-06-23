@@ -5,6 +5,7 @@ namespace FintechFab\Models;
 use Eloquent;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\UserInterface;
+use Illuminate\Pagination\Paginator;
 
 /**
  * @property integer         $id
@@ -16,9 +17,11 @@ use Illuminate\Auth\UserInterface;
  * @property string          $created_at
  * @property string          $remember_token
  *
- * @property Role            $roles
+ * @property Role[]            $roles
  *
  * @method User find() static
+ * @method User orderBy() static
+ * @method Paginator|User[] paginate() static
  */
 class User extends Eloquent implements UserInterface, RemindableInterface
 {
@@ -132,10 +135,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	public function isCompetent($strRole)
 	{
 		$role = Role::whereRole($strRole)->first();
+		$roleAdmin = Role::whereRole('admin')->first();
 		$res = RoleUser::
-			whereUserId($this->id)->
-			whereIn('role_id', array(1, $role->id))->
-			count();
+			whereUserId($this->id)->whereIn('role_id', array($roleAdmin->id, $role->id))->count();
 
 		return ($res > 0);
 	}
