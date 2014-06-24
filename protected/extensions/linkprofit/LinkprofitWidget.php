@@ -17,7 +17,8 @@ class LinkprofitWidget extends CWidget
 		$sWid = Yii::app()->request->cookies['linkprofit'];
 
 		if ($sWid) {
-			Yii::app()->request->cookies['linkprofit'] = null;
+			Yii::app()->request->cookies->remove('linkprofit');
+
 
 			$this->render('pixel', ['sWid' => $sWid->value, 'sOrderId' => time()]);
 		}

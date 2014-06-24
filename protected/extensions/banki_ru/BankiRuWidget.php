@@ -17,7 +17,7 @@ class BankiRuWidget extends CWidget
 		$sWid = Yii::app()->request->cookies['banki_ru'];
 
 		if ($sWid) {
-			Yii::app()->request->cookies['banki_ru'] = null;
+			Yii::app()->request->cookies->remove('banki_ru');
 
 			$this->render('pixel', ['iSubId' => time()]);
 		}
