@@ -4,7 +4,7 @@ namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
 use FintechFab\Models\MessageThemes;
-//use FintechFab\Models\User;
+use FintechFab\Models\User;
 use FintechFab\Models\Role;
 use Input;
 use Redirect;
@@ -18,7 +18,6 @@ class NoticesController extends BaseController
 
 	public function notices()
 	{
-
 		$role = Role::whereRole('messageSubscriber')->first();
 
 		return $this->make(
@@ -29,38 +28,31 @@ class NoticesController extends BaseController
 		);
 	}
 
+	public function addNewTheme()
+	{
+		$mTheme = new MessageThemes;
+		$mTheme->name = Input::get('themeName');
+		$mTheme->message = Input::get('themeText');
+		$mTheme->comment = Input::get('themeComment');
+		$mTheme->theme = 'emails.themes';
+		$mTheme->save();
+
+		return Redirect::to('notices');
+	}
+
 	public function sendNotice()
 	{
-
-		$subscribers = Input::except('themes','themeText','themeName', 'themeComment','comment','_token', 'btnSelectedTheme', 'btnNewTheme');
-
-		if(Input::exists('btnNewTheme'))
+		if(! Input::has('themes'))
 		{
-			$mTheme = new MessageThemes;
-			$mTheme->name = Input::get('themeName');
-			$mTheme->message = Input::get('themeText');
-			$mTheme->comment = Input::get('themeComment');
-			$mTheme->theme = 'emails.themes';
-			$mTheme->save();
+			return Redirect::to('notices');
 		}
-		else
-		{
-			if(! Input::has('themes'))
-			{
-				return Redirect::to('notices');
-			}
-			$mTheme = MessageThemes::find(Input::get('themes'));
-		}
+		$mTheme = MessageThemes::find(Input::get('themes'));
 
+		$subscribers = Input::get('subscribers');
 		if(count($subscribers) == 0)
 		{
 			return Redirect::to('notices');
 		}
-
-		$mails = DB::select(
-			"SELECT email, CONCAT(first_name, ' ', last_name ) AS name
-			 FROM " . DB::getTablePrefix() . "users
-			 WHERE id in (" . implode(', ',$subscribers) . ");");
 
 		$data['subject'] = $mTheme->name;
 		$data['baseMessage'] = $mTheme->message;
@@ -68,11 +60,14 @@ class NoticesController extends BaseController
 		$data['comment'] = Input::get('comment', '');
 
 		$mailSender = new MailSender();
-		foreach($mails as $mail)
+
+		for($i = 0; $i < count($subscribers); $i++)
 		{
-			$data['to'] = $mail->email;
-			$data['toName'] = $mail->name;
+			$user = User::find($subscribers[$i]);
+			$data['to'] = $user->email;
+			$data['toName'] = $user->first_name . " " . $user->last_name;
 			$mailSender->doNoticeTheme($data);
+
 		}
 
 		return Redirect::to('notices');

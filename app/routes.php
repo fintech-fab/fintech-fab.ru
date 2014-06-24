@@ -8,10 +8,15 @@ Route::get('notices', array(
 		'as' => 'notices',
 		'uses' => 'App\Controllers\Site\NoticesController@notices')
 );
-Route::post('notices', array(
+Route::post('sendNotice', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'notices',
+		'as' => 'sendNotice',
 		'uses' => 'App\Controllers\Site\NoticesController@sendNotice')
+);
+Route::post('addNewTheme', array(
+		'before' => 'auth|testRole:messageSender',
+		'as' => 'addNewTheme',
+		'uses' => 'App\Controllers\Site\NoticesController@addNewTheme')
 );
 
 Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
@@ -30,28 +35,16 @@ Route::get('logout', array('as' => 'logout', 'uses' => 'App\Controllers\Site\Aut
 Route::get('vk', 'App\Controllers\Site\AuthController@socialNet');
 Route::get('fb', 'App\Controllers\Site\AuthController@socialNet');
 
-Route::get('admin0', array( //-----
-	'before' => 'auth|roleAdmin',
-	'as'     => 'admin0',
-	'uses'   => 'App\Controllers\User\UserProfileController@showAdmin'
-));
-
-Route::get('TableForAdmin', array( //-------
-	'before' => 'auth|testRole:admin',
-	'as'   => 'WorkAdmin',
-	'uses' => 'App\Controllers\User\AdminController@TableForRoles'
-));
-
-Route::get('admin', array( //Взамен маршрутам: AdminController@TableForRoles (TableForAdmin), UserProfileController@showAdmin (admin)
+Route::get('admin', array(
 	'before' => 'auth|roleAdmin',
 	'as'     => 'admin',
-	'uses'   => 'App\Controllers\User\AdminController@userRoles'
+	'uses'   => 'App\Controllers\Site\AdminController@userRoles'
 ));
 
 Route::get('changeRole', array(
 	'before' => 'auth|roleAdmin',
 	'as'   => 'changeRole',
-	'uses' => 'App\Controllers\User\AdminController@changeRole'
+	'uses' => 'App\Controllers\Site\AdminController@changeRole'
 ));
 
 Route::group(array('before' => 'auth'), function () {

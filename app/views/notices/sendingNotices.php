@@ -18,14 +18,12 @@
 	<li>
 		<a href="#tab2" data-toggle="tab">Подписчики</a>
 	</li>
-	<li>
-		<a href="#tab3" data-toggle="tab">Новая тема</a>
-	</li>
+
 </ul>
 
 	<?=
 	Form::open(array(
-		'action' => 'notices',
+		'action' => 'sendNotice',
 		'class'  => 'form-horizontal',
 		'role'   => 'form',
 		'method' => 'post',
@@ -68,7 +66,14 @@
 				<table class="table table-striped">
 					<?php foreach($themes as $theme): ?>
 						<tr>
-							<td> <label><input type="radio" name="themes" value=<?=$theme->id;?>>&nbsp;<?=$theme->name;?></label> </td>
+							<td>
+								<label>
+									<?=
+									Form::radio("themes", "$theme->id");
+									?>
+									&nbsp;<?=e($theme->name)?>
+								</label>
+							</td>
 							<td><?=$theme->comment;?></td>
 
 						</tr>
@@ -86,9 +91,8 @@
 				<?php foreach($users as $user): ?>
 
 					<label>
-
-						<input type='checkbox' name="subscriber[]" value=<?= $user->id ?>>
-						&nbsp;<?= trim(e($user->first_name)) . '  ' . $user->last_name; ?>
+						<?=	Form::checkbox("subscribers[]", "$user->id") ?>
+						&nbsp;<?= trim(e($user->first_name)) . '  ' . e($user->last_name) ?>
 					</label><br>
 
 				<?php endforeach; ?>
@@ -99,10 +103,22 @@
 		</div>
 
 	</div>
-	<div class="tab-pane" id="tab3">
+
+</div>
+	<?= Form::close(); ?>
 
 
 
+	<div class="jumbotron">
+		<?=
+		Form::open(array(
+			'action' => 'addNewTheme',
+			'class'  => 'form-horizontal',
+			'role'   => 'form',
+			'method' => 'post',
+		)); ?>
+
+		<h3>Новая тема</h3>
 		<div class="form-group">
 			<label for="inputThemeName" class="col-sm-3 control-label">Название</label>
 
@@ -112,7 +128,7 @@
 					'placeholder' => 'Название темы.',
 					'class'       => 'form-control',
 					'id'          => 'inputThemeName',
-					//'required'    => 'required',
+					'required'    => 'required',
 				));
 				?>
 			</div>
@@ -126,7 +142,7 @@
 					'placeholder' => 'Текст сообщения',
 					'class'       => 'form-control',
 					'id'          => 'inputTheme',
-					//'required'    => 'required',
+					'required'    => 'required',
 					'rows'        => '10',
 				));
 				?>
@@ -149,18 +165,16 @@
 		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-10">
 				<?=
-				Form::button('Отправить', array(
+				Form::button('Сохранить', array(
 					'type'  => 'submit',
 					'name' => 'btnNewTheme',
-					'class' => 'btn',
+					'class' => 'btn btn-default',
 				));
 				?>
 			</div>
 		</div>
+		<?= Form::close(); ?>
 	</div>
-</div>
-	<?= Form::close(); ?>
-
 
 
 </div>

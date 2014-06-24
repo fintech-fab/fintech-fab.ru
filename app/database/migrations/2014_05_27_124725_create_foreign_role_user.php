@@ -12,19 +12,9 @@ class CreateForeignRoleUser extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('role_user', function (Blueprint $table) {
-			$table->renameColumn('user_id', 'user_id0');
-			$table->renameColumn('role_id', 'role_id0');
-		});
-		Schema::table('role_user', function (Blueprint $table) {
-			$table->integer('user_id')->unsigned();
-			$table->integer('role_id')->unsigned();
-		});
-		DB::update("UPDATE  " . DB::getTablePrefix() . "role_user SET  user_id = user_id0,  role_id = role_id0");
-		Schema::table('role_user', function (Blueprint $table) {
-			$table->dropColumn('user_id0');
-			$table->dropColumn('role_id0');
-		});
+		DB::statement("ALTER TABLE " . DB::getTablePrefix() . "role_user
+			CHANGE user_id user_id INT(10) UNSIGNED NOT NULL,
+			CHANGE role_id role_id INT(10) UNSIGNED NOT NULL");
 
 		Schema::table('role_user', function (Blueprint $table) {
 			$table->foreign('user_id')->references('id')->on('users');
@@ -45,20 +35,9 @@ class CreateForeignRoleUser extends Migration {
 			$table->dropForeign('role_user_role_id_foreign');
 		});
 
-		Schema::table('role_user', function (Blueprint $table) {
-			$table->renameColumn('user_id', 'user_id0');
-			$table->renameColumn('role_id', 'role_id0');
-		});
-		Schema::table('role_user', function (Blueprint $table) {
-			$table->integer('user_id');
-			$table->integer('role_id');
-		});
-		DB::update("UPDATE  " . DB::getTablePrefix() . "role_user SET  user_id = user_id0,  role_id = role_id0");
-		Schema::table('role_user', function (Blueprint $table) {
-			$table->dropColumn('user_id0');
-			$table->dropColumn('role_id0');
-		});
-
+		DB::statement("ALTER TABLE " . DB::getTablePrefix() . "role_user
+			CHANGE user_id user_id INT(11) NOT NULL,
+			CHANGE role_id role_id INT(11) NOT NULL");
 	}
 
 }

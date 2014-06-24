@@ -63,7 +63,7 @@ class MailSender
 		$this->initTo($data);
 
 		Mail::send('emails.themes', $data, function (Message $message) {
-			$message->to($this->to)->subject($this->subject);
+			$message->to($this->to, $this->name)->subject($this->subject);
 		});
 
 		$cntFails = count(Mail::failures());
