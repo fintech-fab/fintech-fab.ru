@@ -33,6 +33,7 @@ class Controller extends CController
 
 	protected function beforeAction($aAction)
 	{
+		ob_start();
 
 		if ($sTrackingID = Yii::app()->request->getParam('TrackingID')) {
 			//очистка данных из GET-запроса
@@ -56,6 +57,13 @@ class Controller extends CController
 		}
 
 		return parent::beforeAction($aAction);
+	}
+
+	protected function afterAction($aAction)
+	{
+		parent::afterAction($aAction);
+
+		ob_end_flush();
 	}
 
 	/**
