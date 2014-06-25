@@ -14,7 +14,6 @@ use Eloquent;
  */
 class RoleUser extends Eloquent
 {
-	//protected $fillable = array('user_id', 'role_id');
 	public $timestamps = false;
 
 	protected $table = 'role_user';

@@ -9,7 +9,6 @@ use FintechFab\Models\Role;
 use Input;
 use Redirect;
 use FintechFab\Components\MailSender;
-use DB;
 
 class NoticesController extends BaseController
 {

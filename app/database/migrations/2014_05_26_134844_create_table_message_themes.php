@@ -14,7 +14,7 @@ class CreateTableMessageThemes extends Migration {
 	{
 		Schema::create('message_themes', function(Blueprint $table)
 		{
-			$table->increments('id')->unsigned();
+			$table->increments('id');
 			$table->string('theme', 64);
 			$table->string('name', 32);
 			$table->string('message', 255)->default('');

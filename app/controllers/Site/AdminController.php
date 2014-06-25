@@ -6,7 +6,6 @@ use App\Controllers\BaseController;
 use FintechFab\Models\User;
 use FintechFab\Models\Role;
 use Input;
-use DB;
 
 /**
  * Class AdminController
@@ -26,7 +25,7 @@ class AdminController extends BaseController
 	{
 		$userTable = array();
 
-		$users = User::orderBy('last_name')->orderBy('first_name')->paginate(10);
+		$users = User::orderBy('last_name')->orderBy('first_name')->paginate(25);
 		$id1 = Role::whereRole('admin')->first()->id;
 		$id2 = Role::whereRole('moderator')->first()->id;
 		$id3 = Role::whereRole('user')->first()->id;
