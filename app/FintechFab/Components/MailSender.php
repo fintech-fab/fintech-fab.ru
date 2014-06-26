@@ -5,7 +5,7 @@ namespace FintechFab\Components;
 use Config;
 use Illuminate\Mail\Message;
 use Mail;
-use Symfony\Component\Security\Acl\Exception\Exception;
+use Exception;
 
 class MailSender
 {
