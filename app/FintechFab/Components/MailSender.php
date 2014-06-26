@@ -62,7 +62,7 @@ class MailSender
 	{
 		$this->initTo($data);
 
-		Mail::send('emails.themes', $data, function (Message $message) {
+		Mail::send('emails.noticeThemes', $data, function (Message $message) {
 			$message->to($this->to, $this->name)->subject($this->subject);
 		});
 

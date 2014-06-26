@@ -33,7 +33,7 @@ class NoticesController extends BaseController
 		$mTheme->name = Input::get('themeName');
 		$mTheme->message = Input::get('themeText');
 		$mTheme->comment = Input::get('themeComment');
-		$mTheme->theme = 'emails.themes';
+		$mTheme->theme = 'emails.noticeThemes';
 		$mTheme->save();
 
 		return Redirect::to('notices');
