@@ -54,7 +54,7 @@ return array(
     |
     */
 
-    'from' => array('address' => null, 'name' => 'helpik94'),
+    'from' => array('address' => null, 'name' => 'fintech-fab'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return array(
     |
     */
 
-    'username' => 'helpik94',
+    'username' => 'fintech-fab',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return array(
     |
     */
 
-    'password' => 'Mastanggt23051967',
+    'password' => '123qwerty',
 
     /*
     |--------------------------------------------------------------------------

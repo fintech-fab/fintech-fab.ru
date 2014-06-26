@@ -223,16 +223,20 @@
             ?> <label class="control-label" for="inputPhp">php</label><br>
             <?=Form::checkbox('direction[]', 'page-proofs', false,  array(
                 'id'          => 'page-proofs'
-            ));?> <label class="control-label" for="page-proofs">Верстка</label><br>
+            ));
+            ?> <label class="control-label" for="page-proofs">Верстка</label><br>
             <?=Form::checkbox('direction[]', 'Android', false,  array(
                 'id'          => 'Android'
-            ));?> <label class="control-label" for="Android">Android</label><br>
+            ));
+            ?> <label class="control-label" for="Android">Android</label><br>
             <?=Form::checkbox('direction[]', 'ios', false,  array(
                 'id'          => 'ios'
-            ));?> <label class="control-label" for="ios">ios</label><br>
+            ));
+            ?> <label class="control-label" for="ios">ios</label><br>
             <?=Form::checkbox('direction[]', 'other', false,  array(
                 'id'          => 'other'
-            ));?> <label class="control-label" for="other">other</label><br>
+            ));
+            ?> <label class="control-label" for="other">other</label><br>
         </div>
     </div>
 
@@ -290,7 +294,7 @@
         <label for="input" class="col-sm-3 control-label">Могу раз в неделю приезжать к вам в офис</label>
 
         <div class="col-sm-8">
-            <?=Form::select('visit', array('Yes' => 'Да', 'No' => 'Нет'), '', array(
+            <?=Form::select('visit', array('Да' => 'Да', 'Нет' => 'Нет'), '', array(
                 'class'       => 'form-control',
                 'id'          => 'inputEmail',
                 'required'    => 'required',
