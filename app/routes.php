@@ -1,21 +1,21 @@
 <?php
 Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainController@index'));
 Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
-Route::post('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
+Route::post('vanguard/postOrder', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',
 		'as' => 'notices',
 		'uses' => 'App\Controllers\Site\NoticesController@notices')
 );
-Route::post('sendNotice', array(
+Route::post('notices/send', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'sendNotice',
+		'as' => 'notices.send',
 		'uses' => 'App\Controllers\Site\NoticesController@sendNotice')
 );
-Route::post('addNewTheme', array(
+Route::post('notices/theme/add', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'addNewTheme',
+		'as' => 'notices.theme.add',
 		'uses' => 'App\Controllers\Site\NoticesController@addNewTheme')
 );
 

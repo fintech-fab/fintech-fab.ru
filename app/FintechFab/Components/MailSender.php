@@ -40,15 +40,12 @@ class MailSender
 	{
 		$this->initTo($data);
 
-		/*
-		 *
-		 *
-		 *
-		 */
+		Mail::send('emails.replyToNewImprover', $data, function (Message $message) {
+			$message->to($this->to, $this->name)->subject('Принята заявка');
+		});
 
-		//$cntFails = count(Mail::failures());
-		//return (0 == $cntFails);
-		return (true);
+		$cntFails = count(Mail::failures());
+		return (0 == $cntFails);
 	}
 	/**
 	 * @param array $data

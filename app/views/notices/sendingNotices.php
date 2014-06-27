@@ -23,7 +23,7 @@
 
 	<?=
 	Form::open(array(
-		'action' => 'sendNotice',
+		'action' => 'notices.send',
 		'class'  => 'form-horizontal',
 		'role'   => 'form',
 		'method' => 'post',
@@ -112,7 +112,7 @@
 	<div class="jumbotron">
 		<?=
 		Form::open(array(
-			'action' => 'addNewTheme',
+			'action' => 'notices.theme.add',
 			'class'  => 'form-horizontal',
 			'role'   => 'form',
 			'method' => 'post',
