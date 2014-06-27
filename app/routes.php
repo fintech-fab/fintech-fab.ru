@@ -18,6 +18,11 @@ Route::post('notices/theme/add', array(
 		'as' => 'notices.theme.add',
 		'uses' => 'App\Controllers\Site\NoticesController@addNewTheme')
 );
+Route::post('notices/theme/getMessage', array(
+		'before' => 'auth|testRole:messageSender',
+		'as' => 'notices.theme.getMessage',
+		'uses' => 'App\Controllers\Site\NoticesController@getMessageOfTheme')
+);
 
 Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
 Route::post('registration', array(
@@ -41,9 +46,9 @@ Route::get('admin', array(
 	'uses'   => 'App\Controllers\Site\AdminController@userRoles'
 ));
 
-Route::get('changeRole', array(
+Route::get('admin/changeRole', array(
 	'before' => 'auth|roleAdmin',
-	'as'   => 'changeRole',
+	'as'   => 'admin.changeRole',
 	'uses' => 'App\Controllers\Site\AdminController@changeRole'
 ));
 

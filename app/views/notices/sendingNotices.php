@@ -4,6 +4,7 @@
  * @var array $users
  */
 ?>
+<script src="/js/ActionForMessageThemes.js" type="text/javascript"></script>
 <div class="jumbotron">
 	<h2>Отправка сообщений</h2>
 
@@ -33,11 +34,11 @@
 
 		<div class="row">
 			<div class="pull-right col-xs-5">
+				<div id="themeMessage" style="min-height: 100px"></div>
 				<div class="form-group">
 					<label for="comment" class="col-sm-3 control-label">Комментарий</label>
 
 					<div class="col-sm-8">
-
 						<?=
 						Form::input('comment', 'comment', '', array(
 							'placeholder' => 'Комментарий к сообщению',
@@ -58,7 +59,6 @@
 						?>
 					</div>
 				</div>
-				<div id="themeComment"></div>
 			</div>
 
 

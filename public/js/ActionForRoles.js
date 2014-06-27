@@ -5,7 +5,7 @@ $(document).ready(function () {
 		var userN = tr.children("td:first").html();
 		var roleN = this.value;
 		var val = this.checked;
-		$.get('changeRole', {"userN": userN, "roleN": roleN, "val": val},
+		$.get('admin/changeRole', {"userN": userN, "roleN": roleN, "val": val},
 			function (res) {
 				$("#message").dialog({ title: 'Сообщение', show: 'drop', hide: 'explode' }).html(res);
 			});

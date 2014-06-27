@@ -23,30 +23,38 @@ class AdminController extends BaseController
 	 */
 	public function userRoles()
 	{
-		$userTable = array();
-
 		$users = User::orderBy('last_name')->orderBy('first_name')->paginate(25);
-		$id1 = Role::whereRole('admin')->first()->id;
-		$id2 = Role::whereRole('moderator')->first()->id;
-		$id3 = Role::whereRole('user')->first()->id;
-		$id4 = Role::whereRole('messageSender')->first()->id;
-		$id5 = Role::whereRole('messageSubscriber')->first()->id;
+
+		$allRoles = Role::all();
+		$rolesStr = array();
+		foreach($allRoles as $role)
+		{
+			$list = explode(" ", $role->role_name);
+			$rolesStr[$role->role] = $list[0];
+		}
+		$userTableHead = $rolesStr;
+
+		$userTable = array();
 		foreach($users as $user)
 		{
 			$roles = $user->roles;
+			foreach($allRoles as $role)
+			{
+				$rolesStr[$role->role] = isset($roles->find($role->id)->id) ? 'checked' : '';
+			}
 			$userTable[] = array(
 				'id'         => $user->id,
 				'first_name' => $user->first_name,
 				'last_name'  => $user->last_name,
-				'admin'      => isset($roles->find($id1)->id) ? 'checked' : '',
-				'moderator'  => isset($roles->find($id2)->id) ? 'checked' : '',
-				'user'       => isset($roles->find($id3)->id) ? 'checked' : '',
-				'messageSender'         => isset($roles->find($id4)->id) ? 'checked' : '',
-				'messageSubscriber'     => isset($roles->find($id5)->id) ? 'checked' : ''
+				'roles'      => $rolesStr
 			);
 		}
 
-		return $this->make('userRoles', array('userTable' => $userTable, 'pageLinks' => $users->links()) );
+		return $this->make('userRoles', array(
+			'userTable' => $userTable,
+			'userTableHead' => $userTableHead,
+			'pageLinks' => $users->links())
+		);
 	}
 
 

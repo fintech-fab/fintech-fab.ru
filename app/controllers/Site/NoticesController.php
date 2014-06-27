@@ -72,4 +72,14 @@ class NoticesController extends BaseController
 		return Redirect::to('notices');
 	}
 
+	public function getMessageOfTheme()
+	{
+		if(input::has('themeId')){
+			$themeId = input::get('themeId');
+			return MessageThemes::find($themeId)->message;
+		}
+		else {
+			return "";
+		}
+	}
 }

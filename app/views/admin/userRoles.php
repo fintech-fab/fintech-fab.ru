@@ -1,8 +1,9 @@
 <?php
 /**
  * @var array $userTable
+ * @var array $userTableHead
  * @var mixed $pageLinks
- */
+  */
 ?>
 <script src="/js/ActionForRoles.js" type="text/javascript"></script>
 <div class="row">
@@ -23,11 +24,10 @@
 					<td><b>№</b></td>
 					<td><b>Имя</b></td>
 					<td><b>Фамилия</b></td>
-					<td><b>Админ</b></td>
-					<td><b>Модератор</b></td>
-					<td><b>Пользователь</b></td>
-					<td><b>Рассыльный</b></td>
-					<td><b>Подписчик</b></td>
+
+					<?php foreach($userTableHead as $roleHead): ?>
+						<td><b><?=$roleHead ?></b></td>
+					<?php endforeach; ?>
 				</tr>
 				<?php foreach($userTable as $user):?>
 
@@ -35,21 +35,18 @@
 						<td><?=$user['id']; ?></td>
 						<td><?=$user['first_name']; ?></td>
 						<td><?=$user['last_name']; ?></td>
-						<td>
-							<input id="Checkbox1" type="checkbox" <?=$user['admin']; ?> value="1">
-						</td>
-						<td>
-							<input id="Checkbox2" type="checkbox" <?=$user['moderator']; ?> value="2">
-						</td>
-						<td>
-							<input id="Checkbox3" type="checkbox" <?=$user['user']; ?> value="3">
-						</td>
-						<td>
-							<input id="Checkbox4" type="checkbox" <?=$user['messageSender']; ?> value="4">
-						</td>
-						<td>
-							<input id="Checkbox5" type="checkbox" <?=$user['messageSubscriber']; ?> value="5">
-						</td>
+						<?php
+						$i = 1;
+						foreach($user['roles'] as $checkRole):
+						?>
+							<td>
+								<?=	Form::checkbox("Checkbox" . $i, $i, $checkRole)	?>
+							</td>
+						<?php
+							$i++;
+						endforeach;
+						?>
+
 					</tr>
 				<?php endforeach;?>
 

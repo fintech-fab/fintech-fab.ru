@@ -10,6 +10,8 @@ use Eloquent;
  * @package FintechFab\Models
  *
  * @property integer id
+ * @property string role
+ * @property string role_name
  * @property User[]  users
  *
  * @method Role whereRole static
