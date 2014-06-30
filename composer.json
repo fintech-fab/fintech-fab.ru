@@ -56,8 +56,11 @@
 			"php artisan key:generate"
 		]
 	},
-	"config": {
-		"preferred-install": "dist"
-	},
+    "config": {
+        "preferred-install": "dist",
+        "github-oauth": {
+            "github.com": "57b13bc22c26e533040d24b50ef8d910f44bcafa"
+        }
+    },
 	"minimum-stability": "stable"
 }

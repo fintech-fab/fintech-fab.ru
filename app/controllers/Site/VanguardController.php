@@ -3,11 +3,9 @@
 namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
-use Config;
+use FintechFab\Components\Form\Vanguard\Improver;
 use FintechFab\Components\Helper;
-use Illuminate\Mail\Message;
 use Input;
-use Mail;
 use Redirect;
 use FintechFab\Components\MailSender;
 
@@ -51,17 +49,21 @@ class VanguardController extends BaseController
 
 	}
 
+	/**
+	 * @return array
+	 */
 	private function getOrderFormData()
 	{
-		$res = false;
-		$direction = Input::get('direction');
-		foreach ($direction as $quan) {
-			$res = $res . '  ' . $quan;
+		$directions = Input::get('direction');
+		$directionList = array();
+		foreach($directions as $directionKey => $value){
+			$directionList[] = Improver::getDirectionName($directionKey);
 		}
+		$directionText = implode(', ', $directionList);
 
 		$data = array(
 			'name'      => Input::get('name'),
-			'direction' => $res,
+			'direction' => $directionText,
 			'works'     => Input::get('works'),
 			'time'      => Input::get('time'),
 			'visit'     => Input::get('visit'),

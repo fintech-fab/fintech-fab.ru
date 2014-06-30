@@ -1,3 +1,8 @@
+<?php
+use FintechFab\Components\Form\Vanguard\FormHelper;
+
+?>
+<!--suppress HtmlUnknownTarget -->
 <div class="jumbotron">
 	<h3>Здесь про то, что:</h3>
 
@@ -199,17 +204,7 @@
 	)); ?>
 	<div class="form-group">
 		<label for="inputName" class="col-sm-3 control-label">Как звать-величать</label>
-
-		<div class="col-sm-8">
-			<?=
-			Form::input('text', 'name', '', array(
-				'placeholder' => 'Имя. Лучше с фамилией.',
-				'class'       => 'form-control',
-				'id'          => 'inputName',
-				'required'    => 'required',
-			));
-			?>
-		</div>
+		<?php FormHelper::input('name', 'Плейсхолдер'); ?>
 	</div>
 
 	<div class="form-group">
@@ -246,18 +241,7 @@
 
 	<div class="form-group">
 		<label for="inputProjects" class="col-sm-3 control-label">Ваши работы</label>
-
-		<div class="col-sm-8">
-			<?=
-			Form::textarea('works', '', array(
-				'placeholder' => 'Что успели сделать на практике',
-				'class'       => 'form-control',
-				'id'          => 'inputProjects',
-				'required'    => 'required',
-				'rows'        => '5',
-			));
-			?>
-		</div>
+		<?php FormHelper::input('works', 'Другой плейсхолдер'); ?>
 	</div>
 
 	<div class="form-group">
