@@ -27,7 +27,7 @@ return array(
 	| the Postmark mail service, which will provide reliable delivery.
 	|
 	*/
-
+ 
 	'host'       => 'smtp.yandex.ru',
 
 	/*
