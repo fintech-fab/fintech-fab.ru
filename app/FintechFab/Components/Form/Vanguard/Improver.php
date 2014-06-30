@@ -7,11 +7,11 @@ class Improver
 {
 
 	public static $directions = array(
-		'php'     => 'php',
-		'css'     => 'Верстка',
-		'android' => 'Android',
-		'ios'     => 'IoS',
-		'other'   => 'other',
+		'php'         => 'php',
+		'page-proofs' => 'Верстка',
+		'Android'     => 'Android',
+		'ios'         => 'IoS',
+		'other'       => 'other',
 	);
 
 

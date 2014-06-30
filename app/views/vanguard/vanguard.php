@@ -204,61 +204,41 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 	)); ?>
 	<div class="form-group">
 		<label for="inputName" class="col-sm-3 control-label">Как звать-величать</label>
-		<?php FormHelper::input('name', 'Плейсхолдер'); ?>
+		<?php FormHelper::input('text', 'name', 'Имя. Лучше с фамилией.'); ?>
 	</div>
 
 	<div class="form-group">
 		<label for="input" class="col-sm-3 control-label">В каких направлениях хотите стажироваться</label>
 
 		<div class="col-sm-8">
-			<?=
-			Form::checkbox('direction[]', 'php', false, array(
-				'id' => 'inputPhp'
-			));
-			?> <label class="control-label" for="inputPhp">php</label><br>
-			<?=
-			Form::checkbox('direction[]', 'page-proofs', false, array(
-				'id' => 'page-proofs'
-			));
-			?> <label class="control-label" for="page-proofs">Верстка</label><br>
-			<?=
-			Form::checkbox('direction[]', 'Android', false, array(
-				'id' => 'Android'
-			));
-			?> <label class="control-label" for="Android">Android</label><br>
-			<?=
-			Form::checkbox('direction[]', 'ios', false, array(
-				'id' => 'ios'
-			));
-			?> <label class="control-label" for="ios">ios</label><br>
-			<?=
-			Form::checkbox('direction[]', 'other', false, array(
-				'id' => 'other'
-			));
-			?> <label class="control-label" for="other">other</label><br>
+			<?php FormHelper::checkbox('php', 'php'); ?>
+			<?php FormHelper::checkbox('page-proofs', 'Верстка'); ?>
+			<?php FormHelper::checkbox('Android', 'Android'); ?>
+			<?php FormHelper::checkbox('ios', 'IoS'); ?>
+			<?php FormHelper::checkbox('other', 'other'); ?>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="inputProjects" class="col-sm-3 control-label">Ваши работы</label>
-		<?php FormHelper::input('works', 'Другой плейсхолдер'); ?>
+
+		<div class="col-sm-8">
+			<?=
+			Form::textarea('projects', '', array(
+				'placeholder' => 'Что успели сделать на практике',
+				'class'       => 'form-control',
+				'id'          => 'inputProjects',
+				'required'    => 'required',
+				'rows'        => '2',
+			));
+			?>
+		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="inputTime" class="col-sm-3 control-label">Время</label>
+		<?php FormHelper::input('text', 'time', 'Сколько часов в неделю есть на стажировку'); ?>
 
-		<div class="col-sm-8">
-			<?=
-			Form::textarea('time', '', array(
-				'placeholder' => 'Сколько часов в неделю есть на стажировку',
-				'class'       => 'form-control',
-				'id'          => 'inputTime',
-				'required'    => 'required',
-				'rows'        => '2',
-				'type'        => 'number',
-			));
-			?>
-		</div>
 	</div>
 
 	<div class="form-group">
@@ -292,21 +272,10 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 		</div>
 	</div>
 
-
 	<div class="form-group">
 		<label for="inputEmail" class="col-sm-3 control-label">Email для получения ответа</label>
+		<?php FormHelper::input('email', 'email', 'your@mail.com'); ?>
 
-		<div class="col-sm-8">
-
-			<?=
-			Form::input('email', 'email', '', array(
-				'placeholder' => 'your@mail.com',
-				'class'       => 'form-control',
-				'id'          => 'inputEmail',
-				'required'    => 'required',
-			));
-			?>
-		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-10">

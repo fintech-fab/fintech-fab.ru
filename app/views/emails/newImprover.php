@@ -13,7 +13,8 @@
 <p>
 	Прилетела новая заявка в программу стажировки.<br> Имя: <?= HTML::entities($name) ?>.<br>
 	Направление: <?= HTML::entities($direction) ?>.<br> Работы: <?= HTML::entities($works) ?>.<br>
-	Время: <?= HTML::entities($time) ?>.<br> Могу ли приезжать в офис: <?= HTML::entities($visit) ?>.<br> Email: <?= HTML::entities($email) ?>.<br> О себе: <?= HTML::entities($about) ?>
+	Время: <?= HTML::entities($time) ?>.<br> Могу ли приезжать в офис: <?= HTML::entities($visit) ?>.<br>
+	Email: <?= HTML::entities($email) ?>.<br> О себе: <?= HTML::entities($about) ?>
 </p>
 </body>
 </html>

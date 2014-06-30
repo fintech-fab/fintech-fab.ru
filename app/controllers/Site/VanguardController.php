@@ -56,7 +56,7 @@ class VanguardController extends BaseController
 	{
 		$directions = Input::get('direction');
 		$directionList = array();
-		foreach($directions as $directionKey => $value){
+		foreach ($directions as $directionKey => $value) {
 			$directionList[] = Improver::getDirectionName($directionKey);
 		}
 		$directionText = implode(', ', $directionList);
@@ -64,7 +64,7 @@ class VanguardController extends BaseController
 		$data = array(
 			'name'      => Input::get('name'),
 			'direction' => $directionText,
-			'works'     => Input::get('works'),
+			'works' => Input::get('projects'),
 			'time'      => Input::get('time'),
 			'visit'     => Input::get('visit'),
 			'about'     => Input::get('about'),
