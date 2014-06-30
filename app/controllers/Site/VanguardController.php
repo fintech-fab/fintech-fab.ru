@@ -53,20 +53,20 @@ class VanguardController extends BaseController
 
 	private function getOrderFormData()
 	{
-        $res = false;
-        $direction = Input::get('direction');
-        foreach($direction as $quan) {
-            $res  = $res . '  ' . $quan;
-        }
+		$res = false;
+		$direction = Input::get('direction');
+		foreach ($direction as $quan) {
+			$res = $res . '  ' . $quan;
+		}
 
 		$data = array(
-			'name'  => Input::get('name'),
-			'direction'  => $res,
-			'works'  => Input::get('works'),
-			'time'  => Input::get('time'),
-			'visit'  => Input::get('visit'),
-			'about' => Input::get('about'),
-			'email' => Input::get('email'),
+			'name'      => Input::get('name'),
+			'direction' => $res,
+			'works'     => Input::get('works'),
+			'time'      => Input::get('time'),
+			'visit'     => Input::get('visit'),
+			'about'     => Input::get('about'),
+			'email'     => Input::get('email'),
 		);
 
 		return $data;
