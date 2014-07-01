@@ -46,28 +46,6 @@ return array(
 
 	'connections' => array(
 
-		'qiwiGate'     => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'qiwi_gate',
-			'username'  => '',
-			'password'  => '',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
-		),
-
-		'ff-qiwi-shop' => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'qiwi_shop',
-			'username'  => '',
-			'password'  => '',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
-		),
-
 		'sqlite'       => array(
 			'driver'   => 'sqlite',
 			'database' => __DIR__ . '/../database/production.sqlite',
@@ -78,8 +56,8 @@ return array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'dev',
-			'username'  => 'root',
-			'password'  => 'fintechfab',
+			'username'  => '',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

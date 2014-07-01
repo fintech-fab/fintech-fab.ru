@@ -40,6 +40,18 @@ return array(
 			'prefix'    => '',
 		),
 
+		// для калькулятора поведения
+		'ff-actions-calc' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'actions_calc',
+			'username'  => 'homestead',
+			'password'  => 'secret',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+
 		// для пакета эмулятора банка
 		'ff-bank-em'   => array(
 			'driver'    => 'mysql',
