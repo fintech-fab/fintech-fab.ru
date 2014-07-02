@@ -11,6 +11,7 @@ return array(
 			'project' => '',
 			'token'   => '',
 			'queue'   => 'ff-bank-em-dev',
+			'encrypt' => true,
 		),
 
 		'ff-qiwi-gate' => array(
@@ -18,6 +19,7 @@ return array(
 			'project' => '',
 			'token'   => '',
 			'queue'   => 'ff-qiwi-gate',
+			'encrypt' => true,
 		),
 
 	),
