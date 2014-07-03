@@ -3,7 +3,6 @@
 
 namespace FintechFab\Components\Form\Vanguard;
 
-
 use Form;
 
 class FormHelper
@@ -30,4 +29,13 @@ class FormHelper
 		echo ' <label class="control-label" for="input' . ucfirst($value) . '">' . $name . '</label><br>';
 	}
 
-} 
+
+	public static function directions()
+	{
+		$directions = Improver::getDirectionList();
+		foreach ($directions as $directionKey => $value) {
+			FormHelper::checkbox($directionKey, $value);
+		}
+	}
+
+}

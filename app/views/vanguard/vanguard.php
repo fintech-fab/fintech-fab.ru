@@ -211,12 +211,9 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 		<label for="input" class="col-sm-3 control-label">В каких направлениях хотите стажироваться</label>
 
 		<div class="col-sm-8">
-			<?php FormHelper::checkbox('php', 'php'); ?>
-			<?php FormHelper::checkbox('page-proofs', 'Верстка'); ?>
-			<?php FormHelper::checkbox('Android', 'Android'); ?>
-			<?php FormHelper::checkbox('ios', 'IoS'); ?>
-			<?php FormHelper::checkbox('other', 'other'); ?>
+			<?php FormHelper::directions(); ?>
 		</div>
+
 	</div>
 
 	<div class="form-group">
@@ -238,7 +235,6 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 	<div class="form-group">
 		<label for="inputTime" class="col-sm-3 control-label">Время</label>
 		<?php FormHelper::input('text', 'time', 'Сколько часов в неделю есть на стажировку'); ?>
-
 	</div>
 
 	<div class="form-group">
