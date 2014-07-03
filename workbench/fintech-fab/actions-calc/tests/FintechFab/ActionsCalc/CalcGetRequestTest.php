@@ -3,10 +3,17 @@
 
 class CalcGetRequestTest extends TestCase
 {
+	private $requestData;
 
 	public function setUp()
 	{
 		parent::setUp();
+		$this->requestData = array(
+			'term'   => 1,
+			'sid'    => 'хочу есть',
+			'data'   => null,
+			'signal' => null,
+		);
 
 	}
 
@@ -14,8 +21,9 @@ class CalcGetRequestTest extends TestCase
 	{
 
 		$resp = $this->call(
-			'GET',
-			'/actions-calc/getRequest'
+			'POST',
+			'/actions-calc/getRequest',
+			$this->requestData
 		);
 
 

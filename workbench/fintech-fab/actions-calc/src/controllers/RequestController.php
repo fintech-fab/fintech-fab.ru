@@ -3,11 +3,13 @@
 namespace FintechFab\ActionsCalc\Controllers;
 
 use Controller;
+use Input;
 
 class RequestController extends Controller {
 
 	public function getRequest(){
-		dd(123);
+		$input = Input::all();
+		dd($input);
 	}
 
 } 
