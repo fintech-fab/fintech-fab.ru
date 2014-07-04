@@ -10,8 +10,8 @@ class CalcGetRequestTest extends TestCase
 		parent::setUp();
 		$this->requestData = array(
 			'term'   => 1,
-			'sid'    => 'хочу есть',
-			'data'   => null,
+			'sid'  => 'im_hungry',
+			'data' => json_encode(array('time' => '13.05')),
 			'signal' => null,
 		);
 
@@ -20,8 +20,8 @@ class CalcGetRequestTest extends TestCase
 	public function testGetRequest()
 	{
 
-		$resp = $this->call(
-			'POST',
+		$this->call(
+		'POST',
 			'/actions-calc/getRequest',
 			$this->requestData
 		);

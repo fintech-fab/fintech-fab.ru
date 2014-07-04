@@ -16,5 +16,15 @@ class Event extends Eloquent
 {
 	protected $table = 'events';
 
-	protected $fillable = array('id', 'terminal_id', 'sid', 'data');
+	protected $fillable = array('terminal_id', 'sid', 'data');
+
+	public function terminals()
+	{
+		return $this->belongsTo('FintechFab\ActionsCalc\Models\Terminal');
+	}
+
+	public function sendSignals()
+	{
+		return $this->hasMany('FintechFab\ActionsCalc\Models\SendSignal');
+	}
 } 
