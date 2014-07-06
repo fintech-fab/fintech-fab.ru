@@ -3,7 +3,7 @@
 namespace FintechFab\ActionsCalc\Controllers;
 
 use Controller;
-use FintechFab\ActionsCalc\Components\Rules;
+use FintechFab\ActionsCalc\Components\RulesHandler;
 use FintechFab\ActionsCalc\Models\Rule;
 use Input;
 
@@ -16,8 +16,12 @@ class RequestController extends Controller {
 		//Получаем все проавила теминала по событию
 		$rules = Rule::getRules($input['term'], $input['sid']);
 		//Определяем соответсвующие запросу правила
-		$fitRules = Rules::getFitRules($rules, $input['data']);
-		dd($rules);
+		$rulesHandler = new RulesHandler();
+		$fitRules = $rulesHandler->getFitRules($rules, $input['data']);
+		if (count($fitRules) == 0) {
+
+		}
+		dd($fitRules);
 	}
 
 } 

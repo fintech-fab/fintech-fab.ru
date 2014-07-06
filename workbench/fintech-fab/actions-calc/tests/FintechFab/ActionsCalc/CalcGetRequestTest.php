@@ -11,7 +11,7 @@ class CalcGetRequestTest extends TestCase
 		$this->requestData = array(
 			'term'   => 1,
 			'sid'  => 'im_hungry',
-			'data' => json_encode(array('time' => '13.05')),
+			'data' => json_encode(array('time' => '12.05')),
 			'signal' => null,
 		);
 
