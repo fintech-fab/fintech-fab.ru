@@ -15,6 +15,7 @@ use Eloquent;
 class Terminal extends Eloquent
 {
 	protected $table = 'terminals';
+	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('name', 'url', 'queue');
 

@@ -15,6 +15,7 @@ use Eloquent;
 class Signal extends Eloquent
 {
 	protected $table = 'signals';
+	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('event_id', 'name', 'signal_sid');
 } 

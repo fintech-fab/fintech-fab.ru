@@ -16,6 +16,7 @@ use Eloquent;
 class SendSignal extends Eloquent
 {
 	protected $table = 'signals';
+	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('event_id', 'signal_sid', 'flag_url', 'flag_queue');
 

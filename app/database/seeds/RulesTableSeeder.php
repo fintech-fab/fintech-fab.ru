@@ -21,7 +21,7 @@ class RulesTableSeeder extends Seeder
 
 		Rule::create(array(
 			'terminal_id' => 1,
-			'name'        => 'Отправить кушать',
+			'name' => 'Иди кушай',
 			'event_sid'   => 'im_hungry',
 			'rule'        => 'time >= 13.00 AND time <= 14.00',
 			'signal_sid'  => 'go_eat',
@@ -30,10 +30,19 @@ class RulesTableSeeder extends Seeder
 
 		Rule::create(array(
 			'terminal_id' => 1,
-			'name'        => 'Ждать',
+			'name' => 'Жди',
 			'event_sid'   => 'im_hungry',
 			'rule'        => 'time < 13.00',
 			'signal_sid'  => 'wait',
+			'flag_active' => true,
+		));
+
+		Rule::create(array(
+			'terminal_id' => 1,
+			'name'        => 'Терпи до дома',
+			'event_sid'   => 'im_hungry',
+			'rule'        => 'time > 14.00',
+			'signal_sid'  => 'endure',
 			'flag_active' => true,
 		));
 

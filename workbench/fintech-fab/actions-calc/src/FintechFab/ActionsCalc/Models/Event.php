@@ -15,6 +15,7 @@ use Eloquent;
 class Event extends Eloquent
 {
 	protected $table = 'events';
+	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('terminal_id', 'sid', 'data');
 
