@@ -54,7 +54,16 @@ class RulesHandler
 			return true;
 		}
 		$dataValue = $data[$key];
-		$ruleValue = $ruleArray[2];
+		switch ($ruleArray[2]) {
+			case 'false':
+				$ruleValue = false;
+				break;
+			case 'true':
+				$ruleValue = true;
+				break;
+			default:
+				$ruleValue = $ruleArray[2];
+		}
 		$nameOfMethod = $this->spotMethod($method);
 		$isTrueComparing = $this->$nameOfMethod($dataValue, $ruleValue);
 
