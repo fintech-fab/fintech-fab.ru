@@ -23,7 +23,7 @@ class RulesTableSeeder extends Seeder
 			'terminal_id' => 1,
 			'name' => 'Иди кушай',
 			'event_sid'   => 'im_hungry',
-			'rule'        => 'time >= 13.00 AND time <= 14.00',
+			'rule' => 'time !>= 13.00 AND time !<= 14.00 AND have_money === true',
 			'signal_sid'  => 'go_eat',
 			'flag_active' => true,
 		));
@@ -32,7 +32,7 @@ class RulesTableSeeder extends Seeder
 			'terminal_id' => 1,
 			'name' => 'Жди',
 			'event_sid'   => 'im_hungry',
-			'rule'        => 'time < 13.00',
+			'rule' => 'time !< 13.00',
 			'signal_sid'  => 'wait',
 			'flag_active' => true,
 		));
@@ -41,7 +41,7 @@ class RulesTableSeeder extends Seeder
 			'terminal_id' => 1,
 			'name'        => 'Терпи до дома',
 			'event_sid'   => 'im_hungry',
-			'rule'        => 'time > 14.00',
+			'rule' => 'time !> 14.00',
 			'signal_sid'  => 'endure',
 			'flag_active' => true,
 		));

@@ -46,7 +46,14 @@ class RulesHandler
 		$strRule = trim($strRule);
 		$ruleArray = explode(' ', $strRule);
 		$method = $ruleArray[1];
-		$dataValue = $data[$ruleArray[0]];
+		$key = $ruleArray[0];
+		if (strpos($method, '!') !== false && !array_key_exists($key, $data)) {
+			return false;
+		}
+		if (!strpos($method, '!') !== false && !array_key_exists($key, $data)) {
+			return true;
+		}
+		$dataValue = $data[$key];
 		$ruleValue = $ruleArray[2];
 		$nameOfMethod = $this->spotMethod($method);
 		$isTrueComparing = $this->$nameOfMethod($dataValue, $ruleValue);
