@@ -3,6 +3,8 @@
 namespace FintechFab\ActionsCalc\Components;
 
 
+use Log;
+
 class RulesHandler
 {
 
@@ -19,10 +21,10 @@ class RulesHandler
 	{
 		foreach ($rules as $rule) {
 
-			$rulesArray = explode(' AND ', $rule['rule']);
+			$ruleArray = explode(' AND ', $rule['rule']);
 
 			$result = true;
-			foreach ($rulesArray as $strRule) {
+			foreach ($ruleArray as $strRule) {
 				$result = $result && $this->checkRule($strRule, $data);
 			}
 			if ($result) {
@@ -48,9 +50,13 @@ class RulesHandler
 		$method = $ruleArray[1];
 		$key = $ruleArray[0];
 		if (strpos($method, '!') !== false && !array_key_exists($key, $data)) {
+			Log::info("Правило ($strRule) обязательное. Соответствующие данные не получены. Праило ложно.");
+
 			return false;
 		}
 		if (!strpos($method, '!') !== false && !array_key_exists($key, $data)) {
+			Log::info("Правило ($strRule) необязательное. Соответствующие данные не получены. Правило верно");
+
 			return true;
 		}
 		$dataValue = $data[$key];
@@ -65,7 +71,12 @@ class RulesHandler
 				$ruleValue = $ruleArray[2];
 		}
 		$nameOfMethod = $this->spotMethod($method);
+		if ($nameOfMethod == 'unknown') {
+			return false;
+		}
 		$isTrueComparing = $this->$nameOfMethod($dataValue, $ruleValue);
+		$answer = $isTrueComparing ? 'верно' : 'ложно';
+		Log::info("Правило ($strRule)  $answer");
 
 		return $isTrueComparing;
 
