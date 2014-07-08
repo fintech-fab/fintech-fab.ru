@@ -14,7 +14,8 @@
     "autoload": {
         "classmap": [
             "src/migrations",
-            "src/controllers"
+	        "src/controllers",
+	        "tests/FintechFab/ActionsCalc/CalcTestCase.php"
         ],
         "psr-0": {
             "FintechFab\\ActionsCalc\\": "src/"

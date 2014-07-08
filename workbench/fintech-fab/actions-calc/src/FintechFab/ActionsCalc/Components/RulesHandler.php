@@ -72,6 +72,8 @@ class RulesHandler
 		}
 		$nameOfMethod = $this->spotMethod($method);
 		if ($nameOfMethod == 'unknown') {
+			Log::info("В правиле указан неизвестный метод сравнения ($method)");
+
 			return false;
 		}
 		$isTrueComparing = $this->$nameOfMethod($dataValue, $ruleValue);

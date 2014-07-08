@@ -26,7 +26,7 @@ class Rule extends Eloquent
 
 	protected $fillable = array('terminal_id', 'name', 'event_sid', 'rule', 'signal_sid', 'flag_active');
 
-	public function terminals()
+	public function terminal()
 	{
 		return $this->belongsTo('FintechFab\ActionsCalc\Models\Terminal');
 	}

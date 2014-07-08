@@ -19,12 +19,12 @@ class Terminal extends Eloquent
 
 	protected $fillable = array('name', 'url', 'queue');
 
-	public function events()
+	public function event()
 	{
 		return $this->hasMany('FintechFab\ActionsCalc\Models\Event');
 	}
 
-	public function rules()
+	public function rule()
 	{
 		return $this->hasMany('FintechFab\ActionsCalc\Models\Rule');
 	}

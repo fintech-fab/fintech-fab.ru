@@ -13,15 +13,19 @@ class Events
 	 * @param $term
 	 * @param $sid
 	 * @param $data
+	 *
+	 * @return Event
 	 */
 	public static function newEvent($term, $sid, $data)
 	{
 		$dataString = urldecode(http_build_query($data, null, ' | '));
 
-		Event::create(array(
-			'terminal_id' => $term,
-			'sid'         => $sid,
-			'data'        => $dataString,
-		));
+		$event = new Event;
+		$event->terminal_id = $term;
+		$event->sid = $sid;
+		$event->data = $dataString;
+		$event->save();
+
+		return $event;
 	}
 }
