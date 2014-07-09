@@ -1,7 +1,7 @@
 <?php
 
 
-class CalcGetRequestTest extends CalcTestCase
+class CalcRequestTest extends CalcTestCase
 {
 	private $requestData;
 

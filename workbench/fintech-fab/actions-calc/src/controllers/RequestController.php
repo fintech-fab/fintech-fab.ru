@@ -45,17 +45,20 @@ class RequestController extends Controller {
 			$signal = Signals::newSignal($event->id, $signalSid);
 			Log::info("Запись в таблицу сигналов: id  = $signal->id");
 
-			//Отправляем результат
+			//Отправляем результат по http
 			$url = $event->terminal->url;
 			if ($url != '') {
-				SenderOfResults::makeCurl($url, $signal->signal_sid);
+				SenderOfResults::makeCurl($url, $signalSid);
 				$signal->setFlagUrlTrue();
 			}
+
+			//Отправляем результат в очередь
 			$queue = $event->terminal->queue;
 			if ($queue != '') {
-				SenderOfResults::sendQueue($queue, $signal->signal_sid);
+				SenderOfResults::sendQueue($queue, $signalSid);
 				$signal->setFlagQueueTrue();
 			}
+
 		}
 
 	}
