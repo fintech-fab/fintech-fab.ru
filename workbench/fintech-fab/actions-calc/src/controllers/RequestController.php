@@ -5,7 +5,7 @@ namespace FintechFab\ActionsCalc\Controllers;
 use Controller;
 use FintechFab\ActionsCalc\Components\Events;
 use FintechFab\ActionsCalc\Components\RulesHandler;
-use FintechFab\ActionsCalc\Components\SenderOfResults;
+use FintechFab\ActionsCalc\Components\SendResults;
 use FintechFab\ActionsCalc\Components\Signals;
 use FintechFab\ActionsCalc\Models\Rule;
 use Input;
@@ -48,14 +48,14 @@ class RequestController extends Controller {
 			//Отправляем результат по http
 			$url = $event->terminal->url;
 			if ($url != '') {
-				SenderOfResults::makeCurl($url, $signalSid);
+				SendResults::makeCurl($url, $signalSid);
 				$signal->setFlagUrlTrue();
 			}
 
 			//Отправляем результат в очередь
 			$queue = $event->terminal->queue;
 			if ($queue != '') {
-				SenderOfResults::sendQueue($queue, $signalSid);
+				SendResults::sendQueue($queue, $signalSid);
 				$signal->setFlagQueueTrue();
 			}
 

@@ -10,13 +10,14 @@ namespace FintechFab\ActionsCalc\Components;
 
 
 use Log;
+use Queue;
 
-class SenderOfResults
+class SendResults
 {
 
 	public static function makeCurl($url, $signalSid)
 	{
-		$postData = self::prepareData($signalSid);
+		$postData = array('signalSid' => $signalSid);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -39,12 +40,12 @@ class SenderOfResults
 
 	public static function sendQueue($queue, $signalSid)
 	{
-		//TODO
-		//dd($queue, $signalSid);
+		Queue::connection('ff-actions-calc')->push('FintechFab\ActionsCalc\Queue\QueueHandler', array(
+			'url'       => $queue,
+			'signalSid' => $signalSid,
+		));
+
+		Log::info('Результат поставлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');
 	}
 
-	private static function prepareData($signalSid)
-	{
-		return array('signalSid' => $signalSid);
-	}
 }
