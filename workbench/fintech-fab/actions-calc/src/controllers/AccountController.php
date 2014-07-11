@@ -16,7 +16,7 @@ class AccountController extends BaseController
 
 	public function account()
 	{
-		$termId = Config::get('ff-actions-calc::config.termId');
+		$termId = Config::get('ff-actions-calc::termId');
 		$terminal = Terminal::find($termId);
 		if ($terminal == null) {
 			return $this->make('registration', array(
@@ -24,7 +24,9 @@ class AccountController extends BaseController
 			));
 		}
 
-		return $this->make('account');
+		return $this->make('account', array(
+			'terminal' => $terminal,
+		));
 	}
 
 	public function about()
@@ -32,7 +34,7 @@ class AccountController extends BaseController
 		return $this->make('about');
 	}
 
-	public function newTerminal()
+	public function postNewTerminal()
 	{
 		$input = Input::only('termId', 'username', 'url', 'queue', 'password', 'confirmPassword');
 		Log::info('На регистрацию нового пользователя получены данные:', $input);
@@ -58,5 +60,39 @@ class AccountController extends BaseController
 		return array('message' => $message);
 	}
 
+	public function postChangeData()
+	{
+		$input = Input::only('username', 'url', 'queue', 'password', 'confirmPassword', 'oldPassword');
 
+		//проверяем данные
+		$errors = Validators::getErrorFromChangeData($input);
+		if ($errors) {
+			return $errors;
+		}
+
+		//Проверяем текущий пароль
+		$termId = Config::get('ff-actions-calc::termId');
+		$terminal = Terminal::find($termId)->first();
+
+		if ($input['oldPassword'] != $terminal->password) {
+			$result['errors'] = array(
+				'termId'          => '',
+				'username'        => '',
+				'url'             => '',
+				'queue'           => '',
+				'password'        => '',
+				'confirmPassword' => '',
+				'oldPassword'     => 'Неверный пароль',
+			);
+
+			return $result;
+		}
+
+		//Изменяем данные
+		$terminal->changeTerminal($input);
+		$message = 'Данные изменены';
+
+		return array('message' => $message);
+
+	}
 } 

@@ -30,13 +30,22 @@ class Terminal extends Eloquent
 		return $this->hasMany('FintechFab\ActionsCalc\Models\Rule');
 	}
 
-	public function newTerminal($input)
+	public function newTerminal($data)
 	{
-		$this->id = $input['termId'];
-		$this->name = $input['username'];
-		$this->url = $input['url'];
-		$this->queue = $input['queue'];
-		$this->password = $input['password'];
+		$this->id = $data['termId'];
+		$this->name = $data['username'];
+		$this->url = $data['url'];
+		$this->queue = $data['queue'];
+		$this->password = $data['password'];
+		$this->save();
+	}
+
+	public function changeTerminal($data)
+	{
+		$this->name = $data['username'];
+		$this->url = $data['url'];
+		$this->queue = $data['queue'];
+		$this->password = $data['password'];
 		$this->save();
 	}
 

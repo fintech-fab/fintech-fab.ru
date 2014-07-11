@@ -16,6 +16,11 @@ Route::get('actions-calc/account', array(
 
 Route::post('actions-calc/account/newTerminal', array(
 	'as'   => 'newTerminal',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@newTerminal',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postNewTerminal',
+));
+
+Route::post('actions-calc/account/changeData', array(
+	'as'   => 'changeDataCalc',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postChangeData',
 ));
 

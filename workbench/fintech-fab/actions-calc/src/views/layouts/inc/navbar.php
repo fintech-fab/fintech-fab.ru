@@ -13,7 +13,7 @@ $logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAB
 					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 					<span class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?= URL::route('accountIndex') ?>">
+				<a class="navbar-brand" href="<?= URL::route('calcAccount') ?>">
 					<i><img class="logo-icon" src="<?= $logo ?>"></i> Actions Calc </a>
 			</div>
 
