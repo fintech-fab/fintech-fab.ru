@@ -3,7 +3,9 @@
 namespace FintechFab\ActionsCalc\Components;
 
 
+use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
+use FintechFab\ActionsCalc\Models\Signal;
 use Log;
 
 class MainHandler
@@ -17,7 +19,8 @@ class MainHandler
 		$eventData = (array)json_decode($data['data']);
 
 		//Записываем событие в базу
-		$event = Events::newEvent($data['term'], $data['sid'], $eventData);
+		$event = new Event();
+		$event->newEvent($data['term'], $data['sid'], $eventData);
 
 		//Получаем все правила теминала по событию
 		$rules = Rule::getRules($data['term'], $data['sid']);
@@ -38,7 +41,8 @@ class MainHandler
 			Log::info("Соответствующее правило: ", $fitRule);
 			$signalSid = $fitRule['signal_sid'];
 
-			$signal = Signals::newSignal($event->id, $signalSid);
+			$signal = new Signal;
+			$signal->newSignal($event->id, $signalSid);
 			Log::info("Запись в таблицу сигналов: id  = $signal->id");
 
 			//Отправляем результат по http

@@ -32,4 +32,14 @@ class Event extends Eloquent
 	{
 		return $this->hasMany('FintechFab\ActionsCalc\Models\Signal');
 	}
+
+	public function newEvent($termId, $sid, $data)
+	{
+		$dataString = urldecode(http_build_query($data, null, ' | '));
+
+		$this->terminal_id = $termId;
+		$this->sid = $sid;
+		$this->data = $dataString;
+		$this->save();
+	}
 } 

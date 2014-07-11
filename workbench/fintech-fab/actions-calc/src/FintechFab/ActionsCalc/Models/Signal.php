@@ -39,4 +39,11 @@ class Signal extends Eloquent
 		$this->flag_queue = true;
 		$this->save();
 	}
+
+	public function newSignal($eventId, $signalSid)
+	{
+		$this->event_id = $eventId;
+		$this->signal_sid = $signalSid;
+		$this->save();
+	}
 } 
