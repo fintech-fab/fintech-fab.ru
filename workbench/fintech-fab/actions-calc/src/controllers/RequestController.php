@@ -10,11 +10,37 @@ use FintechFab\ActionsCalc\Components\Signals;
 use FintechFab\ActionsCalc\Models\Rule;
 use Input;
 use Log;
+use Validator;
 
 class RequestController extends Controller {
 
+	/**
+	 * @var int $input['term']
+	 * @var string $input['sid']
+	 * @var string $input['data']
+	 * @var string $input['signal']
+	 */
 	public function getRequest(){
 		$input = Input::only('term', 'sid', 'data', 'signal');
+
+		// Валидация term sid
+		$sidTermValidator = Validator::make($input, [
+			'term' => 'required|numeric',
+			'sid' => 'required|alpha|min:1'
+		]);
+
+		// Без term и sid не имеет смысла гнать скрипт
+		if($sidTermValidator->fails()) {
+			$aFailMessages = $sidTermValidator->failed();
+			$sLogMessage = 'Ошибки валидации: (';
+			foreach($aFailMessages as $param => $err) {
+				$sLogMessage .= ($param . ":" . key($err) . ",");
+			}
+			$sLogMessage .= ')';
+			Log::info($sLogMessage);
+			exit();
+		}
+
 		Log::info('Получен запрос с параметрами:', $input);
 
 		$data = (array)json_decode($input['data']);
