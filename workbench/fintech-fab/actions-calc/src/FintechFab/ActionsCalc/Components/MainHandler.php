@@ -7,6 +7,7 @@ use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Signal;
 use Log;
+use Validator;
 
 class MainHandler
 {
@@ -17,6 +18,24 @@ class MainHandler
 	public static function processRequest($data)
 	{
 		$eventData = (array)json_decode($data['data']);
+
+		// Валидация term sid
+		$sidTermValidator = Validator::make($eventData, [
+			'term' => 'required|numeric',
+			'sid'  => 'required|alpha|min:1'
+		]);
+
+		// Без term и sid не имеет смысла гнать скрипт
+		if ($sidTermValidator->fails()) {
+			$aFailMessages = $sidTermValidator->failed();
+			$sLogMessage = 'Ошибки валидации: (';
+			foreach ($aFailMessages as $param => $err) {
+				$sLogMessage .= ($param . ":" . key($err) . ",");
+			}
+			$sLogMessage .= ')';
+			Log::info($sLogMessage);
+			exit();
+		}
 
 		//Записываем событие в базу
 		$event = new Event();
