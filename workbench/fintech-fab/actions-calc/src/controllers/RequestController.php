@@ -6,7 +6,6 @@ use Controller;
 use FintechFab\ActionsCalc\Components\MainHandler;
 use Input;
 use Log;
-use Validator;
 
 class RequestController extends Controller {
 
