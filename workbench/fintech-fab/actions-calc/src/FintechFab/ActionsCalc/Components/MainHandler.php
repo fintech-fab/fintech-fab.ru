@@ -19,10 +19,14 @@ class MainHandler
 	{
 		$eventData = (array)json_decode($data['data']);
 
+		//Записываем событие в базу
+		$event = new Event();
+		$event->newEvent($data['term'], $data['sid'], $eventData);
+
 		// Валидация term sid
-		$sidTermValidator = Validator::make($eventData, [
+		$sidTermValidator = Validator::make($data, [
 			'term' => 'required|numeric',
-			'sid'  => 'required|alpha|min:1'
+			'sid' => 'required|alpha_dash|min:1'
 		]);
 
 		// Без term и sid не имеет смысла гнать скрипт
@@ -36,10 +40,6 @@ class MainHandler
 			Log::info($sLogMessage);
 			exit();
 		}
-
-		//Записываем событие в базу
-		$event = new Event();
-		$event->newEvent($data['term'], $data['sid'], $eventData);
 
 		//Получаем все правила теминала по событию
 		$rules = Rule::getRules($data['term'], $data['sid']);
