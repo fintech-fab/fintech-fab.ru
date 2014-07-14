@@ -25,19 +25,14 @@ class MainHandler
 
 		// Валидация term sid
 		$sidTermValidator = Validator::make($data, [
-			'term' => 'required|numeric',
-			'sid' => 'required|alpha_dash|min:1'
+			'term' => 'required|integer',
+			'sid'  => 'required|alpha_dash'
 		]);
 
 		// Без term и sid не имеет смысла гнать скрипт
 		if ($sidTermValidator->fails()) {
 			$aFailMessages = $sidTermValidator->failed();
-			$sLogMessage = 'Ошибки валидации: (';
-			foreach ($aFailMessages as $param => $err) {
-				$sLogMessage .= ($param . ":" . key($err) . ",");
-			}
-			$sLogMessage .= ')';
-			Log::info($sLogMessage);
+			Log::info('Ошибки валидации: ', $aFailMessages);
 			exit();
 		}
 
@@ -56,6 +51,7 @@ class MainHandler
 		}
 		Log::info("Найдено подходящих правил: $countFitRules");
 
+		//Проходим циклом по каждому правилу и отправляем результат
 		foreach ($fitRules as $fitRule) {
 			Log::info("Соответствующее правило: ", $fitRule);
 			$signalSid = $fitRule['signal_sid'];
