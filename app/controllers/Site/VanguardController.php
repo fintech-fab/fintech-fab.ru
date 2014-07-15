@@ -2,6 +2,8 @@
 
 namespace App\Controllers\Site;
 
+use FintechFab\Models\vanguardForms;
+use Models\User;
 use App\Controllers\BaseController;
 use FintechFab\Components\Form\Vanguard\Improver;
 use FintechFab\Components\Helper;
@@ -54,25 +56,19 @@ class VanguardController extends BaseController
 	 */
 	private function getOrderFormData()
 	{
-		$directions = Input::get('direction');
+		$allForms = Input::all();
 		$directionList = array();
-		foreach ($directions as $directionKey => $value) {
+		foreach ($allForms['direction'] as $directionKey => $value) {
 			$directionList[] = Improver::getDirectionName($directionKey);
 		}
-		$directionText = implode(', ', $directionList);
+		$allForms['direction'] = implode(', ', $directionList);
 
-		$data = array(
-			'name'      => Input::get('name'),
-			'direction' => $directionText,
-			'works' => Input::get('projects'),
-			'time'      => Input::get('time'),
-			'visit'     => Input::get('visit'),
-			'about'     => Input::get('about'),
-			'email'     => Input::get('email'),
-		);
+		$data = array();
+		foreach ($allForms as $allFormsKey => $value) {
+			$data[$allFormsKey] = $value;
+		}
 
 		return $data;
-
 	}
 
 }

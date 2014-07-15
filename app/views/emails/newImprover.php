@@ -1,9 +1,6 @@
 <?php
-/**
- * @var string $name
- * @var string $email
- * @var string $about
- */
+$inputs = New \FintechFab\Models\vanguardForms();
+$mass = $inputs->mass();
 ?>
 <html>
 <head>
@@ -11,10 +8,14 @@
 </head>
 <body>
 <p>
-	Прилетела новая заявка в программу стажировки.<br> Имя: <?= HTML::entities($name) ?>.<br>
-	Направление: <?= HTML::entities($direction) ?>.<br> Работы: <?= HTML::entities($works) ?>.<br>
-	Время: <?= HTML::entities($time) ?>.<br> Могу ли приезжать в офис: <?= HTML::entities($visit) ?>.<br>
-	Email: <?= HTML::entities($email) ?>.<br> О себе: <?= HTML::entities($about) ?>
+	Прилетела новая заявка в программу стажировки.<br>
+	<?php
+	foreach ($mass['improver'] as $data) {
+		$asd = array_search($data, $mass['improver']);
+		echo $data . ' ';
+		echo HTML::entities($$asd) . '. <br>';
+	}
+	?>
 </p>
 </body>
 </html>
