@@ -35,17 +35,22 @@ class CalcRequestTest extends CalcTestCase
 					'url' => 'http://test',
 					'sid' => 'qweqwe',
 				));
-
 			return $this->mock;
 		});
 
 		$this->call(
-		'POST',
+			'POST',
 			'/actions-calc/getRequest',
 			$this->requestData
 		);
 
 
+	}
+
+
+	public function setDown()
+	{
+		Mockery::close();
 	}
 
 }

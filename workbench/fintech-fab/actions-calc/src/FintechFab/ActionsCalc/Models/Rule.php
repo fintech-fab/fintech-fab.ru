@@ -41,7 +41,7 @@ class Rule extends Eloquent
 	 */
 	public static function getRules($term, $sid)
 	{
-		return Rule::whereTerminalId($term)->whereEventSid($sid)->get()->toArray();
+		return Rule::whereTerminalId($term)->whereEventSid($sid)->get()->all();
 	}
 
 } 

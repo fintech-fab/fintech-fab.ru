@@ -22,19 +22,8 @@ class MainHandler
 		//Записываем событие в базу
 		$event = new Event();
 		$event->newEvent($data['term'], $data['sid'], $eventData);
+		self::validate($data);
 
-		// Валидация term sid
-		$sidTermValidator = Validator::make($data, [
-			'term' => 'required|integer',
-			'sid'  => 'required|alpha_dash'
-		]);
-
-		// Без term и sid не имеет смысла гнать скрипт
-		if ($sidTermValidator->fails()) {
-			$aFailMessages = $sidTermValidator->failed();
-			Log::info('Ошибки валидации: ', $aFailMessages);
-			exit();
-		}
 
 		//Получаем все правила теминала по событию
 		$rules = Rule::getRules($data['term'], $data['sid']);
@@ -53,8 +42,8 @@ class MainHandler
 
 		//Проходим циклом по каждому правилу и отправляем результат
 		foreach ($fitRules as $fitRule) {
-			Log::info("Соответствующее правило: ", $fitRule);
-			$signalSid = $fitRule['signal_sid'];
+			Log::info("Соответствующее правило: ", $fitRule->getAttributes());
+			$signalSid = $fitRule->signal_sid;
 
 			$signal = new Signal;
 			$signal->newSignal($event->id, $signalSid);
@@ -74,6 +63,27 @@ class MainHandler
 				$signal->setFlagQueueTrue();
 			}
 
+		}
+
+	}
+
+	/**
+	 * @param $data
+	 */
+	public static function validate($data)
+	{
+
+		// Валидация term sid
+		$sidTermValidator = Validator::make($data, [
+			'term' => 'required|integer',
+			'sid'  => 'required|alpha_dash'
+		]);
+
+		// Без term и sid не имеет смысла гнать скрипт
+		if ($sidTermValidator->fails()) {
+			$aFailMessages = $sidTermValidator->failed();
+			Log::info('Ошибки валидации: ', $aFailMessages);
+			exit();
 		}
 
 	}

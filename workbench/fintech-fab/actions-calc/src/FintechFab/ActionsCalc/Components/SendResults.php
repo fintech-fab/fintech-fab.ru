@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 08.07.14
- * Time: 14:35
- */
 
 namespace FintechFab\ActionsCalc\Components;
 

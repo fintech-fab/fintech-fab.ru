@@ -3,6 +3,7 @@
 namespace FintechFab\ActionsCalc\Components;
 
 
+use FintechFab\ActionsCalc\Models\Rule;
 use Log;
 
 class RulesHandler
@@ -12,16 +13,16 @@ class RulesHandler
 
 	/** Отдаёт подходящие правила
 	 *
-	 * @param array $rules
-	 * @param array $data
+	 * @param Rule[] $rules
+	 * @param array  $data
 	 *
-	 * @return array
+	 * @return Rule[]
 	 */
 	public function getFitRules($rules, $data)
 	{
 		foreach ($rules as $rule) {
 
-			$ruleArray = explode(' AND ', $rule['rule']);
+			$ruleArray = explode(' AND ', $rule->rule);
 
 			$result = true;
 			foreach ($ruleArray as $strRule) {
@@ -46,21 +47,33 @@ class RulesHandler
 	private function checkRule($strRule, $data)
 	{
 		$strRule = trim($strRule);
-		$ruleArray = explode(' ', $strRule);
-		$method = $ruleArray[1];
-		$key = $ruleArray[0];
-		if (strpos($method, '!') !== false && !array_key_exists($key, $data)) {
-			Log::info("Правило ($strRule) обязательное. Соответствующие данные не получены. Праило ложно.");
 
+		$matches = [];
+		$isMatch = preg_match('/^(.*) ([\<\>\=\!]+) (.*)$/', $strRule, $matches);
+		if (!$isMatch) {
 			return false;
 		}
-		if (!strpos($method, '!') !== false && !array_key_exists($key, $data)) {
-			Log::info("Правило ($strRule) необязательное. Соответствующие данные не получены. Правило верно");
+		list(, $key, $method, $value) = $matches;
 
-			return true;
+		$keyExists = array_key_exists($key, $data);
+		$keyRequired = strpos($method, '!') === 0;
+
+		if (!$keyExists) {
+
+			if ($keyRequired) {
+				Log::info("Правило ($strRule) обязательное. Соответствующие данные не получены. Праило ложно.");
+
+				return false;
+			} else {
+				Log::info("Правило ($strRule) необязательное. Соответствующие данные не получены. Правило верно");
+
+				return true;
+			}
+
 		}
+
 		$dataValue = $data[$key];
-		switch ($ruleArray[2]) {
+		switch ($value) {
 			case 'false':
 				$ruleValue = false;
 				break;
@@ -68,7 +81,7 @@ class RulesHandler
 				$ruleValue = true;
 				break;
 			default:
-				$ruleValue = $ruleArray[2];
+				$ruleValue = $value;
 		}
 		$nameOfMethod = $this->spotMethod($method);
 		if ($nameOfMethod == 'unknown') {
