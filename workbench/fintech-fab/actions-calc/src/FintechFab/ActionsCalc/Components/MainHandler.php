@@ -3,6 +3,7 @@
 namespace FintechFab\ActionsCalc\Components;
 
 
+use App;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Signal;
@@ -43,7 +44,7 @@ class MainHandler
 		//Проходим циклом по каждому правилу и отправляем результат
 		foreach ($fitRules as $fitRule) {
 			Log::info("Соответствующее правило: ", $fitRule->getAttributes());
-			$signalSid = $fitRule->signal_sid;
+			$signalSid = $fitRule['signal_sid'];
 
 			$signal = new Signal;
 			$signal->newSignal($event->id, $signalSid);
@@ -70,9 +71,8 @@ class MainHandler
 	/**
 	 * @param $data
 	 */
-	public static function validate($data)
+	private static function validate($data)
 	{
-
 		// Валидация term sid
 		$sidTermValidator = Validator::make($data, [
 			'term' => 'required|integer',
@@ -83,9 +83,9 @@ class MainHandler
 		if ($sidTermValidator->fails()) {
 			$aFailMessages = $sidTermValidator->failed();
 			Log::info('Ошибки валидации: ', $aFailMessages);
+			App::abort(500);
 			exit();
 		}
-
 	}
 
 } 
