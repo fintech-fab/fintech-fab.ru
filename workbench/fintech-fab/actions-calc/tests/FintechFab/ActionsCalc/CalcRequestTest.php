@@ -31,20 +31,22 @@ class CalcRequestTest extends CalcTestCase
 		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
 			$this->mock
 				->shouldReceive('makeCurl')
-				->withArgs(array(
-					'url' => 'http://test',
-					'sid' => 'qweqwe',
-				));
+				->withArgs(['http://test', 'go_eat']);
+			$this->mock
+				->shouldReceive('sendQueue')
+				->withArgs(['queueTest', 'go_eat']);
+
 			return $this->mock;
+
 		});
 
-		$this->call(
-			'POST',
+		$response = $this->call(
+		'POST',
 			'/actions-calc/getRequest',
 			$this->requestData
 		);
 
-
+		print_r($response);
 	}
 
 

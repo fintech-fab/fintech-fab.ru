@@ -106,6 +106,8 @@ class RulesHandler
 	private function spotMethod($method)
 	{
 		switch ($method) {
+			case '=':
+			case '==':
 			case '===':
 			case '!==':
 				$nameOfMethod = 'equal';
@@ -140,68 +142,74 @@ class RulesHandler
 		return $nameOfMethod;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * @param string $dataValue
 	 * @param string $ruleValue
 	 *
 	 * @return bool
 	 */
-	public function equal($dataValue, $ruleValue)
+	private function equal($dataValue, $ruleValue)
 	{
 		return $dataValue == $ruleValue;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * @param string $dataValue
 	 * @param string $ruleValue
 	 *
 	 * @return bool
 	 */
-	public function notEqual($dataValue, $ruleValue)
+	private function notEqual($dataValue, $ruleValue)
 	{
 		return $dataValue != $ruleValue;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * @param string $dataValue
 	 * @param string $ruleValue
 	 *
 	 * @return bool
 	 */
-	public function less($dataValue, $ruleValue)
+	private function less($dataValue, $ruleValue)
 	{
 		return $dataValue < $ruleValue;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * @param string $dataValue
 	 * @param string $ruleValue
 	 *
 	 * @return bool
 	 */
-	public function more($dataValue, $ruleValue)
+	private function more($dataValue, $ruleValue)
 	{
 		return $dataValue > $ruleValue;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * @param string $dataValue
 	 * @param string $ruleValue
 	 *
 	 * @return bool
 	 */
-	public function moreOrEqual($dataValue, $ruleValue)
+	private function moreOrEqual($dataValue, $ruleValue)
 	{
 		return $dataValue >= $ruleValue;
 	}
 
+	/** @noinspection PhpUnusedPrivateMethodInspection */
 	/**
 	 * @param string $dataValue
 	 * @param string $ruleValue
 	 *
 	 * @return bool
 	 */
-	public function lessOrEqual($dataValue, $ruleValue)
+	private function lessOrEqual($dataValue, $ruleValue)
 	{
 		return $dataValue <= $ruleValue;
 	}

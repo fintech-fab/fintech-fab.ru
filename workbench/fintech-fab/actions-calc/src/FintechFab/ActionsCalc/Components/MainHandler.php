@@ -16,14 +16,14 @@ class MainHandler
 	/**
 	 * @param $data
 	 */
-	public static function processRequest($data)
+	public function processRequest($data)
 	{
 		$eventData = (array)json_decode($data['data']);
 
 		//Записываем событие в базу
 		$event = new Event();
 		$event->newEvent($data['term'], $data['sid'], $eventData);
-		self::validate($data);
+		$this->validate($data);
 
 
 		//Получаем все правила теминала по событию
@@ -51,16 +51,17 @@ class MainHandler
 			Log::info("Запись в таблицу сигналов: id  = $signal->id");
 
 			//Отправляем результат по http
+			$sendResults = App::make('FintechFab\ActionsCalc\Components\SendResults');
 			$url = $event->terminal->url;
 			if ($url != '') {
-				SendResults::makeCurl($url, $signalSid);
+				$sendResults->makeCurl($url, $signalSid);
 				$signal->setFlagUrlTrue();
 			}
 
 			//Отправляем результат в очередь
 			$queue = $event->terminal->queue;
 			if ($queue != '') {
-				SendResults::sendQueue($queue, $signalSid);
+				$sendResults->sendQueue($queue, $signalSid);
 				$signal->setFlagQueueTrue();
 			}
 
@@ -71,7 +72,7 @@ class MainHandler
 	/**
 	 * @param $data
 	 */
-	private static function validate($data)
+	private function validate($data)
 	{
 		// Валидация term sid
 		$sidTermValidator = Validator::make($data, [

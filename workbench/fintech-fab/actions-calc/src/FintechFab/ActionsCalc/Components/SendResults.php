@@ -9,7 +9,7 @@ use Queue;
 class SendResults
 {
 
-	public static function makeCurl($url, $signalSid)
+	public function makeCurl($url, $signalSid)
 	{
 		$postData = array('signalSid' => $signalSid);
 
@@ -32,7 +32,7 @@ class SendResults
 
 	}
 
-	public static function sendQueue($queue, $signalSid)
+	public function sendQueue($queue, $signalSid)
 	{
 		Queue::connection('ff-actions-calc')->push('FintechFab\ActionsCalc\Queue\QueueHandler', array(
 			'url'       => $queue,

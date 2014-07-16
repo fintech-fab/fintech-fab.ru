@@ -19,7 +19,8 @@ class RequestController extends Controller {
 		$input = Input::only('term', 'sid', 'data', 'signal');
 		Log::info('Получен http запрос с параметрами:', $input);
 
-		MainHandler::processRequest($input);
+		$mainHandler = new MainHandler();
+		$mainHandler->processRequest($input);
 
 	}
 
