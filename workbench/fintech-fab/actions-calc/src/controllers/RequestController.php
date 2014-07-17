@@ -10,18 +10,20 @@ use Log;
 class RequestController extends Controller {
 
 	/**
-	 * @var int $input['term']
-	 * @var string $input['sid']
-	 * @var string $input['data']
-	 * @var string $input['signal']
+	 * @var int    $input ['term']
+	 * @var string $input ['sid']
+	 * @var string $input ['data']
+	 * @var string $input ['signal']
+	 *
+	 * @return string JSON $response
 	 */
 	public function getRequest(){
 		$input = Input::only('term', 'sid', 'data', 'signal');
 		Log::info('Получен http запрос с параметрами:', $input);
 
 		$mainHandler = new MainHandler();
-		$mainHandler->processRequest($input);
 
+		return $mainHandler->processRequest($input);
 	}
 
 } 
