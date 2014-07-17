@@ -21,7 +21,7 @@ use FintechFab\Widgets\LinksInMenu;
 						<li <?= LinksInMenu::isActive(URL::route('vanguard')) ?>>
 							<a href="<?= URL::route('vanguard') ?>">Стажировка</a>
 						</li>
-						<?= LinksInMenu::linkForMainMenu() ?>
+						<?php //LinksInMenu::linkForMainMenu() ?>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<?= LinksInMenu::echoAuthMode() ?>

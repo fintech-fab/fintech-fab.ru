@@ -36,7 +36,19 @@ class AccountController extends BaseController
 
 	public function edit()
 	{
-		return $this->make('edit');
+		$termId = Config::get('ff-actions-calc::termId');
+		$terminal = Terminal::find($termId);
+		if ($terminal == null) {
+			return $this->make('registration', array(
+				'termId' => $termId,
+			));
+		}
+
+		$str = $terminal->id . ':' . $terminal->password;
+
+		return $this->make('edit', array(
+			'header' => $str,
+		));
 	}
 
 	public function postNewTerminal()

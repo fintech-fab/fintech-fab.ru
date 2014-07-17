@@ -10,6 +10,7 @@ Route::get('actions-calc/about', array(
 ));
 
 Route::get('actions-calc/edit', array(
+	'before' => 'checkTerm',
 	'as'   => 'calcEdit',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@edit',
 ));
@@ -28,4 +29,3 @@ Route::post('actions-calc/account/changeData', array(
 	'as'   => 'changeDataCalc',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postChangeData',
 ));
-
