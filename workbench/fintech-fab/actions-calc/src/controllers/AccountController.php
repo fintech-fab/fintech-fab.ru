@@ -34,6 +34,11 @@ class AccountController extends BaseController
 		return $this->make('about');
 	}
 
+	public function edit()
+	{
+		return $this->make('edit');
+	}
+
 	public function postNewTerminal()
 	{
 		$input = Input::only('termId', 'username', 'url', 'queue', 'password', 'confirmPassword');

@@ -27,6 +27,9 @@ $logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAB
 					<li class=" <?= URL::current() == URL::route('calcAccount') ? 'active' : '' ?> ">
 						<a href="<?= URL::route('calcAccount') ?>">Account</a>
 					</li>
+					<li class=" <?= URL::current() == URL::route('calcEdit') ? 'active' : '' ?> ">
+						<a href="<?= URL::route('calcEdit') ?>">Edit</a>
+					</li>
 
 				</ul>
 

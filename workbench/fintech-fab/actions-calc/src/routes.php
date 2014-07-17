@@ -9,6 +9,11 @@ Route::get('actions-calc/about', array(
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@about',
 ));
 
+Route::get('actions-calc/edit', array(
+	'as'   => 'calcEdit',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@edit',
+));
+
 Route::get('actions-calc/account', array(
 	'as'   => 'calcAccount',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@account',
