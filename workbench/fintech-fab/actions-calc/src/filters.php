@@ -2,7 +2,7 @@
 use FintechFab\ActionsCalc\Components\AuthCheck;
 
 Route::filter('checkTerm', function () {
-	if (!AuthCheck::findTerm()) {
-		return Redirect::route('registration');
+	if (AuthCheck::getTerm() == null) {
+		return Redirect::route('calcRegistration');
 	}
 });

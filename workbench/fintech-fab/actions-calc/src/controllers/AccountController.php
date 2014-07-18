@@ -4,6 +4,7 @@ namespace FintechFab\ActionsCalc\Controllers;
 
 
 use Config;
+use FintechFab\ActionsCalc\Components\AuthCheck;
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Terminal;
 use Input;
@@ -16,13 +17,7 @@ class AccountController extends BaseController
 
 	public function account()
 	{
-		$termId = Config::get('ff-actions-calc::termId');
-		$terminal = Terminal::find($termId);
-		if ($terminal == null) {
-			return $this->make('registration', array(
-				'termId' => $termId,
-			));
-		}
+		$terminal = AuthCheck::getTerm();
 
 		return $this->make('account', array(
 			'terminal' => $terminal,
@@ -34,20 +29,21 @@ class AccountController extends BaseController
 		return $this->make('about');
 	}
 
-	public function edit()
+	public function editRule()
 	{
-		$termId = Config::get('ff-actions-calc::termId');
-		$terminal = Terminal::find($termId);
-		if ($terminal == null) {
-			return $this->make('registration', array(
-				'termId' => $termId,
-			));
-		}
-
-		$str = $terminal->id . ':' . $terminal->password;
+		$terminal = AuthCheck::getTerm();
 
 		return $this->make('edit', array(
-			'header' => $str,
+			'terminal' => $terminal,
+		));
+	}
+
+	public function registration()
+	{
+		$termId = Config::get('ff-actions-calc::termId');
+
+		return $this->make('registration', array(
+			'termId' => $termId,
 		));
 	}
 
