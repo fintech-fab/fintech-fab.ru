@@ -20,6 +20,7 @@ class CalcTestCase extends TestCase
 			'name'  => 'test',
 			'url'   => 'http://test',
 			'queue' => 'queueTest',
+			'key' => 'key',
 		));
 
 		Rule::create(array(

@@ -36,6 +36,16 @@ class Validators
 		return $rules;
 	}
 
+	public static function rulesForRequest()
+	{
+		$rules = array(
+			'term' => 'required|integer',
+			'sid'  => 'required|alpha_dash',
+		);
+
+		return $rules;
+	}
+
 	public static function messagesForErrors()
 	{
 		$rules = array(

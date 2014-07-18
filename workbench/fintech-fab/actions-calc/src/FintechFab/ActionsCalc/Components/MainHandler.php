@@ -8,7 +8,6 @@ use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Signal;
 use Log;
-use Validator;
 
 class MainHandler
 {
@@ -16,7 +15,7 @@ class MainHandler
 	/**
 	 * @param $data
 	 *
-	 * @return string JSON $response
+	 * @return array
 	 */
 	public function processRequest($data)
 	{
@@ -25,7 +24,6 @@ class MainHandler
 		//Записываем событие в базу
 		$event = new Event();
 		$event->newEvent($data['term'], $data['sid'], $eventData);
-		$this->validate($data);
 
 
 		//Получаем все правила теминала по событию
@@ -40,7 +38,7 @@ class MainHandler
 		if ($countFitRules == 0) {
 			Log::info('Соответствующих запросу правил не найдено');
 
-			return json_encode(['countFitRules' => $countFitRules]);
+			return ['countFitRules' => $countFitRules];
 		}
 		Log::info("Найдено подходящих правил: $countFitRules");
 
@@ -70,28 +68,7 @@ class MainHandler
 
 		}
 
-		return json_encode(['countFitRules' => $countFitRules]);
-
+		return ['countFitRules' => $countFitRules];
 	}
 
-	/**
-	 * @param $data
-	 */
-	private function validate($data)
-	{
-		// Валидация term sid
-		$sidTermValidator = Validator::make($data, [
-			'term' => 'required|integer',
-			'sid'  => 'required|alpha_dash'
-		]);
-
-		// Без term и sid не имеет смысла гнать скрипт
-		if ($sidTermValidator->fails()) {
-			$aFailMessages = $sidTermValidator->failed();
-			Log::info('Ошибки валидации: ', $aFailMessages);
-			App::abort(500);
-			exit();
-		}
-	}
-
-} 
+}

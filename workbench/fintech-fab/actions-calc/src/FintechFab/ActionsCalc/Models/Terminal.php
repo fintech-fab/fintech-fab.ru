@@ -13,6 +13,8 @@ use Eloquent;
  * @property string  $password
  * @property string  $updated_at
  * @property string  $created_at
+ *
+ * @method   static find() Terminal
  */
 class Terminal extends Eloquent
 {
