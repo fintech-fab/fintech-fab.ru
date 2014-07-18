@@ -39,8 +39,8 @@ class Validators
 	public static function rulesForRequest()
 	{
 		$rules = array(
-			'term' => 'required|integer',
-			'sid'  => 'required|alpha_dash',
+			'term'  => 'required|integer',
+			'event' => 'required|alpha_dash',
 		);
 
 		return $rules;

@@ -35,13 +35,13 @@ class Rule extends Eloquent
 	 * Получить все правила по номеру терминала и событию
 	 *
 	 * @param integer $term
-	 * @param string  $sid
+	 * @param string  $event
 	 *
 	 * @return array
 	 */
-	public static function getRules($term, $sid)
+	public static function getRules($term, $event)
 	{
-		return Rule::whereTerminalId($term)->whereEventSid($sid)->get()->all();
+		return Rule::whereTerminalId($term)->whereEventSid($event)->get()->all();
 	}
 
 } 

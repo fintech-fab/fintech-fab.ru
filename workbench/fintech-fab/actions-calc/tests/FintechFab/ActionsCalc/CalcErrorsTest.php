@@ -11,10 +11,10 @@ class CalcErrorsTest extends CalcTestCase
 	{
 		$sign = md5('terminal=1|event=im_hungry|errorKey');
 		$requestData = array(
-			'term' => 1,
-			'sid'  => 'im_hungry',
-			'data' => json_encode(array('time' => '13.05')),
-			'sign' => $sign,
+			'term'  => 1,
+			'event' => 'im_hungry',
+			'data'  => json_encode(array('time' => '13.05')),
+			'sign'  => $sign,
 		);
 
 		$response = $this->call(

@@ -23,11 +23,11 @@ class MainHandler
 
 		//Записываем событие в базу
 		$event = new Event();
-		$event->newEvent($data['term'], $data['sid'], $eventData);
+		$event->newEvent($data['term'], $data['event'], $eventData);
 
 
 		//Получаем все правила теминала по событию
-		$rules = Rule::getRules($data['term'], $data['sid']);
+		$rules = Rule::getRules($data['term'], $data['event']);
 		$countRules = count($rules);
 		Log::info("Всего найдено правил: $countRules");
 

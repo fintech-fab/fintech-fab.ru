@@ -23,7 +23,7 @@ class RequestController extends Controller {
 	 */
 	public function getRequest()
 	{
-		$input = Input::only('term', 'sid', 'data', 'sign');
+		$input = Input::only('term', 'event', 'data', 'sign');
 		Log::info('Получен http запрос с параметрами:', $input);
 
 		$this->ValidateInput($input);
@@ -46,7 +46,11 @@ class RequestController extends Controller {
 	{
 		$terminal = Terminal::find($input['term']);
 
-		$signature = md5('terminal=' . $input ['term'] . '|event=' . $input ['sid'] . '|' . $terminal->key);
+		if ($terminal == null) {
+			return false;
+		}
+
+		$signature = md5('terminal=' . $input ['term'] . '|event=' . $input ['event'] . '|' . $terminal->key);
 
 
 		return $signature == $input['sign'];
