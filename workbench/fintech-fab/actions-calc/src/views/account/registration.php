@@ -59,7 +59,7 @@
 		</div>
 
 		<div class="form-group row">
-			<label for="inputKey" class="col-sm-3 control-label">Queue</label>
+			<label for="inputQueue" class="col-sm-3 control-label">Queue</label>
 
 			<div class="col-sm-7">
 
@@ -71,6 +71,22 @@
 				));
 				?>
 				<div class="text-danger text-center" id="errorQueue"></div>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="inputKey" class="col-sm-3 control-label">Key</label>
+
+			<div class="col-sm-7">
+
+				<?=
+				Form::input('text', 'key', '', array(
+					'placeholder' => 'Key',
+					'class'       => 'form-control',
+					'id'          => 'inputKey',
+				));
+				?>
+				<div class="text-danger text-center" id="errorKey"></div>
 			</div>
 		</div>
 

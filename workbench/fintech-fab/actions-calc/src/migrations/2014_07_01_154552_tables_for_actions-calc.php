@@ -18,6 +18,7 @@ class TablesForActionsCalc extends Migration {
 			$table->string('name');
 			$table->string('url');
 			$table->string('queue');
+			$table->string('key');
 			$table->timestamps();
 		});
 

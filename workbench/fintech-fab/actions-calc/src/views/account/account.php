@@ -37,7 +37,13 @@ use FintechFab\ActionsCalc\Models\Terminal;
 			<div class="row">
 				<p class="col-md-6">Queue:</p>
 
-				<p class="col-md-5" id="key"><?= $terminal->queue ?></p>
+				<p class="col-md-5" id="queue"><?= $terminal->queue ?></p>
+			</div>
+
+			<div class="row">
+				<p class="col-md-6">Key:</p>
+
+				<p class="col-md-5" id="key"><?= $terminal->key ?></p>
 			</div>
 
 			<div class="col-md-offset-6 col-md-6">

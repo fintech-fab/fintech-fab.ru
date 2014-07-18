@@ -42,7 +42,7 @@ use FintechFab\ActionsCalc\Models\Terminal;
 					<div id="errorUrl" class="text-danger text-center"></div>
 				</div>
 				<div class="form-group row">
-					<?= Form::label('inputKey', 'Queue', array('class' => 'col-sm-3 control-label')) ?>
+					<?= Form::label('inputQueue', 'Queue', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">
 						<?=
 						Form::input('text', 'queue', $terminal->queue, array(
@@ -53,6 +53,19 @@ use FintechFab\ActionsCalc\Models\Terminal;
 						?>
 					</div>
 					<div id="errorQueue" class="text-danger text-center"></div>
+				</div>
+				<div class="form-group row">
+					<?= Form::label('inputKey', 'Key', array('class' => 'col-sm-3 control-label')) ?>
+					<div class="col-sm-9">
+						<?=
+						Form::input('text', 'key', $terminal->key, array(
+							'placeholder' => 'Key',
+							'class'       => 'form-control',
+							'id'          => 'inputKey',
+						));
+						?>
+					</div>
+					<div id="errorKey" class="text-danger text-center"></div>
 				</div>
 				<div class="form-group row">
 					<?= Form::label('inputPassword', 'Новый пароль', array('class' => 'col-sm-3 control-label')) ?>
