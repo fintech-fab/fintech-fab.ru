@@ -49,7 +49,7 @@ class AccountController extends BaseController
 
 	public function postNewTerminal()
 	{
-		$input = Input::only('termId', 'username', 'url', 'queue', 'password', 'confirmPassword');
+		$input = Input::only('termId', 'username', 'url', 'queue', 'key', 'password', 'confirmPassword');
 		Log::info('На регистрацию нового пользователя получены данные:', $input);
 
 		$errors = Validators::getErrorFromRegData($input);
@@ -75,8 +75,8 @@ class AccountController extends BaseController
 
 	public function postChangeData()
 	{
-		$input = Input::only('username', 'url', 'queue', 'password', 'confirmPassword', 'oldPassword');
-
+		$input = Input::only('username', 'url', 'queue', 'key', 'password', 'confirmPassword', 'oldPassword');
+//		$input['key'] = 'sdgsdfhfh';
 		//проверяем данные
 		$errors = Validators::getErrorFromChangeData($input);
 		if ($errors) {
@@ -93,6 +93,7 @@ class AccountController extends BaseController
 				'username'        => '',
 				'url'             => '',
 				'queue'           => '',
+				'key'             => '',
 				'password'        => '',
 				'confirmPassword' => '',
 				'oldPassword'     => 'Неверный пароль',

@@ -9,6 +9,7 @@ use Eloquent;
  * @property integer $name
  * @property string  $url
  * @property string  $queue
+ * @property string  $key
  * @property string  $password
  * @property string  $updated_at
  * @property string  $created_at
@@ -18,7 +19,7 @@ class Terminal extends Eloquent
 	protected $table = 'terminals';
 	protected $connection = 'ff-actions-calc';
 
-	protected $fillable = array('name', 'url', 'queue', 'password');
+	protected $fillable = array('name', 'url', 'queue', 'password', 'key',);
 
 	public function event()
 	{
@@ -32,10 +33,14 @@ class Terminal extends Eloquent
 
 	public function newTerminal($data)
 	{
+		if (!$data['key']) {
+			$data['key'] = md5($data['username'] . $data['termId'] . $data['queue']);
+		}
 		$this->id = $data['termId'];
 		$this->name = $data['username'];
 		$this->url = $data['url'];
 		$this->queue = $data['queue'];
+		$this->key = $data['key'];
 		$this->password = $data['password'];
 		$this->save();
 	}
@@ -45,6 +50,7 @@ class Terminal extends Eloquent
 		$this->name = $data['username'];
 		$this->url = $data['url'];
 		$this->queue = $data['queue'];
+		$this->key = $data['key'];
 		$this->password = $data['password'];
 		$this->save();
 	}
