@@ -9,32 +9,19 @@ use Queue;
 class SendResults
 {
 
-	public function makeCurl($url, $signalSid)
+	public function sendHttp($url, $signalId)
 	{
-		$postData = array('signalSid' => $signalSid);
+		Queue::connection('ff-actions-calc')->push('FintechFab\ActionsCalc\Queue\SendHttp', array(
+			'url'      => $url,
+			'signalId' => $signalId,
+		));
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-
-		$httpResponse = curl_exec($ch);
-		$httpError = curl_error($ch);
-
-		if (!$httpResponse || $httpError) {
-			Log::info("Ошибка CURL. httpResponse = $httpResponse , httpError = $httpError");
-		} else {
-			Log::info("CURL успешно отработал.  httpResponse = $httpResponse , httpError = $httpError");
-		}
-
+		Log::info('Результат для отправки по http поставлен в очередь');
 	}
 
 	public function sendQueue($queue, $signalSid)
 	{
-		Queue::connection('ff-actions-calc')->push('FintechFab\ActionsCalc\Queue\QueueHandler', array(
+		Queue::connection('ff-actions-calc-result')->push($queue, array(
 			'url'       => $queue,
 			'signalSid' => $signalSid,
 		));

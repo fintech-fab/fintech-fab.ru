@@ -3,14 +3,25 @@
 namespace FintechFab\ActionsCalc\Queue;
 
 
+use FintechFab\ActionsCalc\Components\MainHandler;
+use FintechFab\ActionsCalc\Components\Validators;
 use Illuminate\Queue\Jobs\Job;
+use Log;
 
 class QueueHandler
 {
-	public function fire(Job $job, array $data)
+	/**
+	 * @param Job   $job
+	 * @param array $data
+	 */
+	public function fire(Job $job, $data)
 	{
+		Log::info('Получен запрос через очередь с параметрами:', $data);
+		Validators::ValidateInput($data);
+
+		$mainHandler = new MainHandler();
+		$mainHandler->processRequest($data);
 		$job->delete();
-		dd($data);
 	}
 
 } 

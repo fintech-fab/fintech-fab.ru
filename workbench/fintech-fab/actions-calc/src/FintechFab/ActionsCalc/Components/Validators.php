@@ -2,6 +2,8 @@
 namespace FintechFab\ActionsCalc\Components;
 
 
+use App;
+use Log;
 use Validator;
 
 class Validators
@@ -104,6 +106,21 @@ class Validators
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param $input
+	 */
+	public static function ValidateInput($input)
+	{
+		$sidTermValidator = Validator::make($input, Validators::rulesForRequest());
+
+		if ($sidTermValidator->fails()) {
+			$aFailMessages = $sidTermValidator->failed();
+			Log::info('Ошибки валидации: ', $aFailMessages);
+			App::abort(500);
+			exit();
+		}
 	}
 
 }

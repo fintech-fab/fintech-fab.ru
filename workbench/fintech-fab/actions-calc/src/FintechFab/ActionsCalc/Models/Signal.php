@@ -12,6 +12,7 @@ use Eloquent;
  * @property boolean $flag_queue
  * @property string  $updated_at
  * @property string  $created_at
+ *
  */
 class Signal extends Eloquent
 {

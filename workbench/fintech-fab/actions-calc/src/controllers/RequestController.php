@@ -2,14 +2,12 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
-use App;
 use Controller;
 use FintechFab\ActionsCalc\Components\MainHandler;
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Terminal;
 use Input;
 use Log;
-use Validator;
 
 class RequestController extends Controller {
 
@@ -26,7 +24,7 @@ class RequestController extends Controller {
 		$input = Input::only('term', 'event', 'data', 'sign');
 		Log::info('Получен http запрос с параметрами:', $input);
 
-		$this->ValidateInput($input);
+		Validators::ValidateInput($input);
 
 		if (!$this->checkSign($input)) {
 			return json_encode(['error' => 'Auth error']);
@@ -54,20 +52,5 @@ class RequestController extends Controller {
 
 
 		return $signature == $input['sign'];
-	}
-
-	/**
-	 * @param $input
-	 */
-	private function ValidateInput($input)
-	{
-		$sidTermValidator = Validator::make($input, Validators::rulesForRequest());
-
-		if ($sidTermValidator->fails()) {
-			$aFailMessages = $sidTermValidator->failed();
-			Log::info('Ошибки валидации: ', $aFailMessages);
-			App::abort(500);
-			exit();
-		}
 	}
 }

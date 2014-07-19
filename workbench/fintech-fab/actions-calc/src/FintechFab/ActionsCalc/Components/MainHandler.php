@@ -55,8 +55,7 @@ class MainHandler
 			$sendResults = App::make('FintechFab\ActionsCalc\Components\SendResults');
 			$url = $event->terminal->url;
 			if ($url != '') {
-				$sendResults->makeCurl($url, $signalSid);
-				$signal->setFlagUrlTrue();
+				$sendResults->sendHttp($url, $signal->id);
 			}
 
 			//Отправляем результат в очередь
