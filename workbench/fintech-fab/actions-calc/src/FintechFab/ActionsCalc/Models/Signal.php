@@ -13,6 +13,7 @@ use Eloquent;
  * @property string  $updated_at
  * @property string  $created_at
  *
+ * @method static Signal find()
  */
 class Signal extends Eloquent
 {

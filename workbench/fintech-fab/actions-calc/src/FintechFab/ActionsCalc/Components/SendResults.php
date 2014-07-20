@@ -16,7 +16,7 @@ class SendResults
 			'signalId' => $signalId,
 		));
 
-		Log::info('Результат для отправки по http поставлен в очередь');
+		Log::info('Задача для отправки по http поставлена в очередь');
 	}
 
 	public function sendQueue($queue, $signalSid)
@@ -26,7 +26,7 @@ class SendResults
 			'signalSid' => $signalSid,
 		));
 
-		Log::info('Результат поставлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');
+		Log::info('Результат отправлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');
 	}
 
 }

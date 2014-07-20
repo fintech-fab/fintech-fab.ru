@@ -14,7 +14,7 @@ use Eloquent;
  * @property string  $updated_at
  * @property string  $created_at
  *
- * @method   static find() Terminal
+ * @method   static Terminal find()
  */
 class Terminal extends Eloquent
 {

@@ -16,8 +16,8 @@ class SendHttp
 	 */
 	public function fire(Job $job, $data)
 	{
-		$SignalSid = $data['signalId'];
-		$signal = Signal::find($SignalSid)->first();
+		$signalId = $data['signalId'];
+		$signal = Signal::find($signalId);
 
 		if ($signal == null) {
 			$job->delete();
@@ -32,6 +32,8 @@ class SendHttp
 		if ($isSend) {
 			$job->delete();
 			$signal->setFlagUrlTrue();
+			Log::info('Результат отправлен по http.');
+
 		}
 
 		$cnt = $job->attempts();

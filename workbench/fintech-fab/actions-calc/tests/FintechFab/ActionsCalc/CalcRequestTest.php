@@ -24,8 +24,8 @@ class CalcRequestTest extends CalcTestCase
 
 		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
 			$this->mock
-				->shouldReceive('makeCurl')
-				->withArgs(['http://test', 'go_eat']);
+				->shouldReceive('sendHttp')
+				->withArgs(['http://test', '1']);
 			$this->mock
 				->shouldReceive('sendQueue')
 				->withArgs(['queueTest', 'go_eat']);
@@ -55,8 +55,8 @@ class CalcRequestTest extends CalcTestCase
 
 		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
 			$this->mock
-				->shouldReceive('makeCurl')
-				->withArgs(['http://test', 'wait']);
+				->shouldReceive('sendHttp')
+				->withArgs(['http://test', '1']);
 			$this->mock
 				->shouldReceive('sendQueue')
 				->withArgs(['queueTest', 'wait']);
@@ -86,8 +86,8 @@ class CalcRequestTest extends CalcTestCase
 
 		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
 			$this->mock
-				->shouldReceive('makeCurl')
-				->withArgs(['http://test', 'endure']);
+				->shouldReceive('sendHttp')
+				->withArgs(['http://test', '1']);
 			$this->mock
 				->shouldReceive('sendQueue')
 				->withArgs(['queueTest', 'endure']);
@@ -136,7 +136,7 @@ class CalcRequestTest extends CalcTestCase
 
 		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
 			$this->mock
-				->shouldReceive('makeCurl')
+				->shouldReceive('sendHttp')
 				->withArgs(['http://test', 'go_eat']);
 			$this->mock
 				->shouldReceive('sendQueue')
