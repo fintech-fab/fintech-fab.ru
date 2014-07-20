@@ -25,7 +25,7 @@ class IncomeEvent extends Eloquent
 	 */
 	public function terminal()
 	{
-		return $this->belongsTo('FintechFab\ActionsCalc\Models\Terminal');
+		return $this->belongsTo(Terminal::class);
 	}
 
 	/**
@@ -33,7 +33,7 @@ class IncomeEvent extends Eloquent
 	 */
 	public function resultSignal()
 	{
-		return $this->hasMany('FintechFab\ActionsCalc\Models\ResultSignal');
+		return $this->hasMany(ResultSignal::class);
 	}
 
 	/**Запись нового события

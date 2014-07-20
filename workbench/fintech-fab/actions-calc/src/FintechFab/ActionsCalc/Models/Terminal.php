@@ -28,7 +28,23 @@ class Terminal extends Eloquent
 	 */
 	public function incomeEvent()
 	{
-		return $this->hasMany('FintechFab\ActionsCalc\Models\IncomeEvent');
+		return $this->hasMany(IncomeEvent::class);
+	}
+
+	/**
+	 * @return Event
+	 */
+	public function event()
+	{
+		return $this->hasMany(Event::class);
+	}
+
+	/**
+	 * @return Signal
+	 */
+	public function signal()
+	{
+		return $this->hasMany(Signal::class);
 	}
 
 	/**
@@ -36,7 +52,7 @@ class Terminal extends Eloquent
 	 */
 	public function rule()
 	{
-		return $this->hasMany('FintechFab\ActionsCalc\Models\Rule');
+		return $this->hasMany(Rule::class);
 	}
 
 	/**Создание нового пользователя

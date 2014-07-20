@@ -27,7 +27,7 @@ class ResultSignal extends Eloquent
 	 */
 	public function incomeEvent()
 	{
-		return $this->belongsTo('FintechFab\ActionsCalc\Models\IncomeEvent');
+		return $this->belongsTo(IncomeEvent::class);
 	}
 
 	public function setFlagUrlTrue()

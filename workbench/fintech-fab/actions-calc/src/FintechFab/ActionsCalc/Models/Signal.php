@@ -8,23 +8,17 @@ use Eloquent;
  * @property integer $id
  * @property integer $terminal_id
  * @property string  $name
- * @property string  $event_sid
- * @property string  $rule
  * @property string  $signal_sid
- * @property boolean $flag_active
  * @property string  $updated_at
  * @property string  $created_at
  *
- * @method static Rule whereTerminalId($term)
- * @method static Rule whereEventSid($sid)
-
  */
-class Rule extends Eloquent
+class Signal extends Eloquent
 {
 	protected $table = 'rules';
 	protected $connection = 'ff-actions-calc';
 
-	protected $fillable = array('terminal_id', 'name', 'event_sid', 'rule', 'signal_sid', 'flag_active');
+	protected $fillable = array('terminal_id', 'name', 'signal_sid');
 
 	public function terminal()
 	{
@@ -39,7 +33,7 @@ class Rule extends Eloquent
 	 *
 	 * @return array
 	 */
-	public static function getRules($term, $event)
+	public static function getSignals($term, $event)
 	{
 		return Rule::whereTerminalId($term)->whereEventSid($event)->get()->all();
 	}
