@@ -29,12 +29,14 @@ class AccountController extends BaseController
 		return $this->make('about');
 	}
 
-	public function editRule()
+	public function tableRule()
 	{
 		$terminal = AuthCheck::getTerm();
 
-		return $this->make('edit', array(
-			'terminal' => $terminal,
+		$rules = $terminal->rules()->paginate(10);
+
+		return $this->make('tableRule', array(
+			'rules' => $rules,
 		));
 	}
 

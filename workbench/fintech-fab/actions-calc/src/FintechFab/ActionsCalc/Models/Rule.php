@@ -8,40 +8,56 @@ use Eloquent;
  * @property integer $id
  * @property integer $terminal_id
  * @property string  $name
- * @property string  $event_sid
+ * @property integer $event_id
  * @property string  $rule
- * @property string  $signal_sid
+ * @property integer $signal_id
  * @property boolean $flag_active
  * @property string  $updated_at
  * @property string  $created_at
+ * @property Signal  $signal
+ * @property Event   $event
  *
- * @method static Rule whereTerminalId($term)
- * @method static Rule whereEventSid($sid)
-
+ * @method static Rule whereTerminalId()
+ * @method static Rule whereEventId()
+ * @method static Rule whereFlagActive()
+ * @method static Rule links()
  */
 class Rule extends Eloquent
 {
 	protected $table = 'rules';
 	protected $connection = 'ff-actions-calc';
 
-	protected $fillable = array('terminal_id', 'name', 'event_sid', 'rule', 'signal_sid', 'flag_active');
+	protected $fillable = array('terminal_id', 'name', 'event_id', 'rule', 'signal_id', 'flag_active');
 
 	public function terminal()
 	{
 		return $this->belongsTo(Terminal::class);
 	}
 
+	public function event()
+	{
+		return $this->belongsTo(Event::class);
+	}
+
+	public function signal()
+	{
+		return $this->belongsTo(Signal::class);
+	}
+
 	/**
 	 * Получить все правила по номеру терминала и событию
 	 *
 	 * @param integer $term
-	 * @param string  $event
+	 * @param string  $eventId
 	 *
 	 * @return array
 	 */
-	public static function getRules($term, $event)
+	public static function getRules($term, $eventId)
 	{
-		return Rule::whereTerminalId($term)->whereEventSid($event)->get()->all();
+		return Rule::whereTerminalId($term)
+			->whereEventId($eventId)
+			->whereFlagActive(true)
+			->get()->all();
 	}
 
 } 

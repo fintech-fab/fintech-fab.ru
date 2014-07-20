@@ -42,7 +42,7 @@ class ResultSignal extends Eloquent
 		$this->save();
 	}
 
-	public function newSignal($eventId, $signalSid)
+	public function newResultSignal($eventId, $signalSid)
 	{
 		$this->event_id = $eventId;
 		$this->signal_sid = $signalSid;

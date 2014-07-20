@@ -12,10 +12,13 @@ use Eloquent;
  * @property string  $updated_at
  * @property string  $created_at
  *
+ * @method static Event whereTerminalId()
+ * @method static Event whereEventSid()
+ *
  */
 class Event extends Eloquent
 {
-	protected $table = 'rules';
+	protected $table = 'events';
 	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('terminal_id', 'name', 'event_sid');
@@ -25,17 +28,22 @@ class Event extends Eloquent
 		return $this->belongsTo(Terminal::class);
 	}
 
-	/**
-	 * Получить все события по номеру терминала и событию
-	 *
-	 * @param integer $term
-	 * @param string  $event
-	 *
-	 * @return array
-	 */
-	public static function getEvents($term, $event)
+	public function rules()
 	{
-		return Rule::whereTerminalId($term)->whereEventSid($event)->get()->all();
+		return $this->hasMany(Rule::class);
+	}
+
+	/**
+	 * Получить событие по номеру терминала и коду события
+	 *
+	 * @param integer $termId
+	 * @param string  $eventSid
+	 *
+	 * @return Event
+	 */
+	public static function getEvent($termId, $eventSid)
+	{
+		return Event::whereTerminalId($termId)->whereEventSid($eventSid)->first();
 	}
 
 } 

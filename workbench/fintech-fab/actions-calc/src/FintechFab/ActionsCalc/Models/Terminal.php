@@ -50,7 +50,7 @@ class Terminal extends Eloquent
 	/**
 	 * @return Rule
 	 */
-	public function rule()
+	public function rules()
 	{
 		return $this->hasMany(Rule::class);
 	}

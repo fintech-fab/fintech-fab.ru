@@ -16,13 +16,13 @@ Route::get('actions-calc/registration', array(
 ));
 
 Route::group(array(
-	'before' => 'calcRegistered',
+	'before'    => 'calcRegistered',
 	'prefix'    => 'actions-calc',
 	'namespace' => 'FintechFab\ActionsCalc\Controllers',
 ), function () {
-	Route::get('editRule', array(
-		'as'   => 'calcEditRule',
-		'uses' => 'AccountController@editRule',
+	Route::get('tableRule', array(
+		'as'   => 'calcTableRule',
+		'uses' => 'AccountController@tableRule',
 	));
 
 	Route::get('account', array(

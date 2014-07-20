@@ -42,7 +42,7 @@ class IncomeEvent extends Eloquent
 	 * @param $sid
 	 * @param $data
 	 */
-	public function newEvent($termId, $sid, $data)
+	public function newIncomeEvent($termId, $sid, $data)
 	{
 		$dataString = urldecode(http_build_query($data, null, ' | '));
 

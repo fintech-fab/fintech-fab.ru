@@ -27,16 +27,20 @@ $logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAB
 						<a href="<?= URL::route('calcAbout') ?>">About</a>
 					</li>
 					<?php if (AuthCheck::getTerm() != null) { ?>
+
 						<li class=" <?= URL::current() == URL::route('calcAccount') ? 'active' : '' ?> ">
 							<a href="<?= URL::route('calcAccount') ?>">Account</a>
 						</li>
-						<li class=" <?= URL::current() == URL::route('calcEditRule') ? 'active' : '' ?> ">
-							<a href="<?= URL::route('calcEditRule'); ?>">Edit</a>
+						<li class=" <?= URL::current() == URL::route('calcTableRule') ? 'active' : '' ?> ">
+							<a href="<?= URL::route('calcTableRule'); ?>">Таблица правил</a>
 						</li>
+
 					<?php } else { ?>
+
 						<li class=" <?= URL::current() == URL::route('calcRegistration') ? 'active' : '' ?> ">
 							<a href="<?= URL::route('calcRegistration') ?>">Registration</a>
 						</li>
+
 					<?php } ?>
 				</ul>
 

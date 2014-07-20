@@ -15,7 +15,7 @@ use Eloquent;
  */
 class Signal extends Eloquent
 {
-	protected $table = 'rules';
+	protected $table = 'signals';
 	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('terminal_id', 'name', 'signal_sid');
@@ -25,17 +25,10 @@ class Signal extends Eloquent
 		return $this->belongsTo(Terminal::class);
 	}
 
-	/**
-	 * Получить все правила по номеру терминала и событию
-	 *
-	 * @param integer $term
-	 * @param string  $event
-	 *
-	 * @return array
-	 */
-	public static function getSignals($term, $event)
+	public function rules()
 	{
-		return Rule::whereTerminalId($term)->whereEventSid($event)->get()->all();
+		return $this->hasMany(Rule::class);
 	}
+
 
 } 

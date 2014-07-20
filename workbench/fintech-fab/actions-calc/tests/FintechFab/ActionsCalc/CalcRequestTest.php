@@ -16,7 +16,7 @@ class CalcRequestTest extends CalcTestCase
 		parent::setUp();
 
 		$this->mock = Mockery::mock('FintechFab\ActionsCalc\Components\SendResults');
-		$this->sign = $sign = md5('terminal=1|event=im_hungry|key');
+		$this->sign = md5('terminal=1|event=im_hungry|key');
 	}
 
 	public function testGetRequest1()
