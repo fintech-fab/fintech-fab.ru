@@ -4,9 +4,9 @@ namespace FintechFab\ActionsCalc\Components;
 
 
 use App;
-use FintechFab\ActionsCalc\Models\Event;
+use FintechFab\ActionsCalc\Models\IncomeEvent;
+use FintechFab\ActionsCalc\Models\ResultSignal;
 use FintechFab\ActionsCalc\Models\Rule;
-use FintechFab\ActionsCalc\Models\Signal;
 use Log;
 
 class MainHandler
@@ -22,8 +22,8 @@ class MainHandler
 		$eventData = (array)json_decode($data['data']);
 
 		//Записываем событие в базу
-		$event = new Event();
-		$event->newEvent($data['term'], $data['event'], $eventData);
+		$incomeEvent = new IncomeEvent();
+		$incomeEvent->newEvent($data['term'], $data['event'], $eventData);
 
 
 		//Получаем все правила теминала по событию
@@ -47,22 +47,22 @@ class MainHandler
 			Log::info("Соответствующее правило: ", $fitRule->getAttributes());
 			$signalSid = $fitRule['signal_sid'];
 
-			$signal = new Signal;
-			$signal->newSignal($event->id, $signalSid);
-			Log::info("Запись в таблицу сигналов: id  = $signal->id");
+			$resultSignal = new ResultSignal;
+			$resultSignal->newSignal($incomeEvent->id, $signalSid);
+			Log::info("Запись в таблицу сигналов: id  = $resultSignal->id");
 
 			//Отправляем результат по http
 			$sendResults = App::make('FintechFab\ActionsCalc\Components\SendResults');
-			$url = $event->terminal->url;
+			$url = $incomeEvent->terminal->url;
 			if ($url != '') {
-				$sendResults->sendHttp($url, $signal->id);
+				$sendResults->sendHttp($url, $resultSignal->id);
 			}
 
 			//Отправляем результат в очередь
-			$queue = $event->terminal->queue;
+			$queue = $incomeEvent->terminal->queue;
 			if ($queue != '') {
 				$sendResults->sendQueue($queue, $signalSid);
-				$signal->setFlagQueueTrue();
+				$resultSignal->setFlagQueueTrue();
 			}
 
 		}

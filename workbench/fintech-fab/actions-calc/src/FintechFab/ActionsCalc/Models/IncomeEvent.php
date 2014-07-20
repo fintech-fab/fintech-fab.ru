@@ -13,9 +13,9 @@ use Eloquent;
  * @property string   $created_at
  * @property Terminal $terminal
  */
-class Event extends Eloquent
+class IncomeEvent extends Eloquent
 {
-	protected $table = 'events';
+	protected $table = 'income_events';
 	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('terminal_id', 'sid', 'data');
@@ -28,11 +28,20 @@ class Event extends Eloquent
 		return $this->belongsTo('FintechFab\ActionsCalc\Models\Terminal');
 	}
 
-	public function signal()
+	/**
+	 * @return ResultSignal
+	 */
+	public function resultSignal()
 	{
-		return $this->hasMany('FintechFab\ActionsCalc\Models\Signal');
+		return $this->hasMany('FintechFab\ActionsCalc\Models\ResultSignal');
 	}
 
+	/**Запись нового события
+	 *
+	 * @param $termId
+	 * @param $sid
+	 * @param $data
+	 */
 	public function newEvent($termId, $sid, $data)
 	{
 		$dataString = urldecode(http_build_query($data, null, ' | '));

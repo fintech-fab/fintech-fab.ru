@@ -1,8 +1,8 @@
 <?php
 
-use FintechFab\ActionsCalc\Models\Event;
+use FintechFab\ActionsCalc\Models\IncomeEvent;
+use FintechFab\ActionsCalc\Models\ResultSignal;
 use FintechFab\ActionsCalc\Models\Rule;
-use FintechFab\ActionsCalc\Models\Signal;
 use FintechFab\ActionsCalc\Models\Terminal;
 
 class CalcTestCase extends TestCase
@@ -11,16 +11,16 @@ class CalcTestCase extends TestCase
 	{
 		parent::setUp();
 
-		Event::truncate();
+		IncomeEvent::truncate();
 		Terminal::truncate();
 		Rule::truncate();
-		Signal::truncate();
+		ResultSignal::truncate();
 
 		Terminal::create(array(
 			'name'  => 'test',
 			'url'   => 'http://test',
 			'queue' => 'queueTest',
-			'key' => 'key',
+			'key'   => 'key',
 		));
 
 		Rule::create(array(

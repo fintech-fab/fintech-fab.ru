@@ -137,7 +137,7 @@ class CalcRequestTest extends CalcTestCase
 		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
 			$this->mock
 				->shouldReceive('sendHttp')
-				->withArgs(['http://test', 'go_eat']);
+				->withArgs(['http://test', '1']);
 			$this->mock
 				->shouldReceive('sendQueue')
 				->withArgs(['queueTest', 'go_eat']);

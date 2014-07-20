@@ -23,16 +23,26 @@ class Terminal extends Eloquent
 
 	protected $fillable = array('name', 'url', 'queue', 'password', 'key',);
 
-	public function event()
+	/**
+	 * @return IncomeEvent
+	 */
+	public function incomeEvent()
 	{
-		return $this->hasMany('FintechFab\ActionsCalc\Models\Event');
+		return $this->hasMany('FintechFab\ActionsCalc\Models\IncomeEvent');
 	}
 
+	/**
+	 * @return Rule
+	 */
 	public function rule()
 	{
 		return $this->hasMany('FintechFab\ActionsCalc\Models\Rule');
 	}
 
+	/**Создание нового пользователя
+	 *
+	 * @param $data
+	 */
 	public function newTerminal($data)
 	{
 		if (!$data['key']) {
@@ -47,6 +57,10 @@ class Terminal extends Eloquent
 		$this->save();
 	}
 
+	/**Изменение данных пользователя
+	 *
+	 * @param $data
+	 */
 	public function changeTerminal($data)
 	{
 		$this->name = $data['username'];

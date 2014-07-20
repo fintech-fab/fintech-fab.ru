@@ -13,21 +13,21 @@ use Eloquent;
  * @property string  $updated_at
  * @property string  $created_at
  *
- * @method static Signal find()
+ * @method static ResultSignal find()
  */
-class Signal extends Eloquent
+class ResultSignal extends Eloquent
 {
-	protected $table = 'signals';
+	protected $table = 'result_signals';
 	protected $connection = 'ff-actions-calc';
 
 	protected $fillable = array('event_id', 'signal_sid', 'flag_url', 'flag_queue');
 
 	/**
-	 * @return Event
+	 * @return IncomeEvent
 	 */
-	public function event()
+	public function incomeEvent()
 	{
-		return $this->belongsTo('FintechFab\ActionsCalc\Models\Event');
+		return $this->belongsTo('FintechFab\ActionsCalc\Models\IncomeEvent');
 	}
 
 	public function setFlagUrlTrue()
