@@ -65,7 +65,7 @@
 
 				<?=
 				Form::input('text', 'queue', '', array(
-					'placeholder' => 'Queue',
+					'placeholder' => 'Класс для выполнения очереди',
 					'class'       => 'form-control',
 					'id'          => 'inputQueue',
 				));
@@ -81,7 +81,7 @@
 
 				<?=
 				Form::input('text', 'key', '', array(
-					'placeholder' => 'Key',
+					'placeholder' => 'Если не указать, будет выдан случайный',
 					'class'       => 'form-control',
 					'id'          => 'inputKey',
 				));

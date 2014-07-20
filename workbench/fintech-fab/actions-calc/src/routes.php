@@ -8,14 +8,19 @@ Route::get('actions-calc/about', array(
 	'as'   => 'calcAbout',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@about',
 ));
+Route::get('actions-calc', array(
+	'as'   => 'calcAbout',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@about',
+));
 Route::get('actions-calc/registration', array(
-	'as'   => 'calcRegistration',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@registration',
+	'before' => 'notAuth',
+	'as'     => 'calcRegistration',
+	'uses'   => 'FintechFab\ActionsCalc\Controllers\AccountController@registration',
 ));
 
 
 Route::group(array(
-	'before' => 'checkTerm',
+	'before' => 'auth',
 	'prefix'    => 'actions-calc',
 	'namespace' => 'FintechFab\ActionsCalc\Controllers',
 ), function () {
