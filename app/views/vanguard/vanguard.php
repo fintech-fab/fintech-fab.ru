@@ -1,6 +1,9 @@
 <?php
 use FintechFab\Components\Form\Vanguard\FormHelper;
 
+$forms = FormHelper::getInformation();
+$placeholders = $forms['placeholder'];
+$labels = $forms['label'];
 ?>
 <!--suppress HtmlUnknownTarget -->
 <div class="jumbotron">
@@ -194,8 +197,6 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 	<p>Например, <a href="http://wiki.fintech-fab.ru" target="_blank">здесь</a> вы увидите наш стартовый рабочий
 		материал по основному проекту (могут быть другие. и совсем не про php).<br> Советуем посмотреть. Если вы это
 		можете &laquo;осилить&raquo; самостоятельно, то считайте, что проходной тест пройден и подавайте заявку:</p>
-	<?php $forms = New \FintechFab\Models\vanguardForms();
-	$forms = $forms->mass();?>
 	<?=
 	Form::open(array(
 		'action' => 'vanguard',
@@ -204,12 +205,12 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 		'method' => 'post',
 	)); ?>
 	<div class="form-group">
-		<label for="inputName" class="col-sm-3 control-label"><?= $forms['label']['name'] ?></label>
-		<?php FormHelper::input('text', 'name', $forms['placeholder']['name']); ?>
+		<label for="inputName" class="col-sm-3 control-label"><?= $labels['name'] ?></label>
+		<?php FormHelper::input('text', 'name', $placeholders['name']); ?>
 	</div>
 
 	<div class="form-group">
-		<label for="input" class="col-sm-3 control-label"><?= $forms['label']['direction'] ?></label>
+		<label for="input" class="col-sm-3 control-label"><?= $labels['direction'] ?></label>
 
 		<div class="col-sm-8">
 			<?php FormHelper::directions(); ?>
@@ -218,12 +219,12 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 	</div>
 
 	<div class="form-group">
-		<label for="inputProjects" class="col-sm-3 control-label"><?= $forms['label']['projects'] ?></label>
+		<label for="inputProjects" class="col-sm-3 control-label"><?= $labels['projects'] ?></label>
 
 		<div class="col-sm-8">
 			<?=
 			Form::textarea('projects', '', array(
-				'placeholder' => $forms['placeholder']['projects'],
+				'placeholder' => $placeholders['projects'],
 				'class'       => 'form-control',
 				'id'          => 'inputProjects',
 				'required'    => 'required',
@@ -234,17 +235,17 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 	</div>
 
 	<div class="form-group">
-		<label for="inputTime" class="col-sm-3 control-label"><?= $forms['label']['time'] ?></label>
-		<?php FormHelper::input('text', 'time', $forms['placeholder']['time']); ?>
+		<label for="inputTime" class="col-sm-3 control-label"><?= $labels['time'] ?></label>
+		<?php FormHelper::input('text', 'time', $placeholders['time']); ?>
 	</div>
 
 	<div class="form-group">
-		<label for="inputAbout" class="col-sm-3 control-label"><?= $forms['label']['about'] ?></label>
+		<label for="inputAbout" class="col-sm-3 control-label"><?= $labels['about'] ?></label>
 
 		<div class="col-sm-8">
 			<?=
 			Form::textarea('about', '', array(
-				'placeholder' => $forms['placeholder']['about'],
+				'placeholder' => $placeholders['about'],
 				'class'       => 'form-control',
 				'id'          => 'inputAbout',
 				'required'    => 'required',
@@ -256,11 +257,11 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 
 
 	<div class="form-group">
-		<label for="input" class="col-sm-3 control-label"><?= $forms['label']['visit'] ?></label>
+		<label for="input" class="col-sm-3 control-label"><?= $labels['visit'] ?></label>
 
 		<div class="col-sm-8">
 			<?=
-			Form::select('visit', $forms['placeholder']['visit'], '', array(
+			Form::select('visit', $placeholders['visit'], '', array(
 				'class'    => 'form-control',
 				'id'       => 'inputEmail',
 				'required' => 'required',
@@ -270,8 +271,8 @@ use FintechFab\Components\Form\Vanguard\FormHelper;
 	</div>
 
 	<div class="form-group">
-		<label for="inputEmail" class="col-sm-3 control-label"><?= $forms['label']['email'] ?></label>
-		<?php FormHelper::input('email', 'email', $forms['placeholder']['email']); ?>
+		<label for="inputEmail" class="col-sm-3 control-label"><?= $labels['email'] ?></label>
+		<?php FormHelper::input('email', 'email', $placeholders['email']); ?>
 
 	</div>
 	<div class="form-group">

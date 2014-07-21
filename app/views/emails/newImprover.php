@@ -1,6 +1,7 @@
 <?php
-$inputs = New \FintechFab\Models\vanguardForms();
-$mass = $inputs->mass();
+use FintechFab\Components\Form\Vanguard\FormHelper;
+
+$Information = FormHelper::getInformation();
 ?>
 <html>
 <head>
@@ -10,10 +11,10 @@ $mass = $inputs->mass();
 <p>
 	Прилетела новая заявка в программу стажировки.<br>
 	<?php
-	foreach ($mass['improver'] as $data) {
-		$asd = array_search($data, $mass['improver']);
+	foreach ($Information['improver'] as $data) {
+		$text = array_search($data, $Information['improver']);
 		echo $data . ' ';
-		echo HTML::entities($$asd) . '. <br>';
+		echo HTML::entities($$text) . '. <br>';
 	}
 	?>
 </p>
