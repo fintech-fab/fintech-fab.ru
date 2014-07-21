@@ -12,7 +12,7 @@
 */
 
 
-use FintechFab\Models\User;
+use FintechFab\Models\RoleUser;
 
 App::before(function ($request) {
 	//
@@ -94,16 +94,17 @@ Route::filter('csrf', function () {
 	}
 });
 
-Route::filter('roleAdmin', function () {
-	$user = User::find(Auth::user()->id);
-	$res = false;
-	foreach ($user->roles as $role) {
-		if ($role->role == "admin") {
-			$res = true;
-			break;
-		}
+
+Route::filter('roleAdmin', function ()
+{
+	$res = RoleUser::whereRoleId(1)->whereUserId(Auth::user()->id)->count();
+	if ($res == 0) {
+		return Redirect::to('profile');
 	}
-	if (!$res) {
+});
+
+Route::filter('testRole', function ($route, $request, $value = '') {
+	if(! Auth::user()->isCompetent($value)) {
 		return Redirect::to('profile');
 	}
 });

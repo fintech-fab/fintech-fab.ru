@@ -193,7 +193,7 @@
 
 		<?=
 		Form::open(array(
-			'action' => 'vanguard',
+			'action' => 'vanguard.postOrder',
 			'class'  => 'form-horizontal',
 			'role'   => 'form',
 			'method' => 'post',

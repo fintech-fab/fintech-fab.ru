@@ -26,7 +26,7 @@ class UserProfileController extends BaseController
 
 	public function showAdmin()
 	{
-		return $this->make('admin');
+		return $this->make('admin0');
 	}
 
 	public function getPhoto()

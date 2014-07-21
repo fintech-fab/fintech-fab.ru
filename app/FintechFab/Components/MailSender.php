@@ -11,6 +11,7 @@ class MailSender
 {
 	private $to;
 	private $name;
+	private $subject;
 
 	/**
 	 *
@@ -39,15 +40,31 @@ class MailSender
 	{
 		$this->initTo($data);
 
-		/*
-		 *
-		 *
-		 *
-		 */
+		Mail::send('emails.replyToNewImprover', $data, function (Message $message) {
+			$message->to($this->to, $this->name)->subject('Принята заявка');
+		});
 
-		//$cntFails = count(Mail::failures());
-		//return (0 == $cntFails);
-		return (true);
+		$cntFails = count(Mail::failures());
+		return (0 == $cntFails);
+	}
+	/**
+	 * @param array $data
+	 * $data['baseMessage']
+	 * $data['themeName']
+	 * $data['comment']
+	 *
+	 * @return bool
+	 */
+	public function doNoticeTheme(array $data)
+	{
+		$this->initTo($data);
+
+		Mail::send('emails.noticeThemes', $data, function (Message $message) {
+			$message->to($this->to, $this->name)->subject($this->subject);
+		});
+
+		$cntFails = count(Mail::failures());
+		return (0 == $cntFails);
 	}
 
 
@@ -55,6 +72,9 @@ class MailSender
 	 *
 	 * @param      $data
 	 * @param bool $defaultTo
+	 * $data['to']
+	 * $data['toName']
+	 * $data['subject']
 	 *
 	 * @throws Exception
 	 */
@@ -70,9 +90,12 @@ class MailSender
 			}
 		}
 		$this->to = $data['to'];
-		$this->name = empty($data['name'])
+		$this->name = empty($data['toName'])
 			? $this->getNameFromTo()
-			: $data['name'];
+			: $data['toName'];
+		$this->subject = isset($data['subject'])
+			? $data['subject']
+			: "";
 
 	}
 	/**

@@ -3,11 +3,8 @@
 namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
-use Config;
 use FintechFab\Components\Helper;
-use Illuminate\Mail\Message;
 use Input;
-use Mail;
 use Redirect;
 use FintechFab\Components\MailSender;
 
@@ -29,7 +26,8 @@ class VanguardController extends BaseController
 		if ($mailSender->doVanguardOrder($data)) {
 			$mailSender->doVanguardOrderAuthor(array(
 				'to' => $data['email'],
-				'name' => $data['name']
+				'name' => $data['name'],
+				'toName' => $data['name']
 			));
 
 			$title = 'Все получилось';
