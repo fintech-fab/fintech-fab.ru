@@ -8,7 +8,7 @@ use FintechFab\ActionsCalc\Components\AuthCheck;
 class TablesController extends BaseController
 {
 
-	public $layout = 'account';
+	public $layout = 'tables';
 
 	/**Таблица правил
 	 *
@@ -20,7 +20,7 @@ class TablesController extends BaseController
 
 		$rules = $terminal->rules()->paginate(10);
 
-		return $this->make('tableRule', array(
+		return $this->make('tableRules', array(
 			'rules' => $rules,
 		));
 	}
@@ -35,7 +35,7 @@ class TablesController extends BaseController
 
 		$rules = $terminal->rules()->paginate(10);
 
-		return $this->make('tableRule', array(
+		return $this->make('tableRules', array(
 			'rules' => $rules,
 		));
 	}
@@ -50,7 +50,7 @@ class TablesController extends BaseController
 
 		$rules = $terminal->rules()->paginate(10);
 
-		return $this->make('tableRule', array(
+		return $this->make('tableRules', array(
 			'rules' => $rules,
 		));
 	}

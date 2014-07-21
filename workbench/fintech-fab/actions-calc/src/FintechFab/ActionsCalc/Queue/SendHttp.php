@@ -17,21 +17,21 @@ class SendHttp
 	public function fire(Job $job, $data)
 	{
 		$signalId = $data['signalId'];
-		$signal = ResultSignal::find($signalId);
+		$signalResult = ResultSignal::find($signalId);
 
-		if ($signal == null) {
+		if ($signalResult == null) {
 			$job->delete();
 			exit();
 		}
 
 		$url = $data['url'];
-		$signalSid = $signal->signal_sid;
+		$signalSid = $signalResult->signal_sid;
 		$isSend = $this->makeCurl($url, $signalSid);
 
 		//Если отправлен результат то удаляем задачу и ставим флаг
 		if ($isSend) {
 			$job->delete();
-			$signal->setFlagUrlTrue();
+			$signalResult->setFlagUrlTrue();
 			Log::info('Результат отправлен по http.');
 
 		}
