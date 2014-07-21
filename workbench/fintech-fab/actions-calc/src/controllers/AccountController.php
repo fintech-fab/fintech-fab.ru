@@ -29,17 +29,6 @@ class AccountController extends BaseController
 		return $this->make('about');
 	}
 
-	public function tableRule()
-	{
-		$terminal = AuthCheck::getTerm();
-
-		$rules = $terminal->rules()->paginate(10);
-
-		return $this->make('tableRule', array(
-			'rules' => $rules,
-		));
-	}
-
 	public function registration()
 	{
 		$termId = Config::get('ff-actions-calc::termId');

@@ -20,14 +20,21 @@ Route::group(array(
 	'prefix'    => 'actions-calc',
 	'namespace' => 'FintechFab\ActionsCalc\Controllers',
 ), function () {
-	Route::get('tableRule', array(
-		'as'   => 'calcTableRule',
-		'uses' => 'AccountController@tableRule',
-	));
-
 	Route::get('account', array(
 		'as'   => 'calcAccount',
 		'uses' => 'AccountController@account',
+	));
+	Route::get('tableRules', array(
+		'as'   => 'calcTableRules',
+		'uses' => 'TablesController@tableRules',
+	));
+	Route::get('tableEvents', array(
+		'as'   => 'calcTableEvents',
+		'uses' => 'TablesController@tableEvents',
+	));
+	Route::get('tableSignals', array(
+		'as'   => 'calcTableSignals',
+		'uses' => 'TablesController@tableSignals',
 	));
 });
 

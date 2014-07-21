@@ -1,4 +1,4 @@
-Формат записи данных в в очередь
+Формат записи данных в очередь
 
 {
     "job": "FintechFab\\ActionsCalc\\Queue\\QueueHandler",

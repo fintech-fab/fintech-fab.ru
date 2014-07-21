@@ -31,8 +31,14 @@ $logo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAB
 						<li class=" <?= URL::current() == URL::route('calcAccount') ? 'active' : '' ?> ">
 							<a href="<?= URL::route('calcAccount') ?>">Account</a>
 						</li>
-						<li class=" <?= URL::current() == URL::route('calcTableRule') ? 'active' : '' ?> ">
-							<a href="<?= URL::route('calcTableRule'); ?>">Таблица правил</a>
+						<li class=" <?= URL::current() == URL::route('calcTableRules') ? 'active' : '' ?> ">
+							<a href="<?= URL::route('calcTableRules'); ?>">Правила</a>
+						</li>
+						<li class=" <?= URL::current() == URL::route('calcTableEvents') ? 'active' : '' ?> ">
+							<a href="<?= URL::route('calcTableEvents'); ?>">События</a>
+						</li>
+						<li class=" <?= URL::current() == URL::route('calcTableSignals') ? 'active' : '' ?> ">
+							<a href="<?= URL::route('calcTableSignals'); ?>">Сигналы</a>
 						</li>
 
 					<?php } else { ?>

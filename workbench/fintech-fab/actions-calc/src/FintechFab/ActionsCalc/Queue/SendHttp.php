@@ -3,7 +3,7 @@
 namespace FintechFab\ActionsCalc\Queue;
 
 
-use FintechFab\ActionsCalc\Models\Signal;
+use FintechFab\ActionsCalc\Models\ResultSignal;
 use Illuminate\Queue\Jobs\Job;
 use Log;
 
@@ -17,7 +17,7 @@ class SendHttp
 	public function fire(Job $job, $data)
 	{
 		$signalId = $data['signalId'];
-		$signal = Signal::find($signalId);
+		$signal = ResultSignal::find($signalId);
 
 		if ($signal == null) {
 			$job->delete();
