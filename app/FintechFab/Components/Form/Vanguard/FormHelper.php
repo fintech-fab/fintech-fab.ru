@@ -41,8 +41,7 @@ class FormHelper
 
 	public static function getInformation()
 	{
-
-		return $information = array(
+		return $Information = array(
 			'label'       => array(
 				'name'      => 'Как звать-величать',
 				'direction' => 'В каких направлениях хотите стажироваться',
@@ -70,8 +69,6 @@ class FormHelper
 				'about'     => 'О себе:',
 			),
 		);
-
-
 	}
 
 }
