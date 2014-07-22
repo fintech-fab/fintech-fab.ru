@@ -28,7 +28,7 @@ class VanguardController extends BaseController
 
 		if ($mailSender->doVanguardOrder($data)) {
 			$mailSender->doVanguardOrderAuthor(array(
-				'to' => $data['email'],
+				'to'   => $data['email'],
 				'name' => $data['name']
 			));
 

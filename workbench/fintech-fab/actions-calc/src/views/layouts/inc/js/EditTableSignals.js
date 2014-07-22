@@ -2,33 +2,34 @@ $(document).ready(function () {
 	$('button.tableEditBtn').click(function () {
 
 		var $btn = $(this);
-		var event = $btn.data('event');
+		var signal = $btn.data('signal');
 
 		$('button.changeDataModal').attr({
-			'data-id': event.id
+			'data-id': signal.id
 		});
-		$('#inputName').val(event.name);
-		$('#inputSid').val(event.event_sid);
+		$('#inputName').val(signal.name);
+		$('#inputSid').val(signal.signal_sid);
 
 
 	});
 
 
 	$('button#actionBtn').click(function () {
+
 		var $btn = $(this);
 		var id = $btn.data('id');
 
 		var name = $('#inputName').val();
-		var event_sid = $('#inputSid').val();
-		$.post('tableEvents/changeData/', {
+		var signal_sid = $('#inputSid').val();
+		$.post('tableSignals/changeData/', {
 				id: id,
 				name: name,
-				event_sid: event_sid
+				signal_sid: signal_sid
 			},
 			function (data) {
 				if (data['errors']) {
 					$('#errorName').html(data['errors']['name']);
-					$('#errorSid').html(data['errors']['event_sid']);
+					$('#errorSid').html(data['errors']['signal_sid']);
 					return;
 				}
 				location.reload();
@@ -36,17 +37,17 @@ $(document).ready(function () {
 		);
 	});
 
-	$('button#AddEventTable').click(function () {
+	$('button#AddSignalTable').click(function () {
 		var name = $('#inputNameAdd').val();
-		var event_sid = $('#inputSidAdd').val();
-		$.post('tableEvents/addData/', {
+		var signal_sid = $('#inputSidAdd').val();
+		$.post('tableSignals/addData/', {
 				name: name,
-				event_sid: event_sid
+				signal_sid: signal_sid
 			},
 			function (data) {
 				if (data['errors']) {
 					$('#errorNameAdd').html(data['errors']['name']);
-					$('#errorSidAdd').html(data['errors']['event_sid']);
+					$('#errorSidAdd').html(data['errors']['signal_sid']);
 					return;
 				}
 				location.reload();

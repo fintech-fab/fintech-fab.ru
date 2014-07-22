@@ -39,7 +39,7 @@ Route::group(array(
 });
 
 Route::post('actions-calc/account/newTerminal', array(
-	'as'   => 'newTerminal',
+	'as' => 'calcNewTerminal',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postNewTerminal',
 ));
 
@@ -48,17 +48,24 @@ Route::post('actions-calc/account/changeData', array(
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postChangeData',
 ));
 
-Route::post('actions-calc/tableEvents/getData/{action}', array(
-	'as'   => 'getDataEvents',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postGetData',
-));
 
 Route::post('actions-calc/tableEvents/changeData/', array(
-	'as'   => 'changeDataEvents',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postChangeData',
+	'as'   => 'calcChangeDataEvents',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postChangeDataEvents',
 ));
 
 Route::post('actions-calc/tableEvents/addData/', array(
-	'as'   => 'addDataEvents',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddData',
+	'as'   => 'calcAddDataEvents',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddDataEvents',
+));
+
+
+Route::post('actions-calc/tableSignals/changeData/', array(
+	'as'   => 'calcChangeDataSignals',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postChangeDataSignals',
+));
+
+Route::post('actions-calc/tableSignals/addData/', array(
+	'as'   => 'calcAddDataSignals',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddDataSignals',
 ));

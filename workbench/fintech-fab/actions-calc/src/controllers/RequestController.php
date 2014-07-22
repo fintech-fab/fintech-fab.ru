@@ -9,7 +9,8 @@ use FintechFab\ActionsCalc\Models\Terminal;
 use Input;
 use Log;
 
-class RequestController extends Controller {
+class RequestController extends Controller
+{
 
 	/**
 	 * @var int    $input ['term']

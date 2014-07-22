@@ -1,18 +1,20 @@
 <?php
 
-use FintechFab\ActionsCalc\Models\Rule;
+
+use FintechFab\ActionsCalc\Models\Event;
 
 /**
- * @var Rule $events
- * @var Rule $event
+ * @var Event $events
+ * @var Event $event
  */
+
 ?>
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableEvents.js') ?>
 </script>
-<?= View::make('ff-actions-calc::tables.inc.changeDataModal') ?>
+<?= View::make('ff-actions-calc::tables.inc.changeDataEventModal') ?>
 
-<?= View::make('ff-actions-calc::tables.inc.addDataEventTable') ?>
+<?= View::make('ff-actions-calc::tables.inc.addDataEventModal') ?>
 
 
 <?=
@@ -23,12 +25,10 @@ Form::button('Добавить', array(
 ));
 echo '<br><br>'
 ?>
-
-
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
 		<td><b>ID</b></td>
-		<td><b>Правило</b></td>
+		<td><b>Название</b></td>
 		<td><b>Событие</b></td>
 		<td><b>Действия</b></td>
 	</tr>
@@ -43,7 +43,7 @@ echo '<br><br>'
 				Form::button('Изменить', array(
 					'class'       => 'btn btn-sm btn-info tableBtn tableEditBtn',
 					'data-action' => 'showStatus',
-					'data-id'     => $event->id,
+					'data-event' => $event,
 					'data-toggle' => 'modal',
 					'data-target' => '#changeDataModal',
 				)) ?>

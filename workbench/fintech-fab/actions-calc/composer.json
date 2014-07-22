@@ -1,25 +1,25 @@
 {
-    "name": "fintech-fab/actions-calc",
-    "description": "",
-    "authors": [
-        {
-            "name": "fintech-fab",
-            "email": "dev@fintech-fab.ru"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "4.2.*"
-    },
-    "autoload": {
-        "classmap": [
-            "src/migrations",
-	        "src/controllers",
-	        "tests/FintechFab/ActionsCalc/CalcTestCase.php"
-        ],
-        "psr-0": {
-            "FintechFab\\ActionsCalc\\": "src/"
-        }
-    },
-    "minimum-stability": "stable"
+	"name": "fintech-fab/actions-calc",
+	"description": "",
+	"authors": [
+		{
+			"name": "fintech-fab",
+			"email": "dev@fintech-fab.ru"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"illuminate/support": "4.2.*"
+	},
+	"autoload": {
+		"classmap": [
+			"src/migrations",
+			"src/controllers",
+			"tests/FintechFab/ActionsCalc/CalcTestCase.php"
+		],
+		"psr-0": {
+			"FintechFab\\ActionsCalc\\": "src/"
+		}
+	},
+	"minimum-stability": "stable"
 }

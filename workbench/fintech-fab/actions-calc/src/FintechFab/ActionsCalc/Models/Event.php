@@ -14,6 +14,8 @@ use Eloquent;
  *
  * @method static Event whereTerminalId()
  * @method static Event whereEventSid()
+ * @method static Event find()
+ * @method static Event links()
  *
  */
 class Event extends Eloquent

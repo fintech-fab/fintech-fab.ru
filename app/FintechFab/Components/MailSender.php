@@ -27,8 +27,10 @@ class MailSender
 		});
 
 		$cntFails = count(Mail::failures());
+
 		return (0 == $cntFails);
 	}
+
 	/**
 	 *
 	 * @param array $data
@@ -75,6 +77,7 @@ class MailSender
 			: $data['name'];
 
 	}
+
 	/**
 	 * Получим имя из адреса эл. почты
 	 *

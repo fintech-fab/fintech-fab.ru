@@ -35,14 +35,14 @@ class CalcRequestTest extends CalcTestCase
 		});
 
 		$requestData = array(
-			'term'   => 1,
+			'term'  => 1,
 			'event' => 'im_hungry',
-			'data'   => json_encode(array('time' => '13.05')),
+			'data'  => json_encode(array('time' => '13.05')),
 			'sign'  => $this->sign,
 		);
 
 		$response = $this->call(
-		'POST',
+			'POST',
 			'/actions-calc/getRequest',
 			$requestData
 		);
@@ -66,9 +66,9 @@ class CalcRequestTest extends CalcTestCase
 		});
 
 		$requestData = array(
-			'term'   => 1,
+			'term'  => 1,
 			'event' => 'im_hungry',
-			'data'   => json_encode(array('time' => '12.05')),
+			'data'  => json_encode(array('time' => '12.05')),
 			'sign'  => $this->sign,
 		);
 
@@ -97,9 +97,9 @@ class CalcRequestTest extends CalcTestCase
 		});
 
 		$requestData = array(
-			'term'   => 1,
+			'term'  => 1,
 			'event' => 'im_hungry',
-			'data'   => json_encode(array('time' => '14.30')),
+			'data'  => json_encode(array('time' => '14.30')),
 			'sign'  => $this->sign,
 		);
 
@@ -116,9 +116,9 @@ class CalcRequestTest extends CalcTestCase
 	{
 
 		$requestData = array(
-			'term'   => 1,
+			'term'  => 1,
 			'event' => 'im_hungry',
-			'data'   => json_encode(array('time' => '13.30', 'have_money' => false)),
+			'data'  => json_encode(array('time' => '13.30', 'have_money' => false)),
 			'sign'  => $this->sign,
 		);
 
@@ -147,9 +147,9 @@ class CalcRequestTest extends CalcTestCase
 		});
 
 		$requestData = array(
-			'term'   => 1,
+			'term'  => 1,
 			'event' => 'im_hungry',
-			'data'   => json_encode(array('time' => '13.30', 'have_money' => true)),
+			'data'  => json_encode(array('time' => '13.30', 'have_money' => true)),
 			'sign'  => $this->sign,
 		);
 

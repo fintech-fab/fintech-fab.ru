@@ -1,17 +1,34 @@
 <?php
 
-use FintechFab\ActionsCalc\Models\Rule;
+
+use FintechFab\ActionsCalc\Models\Signal;
 
 /**
- * @var Rule $signal
- * @var Rule $signals
+ * @var Signal $signals
+ * @var Signal $signal
  */
 
+?>
+<script type="application/javascript">
+	<?php require(__DIR__ . '/../layouts/inc/js/EditTableSignals.js') ?>
+</script>
+<?= View::make('ff-actions-calc::tables.inc.changeDataSignalModal') ?>
+
+<?= View::make('ff-actions-calc::tables.inc.addDataSignalModal') ?>
+
+
+<?=
+Form::button('Добавить', array(
+	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
+	'data-toggle' => 'modal',
+	'data-target' => '#addDataSignalModal',
+));
+echo '<br><br>'
 ?>
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
 		<td><b>ID</b></td>
-		<td><b>Правило</b></td>
+		<td><b>Название</b></td>
 		<td><b>Событие</b></td>
 		<td><b>Действия</b></td>
 	</tr>
@@ -24,9 +41,11 @@ use FintechFab\ActionsCalc\Models\Rule;
 			<td>
 				<?=
 				Form::button('Изменить', array(
-					'class'       => 'btn btn-sm btn-info tableBtn',
+					'class'       => 'btn btn-sm btn-info tableBtn tableEditBtn',
 					'data-action' => 'showStatus',
-					'data-id'     => $signal->id,
+					'data-signal' => $signal,
+					'data-toggle' => 'modal',
+					'data-target' => '#changeDataModal',
 				)) ?>
 			</td>
 		</tr>

@@ -6,6 +6,7 @@ use FintechFab\ActionsCalc\Models\Event;
  * @var Event $event
  */
 
+
 ?>
 <div class="modal fade" id="changeDataModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">

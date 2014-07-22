@@ -12,6 +12,8 @@ use Eloquent;
  * @property string  $updated_at
  * @property string  $created_at
  *
+ * @method static Signal find()
+ * @method static Signal links()
  */
 class Signal extends Eloquent
 {
@@ -28,6 +30,22 @@ class Signal extends Eloquent
 	public function rules()
 	{
 		return $this->hasMany(Rule::class);
+	}
+
+
+	public function changeSignal($data)
+	{
+		$this->name = $data['name'];
+		$this->signal_sid = $data['signal_sid'];
+		$this->save();
+	}
+
+	public function newSignal($data)
+	{
+		$this->name = $data['name'];
+		$this->signal_sid = $data['signal_sid'];
+		$this->terminal_id = $data['terminal_id'];
+		$this->save();
 	}
 
 
