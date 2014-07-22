@@ -4,6 +4,7 @@ namespace FintechFab\Widgets;
 
 use Auth;
 use FintechFab\Models\User;
+use Route;
 use URL;
 
 class LinksInMenu
@@ -48,7 +49,7 @@ class LinksInMenu
 	public static function linkForMainMenu()
 	{
 		$link_main_menu = '';
-		if (Auth::check()) {
+		if (Auth::check() && Route::has('accountIndex') && Route::has('createOrder')) {
 			$link_main_menu = '<li>
 									<a href ="' . URL::route('createOrder') . '">Терминал QIWI</a>
 								</li>

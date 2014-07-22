@@ -8,7 +8,7 @@
 		"laravel/framework": "4.2.*",
 		"codesleeve/asset-pipeline": "dev-master",
 		"iron-io/iron_mq": "dev-master",
-		"pda/pheanstalk": "dev-master",
+		"pda/pheanstalk": "2.*@dev",
 
 		"fintech-fab/bank-emulator": "dev-master",
 		"fintech-fab/money-transfer-emulator": "dev-master",
