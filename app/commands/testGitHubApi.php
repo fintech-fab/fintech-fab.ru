@@ -3,7 +3,8 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use FintechFab\Models\MembersGitHub;
+use FintechFab\Models\GitHubMembers;
+use FintechFab\Models\GitHubIssues;
 
 class testGitHubApi extends Command
 {
@@ -89,7 +90,14 @@ class testGitHubApi extends Command
 				/**?state=open|closed|all
 				 * ?since='YYY-MM-DDTHH:MM:SSZ'
 				 */
-				$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all", "issuesData");
+				if(! empty($opt["saveInDB"])) {
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all");
+					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubIssues');
+					$res = '';
+				}
+				else {
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all", "issuesData");
+				}
 				break;
 			case "issuesEvents":
 				$this->_curl_nobody = true;
@@ -104,8 +112,8 @@ class testGitHubApi extends Command
 				//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
 				//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
 				if(! empty($opt["saveInDB"])) {
-					$this->info("Addition to DataBase...");
-					$this->saveUsers($res['response']);
+					//$this->saveUsers($res['response']);
+					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
 					$res = '';
 				}
 
@@ -331,11 +339,13 @@ class testGitHubApi extends Command
 		return empty($inVal) ? $val : $inVal;
 	}
 
+	/*
 	private function saveUsers($inData)
 	{
+		$this->info("Addition to DataBase...");
 		foreach($inData as $inMember)
 		{
-			$member = MembersGitHub::where("login", $inMember->login)->first();
+			$member = GitHubMembers::where("login", $inMember->login)->first();
 			if(isset($member->id))
 			{
 				$this->info("User: " . $member->login);
@@ -352,11 +362,71 @@ class testGitHubApi extends Command
 			else
 			{
 				$this->info("Addition user: " . $inMember->login);
-				$member = new MembersGitHub;
+				$member = new GitHubMembers;
 				$member->dataGitHub($inMember);
 				$member->save();
 			}
 		}
 	}
+	private function saveIssues($inData)
+	{
+		$this->info("Addition to DataBase...");
+		foreach($inData as $inItem)
+		{
+			$item = GitHubIssues::where("number", $inItem->number)->first();
+			if(isset($item->id))
+			{
+				$this->info("Issue: " . $item->number);
+				if($item->updateFromGitHub($inItem))
+				{
+					$this->info("Update: " . $item->number);
+					$item->save();
+				}
+			}
+			else
+			{
+				$this->info("Addition issue: " . $inItem->number);
+				$item = new GitHubIssues;
+				$item->dataGitHub($inItem);
+				$item->save();
+			}
+		}
+	}
+	*/
+
+	/**
+	 * @param $inData
+	 * @param $classDB
+	 *
+	 */
+	private function saveInDB($inData, $classDB)
+	{
+		$this->info("Addition to DataBase...");
+		$item = new $classDB;
+		$keyName = $item->getKeyName();
+		$myName = $item->getMyName();
+		foreach($inData as $inItem)
+		{
+			$item = $classDB::where($keyName, $inItem->$keyName)->first();;
+			if(isset($item->id))
+			{
+				$this->info("Found $myName:" . $item->$keyName);
+				if($item->updateFromGitHub($inItem))
+				{
+					$this->info("Update: " . $item->$keyName);
+					$item->save();
+				}
+			}
+			else
+			{
+				$this->info("Addition $myName: " . $inItem->$keyName);
+				$item = new $classDB;
+				$item->dataGitHub($inItem);
+				$item->save();
+			}
+		}
+	}
+
+
 
 }
