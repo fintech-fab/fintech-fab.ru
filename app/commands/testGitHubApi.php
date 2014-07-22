@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use FintechFab\Models\MembersGitHub;
 
 class testGitHubApi extends Command
 {
@@ -28,21 +29,16 @@ class testGitHubApi extends Command
 	 */
 	protected $description = 'Command for testing GitHub Api';
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
+
 	public function __construct()
 	{
 		parent::__construct();
 		$this->apiRepos = "https://api.github.com/repos/fintech-fab/fintech-fab.ru/";
-		//$this->apiRepos = "https://api.github.com/repos/truetamtam/fintech-fab.ru/git/";
 
-		$res = self::getFromGitHubApi(self::$apiBaseUrl . "rate_limit");
-		$this->_rateLimit = $res->rate->limit;
-		$this->_rateLimitRemaining = $res->rate->remaining;
-		$this->_rateLimitReset = $res->rate->reset;
+		//$res = self::getFromGitHubApi(self::$apiBaseUrl . "rate_limit");
+		//$this->_rateLimit = $res->rate->limit;
+		//$this->_rateLimitRemaining = $res->rate->remaining;
+		//$this->_rateLimitReset = $res->rate->reset;
 
 	}
 
@@ -72,38 +68,48 @@ class testGitHubApi extends Command
 
 		//$res = self::getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues?state=closed");
 
+		$opt = $this->option();
 		$dt = getdate();
 		$qDate = date('c', $dt[0]-(3600*24*40));
 		//$this->info(date('c', $dt[0]-(3600*24*30)));
 
 		switch($this->argument('firstArg')) {
 			case "comments":
-				$res = self::getFromGitHubApi($this->apiRepos . "issues/comments?since=" . $qDate, "issuesCommentsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments?since=" . $qDate, "issuesCommentsData");
 				break;
 			case "commits":
-				$res = self::getFromGitHubApi($this->apiRepos . "commits?since=" . $qDate, "commitsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "commits?since=" . $qDate, "commitsData");
 				break;
 			case "events":
-				$res = self::getFromGitHubApi($this->apiRepos . "events", "eventsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "events", "eventsData");
 				break;
 			case "issues":
 				/**?state=open|closed|all
 				 * ?since='YYY-MM-DDTHH:MM:SSZ'
 				 */
-				$res = self::getFromGitHubApi($this->apiRepos . "issues?state=all", "issuesData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all", "issuesData");
 				break;
 			case "issuesEvents":
-				$res = self::getFromGitHubApi($this->apiRepos . "issues/events?page=2", "issuesEventsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events?page=2", "issuesEventsData");
 				break;
 			case "users":
-				//$res = self::getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/assignees");
-				$res = self::getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/collaborators");
+				$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
+				//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
+				//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
+				if(! empty($opt["saveInDB"])) {
+					$this->info("Addition to DataBase...");
+					$this->saveUsers($res['response']);
+					$res = '';
+				}
+
 				break;
 			default:
 				//$res = $this->argument();
-				$res = self::getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
+				//$res = self::getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
+				$res = $this->option();
+				$this->info("saveInDB: " . (empty($res["saveInDB"]) ? "false" : "true"));
 		}
-		$this->_rateLimitRemaining -= 1;
+		//$this->_rateLimitRemaining -= 1;
 
 
 
@@ -115,6 +121,7 @@ class testGitHubApi extends Command
 		$this->info("rateLimit: " . $this->_rateLimit);
 		$this->info("rateLimitRemaining: " . $this->_rateLimitRemaining);
 		$this->info("rateLimitReset: " . date("c", $this->_rateLimitReset));
+
 
 	}
 
@@ -138,14 +145,16 @@ class testGitHubApi extends Command
 	protected function getOptions()
 	{
 		return array(
-			array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+			//array('firstOpt', null, InputOption::VALUE_OPTIONAL, 'An option.', null),
+			array('saveInDB', null, InputOption::VALUE_NONE, 'An option.', null),
 		);
 	}
-	protected static function getFromGitHubApi($httpRequest, $func = '')
+	protected function getFromGitHubApi($httpRequest, $func = '')
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $httpRequest);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
+		//curl_setopt($ch, CURLOPT_HEADER, 0); //<---------------
+		curl_setopt($ch, CURLOPT_HEADER, 1);   //<===============
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, "fintech-fab");
 
@@ -157,10 +166,32 @@ class testGitHubApi extends Command
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
-		if($http_code == 200) {
+		//<===
+		$res = explode("\n", $response);        //<===header
+		$response = array_pop($res);
+		$header = array();
+		foreach($res as $str)
+		{
+			$p = strpos($str, ":");
+			if($p > 0)
+			{
+				$header[substr($str, 0, $p)] = substr($str, $p + 1);
+			}
+		}
+		$fullResponse = array();
+		 $this->_rateLimit = $header['X-RateLimit-Limit'];
+		 $this->_rateLimitRemaining = $header['X-RateLimit-Remaining'];
+		 $this->_rateLimitReset = intval($header['X-RateLimit-Reset']);
+		$fullResponse['header'] = $header;                          //<===header
+
+
+		if($http_code == 200)
+		{
 			if($func == '')
 			{
-				return json_decode($response);
+				$fullResponse['response'] = json_decode($response);//<===header
+				return $fullResponse;                              //<===header
+				//return json_decode($response);//<---без заголовка
 			} else
 			{
 				$res = array();
@@ -168,7 +199,9 @@ class testGitHubApi extends Command
 				{
 					$res[] = self::$func($inData);
 				}
-				return $res;
+				//return $res;  //<---без заголовка
+				$fullResponse['response'] = $res;//<===header
+				return $fullResponse;            //<===header
 			}
 
 		} else {
@@ -266,6 +299,36 @@ class testGitHubApi extends Command
 			}
 		}
 		return empty($inVal) ? $val : $inVal;
+	}
+
+	private function saveUsers($inData)
+	{
+		foreach($inData as $inMember)
+		{
+			$member = MembersGitHub::where("login", $inMember->login)->first();
+			if(isset($member->id))
+			{
+				$this->info("User: " . $member->login);
+				if(! empty($inMember->contributions))
+				{
+					if($member->contributions != $inMember->contributions)
+					{
+						$this->info("Update: " . $member->login);
+						$member->contributions = $inMember->contributions;
+						$member->save();
+					}
+				}
+			}
+			else
+			{
+				$this->info("Addition user: " . $inMember->login);
+				$member = new MembersGitHub;
+				$member->dataGitHub($inMember);
+				$member->save();
+			}
+
+
+		}
 	}
 
 }
