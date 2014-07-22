@@ -9,6 +9,7 @@ use FintechFab\Components\Helper;
 use Input;
 use Redirect;
 use FintechFab\Components\MailSender;
+use FintechFab\Components\Form\Vanguard\FormHelper;
 
 class VanguardController extends BaseController
 {
@@ -55,14 +56,25 @@ class VanguardController extends BaseController
 	 */
 	private function getOrderFormData()
 	{
-		$forms = Input::all();
+		$information = FormHelper::getInformation();
+		$formData = Input::all();
 		$directionList = array();
-		foreach ($forms['direction'] as $directionKey => $value) {
-			$directionList[] = Improver::getDirectionName($directionKey);
-		}
-		$forms['direction'] = implode(', ', $directionList);
 
-		return $forms;
+		if (isset($formData['direction'])) {
+
+			foreach ($formData['direction'] as $directionKey => $value) {
+				$directionList[] = Improver::getDirectionName($directionKey);
+			}
+		}
+
+		$formData['direction'] = implode(', ', $directionList);
+		$result = array_diff_assoc($information['improver'], $formData);
+		foreach ($result as $data) {
+			$data = '';
+			$formData[] = $data;
+		}
+
+		return $formData;
 	}
 
 }
