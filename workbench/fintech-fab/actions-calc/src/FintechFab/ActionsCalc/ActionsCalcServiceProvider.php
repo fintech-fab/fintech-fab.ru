@@ -18,7 +18,7 @@ class ActionsCalcServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('fintech-fab/actions-calc');
+		$this->package('fintech-fab/actions-calc', 'ff-actions-calc');
 		include __DIR__ . '/../../routes.php';
 	}
 

@@ -7,7 +7,7 @@ class RequestControllerTest extends TestCase
 		$requstData = ['data' => json_encode(['test' => 1])];
 
 		$response = $this->call('POST', '/actions-calc/getRequest', $requstData);
-		$this->assertContains($requstData, $response->original);
+		$this->assertContains(json_encode(['test' => 2]), $response->original);
 	}
 }
  
