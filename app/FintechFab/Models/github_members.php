@@ -7,14 +7,14 @@ use Eloquent;
 /**
  * Class MembersGitHub
  *
- * property integer $id
- * property string  $login
- * property string  $avatar_url
- * property integer  $contributions
- *
- *
  * @package FintechFab\Models
- */
+ *
+ * @property integer $id
+ * @property string  $login
+ * @property string  $avatar_url
+ * @property integer  $contributions
+ *
+  */
 class MembersGitHub extends Eloquent
 {
 	//protected $fillable = array('login', 'avatar_url');

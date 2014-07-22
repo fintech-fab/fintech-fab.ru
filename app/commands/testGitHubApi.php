@@ -8,6 +8,8 @@ use FintechFab\Models\MembersGitHub;
 class testGitHubApi extends Command
 {
 	private static $apiBaseUrl = 'https://api.github.com/';
+
+	private $_curl_nobody = false;
 	private $_rateLimit = 0;
 	private $_rateLimitRemaining = 0;
 	private $_rateLimitReset = 0;
@@ -49,7 +51,7 @@ class testGitHubApi extends Command
 	 */
 	public function fire()
 	{
-		$this->info("It's OK");
+		$this->info("It's OK. Begin...");
 
 
 		//$res = getFromGitHubApi("https://api.github.com/users/fintech-fab");
@@ -90,7 +92,12 @@ class testGitHubApi extends Command
 				$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all", "issuesData");
 				break;
 			case "issuesEvents":
+				$this->_curl_nobody = true;
 				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events?page=2", "issuesEventsData");
+				if(isset($res["header"]["Link"])) {
+					$res = self::decodePageLinks($res["header"]["Link"]);
+				}
+
 				break;
 			case "users":
 				$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
@@ -107,7 +114,7 @@ class testGitHubApi extends Command
 				//$res = $this->argument();
 				//$res = self::getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
 				$res = $this->option();
-				$this->info("saveInDB: " . (empty($res["saveInDB"]) ? "false" : "true"));
+				//$this->info("saveInDB: " . (empty($res["saveInDB"]) ? "false" : "true"));
 		}
 		//$this->_rateLimitRemaining -= 1;
 
@@ -117,7 +124,6 @@ class testGitHubApi extends Command
 		print_r($res);  // var_dump($this->argument('firstArg'));
 		$d =  ob_get_clean();
 		$this->info($d);
-		$this->info("OK");
 		$this->info("rateLimit: " . $this->_rateLimit);
 		$this->info("rateLimitRemaining: " . $this->_rateLimitRemaining);
 		$this->info("rateLimitReset: " . date("c", $this->_rateLimitReset));
@@ -159,6 +165,11 @@ class testGitHubApi extends Command
 		curl_setopt($ch, CURLOPT_USERAGENT, "fintech-fab");
 
 
+		if($this->_curl_nobody){
+			curl_setopt($ch, CURLOPT_NOBODY, 1);
+			$func = '';
+		}
+
 		//curl_setopt($ch, CURLOPT_USERPWD, ":");
 
 
@@ -167,15 +178,15 @@ class testGitHubApi extends Command
 		curl_close($ch);
 
 		//<===
-		$res = explode("\n", $response);        //<===header
+		$res = explode("\r\n", $response);        //<===header
 		$response = array_pop($res);
 		$header = array();
-		foreach($res as $str)
+		for($i = 1; $i < count($res); $i++)
 		{
-			$p = strpos($str, ":");
+			$p = strpos($res[$i], ":");
 			if($p > 0)
 			{
-				$header[substr($str, 0, $p)] = substr($str, $p + 1);
+				$header[substr($res[$i], 0, $p)] = substr($res[$i], $p + 1);
 			}
 		}
 		$fullResponse = array();
@@ -209,6 +220,25 @@ class testGitHubApi extends Command
 		}
 	}
 
+	/**
+	 * @param string $inLinks
+	 *
+	 * @return array
+	 */
+	protected static function decodePageLinks($inLinks)
+	{
+		$rel = "";
+		$links = explode(",", $inLinks);
+		$pageLinks = array();
+		foreach($links as $strLink)
+		{
+			$link = explode(";", $strLink);
+			parse_str($link[1]);
+			$pageLinks[trim($rel, ' "')] = trim($link[0], " <>");
+		}
+		return $pageLinks;
+	}
+
 	protected static function commitsData($inData)
 	{
 		$x = array();
@@ -217,8 +247,8 @@ class testGitHubApi extends Command
 		$x['message'] = $inData->commit->message;
 		$x['authorName'] = $inData->commit->author->name;
 		$x['committerName'] = $inData->commit->committer->name;
-		$x['author'] = self::isNull(array($inData, "author", "login")); //empty($inData->author->login) ? '' : $inData->author->login;
-		$x['committer'] = self::isNull(array($inData, "committer", "login")); //empty($inData->committer->login) ? '' : $inData->committer->login;
+		$x['author'] = self::isNull(array($inData->author, "login")); //empty($inData->author->login) ? '' : $inData->author->login;
+		$x['committer'] = self::isNull(array($inData->committer, "login")); //empty($inData->committer->login) ? '' : $inData->committer->login;
 		return $x;
 	}
 
@@ -326,8 +356,6 @@ class testGitHubApi extends Command
 				$member->dataGitHub($inMember);
 				$member->save();
 			}
-
-
 		}
 	}
 
