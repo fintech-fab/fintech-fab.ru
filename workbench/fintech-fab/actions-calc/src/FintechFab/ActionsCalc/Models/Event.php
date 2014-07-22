@@ -41,9 +41,25 @@ class Event extends Eloquent
 	 *
 	 * @return Event
 	 */
+
 	public static function getEvent($termId, $eventSid)
 	{
 		return Event::whereTerminalId($termId)->whereEventSid($eventSid)->first();
 	}
 
-} 
+	public function changeEvent($data)
+	{
+		$this->name = $data['name'];
+		$this->event_sid = $data['event_sid'];
+		$this->save();
+	}
+
+	public function newEvent($data)
+	{
+		$this->name = $data['name'];
+		$this->event_sid = $data['event_sid'];
+		$this->terminal_id = $data['terminal_id'];
+		$this->save();
+	}
+
+}

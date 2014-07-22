@@ -16,7 +16,7 @@ class Validators
 			'username'        => 'required',
 			'url'             => 'url',
 			'queue'           => '',
-			'key' => '',
+			'key'             => '',
 			'password'        => 'required|min:4|alpha_dash',
 			'confirmPassword' => 'required|same:password',
 		);
@@ -30,7 +30,7 @@ class Validators
 			'username'        => 'required',
 			'url'             => 'url',
 			'queue'           => '',
-			'key' => '',
+			'key'             => '',
 			'password'        => 'min:4|alpha_dash',
 			'confirmPassword' => 'required_with:password|same:password',
 		);
@@ -75,7 +75,7 @@ class Validators
 				'username'        => $userMessages->first('username'),
 				'url'             => $userMessages->first('url'),
 				'queue'           => $userMessages->first('queue'),
-				'key' => $userMessages->first('key'),
+				'key'             => $userMessages->first('key'),
 				'password'        => $userMessages->first('password'),
 				'confirmPassword' => $userMessages->first('confirmPassword'),
 			);
@@ -97,7 +97,7 @@ class Validators
 				'username'        => $userMessages->first('username'),
 				'url'             => $userMessages->first('url'),
 				'queue'           => $userMessages->first('queue'),
-				'key' => $userMessages->first('key'),
+				'key'             => $userMessages->first('key'),
 				'password'        => $userMessages->first('password'),
 				'confirmPassword' => $userMessages->first('confirmPassword'),
 			);
@@ -122,5 +122,37 @@ class Validators
 			exit();
 		}
 	}
+
+
+	public static function rulesForTableData()
+	{
+		$rules = array(
+			'name'      => 'required',
+			'event_sid' => 'required',
+		);
+
+		return $rules;
+	}
+
+
+	public static function getErrorFromChangeDataTable($data)
+	{
+		$data['name'] = e($data['name']);
+		$validator = Validator::make($data, Validators::rulesForTableData(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'name'      => $userMessages->first('name'),
+				'event_sid' => $userMessages->first('event_sid'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
 
 }

@@ -47,3 +47,18 @@ Route::post('actions-calc/account/changeData', array(
 	'as'   => 'changeDataCalc',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postChangeData',
 ));
+
+Route::post('actions-calc/tableEvents/getData/{action}', array(
+	'as'   => 'getDataEvents',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postGetData',
+));
+
+Route::post('actions-calc/tableEvents/changeData/', array(
+	'as'   => 'changeDataEvents',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postChangeData',
+));
+
+Route::post('actions-calc/tableEvents/addData/', array(
+	'as'   => 'addDataEvents',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddData',
+));
