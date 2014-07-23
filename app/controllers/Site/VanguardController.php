@@ -4,12 +4,12 @@ namespace App\Controllers\Site;
 
 
 use App\Controllers\BaseController;
+use FintechFab\Components\Form\Vanguard\FormHelper;
 use FintechFab\Components\Form\Vanguard\Improver;
 use FintechFab\Components\Helper;
+use FintechFab\Components\MailSender;
 use Input;
 use Redirect;
-use FintechFab\Components\MailSender;
-use FintechFab\Components\Form\Vanguard\FormHelper;
 
 class VanguardController extends BaseController
 {
@@ -75,12 +75,10 @@ class VanguardController extends BaseController
 		$difference = array_diff_key($information['improver'], $formData);
 
 		foreach ($difference as $key => $value) {
-			$difference[$key] = '';
+			$formData[$key] = '';
 		}
 
-		$data = $formData + $difference;
-
-		return $data;
+		return $formData;
 	}
 
 }
