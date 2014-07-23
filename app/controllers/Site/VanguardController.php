@@ -3,10 +3,12 @@
 namespace App\Controllers\Site;
 
 use App\Controllers\BaseController;
+use FintechFab\Components\Form\Vanguard\FormHelper;
+use FintechFab\Components\Form\Vanguard\Improver;
 use FintechFab\Components\Helper;
+use FintechFab\Components\MailSender;
 use Input;
 use Redirect;
-use FintechFab\Components\MailSender;
 
 class VanguardController extends BaseController
 {
@@ -26,8 +28,7 @@ class VanguardController extends BaseController
 		if ($mailSender->doVanguardOrder($data)) {
 			$mailSender->doVanguardOrderAuthor(array(
 				'to' => $data['email'],
-				'name' => $data['name'],
-				'toName' => $data['name']
+				'name' => $data['name']
 			));
 
 			$title = 'Все получилось';
@@ -49,16 +50,34 @@ class VanguardController extends BaseController
 
 	}
 
+	/**
+	 * @return array
+	 */
 	private function getOrderFormData()
 	{
-		$data = array(
-			'name'  => Input::get('name'),
-			'about' => Input::get('about'),
-			'email' => Input::get('email'),
-		);
+		$information = FormHelper::getInformation();
+		$formData = Input::all();
+		$directionList = array();
 
-		return $data;
+		if (isset($formData['direction'])) {
+			if (is_array($formData['direction'])) {
 
+				foreach ($formData['direction'] as $directionKey => $value) {
+					$directionList[] = Improver::getDirectionName($directionKey);
+				}
+				$formData['direction'] = implode(', ', $directionList);
+			}
+		} else {
+			$formData['direction'] = '';
+		}
+
+		$difference = array_diff_key($information['improver'], $formData);
+
+		foreach ($difference as $key => $value) {
+			$formData[$key] = '';
+		}
+
+		return $formData;
 	}
 
 }

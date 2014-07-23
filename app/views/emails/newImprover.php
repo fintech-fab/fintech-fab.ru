@@ -1,9 +1,8 @@
 <?php
-/**
- * @var string $name
- * @var string $email
- * @var string $about
- */
+use FintechFab\Components\Form\Vanguard\FormHelper;
+
+$information = FormHelper::getInformation();
+//Данные передаются из инпутов, контроллер VanguardController -> getOrderFormData()
 ?>
 <html>
 <head>
@@ -11,8 +10,14 @@
 </head>
 <body>
 <p>
-	Прилетела новая заявка в программу стажировки.<br> Имя: <?= HTML::entities($name) ?>.<br>
-	Email: <?= HTML::entities($email) ?>.<br> О себе: <?= HTML::entities($about) ?>
+	Прилетела новая заявка в программу стажировки.<br>
+	<?php
+	foreach ($information['improver'] as $data) {
+		$text = array_search($data, $information['improver']);
+		echo $data . ' ';
+		echo HTML::entities($$text) . '. <br>';
+	}
+	?>
 </p>
 </body>
 </html>
