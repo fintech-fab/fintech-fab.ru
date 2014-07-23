@@ -39,7 +39,7 @@ Route::group(array(
 });
 
 Route::post('actions-calc/account/newTerminal', array(
-	'as' => 'calcNewTerminal',
+	'as'   => 'calcNewTerminal',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AccountController@postNewTerminal',
 ));
 
@@ -68,4 +68,19 @@ Route::post('actions-calc/tableSignals/changeData/', array(
 Route::post('actions-calc/tableSignals/addData/', array(
 	'as'   => 'calcAddDataSignals',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddDataSignals',
+));
+
+Route::post('actions-calc/tableRule/changeFlagRule/', array(
+	'as'   => 'calcChangeFlagRule',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postChangeFlagRule',
+));
+
+Route::post('actions-calc/tableRules/changeData/', array(
+	'as'   => 'calcChangeDataRule',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postChangeDataRule',
+));
+
+Route::post('actions-calc/tableRules/addData/', array(
+	'as'   => 'calcAddDataRule',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddDataRule',
 ));

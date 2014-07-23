@@ -64,4 +64,16 @@ class Event extends Eloquent
 		$this->save();
 	}
 
+	public static function getEventSid()
+	{
+		$event = Event::select('id', 'event_sid')->get();
+		$result = array();
+		foreach ($event as $key => $value) {
+			$result[$value->id] = $value->event_sid;
+		}
+
+		return $result;
+	}
+
+
 }

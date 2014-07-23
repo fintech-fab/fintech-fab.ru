@@ -12,9 +12,9 @@ use FintechFab\ActionsCalc\Models\Event;
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableEvents.js') ?>
 </script>
-<?= View::make('ff-actions-calc::tables.inc.changeDataEventModal') ?>
+<?= View::make('ff-actions-calc::tables.inc.TableEvents.changeDataEventModal') ?>
 
-<?= View::make('ff-actions-calc::tables.inc.addDataEventModal') ?>
+<?= View::make('ff-actions-calc::tables.inc.TableEvents.addDataEventModal') ?>
 
 
 <?=
@@ -43,7 +43,7 @@ echo '<br><br>'
 				Form::button('Изменить', array(
 					'class'       => 'btn btn-sm btn-info tableBtn tableEditBtn',
 					'data-action' => 'showStatus',
-					'data-event' => $event,
+					'data-event'  => $event,
 					'data-toggle' => 'modal',
 					'data-target' => '#changeDataModal',
 				)) ?>

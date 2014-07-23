@@ -7,6 +7,7 @@ use FintechFab\ActionsCalc\Components\AuthCheck;
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Signal;
+use FintechFab\ActionsCalc\Models\Rule;
 use Input;
 
 class TablesController extends BaseController
@@ -135,6 +136,66 @@ class TablesController extends BaseController
 		$signal = New Signal();
 		$signal->newSignal($input);
 		$message = 'Данные изменены';
+
+		return array('message' => $message);
+
+	}
+
+	public function postChangeFlagRule()
+	{
+		$input = Input::all();
+		$val = $input['val'];
+		$id = $input['id'];
+
+		$rule = Rule::find($id);
+
+		if ($val == "true") {
+			$rule->changeFlag(1);
+		} else {
+			$rule->changeFlag(0);
+		}
+
+		$res = "Изменения произошли для правила с порядковым номером  $id";
+
+		return $res;
+
+	}
+
+	public function postChangeDataRule()
+	{
+		$input = Input::all();
+		$input['name'] = e($input['name']);
+		$id = $input['id'];
+
+		$errors = Validators::getErrorFromChangeDataRuleTable($input);
+		if ($errors) {
+			return $errors;
+		}
+
+		//Изменяем данные
+		$rule = Rule::find($id);
+		$message = 'Данные изменены';
+		$rule->changeRule($input);
+
+		return array('message' => $message);
+
+	}
+
+	public function postAddDataRule()
+	{
+		$input = Input::all();
+
+		$errors = Validators::getErrorFromChangeDataRuleTable($input);
+		if ($errors) {
+			return $errors;
+		}
+		$terminal = AuthCheck::getTerm();
+		$input['terminal_id'] = $terminal['id'];
+
+		//Изменяем данные
+		$message = 'Данные изменены';
+		$rule = New Rule();
+		$rule->newRule($input);
 
 		return array('message' => $message);
 

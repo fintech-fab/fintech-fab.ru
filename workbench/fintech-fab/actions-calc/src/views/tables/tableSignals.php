@@ -12,9 +12,9 @@ use FintechFab\ActionsCalc\Models\Signal;
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableSignals.js') ?>
 </script>
-<?= View::make('ff-actions-calc::tables.inc.changeDataSignalModal') ?>
+<?= View::make('ff-actions-calc::tables.inc.TableSignals.changeDataSignalModal') ?>
 
-<?= View::make('ff-actions-calc::tables.inc.addDataSignalModal') ?>
+<?= View::make('ff-actions-calc::tables.inc.TableSignals.addDataSignalModal') ?>
 
 
 <?=

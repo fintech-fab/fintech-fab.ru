@@ -49,4 +49,16 @@ class Signal extends Eloquent
 	}
 
 
-} 
+	public static function getSignalSid()
+	{
+		$signal = Signal::select('id', 'signal_sid')->get();
+		$result = array();
+		foreach ($signal as $key => $value) {
+			$result[$value->id] = $value->signal_sid;
+		}
+
+		return $result;
+	}
+
+
+}

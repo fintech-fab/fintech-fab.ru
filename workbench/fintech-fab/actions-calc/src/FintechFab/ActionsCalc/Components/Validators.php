@@ -145,6 +145,19 @@ class Validators
 	}
 
 
+	public static function rulesForTableDataRule()
+	{
+		$rules = array(
+			'name'      => 'required',
+			'rule'      => 'required',
+			'signal_id' => 'required|alpha_dash',
+			'event_id'  => 'required|alpha_dash',
+		);
+
+		return $rules;
+	}
+
+
 	public static function getErrorFromChangeDataEventsTable($data)
 	{
 		$data['name'] = e($data['name']);
@@ -174,6 +187,27 @@ class Validators
 			$result['errors'] = array(
 				'name'       => $userMessages->first('name'),
 				'signal_sid' => $userMessages->first('signal_sid'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
+	public static function getErrorFromChangeDataRuleTable($data)
+	{
+		$data['name'] = e($data['name']);
+		$validator = Validator::make($data, Validators::rulesForTableDataRule(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'name'      => $userMessages->first('name'),
+				'rule'      => $userMessages->first('rule'),
+				'signal_id' => $userMessages->first('signal_id'),
+				'event_id'  => $userMessages->first('event_id'),
 			);
 
 			return $result;
