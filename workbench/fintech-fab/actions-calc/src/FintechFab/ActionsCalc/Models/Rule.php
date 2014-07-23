@@ -26,6 +26,6 @@ class Rule extends Eloquent
 
 	public function terminal()
 	{
-		return $this->belongsTo('Terminal', 'terminal_id');
-	} // TODO: rules
+		return $this->belongsTo('Terminal');
+	}
 }

@@ -1,7 +1,14 @@
 <?php
 
-class RequestControllerTest extends TestCase
+class RequestControllerTest extends TestSetUp
 {
+
+
+	function __construct()
+	{
+		parent::setUp();
+	}
+
 	public function testPostRequest() {
 
 		$requstData = ['data' => json_encode(['test' => 1])];

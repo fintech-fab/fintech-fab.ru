@@ -21,6 +21,10 @@ use Eloquent;
 class Terminal extends Eloquent
 {
 	protected $table = 'terminals';
+
+	public function rules() {
+	    return $this->hasMany('Rule', 'terminal_id', 'id');
+	}
 }
 
  
