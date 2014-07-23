@@ -8,16 +8,26 @@
 namespace FintechFab\ActionsCalc\Controllers;
 
 use Controller;
+use App;
 use Input;
 use Log;
+use FintechFab\ActionsCalc\Components\AuthHandler;
 
 class RequestController extends Controller
 {
-	public function getRequest() {
-		$data = Input::get('all');
-		$requestTestData = json_decode($data['data']);
-		Log::info("Request in: $requestTestData");
+	public function getRequest()
+	{
+		$aRequestData = Input::only('terminal_id', 'event_sid', 'auth_sign', 'data');
+
+		if (!AuthHandler::checkSign($aRequestData)) {
+			App::abort(400, 'Wrong signature');
+		}
+
+		// authenticate user
+		$requestTestData = json_decode($aRequestData['data']);
+		Log::info("Request in: " . json_encode($aRequestData));
 		$requestTestData['test'] = 2;
+
 		return json_encode(['data' => $requestTestData]);
 	}
 }
