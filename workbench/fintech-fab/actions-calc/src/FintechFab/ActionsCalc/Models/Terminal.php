@@ -20,9 +20,9 @@ use Eloquent;
  */
 class Terminal extends Eloquent
 {
+	protected $connection = 'ff-actions-calc';
 	protected $table = 'terminals';
-
-	protected $fillable = ['id', 'name', 'url', 'queue'];
+	protected $fillable = ['id', 'name', 'url', 'queue', 'key', 'password'];
 
 	public function rules() {
 	    return $this->hasMany('Rule', 'terminal_id', 'id');

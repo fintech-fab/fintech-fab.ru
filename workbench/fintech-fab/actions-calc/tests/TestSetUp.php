@@ -32,7 +32,12 @@ class TestSetUp extends TestCase
 		]);
 
 		// Terminal user
-		Terminal::create(['id' => 1, 'name' => 'User1']);
+		Terminal::create([
+			'id' => 1,
+			'name' => 'User1',
+			'key' => 'key',
+			'password' => 'password',
+		]);
 	}
 }
  

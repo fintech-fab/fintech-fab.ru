@@ -18,6 +18,7 @@ use Eloquent;
  */
 class Event extends Eloquent
 {
+	protected $connection = 'ff-actions-calc';
 	protected $table = 'events';
 
 	public function terminal()

@@ -23,7 +23,7 @@ class Rule extends Eloquent
 {
 
 	protected $table = 'rules';
-
+	protected $connection = 'ff-actions-calc';
 	protected $fillable = ['id', 'name', 'terminal_id'];
 
 	public function terminal()

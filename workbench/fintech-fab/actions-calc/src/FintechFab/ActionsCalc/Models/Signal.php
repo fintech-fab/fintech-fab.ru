@@ -19,7 +19,7 @@ use Eloquent;
  */
 class Signal extends Eloquent
 {
-
+	protected $connection = 'ff-actions-calc';
 	protected $table = 'signals';
 
 	public function terminal()
