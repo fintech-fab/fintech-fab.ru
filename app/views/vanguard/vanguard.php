@@ -199,7 +199,7 @@ $labels = $forms['label'];
 		можете &laquo;осилить&raquo; самостоятельно, то считайте, что проходной тест пройден и подавайте заявку:</p>
 	<?=
 	Form::open(array(
-		'action' => 'vanguard',
+		'action' => 'vanguard.postOrder',
 		'class'  => 'form-horizontal',
 		'role'   => 'form',
 		'method' => 'post',

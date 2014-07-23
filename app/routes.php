@@ -1,7 +1,7 @@
 <?php
 Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainController@index'));
 Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
-Route::post('vanguard/postOrder', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
+Route::post('vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',

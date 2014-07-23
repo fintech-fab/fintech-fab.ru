@@ -47,8 +47,10 @@ class MailSender
 		});
 
 		$cntFails = count(Mail::failures());
+
 		return (0 == $cntFails);
 	}
+
 	/**
 	 * @param array $data
 	 * $data['baseMessage']
@@ -66,6 +68,7 @@ class MailSender
 		});
 
 		$cntFails = count(Mail::failures());
+
 		return (0 == $cntFails);
 	}
 
