@@ -82,12 +82,29 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "issuesEvents":
-				$this->_curl_nobody = true;
 				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events?page=2", "issuesEventsData");
-				if(isset($res["header"]["Link"])) {
-					$res = self::decodePageLinks($res["header"]["Link"]);
+				break;
+			case "testPages":
+				$this->_curl_nobody = true;
+				$res = array();
+				$i = 10; //страховка от зацикливания
+				$isNextPage = true;
+				$link['next'] = $this->apiRepos . "issues/events";
+				while($isNextPage && $i > 0)
+				{
+					$newRes = $this->getFromGitHubApi($link['next']);
+					$link = isset($newRes["header"]["Link"]) ?
+						self::decodePageLinks($newRes["header"]["Link"]) :
+						'';
+					$res[] = $link;
+					$isNextPage = isset($link['next']);
+					$this->info("rateLimitRemaining: " . $this->_rateLimitRemaining);
+					$i--;
 				}
-
+				$res['end'] = $newRes["header"];
+				if(isset($newRes["header"]["Link"])){
+					$res['endLink'] = self::decodePageLinks($newRes["header"]["Link"]);
+				}
 				break;
 			case "users":
 				if(empty($opt["saveInDB"])) {
@@ -100,8 +117,9 @@ class testGitHubApi extends Command
 					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
 					//$this->saveUsers($res['response']);
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
+
 					$this->info("assignees");
-					$res = self::getFromGitHubApi($this->apiRepos . "assignees");
+					$res = $this->getFromGitHubApi($this->apiRepos . "assignees");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
 					$res = '';
 				}
@@ -182,9 +200,9 @@ class testGitHubApi extends Command
 			}
 		}
 		$fullResponse = array();
-		 $this->_rateLimit = $header['X-RateLimit-Limit'];
-		 $this->_rateLimitRemaining = $header['X-RateLimit-Remaining'];
-		 $this->_rateLimitReset = intval($header['X-RateLimit-Reset']);
+		 $this->_rateLimit = self::isNull($header['X-RateLimit-Limit'], 0);
+		 $this->_rateLimitRemaining = self::isNull($header['X-RateLimit-Remaining'], 0);
+		 $this->_rateLimitReset = self::isNull(intval($header['X-RateLimit-Reset']), 0);
 		$fullResponse['header'] = $header;
 
 
