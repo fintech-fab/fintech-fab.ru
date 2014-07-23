@@ -20,7 +20,7 @@ use Eloquent;
 class Signal extends Eloquent
 {
 
-	private $table = 'signals';
+	protected $table = 'signals';
 
 	public function terminal()
 	{

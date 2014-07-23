@@ -22,7 +22,9 @@ use Eloquent;
 class Rule extends Eloquent
 {
 
-	private $table = 'rules';
+	protected $table = 'rules';
+
+	protected $fillable = ['id', 'name', 'terminal_id'];
 
 	public function terminal()
 	{

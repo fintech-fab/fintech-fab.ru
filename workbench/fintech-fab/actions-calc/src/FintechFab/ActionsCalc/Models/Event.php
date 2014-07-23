@@ -18,7 +18,7 @@ use Eloquent;
  */
 class Event extends Eloquent
 {
-	private $table = 'events';
+	protected $table = 'events';
 
 	public function terminal()
 	{

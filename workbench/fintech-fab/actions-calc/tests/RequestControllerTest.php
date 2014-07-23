@@ -3,14 +3,13 @@
 class RequestControllerTest extends TestSetUp
 {
 
-
-	function __construct()
+	public function setUp()
 	{
 		parent::setUp();
 	}
 
-	public function testPostRequest() {
-
+	public function testPostRequest()
+	{
 		$requstData = ['data' => json_encode(['test' => 1])];
 
 		$response = $this->call('POST', '/actions-calc/getRequest', $requstData);

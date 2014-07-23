@@ -22,6 +22,8 @@ class Terminal extends Eloquent
 {
 	protected $table = 'terminals';
 
+	protected $fillable = ['id', 'name', 'url', 'queue'];
+
 	public function rules() {
 	    return $this->hasMany('Rule', 'terminal_id', 'id');
 	}
