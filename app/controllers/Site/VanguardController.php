@@ -61,20 +61,26 @@ class VanguardController extends BaseController
 		$directionList = array();
 
 		if (isset($formData['direction'])) {
+			if (is_array($formData['direction'])) {
 
-			foreach ($formData['direction'] as $directionKey => $value) {
-				$directionList[] = Improver::getDirectionName($directionKey);
+				foreach ($formData['direction'] as $directionKey => $value) {
+					$directionList[] = Improver::getDirectionName($directionKey);
+				}
+				$formData['direction'] = implode(', ', $directionList);
 			}
+		} else {
+			$formData['direction'] = '';
 		}
 
-		$formData['direction'] = implode(', ', $directionList);
-		$result = array_diff_assoc($information['improver'], $formData);
-		foreach ($result as $data) {
-			$data = '';
-			$formData[] = $data;
+		$difference = array_diff_key($information['improver'], $formData);
+
+		foreach ($difference as $key => $value) {
+			$difference[$key] = '';
 		}
 
-		return $formData;
+		$data = $formData + $difference;
+
+		return $data;
 	}
 
 }
