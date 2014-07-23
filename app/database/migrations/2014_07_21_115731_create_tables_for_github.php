@@ -14,9 +14,10 @@ class CreateTablesForGithub extends Migration {
 	{
 		Schema::create('github_members', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->string('login', 32)->unique();
-			$table->string('avatar_url', 100)->nullable();
+			//$table->increments('id');
+			//$table->string('login', 20)->unique();
+			$table->string('login', 20)->primary();
+			$table->string('avatar_url', 100)->default('');
 			$table->integer('contributions')->default(0);
 			$table->timestamps();
 		});
@@ -30,7 +31,8 @@ class CreateTablesForGithub extends Migration {
 			$table->dateTime('created');
 			$table->dateTime('updated');
 			$table->dateTime('closed')->nullable();
-			$table->string('userLogin', 32);
+			$table->string('userLogin', 20);
+			$table->foreign('userLogin')->references('login')->on('github_members');
 		});
 	}
 
@@ -41,8 +43,8 @@ class CreateTablesForGithub extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('github_members');
 		Schema::drop('github_issues');
+		Schema::drop('github_members');
 	}
 
 }

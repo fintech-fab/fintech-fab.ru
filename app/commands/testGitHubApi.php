@@ -38,11 +38,6 @@ class testGitHubApi extends Command
 		parent::__construct();
 		$this->apiRepos = "https://api.github.com/repos/fintech-fab/fintech-fab.ru/";
 
-		//$res = self::getFromGitHubApi(self::$apiBaseUrl . "rate_limit");
-		//$this->_rateLimit = $res->rate->limit;
-		//$this->_rateLimitRemaining = $res->rate->remaining;
-		//$this->_rateLimitReset = $res->rate->reset;
-
 	}
 
 	/**
@@ -54,27 +49,12 @@ class testGitHubApi extends Command
 	{
 		$this->info("It's OK. Begin...");
 
-
-		//$res = getFromGitHubApi("https://api.github.com/users/fintech-fab");
+		//$res = $this->getFromGitHubApi("https://api.github.com/users/fintech-fab");
 		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues/9/events");
-		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru"); //+
-		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/assignees"); //+
-		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/languages"); //+(?)
-		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/contributors"); //+(?)
-		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/subscribers"); //+(?)
-
-		//$res = self::getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues");//+
-		//$res = self::getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues?state=closed");
-		//$res = self::getIssuesComments('2014-06-10T00:00:00Z');
-		//$res = self::getIssuesComments('2014-06-10');
-
-
-		//$res = self::getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues?state=closed");
 
 		$opt = $this->option();
 		$dt = getdate();
 		$qDate = date('c', $dt[0]-(3600*24*40));
-		//$this->info(date('c', $dt[0]-(3600*24*30)));
 
 		switch($this->argument('firstArg')) {
 			case "comments":
@@ -87,11 +67,13 @@ class testGitHubApi extends Command
 				$res = $this->getFromGitHubApi($this->apiRepos . "events", "eventsData");
 				break;
 			case "issues":
-				/**?state=open|closed|all
+				/**?state=open|closed|all (Default: open)
 				 * ?since='YYY-MM-DDTHH:MM:SSZ'
+				 * ?sort=created|updated|comments (Default: created)
+				 * ?direction=asc|desc
 				 */
 				if(! empty($opt["saveInDB"])) {
-					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all");
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all&direction=asc");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubIssues');
 					$res = '';
 				}
@@ -108,11 +90,18 @@ class testGitHubApi extends Command
 
 				break;
 			case "users":
-				$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
-				//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
-				//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
-				if(! empty($opt["saveInDB"])) {
+				if(empty($opt["saveInDB"])) {
+					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
+					//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
+					//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
+				}
+				else {
+					$this->info("contributors");
+					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
 					//$this->saveUsers($res['response']);
+					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
+					$this->info("assignees");
+					$res = self::getFromGitHubApi($this->apiRepos . "assignees");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
 					$res = '';
 				}
@@ -120,16 +109,15 @@ class testGitHubApi extends Command
 				break;
 			default:
 				//$res = $this->argument();
-				//$res = self::getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
-				$res = $this->option();
-				//$this->info("saveInDB: " . (empty($res["saveInDB"]) ? "false" : "true"));
+				//$res = $this->getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
+				//$res = $this->option();
+				$res = GitHubMembers::find('finking')->issues()->toArray();
 		}
-		//$this->_rateLimitRemaining -= 1;
 
 
 
 		ob_start();
-		print_r($res);  // var_dump($this->argument('firstArg'));
+		print_r($res);
 		$d =  ob_get_clean();
 		$this->info($d);
 		$this->info("rateLimit: " . $this->_rateLimit);
@@ -159,7 +147,6 @@ class testGitHubApi extends Command
 	protected function getOptions()
 	{
 		return array(
-			//array('firstOpt', null, InputOption::VALUE_OPTIONAL, 'An option.', null),
 			array('saveInDB', null, InputOption::VALUE_NONE, 'An option.', null),
 		);
 	}
@@ -167,11 +154,9 @@ class testGitHubApi extends Command
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $httpRequest);
-		//curl_setopt($ch, CURLOPT_HEADER, 0); //<---------------
-		curl_setopt($ch, CURLOPT_HEADER, 1);   //<===============
+		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, "fintech-fab");
-
 
 		if($this->_curl_nobody){
 			curl_setopt($ch, CURLOPT_NOBODY, 1);
@@ -185,8 +170,7 @@ class testGitHubApi extends Command
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
-		//<===
-		$res = explode("\r\n", $response);        //<===header
+		$res = explode("\r\n", $response);
 		$response = array_pop($res);
 		$header = array();
 		for($i = 1; $i < count($res); $i++)
@@ -201,16 +185,15 @@ class testGitHubApi extends Command
 		 $this->_rateLimit = $header['X-RateLimit-Limit'];
 		 $this->_rateLimitRemaining = $header['X-RateLimit-Remaining'];
 		 $this->_rateLimitReset = intval($header['X-RateLimit-Reset']);
-		$fullResponse['header'] = $header;                          //<===header
+		$fullResponse['header'] = $header;
 
 
 		if($http_code == 200)
 		{
 			if($func == '')
 			{
-				$fullResponse['response'] = json_decode($response);//<===header
-				return $fullResponse;                              //<===header
-				//return json_decode($response);//<---без заголовка
+				$fullResponse['response'] = json_decode($response);
+				return $fullResponse;
 			} else
 			{
 				$res = array();
@@ -218,9 +201,8 @@ class testGitHubApi extends Command
 				{
 					$res[] = self::$func($inData);
 				}
-				//return $res;  //<---без заголовка
-				$fullResponse['response'] = $res;//<===header
-				return $fullResponse;            //<===header
+				$fullResponse['response'] = $res;
+				return $fullResponse;
 			}
 
 		} else {
@@ -346,7 +328,7 @@ class testGitHubApi extends Command
 		foreach($inData as $inMember)
 		{
 			$member = GitHubMembers::where("login", $inMember->login)->first();
-			if(isset($member->id))
+			if(isset($member->login))
 			{
 				$this->info("User: " . $member->login);
 				if(! empty($inMember->contributions))
@@ -408,7 +390,7 @@ class testGitHubApi extends Command
 		foreach($inData as $inItem)
 		{
 			$item = $classDB::where($keyName, $inItem->$keyName)->first();;
-			if(isset($item->id))
+			if(isset($item->$keyName))
 			{
 				$this->info("Found $myName:" . $item->$keyName);
 				if($item->updateFromGitHub($inItem))
@@ -426,7 +408,6 @@ class testGitHubApi extends Command
 			}
 		}
 	}
-
 
 
 }

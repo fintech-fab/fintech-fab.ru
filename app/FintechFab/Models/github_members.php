@@ -3,6 +3,7 @@
 namespace FintechFab\Models;
 
 use Eloquent;
+//use FintechFab\Models\GitHubIssues;
 
 /**
  * Class GitHubMembers
@@ -17,10 +18,15 @@ use Eloquent;
   */
 class GitHubMembers extends Eloquent
 {
-	//protected $fillable = array('login', 'avatar_url');
-	//public $timestamps = false;
 
 	protected $table = 'github_members';
+
+	public function issues()
+	{
+		//return $this->hasMany('FintechFab\Models\GitHubIssues', "userLogin");
+		return GitHubIssues::where("userLogin", $this->login)->get();
+	}
+
 
 	public function getKeyName()
 	{

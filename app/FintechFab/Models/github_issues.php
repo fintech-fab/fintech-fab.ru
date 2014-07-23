@@ -3,6 +3,7 @@
 namespace FintechFab\Models;
 
 use Eloquent;
+//use FintechFab\Models\GitHubMembers;
 
 /**
  * Class GitHubIssues
@@ -25,6 +26,12 @@ class GitHubIssues extends Eloquent
 	public $timestamps = false;
 	protected $table = 'github_issues';
 
+	public function user()	{
+	//	return $this->belongsTo('FintechFab\Models\GitHubMembers', "login", "userLogin");
+		return GitHubMembers::find($this->userLogin);
+
+	}
+
 	public function getKeyName()
 	{
 		return 'number';
@@ -37,6 +44,12 @@ class GitHubIssues extends Eloquent
 
 	public function dataGitHub($inData)
 	{
+		if(! isset(GitHubMembers::find($inData->user->login)->login))
+		{
+			$user = new GitHubMembers;
+			$user->login = $inData->user->login;
+			$user->save();
+		}
 		$this->html_url = $inData->html_url;
 		$this->number = $inData->number;
 		$this->title = $inData->title;
@@ -48,6 +61,7 @@ class GitHubIssues extends Eloquent
 			$this->closed = $inData->closed_at;
 		}
 		$this->userLogin = $inData->user->login;
+
 	}
 
 	public function updateFromGitHub($inData)
