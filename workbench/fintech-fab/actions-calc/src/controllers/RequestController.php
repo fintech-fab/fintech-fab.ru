@@ -12,6 +12,7 @@ use App;
 use Input;
 use Log;
 use FintechFab\ActionsCalc\Components\AuthHandler;
+use Config;
 
 class RequestController extends Controller
 {
@@ -24,12 +25,11 @@ class RequestController extends Controller
 		}
 
 		// authenticate user
-		$requestTestData = json_decode($aRequestData['data']);
-		Log::info("Request in: " . json_encode($aRequestData));
-		$requestTestData['test'] = 2;
+		$oRequestTestData = json_decode($aRequestData['data']);
 
-		return json_encode(['data' => $requestTestData]);
+		Log::info("Request in: " . json_encode($aRequestData));
+		$oRequestTestData->test = 2;
+
+		return json_encode(['data' => $oRequestTestData]);
 	}
 }
-
- 
