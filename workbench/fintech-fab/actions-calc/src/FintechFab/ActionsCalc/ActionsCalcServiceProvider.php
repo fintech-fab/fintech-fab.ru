@@ -2,7 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class ActionsCalcServiceProvider extends ServiceProvider {
+class ActionsCalcServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * Indicates if loading of the provider is deferred.

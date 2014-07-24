@@ -3,6 +3,7 @@
 namespace FintechFab\ActionsCalc\Controllers;
 
 use Controller;
+use Config;
 
 /**
  * Class AuthController
@@ -13,5 +14,6 @@ class AuthController extends Controller
 {
 	public function login()
 	{
+		return 'login page';
 	}
 }

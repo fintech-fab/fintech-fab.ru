@@ -4,19 +4,10 @@ use FintechFab\ActionsCalc\Components\AuthHandler;
 
 class RequestControllerTest extends TestSetUp
 {
-	// Request post data
-	private $aRequestData;
-
 	public function setUp()
 	{
-		$sSignature = sha1("1|under_rain|key");
-		$this->aRequestData = [
-			'terminal_id' => 1,
-			'event_sid'   => 'under_rain',
-			'data'        => json_encode(['test' => 1]),
-			'auth_sign'   => $sSignature
-		];
 		parent::setUp();
+		Route::enableFilters();
 	}
 
 	public function testRequestDataIn()
@@ -32,14 +23,11 @@ class RequestControllerTest extends TestSetUp
 		$this->assertTrue(AuthHandler::checkSign($this->aRequestData));
 	}
 
-	// TODO: to separate class
-	public function testRequestClientAuth()
+	public function testAuthFailAndRedirect()
 	{
 		Config::set('ff-actions-calc::app.terminal_id', 0);
-		Route::enableFilters();
 		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
-		$this->assertRedirectedTo('login');
+		$this->assertRedirectedToRoute('login');
 	}
-
 }
  

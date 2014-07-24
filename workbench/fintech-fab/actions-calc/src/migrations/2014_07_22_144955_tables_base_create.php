@@ -3,7 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TablesBaseCreate extends Migration {
+class TablesBaseCreate extends Migration
+{
 
 	/**
 	 * Run the migrations.
@@ -13,7 +14,7 @@ class TablesBaseCreate extends Migration {
 	public function up()
 	{
 		// terminals
-		Schema::create('terminals', function(Blueprint $table) {
+		Schema::create('terminals', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('url');

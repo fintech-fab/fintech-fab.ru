@@ -12,7 +12,6 @@ use App;
 use Input;
 use Log;
 use FintechFab\ActionsCalc\Components\AuthHandler;
-use Config;
 
 class RequestController extends Controller
 {

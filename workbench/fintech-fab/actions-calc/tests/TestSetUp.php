@@ -5,8 +5,18 @@ use FintechFab\ActionsCalc\Models\Rule;
 
 class TestSetUp extends TestCase
 {
+	protected $aRequestData;
+
 	public function setUp()
 	{
+		$sSignature = sha1("1|under_rain|key");
+		$this->aRequestData = [
+			'terminal_id' => 1,
+			'event_sid'   => 'under_rain',
+			'data'        => json_encode(['test' => 1]),
+			'auth_sign'   => $sSignature
+		];
+
 		parent::setUp();
 
 		// Clearing tables on every test
