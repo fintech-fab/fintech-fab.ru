@@ -29,11 +29,6 @@ class RequestControllerTest extends TestSetUp
 
 	public function testSignature()
 	{
-		$iTerminalId = Config::get('actions-calc::app.terminal_id');
-		$sClientKey = Config::get('actions-calc::app.key');
-		$sSignature = sha1($iTerminalId . "|under_rain|" . $sClientKey);
-
-		$this->assertEquals($sSignature, $sSignature);
 		$this->assertTrue(AuthHandler::checkSign($this->aRequestData));
 	}
 }
