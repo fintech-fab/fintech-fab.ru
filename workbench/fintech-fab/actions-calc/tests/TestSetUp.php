@@ -36,7 +36,7 @@ class TestSetUp extends TestCase
 			'id'       => 1,
 			'name'     => 'User1',
 			'key'      => 'key',
-			'password' => 'password',
+			'password' => Hash::make('password'),
 		]);
 	}
 }

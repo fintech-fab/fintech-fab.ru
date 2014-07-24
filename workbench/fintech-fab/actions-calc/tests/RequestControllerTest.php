@@ -31,5 +31,15 @@ class RequestControllerTest extends TestSetUp
 	{
 		$this->assertTrue(AuthHandler::checkSign($this->aRequestData));
 	}
+
+	// TODO: to separate class
+	public function testRequestClientAuth()
+	{
+		Config::set('ff-actions-calc::app.terminal_id', 0);
+		Route::enableFilters();
+		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
+		$this->assertRedirectedTo('login');
+	}
+
 }
  

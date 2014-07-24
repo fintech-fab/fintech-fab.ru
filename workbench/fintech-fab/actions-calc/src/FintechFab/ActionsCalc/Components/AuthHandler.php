@@ -13,8 +13,9 @@ class AuthHandler
 {
 
 	/**
+	 * Compare signatures
+	 *
 	 * @param $aRequestData
-	 * terminal_id | event_sid | key
 	 *
 	 * @return bool
 	 */
