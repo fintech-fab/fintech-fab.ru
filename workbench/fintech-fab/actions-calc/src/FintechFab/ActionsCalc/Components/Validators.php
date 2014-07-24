@@ -58,6 +58,7 @@ class Validators
 			'alpha_dash'    => 'Только буквы, цифры, тире и подчёткивания.',
 			'same'          => 'Пароли не одинаковы',
 			'required_with' => 'Подтвердите пароль',
+			'unique' => 'Такой sid уже существует',
 		);
 
 		return $rules;
@@ -128,7 +129,7 @@ class Validators
 	{
 		$rules = array(
 			'name'      => 'required',
-			'event_sid' => 'required|alpha_dash',
+			'event_sid' => 'required|alpha_dash|unique:actions_calc.events',
 		);
 
 		return $rules;
@@ -138,7 +139,7 @@ class Validators
 	{
 		$rules = array(
 			'name'       => 'required',
-			'signal_sid' => 'required|alpha_dash',
+			'signal_sid' => 'required|alpha_dash|unique:actions_calc.signals',
 		);
 
 		return $rules;

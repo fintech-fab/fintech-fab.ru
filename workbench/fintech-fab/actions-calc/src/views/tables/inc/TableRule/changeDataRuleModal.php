@@ -34,13 +34,18 @@ use FintechFab\ActionsCalc\Models\Signal;
 				<div class="form-group row">
 					<?= Form::label('inputEventSid', 'event_sid', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">
-						<?=
-						Form::select('EventSid', Event::getEventSid(), '', array(
-							'class'    => 'form-control',
-							'id'       => 'inputEventSid',
-							'required' => 'required',
-						));
-						?>
+
+						<div class="demo">
+							<div class="ui-widget">
+								<?=
+								Form::select('EventSid', Event::getEventSid(), '', array(
+									'class'    => 'form-control',
+									'id'       => 'inputEventSid',
+									'required' => 'required',
+								));
+								?>
+							</div>
+						</div>
 					</div>
 					<div id="errorEventSid" class="text-danger text-center"></div>
 				</div>
@@ -61,15 +66,20 @@ use FintechFab\ActionsCalc\Models\Signal;
 
 
 				<div class="form-group row">
+
 					<?= Form::label('inputSignalSid', 'signal_sid', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">
-						<?=
+						<div class="demo">
+							<div class="ui-widget">
+							<?=
 						Form::select('SignalSid', Signal::getSignalSid(), '', array(
 							'class'    => 'form-control',
 							'id'       => 'inputSignalSid',
 							'required' => 'required',
 						));
 						?>
+							</div>
+						</div>
 					</div>
 					<div id="errorSignalSid" class="text-danger text-center"></div>
 				</div>

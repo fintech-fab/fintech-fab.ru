@@ -1,6 +1,7 @@
 <?php
 
 use FintechFab\ActionsCalc\Models\Rule;
+use FintechFab\ActionsCalc\Models\eVENT;
 
 /**
  * @var Rule $rules
@@ -8,6 +9,30 @@ use FintechFab\ActionsCalc\Models\Rule;
  */
 
 ?>
+<style>.ui-menu {
+		z-index: 10000;
+	}
+
+	.custom-combobox {
+		position: relative;
+		display: inline-block;
+	}
+
+	.custom-combobox-toggle {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		margin-left: -1px;
+		padding: 0;
+		/* support: IE7 */
+		*height: 1.7em;
+		*top: 0.1em;
+	}
+
+	.custom-combobox-input {
+		margin: 0;
+		padding: 0.3em;
+	}</style>
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableRule.js') ?>
 </script>
@@ -53,17 +78,16 @@ echo '<br><br>'
 				Form::button('Изменить', array(
 					'class'          => 'btn btn-sm btn-info tableBtn tableEdit',
 					'data-action'    => 'showStatus',
-					'data-id'        => $rule->id,
 					'data-rule'      => $rule,
-					'data-event-id'  => $rule->event_id,
-					'data-signal-id' => $rule->signal_id,
 					'data-toggle'    => 'modal',
 					'data-target'    => '#changeDataModal',
 				)) ?>
 			</td>
 		</tr>
 
+
 	<?php endforeach ?>
+
 </table>
 <?= $rules->links() ?>
 <div id="message" class="text-center"></div>
