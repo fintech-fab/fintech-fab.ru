@@ -10,7 +10,6 @@ use Eloquent;
  *
  * @package FintechFab\Models
  *
- * @property integer $id
  * @property string  $html_url
  * @property integer $number
  * @property string  $title
@@ -18,7 +17,7 @@ use Eloquent;
  * @property integer $created
  * @property integer $updated
  * @property integer $closed
- * @property string  $userLogin
+ * @property string  $user_login
  *
   */
 class GitHubIssues extends Eloquent
@@ -27,8 +26,14 @@ class GitHubIssues extends Eloquent
 	protected $table = 'github_issues';
 
 	public function user()	{
-	//	return $this->belongsTo('FintechFab\Models\GitHubMembers', "login", "userLogin");
-		return GitHubMembers::find($this->userLogin);
+		//	return $this->belongsTo('FintechFab\Models\GitHubMembers', "login", "user_login");
+		return GitHubMembers::find($this->user_login);
+
+	}
+
+	public function comments()	{
+		//	return $this->belongsTo('FintechFab\Models\GitHubMembers', "login", "user_login");
+		return GitHubComments::where("issue_number", $this->number)->orderBy("created")->get();
 
 	}
 
@@ -60,8 +65,8 @@ class GitHubIssues extends Eloquent
 		{
 			$this->closed = $inData->closed_at;
 		}
-		$this->userLogin = $inData->user->login;
-
+		$this->user_login = $inData->user->login;
+		return true;
 	}
 
 	public function updateFromGitHub($inData)

@@ -5,10 +5,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use FintechFab\Models\GitHubMembers;
 use FintechFab\Models\GitHubIssues;
+use FintechFab\Models\GitHubRefcommits;
 
 class testGitHubApi extends Command
 {
-	private static $apiBaseUrl = 'https://api.github.com/';
+	//private static $apiBaseUrl = 'https://api.github.com/';
 
 	private $_curl_nobody = false;
 	private $_rateLimit = 0;
@@ -54,17 +55,26 @@ class testGitHubApi extends Command
 
 		$opt = $this->option();
 		$dt = getdate();
-		$qDate = date('c', $dt[0]-(3600*24*40));
+		$qDate = date('c', $dt[0]-(3600*24*15));
+		$this->info($qDate);
 
 		switch($this->argument('firstArg')) {
 			case "comments":
-				$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments?since=" . $qDate, "issuesCommentsData");
+				if(! empty($opt["save"])) {
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments");
+					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubComments');
+					$res = '';
+				}
+				else {
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments?since=" . $qDate, "issuesCommentsData");
+				}
 				break;
 			case "commits":
 				$res = $this->getFromGitHubApi($this->apiRepos . "commits?since=" . $qDate, "commitsData");
 				break;
 			case "events":
-				$res = $this->getFromGitHubApi($this->apiRepos . "events", "eventsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "events?page=3", "eventsData");
+				//$res = $this->getFromGitHubApi($this->apiRepos . "events?since=" . $qDate, "eventsData");  //Параметры здесь не работают
 				break;
 			case "issues":
 				/**?state=open|closed|all (Default: open)
@@ -72,7 +82,7 @@ class testGitHubApi extends Command
 				 * ?sort=created|updated|comments (Default: created)
 				 * ?direction=asc|desc
 				 */
-				if(! empty($opt["saveInDB"])) {
+				if(! empty($opt["save"])) {
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all&direction=asc");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubIssues');
 					$res = '';
@@ -82,7 +92,29 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "issuesEvents":
-				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events?page=2", "issuesEventsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
+				if(! empty($opt["save"])) {
+					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubRefcommits');
+					$refCommits = GitHubRefcommits::where('message', '')->get();
+					foreach($refCommits as $ref)
+					{
+						$res = $this->getFromGitHubApi($this->apiRepos . "git/commits/" . $ref->commit_id);
+						$this->info("rateLimitRemaining: " . $this->_rateLimitRemaining);
+						if($ref->updateFromGitHub($res['response']))
+						{
+							$this->info('Update: ' . substr($ref->message, 0, 60));
+							$ref->save();
+						}
+					}
+					$res = '';
+				}
+				break;
+			case "issuesEvent":
+				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
+				$event = $res['response'][0];
+				$res = $this->getFromGitHubApi($this->apiRepos . "git/commits/" . $event['commit_id']);
+				$event['message'] = $res['response']->message;
+				$res = $event;
 				break;
 			case "testPages":
 				$this->_curl_nobody = true;
@@ -90,6 +122,8 @@ class testGitHubApi extends Command
 				$i = 10; //страховка от зацикливания
 				$isNextPage = true;
 				$link['next'] = $this->apiRepos . "issues/events";
+				//$link['next'] = $this->apiRepos . "issues/events?since=" . $qDate; //Параметры здесь не работают
+				$newRes = array();
 				while($isNextPage && $i > 0)
 				{
 					$newRes = $this->getFromGitHubApi($link['next']);
@@ -107,7 +141,7 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "users":
-				if(empty($opt["saveInDB"])) {
+				if(empty($opt["save"])) {
 					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
 					//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
 					//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
@@ -126,10 +160,19 @@ class testGitHubApi extends Command
 
 				break;
 			default:
+				//тесты
 				//$res = $this->argument();
 				//$res = $this->getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
 				//$res = $this->option();
-				$res = GitHubMembers::find('finking')->issues()->toArray();
+				//$res = GitHubMembers::find('finking')->issues()->toArray();
+				//$res = GitHubComments::find(41154299)->issue();
+				$com = GitHubIssues::find(7)->comments();
+				$res = array();
+				foreach($com as $comment)
+				{
+					$res[] = $comment->user();
+				}
+
 		}
 
 
@@ -165,7 +208,7 @@ class testGitHubApi extends Command
 	protected function getOptions()
 	{
 		return array(
-			array('saveInDB', null, InputOption::VALUE_NONE, 'An option.', null),
+			array('save', null, InputOption::VALUE_NONE, 'An option.', null),
 		);
 	}
 	protected function getFromGitHubApi($httpRequest, $func = '')
@@ -182,6 +225,7 @@ class testGitHubApi extends Command
 		}
 
 		//curl_setopt($ch, CURLOPT_USERPWD, ":");
+		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('If-None-Match: "e1fe2d0c86ed010a4fe5608a264b50b5"'));
 
 
 		$response = curl_exec($ch);
@@ -267,19 +311,84 @@ class testGitHubApi extends Command
 		$x['type'] = $inData->type;
 		$x['actorLogin'] = $inData->actor->login;
 		$x['created_at'] = $inData->created_at;
+		switch($inData->type)
+		{
+			case "CommitCommentEvent":
+				$x['payload'] = array(
+					'commentId' => $inData->payload->comment->id,
+					'comment' => $inData->payload->comment->html_url
+				);
+				break;
+			case "CreateEvent":
+				$x['payload'] = array(
+					'ref' => $inData->payload->ref,
+					'ref_type' => $inData->payload->ref_type
+				);
+				break;
+			case "DeleteEvent":
+				$x['payload'] = array(
+					'ref' => $inData->payload->ref,
+					'ref_type' => $inData->payload->ref_type
+				);
+				break;
+			case "DeploymentEvent": break;
+			case "DeploymentStatusEvent": break;
+			case "DownloadEvent": break;
+			case "FollowEvent": break;
+			case "ForkEvent": break; //-
+			case "ForkApplyEvent": break;
+			case "GistEvent": break;
+			case "GollumEvent": break;
+			case "IssueCommentEvent":
+				$x['payload'] = array(
+					'action' => $inData->payload->action,
+					'issueNumber' => $inData->payload->issue->number,
+					'commentHtml_url' => $inData->payload->comment->html_url
+				);
+				break;
+			case "IssuesEvent":
+				$x['payload'] = array(
+					'action' => $inData->payload->action,
+					'issueNumber' => $inData->payload->issue->number
+				);
+				break;
+			case "MemberEvent": break;
+			case "PageBuildEvent": break;
+			case "PublicEvent": break;
+			case "PullRequestEvent": break;
+			case "PullRequestReviewCommentEvent": break;
+			case "PushEvent":
+				$x['payload'] = array(
+					'push_id' => $inData->payload->push_id,
+					'ref' => $inData->payload->ref,
+					'head' => $inData->payload->head
+				);
+				break;
+			case "ReleaseEvent": break;
+			case "StatusEvent": break;
+			case "TeamAddEvent": break;
+			case "WatchEvent": break;
+		}
+
+
+
 		return $x;
 	}
 
 	protected static function issuesCommentsData($inData)
 	{
 		$x = array();
+		$x['id'] = $inData->id;
 		$x['html_url'] = $inData->html_url;
-		$x['issue_url'] = $inData->issue_url;
-		$n = explode('/', $x['issue_url']);
-		$x['issue_num'] = $n[count($n)-1];
+		$n = explode('/', $inData->issue_url);
+		$x['issue_number'] = $n[count($n)-1];
 		$x['created_at'] = $inData->created_at;
 		$x['updated_at'] = $inData->updated_at;
-		$x['user'] = $inData->user->login;
+		$x['userLogin'] = $inData->user->login;
+		$body = strip_tags($inData->body);
+		$x['prevbody'] = (mb_strlen($body) > 27)
+			? (mb_substr($body, 0, 26) . "...")
+			: $body;
 		return $x;
 
 	}
@@ -287,13 +396,23 @@ class testGitHubApi extends Command
 	protected static function issuesEventsData($inData)
 	{
 		$x = array();
+		/*
 		$x['id'] = $inData->id;
 		$x['event'] = $inData->event;
 		$x['actorLogin'] = $inData->actor->login;
 		$x['commit_id'] = $inData->commit_id;
 		$x['created_at'] = $inData->created_at;
 		$x['issue'] = $inData->issue->number;
-		return $x;
+			*/
+		$x['id'] = $inData->id;
+		$x['event'] = $inData->event;
+		$x['actor'] = (object)array('login' => $inData->actor->login);
+		$x['commit_id'] = $inData->commit_id;
+		$x['created_at'] = $inData->created_at;
+		$x['issue'] = (object)array('number' => $inData->issue->number);
+
+
+		return (object)$x;
 	}
 
 	protected static function issuesData($inData)
@@ -339,60 +458,6 @@ class testGitHubApi extends Command
 		return empty($inVal) ? $val : $inVal;
 	}
 
-	/*
-	private function saveUsers($inData)
-	{
-		$this->info("Addition to DataBase...");
-		foreach($inData as $inMember)
-		{
-			$member = GitHubMembers::where("login", $inMember->login)->first();
-			if(isset($member->login))
-			{
-				$this->info("User: " . $member->login);
-				if(! empty($inMember->contributions))
-				{
-					if($member->contributions != $inMember->contributions)
-					{
-						$this->info("Update: " . $member->login);
-						$member->contributions = $inMember->contributions;
-						$member->save();
-					}
-				}
-			}
-			else
-			{
-				$this->info("Addition user: " . $inMember->login);
-				$member = new GitHubMembers;
-				$member->dataGitHub($inMember);
-				$member->save();
-			}
-		}
-	}
-	private function saveIssues($inData)
-	{
-		$this->info("Addition to DataBase...");
-		foreach($inData as $inItem)
-		{
-			$item = GitHubIssues::where("number", $inItem->number)->first();
-			if(isset($item->id))
-			{
-				$this->info("Issue: " . $item->number);
-				if($item->updateFromGitHub($inItem))
-				{
-					$this->info("Update: " . $item->number);
-					$item->save();
-				}
-			}
-			else
-			{
-				$this->info("Addition issue: " . $inItem->number);
-				$item = new GitHubIssues;
-				$item->dataGitHub($inItem);
-				$item->save();
-			}
-		}
-	}
-	*/
 
 	/**
 	 * @param $inData
@@ -416,13 +481,14 @@ class testGitHubApi extends Command
 					$this->info("Update: " . $item->$keyName);
 					$item->save();
 				}
-			}
-			else
+			} else
 			{
-				$this->info("Addition $myName: " . $inItem->$keyName);
 				$item = new $classDB;
-				$item->dataGitHub($inItem);
-				$item->save();
+				if($item->dataGitHub($inItem))
+				{
+					$this->info("Addition $myName: " . $inItem->$keyName);
+					$item->save();
+				}
 			}
 		}
 	}

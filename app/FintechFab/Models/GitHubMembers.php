@@ -23,8 +23,13 @@ class GitHubMembers extends Eloquent
 
 	public function issues()
 	{
-		//return $this->hasMany('FintechFab\Models\GitHubIssues', "userLogin");
-		return GitHubIssues::where("userLogin", $this->login)->get();
+		//return $this->hasMany('FintechFab\Models\GitHubIssues', "user_login");
+		return GitHubIssues::where("user_login", $this->login)->get();
+	}
+	public function users()
+	{
+		//return $this->hasMany('FintechFab\Models\GitHubIssues', "user_login");
+		return GitHubIssues::where("user_login", $this->login)->get();
 	}
 
 
@@ -44,6 +49,7 @@ class GitHubMembers extends Eloquent
 		if(! empty($inData->contributions)) {
 			$this->contributions = $inData->contributions;
 		}
+		return true;
 	}
 	public function updateFromGitHub($inData)
 	{
