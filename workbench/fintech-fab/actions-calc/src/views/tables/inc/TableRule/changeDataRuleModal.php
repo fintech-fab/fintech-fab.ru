@@ -1,9 +1,7 @@
 <?php
 
-use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Signal;
-
 
 ?>
 <div class="modal fade" id="changeDataModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -72,8 +70,8 @@ use FintechFab\ActionsCalc\Models\Signal;
 						<div class="demo">
 							<div class="ui-widget">
 							<?=
-						Form::select('SignalSid', Signal::getSignalSid(), '', array(
-							'class'    => 'form-control',
+							Form::select('SignalSid', Signal::getSignalSid(), 1, array(
+								'class'    => 'form-control',
 							'id'       => 'inputSignalSid',
 							'required' => 'required',
 						));
@@ -93,7 +91,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 					'id'    => 'actionBtn',
 					'class' => 'btn btn-success changeDataModal',
 				)); ?>
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+				<button type="button" class="btn btn-danger cancelEdit" data-dismiss="modal">Отмена</button>
 			</div>
 		</div>
 	</div>

@@ -13,10 +13,6 @@ use FintechFab\ActionsCalc\Models\eVENT;
 		z-index: 10000;
 	}
 
-	.custom-combobox {
-		position: relative;
-		display: inline-block;
-	}
 
 	.custom-combobox-toggle {
 		position: absolute;
@@ -29,14 +25,11 @@ use FintechFab\ActionsCalc\Models\eVENT;
 		*top: 0.1em;
 	}
 
-	.custom-combobox-input {
-		margin: 0;
-		padding: 0.3em;
-	}</style>
+</style>
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableRule.js') ?>
 </script>
-<?= View::make('ff-actions-calc::tables.inc.TableRule.changeDataRuleModal', array('rules' => $rules)) ?>
+<?= View::make('ff-actions-calc::tables.inc.TableRule.changeDataRuleModal', array('rule' => $rules)) ?>
 
 <?= View::make('ff-actions-calc::tables.inc.TableRule.addDataRuleModal') ?>
 

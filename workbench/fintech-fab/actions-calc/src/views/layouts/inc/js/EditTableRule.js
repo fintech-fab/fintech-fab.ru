@@ -11,15 +11,21 @@ $(document).ready(function () {
 
 	$('button.tableEdit').click(function () {
 		var $btn = $(this);
+		$('select').children().removeAttr("selected");
+
 		var rule = $btn.data('rule');
-		$('#inputEventSid').val(rule.event_id);
+//		$('.custom-combobox-input ').val('');
+		$('#inputEventSid ').val(rule.event_id);
+		$("#inputEventSid").children().eq(rule.event_id - 1).attr("selected", 'true');
 		$('#inputSignalSid').val(rule.signal_id);
+		$("#inputSignalSid").children().eq(rule.signal_id - 1).attr("selected", 'true');
 		$('#inputName').val(rule.name);
 		$('#inputRule').val(rule.rule);
 
 		$('button#actionBtn').attr({
 			'data-id': rule.id
 		});
+		$('select').combobox();
 	});
 
 
@@ -80,6 +86,7 @@ $(document).ready(function () {
 
 	(function ($) {
 		$.widget("custom.combobox", {
+
 			_create: function () {
 				this.wrapper = $("<span>")
 					.addClass("custom-combobox")
@@ -208,9 +215,6 @@ $(document).ready(function () {
 		});
 	})(jQuery);
 
-	$(function () {
-		$("select").combobox();
-	});
 
 });
 
