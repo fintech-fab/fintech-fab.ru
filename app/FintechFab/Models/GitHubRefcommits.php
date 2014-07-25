@@ -63,7 +63,7 @@ class GitHubRefcommits extends Eloquent
 	{
 		if(isset($inData->message))
 		{
-			if($this->message != $inData->message)
+			if($this->message == '')
 			{
 				$this->message = $inData->message;
 				return true;
@@ -71,6 +71,4 @@ class GitHubRefcommits extends Eloquent
 		}
 		return false;
 	}
-
-
 }

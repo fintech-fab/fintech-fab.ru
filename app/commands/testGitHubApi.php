@@ -92,8 +92,12 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "issuesEvents":
-				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
-				if(! empty($opt["save"])) {
+				if(empty($opt["save"]))
+				{
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
+				} else
+				{
+					$res = $this->getFromGitHubApi($this->apiRepos . "issues/events");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubRefcommits');
 					$refCommits = GitHubRefcommits::where('message', '')->get();
 					foreach($refCommits as $ref)
@@ -399,20 +403,19 @@ class testGitHubApi extends Command
 		/*
 		$x['id'] = $inData->id;
 		$x['event'] = $inData->event;
-		$x['actorLogin'] = $inData->actor->login;
-		$x['commit_id'] = $inData->commit_id;
-		$x['created_at'] = $inData->created_at;
-		$x['issue'] = $inData->issue->number;
-			*/
-		$x['id'] = $inData->id;
-		$x['event'] = $inData->event;
 		$x['actor'] = (object)array('login' => $inData->actor->login);
 		$x['commit_id'] = $inData->commit_id;
 		$x['created_at'] = $inData->created_at;
 		$x['issue'] = (object)array('number' => $inData->issue->number);
-
-
 		return (object)$x;
+			*/
+		$x['id'] = $inData->id;
+		$x['event'] = $inData->event;
+		$x['actorLogin'] = $inData->actor->login;
+		$x['commit_id'] = $inData->commit_id;
+		$x['created_at'] = $inData->created_at;
+		$x['issueNumber'] = $inData->issue->number;
+		return $x;
 	}
 
 	protected static function issuesData($inData)
