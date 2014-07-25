@@ -9,12 +9,16 @@ $(document).ready(function () {
 			});
 	});
 
-	$('button.tableEdit').click(function () {
+	$('button.btnEdit').click(function () {
 		var $btn = $(this);
 		$('select').children().removeAttr("selected");
 
 		var rule = $btn.data('rule');
-//		$('.custom-combobox-input ').val('');
+		var eventSid = rule.event.event_sid;
+		var signalSid = rule.signal.signal_sid;
+
+		$('.eventSid').find('.custom-combobox-input').val(eventSid);
+		$('.signalSid').find('.custom-combobox-input').val(signalSid);
 		$('#inputEventSid ').val(rule.event_id);
 		$("#inputEventSid").children().eq(rule.event_id - 1).attr("selected", 'true');
 		$('#inputSignalSid').val(rule.signal_id);
