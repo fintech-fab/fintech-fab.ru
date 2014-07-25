@@ -16,4 +16,8 @@ class AuthController extends Controller
 	{
 		return 'login page';
 	}
+
+	public function registration() {
+	    return 'registration page';
+	}
 }

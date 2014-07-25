@@ -17,4 +17,5 @@ Route::filter('ff.actions-calc.basic.auth', function () {
 		return Redirect::route('login');
 	}
 
+	return true;
 });
