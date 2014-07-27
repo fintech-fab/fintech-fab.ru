@@ -14,10 +14,7 @@ $(document).ready(function () {
 		var $btn = $(this);
 		var rule = $btn.data('rule');
 
-		$('button#saveChangeRule').attr({
-			'data-id': rule.id
-		});
-
+		$('button#saveChangeRule').data('id', rule.id);
 		$('#myModalLabel').html('Введите новые данные для правила #' + rule.id);
 
 		$('#errorName').empty();
@@ -44,7 +41,6 @@ $(document).ready(function () {
 		var signalSid = $('#inputSignalSid').val();
 		var name = $('#inputName').val();
 		var rule = $('#inputRule').val();
-		alert($('#saveChangeRule').data('id'));
 		$('button').attr('disabled', true);
 		$.post('tableRules/changeData/', {
 				event_id: eventSid,
