@@ -5,7 +5,8 @@ $(document).ready(function () {
 		var signal = $btn.data('signal');
 
 		$('button.changeDataModal').attr({
-			'data-id': signal.id
+			'data-id': signal.id,
+			'data-sid': signal.signal_sid
 		});
 		$('#inputName').val(signal.name);
 		$('#inputSid').val(signal.signal_sid);
@@ -14,27 +15,51 @@ $(document).ready(function () {
 	});
 
 
-	$('button#actionBtn').click(function () {
+	$('button#saveChangeSignal').click(function () {
 
 		var $btn = $(this);
 		var id = $btn.data('id');
+		var sid = $btn.data('sid');
 
 		var name = $('#inputName').val();
 		var signal_sid = $('#inputSid').val();
-		$.post('tableSignals/changeData/', {
-				id: id,
-				name: name,
-				signal_sid: signal_sid
-			},
-			function (data) {
-				if (data['errors']) {
-					$('#errorName').html(data['errors']['name']);
-					$('#errorSid').html(data['errors']['signal_sid']);
-					return;
+
+		if (signal_sid == sid) {
+			$.post('tableSignals/changeData/', {
+					id: id,
+					unique: false,
+					name: name,
+					signal_sid: signal_sid
+				},
+				function (data) {
+					if (data['errors']) {
+						$('#errorName').html(data['errors']['name']);
+						$('#errorSid').html(data['errors']['signal_sid']);
+						return;
+					}
+					location.reload();
 				}
-				location.reload();
-			}
-		);
+			);
+		} else {
+			$.post('tableSignals/changeData/', {
+					id: id,
+					unique: true,
+					name: name,
+					signal_sid: signal_sid
+				},
+				function (data) {
+					if (data['errors']) {
+						$('#errorName').html(data['errors']['name']);
+						$('#errorSid').html(data['errors']['signal_sid']);
+						return;
+					}
+					location.reload();
+				}
+			);
+
+		}
+
+
 	});
 
 	$('button#AddSignalTable').click(function () {

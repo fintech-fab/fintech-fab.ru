@@ -1,0 +1,14 @@
+.ui-menu {
+	z-index: 10000;
+}
+
+.custom-combobox-toggle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin-left: -1px;
+	padding: 0;
+	/* support: IE7 */
+	*height: 1.7em;
+	*top: 0.1em;
+}

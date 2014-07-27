@@ -62,13 +62,20 @@ class TablesController extends BaseController
 
 	public function postChangeDataEvents()
 	{
-
-		$input = Input::only('id', 'name', 'event_sid');
+		$input = Input::only('id', 'name', 'event_sid', 'unique');
 
 		//проверяем данные
-		$errors = Validators::getErrorFromChangeDataEventsTable($input);
-		if ($errors) {
-			return $errors;
+		if ($input['unique'] == 'true') {
+			$errors = Validators::getErrorFromChangeDataEventsTableUnique($input);
+			if ($errors) {
+				return $errors;
+			}
+		} else {
+			$errors = Validators::getErrorFromChangeDataEventsTable($input);
+			if ($errors) {
+				return $errors;
+			}
+
 		}
 
 		//Изменяем данные
@@ -103,12 +110,21 @@ class TablesController extends BaseController
 
 	public function postChangeDataSignals()
 	{
-		$input = Input::only('id', 'name', 'signal_sid');
+		$input = Input::only('id', 'name', 'signal_sid', 'unique');
 
 		//проверяем данные
-		$errors = Validators::getErrorFromChangeDataSignalsTable($input);
-		if ($errors) {
-			return $errors;
+		if ($input['unique'] == 'true') {
+			$errors = Validators::getErrorFromChangeDataSignalsTableUnique($input);
+			if ($errors) {
+				return $errors;
+			}
+		} else {
+
+			$errors = Validators::getErrorFromChangeDataSignalsTable($input);
+			if ($errors) {
+				return $errors;
+			}
+
 		}
 
 		//Изменяем данные
@@ -185,7 +201,7 @@ class TablesController extends BaseController
 	{
 		$input = Input::all();
 
-		$errors = Validators::getErrorFromChangeDataRuleTable($input);
+		$errors = Validators::getErrorFromAddDataRuleTable($input);
 		if ($errors) {
 			return $errors;
 		}

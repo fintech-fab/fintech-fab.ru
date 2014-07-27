@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+
 	$("input[type=checkbox]").click(function () {
 		var id = this.id;
 		var val = this.checked;
@@ -11,25 +12,31 @@ $(document).ready(function () {
 
 	$('button.tableEdit').click(function () {
 		var $btn = $(this);
-		$('select').children().removeAttr("selected");
-
 		var rule = $btn.data('rule');
-//		$('.custom-combobox-input ').val('');
-		$('#inputEventSid ').val(rule.event_id);
-		$("#inputEventSid").children().eq(rule.event_id - 1).attr("selected", 'true');
-		$('#inputSignalSid').val(rule.signal_id);
-		$("#inputSignalSid").children().eq(rule.signal_id - 1).attr("selected", 'true');
-		$('#inputName').val(rule.name);
-		$('#inputRule').val(rule.rule);
 
-		$('button#actionBtn').attr({
+		$('button#saveChangeRule').attr({
 			'data-id': rule.id
 		});
-		$('select').combobox();
+
+		$('#myModalLabel').html('Введите новые данные для правила #' + rule.id);
+
+		$('#errorName').empty();
+		$('#errorRule').empty();
+		$('#errorEventSid').empty();
+		$('#errorSignalSid').empty();
+
+		$('#inputEventSid ').val(rule.event_id);
+		$('#inputSignalSid').val(rule.signal_id);
+		$("#EventSid").find('input').val(rule.event.event_sid);
+		$('#SignalSid').find('input').val(rule.signal.signal_sid);
+
+
+		$('#inputName').val(rule.name);
+		$('#inputRule').val(rule.rule);
 	});
 
 
-	$('button#actionBtn').click(function () {
+	$('button#saveChangeRule').click(function () {
 		var $btn = $(this);
 		var id = $btn.data('id');
 
@@ -37,7 +44,8 @@ $(document).ready(function () {
 		var signalSid = $('#inputSignalSid').val();
 		var name = $('#inputName').val();
 		var rule = $('#inputRule').val();
-
+		alert($('#saveChangeRule').data('id'));
+		$('button').attr('disabled', true);
 		$.post('tableRules/changeData/', {
 				event_id: eventSid,
 				signal_id: signalSid,
@@ -47,6 +55,7 @@ $(document).ready(function () {
 			},
 			function (data) {
 				if (data['errors']) {
+					$('button').attr('disabled', false);
 					$('#errorName').html(data['errors']['name']);
 					$('#errorEventSid').html(data['errors']['event_id']);
 					$('#errorRule').html(data['errors']['rule']);
@@ -214,6 +223,10 @@ $(document).ready(function () {
 			}
 		});
 	})(jQuery);
+
+	$(function () {
+		$('select').combobox();
+	});
 
 
 });

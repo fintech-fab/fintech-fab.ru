@@ -9,22 +9,8 @@ use FintechFab\ActionsCalc\Models\eVENT;
  */
 
 ?>
-<style>.ui-menu {
-		z-index: 10000;
-	}
-
-
-	.custom-combobox-toggle {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		margin-left: -1px;
-		padding: 0;
-		/* support: IE7 */
-		*height: 1.7em;
-		*top: 0.1em;
-	}
-
+<style type="text/css">
+	<?php require(__DIR__ . '/../layouts/inc/css/styleForTableRules.css') ?>
 </style>
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableRule.js') ?>

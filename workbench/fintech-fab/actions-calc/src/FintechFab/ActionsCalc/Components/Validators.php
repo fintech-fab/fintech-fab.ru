@@ -125,7 +125,7 @@ class Validators
 	}
 
 
-	public static function rulesForTableDataEvents()
+	public static function rulesForTableDataEventsUnique()
 	{
 		$rules = array(
 			'name'      => 'required',
@@ -135,11 +135,31 @@ class Validators
 		return $rules;
 	}
 
-	public static function rulesForTableDataSignals()
+	public static function rulesForTableDataEvents()
+	{
+		$rules = array(
+			'name'      => 'required',
+			'event_sid' => 'required|alpha_dash',
+		);
+
+		return $rules;
+	}
+
+	public static function rulesForTableDataSignalsUnique()
 	{
 		$rules = array(
 			'name'       => 'required',
 			'signal_sid' => 'required|alpha_dash|unique:actions_calc.signals',
+		);
+
+		return $rules;
+	}
+
+	public static function rulesForTableDataSignals()
+	{
+		$rules = array(
+			'name'       => 'required',
+			'signal_sid' => 'required|alpha_dash',
 		);
 
 		return $rules;
@@ -159,6 +179,25 @@ class Validators
 	}
 
 
+	public static function getErrorFromChangeDataEventsTableUnique($data)
+	{
+		$data['name'] = e($data['name']);
+		$validator = Validator::make($data, Validators::rulesForTableDataEventsUnique(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'name'      => $userMessages->first('name'),
+				'event_sid' => $userMessages->first('event_sid'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
 	public static function getErrorFromChangeDataEventsTable($data)
 	{
 		$data['name'] = e($data['name']);
@@ -169,6 +208,25 @@ class Validators
 			$result['errors'] = array(
 				'name'      => $userMessages->first('name'),
 				'event_sid' => $userMessages->first('event_sid'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
+	public static function getErrorFromChangeDataSignalsTableUnique($data)
+	{
+		$data['name'] = e($data['name']);
+		$validator = Validator::make($data, Validators::rulesForTableDataSignalsUnique(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'name'       => $userMessages->first('name'),
+				'signal_sid' => $userMessages->first('signal_sid'),
 			);
 
 			return $result;
