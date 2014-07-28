@@ -3,6 +3,7 @@ namespace FintechFab\ActionsCalc\Components;
 
 
 use App;
+use Config;
 use Log;
 use Validator;
 
@@ -59,6 +60,7 @@ class Validators
 			'same'          => 'Пароли не одинаковы',
 			'required_with' => 'Подтвердите пароль',
 			'unique' => 'Такой sid уже существует',
+			'exists' => 'Такой sid не существует',
 		);
 
 		return $rules;
@@ -129,7 +131,7 @@ class Validators
 	{
 		$rules = array(
 			'name'      => 'required',
-			'event_sid' => 'required|alpha_dash|unique:actions_calc.events',
+			'event_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.events',
 		);
 
 		return $rules;
@@ -149,7 +151,7 @@ class Validators
 	{
 		$rules = array(
 			'name'       => 'required',
-			'signal_sid' => 'required|alpha_dash|unique:actions_calc.signals',
+			'signal_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.signals',
 		);
 
 		return $rules;
@@ -169,10 +171,12 @@ class Validators
 	public static function rulesForTableDataRule()
 	{
 		$rules = array(
-			'name'      => 'required',
-			'rule'      => 'required',
-			'signal_id' => 'required|alpha_dash',
-			'event_id'  => 'required|alpha_dash',
+			'name'       => 'required',
+			'rule'       => 'required',
+			'signal_id'  => 'required|alpha_dash',
+			'signal_sid' => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.signals',
+			'event_id'   => 'required|alpha_dash',
+			'event_sid'  => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.events',
 		);
 
 		return $rules;
@@ -263,10 +267,12 @@ class Validators
 
 		if ($validator->fails()) {
 			$result['errors'] = array(
-				'name'      => $userMessages->first('name'),
-				'rule'      => $userMessages->first('rule'),
-				'signal_id' => $userMessages->first('signal_id'),
-				'event_id'  => $userMessages->first('event_id'),
+				'name'       => $userMessages->first('name'),
+				'rule'       => $userMessages->first('rule'),
+				'signal_id'  => $userMessages->first('signal_id'),
+				'signal_sid' => $userMessages->first('signal_sid'),
+				'event_id'   => $userMessages->first('event_id'),
+				'event_sid'  => $userMessages->first('event_sid'),
 			);
 
 			return $result;

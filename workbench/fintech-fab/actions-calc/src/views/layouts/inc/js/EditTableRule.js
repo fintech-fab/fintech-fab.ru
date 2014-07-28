@@ -10,7 +10,7 @@ $(document).ready(function () {
 			});
 	});
 
-	$('button.tableEdit').click(function () {
+	$('button.btnEdit').click(function () {
 		var $btn = $(this);
 		var rule = $btn.data('rule');
 
@@ -32,19 +32,36 @@ $(document).ready(function () {
 		$('#inputRule').val(rule.rule);
 	});
 
+	$('button.tableAddBtn').click(function () {
+
+		$('#errorName').empty();
+		$('#errorRule').empty();
+		$('#errorEventSid').empty();
+		$('#errorSignalSid').empty();
+
+		$(".EventSid").find('input').val('').attr('placeholder', 'Введите event_sid');
+		$(".SignalSid").find('input').val('').attr('placeholder', 'Введите signal_sid');
+
+
+	});
+
 
 	$('button#saveChangeRule').click(function () {
 		var $btn = $(this);
 		var id = $btn.data('id');
 
-		var eventSid = $('#inputEventSid').val();
-		var signalSid = $('#inputSignalSid').val();
+		var eventSid = $('#EventSid input').val();
+		var signalSid = $('#SignalSid input').val();
+		var eventSidId = $('#inputEventSid').val();
+		var signalSidId = $('#inputSignalSid').val();
 		var name = $('#inputName').val();
 		var rule = $('#inputRule').val();
 		$('button').attr('disabled', true);
 		$.post('tableRules/changeData/', {
-				event_id: eventSid,
-				signal_id: signalSid,
+				event_id: eventSidId,
+				signal_sid: signalSid,
+				event_sid: eventSid,
+				signal_id: signalSidId,
 				rule: rule,
 				name: name,
 				id: id
