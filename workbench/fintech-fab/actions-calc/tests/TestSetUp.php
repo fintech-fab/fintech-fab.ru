@@ -28,28 +28,31 @@ class TestSetUp extends TestCase
 		// Fill in tables on every testg
 		// Events
 		Event::create([
-			'id' => 1,
-			'event_sid' => 'under_rain',
-			'name' => 'Событие раз',
+			'id'          => 1,
+			'event_sid'   => 'under_rain',
+			'name'        => 'Событие раз',
 			'terminal_id' => 1
 		]);
 
 		// Rules
 		Rule::create([
 			'id'          => 1,
-			'rule' => 'cold=true[AND]sopli=true[AND]all_wet=true[AND]time!>14:00',
+			'rule'        => 'cold=true[AND]sopli=true[AND]all_wet=true[AND]time!>14:00',
 			'name'        => 'Правило раз',
-			'terminal_id' => 1
+			'terminal_id' => 1,
+			'event_id'    => 1,
 		]);
 		Rule::create([
 			'id'          => 2,
 			'name'        => 'Правило два',
-			'terminal_id' => 1
+			'terminal_id' => 1,
+			'event_id'    => 1,
 		]);
 		Rule::create([
 			'id'          => 3,
 			'name'        => 'Правило три',
-			'terminal_id' => 1
+			'terminal_id' => 1,
+			'event_id'    => 1,
 		]);
 
 		// Terminal user

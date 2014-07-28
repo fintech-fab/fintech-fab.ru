@@ -21,18 +21,21 @@ class CoreHandler
 		$iTerminalId = $aRequestData['terminal_id'];
 		$sEventSid = $aRequestData['event_sid'];
 
+		$oEvent = Event::whereEventSid($sEventSid)->first();
 //		if (Event::sidExists($sEventSid)) {
 //		}
 
 //		$oEvents = Terminal::find($iTerminalId)->events()
 
 //		$aoRules = Rule::where('event_id', '=', $iTerminalId);
-		$aoRules = Rule::whereTerminalId($iTerminalId)->get()->all();
+		$aoRules = Rule::whereTerminalId($iTerminalId)
+			->whereEventId($oEvent->id)
+			->get()->all();
 
-		if (is_null($aoRules)) {
-			Response::json(['status' => 'success', 'No rules found.']);
-		}
-
+//		if (is_null($aoRules)) {
+//			Response::json(['status' => 'success', 'No rules found.']);
+//		}
+//
 		dd($aoRules);
 	}
 }

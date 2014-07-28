@@ -18,13 +18,15 @@ use Eloquent;
  * @property int    $signal_id
  * @property string created_at
  * @property string updated_at
+ *
+ * @method static Rule whereTerminalId()
  */
 class Rule extends Eloquent
 {
 
 	protected $table = 'rules';
 	protected $connection = 'ff-actions-calc';
-	protected $fillable = ['id', 'name', 'terminal_id'];
+	protected $fillable = ['id', 'name', 'rule', 'flag_active', 'terminal_id', 'event_id', 'signal_id'];
 
 	public function terminal()
 	{
