@@ -29,7 +29,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 					<div id="errorName" class="text-danger text-center"></div>
 				</div>
 
-				<div class="form-group row">
+				<div class="form-group row eventSid">
 					<?= Form::label('inputEventSid', 'event_sid', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">
 
@@ -63,7 +63,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 				</div>
 
 
-				<div class="form-group row">
+				<div class="form-group row signalSid">
 
 					<?= Form::label('inputSignalSid', 'signal_sid', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">

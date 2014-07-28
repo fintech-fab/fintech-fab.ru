@@ -1,7 +1,6 @@
 <?php
 
 use FintechFab\ActionsCalc\Models\Rule;
-use FintechFab\ActionsCalc\Models\eVENT;
 
 /**
  * @var Rule $rules
@@ -55,7 +54,7 @@ echo '<br><br>'
 			<td>
 				<?=
 				Form::button('Изменить', array(
-					'class'          => 'btn btn-sm btn-info tableBtn tableEdit',
+					'class' => 'btn btn-sm btn-info btnEdit',
 					'data-action'    => 'showStatus',
 					'data-rule'      => $rule,
 					'data-toggle'    => 'modal',
