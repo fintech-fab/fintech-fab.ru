@@ -28,6 +28,11 @@ class Terminal extends Eloquent
 	{
 		return $this->hasMany(Rule::class, 'terminal_id', 'id');
 	}
+
+	public function events()
+	{
+		return $this->hasMany(Event::class, 'terminal_id', 'id');
+	}
 }
 
  

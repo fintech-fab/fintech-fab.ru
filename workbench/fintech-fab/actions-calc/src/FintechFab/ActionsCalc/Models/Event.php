@@ -20,10 +20,21 @@ class Event extends Eloquent
 {
 	protected $table = 'events';
 	protected $connection = 'ff-actions-calc';
+	protected $fillable = ['id', 'name', 'event_sid', 'terminal_id'];
 
 	public function terminal()
 	{
 		return $this->belongsTo(Terminal::class, 'terminal_id');
+	}
+
+	/**
+	 * @param $sEventSid
+	 *
+	 * @return bool
+	 */
+	public static function sidExists($sEventSid)
+	{
+		return self::where('event_sid', '=', $sEventSid)->exists;
 	}
 }
 

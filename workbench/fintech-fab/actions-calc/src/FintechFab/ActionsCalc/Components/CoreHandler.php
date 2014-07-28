@@ -3,7 +3,10 @@
 namespace FintechFab\ActionsCalc\Components;
 
 use FintechFab\ActionsCalc\Components\AuthHandler;
+use FintechFab\ActionsCalc\Models\Event;
+use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Terminal;
+use Response;
 
 /**
  * Class CoreHandler
@@ -16,9 +19,19 @@ class CoreHandler
 	public function process($aRequestData)
 	{
 		$iTerminalId = $aRequestData['terminal_id'];
-		$aoRules = Terminal::find($iTerminalId)->rules();
+		$sEventSid = $aRequestData['event_sid'];
 
+//		if (Event::sidExists($sEventSid)) {
+//		}
 
+//		$oEvents = Terminal::find($iTerminalId)->events()
+
+//		$aoRules = Rule::where('event_id', '=', $iTerminalId);
+		$aoRules = Rule::whereTerminalId($iTerminalId)->get()->all();
+
+		if (is_null($aoRules)) {
+			Response::json(['status' => 'success', 'No rules found.']);
+		}
 
 		dd($aoRules);
 	}

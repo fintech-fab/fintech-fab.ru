@@ -2,6 +2,7 @@
 
 use FintechFab\ActionsCalc\Models\Terminal;
 use FintechFab\ActionsCalc\Models\Rule;
+use FintechFab\ActionsCalc\Models\Event;
 
 class TestSetUp extends TestCase
 {
@@ -22,8 +23,17 @@ class TestSetUp extends TestCase
 		// Clearing tables on every test
 		Terminal::truncate();
 		Rule::truncate();
+		Event::truncate();
 
-		// Fill in tables on every test
+		// Fill in tables on every testg
+		// Events
+		Event::create([
+			'id' => 1,
+			'event_sid' => 'under_rain',
+			'name' => 'Событие раз',
+			'terminal_id' => 1
+		]);
+
 		// Rules
 		Rule::create([
 			'id'          => 1,
