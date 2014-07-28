@@ -3,7 +3,7 @@
 namespace FintechFab\ActionsCalc\Components;
 
 use FintechFab\ActionsCalc\Components\AuthHandler;
-
+use FintechFab\ActionsCalc\Models\Terminal;
 
 /**
  * Class CoreHandler
@@ -13,8 +13,13 @@ use FintechFab\ActionsCalc\Components\AuthHandler;
 class CoreHandler
 {
 
-	public static function process()
+	public function process($aRequestData)
 	{
+		$iTerminalId = $aRequestData['terminal_id'];
+		$aoRules = Terminal::find($iTerminalId)->rules();
 
+
+
+		dd($aoRules);
 	}
 }

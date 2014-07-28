@@ -20,6 +20,7 @@ class RequestController extends Controller
 		$aRequestData = Input::only('terminal_id', 'event_sid', 'auth_sign', 'data');
 
 		$oRequestHandler = new RequestHandler();
+
 		return $oRequestHandler->process($aRequestData);
 	}
 }

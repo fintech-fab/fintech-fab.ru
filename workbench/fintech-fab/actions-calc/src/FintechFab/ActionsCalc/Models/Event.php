@@ -18,12 +18,12 @@ use Eloquent;
  */
 class Event extends Eloquent
 {
-	protected $connection = 'ff-actions-calc';
 	protected $table = 'events';
+	protected $connection = 'ff-actions-calc';
 
 	public function terminal()
 	{
-		return $this->belongsTo('Terminal', 'terminal_id');
+		return $this->belongsTo(Terminal::class, 'terminal_id');
 	}
 }
 

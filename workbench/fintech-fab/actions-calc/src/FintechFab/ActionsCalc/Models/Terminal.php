@@ -26,7 +26,7 @@ class Terminal extends Eloquent
 
 	public function rules()
 	{
-		return $this->hasMany('Rule', 'terminal_id', 'id');
+		return $this->hasMany(Rule::class, 'terminal_id', 'id');
 	}
 }
 

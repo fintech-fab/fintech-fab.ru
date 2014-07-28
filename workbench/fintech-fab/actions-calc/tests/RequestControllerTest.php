@@ -22,12 +22,12 @@ class RequestControllerTest extends TestSetUp
 		$this->assertTrue(AuthHandler::checkSign($this->aRequestData), 'Signature test failed');
 	}
 
-	public function testAuthFailAndRedirect()
-	{
-		Route::enableFilters();
-		Config::set('ff-actions-calc::app.terminal_id', 0);
-		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
-		$this->assertRedirectedToRoute('login');
-	}
+//	public function testAuthFailAndRedirect()
+//	{
+//		Route::enableFilters();
+//		Config::set('ff-actions-calc::app.terminal_id', 0);
+//		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
+//		$this->assertRedirectedToRoute('login');
+//	}
 }
  

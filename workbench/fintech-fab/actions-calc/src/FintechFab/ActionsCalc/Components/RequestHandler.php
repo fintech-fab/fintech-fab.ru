@@ -5,6 +5,7 @@ namespace FintechFab\ActionsCalc\Components;
 use App;
 use Log;
 use Validator;
+use Exception;
 
 /**
  * Class RequestHandler
@@ -17,6 +18,8 @@ class RequestHandler
 {
 
 	/**
+	 * All request and response stuff boiling here.
+	 *
 	 * @param       $aRequestData
 	 *
 	 * @var integer $aRequestData ['terminal_id']
@@ -24,24 +27,45 @@ class RequestHandler
 	 * @var string  $aRequestData ['auth_sign']
 	 * @var string  $aRequestData ['data']
 	 *
-	 * @return string
+	 * @return string JSON
+	 * @throws Exception
 	 */
 	public function process($aRequestData)
 	{
-//		Log::info('Request-data: ' . json_encode($aRequestData));
+		Log::info('Request-data: ' . json_encode($aRequestData));
 
-		// terminal_id and event_sid validation
+		if ($this->validate($aRequestData)) {
+			$oCoreHandler = new CoreHandler();
+			// data should be solid here
+			$oCoreHandler->process($aRequestData);
+		} else {
+			App::abort(400, 'Bad request');
+		}
+	}
+
+	/**
+	 * @param $aRequestData
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private function validate($aRequestData)
+	{
+		// validation terminal_id and event_sid
 		$oValidator = Validator::make($aRequestData, Validators::getRequestRules());
 
 		if ($oValidator->fails()) {
 			Log::info('Validators: terminal_id, event_sid failed.');
-			return json_encode(['status' => 'error', 'message' => 'Validation failed.']);
+			App::abort(400, 'Validation failed');
 		}
 
-		// Check clien signature
+		// check clien signature
 		if (!AuthHandler::checkSign($aRequestData)) {
+			Log::info('Request. Wrong signature.');
 			App::abort(400, 'Wrong signature');
 		}
+
+		return true;
 	}
 
 }

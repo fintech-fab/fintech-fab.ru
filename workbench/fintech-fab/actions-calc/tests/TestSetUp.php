@@ -27,24 +27,25 @@ class TestSetUp extends TestCase
 		// Rules
 		Rule::create([
 			'id'          => 1,
-			'name'        => 'Rule1',
+			'rule' => 'cold=true[AND]sopli=true[AND]all_wet=true[AND]time!>14:00',
+			'name'        => 'Правило раз',
 			'terminal_id' => 1
 		]);
 		Rule::create([
 			'id'          => 2,
-			'name'        => 'Rule2',
+			'name'        => 'Правило два',
 			'terminal_id' => 1
 		]);
 		Rule::create([
 			'id'          => 3,
-			'name'        => 'Rule3',
+			'name'        => 'Правило три',
 			'terminal_id' => 1
 		]);
 
 		// Terminal user
 		Terminal::create([
 			'id'       => 1,
-			'name'     => 'User1',
+			'name'     => 'Терминал 1',
 			'key'      => 'key',
 			'password' => Hash::make('password'),
 		]);

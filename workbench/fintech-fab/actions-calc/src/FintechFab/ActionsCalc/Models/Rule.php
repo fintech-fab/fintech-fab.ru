@@ -28,6 +28,6 @@ class Rule extends Eloquent
 
 	public function terminal()
 	{
-		return $this->belongsTo('Terminal');
+		return $this->belongsTo(Terminal::class);
 	}
 }
