@@ -20,6 +20,8 @@ use Eloquent;
  * @property string updated_at
  *
  * @method static Rule whereTerminalId()
+ * @method static Rule whereEventId()
+ * @method static Rule whereFlagActive()
  */
 class Rule extends Eloquent
 {

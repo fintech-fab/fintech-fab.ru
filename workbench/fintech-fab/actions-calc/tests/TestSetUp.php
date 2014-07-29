@@ -41,18 +41,21 @@ class TestSetUp extends TestCase
 			'name'        => 'Правило раз',
 			'terminal_id' => 1,
 			'event_id'    => 1,
+			'flag_active'    => true,
 		]);
 		Rule::create([
 			'id'          => 2,
 			'name'        => 'Правило два',
 			'terminal_id' => 1,
 			'event_id'    => 1,
+			'flag_active'    => true,
 		]);
 		Rule::create([
 			'id'          => 3,
 			'name'        => 'Правило три',
 			'terminal_id' => 1,
 			'event_id'    => 1,
+			'flag_active'    => true,
 		]);
 
 		// Terminal user
@@ -61,6 +64,7 @@ class TestSetUp extends TestCase
 			'name'     => 'Терминал 1',
 			'key'      => 'key',
 			'password' => Hash::make('password'),
+			'flag_active'    => true,
 		]);
 	}
 }

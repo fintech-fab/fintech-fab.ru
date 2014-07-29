@@ -2,11 +2,8 @@
 
 namespace FintechFab\ActionsCalc\Components;
 
-use FintechFab\ActionsCalc\Components\AuthHandler;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
-use FintechFab\ActionsCalc\Models\Terminal;
-use Response;
 
 /**
  * Class CoreHandler
@@ -21,21 +18,35 @@ class CoreHandler
 		$iTerminalId = $aRequestData['terminal_id'];
 		$sEventSid = $aRequestData['event_sid'];
 
-		$oEvent = Event::whereEventSid($sEventSid)->first();
-//		if (Event::sidExists($sEventSid)) {
+		$aoRules = $this->getEventRules($iTerminalId, $sEventSid);
+
+		if (count($aoRules) > 0) {
+			return ['status' => 'success', 'message' => '3 rules found'];
+		}
+
+//		foreach($aoRules as $rule) {
+//
 //		}
 
-//		$oEvents = Terminal::find($iTerminalId)->events()
+//
+//		dd($aoRules);
+	}
 
-//		$aoRules = Rule::where('event_id', '=', $iTerminalId);
+	/**
+	 * @param int    $iTerminalId
+	 * @param string $sEventSid
+	 *
+	 * @return Rule[]
+	 */
+	private function getEventRules($iTerminalId, $sEventSid)
+	{
+		$oEvent = Event::whereEventSid($sEventSid)->first();
+
 		$aoRules = Rule::whereTerminalId($iTerminalId)
 			->whereEventId($oEvent->id)
-			->get()->all();
+			->whereFlagActive(true)
+			->get();
 
-//		if (is_null($aoRules)) {
-//			Response::json(['status' => 'success', 'No rules found.']);
-//		}
-//
-		dd($aoRules);
+		return $aoRules;
 	}
 }

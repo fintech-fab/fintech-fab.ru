@@ -15,6 +15,8 @@ use Eloquent;
  * @property string $data
  * @property string $created_at
  * @property string $updated_at
+ *
+ * @method static Event whereEventSid()
  */
 class Event extends Eloquent
 {
@@ -25,16 +27,6 @@ class Event extends Eloquent
 	public function terminal()
 	{
 		return $this->belongsTo(Terminal::class, 'terminal_id');
-	}
-
-	/**
-	 * @param $sEventSid
-	 *
-	 * @return bool
-	 */
-	public static function sidExists($sEventSid)
-	{
-		return self::where('event_sid', '=', $sEventSid)->exists;
 	}
 }
 

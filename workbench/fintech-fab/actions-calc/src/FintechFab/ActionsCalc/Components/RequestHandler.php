@@ -36,8 +36,8 @@ class RequestHandler
 
 		if ($this->validate($aRequestData)) {
 			$oCoreHandler = new CoreHandler();
-			// data should be solid here
-			$oCoreHandler->process($aRequestData);
+			// incoming data should be solid here, by now
+			return $oCoreHandler->process($aRequestData);
 		} else {
 			App::abort(400, 'Bad request');
 		}
