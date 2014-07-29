@@ -24,7 +24,7 @@
 					<div class="clearfix"></div>
 					<div class="row">
 						<small>
-							24/7, бесплатно по России
+							с 6:00 до 00:00, бесплатно по России
 						</small>
 					</div>
 				</div>

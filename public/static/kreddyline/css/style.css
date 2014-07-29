@@ -21,6 +21,8 @@ nav .hotline {
     font-size: 18pt;
     font-weight: 400;
     display: inline-block;
+	width: 240px;
+	text-align: center;
 }
 
 nav .hotline small {
