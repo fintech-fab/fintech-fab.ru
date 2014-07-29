@@ -3,29 +3,47 @@
 use FintechFab\ActionsCalc\Models\Terminal;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Event;
+use FintechFab\ActionsCalc\Models\Signal;
 
 class TestSetUp extends TestCase
 {
 	protected $aRequestData;
 
+	// Set here:
+	// 1. database seed and truncate
+	// 2. request data
+	// 3. client signature
 	public function setUp()
 	{
 		$sSignature = sha1("1|under_rain|key");
 		$this->aRequestData = [
 			'terminal_id' => 1,
 			'event_sid'   => 'under_rain',
-			'data'        => json_encode(['test' => 1]),
+			'data'        => json_encode([
+				'all_wet' => true,
+				'time'    => '15:05',
+			]),
 			'auth_sign'   => $sSignature
 		];
 
 		parent::setUp();
 
+		// Fill in tables on every testg
 		// Clearing tables on every test
 		Terminal::truncate();
 		Rule::truncate();
 		Event::truncate();
+		Signal::truncate();
 
-		// Fill in tables on every testg
+		// Terminal user
+		Terminal::create([
+			'id'          => 1,
+			'name'        => 'Терминал 1',
+			'key'         => 'key',
+			'password'    => Hash::make('password'),
+			'flag_active' => true,
+		]);
+
 		// Events
 		Event::create([
 			'id'          => 1,
@@ -37,35 +55,52 @@ class TestSetUp extends TestCase
 		// Rules
 		Rule::create([
 			'id'          => 1,
-			'rule'        => 'cold=true[AND]sopli=true[AND]all_wet=true[AND]time!>14:00',
 			'name'        => 'Правило раз',
+			'rule'        => 'cold=true[AND]sopli=true[AND]all_wet=true[AND]time!>=14:00',
 			'terminal_id' => 1,
 			'event_id'    => 1,
-			'flag_active'    => true,
+			'signal_id'   => 1,
+			'flag_active' => true,
 		]);
 		Rule::create([
 			'id'          => 2,
 			'name'        => 'Правило два',
+			'rule'        => 'sopli=true',
 			'terminal_id' => 1,
 			'event_id'    => 1,
-			'flag_active'    => true,
+			'signal_id'   => 3,
+			'flag_active' => true,
 		]);
 		Rule::create([
 			'id'          => 3,
 			'name'        => 'Правило три',
+			'rule'        => 'time!<=16:00',
 			'terminal_id' => 1,
 			'event_id'    => 1,
-			'flag_active'    => true,
+			'signal_id'   => 2,
+			'flag_active' => true,
 		]);
 
-		// Terminal user
-		Terminal::create([
-			'id'       => 1,
-			'name'     => 'Терминал 1',
-			'key'      => 'key',
-			'password' => Hash::make('password'),
-			'flag_active'    => true,
+		// Signals
+		Signal::create([
+			'id'          => 1,
+			'name'        => 'Орать мама',
+			'signal_sid'  => 'cry_mommy',
+			'terminal_id' => 1,
 		]);
+		Signal::create([
+			'id'          => 2,
+			'name'        => 'Беги домой',
+			'signal_sid'  => 'run_home',
+			'terminal_id' => 1,
+		]);
+		Signal::create([
+			'id'          => 3,
+			'name'        => 'Просто стой',
+			'signal_sid'  => 'wasted',
+			'terminal_id' => 1,
+		]);
+
 	}
 }
  

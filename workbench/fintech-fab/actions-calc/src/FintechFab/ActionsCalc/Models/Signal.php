@@ -21,6 +21,7 @@ class Signal extends Eloquent
 {
 	protected $connection = 'ff-actions-calc';
 	protected $table = 'signals';
+	protected $fillable = ['id', 'terminal_id', 'signal_sid'];
 
 	public function terminal()
 	{

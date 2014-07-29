@@ -35,6 +35,7 @@ class TablesBaseCreate extends Migration
 
 		Schema::create('signals', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('name');
 			$table->string('signal_sid');
 			$table->integer('terminal_id');
 			$table->tinyInteger('flag_url');

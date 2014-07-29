@@ -20,7 +20,8 @@ class Validators
 	{
 		return [
 			'terminal_id' => 'required|integer',
-			'event_sid'   => 'required|alpha_dash'
+			'event_sid'   => 'required|alpha_dash',
+			'data'        => 'required'
 		];
 	}
 } 

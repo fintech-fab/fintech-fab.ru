@@ -35,9 +35,9 @@ class RequestHandler
 		Log::info('Request-data: ' . json_encode($aRequestData));
 
 		if ($this->validate($aRequestData)) {
-			$oCoreHandler = new CoreHandler();
+			$oCalcHandler = new CalcHandler;
 			// incoming data should be solid here, by now
-			return $oCoreHandler->process($aRequestData);
+			$oCalcHandler->process($aRequestData);
 		} else {
 			App::abort(400, 'Bad request');
 		}
