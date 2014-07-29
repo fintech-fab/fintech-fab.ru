@@ -53,6 +53,7 @@ class CalcHandler
 	 * @return void
 	 */
 	private function filterRulesWith()
+	// TODO: rules format save sa JSON {[ {"name":"val", "op":"opCONST"}, {"more":"and"...}, {...}  ]}
 	{
 		$oData = json_decode(self::$_data);
 
