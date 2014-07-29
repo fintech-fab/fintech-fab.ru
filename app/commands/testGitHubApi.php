@@ -1,16 +1,17 @@
 <?php
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use FintechFab\Models\GitHubMembers;
 use FintechFab\Models\GitHubIssues;
 use FintechFab\Models\GitHubRefcommits;
+use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class testGitHubApi extends Command
 {
+	// все правильно, так лучше не делать, потому что ссылка может измениться
 	//private static $apiBaseUrl = 'https://api.github.com/';
 
+	// что это за параметры? что они делают, на что влияют? как ими пользоваться?
 	private $_curl_nobody = false;
 	private $_rateLimit = 0;
 	private $_rateLimitRemaining = 0;
@@ -24,6 +25,7 @@ class testGitHubApi extends Command
 	 *
 	 * @var string
 	 */
+	// для команд и всего другого - использовать общий префикс вендора - fintech-fab
 	protected $name = 'command:testGitHubApi';
 
 	/**
@@ -37,6 +39,7 @@ class testGitHubApi extends Command
 	public function __construct()
 	{
 		parent::__construct();
+		// так не надо делать. все что может меняться, - выносить в конфиг
 		$this->apiRepos = "https://api.github.com/repos/fintech-fab/fintech-fab.ru/";
 
 	}
@@ -50,22 +53,37 @@ class testGitHubApi extends Command
 	{
 		$this->info("It's OK. Begin...");
 
+		//не надо коммитить не работающий код
 		//$res = $this->getFromGitHubApi("https://api.github.com/users/fintech-fab");
 		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues/9/events");
 
 		$opt = $this->option();
 		$dt = getdate();
+		// совсем непонятно, что здесь происходит. как минимум комментарий написать, что такое $qDate и почему нужны сложные вычисления?
 		$qDate = date('c', $dt[0]-(3600*24*15));
 		$this->info($qDate);
 
+		// похоже команда запускается аргументами и какими-то условиями
+		// нужно предусмотреть выполнение команды с параметром --help чтобы команда сама показала, как ей пользоваться :-)
 		switch($this->argument('firstArg')) {
 			case "comments":
 				if(! empty($opt["save"])) {
+					// срочно прекращать так называть переменные. $res - это что?
+					// в данном случае $res - это комментарии.
+					// ниже $res - это коммиты... это плохо.
+					// нельзя в одной переменной (в одной области видимости) держать разное содержимое
+					// и переменная должна называться так, чтобы название совпадало с содержимым.
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments");
+					// начиная с php 5.5 (а у нас 5.5) вместо FintechFab\Models\GitHubComments можно делать:
+					// т.е. так: this->saveInDB($res['response'], GitHubComments::class);
+					// но класс GitHubComments надо сделать use
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubComments');
 					$res = '';
 				}
 				else {
+					// тут можно сделать сильно "красивее", то есть - удобнее в использовании
+					// например: $this->getFromGitHubApi($method, $params)
+					// при этом $this->apiRepos - берется из конфига (спрятано внутри), $method - это issues/comments, или commits, а $params - это уже параметры
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments?since=" . $qDate, "issuesCommentsData");
 				}
 				break;
@@ -74,6 +92,7 @@ class testGitHubApi extends Command
 				break;
 			case "events":
 				$res = $this->getFromGitHubApi($this->apiRepos . "events?page=3", "eventsData");
+				// неработающий код - убирать.
 				//$res = $this->getFromGitHubApi($this->apiRepos . "events?since=" . $qDate, "eventsData");  //Параметры здесь не работают
 				break;
 			case "issues":
@@ -82,7 +101,11 @@ class testGitHubApi extends Command
 				 * ?sort=created|updated|comments (Default: created)
 				 * ?direction=asc|desc
 				 */
-				if(! empty($opt["save"])) {
+				// вообще весь этот код называют "портянкой" :-)
+				// всегда, в любых обстоятельствах, плохо писать много кода в одном методе
+				// улучшить можно если сборку запросов к гитхабовскому апи, спрятать в небольшие методы например $this->getIssues()
+				// будет еще лучше если будут небольшие методы типа getIssues()
+			if(! empty($opt["save"])) {
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all&direction=asc");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubIssues');
 					$res = '';
@@ -92,11 +115,14 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "issuesEvents":
+				// непонятная опция... требуется комментарии, описание!
+				// и почему empty, а если я передам в опции save="не надо сохранять"? :-)
 				if(empty($opt["save"]))
 				{
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
 				} else
 				{
+					// портянка! выносить функциональные вещи в отдельные методы/классы
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/events");
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubRefcommits');
 					$refCommits = GitHubRefcommits::where('message', '')->get();
@@ -114,7 +140,8 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "issuesEvent":
-				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
+				// я совсем не понимаю что здесь происходит и как дальше обрабатывается $res, и что содержится в $res...
+			$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
 				$event = $res['response'][0];
 				$res = $this->getFromGitHubApi($this->apiRepos . "git/commits/" . $event['commit_id']);
 				$event['message'] = $res['response']->message;
@@ -126,6 +153,7 @@ class testGitHubApi extends Command
 				$i = 10; //страховка от зацикливания
 				$isNextPage = true;
 				$link['next'] = $this->apiRepos . "issues/events";
+				// нерабочий код - весь удалить, зачем он здесь?
 				//$link['next'] = $this->apiRepos . "issues/events?since=" . $qDate; //Параметры здесь не работают
 				$newRes = array();
 				while($isNextPage && $i > 0)
@@ -147,6 +175,7 @@ class testGitHubApi extends Command
 			case "users":
 				if(empty($opt["save"])) {
 					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
+					// почему закомментировано, что это?
 					//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
 					//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
 				}
@@ -164,6 +193,9 @@ class testGitHubApi extends Command
 
 				break;
 			default:
+				// что за тесты, зачем, как пользоваться?
+				// весь нерабочий код убирать. А если нужен - можно делать ветки "для себя"
+				// и там экспериментировать, чтобы не "засорять" рабочий код
 				//тесты
 				//$res = $this->argument();
 				//$res = $this->getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
@@ -180,7 +212,7 @@ class testGitHubApi extends Command
 		}
 
 
-
+		// хаха. это зря. у функции print_r есть второй параметр ;)
 		ob_start();
 		print_r($res);
 		$d =  ob_get_clean();
@@ -215,6 +247,8 @@ class testGitHubApi extends Command
 			array('save', null, InputOption::VALUE_NONE, 'An option.', null),
 		);
 	}
+
+	// что такое $func? что возвращает метод?
 	protected function getFromGitHubApi($httpRequest, $func = '')
 	{
 		$ch = curl_init();
@@ -228,6 +262,7 @@ class testGitHubApi extends Command
 			$func = '';
 		}
 
+		// что это? если не нужно - убирать
 		//curl_setopt($ch, CURLOPT_USERPWD, ":");
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('If-None-Match: "e1fe2d0c86ed010a4fe5608a264b50b5"'));
 
@@ -272,6 +307,17 @@ class testGitHubApi extends Command
 			}
 
 		} else {
+			// нельзя чтобы метод мог возвращать json и строку с кодом ответа и еще какие то варианты...
+			// это плохо-плохо, методом неудобно пользоваться и вероятность ошибок очень высокая
+			// метод должен возвращать всегда что-то четкое, одно.
+			// например
+			// метод должен возвращать разобранный json (если все хорошо) или null (если нет данных)
+			// или
+			// возвращает true (если запрос удался) или false (если запрос не удался), а
+			// результат запроса сохраняет куда нибудь в свойство класса в строгом (например, только массив) формате
+			// и тогда при использовании метода будет внятная логика, например
+			// если метод вернул true, то в свойстве класса $this->response находится валидный ответ
+			// а если метод вернул false, то всвойстве класса $this->error находятся данные об ошибке
 			return $http_code;
 		}
 	}
@@ -283,6 +329,8 @@ class testGitHubApi extends Command
 	 */
 	protected static function decodePageLinks($inLinks)
 	{
+		// ох как коментов не хватает... что это за метод? что делает?
+		// название переменной - что в ней? что значит rel?
 		$rel = "";
 		$links = explode(",", $inLinks);
 		$pageLinks = array();
@@ -297,6 +345,7 @@ class testGitHubApi extends Command
 
 	protected static function commitsData($inData)
 	{
+		// название переменной!!!!!
 		$x = array();
 		$x['html_url'] = $inData->html_url;
 		$x['date'] = $inData->commit->author->date;
@@ -308,6 +357,7 @@ class testGitHubApi extends Command
 		return $x;
 	}
 
+	// ох-ох.. совсем непонятный метод...
 	protected static function eventsData($inData)
 	{
 		$x = array();
@@ -379,6 +429,7 @@ class testGitHubApi extends Command
 		return $x;
 	}
 
+	//
 	protected static function issuesCommentsData($inData)
 	{
 		$x = array();
@@ -400,6 +451,7 @@ class testGitHubApi extends Command
 	protected static function issuesEventsData($inData)
 	{
 		$x = array();
+		// закомментированный код - убирать!
 		/*
 		$x['id'] = $inData->id;
 		$x['event'] = $inData->event;
@@ -467,10 +519,13 @@ class testGitHubApi extends Command
 	 * @param $classDB
 	 *
 	 */
+	// совершенно непонятно работает метод. комментариев не хватает.
 	private function saveInDB($inData, $classDB)
 	{
 		$this->info("Addition to DataBase...");
 		$item = new $classDB;
+		// phpstorm ругаетя что у $item нет метода getKeyName..
+		// что тут такое, совсем непонятно
 		$keyName = $item->getKeyName();
 		$myName = $item->getMyName();
 		foreach($inData as $inItem)
