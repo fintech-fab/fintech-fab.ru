@@ -182,6 +182,18 @@ class Validators
 		return $rules;
 	}
 
+	public static function rulesForTableAddDataRule()
+	{
+		$rules = array(
+			'name'      => 'required',
+			'rule'      => 'required',
+			'signal_id' => 'required|alpha_dash',
+			'event_id'  => 'required|alpha_dash',
+		);
+
+		return $rules;
+	}
+
 
 	public static function getErrorFromChangeDataEventsTableUnique($data)
 	{
@@ -259,20 +271,39 @@ class Validators
 
 	}
 
-	public static function getErrorFromChangeDataRuleTable($data)
+	public static function getErrorFromAddDataRuleTable($data)
 	{
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, Validators::rulesForTableDataRule(), Validators::messagesForErrors());
+		$validator = Validator::make($data, Validators::rulesForTableAddDataRule(), Validators::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
 			$result['errors'] = array(
-				'name'       => $userMessages->first('name'),
-				'rule'       => $userMessages->first('rule'),
-				'signal_id'  => $userMessages->first('signal_id'),
-				'signal_sid' => $userMessages->first('signal_sid'),
-				'event_id'   => $userMessages->first('event_id'),
-				'event_sid'  => $userMessages->first('event_sid'),
+				'name'      => $userMessages->first('name'),
+				'rule'      => $userMessages->first('rule'),
+				'signal_id' => $userMessages->first('signal_id'),
+				'event_id'  => $userMessages->first('event_id'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
+	public static function getErrorFromChangeDataRuleTable($data)
+	{
+		$data['name'] = e($data['name']);
+		$validator = Validator::make($data, Validators::rulesForTableAddDataRule(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'name'      => $userMessages->first('name'),
+				'rule'      => $userMessages->first('rule'),
+				'signal_id' => $userMessages->first('signal_id'),
+				'event_id'  => $userMessages->first('event_id'),
 			);
 
 			return $result;
