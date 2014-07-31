@@ -56,7 +56,10 @@ class TestSetUp extends TestCase
 		Rule::create([
 			'id'          => 1,
 			'name'        => 'Правило раз',
-			'rule'        => 'cold=true[AND]sopli=true[AND]all_wet=true[AND]time!>=14:00',
+			'rule'        => '[{"name":"cold","value":true, "operator":"OP_BOOL"},
+								{"rule_operator":"AND", "name":"sopli", "value":true, "operator":"OP_BOOL"},
+								{"rule_operator":"AND", "name":"all_wet", "value":true, "operator":"OP_BOOL"},
+								{"rule_operator":"AND", "name":"time", "value":15.05, "operator":"OP_GREATER"}]',
 			'terminal_id' => 1,
 			'event_id'    => 1,
 			'signal_id'   => 1,
@@ -65,7 +68,7 @@ class TestSetUp extends TestCase
 		Rule::create([
 			'id'          => 2,
 			'name'        => 'Правило два',
-			'rule'        => 'sopli=true',
+			'rule'        => '[{"name":"sopli","value":true, "operator":"OP_BOOL"}]',
 			'terminal_id' => 1,
 			'event_id'    => 1,
 			'signal_id'   => 3,
@@ -74,7 +77,7 @@ class TestSetUp extends TestCase
 		Rule::create([
 			'id'          => 3,
 			'name'        => 'Правило три',
-			'rule'        => 'time!<=16:00',
+			'rule'        => '[{"name":"time","value":16.05, "operator":"OP_LESS_OR_EQUAL"}]',
 			'terminal_id' => 1,
 			'event_id'    => 1,
 			'signal_id'   => 2,

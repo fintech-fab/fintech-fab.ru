@@ -37,7 +37,8 @@ class RequestHandler
 		if ($this->validate($aRequestData)) {
 			$oCalcHandler = new CalcHandler;
 			// incoming data should be solid here, by now
-			$oCalcHandler->process($aRequestData);
+			$oCalcHandler->calculate($aRequestData);
+			dd($oCalcHandler->getFittedRules());
 		} else {
 			App::abort(400, 'Bad request');
 		}
