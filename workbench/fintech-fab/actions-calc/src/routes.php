@@ -59,6 +59,11 @@ Route::post('actions-calc/tableEvents/addData/', array(
 	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postAddDataEvents',
 ));
 
+Route::post('actions-calc/tableEvents/getRules/', array(
+	'as'   => 'calcViewRule',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\TablesController@postViewRule',
+));
+
 
 Route::post('actions-calc/tableSignals/changeData/', array(
 	'as'   => 'calcChangeDataSignals',

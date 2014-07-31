@@ -45,6 +45,25 @@ class TablesController extends BaseController
 		));
 	}
 
+
+	public function postViewRule()
+	{
+		$input = Input::only('event_id');
+		$event = event::find($input['event_id']);
+
+		$errors = Validators::rulesWithEvent($input);
+		if ($errors) {
+			return $errors;
+		}
+
+		$rules = $event->rules()->paginate(10);
+
+
+		return $this->make('tableRulesForEvents', array(
+			'rules' => $rules,
+		));
+	}
+
 	/**Таблица сигналов
 	 *
 	 * @return \Illuminate\View\View

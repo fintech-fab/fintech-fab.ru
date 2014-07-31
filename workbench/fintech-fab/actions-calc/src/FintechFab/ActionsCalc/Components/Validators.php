@@ -59,8 +59,17 @@ class Validators
 			'alpha_dash'    => 'Только буквы, цифры, тире и подчёткивания.',
 			'same'          => 'Пароли не одинаковы',
 			'required_with' => 'Подтвердите пароль',
-			'unique' => 'Такой sid уже существует',
-			'exists' => 'Такой sid не существует',
+			'unique'        => 'Такой sid уже существует',
+			'exists'        => 'Такой sid не существует',
+		);
+
+		return $rules;
+	}
+
+	public static function messagesForErrorsRules()
+	{
+		$rules = array(
+			'exists' => 'Для этого события нету правил',
 		);
 
 		return $rules;
@@ -177,6 +186,15 @@ class Validators
 			'signal_sid' => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.signals',
 			'event_id'   => 'required|alpha_dash',
 			'event_sid'  => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.events',
+		);
+
+		return $rules;
+	}
+
+	public static function rulesForTablerulesWithEvent()
+	{
+		$rules = array(
+			'event_id' => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.rules,event_id',
 		);
 
 		return $rules;
@@ -304,6 +322,24 @@ class Validators
 				'rule'      => $userMessages->first('rule'),
 				'signal_id' => $userMessages->first('signal_id'),
 				'event_id'  => $userMessages->first('event_id'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
+
+	public static function rulesWithEvent($data)
+	{
+		$validator = Validator::make($data, Validators::rulesForTablerulesWithEvent(), Validators::messagesForErrorsRules());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'event_id' => $userMessages->first('event_id'),
 			);
 
 			return $result;

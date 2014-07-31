@@ -18,7 +18,7 @@ use FintechFab\ActionsCalc\Models\Event;
 
 
 <?=
-Form::button('Добавить', array(
+Form::button('Добавить событие', array(
 	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
 	'data-toggle' => 'modal',
 	'data-target' => '#addDataEventTable',
@@ -47,10 +47,15 @@ echo '<br><br>'
 					'data-toggle' => 'modal',
 					'data-target' => '#changeDataModal',
 				)) ?>
+				<?=
+				Form::button('Правила', array(
+					'class'   => 'btn btn-sm btn-info tableGetRules',
+					'data-id' => $event->id,
+				))?>
 			</td>
 		</tr>
-
 	<?php endforeach ?>
 </table>
+<div id="content"></div>
 <?= $events->links() ?>
 <div id="message" class="text-center"></div>

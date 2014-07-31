@@ -30,6 +30,9 @@ class Event extends Eloquent
 		return $this->belongsTo(Terminal::class);
 	}
 
+	/**
+	 * @return Rule
+	 */
 	public function rules()
 	{
 		return $this->hasMany(Rule::class);

@@ -34,7 +34,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 					<div class="col-sm-9">
 
 						<div id="EventSid">
-						<div class="ui-widget">
+							<div class="ui-widget">
 								<?=
 								Form::select('EventSid', Event::getEventSid(), '', array(
 									'class'    => 'form-control',
@@ -69,13 +69,13 @@ use FintechFab\ActionsCalc\Models\Signal;
 					<div class="col-sm-9">
 						<div id="SignalSid">
 							<div class="ui-widget">
-							<?=
-							Form::select('SignalSid', Signal::getSignalSid(), '', array(
-								'class'    => 'form-control',
-							'id'       => 'inputSignalSid',
-							'required' => 'required',
-						));
-						?>
+								<?=
+								Form::select('SignalSid', Signal::getSignalSid(), '', array(
+									'class'    => 'form-control',
+									'id'       => 'inputSignalSid',
+									'required' => 'required',
+								));
+								?>
 							</div>
 						</div>
 					</div>
@@ -88,7 +88,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 			<div class="modal-footer">
 				<?=
 				Form::button('Сохранить', array(
-					'id' => 'saveChangeRule',
+					'id'    => 'saveChangeRule',
 					'class' => 'btn btn-success changeDataModal',
 				)); ?>
 				<button type="button" class="btn btn-danger cancelEdit" data-dismiss="modal">Отмена</button>

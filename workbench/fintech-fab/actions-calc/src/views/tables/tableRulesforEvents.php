@@ -27,7 +27,7 @@ Form::button('Добавить', array(
 ));
 echo '<br><br>'
 ?>
-<table class="table table-striped table-hover" id="ordersTable">
+<table class="table table-striped table-hover" id="ordersTable" style='border-bottom: 2px solid black; border-left: 2px solid black;'>
 	<tr>
 		<td><b>ID</b></td>
 		<td><b>Правило</b></td>
