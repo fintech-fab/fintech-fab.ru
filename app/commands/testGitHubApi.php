@@ -1,5 +1,8 @@
 <?php
-
+/**
+ *                  НЕ СДАЕТСЯ НА РЕВЬЮ
+ *
+ */
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -9,13 +12,15 @@ use FintechFab\Models\GitHubRefcommits;
 
 class testGitHubApi extends Command
 {
-	//private static $apiBaseUrl = 'https://api.github.com/';
+	//Опция для curl_setopt()
+	private $_curl_nobody = false;// При значении 'true' результат запроса будет без данных (пустым)
 
-	private $_curl_nobody = false;
+	//Ограничения API GitHub'а по количеству запросов и времени.
 	private $_rateLimit = 0;
 	private $_rateLimitRemaining = 0;
 	private $_rateLimitReset = 0;
 
+	//Адрес репозитория
 	private $apiRepos;
 
 
@@ -50,6 +55,7 @@ class testGitHubApi extends Command
 	{
 		$this->info("It's OK. Begin...");
 
+		//Не удалять.
 		//$res = $this->getFromGitHubApi("https://api.github.com/users/fintech-fab");
 		//$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues/9/events");
 
@@ -73,7 +79,8 @@ class testGitHubApi extends Command
 				$res = $this->getFromGitHubApi($this->apiRepos . "commits?since=" . $qDate, "commitsData");
 				break;
 			case "events":
-				$res = $this->getFromGitHubApi($this->apiRepos . "events?page=3", "eventsData");
+				$res = $this->getFromGitHubApi($this->apiRepos . "events?page=2", "eventsData");
+				//Не удалять.
 				//$res = $this->getFromGitHubApi($this->apiRepos . "events?since=" . $qDate, "eventsData");  //Параметры здесь не работают
 				break;
 			case "issues":
@@ -92,6 +99,8 @@ class testGitHubApi extends Command
 				}
 				break;
 			case "issuesEvents":
+				// и почему empty, а если я передам в опции save="не надо сохранять"? :-)
+				// То будет ответ: "[RuntimeException] The "--save" option does not accept a value. "
 				if(empty($opt["save"]))
 				{
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
@@ -113,19 +122,20 @@ class testGitHubApi extends Command
 					$res = '';
 				}
 				break;
-			case "issuesEvent":
+			case "issuesEvent": // тестовый, то есть не рабочий пункт.
 				$res = $this->getFromGitHubApi($this->apiRepos . "issues/events", "issuesEventsData");
 				$event = $res['response'][0];
 				$res = $this->getFromGitHubApi($this->apiRepos . "git/commits/" . $event['commit_id']);
 				$event['message'] = $res['response']->message;
 				$res = $event;
 				break;
-			case "testPages":
+			case "testPages":  // тестовый, то есть не рабочий пункт.
 				$this->_curl_nobody = true;
 				$res = array();
 				$i = 10; //страховка от зацикливания
 				$isNextPage = true;
 				$link['next'] = $this->apiRepos . "issues/events";
+				//Не удалять.
 				//$link['next'] = $this->apiRepos . "issues/events?since=" . $qDate; //Параметры здесь не работают
 				$newRes = array();
 				while($isNextPage && $i > 0)
@@ -146,14 +156,13 @@ class testGitHubApi extends Command
 				break;
 			case "users":
 				if(empty($opt["save"])) {
-					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
-					//$res = self::getFromGitHubApi($this->apiRepos . "assignees");
-					//$res = self::getFromGitHubApi($this->apiRepos . "collaborators");
+					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");   //Не удалять.
+					//$res = self::getFromGitHubApi($this->apiRepos . "assignees");     //Не удалять.
+					//$res = self::getFromGitHubApi($this->apiRepos . "collaborators"); //Не удалять.
 				}
 				else {
 					$this->info("contributors");
 					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
-					//$this->saveUsers($res['response']);
 					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
 
 					$this->info("assignees");
@@ -164,7 +173,7 @@ class testGitHubApi extends Command
 
 				break;
 			default:
-				//тесты
+				//тесты (сюда не смотреть)
 				//$res = $this->argument();
 				//$res = $this->getFromGitHubApi("https://api.github.com/orgs/fintech-fab/members");
 				//$res = $this->option();
@@ -176,15 +185,14 @@ class testGitHubApi extends Command
 				{
 					$res[] = $comment->user();
 				}
+				$res[] = empty($opt["save"]) ? 'true' : 'false';
+				$res[] = isset($opt["save"]) ? 'true' : 'false';
 
 		}
 
 
 
-		ob_start();
-		print_r($res);
-		$d =  ob_get_clean();
-		$this->info($d);
+		$this->info(print_r($res));
 		$this->info("rateLimit: " . $this->_rateLimit);
 		$this->info("rateLimitRemaining: " . $this->_rateLimitRemaining);
 		$this->info("rateLimitReset: " . date("c", $this->_rateLimitReset));
@@ -215,6 +223,13 @@ class testGitHubApi extends Command
 			array('save', null, InputOption::VALUE_NONE, 'An option.', null),
 		);
 	}
+
+	/**
+	 * @param string $httpRequest
+	 * @param string $func
+	 *
+	 * @return array|mixed
+	 */
 	protected function getFromGitHubApi($httpRequest, $func = '')
 	{
 		$ch = curl_init();
@@ -228,6 +243,7 @@ class testGitHubApi extends Command
 			$func = '';
 		}
 
+		//КАТЕГОРИЧЕСКИ НЕ УДАЛЯТЬ!!!
 		//curl_setopt($ch, CURLOPT_USERPWD, ":");
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('If-None-Match: "e1fe2d0c86ed010a4fe5608a264b50b5"'));
 
@@ -277,6 +293,11 @@ class testGitHubApi extends Command
 	}
 
 	/**
+	 * GitHub выдает данные постранично. В заголовке ответа (header) дает ссылки на другие страницы.
+	 *
+	 * Из полученной строки функция выделяет адреса страниц и указатели, со значениями: first, next, prev, last
+	 * Например:  <https://api.github.com/repositories/16651992/issues/events?page=1>; rel="first"
+	 *
 	 * @param string $inLinks
 	 *
 	 * @return array
@@ -466,6 +487,16 @@ class testGitHubApi extends Command
 	 * @param $inData
 	 * @param $classDB
 	 *
+	 * Сохранение или обновление данных в БД,
+	 * вывод сообщений на экран по каждой отдельной записи данных (при добавлении в БД, при обновлении).
+	 *
+	 * $inData  — данные, полученные из GitHub'а
+	 * $classDB — имя класса таблицы БД (модель). Заполение и контроль полученных данных выполняется в этой модели.
+	 *      Методы, принимающие данные ("dataGitHub($inItem)", "updateFromGitHub($inItem)")
+	 *      дают положительный ответ "true", если разрешено сохранять.
+	 *
+	 * $item->getKeyName() — имя ключевого поля (может быть 'id' или иным). Задается в модели данных.
+	 * $item->getMyName()  — нужно для вывода на экран (показать, какие данные сохраняются).
 	 */
 	private function saveInDB($inData, $classDB)
 	{
@@ -475,7 +506,7 @@ class testGitHubApi extends Command
 		$myName = $item->getMyName();
 		foreach($inData as $inItem)
 		{
-			$item = $classDB::where($keyName, $inItem->$keyName)->first();;
+			$item = $classDB::where($keyName, $inItem->$keyName)->first();
 			if(isset($item->$keyName))
 			{
 				$this->info("Found $myName:" . $item->$keyName);
