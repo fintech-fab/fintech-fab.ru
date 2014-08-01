@@ -16,7 +16,6 @@ use FintechFab\ActionsCalc\Models\Event;
 
 <?= View::make('ff-actions-calc::tables.inc.TableEvents.addDataEventModal') ?>
 
-
 <?=
 Form::button('Добавить событие', array(
 	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',

@@ -2,3 +2,7 @@
 	height: 100% !important;
 }
 
+div.rulesForEvents {
+	display: none;
+	margin-left: 35px;
+}

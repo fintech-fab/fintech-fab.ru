@@ -78,38 +78,38 @@ $(document).ready(function () {
 		);
 
 	});
-
-	$('button.tableGetRules').click(function () {
-
-		var $btn = $(this);
-		var id = $btn.data('id');
-
-		$.post('tableEvents/getRules/', {
-				event_id: id
-			},
-			function (data) {
-				if (data['errors']) {
-					alert(data['errors']['event_id']);
-					return;
-				}
-
-				$(".rulesForEvents").hide("slow", function () {
-					$('.rulesForEvents').remove();
-				});
-				$('.colored').css({'background-color': ''});
-				$btn.parent().parent().addClass('colored').css({'background-color': '#FFFACD'});
-				$btn.parent().parent().after(
-					"<tr class='rulesForEvents' style='opacity: 0;'><td colspan='4' style='background-color: #FFFACD; '><div class='test' style='margin-left: 35px;  '>" + data + "</div></td></tr>"
-				);
-
-				$(".rulesForEvents").animate({'opacity': '1'}, 1000);
-
-
+	$('button.tableGetRules').click({x: 0}, function (e) {
+		if (e.data.x != this) {
+			if (e.data.x) {
+				$(e.data.x)
+					.closest('tr')
+					.removeClass('active')
+					.next()
+					.find('.rulesForEvents')
+					.slideUp(500, function () {
+						$(this).closest('tr').remove();
+					});
 			}
-		);
+			var $btn = $(this);
+			var $act = $btn.closest('tr').addClass('active');
 
+			$.post(
+				'tableEvents/getRules/',
+				{ event_id: $btn.data('id') },
+				function (data) {
+					if (data['errors']) {
+						alert(data['errors']['event_id']);
+						return;
+					}
+					$act.after('<tr class="active"><td colspan="4" style="background-color: #C9EEEC;border-top: 1px solid black;"><div class="rulesForEvents">' + data + '</div></td></tr>')
+						.next()
+						.find('.rulesForEvents')
+						.slideDown(500);
+				});
+
+			e.data.x = this;
+		}
 	});
-
 });
 
 
