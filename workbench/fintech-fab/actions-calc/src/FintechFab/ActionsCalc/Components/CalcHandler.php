@@ -2,6 +2,8 @@
 
 namespace FintechFab\ActionsCalc\Components;
 
+use Log;
+use App;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
 
@@ -57,6 +59,14 @@ class CalcHandler
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getFittedRulesCount()
+	{
+		return count($this->_aoFittedRules);
+	}
+
+	/**
 	 * @param $oRule
 	 *
 	 * @return bool
@@ -87,6 +97,11 @@ class CalcHandler
 	{
 		// term present in data, go further
 		$operatorName = constant(self::class . '::' . $oRuleTerm->operator);
+
+		if (!is_callable(self::class . '::' . $operatorName)) {
+			Log::info("No such method {$operatorName} for compare rule");
+			App::abort(500, "No such method {$operatorName} for compare rule");
+		}
 
 		return $this->{$operatorName}($oRuleTerm->value, $this->_aData[$oRuleTerm->name]);
 	}
@@ -197,7 +212,7 @@ class CalcHandler
 			foreach ($aoRules as $oRule) {
 				$sFoundRules .= "rule:=> " . $oRule->rule . "\n";
 			}
-			\Log::info("Found rules:\n" . $sFoundRules);
+			Log::info("Found rules:\n" . $sFoundRules);
 		}
 
 		return $aoRules;
