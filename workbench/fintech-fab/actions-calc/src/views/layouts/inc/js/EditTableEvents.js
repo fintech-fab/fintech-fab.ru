@@ -80,6 +80,7 @@ $(document).ready(function () {
 	});
 	$('button.tableGetRules').click({x: 0}, function (e) {
 		if (e.data.x != this) {
+			$('button.tableGetRules').attr('disabled', true);
 			if (e.data.x) {
 				$(e.data.x)
 					.closest('tr')
@@ -98,10 +99,12 @@ $(document).ready(function () {
 				{ event_id: $btn.data('id') },
 				function (data) {
 					if (data['errors']) {
+						$('button').attr('disabled', false);
 						alert(data['errors']['event_id']);
 						return;
 					}
-					$act.after('<tr class="active"><td colspan="4" style="background-color: #C9EEEC;border-top: 1px solid black;"><div class="rulesForEvents">' + data + '</div></td></tr>')
+					$('button.tableGetRules').attr('disabled', false);
+					$act.after('<tr class="active"><td colspan="4" style="border-top: 1px solid black;"><div class="rulesForEvents">' + data + '</div></td></tr>')
 						.next()
 						.find('.rulesForEvents')
 						.slideDown(500);

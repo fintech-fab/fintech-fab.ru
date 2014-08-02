@@ -4,7 +4,7 @@ use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Signal;
 
 ?>
-<div class="modal fade" id="changeDataModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="changeDataRuleModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -15,13 +15,13 @@ use FintechFab\ActionsCalc\Models\Signal;
 			<div class="modal-body">
 
 				<div class="form-group row">
-					<?= Form::label('inputName', 'Имя', array('class' => 'col-sm-3 control-label')) ?>
+					<?= Form::label('inputNameRule', 'Имя', array('class' => 'col-sm-3 control-label')) ?>
 					<div class="col-sm-9">
 						<?=
 						Form::input('text', 'name', '', array(
 							'placeholder' => 'Название',
 							'class'       => 'form-control',
-							'id'          => 'inputName',
+							'id' => 'inputNameRule',
 							'required'    => 'required',
 						));
 						?>

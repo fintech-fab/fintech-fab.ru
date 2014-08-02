@@ -10,7 +10,7 @@ $(document).ready(function () {
 		var val = this.checked;
 		$.post('tableRule/changeFlagRule/', {"id": id, "val": val},
 			function (res) {
-				$("#message").dialog({ title: 'Сообщение', show: 'drop', hide: 'explode' }).html(res);
+				alert(res);
 			});
 	});
 
@@ -32,7 +32,7 @@ $(document).ready(function () {
 		$('#inputSignalSid').val(rule.signal_id);
 
 
-		$('#inputName').val(rule.name);
+		$('#inputNameRule').val(rule.name);
 		$('#inputRule').val(rule.rule);
 	});
 
@@ -61,7 +61,7 @@ $(document).ready(function () {
 //		var signalSid = $('#SignalSid').find('input').val();
 		var eventSidId = $('#inputEventSid').val();
 		var signalSidId = $('#inputSignalSid').val();
-		var name = $('#inputName').val();
+		var name = $('#inputNameRule').val();
 		var rule = $('#inputRule').val();
 		$('button').attr('disabled', true);
 		$.post('tableRules/changeData/', {

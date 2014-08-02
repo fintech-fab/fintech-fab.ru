@@ -16,17 +16,8 @@ use FintechFab\ActionsCalc\Models\Rule;
 </script>
 <?= View::make('ff-actions-calc::tables.inc.TableRule.changeDataRuleModal', array('rule' => $rules)) ?>
 
-<?= View::make('ff-actions-calc::tables.inc.TableRule.addDataRuleModal') ?>
 
-
-<?=
-Form::button('Добавить', array(
-	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
-	'data-toggle' => 'modal',
-	'data-target' => '#addDataRuleModal',
-));
-echo '<br><br>'
-?>
+<?= '<br>' ?>
 <table class="table table-striped table-hover" id="ordersTable" style='border-bottom: 2px solid black; border-left: 2px solid black;'>
 	<tr>
 		<td><b>ID</b></td>
@@ -53,12 +44,12 @@ echo '<br><br>'
 			</td>
 			<td>
 				<?=
-				Form::button('Изменить', array(
+				Form::button('Изменить правило', array(
 					'class'       => 'btn btn-sm btn-info btnEdit',
 					'data-action' => 'showStatus',
 					'data-rule'   => $rule,
 					'data-toggle' => 'modal',
-					'data-target' => '#changeDataModal',
+					'data-target' => '#changeDataRuleModal',
 				)) ?>
 			</td>
 		</tr>

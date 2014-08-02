@@ -58,7 +58,7 @@ echo '<br><br>'
 					'data-action' => 'showStatus',
 					'data-rule'   => $rule,
 					'data-toggle' => 'modal',
-					'data-target' => '#changeDataModal',
+					'data-target' => '#changeDataRuleModal',
 				)) ?>
 			</td>
 		</tr>
