@@ -67,6 +67,9 @@ class CalcHandler
 	}
 
 	/**
+	 * In one rule grabbing rules
+	 * Having term of the rule in data, comparing with data using term operator
+	 *
 	 * @param $oRule
 	 *
 	 * @return bool

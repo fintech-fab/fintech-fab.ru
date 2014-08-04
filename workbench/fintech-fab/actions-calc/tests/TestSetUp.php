@@ -42,6 +42,7 @@ class TestSetUp extends TestCase
 			'key'         => 'key',
 			'password'    => Hash::make('password'),
 			'flag_active' => true,
+			'url'         => 'http://ya.ru'
 		]);
 
 		// Events
