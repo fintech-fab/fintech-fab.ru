@@ -3,7 +3,7 @@
 namespace FintechFab\Models;
 
 use Eloquent;
-//use FintechFab\Models\GitHubIssues;
+
 
 /**
  * Class GitHubComments
@@ -19,7 +19,7 @@ use Eloquent;
  * @property string  $prev
  *
   */
-class GitHubComments extends Eloquent
+class GitHubComments extends Eloquent implements IGitHubModel
 {
 	public $timestamps = false;
 

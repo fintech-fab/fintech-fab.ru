@@ -18,7 +18,7 @@ use Eloquent;
  * @property string  $message
  *
   */
-class GitHubRefcommits extends Eloquent
+class GitHubRefcommits extends Eloquent implements IGitHubModel
 {
 	public $timestamps = false;
 

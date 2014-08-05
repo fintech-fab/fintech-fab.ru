@@ -23,7 +23,7 @@ class FintechFabFromGitHub extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'command:fintech-fabFromGitHub';
+	protected $name = 'fintech-fab:git-hub';
 
 
 

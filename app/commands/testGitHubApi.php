@@ -6,6 +6,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use FintechFab\Models\IGitHubModel;
 use FintechFab\Models\GitHubMembers;
 use FintechFab\Models\GitHubIssues;
 use FintechFab\Models\GitHubRefcommits;
@@ -29,7 +30,7 @@ class testGitHubApi extends Command
 	 *
 	 * @var string
 	 */
-	protected $name = 'command:testGitHubApi';
+	protected $name = 'testGitHubApi';
 
 	/**
 	 * The console command description.
@@ -192,7 +193,7 @@ class testGitHubApi extends Command
 
 
 
-		$this->info(print_r($res));
+		$this->info(print_r($res, true));
 		$this->info("rateLimit: " . $this->_rateLimit);
 		$this->info("rateLimitRemaining: " . $this->_rateLimitRemaining);
 		$this->info("rateLimitReset: " . date("c", $this->_rateLimitReset));
@@ -249,8 +250,20 @@ class testGitHubApi extends Command
 
 
 		$response = curl_exec($ch);
+
+		$this->info(curl_getinfo($ch, CURLINFO_EFFECTIVE_URL));
+
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
+
+
+/*
+		//$hdr = http_parse_headers($response);
+		$hdr = http_parse_headers($response);
+		$this->info(print_r($hdr, true));
+		*/
+
+
 
 		$res = explode("\r\n", $response);
 		$response = array_pop($res);
@@ -485,7 +498,8 @@ class testGitHubApi extends Command
 
 	/**
 	 * @param $inData
-	 * @param $classDB
+	 * @param string $classDB
+	 *
 	 *
 	 * Сохранение или обновление данных в БД,
 	 * вывод сообщений на экран по каждой отдельной записи данных (при добавлении в БД, при обновлении).
@@ -498,7 +512,7 @@ class testGitHubApi extends Command
 	 * $item->getKeyName() — имя ключевого поля (может быть 'id' или иным). Задается в модели данных.
 	 * $item->getMyName()  — нужно для вывода на экран (показать, какие данные сохраняются).
 	 */
-	private function saveInDB($inData, $classDB)
+	private function saveInDB($inData,  $classDB)
 	{
 		$this->info("Addition to DataBase...");
 		$item = new $classDB;

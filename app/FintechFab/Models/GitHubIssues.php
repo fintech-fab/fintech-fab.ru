@@ -20,7 +20,7 @@ use Eloquent;
  * @property string  $user_login
  *
   */
-class GitHubIssues extends Eloquent
+class GitHubIssues extends Eloquent implements IGitHubModel
 {
 	public $timestamps = false;
 	protected $table = 'github_issues';
