@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class FintechFabFromGitHub extends Command {
 
@@ -23,6 +23,7 @@ class FintechFabFromGitHub extends Command {
 	 *
 	 * @var string
 	 */
+	// я имел ввиду fintech-fab:git-hub :)
 	protected $name = 'command:fintech-fabFromGitHub';
 
 
@@ -40,6 +41,7 @@ class FintechFabFromGitHub extends Command {
 	 *
 	 * @return void
 	 */
+	// конструктор не может вовзвращать void (и IDE ругается здесь)
 	public function __construct()
 	{
 		parent::__construct();
@@ -61,6 +63,9 @@ class FintechFabFromGitHub extends Command {
 
 		$this->info("It's OK. Begin...");
 
+		// красота. только потом между каждым case и break не должно появиться много кода
+		// строчек по 10 максимум, если получится - это будет отлично.
+		// и здесь не должно быть никакой логики, только запуск соответствующих обработок
 		switch($this->argument('dataCategory')) {
 			case "comments":
 				break;
@@ -90,6 +95,8 @@ class FintechFabFromGitHub extends Command {
 	 */
 	protected function getArguments()
 	{
+		// лучше не усложнять названия, не dataCategory, а просто category или type и т.п.
+		// но при этом чтобы оставалось понятным, конечно :-)
 		return array(
 			array('dataCategory', InputArgument::OPTIONAL, 'Category of data for request to GitHub API.'),
 		);
@@ -102,6 +109,7 @@ class FintechFabFromGitHub extends Command {
 	 */
 	protected function getOptions()
 	{
+		// лучше не усложнять названия, не helpArg, а просто help
 		return array(
 			array('helpArg', null, InputOption::VALUE_OPTIONAL, 'The help about used argument. --helpArg=*|all|:value_of_argument', null),
 		);
@@ -127,6 +135,33 @@ class FintechFabFromGitHub extends Command {
 	 * Возврщает код HTTP
 	 * @return integer
 	 */
+	// нет обработки ошибок! в случае ошибки может не вернуться код http
+	//      кроме этого, в чем польза - возвращать код http?
+	//      зачем он может понадобится тому, кто будет пользоваться этим методом?
+	//
+	// названия продумать:
+	// - метод - getFromGitHubApi - "получить из гит-хаб апи"
+	//          на самом деле метод возвращает http-код из http-запроса, а не "получает из гит-хаб апи"
+	//          и согласно этому должен называться getHttpCodeFromGitHubApiRequest (получить код http из запроса к гитхаб-апи)
+	//          но если еще внимательнее посмотреть, метод выполняет запрос к гит-хаб апи, получает из него некоторые данные,
+	//          сохраняет их во внутренних свойствах объекта, и поэтому идеальным названием будет doGitHubRequest (выполнить запрос к гит-хабу)
+	//          и возвращать лучше bool - успешно или нет или совсем ничего не возвращать.
+	//          нужно крайне внимательно относиться к тому, что делает метод и зачем он возвращает именно это
+	// - параметр - $httpRequest - это же на самом деле всего лишь url, а называется как целый протокол...
+	//
+	// ну и напомню свое предложение - все запросы к гит-хабу (не разбор конкретных полученных данных, а именно запросы)
+	// с этим необязательно разбираться сейчас, но потом все равно придется :-)
+	// лучше делать отдельным объектом "общение" с гит-хабом
+	// т.к. у самой команды задача - не к гитхабу обращаться, а управлять процессом в целом.
+	// сейчас один класс:
+	//      - получает и разбирает запрос от пользователя, решает что будет делать
+	//      - выполняет http-запросы к гит-хабу
+	//      - хранит в себе результаты http-запросов от гит-хаба
+	//      - знает про http-код запроса
+	//      - разбирается с постраничной навигацией
+	//      - разбирается с тем, куда и как сохранять данные от гит-хаба
+	// слишком много обязанностей на одной сущности.
+	// см. первый принцип ООП: https://ru.wikipedia.org/wiki/SOLID_(объектно-ориентированное_программирование)
 	protected function getFromGitHubApi($httpRequest)
 	{
 		$ch = curl_init();
@@ -135,12 +170,25 @@ class FintechFabFromGitHub extends Command {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_USERAGENT, "fintech-fab");
 
+		// 1)
+		// curl_exec может не выполниться по многим причинам
+		// например url неверный или сеть упала, или гитхаб не отвечает
+		// 2)
+		// надо разделять функционал. плохо писать вызовы внутри вызовов
+		// $response =  curl_exec($ch);
+		// $strArray = explode("\r\n", $response);
 		$strArray =  explode("\r\n", curl_exec($ch));
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
+		// разделять функционал, не делать вызовы внутри вызовов (см. выше)
+		//
+		// это какой то странный (ненадежный) способ получить нужные данные из ответа
+		// а вдруг там появится лишний перенос строки?
+		// или совсем не то, что ожидалось?
 		$this->response = json_decode(array_pop($strArray));
 
+		// есть способ проще: http://php.net//manual/ru/function.http-parse-headers.php
 		$this->header = array();
 		for($i = 1; $i < count($strArray); $i++)
 		{
@@ -155,7 +203,7 @@ class FintechFabFromGitHub extends Command {
 			$this->header["Link"] = self::decodePageLinks($this->header["Link"]);
 		}
 
-			return $http_code;
+		return $http_code;
 	}
 
 	/**
@@ -197,6 +245,12 @@ class FintechFabFromGitHub extends Command {
 	 * $item->getKeyName() — имя ключевого поля (может быть 'id' или иным). Задается в модели данных.
 	 * $item->getMyName()  — нужно для вывода на экран (показать, какие данные сохраняются).
 	 */
+	// здесь разумно сделать интерфейс, от которого наследуются все модели, которые предназначены для сбора данных с гит-хаба
+	// например интерфейс называется GitHubModelInterface
+	// он обязательно реализует все указанные методы
+	// и его можно указать здесь:
+	// private function saveInDB($inData, GitHubModelInterface $classDB)
+	// тогда все модели для гит-хаба будут подчиняться общим правилам (и как бонус - IDE ругаться не будет)
 	private function saveInDB($inData, $classDB)
 	{
 		$this->info("Addition to DataBase...");
