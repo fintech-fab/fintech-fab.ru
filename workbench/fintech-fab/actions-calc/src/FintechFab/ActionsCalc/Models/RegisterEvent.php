@@ -5,9 +5,7 @@ namespace FintechFab\ActionsCalc\Models;
 use Eloquent;
 
 /**
- * Class Event
- *
- * @author Ulashev Roman <truetamtam@gmail.com>
+ * Class RegisterEvent
  *
  * @property int       $id
  * @property string    $event_sid
@@ -17,18 +15,17 @@ use Eloquent;
  * @property string    $created_at
  * @property string    $updated_at
  *
- * @method static Event whereEventSid()
+ * @author Ulashev Roman <truetamtam@gmail.com>
  */
-class Event extends Eloquent
+class RegisterEvent extends Eloquent
 {
-	protected $table = 'events';
 	protected $connection = 'ff-actions-calc';
+	protected $table = 'register_events';
 	protected $fillable = ['id', 'name', 'event_sid', 'terminal_id'];
+
 
 	public function terminal()
 	{
 		return $this->belongsTo(Terminal::class, 'terminal_id');
 	}
 }
-
- 

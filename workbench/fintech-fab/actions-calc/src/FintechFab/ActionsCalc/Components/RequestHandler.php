@@ -35,6 +35,8 @@ class RequestHandler
 		$oCalcHandler = new CalcHandler;
 
 		if ($this->validate($aRequestData)) {
+			// registering incoming event
+			Registrator::registerEvent($aRequestData);
 			// incoming data should be solid here, by now
 			$oCalcHandler->calculate($aRequestData);
 		} else {
@@ -53,7 +55,7 @@ class RequestHandler
 
 	/**
 	 * Results to queue.
-	 * Request result to queue | From queue - process - to queue(by queue name)
+	 * Curl request to queue | Нужно поставить в очередь, постановку в очередь результата, для внешнего слушателя.
 	 *
 	 * @param Rule[] $aoFittedRules
 	 */
@@ -64,7 +66,17 @@ class RequestHandler
 			 * @var ResultHandler $oResultHandler
 			 */
 			$oResultHandler = App::make(ResultHandler::class);
-			$oResultHandler->sendHttpToQueue($oRule->terminal->url, $oRule->signal_id);
+
+			$sTerminalUrl = $oRule->terminal->url;
+			$sTerminalQueue = $oRule->terminal->queue;
+
+			if ($sTerminalUrl != "") {
+				$oResultHandler->sendHttpToQueue($sTerminalUrl, $oRule->signal_id);
+			}
+
+			if ($sTerminalQueue != "") {
+				$oResultHandler->resutlToQueue($sTerminalQueue, $oRule->signal->signal_sid);
+			}
 		}
 	}
 

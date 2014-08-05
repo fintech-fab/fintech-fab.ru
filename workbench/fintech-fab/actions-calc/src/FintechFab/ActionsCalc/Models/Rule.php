@@ -30,8 +30,9 @@ class Rule extends Eloquent
 	protected $connection = 'ff-actions-calc';
 	protected $fillable = ['id', 'name', 'rule', 'flag_active', 'terminal_id', 'event_id', 'signal_id'];
 
-	public function signal() {
-	    return $this->belongsTo(Signal::class, 'signal_id');
+	public function signal()
+	{
+		return $this->belongsTo(Signal::class, 'signal_id');
 	}
 
 	public function terminal()

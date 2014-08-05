@@ -22,23 +22,32 @@ class SendHttp
 	 * @var int     $aData ['iSignalId']
 	 * @var string  $aData ['sResultHash']
 	 */
-	public function fire($job, $aData)
+	public function fire(Job $job, $aData)
 	{
 		Log::info('Queue SendHttp fire -', $aData);
 
-		/**
-		 * @var Signal $oSignal
-		 */
-		$oSignal = Signal::find($aData['iSignalId']);
+		$oSignal = Signal::find((int)$aData['iSignalId']);
 		if (is_null($oSignal)) {
 			$job->delete();
+			exit();
 		}
 		$sSignalSid = $oSignal->signal_sid;
 
-		if ($this->makeCurlResponse($aData['sUrl'], $sSignalSid) && $job->attempts() <= 50) {
+		// is request sent?
+		if ($this->makeCurlRequest($aData['sUrl'], $sSignalSid)) {
 			$job->delete();
+			// TODO: register resultRequest was sent.
+			// TODO: failed_jobs table.
+			exit();
 		}
 
+		// job failed?
+		if ($job->attempts() > 50) {
+			$job->delete();
+			exit();
+		}
+
+		Log::info('Job release. Attempts: ' . $job->attempts());
 		$job->release(5); // 60
 	}
 
@@ -48,9 +57,8 @@ class SendHttp
 	 *
 	 * @return bool
 	 */
-	private function makeCurlResponse($sUrl, $sSignalSid)
+	private function makeCurlRequest($sUrl, $sSignalSid)
 	{
-
 		$aPostData = [
 			'signal_sid' => $sSignalSid,
 		];

@@ -13,6 +13,12 @@ use FintechFab\ActionsCalc\Queue\SendHttp;
  */
 class ResultHandler
 {
+	private $_sResultHash;
+
+	function __construct()
+	{
+		$this->_sResultHash = $this->generateResultHash();
+	}
 
 	/**
 	 * @param $url
@@ -22,14 +28,23 @@ class ResultHandler
 	{
 		Log::info("Queue: sendHttpToQueue, url:$url, iSignalId:$iSignalId");
 
-		$sResultHash = $this->generateResultHash();
-
 		Queue::connection('ff-actions-calc')->push(SendHttp::class, [
 			'sUrl'        => $url,
 			'iSignalId'   => $iSignalId,
-			'sResultHash' => $sResultHash,
+			'sResultHash' => $this->_sResultHash,
 		]);
 
+	}
+
+	public function resutlToQueue($queue, $signalSid)
+	{
+		Queue::connection('ff-actions-calc-result')->push($queue, array(
+			'sQueue'      => $queue,
+			'sSignalSid'  => $signalSid,
+			'sResultHash' => $this->_sResultHash,
+		));
+
+		Log::info('Результат отправлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');
 	}
 
 	/**

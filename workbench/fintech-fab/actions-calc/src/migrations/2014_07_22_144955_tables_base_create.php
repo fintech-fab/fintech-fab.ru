@@ -14,7 +14,7 @@ class TablesBaseCreate extends Migration
 	public function up()
 	{
 		// terminals
-		Schema::create('terminals', function (Blueprint $table) {
+		Schema::connection('ff-actions-calc')->create('terminals', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('url');
@@ -24,26 +24,28 @@ class TablesBaseCreate extends Migration
 			$table->timestamps();
 		});
 
-		Schema::create('events', function (Blueprint $table) {
+		Schema::connection('ff-actions-calc')->create('events', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('event_sid');
 			$table->string('name');
 			$table->integer('terminal_id');
 			$table->text('data');
 			$table->timestamps();
+			
+			$table->unique('event_sid');
 		});
 
-		Schema::create('signals', function (Blueprint $table) {
+		Schema::connection('ff-actions-calc')->create('signals', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('signal_sid');
 			$table->integer('terminal_id');
-			$table->tinyInteger('flag_url');
-			$table->tinyInteger('flag_queue');
+//			$table->tinyInteger('flag_url');
+//			$table->tinyInteger('flag_queue');
 			$table->timestamps();
 		});
 
-		Schema::create('rules', function (Blueprint $table) {
+		Schema::connection('ff-actions-calc')->create('rules', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
 			$table->text('rule');
@@ -62,10 +64,10 @@ class TablesBaseCreate extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('terminals');
-		Schema::drop('events');
-		Schema::drop('signals');
-		Schema::drop('rules');
+		Schema::connection('ff-actions-calc')->drop('terminals');
+		Schema::connection('ff-actions-calc')->drop('events');
+		Schema::connection('ff-actions-calc')->drop('signals');
+		Schema::connection('ff-actions-calc')->drop('rules');
 	}
 
 }
