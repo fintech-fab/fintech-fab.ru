@@ -31,6 +31,7 @@ class RequestHandler
 	 */
 	public function process($aRequestData)
 	{
+		// incoming request data
 		Log::info('Request-data: ' . json_encode($aRequestData));
 		$oCalcHandler = new CalcHandler;
 
@@ -47,8 +48,11 @@ class RequestHandler
 		$iFittedRules = $oCalcHandler->getFittedRulesCount();
 		Log::info("Fitted rules count: $iFittedRules");
 
-		$aoFittedRules = $oCalcHandler->getFittedRules();
-		$this->resultsToQueue($aoFittedRules);
+		if ($iFittedRules > 0) {
+			$aoFittedRules = $oCalcHandler->getFittedRules();
+			// All fitted rules, processing and to queue
+			$this->resultsToQueue($aoFittedRules);
+		}
 
 		return ['status' => 'success', 'fittedRulesCount' => $iFittedRules];
 	}

@@ -26,6 +26,7 @@ class TablesRegisterEventsAndSignals extends Migration
 		Schema::connection('ff-actions-calc')->create('register_signals', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
+			$table->integer('signal_id');
 			$table->string('signal_sid');
 			$table->integer('terminal_id');
 			$table->tinyInteger('flag_url');

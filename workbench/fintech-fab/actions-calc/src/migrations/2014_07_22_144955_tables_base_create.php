@@ -31,7 +31,7 @@ class TablesBaseCreate extends Migration
 			$table->integer('terminal_id');
 			$table->text('data');
 			$table->timestamps();
-			
+
 			$table->unique('event_sid');
 		});
 

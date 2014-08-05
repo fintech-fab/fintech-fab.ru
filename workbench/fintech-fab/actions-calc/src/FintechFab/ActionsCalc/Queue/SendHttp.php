@@ -2,6 +2,7 @@
 
 namespace FintechFab\ActionsCalc\Queue;
 
+use FintechFab\ActionsCalc\Components\Registrator;
 use FintechFab\ActionsCalc\Models\Signal;
 use Log;
 use Illuminate\Queue\Jobs\Job;
@@ -35,8 +36,11 @@ class SendHttp
 
 		// is request sent?
 		if ($this->makeCurlRequest($aData['sUrl'], $sSignalSid)) {
+
+			$aSignalAttributes = $oSignal->getAttributes();
+			Registrator::registerSignal($aSignalAttributes);
+
 			$job->delete();
-			// TODO: register resultRequest was sent.
 			// TODO: failed_jobs table.
 			exit();
 		}
