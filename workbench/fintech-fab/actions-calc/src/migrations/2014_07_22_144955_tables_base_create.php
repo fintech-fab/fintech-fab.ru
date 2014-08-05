@@ -29,7 +29,6 @@ class TablesBaseCreate extends Migration
 			$table->string('event_sid');
 			$table->string('name');
 			$table->integer('terminal_id');
-			$table->text('data');
 			$table->timestamps();
 
 			$table->unique('event_sid');
@@ -40,8 +39,6 @@ class TablesBaseCreate extends Migration
 			$table->string('name');
 			$table->string('signal_sid');
 			$table->integer('terminal_id');
-//			$table->tinyInteger('flag_url');
-//			$table->tinyInteger('flag_queue');
 			$table->timestamps();
 		});
 

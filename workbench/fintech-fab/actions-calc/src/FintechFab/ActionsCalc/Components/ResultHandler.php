@@ -56,4 +56,12 @@ class ResultHandler
 	{
 		return uniqid('que_');
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getResultHash()
+	{
+		return $this->_sResultHash;
+	}
 }

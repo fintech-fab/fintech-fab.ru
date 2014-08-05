@@ -4,6 +4,8 @@ use FintechFab\ActionsCalc\Models\Terminal;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Signal;
+use FintechFab\ActionsCalc\Models\RegisterEvent;
+use FintechFab\ActionsCalc\Models\RegisterSignal;
 
 class TestSetUp extends TestCase
 {
@@ -15,6 +17,16 @@ class TestSetUp extends TestCase
 	// 3. client signature
 	public function setUp()
 	{
+		parent::setUp();
+		// Fill in tables on every testg
+		// Clearing tables on every test
+		Terminal::truncate();
+		Rule::truncate();
+		Event::truncate();
+		Signal::truncate();
+		RegisterEvent::truncate();
+		RegisterSignal::truncate();
+
 		$sSignature = sha1("1|under_rain|key");
 		$this->aRequestData = [
 			'terminal_id' => 1,
@@ -26,15 +38,6 @@ class TestSetUp extends TestCase
 			'auth_sign'   => $sSignature
 		];
 
-		parent::setUp();
-
-		// Fill in tables on every testg
-		// Clearing tables on every test
-		Terminal::truncate();
-		Rule::truncate();
-		Event::truncate();
-		Signal::truncate();
-
 		// Terminal user
 		Terminal::create([
 			'id'          => 1,
@@ -42,7 +45,7 @@ class TestSetUp extends TestCase
 			'key'         => 'key',
 			'password'    => Hash::make('password'),
 			'flag_active' => true,
-			'url'   => 'http://test.url',
+			'url'   => 'http://ya.ru',
 			'queue' => 'test_queue'
 		]);
 

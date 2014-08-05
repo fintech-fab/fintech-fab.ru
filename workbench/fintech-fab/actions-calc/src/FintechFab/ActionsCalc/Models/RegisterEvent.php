@@ -21,7 +21,7 @@ class RegisterEvent extends Eloquent
 {
 	protected $connection = 'ff-actions-calc';
 	protected $table = 'register_events';
-	protected $fillable = ['id', 'name', 'event_sid', 'terminal_id'];
+	protected $fillable = ['id', 'name', 'event_id', 'event_sid', 'terminal_id', 'data'];
 
 
 	public function terminal()

@@ -20,6 +20,7 @@ class TablesRegisterEventsAndSignals extends Migration
 			$table->string('name');
 			$table->integer('terminal_id');
 			$table->text('data');
+			$table->string('result_hash');
 			$table->timestamps();
 		});
 
@@ -31,6 +32,7 @@ class TablesRegisterEventsAndSignals extends Migration
 			$table->integer('terminal_id');
 			$table->tinyInteger('flag_url');
 			$table->tinyInteger('flag_queue');
+			$table->string('result_hash');
 			$table->timestamps();
 		});
 	}

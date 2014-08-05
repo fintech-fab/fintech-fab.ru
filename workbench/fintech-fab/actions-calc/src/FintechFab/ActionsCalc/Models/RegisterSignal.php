@@ -11,5 +11,7 @@ use Eloquent;
  */
 class RegisterSignal extends Eloquent
 {
-
+	protected $connection = 'ff-actions-calc';
+	protected $table = 'register_signals';
+	protected $fillable = ['id', 'name', 'signal_id', 'signal_sid', 'terminal_id', 'flag_url', 'flag_queue'];
 } 

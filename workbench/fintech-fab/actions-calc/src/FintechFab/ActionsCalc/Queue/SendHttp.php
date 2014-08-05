@@ -38,7 +38,7 @@ class SendHttp
 		if ($this->makeCurlRequest($aData['sUrl'], $sSignalSid)) {
 
 			$aSignalAttributes = $oSignal->getAttributes();
-			Registrator::registerSignal($aSignalAttributes, true);
+			Registrator::registerSignal($aSignalAttributes, true, false, $aData['sResultHash']);
 
 			$job->delete();
 			// TODO: failed_jobs table.

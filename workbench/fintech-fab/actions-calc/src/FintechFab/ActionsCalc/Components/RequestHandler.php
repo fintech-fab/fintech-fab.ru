@@ -80,9 +80,12 @@ class RequestHandler
 			}
 
 			if ($sTerminalQueue != "") {
+				// registering of sending signal to queue
 				$oSignal = Signal::find($oRule->signal_id)->first();
 				$aSignalAttributes = $oSignal->getAttributes();
-				Registrator::registerSignal($aSignalAttributes, false, true);
+
+				$sResultHash = $oResultHandler->getResultHash();
+				Registrator::registerSignal($aSignalAttributes, false, true, $sResultHash);
 
 				$oResultHandler->resutlToQueue($sTerminalQueue, $oRule->signal->signal_sid);
 			}

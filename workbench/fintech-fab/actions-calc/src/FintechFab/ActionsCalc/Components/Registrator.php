@@ -45,17 +45,18 @@ class Registrator
 	/**
 	 * Register outgoing signal
 	 *
-	 * @param array $aSignalAttributes
-	 * @param bool  $setFlagUrl
-	 * @param bool  $setFlagQueu
+	 * @param array       $aSignalAttributes
+	 * @param bool        $setFlagUrl
+	 * @param bool        $setFlagQueu
+	 * @param null|string $sResultHash
 	 *
 	 * @return void
 	 */
-	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueu = false)
+	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueu = false, $sResultHash = null)
 	{
-		$oRegisterSignal = new RegisterSignal();
-
 		$aSignalAttributes['signal_id'] = $aSignalAttributes['id'];
+
+		unset($aSignalAttributes['id']);
 		unset($aSignalAttributes['created_at']);
 		unset($aSignalAttributes['updated_at']);
 
@@ -65,10 +66,16 @@ class Registrator
 		if ($setFlagQueu) {
 			$aSignalAttributes['flag_queue'] = true;
 		}
+		if (!is_null($sResultHash)) {
+			$aSignalAttributes['result_hash'] = $sResultHash;
+		}
 
+		$oRegisterSignal = new RegisterSignal();
 		$oRegisterSignal->setRawAttributes($aSignalAttributes);
+
 		if ($oRegisterSignal->save()) {
-			Log::info('Register signal', $aSignalAttributes);
+			$sWhichFlag = $setFlagUrl ? 'CURL' : 'Result to Queue to Queue XD';
+			Log::info("Register signal($sWhichFlag)", $aSignalAttributes);
 		}
 	}
 } 
