@@ -4,6 +4,7 @@ namespace FintechFab\ActionsCalc\Components;
 
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\RegisterEvent;
+use Log;
 
 /**
  * Class ResultRegistrator
@@ -14,6 +15,13 @@ use FintechFab\ActionsCalc\Models\RegisterEvent;
 class Registrator
 {
 
+	/**
+	 * Registering incoming event
+	 *
+	 * @param array $aRequestData
+	 *
+	 * @return void
+	 */
 	public static function registerEvent($aRequestData)
 	{
 		$oEvent = Event::whereEventSid($aRequestData['event_sid'])->first();
@@ -28,10 +36,19 @@ class Registrator
 
 		$oRegisterEvent = new RegisterEvent();
 		$oRegisterEvent->setRawAttributes($aEventAttributes);
-		$oRegisterEvent->save();
+		if ($oRegisterEvent->save()) {
+			Log::info('Register event', $aEventAttributes);
+		}
 	}
 
-	public static function registerSignal()
+	/**
+	 * Register outgoing signal
+	 *
+	 * @param $aSignalAttributes
+	 *
+	 * @return void
+	 */
+	public static function registerSignal($aSignalAttributes)
 	{
 
 	}
