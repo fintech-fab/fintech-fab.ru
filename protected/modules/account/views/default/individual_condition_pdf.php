@@ -124,8 +124,7 @@ $aData = array(
 	),
 	array(
 		'condition'     => "Канал выдачи суммы займа ",
-		'conditionText' => "Сумма займа перечисляется заемщику на счет мобильного телефона заемщика, указанный
-							в Заявлении (или на счет банковской карты Заемщика)",
+		'conditionText' => "Сумма займа перечисляется заемщику " . Dictionaries::$aTransferChannels[$aConditionInfo['transfer_channel']],
 	),
 	array(
 		'condition'     => "Порядок разрешения споров и определение подсудности",

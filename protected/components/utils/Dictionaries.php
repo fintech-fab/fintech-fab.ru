@@ -507,6 +507,19 @@ class Dictionaries
 		}
 	}
 
+	const C_CHANNEL_CARD = 'card';
+	const C_CHANNEL_MOB = 'mobile';
+
+	/**
+	 * Каналы перевода денег
+	 *
+	 * @var array
+	 */
+	public static $aTransferChannels = array(
+		self::C_CHANNEL_CARD => 'на счет банкцовской карты Заемщика',
+		self::C_CHANNEL_MOB  => 'на счет мобильного телефона заемщика, указанный в Заявлении',
+	);
+
 	/**
 	 * варианты секретного вопроса
 	 *
