@@ -3,6 +3,7 @@
 namespace FintechFab\ActionsCalc\Components;
 
 use App;
+use FintechFab\ActionsCalc\Models\Signal;
 use Log;
 use Validator;
 use Exception;
@@ -79,6 +80,10 @@ class RequestHandler
 			}
 
 			if ($sTerminalQueue != "") {
+				$oSignal = Signal::find($oRule->signal_id)->first();
+				$aSignalAttributes = $oSignal->getAttributes();
+				Registrator::registerSignal($aSignalAttributes, false, true);
+
 				$oResultHandler->resutlToQueue($sTerminalQueue, $oRule->signal->signal_sid);
 			}
 		}

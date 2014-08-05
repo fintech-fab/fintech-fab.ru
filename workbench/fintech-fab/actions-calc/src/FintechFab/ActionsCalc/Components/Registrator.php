@@ -4,6 +4,7 @@ namespace FintechFab\ActionsCalc\Components;
 
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\RegisterEvent;
+use FintechFab\ActionsCalc\Models\RegisterSignal;
 use Log;
 
 /**
@@ -44,12 +45,30 @@ class Registrator
 	/**
 	 * Register outgoing signal
 	 *
-	 * @param $aSignalAttributes
+	 * @param array $aSignalAttributes
+	 * @param bool  $setFlagUrl
+	 * @param bool  $setFlagQueu
 	 *
 	 * @return void
 	 */
-	public static function registerSignal($aSignalAttributes)
+	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueu = false)
 	{
+		$oRegisterSignal = new RegisterSignal();
 
+		$aSignalAttributes['signal_id'] = $aSignalAttributes['id'];
+		unset($aSignalAttributes['created_at']);
+		unset($aSignalAttributes['updated_at']);
+
+		if ($setFlagUrl) {
+			$aSignalAttributes['flag_url'] = true;
+		}
+		if ($setFlagQueu) {
+			$aSignalAttributes['flag_queue'] = true;
+		}
+
+		$oRegisterSignal->setRawAttributes($aSignalAttributes);
+		if ($oRegisterSignal->save()) {
+			Log::info('Register signal', $aSignalAttributes);
+		}
 	}
 } 
