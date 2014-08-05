@@ -25,6 +25,7 @@ $a = array(
 		'application.extensions.behaviors.*',
 		'application.extensions.image.*',
 		'application.extensions.sms.*',
+		'application.vendor.mpdf.*',
 	),
 
 	'modules'        => array(
@@ -44,7 +45,8 @@ $a = array(
 	),
 
 	'params'         => array(
-		'bShowAlert' => true,
+		'bShowAlert'                 => true,
+		'individual_conditions_path' => '/',
 	),
 
 	'theme'          => 'classic',

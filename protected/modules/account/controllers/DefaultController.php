@@ -51,6 +51,7 @@ class DefaultController extends Controller
 					'continueForm', 'loanComplete',
 					'goIdentify',
 					'takeLoan', 'takeLoanCheckSmsCode',
+					'getDocument', 'getDocumentList',
 				),
 				'users'   => array('@'),
 			),
@@ -749,7 +750,6 @@ class DefaultController extends Controller
 
 		$this->changeClientDataCheckSmsCode($oChangeEmailForm, AdminKreddyApiComponent::API_ACTION_CHANGE_EMAIL, 'change_email');
 	}
-
 
 	/**
 	 * Экшен получает эвент нажатия кнопки видеоидентификации
@@ -1524,6 +1524,63 @@ class DefaultController extends Controller
 
 		// при любом результате логина редиректим клиента на подписку
 		$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
+	}
+
+	/**
+	 * Получить документ по id
+	 *
+	 * @param $id
+	 * @param $download
+	 *
+	 * @throws CHttpException
+	 */
+	public function actionGetDocument($id, $download = 0)
+	{
+
+		$sPath = Yii::app()->params['individual_conditions_path'];
+
+		$sFileName = $sPath . Yii::app()->user->getId() . '-' . $id . '.pdf';
+		if (!file_exists(Yii::app()->getRuntimePath() . "$sFileName")) {
+
+			//Получаем инфомацию из админки по ИУ
+			$aConditionInfo = Yii::app()->adminKreddyApi->getIndividualConditionInfo($id);
+
+			//Если есть ошибка
+			if (Yii::app()->adminKreddyApi->getLastCode() != AdminKreddyApiComponent::ERROR_NONE) {
+				throw new CHttpException('404');
+			}
+
+			$mpdf = new mPDF('utf-8', 'A4', 10, '', 26, 16, 22, 16, 10, 10);
+			$mpdf->charset_in = 'utf8';
+
+			$sHtml = $this->renderPartial('individual_condition_pdf', array(
+				'mPDF'           => $mpdf,
+				'aConditionInfo' => $aConditionInfo,
+			), true);
+
+			$mpdf->WriteHTML($sHtml);
+			$mpdf->Output(Yii::app()->getRuntimePath() . "$sFileName", 'F');
+		}
+
+
+		header('Content-type: application/pdf');
+		if ($download) {
+			header('Content-Disposition: attachment; filename="Индивидуальные условия.pdf"');
+		} else {
+			header('Content-disposition: filename="Индивидуальные условия.pdf"');
+		}
+		echo file_get_contents(Yii::app()->getRuntimePath() . "$sFileName");
+
+	}
+
+	/**
+	 * Получить список документов
+	 */
+	public function actionGetDocumentList()
+	{
+		$aConditions = Yii::app()->adminKreddyApi->getIndividualConditionList();
+
+		$this->render('individual_conditions', array('aConditions' => $aConditions));
 	}
 
 	/**

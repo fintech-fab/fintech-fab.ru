@@ -69,6 +69,20 @@ class AccountMenuWidget extends CWidget
 			'url'   => array('/account/default/addCard')
 		);
 		$this->aMenu[] = '';
+		$this->aMenu[] = array(
+			'label' => 'Мои условия',
+			'items' => array(
+				array(
+					'label' => 'Мой договор',
+					'url'   => array('/account/default/getDocumentList')
+				),
+				array(
+					'label' => 'График платежей',
+					'url'   => array('/account/')
+				),
+			),
+		);
+		$this->aMenu[] = '';
 
 		$this->aMenu[] = array(
 			'label' => 'Изменение личных данных',

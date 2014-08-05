@@ -222,6 +222,8 @@ class AdminKreddyApiComponent
 	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 	const API_ACTION_CANCEL_REQUEST = 'siteClient/doCancelRequest';
 	const API_ACTION_CHANGE_EMAIL = 'siteClient/doChangeEmail';
+	const API_ACTION_GET_INDIVIDUAL_CONDITION_INFO = 'siteClient/getIndividualConditionInfo';
+	const API_ACTION_GET_INDIVIDUAL_CONDITION_LIST = 'siteClient/getIndividualConditionList';
 
 	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
@@ -253,7 +255,6 @@ class AdminKreddyApiComponent
 	/**
 	 * Переменные для тестирования API идентификации, требуются для выполнения тестов.
 	 * логин и пароль должны соответствовать заданным в IdentifyModuleTest
-	 *
 	 */
 	private $testLogin = '9631321654';
 	private $testPassword = 'Aa123456';
@@ -886,6 +887,20 @@ class AdminKreddyApiComponent
 
 			return false;
 		}
+	}
+
+	/**
+	 * Фамилия + инициалы
+	 *
+	 * @return string
+	 */
+	public function getShortFio()
+	{
+		$sFullname = $this->getClientFullName();
+
+		list($sSurname, $sFirstname, $sLastname) = explode(' ', $sFullname);
+
+		return $sSurname . ' ' . mb_substr($sFirstname, 0, 1, 'utf-8') . '. ' . mb_substr($sLastname, 0, 1, 'utf-8') . '.';
 	}
 
 	/**
@@ -3930,5 +3945,43 @@ class AdminKreddyApiComponent
 		$cClientStatus = $this->getClientStatus();
 
 		return in_array($cClientStatus, $this->aSubscriptionActiveStates);
+	}
+
+	/**
+	 * Получить информацию по индивидуальным условиям
+	 *
+	 * @param $hash
+	 *
+	 * @return array
+	 */
+	public function getIndividualConditionInfo($hash)
+	{
+		$aRequest = ['hash' => $hash];
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_INDIVIDUAL_CONDITION_INFO, $aRequest);
+
+		$aCondition = array();
+		if (!empty($aResult['condition'])) {
+			$aCondition = $aResult['condition'];
+			$aCondition['shortFio'] = Yii::app()->adminKreddyApi->getShortFio();
+		}
+
+		return $aCondition;
+	}
+
+	/**
+	 * Получить список индивидуальных условий
+	 *
+	 * @return array
+	 */
+	public function getIndividualConditionList()
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_INDIVIDUAL_CONDITION_LIST);
+
+		if (!empty($aResult['conditions'])) {
+			return $aResult['conditions'];
+		}
+
+		return array();
 	}
 }
