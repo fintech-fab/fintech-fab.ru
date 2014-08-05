@@ -193,7 +193,6 @@ class CalcHandler
 		return $dataValue <= $ruleValue;
 	}
 
-
 	/**
 	 * @param int    $iTerminalId
 	 * @param string $sEventSid
