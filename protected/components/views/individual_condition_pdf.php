@@ -1,19 +1,21 @@
 <?php
 /**
- * @var mPDF  $mPDF
- * @var array $aConditionInfo
+ * @var DocumentComponent $this
+ * @var array             $aParams
  */
+
+$aConditionInfo = $aParams['aConditionInfo'];
 
 list($sSubscriptionRub, $sSubscriptionKop) = explode('.', number_format($aConditionInfo['subscription_amount'], 2, '.', ''));
 
-$mPDF->setHTMLHeader('
+$this->getMPDF()->setHTMLHeader('
 	<div style="text-align: center;font-size: 12px;">
 			Индивидуальные условия договора потребительского займа № ' . $aConditionInfo['contract_name'] . '
-			от ' . date('d.m.Y', strtotime($aConditionInfo['dt_contract'])) . '
+			от ' . SiteParams::formatRusDate($aConditionInfo['dt_contract'], false) . '
 	</div>
 ');
 
-$mPDF->setHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
+$this->getMPDF()->setHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
 
 $aData = array(
 	1 => array(
@@ -124,7 +126,7 @@ $aData = array(
 	),
 	array(
 		'condition'     => "Канал выдачи суммы займа ",
-		'conditionText' => "Сумма займа перечисляется заемщику " . Dictionaries::$aTransferChannels[$aConditionInfo['transfer_channel']],
+		'conditionText' => "Сумма займа перечисляется заемщику " . Dictionaries::$aConditionsTransferChannels[$aConditionInfo['transfer_channel']],
 	),
 	array(
 		'condition'     => "Порядок разрешения споров и определение подсудности",
@@ -186,11 +188,11 @@ $aData = array(
 	<br> Настоящие Индивидуальные условия являются частью Договора потребительского займа и заключаются между
 	микрофинансовой организацией обществом с ограниченной ответственностью «Финансовые Решения», регистрационный номер
 	записи в государственном реестре микрофинансовых организаций 2110177000213 от 19 июля 2011 года, в лице генерального
-	директора Балашовой А.А. (далее – Займодавец или кредитор) и <?= $aConditionInfo['shortFio'] ?> (далее – заемщик)
+	директора Балашовой А.А. (далее – Займодавец или кредитор) и <?= $aConditionInfo['short_fio'] ?> (далее – заемщик)
 </div>
 <div style="float: right;font-size: 120%;width: 35%;text-align: justify;border:1px solid #000000;padding: 5px;height: 210px;">
 	ПСК <br>
-	<?= SiteParams::mb_ucfirst(Num2Words::doConvert(11739.48, Num2Words::C_INT)); ?>
+	<?= SiteParams::mb_ucfirst(Num2Words::doConvert($aConditionInfo['irr'], Num2Words::C_INT)); ?>
 	процентов годовых
 </div>
 <div style="clear: both;"></div>

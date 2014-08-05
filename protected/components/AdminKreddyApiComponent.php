@@ -890,20 +890,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Фамилия + инициалы
-	 *
-	 * @return string
-	 */
-	public function getShortFio()
-	{
-		$sFullname = $this->getClientFullName();
-
-		list($sSurname, $sFirstname, $sLastname) = explode(' ', $sFullname);
-
-		return $sSurname . ' ' . mb_substr($sFirstname, 0, 1, 'utf-8') . '. ' . mb_substr($sLastname, 0, 1, 'utf-8') . '.';
-	}
-
-	/**
 	 * Получение основной информации о клиенте в виде массива
 	 *
 	 * @param bool $bForce //сделать force-запрос к API без использования кэша
@@ -1421,7 +1407,7 @@ class AdminKreddyApiComponent
 
 		$aClientInfo = $this->getClientInfo();
 		$sActivityTo = $aClientInfo['subscription']['activity_to'];
-		$sActivityTo = $this->formatRusDate($sActivityTo, false);
+		$sActivityTo = SiteParams::formatRusDate($sActivityTo, false);
 
 		return $sActivityTo;
 	}
@@ -1434,7 +1420,7 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 		if ($aClientInfo['subscription']['activity_to']) {
 			$sActivityTo = $aClientInfo['subscription']['activity_to'];
-			$sActivityTo = $this->formatRusDate($sActivityTo, true);
+			$sActivityTo = SiteParams::formatRusDate($sActivityTo, true);
 
 			return $sActivityTo;
 		}
@@ -1476,7 +1462,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sMoratoriumTo = $aClientInfo['moratoriums']['loan'];
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
+		$sMoratoriumTo = SiteParams::formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
 	}
@@ -1496,7 +1482,7 @@ class AdminKreddyApiComponent
 
 		$iMaxDate = ($iDate1 > $iDate2) ? $iDate1 : $iDate2;
 
-		return $this->formatRusDate($iMaxDate, false);
+		return SiteParams::formatRusDate($iMaxDate, false);
 	}
 
 	/**
@@ -1573,7 +1559,7 @@ class AdminKreddyApiComponent
 			return false;
 		}
 
-		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
+		$sExpiredTo = SiteParams::formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
 	}
@@ -3048,34 +3034,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Форматируем дату в вид 01.01.2013 00:00
-	 *
-	 * @param      $sDate
-	 * @param bool $bWithTime выводить ли время
-	 *
-	 * @return bool|string
-	 */
-	public function formatRusDate($sDate, $bWithTime = true)
-	{
-		if (!is_numeric($sDate)) {
-			$sDate = strtotime($sDate);
-		}
-
-		if ($sDate) {
-			if ($bWithTime) {
-				$sDate = date('d.m.Y H:i', $sDate);
-
-				$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
-				$sDate .= CHtml::closeTag('i');
-			} else {
-				$sDate = date('d.m.Y', $sDate);
-			}
-		}
-
-		return $sDate;
-	}
-
-	/**
 	 * Сохраняем последнее полученное сообщение о СМС-статусе запроса
 	 *
 	 * @param $sMessage
@@ -3697,10 +3655,10 @@ class AdminKreddyApiComponent
 		if ($bFormat) {
 
 			$iFlexTimeTo = time() + ($iFlexTime * 60 * 60 * 24);
-			$this->formatRusDate($iFlexTimeTo, false);
+			SiteParams::formatRusDate($iFlexTimeTo, false);
 
 
-			return ($iFlexTime) ? $this->formatRusDate($iFlexTimeTo, false) : false;
+			return ($iFlexTime) ? SiteParams::formatRusDate($iFlexTimeTo, false) : false;
 		}
 
 		return $iFlexTime;
@@ -3960,13 +3918,11 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_INDIVIDUAL_CONDITION_INFO, $aRequest);
 
-		$aCondition = array();
 		if (!empty($aResult['condition'])) {
-			$aCondition = $aResult['condition'];
-			$aCondition['shortFio'] = Yii::app()->adminKreddyApi->getShortFio();
+			return $aResult['condition'];
 		}
 
-		return $aCondition;
+		return array();
 	}
 
 	/**

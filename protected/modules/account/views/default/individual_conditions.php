@@ -10,7 +10,8 @@
 	$aActive = $aConditions['active'];
 	?>
 	<div>
-		Индивидуальные условия <b>Подтвердить до: <?= date('d.m.Y', strtotime($aActive['dt_confirm_to'])); ?></b>
+		Индивидуальные условия <b>Подтвердить
+			до: <?= SiteParams::formatRusDate($aActive['dt_confirm_to'], false); ?></b>
 	</div>
 
 <?php } ?>

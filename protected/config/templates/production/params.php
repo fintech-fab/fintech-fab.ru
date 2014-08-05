@@ -13,4 +13,5 @@ return array(
 	'ivPath'              => '/var/www/keys/iv',
 	'landingApiSecretKey' => '%TORNADO_API_SECRET_KEY%',
 	'bTornadoTestMode' => '&TORNADO_API_TEST_MODE&',
+	'sDocumentPath' => '%DOCUMENTS_PATH%',
 );

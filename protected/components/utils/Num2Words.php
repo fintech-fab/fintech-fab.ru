@@ -114,16 +114,16 @@ class Num2Words
 	 * Преобразовать число в строку прописью
 	 *
 	 * @param $fNumber
-	 * @param $cIntUnit
+	 * @param $cUnit
 	 *
 	 * @throws Num2WordsException
 	 * @return string
 	 */
-	public static function doConvert($fNumber, $cIntUnit)
+	public static function doConvert($fNumber, $cUnit)
 	{
 
 		//Если единица измерения - денежная, то округляем до 2х знаков после запятой
-		if (self::isCurrency($cIntUnit)) {
+		if (self::isCurrency($cUnit)) {
 			$fNumber = number_format(round($fNumber, 2), 2, '.', '');
 		}
 
@@ -145,13 +145,13 @@ class Num2Words
 
 
 		//Получаем в число до запятой в виде строки
-		$sTextInt = self::getNumber2Words($sInt, $cIntUnit);
+		$sTextInt = self::getNumber2Words($sInt, $cUnit);
 
 		$sTextPrecision = '';
-		if ($sPrecision != 0 || in_array($cIntUnit, self::$aCurrency)) {
+		if ($sPrecision != 0 || in_array($cUnit, self::$aCurrency)) {
 
 			//Определяем единицу измерения части после запятой
-			$cPrecisionUnit = self::getPrecisionUnitByMain($cIntUnit, $sPrecision);
+			$cPrecisionUnit = self::getPrecisionUnitByMain($cUnit, $sPrecision);
 
 			//Получаем в число после запятой в виде строки
 			$sTextPrecision = self::getNumber2Words($sPrecision, $cPrecisionUnit);

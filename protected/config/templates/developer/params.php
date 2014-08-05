@@ -11,4 +11,5 @@ return array(
 	'contactEmail'     => 'operator@kreddy.ru',
 	'emailFrom'        => 'info@kreddy.ru',
 	'ivPath'           => '/tmp/',
+	'sDocumentPath' => '/tmp/',
 );

@@ -45,8 +45,8 @@ $a = array(
 	),
 
 	'params'         => array(
-		'bShowAlert'                 => true,
-		'individual_conditions_path' => '/',
+		'bShowAlert'     => true,
+		'sDocumentsPath' => '/var/www/',
 	),
 
 	'theme'          => 'classic',
@@ -54,6 +54,9 @@ $a = array(
 	'components'     => array(
 		'cache'            => array(
 			'class' => 'CMemCache',
+		),
+		'document'         => array(
+			'class' => 'application.components.DocumentComponent',
 		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',

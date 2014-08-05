@@ -1536,12 +1536,11 @@ class DefaultController extends Controller
 	 */
 	public function actionGetDocument($id, $download = 0)
 	{
+		$sFileName = $id . '.pdf';
 
-		$sPath = Yii::app()->params['individual_conditions_path'];
+		$sFilePath = Yii::app()->document->getFilePath($sFileName);
 
-		$sFileName = $sPath . Yii::app()->user->getId() . '-' . $id . '.pdf';
-		if (!file_exists(Yii::app()->getRuntimePath() . "$sFileName")) {
-
+		if (!file_exists($sFilePath)) {
 			//Получаем инфомацию из админки по ИУ
 			$aConditionInfo = Yii::app()->adminKreddyApi->getIndividualConditionInfo($id);
 
@@ -1550,16 +1549,11 @@ class DefaultController extends Controller
 				throw new CHttpException('404');
 			}
 
-			$mpdf = new mPDF('utf-8', 'A4', 10, '', 26, 16, 22, 16, 10, 10);
-			$mpdf->charset_in = 'utf8';
+			//Генерируем документ
+			Yii::app()->document->generatePDF('individual_condition_pdf', array('aConditionInfo' => $aConditionInfo));
 
-			$sHtml = $this->renderPartial('individual_condition_pdf', array(
-				'mPDF'           => $mpdf,
-				'aConditionInfo' => $aConditionInfo,
-			), true);
-
-			$mpdf->WriteHTML($sHtml);
-			$mpdf->Output(Yii::app()->getRuntimePath() . "$sFileName", 'F');
+			//Сохраняем документ в файл
+			Yii::app()->document->savePDFToFile($sFileName);
 		}
 
 
@@ -1569,7 +1563,7 @@ class DefaultController extends Controller
 		} else {
 			header('Content-disposition: filename="Индивидуальные условия.pdf"');
 		}
-		echo file_get_contents(Yii::app()->getRuntimePath() . "$sFileName");
+		echo file_get_contents($sFilePath);
 
 	}
 
