@@ -10,7 +10,7 @@ list($sSubscriptionRub, $sSubscriptionKop) = explode('.', number_format($aCondit
 
 $this->getMPDF()->setHTMLHeader('
 	<div style="text-align: center;font-size: 12px;">
-			Индивидуальные условия договора потребительского займа № ' . $aConditionInfo['contract_name'] . '
+			Индивидуальные условия договора потребительского займа № ' . $aConditionInfo['contract_name'] . '<br>
 			от ' . SiteParams::formatRusDate($aConditionInfo['dt_contract'], false) . '
 	</div>
 ');

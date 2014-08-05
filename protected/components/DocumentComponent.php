@@ -19,7 +19,7 @@ class DocumentComponent extends CComponent
 	 */
 	public function mPdfInit()
 	{
-		$this->oMPDF = new mPDF('utf-8', 'A4', 10, '', 26, 16, 22, 16, 10, 10);
+		$this->oMPDF = new mPDF('utf-8', 'A4', 10, '', 26, 16, 26, 16, 10, 10);
 
 		return $this->oMPDF;
 	}
