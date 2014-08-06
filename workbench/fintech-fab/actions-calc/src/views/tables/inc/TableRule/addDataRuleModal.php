@@ -1,6 +1,5 @@
 <?php
 
-use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Signal;
 

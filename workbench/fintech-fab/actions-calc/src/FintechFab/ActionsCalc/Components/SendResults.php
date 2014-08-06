@@ -22,7 +22,7 @@ class SendResults
 	public function sendQueue($queue, $signalSid)
 	{
 		Queue::connection('ff-actions-calc-result')->push($queue, array(
-			'url'       => $queue,
+			'class_queue' => $queue,
 			'signalSid' => $signalSid,
 		));
 

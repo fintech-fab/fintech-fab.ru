@@ -123,7 +123,7 @@ class Validators
 	/**
 	 * @param $input
 	 */
-	public static function ValidateInput($input)
+	public static function ValidateRequest($input)
 	{
 		$sidTermValidator = Validator::make($input, Validators::rulesForRequest());
 

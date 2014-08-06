@@ -113,6 +113,7 @@ return array(
 
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
+		'Way\Generators\GeneratorsServiceProvider',
 
 	),
 

@@ -22,10 +22,10 @@ class RequestController extends Controller
 	 */
 	public function getRequest()
 	{
-		$input = Input::only('term', 'event', 'data', 'sign');
+		$input = Input::all();
 		Log::info('Получен http запрос с параметрами:', $input);
 
-		Validators::ValidateInput($input);
+		Validators::ValidateRequest($input);
 
 		if (!$this->checkSign($input)) {
 			return json_encode(['error' => 'Auth error']);

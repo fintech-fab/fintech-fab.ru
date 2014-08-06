@@ -28,7 +28,8 @@
 		"phpunit/phpunit-mock-objects": "2.3.*@dev",
 		"phpunit/phpunit": "4.3.*@dev",
 		"zizaco/factory-muff": "dev-master",
-		"mockery/mockery": "0.9.*"
+		"mockery/mockery": "0.9.*",
+		"way/generators": "2.*"
 	},
 	"autoload": {
 		"classmap": [

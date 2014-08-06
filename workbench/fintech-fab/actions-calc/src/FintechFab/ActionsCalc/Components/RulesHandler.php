@@ -49,18 +49,18 @@ class RulesHandler
 		$strRule = trim($strRule);
 
 		$matches = [];
-		$isMatch = preg_match('/^(.*) ([\<\>\=\!]+) (.*)$/', $strRule, $matches);
+		$isMatch = preg_match('/^(.*) ([\<\>\=]+) (.*)$/', $strRule, $matches);
 		if (!$isMatch) {
 			return false;
 		}
 		list(, $key, $method, $value) = $matches;
 
 		$keyExists = array_key_exists($key, $data);
-		$keyRequired = strpos($method, '!') === 0;
+		/*$keyRequired = strpos($key, '!') === 0;*/
 
 		if (!$keyExists) {
-
-			if ($keyRequired) {
+			// закоментировано определение обязательности правила по !
+			/*if ($keyRequired) {
 				Log::info("Правило ($strRule) обязательное. Соответствующие данные не получены. Праило ложно.");
 
 				return false;
@@ -68,7 +68,10 @@ class RulesHandler
 				Log::info("Правило ($strRule) необязательное. Соответствующие данные не получены. Правило верно");
 
 				return true;
-			}
+			}*/
+			Log::info("Правило ($strRule). Соответствующие данные не получены. Праило ложно.");
+
+			return false;
 
 		}
 
