@@ -87,7 +87,7 @@ class RequestHandler
 				$sResultHash = $oResultHandler->getResultHash();
 				Registrator::registerSignal($aSignalAttributes, false, true, $sResultHash);
 
-				$oResultHandler->resutlToQueue($sTerminalQueue, $oRule->signal->signal_sid);
+				$oResultHandler->resultToQueue($sTerminalQueue, $oRule->signal->signal_sid);
 			}
 		}
 	}

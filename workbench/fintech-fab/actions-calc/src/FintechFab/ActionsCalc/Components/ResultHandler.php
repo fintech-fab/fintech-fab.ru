@@ -36,7 +36,11 @@ class ResultHandler
 
 	}
 
-	public function resutlToQueue($queue, $signalSid)
+	/**
+	 * @param $queue
+	 * @param $signalSid
+	 */
+	public function resultToQueue($queue, $signalSid)
 	{
 		Queue::connection('ff-actions-calc-result')->push($queue, array(
 			'sQueue'      => $queue,
@@ -44,6 +48,7 @@ class ResultHandler
 			'sResultHash' => $this->_sResultHash,
 		));
 
+		// TODO: queue -> queue XD
 		Log::info('Результат отправлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');
 	}
 

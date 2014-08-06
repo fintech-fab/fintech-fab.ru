@@ -7,5 +7,4 @@
 
 return [
 	'terminal_id' => 1,
-	'key'         => 'key',
 ];

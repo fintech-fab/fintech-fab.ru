@@ -9,14 +9,14 @@ class RequestControllerTest extends TestSetUp
 		parent::setUp();
 	}
 
-	public function testRequestDataIn()
-	{
-		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
-		$this->assertNotEmpty($this->aRequestData['auth_sign']);
-		$this->assertNotEmpty($this->aRequestData['event_sid']);
-		$this->assertResponseOk();
-	}
-
+//	public function testRequestDataIn()
+//	{
+//		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
+//		$this->assertNotEmpty($this->aRequestData['auth_sign']);
+//		$this->assertNotEmpty($this->aRequestData['event_sid']);
+//		$this->assertResponseOk();
+//	}
+//
 	public function testAuthSignature()
 	{
 		$this->assertTrue(AuthHandler::checkSign($this->aRequestData), 'Signature test failed');

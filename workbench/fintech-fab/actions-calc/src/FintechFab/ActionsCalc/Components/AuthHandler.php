@@ -3,6 +3,7 @@
 namespace FintechFab\ActionsCalc\Components;
 
 use FintechFab\ActionsCalc\Models\Terminal;
+use Config;
 
 /**
  * Class AuthHandler
@@ -30,5 +31,20 @@ class AuthHandler
 		$signature = sha1($terminal->id . '|' . $aRequestData['event_sid'] . '|' . $terminal->key);
 
 		return $signature == $aRequestData['auth_sign'];
+	}
+
+	/**
+	 * Authenticate client by hist config terminal_id and key
+	 *
+	 * @return bool
+	 */
+	public static function isClientRegistered()
+	{
+		$iClientId = Config::get('ff-actions-calc::app.terminal_id');
+		$iClientId = (int)$iClientId;
+
+		$terminal = Terminal::find($iClientId, ['id']);
+
+		return (!is_null($terminal));
 	}
 }

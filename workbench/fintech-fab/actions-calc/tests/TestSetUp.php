@@ -10,6 +10,7 @@ use FintechFab\ActionsCalc\Models\RegisterSignal;
 class TestSetUp extends TestCase
 {
 	protected $aRequestData;
+	protected $sSignature;
 
 	// Set here:
 	// 1. database seed and truncate
@@ -27,7 +28,7 @@ class TestSetUp extends TestCase
 		RegisterEvent::truncate();
 		RegisterSignal::truncate();
 
-		$sSignature = sha1("1|under_rain|key");
+		$this->sSignature = sha1("1|under_rain|key");
 		$this->aRequestData = [
 			'terminal_id' => 1,
 			'event_sid'   => 'under_rain',
@@ -35,7 +36,7 @@ class TestSetUp extends TestCase
 				'all_wet' => true,
 				'time'    => '15:05',
 			]),
-			'auth_sign'   => $sSignature
+			'auth_sign' => $this->sSignature
 		];
 
 		// Terminal user
