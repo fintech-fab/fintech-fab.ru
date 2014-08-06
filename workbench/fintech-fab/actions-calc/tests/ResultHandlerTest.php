@@ -43,7 +43,7 @@ class ResultHandlerTest extends TestSetUp
 		$this->assertContains(json_encode(['status' => 'success', 'fittedRulesCount' => 1]), $jsonResponse->getContent());
 	}
 
-	public function tearDown()
+	public function setDown()
 	{
 		m::close();
 	}
