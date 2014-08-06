@@ -48,6 +48,7 @@ class SendHttp
 		// job failed?
 		if ($job->attempts() > 50) {
 			$job->delete();
+			Log::info('Queue attempts exceeded.', $aData);
 			exit();
 		}
 
