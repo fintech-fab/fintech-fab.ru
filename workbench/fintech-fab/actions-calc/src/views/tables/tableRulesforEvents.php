@@ -8,9 +8,6 @@ use FintechFab\ActionsCalc\Models\Rule;
  */
 
 ?>
-<style type="text/css">
-	<?php require(__DIR__ . '/../layouts/inc/css/styleForTableRules.css') ?>
-</style>
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableRule.js') ?>
 </script>

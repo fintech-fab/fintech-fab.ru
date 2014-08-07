@@ -100,7 +100,10 @@ $(document).ready(function () {
 				function (data) {
 					if (data['errors']) {
 						$('button').attr('disabled', false);
-						alert(data['errors']['event_id']);
+						$act.after('<tr class="active inside"><td colspan="4" style="border-top: 1px solid black;"><div class="rulesForEvents"><b>' + data['errors']['event_id'] + '</b></div></td></tr>')
+							.next()
+							.find('.rulesForEvents')
+							.slideDown(500);
 						return;
 					}
 					$('button.tableGetRules').attr('disabled', false);
@@ -111,8 +114,16 @@ $(document).ready(function () {
 				});
 
 			e.data.x = this;
+		} else {
+			$(e.data.x)
+				.closest('tr')
+				.removeClass('active')
+				.next()
+				.find('.rulesForEvents')
+				.slideUp(500, function () {
+					$(this).closest('tr').remove();
+				});
+			e.data.x = false;
 		}
 	});
 });
-
-
