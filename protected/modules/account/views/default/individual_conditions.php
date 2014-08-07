@@ -13,6 +13,11 @@
 		<h5>
 			Индивидуальные условия № <?= $aActive['contract_number'] ?>
 		</h5>
+
+		<p>
+			<?= CHtml::link('Посмотреть', array('/account/getDocument/', 'id' => $aActive['hash'])); ?>
+			<?= CHtml::link('Скачать', array('/account/getDocument/', 'id' => $aActive['hash'], 'download' => '1')); ?>
+		</p>
 		<?php if (isset($aActive['dt_confirm_to'])) { ?>
 			<h5>
 				<b>Подтвердить до: <?= SiteParams::formatRusDate($aActive['dt_confirm_to'], false); ?></b>

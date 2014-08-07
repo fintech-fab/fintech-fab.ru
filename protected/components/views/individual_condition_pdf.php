@@ -25,7 +25,7 @@ $aData = array(
 	array(
 		'condition'     => "Срок действия договора, срок возврата займа",
 		'conditionText' => "Договор действует до полного исполнения Сторонами своих обязательств.<br>
-							Срок возврата займа – {$aConditionInfo['loan_timeleft']} дней со дня принятия Индивидуальных условий",
+							Срок возврата займа – {$aConditionInfo['loan_lifetime']} дней со дня принятия Индивидуальных условий",
 	),
 	array(
 		'condition'     => "Валюта, в которой предоставляется заем",
@@ -192,7 +192,7 @@ $aData = array(
 </div>
 <div style="float: right;font-size: 120%;width: 35%;text-align: justify;border:1px solid #000000;padding: 5px;height: 210px;">
 	ПСК <br>
-	<?= SiteParams::mb_ucfirst(Num2Words::doConvert($aConditionInfo['irr'], Num2Words::C_INT)); ?>
+	<?= SiteParams::mb_ucfirst(Num2Words::doConvert($aConditionInfo['xirr'], Num2Words::C_INT)); ?>
 	процентов годовых
 </div>
 <div style="clear: both;"></div>
