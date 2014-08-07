@@ -4,29 +4,15 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
+use FintechFab\Components\GitHubAPI;
+
 class FintechFabFromGitHub extends Command {
-
-	/**
-	 * Заголовок http-ответа
-	 * @var array
-	 */
-	private $header;
-
-	/**
-	 * Данные http-ответа из GitHub API
-	 * @var mixed
-	 */
-	private $response;
-
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
 	protected $name = 'fintech-fab:git-hub';
-
-
-
 
 	/**
 	 * The console command description.
@@ -36,9 +22,27 @@ class FintechFabFromGitHub extends Command {
 	protected $description = 'Command for receiving of news from GitHub API.';
 
 	/**
+	 * Заголовок http-ответа
+	 * @var array
+	 */
+	private $header = array();
+
+	/**
+	 * Данные ответа из GitHub API
+	 * @var mixed
+	 */
+	private $response;
+
+	/**
+	 * Зппросы к API GitHub и ответы
+	 * @var GitHubAPI
+	 */
+	private $gitHubAPI;
+
+
+
+	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -61,7 +65,7 @@ class FintechFabFromGitHub extends Command {
 
 		$this->info("It's OK. Begin...");
 
-		switch($this->argument('dataCategory')) {
+		switch($this->argument('Category')) {
 			case "comments":
 				break;
 			case "commits":
@@ -91,12 +95,13 @@ class FintechFabFromGitHub extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('dataCategory', InputArgument::OPTIONAL, 'Category of data for request to GitHub API.'),
+			array('Category', InputArgument::OPTIONAL, 'Category of data for request to GitHub API.'),
 		);
 	}
 
 	/**
 	 * Get the console command options.
+	 * (help занят, он показывает аргументы и опци, которые здесь есть)
 	 *
 	 * @return array
 	 */
@@ -116,71 +121,6 @@ class FintechFabFromGitHub extends Command {
 		//
 	}
 
-	/**
-	 * Получает данные из GitHub API
-	 * Сохраняет их в разобранной форме:
-	 * заголовок $this->header и данные $this->response
-	 *
-	 *
-	 * @param string $httpRequest
-	 *
-	 * Возврщает код HTTP
-	 * @return integer
-	 */
-	protected function getFromGitHubApi($httpRequest)
-	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $httpRequest);
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_USERAGENT, "fintech-fab");
-
-		$strArray =  explode("\r\n", curl_exec($ch));
-		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-
-		$this->response = json_decode(array_pop($strArray));
-
-		$this->header = array();
-		for($i = 1; $i < count($strArray); $i++)
-		{
-			$p = strpos($strArray[$i], ":");
-			if($p > 0)
-			{
-				$this->header[substr($strArray[$i], 0, $p)] = substr($strArray[$i], $p + 1);
-			}
-		}
-		if(isset($this->header["Link"]))
-		{
-			$this->header["Link"] = self::decodePageLinks($this->header["Link"]);
-		}
-
-			return $http_code;
-	}
-
-	/**
-	 * GitHub выдает данные постранично. В заголовке ответа (header) дает ссылки на другие страницы.
-	 *
-	 * Из полученной строки функция выделяет адреса страниц и указатели, со значениями: first, next, prev, last
-	 * Например:  <https://api.github.com/repositories/16651992/issues/events?page=1>; rel="first"
-	 *
-	 * @param string $inLinks
-	 *
-	 * @return array
-	 */
-	protected static function decodePageLinks($inLinks)
-	{
-		$rel = ""; //Приходит из GitHub'а
-		$links = explode(",", $inLinks);
-		$pageLinks = array();
-		foreach($links as $strLink)
-		{
-			$link = explode(";", $strLink);
-			parse_str($link[1]);
-			$pageLinks[trim($rel, ' "')] = trim($link[0], " <>");
-		}
-		return $pageLinks;
-	}
 
 	/**
 	 * @param array $inData

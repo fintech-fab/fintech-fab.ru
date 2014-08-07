@@ -12,4 +12,5 @@
 */
 
 Artisan::add(new testGitHubApi());
+Artisan::add(new test2GitHubApi());
 Artisan::add(new FintechFabFromGitHub());

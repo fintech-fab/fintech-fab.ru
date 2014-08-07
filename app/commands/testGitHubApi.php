@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use FintechFab\Models\IGitHubModel;
 use FintechFab\Models\GitHubMembers;
+use FintechFab\Models\GitHubComments;
 use FintechFab\Models\GitHubIssues;
 use FintechFab\Models\GitHubRefcommits;
 
@@ -173,6 +174,9 @@ class testGitHubApi extends Command
 				}
 
 				break;
+			case "test":
+				$res = explode("\r\n", substr("asdfdf\r\nserwer", 0, 0));
+				break;
 			default:
 				//тесты (сюда не смотреть)
 				//$res = $this->argument();
@@ -248,8 +252,32 @@ class testGitHubApi extends Command
 		//curl_setopt($ch, CURLOPT_USERPWD, ":");
 		//curl_setopt($ch, CURLOPT_HTTPHEADER, array('If-None-Match: "e1fe2d0c86ed010a4fe5608a264b50b5"'));
 
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
 
-		$response = curl_exec($ch);
+
+		try{
+			$response = curl_exec($ch);
+		}
+		catch(exception $e) {
+			$this->info(curl_errno($ch));
+			$this->info(curl_error($ch));
+			$this->info($e->getMessage());
+			$fullResponse = array();
+			$fullResponse['header'] = '';
+			$fullResponse['response'] = '';
+			return 0;
+		}
+
+		if(curl_errno($ch) != 0){
+			$this->info('Error number: ' . curl_errno($ch));
+			$this->info(curl_error($ch));
+			$this->info('');
+			$fullResponse = array();
+			$fullResponse['header'] = '';
+			$fullResponse['response'] = '';
+			return 0;
+
+		}
 
 		$this->info(curl_getinfo($ch, CURLINFO_EFFECTIVE_URL));
 
