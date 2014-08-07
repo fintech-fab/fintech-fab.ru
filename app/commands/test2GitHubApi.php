@@ -8,6 +8,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 use FintechFab\Models\GitHubComments;
+use FintechFab\Models\GitHubMembers;
+use FintechFab\Models\GitHubRefcommits;
+use FintechFab\Models\GitHubIssues;
 use FintechFab\Models\IGitHubModel;
 use FintechFab\Components\GitHubAPI;
 
@@ -226,7 +229,7 @@ $res = array();
 
 	/**
 	 * @param array $inData
-	 * @param $classDB
+	 * @param Eloquent $classDB
 	 *
 	 * Сохранение или обновление данных в БД,
 	 * вывод сообщений на экран по каждой отдельной записи данных (при добавлении в БД, при обновлении).
@@ -242,7 +245,9 @@ $res = array();
 	private function saveInDB($inData, $classDB)
 	{
 		$this->info("Addition to DataBase...");
-		$item = new $classDB;
+
+		/** @var Eloquent|IGitHubModel $item */
+		$item = new $classDB();
 		$keyName = $item->getKeyName();
 		$myName = $item->getMyName();
 		foreach($inData as $inItem)
@@ -258,7 +263,7 @@ $res = array();
 				}
 			} else
 			{
-				$item = new $classDB;
+				$item = new $classDB();
 				if($item->dataGitHub($inItem))
 				{
 					$this->info("Addition $myName: " . $inItem->$keyName);

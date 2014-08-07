@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
+use FintechFab\Models\IGitHubModel;
 use FintechFab\Components\GitHubAPI;
 
 class FintechFabFromGitHub extends Command {
@@ -132,7 +133,7 @@ class FintechFabFromGitHub extends Command {
 
 	/**
 	 * @param array $inData
-	 * @param $classDB
+	 * @param Eloquent $classDB
 	 *
 	 * Сохранение или обновление данных в БД,
 	 * вывод сообщений на экран по каждой отдельной записи данных (при добавлении в БД, при обновлении).
@@ -148,6 +149,8 @@ class FintechFabFromGitHub extends Command {
 	private function saveInDB($inData, $classDB)
 	{
 		$this->info("Addition to DataBase...");
+
+		/** @var Eloquent|IGitHubModel $item */
 		$item = new $classDB;
 		$keyName = $item->getKeyName();
 		$myName = $item->getMyName();
