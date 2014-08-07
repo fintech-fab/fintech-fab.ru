@@ -22,18 +22,6 @@ class FintechFabFromGitHub extends Command {
 	protected $description = 'Command for receiving of news from GitHub API.';
 
 	/**
-	 * Заголовок http-ответа
-	 * @var array
-	 */
-	private $header = array();
-
-	/**
-	 * Данные ответа из GitHub API
-	 * @var mixed
-	 */
-	private $response;
-
-	/**
 	 * Зппросы к API GitHub и ответы
 	 * @var GitHubAPI
 	 */
@@ -121,6 +109,26 @@ class FintechFabFromGitHub extends Command {
 		//
 	}
 
+
+	/**
+	 * Загрузка всех данных и вывод сообщений
+	 * Объект $this->gitHubAPI должен быть заранее подготовлен к запросам.
+	 *
+	 * @param $dataModel
+	 */
+	private function processTheData($dataModel)
+	{
+		while($this->gitHubAPI->doNextRequest())
+		{
+			$this->info("\nLimit remaining: " . $this->gitHubAPI->getLimitRemaining());
+			$this->info("Результат запроса: " . $this->gitHubAPI->messageOfResponse);
+			$this->saveInDB($this->gitHubAPI->response, $dataModel);
+		}
+		if(! $this->gitHubAPI->isDoneRequest())
+		{
+			$this->info("Результат запроса: " . $this->gitHubAPI->messageOfResponse);
+		}
+	}
 
 	/**
 	 * @param array $inData

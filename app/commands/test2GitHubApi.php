@@ -18,6 +18,18 @@ class test2GitHubApi extends Command {
 	 */
 	private $gitHubAPI;
 	/**
+	 * Заголовок ответа
+	 * @var array
+	 */
+	private $header = array();
+
+	/**
+	 * Данные ответа из GitHub API
+	 * @var mixed
+	 */
+	private $response;
+
+	/**
 	 * The console command name.
 	 *
 	 * @var string
@@ -122,12 +134,12 @@ $res = array();
 	}
 
 	/**
-	 * @param IGitHubModel  $dataModel
+	 * @param $dataModel
 	 * @param string        $func
 	 *
 	 * @return array
 	 */
-	private function processTheData(IGitHubModel $dataModel, $func = '')
+	private function processTheData($dataModel, $func = '')
 	{
 		$res = array();
 		while($this->gitHubAPI->doNextRequest())
@@ -214,7 +226,7 @@ $res = array();
 
 	/**
 	 * @param array $inData
-	 * @param IGitHubModel $classDB
+	 * @param $classDB
 	 *
 	 * Сохранение или обновление данных в БД,
 	 * вывод сообщений на экран по каждой отдельной записи данных (при добавлении в БД, при обновлении).
@@ -227,7 +239,7 @@ $res = array();
 	 * $item->getKeyName() — имя ключевого поля (может быть 'id' или иным). Задается в модели данных.
 	 * $item->getMyName()  — нужно для вывода на экран (показать, какие данные сохраняются).
 	 */
-	private function saveInDB($inData, IGitHubModel $classDB)
+	private function saveInDB($inData, $classDB)
 	{
 		$this->info("Addition to DataBase...");
 		$item = new $classDB;

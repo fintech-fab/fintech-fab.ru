@@ -40,7 +40,9 @@ class GitHubAPI
 
 	/**
 	 * Репозиторий, для которого создаются запросы к API GitHub
-	 * (о самом репозитории, или же в строку адреса добавляется уточнение о конкретном содержимом репозитория)
+	 * (запрос данных о самом репозитории, или же в строку адреса добавляется уточнение
+	 *  о конкретном содержимом репозитория: задачи, коммиты и пр.)
+	 *
 	 * @var string
 	 */
 	private $workRepo = '';
@@ -73,9 +75,7 @@ class GitHubAPI
 			$this->currentUrl = '';
 		}else
 		{
-			$repoData = ($repoData == '') ?
-				$repoData :
-				('/' . $repoData);
+			$repoData = ($repoData == '') ? '' : ('/' . $repoData);
 			$this->startUrl = $this->workRepo .
 				$repoData .
 				($params = '' ? '' : ('?' . $params));
@@ -86,13 +86,13 @@ class GitHubAPI
 
 
 	/**
-	 * Заголовок http-ответа
+	 * Заголовок ответа
 	 * @var array
 	 */
-	var $header;
+	var $header = array();
 
 	/**
-	 * Данные http-ответа из GitHub API
+	 * Данные ответа из GitHub API
 	 * @var mixed
 	 */
 	var $response;
@@ -225,8 +225,8 @@ class GitHubAPI
 
 		$pos = strpos($response, "\r\n\r\n"); //альтернативный вариант отделения заголовка
 		$strArray = ($pos === false) ? array() : explode("\r\n", substr($response, 0, $pos));//альтернативный вариант отделения заголовка
-
-		$this->response = json_decode(trim(substr($response, $pos))); //альтернативный вариант отделения заголовка
+		$response = trim(substr($response, $pos)); //альтернативный вариант отделения заголовка
+		$this->response = json_decode($response); //альтернативный вариант отделения заголовка
 
 		for($i = 1; $i < count($strArray); $i++)
 		{
@@ -302,7 +302,7 @@ class GitHubAPI
 		if(isset($this->header['X-RateLimit-Remaining']))
 		{
 			return (
-				"RateLimit: " . $this->header['X-RateLimit-Limit'] . "\r\n" .
+				"Rate limit: " . $this->header['X-RateLimit-Limit'] . "\r\n" .
 				"Limit remaining: " . $this->header['X-RateLimit-Remaining'] . "\r\n" .
 				'Limit reset: '. date("c", $this->header['X-RateLimit-Reset'])
 			);
