@@ -16,7 +16,7 @@ use Eloquent;
  * @property integer  $contributions
  *
   */
-class GitHubMembers extends Eloquent
+class GitHubMembers extends Eloquent implements IGitHubModel
 {
 
 	protected $table = 'github_members';
