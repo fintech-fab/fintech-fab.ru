@@ -16,21 +16,8 @@ use FintechFab\Components\GitHubAPI;
 
 class test2GitHubApi extends Command {
 
-	/**
-	 * @var GitHubAPI
-	 */
+	/** @var GitHubAPI */
 	private $gitHubAPI;
-	/**
-	 * Заголовок ответа
-	 * @var array
-	 */
-	private $header = array();
-
-	/**
-	 * Данные ответа из GitHub API
-	 * @var mixed
-	 */
-	private $response;
 
 	/**
 	 * The console command name.
@@ -147,9 +134,9 @@ $res = array();
 		$res = array();
 		while($this->gitHubAPI->doNextRequest())
 		{
-			//$res[] = $this->editData($this->gitHubAPI->response, $func);
 			$this->info("Limit remaining: " . $this->gitHubAPI->getLimitRemaining());
 			$this->info("Результат запроса: " . $this->gitHubAPI->messageOfResponse);
+			//$res[] = $this->editData($this->gitHubAPI->response, $func);
 			$this->saveInDB($this->gitHubAPI->response, $dataModel);
 		}
 		if(! $this->gitHubAPI->isDoneRequest())
@@ -162,70 +149,6 @@ $res = array();
 
 
 
-	/**
-	 * Получает данные из GitHub API
-	 * Сохраняет их в разобранной форме:
-	 * заголовок $this->header и данные $this->response
-	 *
-	 * @param string $httpRequest
-	 *
-	 * Возврщает код HTTP
-	 * @return integer
-	 */
-	protected function getFromGitHubApi($httpRequest)
-	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $httpRequest);
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_USERAGENT, "fintech-fab");
-
-		$strArray =  explode("\r\n", curl_exec($ch));
-		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
-
-		$this->response = json_decode(array_pop($strArray));
-
-		$this->header = array();
-		for($i = 1; $i < count($strArray); $i++)
-		{
-			$p = strpos($strArray[$i], ":");
-			if($p > 0)
-			{
-				$this->header[substr($strArray[$i], 0, $p)] = substr($strArray[$i], $p + 1);
-			}
-		}
-		if(isset($this->header["Link"]))
-		{
-			$this->header["Link"] = self::decodePageLinks($this->header["Link"]);
-		}
-
-			return $http_code;
-	}
-
-	/**
-	 * GitHub выдает данные постранично. В заголовке ответа (header) дает ссылки на другие страницы.
-	 *
-	 * Из полученной строки функция выделяет адреса страниц и указатели, со значениями: first, next, prev, last
-	 * Например:  <https://api.github.com/repositories/16651992/issues/events?page=1>; rel="first"
-	 *
-	 * @param string $inLinks
-	 *
-	 * @return array
-	 */
-	protected static function decodePageLinks($inLinks)
-	{
-		$rel = ""; //Приходит из GitHub'а
-		$links = explode(",", $inLinks);
-		$pageLinks = array();
-		foreach($links as $strLink)
-		{
-			$link = explode(";", $strLink);
-			parse_str($link[1]);
-			$pageLinks[trim($rel, ' "')] = trim($link[0], " <>");
-		}
-		return $pageLinks;
-	}
 
 	/**
 	 * @param array $inData
@@ -244,7 +167,7 @@ $res = array();
 	 */
 	private function saveInDB($inData, $classDB)
 	{
-		$this->info("Addition to DataBase...");
+		$this->info("\nAddition to DataBase...");
 
 		/** @var Eloquent|IGitHubModel $item */
 		$item = new $classDB();

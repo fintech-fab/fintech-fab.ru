@@ -148,7 +148,7 @@ class FintechFabFromGitHub extends Command {
 	 */
 	private function saveInDB($inData, $classDB)
 	{
-		$this->info("Addition to DataBase...");
+		$this->info("\nAddition to DataBase...");
 
 		/** @var Eloquent|IGitHubModel $item */
 		$item = new $classDB;
