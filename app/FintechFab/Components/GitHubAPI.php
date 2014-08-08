@@ -78,7 +78,7 @@ class GitHubAPI
 			$repoData = ($repoData == '') ? '' : ('/' . $repoData);
 			$this->startUrl = $this->workRepo .
 				$repoData .
-				($params = '' ? '' : ('?' . $params));
+				($params = "" ? "" : ("?" . $params));
 			$this->currentUrl = $this->startUrl;
 			$this->usedUrl = '';
 		}
@@ -124,14 +124,14 @@ class GitHubAPI
 	public function doNextRequest()
 	{
 		$this->messageOfResponse = '';
-		$this->usedUrl = '';
 		if($this->currentUrl == '')
 		{
 			return false;
 		}
 		else
 		{
-			switch($this->doGitHubRequest($this->currentUrl))
+			$status = $this->doGitHubRequest($this->currentUrl);
+			switch($status)
 			{
 				case 0:
 					$this->messageOfResponse = "Error number: {$this->errno} \r\n{$this->error} \r\n";
@@ -147,21 +147,20 @@ class GitHubAPI
 					{
 						if($this->header['X-RateLimit-Remaining'] == 0)
 						{
-							$this->messageOfResponse = "Лимит запросов исчерпан. \nВозобновить можно после: "
-								 . date("c", $this->header['X-RateLimit-Reset']);
+							$this->messageOfResponse .= "Лимит запросов исчерпан. \nВозобновить можно после: "
+								 . date("c", $this->header['X-RateLimit-Reset']) . "\n";
 						}
 					}
-					if(isset($this->response->message))
-					{
-						$this->messageOfResponse .= "\r\n" . $this->response->message;
-					}
-
-					break;
-				default:
-					if(isset($this->response->message))
-					{
-						$this->messageOfResponse = $this->response->message;
-					}
+			}
+			if(!($status == 0 || $status == 200))
+			{
+				$this->messageOfResponse .= isset($this->header['Status']) ?
+					"Status: {$this->header['Status']} \n" :
+					"Status: $status \n";
+				if(isset($this->response->message))
+				{
+					$this->messageOfResponse .= $this->response->message;
+				}
 			}
 
 			$this->usedUrl = $this->currentUrl;
@@ -312,6 +311,14 @@ class GitHubAPI
 			return "";
 		}
 
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastUrl()
+	{
+		return $this->usedUrl;
 	}
 
 

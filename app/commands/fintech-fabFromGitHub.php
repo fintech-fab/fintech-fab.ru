@@ -5,6 +5,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 use FintechFab\Models\IGitHubModel;
+use FintechFab\Models\GitHubComments;
 use FintechFab\Components\GitHubAPI;
 
 class FintechFabFromGitHub extends Command {
@@ -51,11 +52,18 @@ class FintechFabFromGitHub extends Command {
 			$this->showHelp($helpOption);
 			return;
 		}
+		$this->gitHubAPI = new GitHubAPI();
+		$this->gitHubAPI->setRepo('fintech-fab', 'fintech-fab.ru');
 
 		$this->info("It's OK. Begin...");
 
 		switch($this->argument('Category')) {
 			case "comments":
+				$maxDate = GitHubComments::max('updated');
+				$param = empty($maxDate) ? "" : "since='" . str_replace(" ", "T", $maxDate) . "Z'";
+
+				$this->gitHubAPI->setNewRepoQuery('issues/comments', $param);
+				$this->processTheData(GitHubComments::class);
 				break;
 			case "commits":
 				break;
@@ -115,7 +123,7 @@ class FintechFabFromGitHub extends Command {
 	 * Загрузка всех данных и вывод сообщений
 	 * Объект $this->gitHubAPI должен быть заранее подготовлен к запросам.
 	 *
-	 * @param $dataModel
+	 * @param Eloquent $dataModel
 	 */
 	private function processTheData($dataModel)
 	{
@@ -148,7 +156,7 @@ class FintechFabFromGitHub extends Command {
 	 */
 	private function saveInDB($inData, $classDB)
 	{
-		$this->info("Addition to DataBase...");
+		$this->info(sprintf("\nAddition to DataBase: %u records...", count($inData)));
 
 		/** @var Eloquent|IGitHubModel $item */
 		$item = new $classDB;
