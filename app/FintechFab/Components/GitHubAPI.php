@@ -78,7 +78,7 @@ class GitHubAPI
 			$repoData = ($repoData == '') ? '' : ('/' . $repoData);
 			$this->startUrl = $this->workRepo .
 				$repoData .
-				($params = '' ? '' : ('?' . $params));
+				($params = "" ? "" : ("?" . $params));
 			$this->currentUrl = $this->startUrl;
 			$this->usedUrl = '';
 		}
@@ -311,6 +311,14 @@ class GitHubAPI
 			return "";
 		}
 
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastUrl()
+	{
+		return $this->usedUrl;
 	}
 
 

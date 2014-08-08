@@ -26,13 +26,11 @@ class GitHubIssues extends Eloquent implements IGitHubModel
 	protected $table = 'github_issues';
 
 	public function user()	{
-		//	return $this->belongsTo('FintechFab\Models\GitHubMembers', "login", "user_login");
 		return GitHubMembers::find($this->user_login);
 
 	}
 
 	public function comments()	{
-		//	return $this->belongsTo('FintechFab\Models\GitHubMembers', "login", "user_login");
 		return GitHubComments::where("issue_number", $this->number)->orderBy("created")->get();
 
 	}
@@ -87,7 +85,7 @@ class GitHubIssues extends Eloquent implements IGitHubModel
 			$this->state = $inData->state;
 			$changed = true;
 		}
-		if(intval($this->updated) != intval($inData->updated_at))
+		if((str_replace(" ", "T", $this->updated) . "Z") != $inData->updated_at) //<--------
 		{
 			$this->updated = $inData->updated_at;
 			$changed = true;

@@ -8,9 +8,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 use FintechFab\Models\GitHubComments;
-use FintechFab\Models\GitHubMembers;
-use FintechFab\Models\GitHubRefcommits;
-use FintechFab\Models\GitHubIssues;
+//use FintechFab\Models\GitHubMembers;
+//use FintechFab\Models\GitHubRefcommits;
+//use FintechFab\Models\GitHubIssues;
 use FintechFab\Models\IGitHubModel;
 use FintechFab\Components\GitHubAPI;
 
@@ -58,8 +58,10 @@ $res = array();
 
 		switch($this->argument('dataCategory')) {
 			case "comments":
-				$this->gitHubAPI->setNewRepoQuery('issues/comments');
-				//$res = $this->processTheData('FintechFab\Models\GitHubComments', 'issuesCommentsData');
+				$maxDate = GitHubComments::max('updated');
+				$param = empty($maxDate) ? "" : "since='" . str_replace(" ", "T", $maxDate) . "Z'";
+				$this->gitHubAPI->setNewRepoQuery('issues/comments', $param);
+				//$this->gitHubAPI->setNewRepoQuery('issues/comments',  "since='2014-08-01T05:51:34Z'");
 				$res = $this->processTheData(GitHubComments::class, 'issuesCommentsData');
 				break;
 			case "commits":
@@ -80,11 +82,31 @@ $res = array();
 			case "users":
 				break;
 			default:
+				$maxDate = strtotime(GitHubComments::max('updated'));
+				$strMaxDate = GitHubComments::max('updated');
+				$res[] = $strMaxDate;
+				$res[] = date('U', strtotime($strMaxDate));
+				$res[] = GitHubComments::find(50851238)->created;
+				$res[] = GitHubComments::find(50851238)->updated;
+				$res[] = strtotime(GitHubComments::find(50851238)->updated);
+				$res[] = strtotime(substr(date('c', $maxDate - 1), 0, 19) . "Z");
+				$res[] =  "since='" . substr(date('c', $maxDate - 1), 0, 19) . "Z'";
+				$res[] = str_replace(" ", "T", $strMaxDate) . "Z";
+
+			//$res[] = date_parse(GitHubComments::find(50851238)->updated);
+
 
 		}
 
-		$this->info(print_r($res, true));
-		$this->info($this->gitHubAPI->getLimit());
+		ob_start();
+		var_dump($res);
+		$d = ob_get_clean();
+		$this->info($d);
+
+		$this->info($this->gitHubAPI->getLastUrl());
+
+		//$this->info(print_r($res, true));
+		//$this->info($this->gitHubAPI->getLimit());
 
 
 
@@ -121,6 +143,10 @@ $res = array();
 	private function showHelp($option)
 	{
 		//
+	}
+
+	private function prepareComments()
+	{
 	}
 
 	/**
@@ -167,7 +193,7 @@ $res = array();
 	 */
 	private function saveInDB($inData, $classDB)
 	{
-		$this->info("\nAddition to DataBase...");
+		$this->info(sprintf("\nAddition to DataBase: %u records...", count($inData)));
 
 		/** @var Eloquent|IGitHubModel $item */
 		$item = new $classDB();

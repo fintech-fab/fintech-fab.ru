@@ -70,7 +70,7 @@ class testGitHubApi extends Command
 			case "comments":
 				if(! empty($opt["save"])) {
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/comments");
-					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubComments');
+					$this->saveInDB($res['response'], GitHubComments::class);
 					$res = '';
 				}
 				else {
@@ -87,13 +87,13 @@ class testGitHubApi extends Command
 				break;
 			case "issues":
 				/**?state=open|closed|all (Default: open)
-				 * ?since='YYY-MM-DDTHH:MM:SSZ'
+				 * ?since='YYYY-MM-DDTHH:MM:SSZ'
 				 * ?sort=created|updated|comments (Default: created)
 				 * ?direction=asc|desc
 				 */
 				if(! empty($opt["save"])) {
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues?state=all&direction=asc");
-					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubIssues');
+					$this->saveInDB($res['response'], GitHubIssues::class);
 					$res = '';
 				}
 				else {
@@ -109,7 +109,7 @@ class testGitHubApi extends Command
 				} else
 				{
 					$res = $this->getFromGitHubApi($this->apiRepos . "issues/events");
-					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubRefcommits');
+					$this->saveInDB($res['response'], GitHubRefcommits::class);
 					$refCommits = GitHubRefcommits::where('message', '')->get();
 					foreach($refCommits as $ref)
 					{
@@ -165,17 +165,17 @@ class testGitHubApi extends Command
 				else {
 					$this->info("contributors");
 					$res = $this->getFromGitHubApi($this->apiRepos . "contributors");
-					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
+					$this->saveInDB($res['response'], GitHubMembers::class);
 
 					$this->info("assignees");
 					$res = $this->getFromGitHubApi($this->apiRepos . "assignees");
-					$this->saveInDB($res['response'], 'FintechFab\Models\GitHubMembers');
+					$this->saveInDB($res['response'], GitHubMembers::class);
 					$res = '';
 				}
 
 				break;
 			case "test":
-				$res = explode("\r\n", substr("asdfdf\r\nserwer", 0, 0));
+				$res = $this->getFromGitHubApi("https://api.github.com/repos/fintech-fab/fintech-fab.ru/issues/comments/50821114");
 				break;
 			default:
 				//тесты (сюда не смотреть)
@@ -526,7 +526,7 @@ class testGitHubApi extends Command
 
 	/**
 	 * @param $inData
-	 * @param string $classDB
+	 * @param Eloquent $classDB
 	 *
 	 *
 	 * Сохранение или обновление данных в БД,
@@ -543,6 +543,7 @@ class testGitHubApi extends Command
 	private function saveInDB($inData,  $classDB)
 	{
 		$this->info("Addition to DataBase...");
+		/** @var Eloquent|IGitHubModel $item */
 		$item = new $classDB;
 		$keyName = $item->getKeyName();
 		$myName = $item->getMyName();

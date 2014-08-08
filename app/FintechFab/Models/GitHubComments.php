@@ -27,7 +27,6 @@ class GitHubComments extends Eloquent implements IGitHubModel
 
 	public function issue()
 	{
-		//return $this->belongsTo('FintechFab\Models\GitHubIssues', "number", "issue_number");
 		return GitHubIssues::where("number", $this->issue_number)->first();
 	}
 
@@ -59,7 +58,7 @@ class GitHubComments extends Eloquent implements IGitHubModel
 	}
 	public function updateFromGitHub($inData)
 	{
-		if(intval($this->updated) == intval($inData->updated_at))
+		if((str_replace(" ", "T", $this->updated) . "Z") == $inData->updated_at) //<-------
 		{
 			return false;
 		}
