@@ -103,7 +103,7 @@ class RequestHandler
 		// check clien signature
 		if (!AuthHandler::checkSign($aRequestData)) {
 			Log::info('Request. Wrong signature.');
-			App::abort(400, 'Wrong signature');
+			App::abort(401, 'Wrong signature. Unauthorized.');
 		}
 
 		// validation terminal_id and event_sid

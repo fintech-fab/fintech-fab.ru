@@ -15,4 +15,9 @@
 			<directory>./app/tests/</directory>
 		</testsuite>
 	</testsuites>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./workbench/fintech-fab/actions-calc/src/</directory>
+		</whitelist>
+	</filter>
 </phpunit>

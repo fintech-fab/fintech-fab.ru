@@ -22,6 +22,7 @@ class AuthHandler
 	 */
 	public static function checkSign($aRequestData)
 	{
+		/** *@var Terminal $terminal */
 		$terminal = Terminal::find($aRequestData['terminal_id'], ['id', 'key']);
 
 		if (is_null($terminal)) {

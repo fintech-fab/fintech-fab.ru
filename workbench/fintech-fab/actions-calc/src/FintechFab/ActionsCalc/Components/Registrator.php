@@ -47,12 +47,12 @@ class Registrator
 	 *
 	 * @param array       $aSignalAttributes
 	 * @param bool        $setFlagUrl
-	 * @param bool        $setFlagQueu
+	 * @param bool        $setFlagQueue
 	 * @param null|string $sResultHash
 	 *
 	 * @return void
 	 */
-	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueu = false, $sResultHash = null)
+	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueue = false, $sResultHash = null)
 	{
 		$aSignalAttributes['signal_id'] = $aSignalAttributes['id'];
 
@@ -63,7 +63,7 @@ class Registrator
 		if ($setFlagUrl) {
 			$aSignalAttributes['flag_url'] = true;
 		}
-		if ($setFlagQueu) {
+		if ($setFlagQueue) {
 			$aSignalAttributes['flag_queue'] = true;
 		}
 		if (!is_null($sResultHash)) {

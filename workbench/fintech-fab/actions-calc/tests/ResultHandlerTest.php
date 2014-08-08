@@ -17,11 +17,12 @@ class ResultHandlerTest extends TestSetUp
 	public function setUp()
 	{
 		parent::setUp();
-		$this->_mock = m::mock(ResultHandler::class . "[sendHttpToQueue, resultToQueue]");
+		$this->_mock = m::mock(ResultHandler::class);
 	}
 
-	public function testRequestCalculationsRaz()
+	public function testSendHttpToQueue()
 	{
+		$this->_mock->shouldReceive('getResultHash')->once();
 		$this->_mock->shouldReceive('resultToQueue')->once();
 		$this->_mock->shouldReceive('sendHttpToQueue')
 			->once()
@@ -39,11 +40,11 @@ class ResultHandlerTest extends TestSetUp
 		/**
 		 * @var \Illuminate\Http\JsonResponse $jsonResponse
 		 */
-		$jsonResponse = $this->call('POST', 'actions-calc/getRequest', $this->_args);
+		$jsonResponse = $this->call('POST', '/actions-calc/getRequest', $this->_args);
 		$this->assertContains(json_encode(['status' => 'success', 'fittedRulesCount' => 1]), $jsonResponse->getContent());
 	}
 
-	public function setDown()
+	public function tearDown()
 	{
 		m::close();
 	}
