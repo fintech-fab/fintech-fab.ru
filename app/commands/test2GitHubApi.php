@@ -6,6 +6,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+//use Config;
 
 use FintechFab\Models\GitHubComments;
 //use FintechFab\Models\GitHubMembers;
@@ -35,6 +36,11 @@ class test2GitHubApi extends Command {
 	public function __construct()
 	{
 		parent::__construct();
+		$owner = Config::get("github.owner");
+		$repo = Config::get("github.trainingRepo");
+
+		$this->gitHubAPI = new GitHubAPI();
+		$this->gitHubAPI->setRepo($owner, $repo);
 	}
 
 	/**
@@ -50,14 +56,13 @@ class test2GitHubApi extends Command {
 			$this->showHelp($helpOption);
 			return;
 		}
+		$res = array();
 
 		$this->info("It's OK. Begin...");
-		$this->gitHubAPI = new GitHubAPI();
-		$this->gitHubAPI->setRepo('fintech-fab', 'fintech-fab.ru');
-$res = array();
 
 		switch($this->argument('dataCategory')) {
 			case "comments":
+				//SELECT DATE_FORMAT(max(`updated`), "%Y-%m-%dT%h:%i:%sZ") AS maxCreated FROM `github_comments`
 				$maxDate = GitHubComments::max('updated');
 				$param = empty($maxDate) ? "" : "since='" . str_replace(" ", "T", $maxDate) . "Z'";
 				$this->gitHubAPI->setNewRepoQuery('issues/comments', $param);
@@ -82,16 +87,26 @@ $res = array();
 			case "users":
 				break;
 			default:
-				$maxDate = strtotime(GitHubComments::max('updated'));
-				$strMaxDate = GitHubComments::max('updated');
+				//$maxDate = strtotime(GitHubComments::max('updated'));
+				$strMaxDate = GitHubComments::max('created');
 				$res[] = $strMaxDate;
-				$res[] = date('U', strtotime($strMaxDate));
-				$res[] = GitHubComments::find(50851238)->created;
-				$res[] = GitHubComments::find(50851238)->updated;
-				$res[] = strtotime(GitHubComments::find(50851238)->updated);
-				$res[] = strtotime(substr(date('c', $maxDate - 1), 0, 19) . "Z");
-				$res[] =  "since='" . substr(date('c', $maxDate - 1), 0, 19) . "Z'";
-				$res[] = str_replace(" ", "T", $strMaxDate) . "Z";
+				$res[] = " ";
+				$strDate = "2014-08-01T05:51:34Z";
+				$strDate = str_replace("Z", "+00:00", $strDate);
+				$res[] = $strDate;
+				$res[] = strtotime($strDate);
+				$res[] = date('c', strtotime($strDate));
+				$res[] = strtotime(date('c', strtotime($strDate)));
+				$res[] = date('c', strtotime(date('c', strtotime($strDate))));
+				$res[] = " ";
+				$res[] = date('Z');
+
+				//Преобразование к нужному формату времени с заданной временной зоной
+				$res[] = date('Y-m-d\TH:i:s\Z', strtotime($strDate) - date('Z'));
+
+				//$res[] = date('U', strtotime($strMaxDate));
+				//$res[] =  "since='" . substr(date('c', $maxDate - 1), 0, 19) . "Z'";
+				//$res[] = str_replace(" ", "T", $strMaxDate) . "Z";
 
 			//$res[] = date_parse(GitHubComments::find(50851238)->updated);
 

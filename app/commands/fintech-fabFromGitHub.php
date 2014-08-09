@@ -37,6 +37,11 @@ class FintechFabFromGitHub extends Command {
 	public function __construct()
 	{
 		parent::__construct();
+		$owner = Config::get("github.owner");
+		$repo = Config::get("github.trainingRepo");
+
+		$this->gitHubAPI = new GitHubAPI();
+		$this->gitHubAPI->setRepo($owner, $repo);
 	}
 
 	/**
