@@ -57,8 +57,6 @@ class FintechFabFromGitHub extends Command {
 			$this->showHelp($helpOption);
 			return;
 		}
-		$this->gitHubAPI = new GitHubAPI();
-		$this->gitHubAPI->setRepo('fintech-fab', 'fintech-fab.ru');
 
 		$this->info("It's OK. Begin...");
 
