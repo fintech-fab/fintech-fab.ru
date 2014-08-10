@@ -218,13 +218,16 @@ class TablesController extends BaseController
 	public function postAddDataRule()
 	{
 		$signal_id = Input::only('signal_id');
+		$sid = $signal_id{'signal_id'};
+
+
 		$input = Input::only('event_id', 'rule', 'name');
 		$errors = Validators::getErrorFromAddDataRuleTable($input);
-		foreach ($signal_id{'signal_id'} as $key => $value) {
+		foreach ($sid as $key => $value) {
 			$data['signal_id'] = $value;
 			$error = Validators::getErrorFromAddDataRuleTableSignals($data);
 			if ($error != null) {
-				$errors['errors']['signal_id'] = $error;
+				$errors['errors']['signal_id'][$key] = $error;
 			}
 		}
 
@@ -237,7 +240,7 @@ class TablesController extends BaseController
 		//Изменяем данные
 		$message = 'Данные изменены';
 
-		foreach ($signal_id{'signal_id'} as $key => $value) {
+		foreach ($sid as $key => $value) {
 			$input['signal_id'] = $value;
 			$rule = New Rule();
 			$rule->newRule($input);
