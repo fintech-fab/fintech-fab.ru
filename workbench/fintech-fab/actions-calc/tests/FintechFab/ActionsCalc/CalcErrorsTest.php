@@ -45,4 +45,22 @@ class CalcErrorsTest extends CalcTestCase
 		$this->assertContains(json_encode(['error' => 'Unknown event']), $response->original);
 	}
 
+	public function testJsonError()
+	{
+		$sign = md5('terminal=1|event=im_very_hungry|key');
+		$requestData = array(
+			'term'  => 1,
+			'event' => 'im_very_hungry',
+			'data'  => "{'time' => '13.05'}",
+			'sign'  => $sign,
+		);
+
+		$response = $this->call(
+			'POST',
+			'/actions-calc/getRequest',
+			$requestData
+		);
+
+		$this->assertContains(json_encode(['error' => 'JSON error']), $response->original);
+	}
 } 

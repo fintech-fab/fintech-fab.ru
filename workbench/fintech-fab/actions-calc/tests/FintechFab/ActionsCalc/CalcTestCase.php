@@ -55,7 +55,7 @@ class CalcTestCase extends TestCase
 			'terminal_id' => 1,
 			'name'        => 'Иди кушай',
 			'event_id'    => 1,
-			'rule'        => 'time !>= 13.00 AND time !<= 14.00 AND have_money === true',
+			'rule' => 'time >= 13.00 AND time <= 14.00 AND have_money === true',
 			'signal_id'   => 1,
 			'flag_active' => true,
 		));
@@ -64,7 +64,7 @@ class CalcTestCase extends TestCase
 			'terminal_id' => 1,
 			'name'        => 'Жди',
 			'event_id'    => 1,
-			'rule'        => 'time !< 13.00',
+			'rule' => 'time < 13.00',
 			'signal_id'   => 2,
 			'flag_active' => true,
 		));
@@ -73,7 +73,7 @@ class CalcTestCase extends TestCase
 			'terminal_id' => 1,
 			'name'        => 'Терпи до дома',
 			'event_id'    => 1,
-			'rule'        => 'time !> 14.00',
+			'rule' => 'time > 14.00',
 			'signal_id'   => 3,
 			'flag_active' => true,
 		));

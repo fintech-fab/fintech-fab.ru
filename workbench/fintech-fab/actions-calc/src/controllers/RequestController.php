@@ -49,6 +49,10 @@ class RequestController extends Controller
 			return false;
 		}
 
+		if (!isset($input['sign'])) {
+			return false;
+		}
+
 		$signature = md5('terminal=' . $input ['term'] . '|event=' . $input ['event'] . '|' . $terminal->key);
 
 

@@ -10,6 +10,7 @@ class CalcRequestTest extends CalcTestCase
 	 */
 	private $mock;
 	private $sign;
+	private $requestData;
 
 	public function setUp()
 	{
@@ -21,18 +22,6 @@ class CalcRequestTest extends CalcTestCase
 
 	public function testGetRequest1()
 	{
-
-		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
-			$this->mock
-				->shouldReceive('sendHttp')
-				->withArgs(['http://test', '1']);
-			$this->mock
-				->shouldReceive('sendQueue')
-				->withArgs(['queueTest', 'go_eat']);
-
-			return $this->mock;
-
-		});
 
 		$requestData = array(
 			'term'  => 1,
@@ -47,35 +36,35 @@ class CalcRequestTest extends CalcTestCase
 			$requestData
 		);
 
-		$this->assertContains(json_encode(['countFitRules' => 1]), $response->original);
+		$this->assertContains(json_encode(['countFitRules' => 0]), $response->original);
 	}
 
 	public function testGetRequest2()
 	{
-
-		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
-			$this->mock
-				->shouldReceive('sendHttp')
-				->withArgs(['http://test', '1']);
-			$this->mock
-				->shouldReceive('sendQueue')
-				->withArgs(['queueTest', 'wait']);
-
-			return $this->mock;
-
-		});
-
-		$requestData = array(
+		$this->requestData = array(
 			'term'  => 1,
 			'event' => 'im_hungry',
 			'data'  => json_encode(array('time' => '12.05')),
 			'sign'  => $this->sign,
 		);
 
+		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
+			$this->mock
+				->shouldReceive('sendHttp')
+				->withArgs(['http://test', '1', $this->requestData]);
+			$this->mock
+				->shouldReceive('sendQueue')
+				->withArgs(['queueTest', 'wait', $this->requestData]);
+
+			return $this->mock;
+
+		});
+
+
 		$response = $this->call(
 			'POST',
 			'/actions-calc/getRequest',
-			$requestData
+			$this->requestData
 		);
 
 		$this->assertContains(json_encode(['countFitRules' => 1]), $response->original);
@@ -83,30 +72,30 @@ class CalcRequestTest extends CalcTestCase
 
 	public function testGetRequest3()
 	{
-
-		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
-			$this->mock
-				->shouldReceive('sendHttp')
-				->withArgs(['http://test', '1']);
-			$this->mock
-				->shouldReceive('sendQueue')
-				->withArgs(['queueTest', 'endure']);
-
-			return $this->mock;
-
-		});
-
-		$requestData = array(
+		$this->requestData = array(
 			'term'  => 1,
 			'event' => 'im_hungry',
 			'data'  => json_encode(array('time' => '14.30')),
 			'sign'  => $this->sign,
 		);
 
+		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
+			$this->mock
+				->shouldReceive('sendHttp')
+				->withArgs(['http://test', '1', $this->requestData]);
+			$this->mock
+				->shouldReceive('sendQueue')
+				->withArgs(['queueTest', 'endure', $this->requestData]);
+
+			return $this->mock;
+
+		});
+
+
 		$response = $this->call(
 			'POST',
 			'/actions-calc/getRequest',
-			$requestData
+			$this->requestData
 		);
 
 		$this->assertContains(json_encode(['countFitRules' => 1]), $response->original);
@@ -133,30 +122,30 @@ class CalcRequestTest extends CalcTestCase
 
 	public function testGetRequest5()
 	{
-
-		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
-			$this->mock
-				->shouldReceive('sendHttp')
-				->withArgs(['http://test', '1']);
-			$this->mock
-				->shouldReceive('sendQueue')
-				->withArgs(['queueTest', 'go_eat']);
-
-			return $this->mock;
-
-		});
-
-		$requestData = array(
+		$this->requestData = array(
 			'term'  => 1,
 			'event' => 'im_hungry',
 			'data'  => json_encode(array('time' => '13.30', 'have_money' => true)),
 			'sign'  => $this->sign,
 		);
 
+		App::bind('FintechFab\ActionsCalc\Components\SendResults', function () {
+			$this->mock
+				->shouldReceive('sendHttp')
+				->withArgs(['http://test', '1', $this->requestData]);
+			$this->mock
+				->shouldReceive('sendQueue')
+				->withArgs(['queueTest', 'go_eat', $this->requestData]);
+
+			return $this->mock;
+
+		});
+
+
 		$response = $this->call(
 			'POST',
 			'/actions-calc/getRequest',
-			$requestData
+			$this->requestData
 		);
 
 		$this->assertContains(json_encode(['countFitRules' => 1]), $response->original);

@@ -20,7 +20,11 @@ class MainHandler
 	 */
 	public function processRequest($data)
 	{
-		$eventData = (array)json_decode($data['data']);
+		$eventData = json_decode($data['data'], true);
+
+		if (json_last_error() != JSON_ERROR_NONE) {
+			return ['error' => 'JSON error'];
+		}
 
 		//Записываем событие в базу
 		$incomeEvent = new IncomeEvent();
@@ -61,16 +65,16 @@ class MainHandler
 			Log::info("Запись в таблицу сигналов: id  = $resultSignal->id");
 
 			//Отправляем результат по http
-			$sendResults = App::make('FintechFab\ActionsCalc\Components\SendResults');
+			$sendResults = App::make(SendResults::class);
 			$url = $incomeEvent->terminal->url;
 			if ($url != '') {
-				$sendResults->sendHttp($url, $resultSignal->id);
+				$sendResults->sendHttp($url, $resultSignal->id, $data);
 			}
 
 			//Отправляем результат в очередь
 			$queue = $incomeEvent->terminal->queue;
 			if ($queue != '') {
-				$sendResults->sendQueue($queue, $signalSid);
+				$sendResults->sendQueue($queue, $signalSid, $data);
 				$resultSignal->setFlagQueueTrue();
 			}
 
