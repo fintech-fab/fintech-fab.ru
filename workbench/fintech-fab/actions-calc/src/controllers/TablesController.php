@@ -6,8 +6,8 @@ namespace FintechFab\ActionsCalc\Controllers;
 use FintechFab\ActionsCalc\Components\AuthCheck;
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Event;
-use FintechFab\ActionsCalc\Models\Signal;
 use FintechFab\ActionsCalc\Models\Rule;
+use FintechFab\ActionsCalc\Models\Signal;
 use Input;
 
 class TablesController extends BaseController
@@ -213,14 +213,21 @@ class TablesController extends BaseController
 		$rule->changeRule($input);
 
 		return array('message' => $message);
-
 	}
 
 	public function postAddDataRule()
 	{
-		$input = Input::all();
-
+		$signal_id = Input::only('signal_id');
+		$input = Input::only('event_id', 'rule', 'name');
 		$errors = Validators::getErrorFromAddDataRuleTable($input);
+		foreach ($signal_id{'signal_id'} as $key => $value) {
+			$data['signal_id'] = $value;
+			$error = Validators::getErrorFromAddDataRuleTableSignals($data);
+			if ($error != null) {
+				$errors['errors']['signal_id'] = $error;
+			}
+		}
+
 		if ($errors) {
 			return $errors;
 		}
@@ -229,8 +236,12 @@ class TablesController extends BaseController
 
 		//Изменяем данные
 		$message = 'Данные изменены';
-		$rule = New Rule();
-		$rule->newRule($input);
+
+		foreach ($signal_id{'signal_id'} as $key => $value) {
+			$input['signal_id'] = $value;
+			$rule = New Rule();
+			$rule->newRule($input);
+		}
 
 		return array('message' => $message);
 

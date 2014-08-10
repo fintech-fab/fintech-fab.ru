@@ -1,6 +1,5 @@
 <?php
 
-use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Signal;
 
@@ -68,7 +67,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 						<div class="SignalSid">
 							<?=
 							Form::select('SignalSid', Signal::getSignalSid(), '', array(
-								'class'    => 'form-control',
+								'class' => 'form-control inputSignalSidAdd',
 								'id'       => 'inputSignalSidAdd',
 								'required' => 'required',
 							));
@@ -77,8 +76,13 @@ use FintechFab\ActionsCalc\Models\Signal;
 					</div>
 					<div id="errorSignalSidAdd" class="text-danger text-center"></div>
 				</div>
-
-
+				<div class="addSignal">
+					<?=
+					Form::button('Добавить сигнал', array(
+						'id'    => 'addSignalInput',
+						'class' => 'btn btn-success',
+					)); ?>
+				</div>
 			</div>
 
 			<div class="modal-footer">

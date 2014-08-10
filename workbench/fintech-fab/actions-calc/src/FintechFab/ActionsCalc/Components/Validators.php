@@ -203,10 +203,18 @@ class Validators
 	public static function rulesForTableAddDataRule()
 	{
 		$rules = array(
-			'name'      => 'required',
-			'rule'      => 'required',
+			'name'     => 'required',
+			'rule'     => 'required',
+			'event_id' => 'required|alpha_dash',
+		);
+
+		return $rules;
+	}
+
+	public static function rulesForTableAddDataRuleSignals()
+	{
+		$rules = array(
 			'signal_id' => 'required|alpha_dash',
-			'event_id'  => 'required|alpha_dash',
 		);
 
 		return $rules;
@@ -297,11 +305,28 @@ class Validators
 
 		if ($validator->fails()) {
 			$result['errors'] = array(
-				'name'      => $userMessages->first('name'),
-				'rule'      => $userMessages->first('rule'),
-				'signal_id' => $userMessages->first('signal_id'),
-				'event_id'  => $userMessages->first('event_id'),
+				'name'     => $userMessages->first('name'),
+				'rule'     => $userMessages->first('rule'),
+				'event_id' => $userMessages->first('event_id'),
 			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
+	public static function getErrorFromAddDataRuleTableSignals($data)
+	{
+
+		$val['signal_id'] = $data;
+		json_encode($val);
+		$validator = Validator::make($data, Validators::rulesForTableAddDataRuleSignals(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result = $userMessages->first('signal_id');
 
 			return $result;
 		}

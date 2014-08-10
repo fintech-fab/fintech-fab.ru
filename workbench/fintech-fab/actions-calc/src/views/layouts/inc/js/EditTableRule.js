@@ -87,7 +87,11 @@ $(document).ready(function () {
 
 	$('button.addDataRuleTable').click(function () {
 		var eventSid = $('#inputEventSidAdd').val();
-		var signalSid = $('#inputSignalSidAdd').val();
+		var signalSid = [];
+		$('select.inputSignalSidAdd').each(function () {
+			signalSid.push($(this).val());
+		});
+		alert(signalSid);
 		var name = $('#inputNameAdd').val();
 		var rule = $('#inputRuleAdd').val();
 		$('button').attr('disabled', true);
@@ -133,6 +137,19 @@ $(document).ready(function () {
 				$('.rulesForEvents').empty().html(data);
 
 			});
+
+	});
+	var i = 1;
+	$('#addSignalInput').click(function () {
+
+		$('.addSignal').before('<div class="form-group row">​' +
+				'<label for="inputSignalSidAdd' + i + '" class="col-sm-3 control-label">signal_sid</label>' +
+				'<div class="col-sm-9"><div class="SignalSid' + i + '">' +
+				'</div></div>' +
+				'<div id="errorSignalSidAdd' + i + '" class="text-danger text-center"></div></div>').after(function () {
+			$('#inputSignalSidAdd').clone().appendTo('.SignalSid' + i).val('').attr({"id": 'inputSignalSidAdd' + i}).addClass('inputSignalSidAdd').select2();
+			i++;
+		});
 
 	});
 
