@@ -10,3 +10,7 @@ div.rulesForEvents {
 	display: none;
 	margin-left: 35px;
 }
+
+.addSignal {
+	text-align: center;
+}

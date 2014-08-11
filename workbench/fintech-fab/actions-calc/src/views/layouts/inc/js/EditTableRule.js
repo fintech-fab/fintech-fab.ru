@@ -37,6 +37,8 @@ $(document).ready(function () {
 	});
 
 	$('button.tableAddBtn').click(function () {
+		$('#inputEventSidAdd').val('');
+		$('#inputSignalSidAdd').val('');
 
 		$(".EventSid .select2-chosen").html('');
 		$(".SignalSid .select2-chosen").html('');
@@ -86,8 +88,14 @@ $(document).ready(function () {
 	});
 
 	$('button.addDataRuleTable').click(function () {
+		$('.text-danger').empty();
 		var eventSid = $('#inputEventSidAdd').val();
-		var signalSid = $('#inputSignalSidAdd').val();
+		var signalSid = {};
+		$('select.inputSignalSidAdd').each(function () {
+			var id = $(this).attr("id");
+			signalSid[id] = $(this).val();
+		});
+//		alert(signalSid);
 		var name = $('#inputNameAdd').val();
 		var rule = $('#inputRuleAdd').val();
 		$('button').attr('disabled', true);
@@ -99,11 +107,18 @@ $(document).ready(function () {
 			},
 			function (data) {
 				$('button').attr('disabled', false);
+//				data.appendTo('#addSignalInput');
 				if (data['errors']) {
+					for (id in data['errors']['signal_id']) {
+						var errorId = 'error' + id.substring(5);
+
+						$('#' + errorId).html(data['errors']['signal_id'][id]);
+					}
+
 					$('#errorNameAdd').html(data['errors']['name']);
 					$('#errorEventSidAdd').html(data['errors']['event_id']);
 					$('#errorRuleAdd').html(data['errors']['rule']);
-					$('#errorSignalSidAdd').html(data['errors']['signal_id']);
+
 					return;
 				}
 				location.reload();
@@ -133,6 +148,19 @@ $(document).ready(function () {
 				$('.rulesForEvents').empty().html(data);
 
 			});
+
+	});
+	var i = 1;
+	$('#addSignalInput').click(function () {
+
+		$('.addSignal').before('<div class="form-group row">​' +
+				'<label for="inputSignalSidAdd' + i + '" class="col-sm-3 control-label">signal_sid</label>' +
+				'<div class="col-sm-9"><div class="SignalSid' + i + '">' +
+				'</div></div>' +
+				'<div id="errorSignalSidAdd' + i + '" class="text-danger text-center"></div></div>').after(function () {
+			$('#inputSignalSidAdd').clone().appendTo('.SignalSid' + i).val('').attr({"id": 'inputSignalSidAdd' + i}).addClass('inputSignalSidAdd').select2();
+			i++;
+		});
 
 	});
 
