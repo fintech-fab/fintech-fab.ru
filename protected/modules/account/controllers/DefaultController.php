@@ -52,6 +52,7 @@ class DefaultController extends Controller
 					'goIdentify',
 					'takeLoan', 'takeLoanCheckSmsCode',
 					'getDocument', 'getDocumentList',
+					'PaymentSchedule'
 				),
 				'users'   => array('@'),
 			),
@@ -1524,6 +1525,35 @@ class DefaultController extends Controller
 
 		// при любом результате логина редиректим клиента на подписку
 		$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
+	}
+
+	public function actionPaymentSchedule()
+	{
+
+		$aPaymentData = Yii::app()->adminKreddyApi->getCurrentClientProduct();
+
+		if ($aPaymentData['subscription_balance'] > 0) {
+			$aPaymentData['subscription_balance'] = 0;
+		}
+
+		if ($aPaymentData['loan_balance'] > 0) {
+			$aPaymentData['loan_balance'] = 0;
+		}
+
+		if ($aPaymentData['balance'] > 0) {
+			$aPaymentData['balance'] = 0;
+		}
+
+		$aPaymentData = array_map(function ($mValue) {
+			if (is_int($mValue)) {
+				$mValue = abs($mValue);
+			}
+
+			return $mValue;
+		}, $aPaymentData);
+
+		$this->render('payment_schedule', ['aPaymentData' => $aPaymentData]);
+
 	}
 
 	/**

@@ -905,34 +905,40 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'                 => self::ERROR_AUTH,
-			'client_data'          => array(
+			'code'                   => self::ERROR_AUTH,
+			'client_data'            => array(
 				'is_debt'               => false,
 				'fullname'              => '',
 				'client_new'            => false,
 				'sms_auth_enabled'      => false,
 				'is_possible_take_loan' => false,
 			),
-			'status'               => array(
+			'status'                 => array(
 				'name' => false,
 			),
-			'loan_request'         => false,
-			'first_identification' => false,
-			'active_loan'          => array(
-				'channel_id'               => false,
-				'balance'                  => 0,
-				'loan_balance'             => 0,
-				'subscription_balance'     => 0,
-				'fine_and_penalty_balance' => 0,
-				'expired'                  => false,
-				'expired_to'               => false
+			'loan_request'           => false,
+			'first_identification'   => false,
+			'current_client_product' => array(
+				'channel_id'              => false,
+				'subscription_expired'    => false,
+				'subscription_expired_to' => false,
+				'loan_expired'            => false,
+				'loan_expired_to'         => false,
+				'balance'                 => 0,
+				'loan_balance'            => 0,
+				'subscription_balance'    => 0,
+				'fine_balance'            => 0,
+				'penalty_balance'         => 0,
+				'percent_balance'         => 0,
+				'percent_daily'           => 0,
+				'loan_days_usage'         => 0,
 			),
-			'subscription_request' => array(
+			'subscription_request'   => array(
 				'name'       => false,
 				'can_cancel' => false,
 				'type'       => 0
 			),
-			'subscription'         => array(
+			'subscription'           => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -946,16 +952,16 @@ class AdminKreddyApiComponent
 					'type'          => false,
 				),
 			),
-			'moratoriums'          => array(
+			'moratoriums'            => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'             => array(),
-			'slow_channels'        => array(),
-			'bank_card_exists'     => false,
-			'bank_card_expired'    => false,
-			'bank_card_pan'        => false,
+			'channels'               => array(),
+			'slow_channels'          => array(),
+			'bank_card_exists'       => false,
+			'bank_card_expired'      => false,
+			'bank_card_pan'          => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -1134,7 +1140,7 @@ class AdminKreddyApiComponent
 		);
 		//проверяем, что текущий статус находится в списке статусов, для которых нужно выдать имя канала
 		if (in_array($sStatusName, $aStatuses)) {
-			$iActiveLoanChannelId = Yii::app()->adminKreddyApi->getSubscriptionActiveLoanChannelId();
+			$iActiveLoanChannelId = Yii::app()->adminKreddyApi->getSubscriptionChannelId();
 			$sChannelName = Yii::app()->productsChannels->formatChannelNameForStatus(Yii::app()->adminKreddyApi->getChannelNameById($iActiveLoanChannelId));
 
 		} else {
@@ -1197,7 +1203,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['active_loan']['balance'];
+		return $aClientInfo['current_client_product']['balance'];
 	}
 
 	/**
@@ -1209,7 +1215,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['balance']);
+		return abs($aClientInfo['current_client_product']['balance']);
 	}
 
 	/**
@@ -1219,7 +1225,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['loan_balance']);
+		return abs($aClientInfo['current_client_product']['loan_balance']);
 	}
 
 	/**
@@ -1229,7 +1235,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['subscription_balance']);
+		return abs($aClientInfo['current_client_product']['subscription_balance']);
 	}
 
 	/**
@@ -1239,7 +1245,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['fine_and_penalty_balance']);
+		return abs($aClientInfo['current_client_product']['penalty_balance'] + $aClientInfo['current_client_product']['fine_balance']);
 	}
 
 	/**
@@ -1282,11 +1288,11 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function getSubscriptionActiveLoanChannelId()
+	public function getSubscriptionChannelId()
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['active_loan']['channel_id'];
+		return $aClientInfo['current_client_product']['channel_id'];
 	}
 
 	/**
@@ -1531,13 +1537,13 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public function getActiveLoanExpired()
+	public function getCurrentProductExpired()
 	{
 		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
 			return false;
 		}
 		$aClientInfo = $this->getClientInfo();
-		$bExpired = $aClientInfo['active_loan']['expired'];
+		$bExpired = $aClientInfo['current_client_product']['loan_expired'] || $aClientInfo['current_client_product']['subscription_expired'];
 
 		return $bExpired;
 	}
@@ -1545,7 +1551,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool|string
 	 */
-	public function getActiveLoanExpiredTo()
+	public function getCurrentProductLoanExpiredTo()
 	{
 		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
 			return false;
@@ -1553,7 +1559,7 @@ class AdminKreddyApiComponent
 
 		$aClientInfo = $this->getClientInfo();
 
-		$sExpiredTo = $aClientInfo['active_loan']['expired_to'];
+		$sExpiredTo = $aClientInfo['current_client_product']['loan_expired_to'];
 
 		if ($sExpiredTo == SiteParams::EMPTY_DATETIME) {
 			return false;
@@ -1562,6 +1568,13 @@ class AdminKreddyApiComponent
 		$sExpiredTo = SiteParams::formatRusDate($sExpiredTo, false);
 
 		return $sExpiredTo;
+	}
+
+	public function getCurrentClientProduct()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['current_client_product'];
 	}
 
 	/**

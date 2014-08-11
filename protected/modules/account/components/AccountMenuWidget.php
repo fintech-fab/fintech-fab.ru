@@ -78,7 +78,7 @@ class AccountMenuWidget extends CWidget
 				),
 				array(
 					'label' => 'График платежей',
-					'url'   => array('/account/')
+					'url' => array('/account/default/paymentSchedule')
 				),
 			),
 		);
@@ -157,7 +157,7 @@ class AccountMenuWidget extends CWidget
 			return;
 		}
 
-		if (Yii::app()->adminKreddyApi->getActiveLoanExpired()) {
+		if (Yii::app()->adminKreddyApi->getCurrentProductExpired()) {
 			echo '<strong>Платеж просрочен!</strong><br/>';
 		}
 
@@ -172,7 +172,7 @@ class AccountMenuWidget extends CWidget
 				echo '<strong>Пени/штраф:</strong> ' . Yii::app()->adminKreddyApi->getAbsFineAndPenalty() . ' руб. <br/>';
 			}
 			echo '</div>';
-			echo '<strong>Вернуть:</strong> ' . Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() . '<br/>';
+			echo '<strong>Вернуть:</strong> ' . Yii::app()->adminKreddyApi->getCurrentProductLoanExpiredTo() . '<br/>';
 		} elseif (Yii::app()->adminKreddyApi->getBalance() >= 0) {
 			echo '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getBalance() . ' руб. <br/>';
 		}

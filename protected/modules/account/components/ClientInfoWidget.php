@@ -26,8 +26,8 @@ class ClientInfoWidget extends CWidget
 		AdminKreddyApiComponent::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
 		AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Заявка одобрена, теперь Вы можете взять займ',
 
-		AdminKreddyApiComponent::C_SCORING_PROGRESS            => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
-		AdminKreddyApiComponent::C_SCORING_AWAITING_REIDENTIFY => 'Необходимо пройти повторную идентификацию',
+		AdminKreddyApiComponent::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		AdminKreddyApiComponent::C_SCORING_AWAITING_REIDENTIFY        => 'Необходимо пройти повторную идентификацию',
 		AdminKreddyApiComponent::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		AdminKreddyApiComponent::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
@@ -128,11 +128,11 @@ class ClientInfoWidget extends CWidget
 
 	protected function renderLoanPayDate()
 	{
-		if (Yii::app()->adminKreddyApi->getActiveLoanExpiredTo()) {
+		if (Yii::app()->adminKreddyApi->getCurrentProductLoanExpiredTo()) {
 			// если есть займ, выводим дату возврата
 			?>
 			<strong>Возврат займа (в любое время)
-				до:</strong> <?= Yii::app()->adminKreddyApi->getActiveLoanExpiredTo() ?><br />
+				до:</strong> <?= Yii::app()->adminKreddyApi->getCurrentProductLoanExpiredTo() ?><br />
 		<?php
 		}
 
