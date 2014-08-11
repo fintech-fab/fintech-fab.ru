@@ -20,8 +20,16 @@ $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] +
 	</div>
 
 	<div class="alert alert-warning">
-		<h5><strong>Общая сумма к возврату: <?= $aPaymentData['balance'] ?> руб.</strong> <a href="#" class="dotted">детализация</a>
+		<h5><strong>Общая сумма к возврату: <?= $aPaymentData['balance'] ?> руб.</strong>
+			<a href="#" class="dotted" id="detail" onclick="return false;">детализация</a>
 		</h5>
+
+		<p style="display: none;" id="detail_info">
+			- Абонентка: <?= $aPaymentData['subscription_balance'] ?> руб. <br /> -
+			Штраф: <?= $aPaymentData['penalty_balance'] ?> руб. <br /> - Тело: <?= $aPaymentData['loan_balance'] ?> руб.
+			<br /> - Проценты: <?= $aPaymentData['percent_balance'] ?> руб. <br /> -
+			Неустойка: <?= $aPaymentData['fine_balance'] ?> руб. <br />
+		</p>
 	</div>
 
 	<h4><strong>Оплата за сервис</strong></h4>
@@ -51,3 +59,14 @@ $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] +
 	</div>
 <?php
 
+Yii::app()->clientScript->registerScript('detail_balance',
+	"
+	var content = $('#detail_info').html();
+	$('#detail').popover({
+		'selector': '',
+		'placement': 'top',
+		'content': content,
+		'html': 'true'
+	});
+	"
+);
