@@ -3,8 +3,8 @@
  * @var array $aPaymentData
  */
 
-$sSubscriptionEndDt = SiteParams::getDayEndFromDatetime($aPaymentData['subscription_expired_to']);
-$sLoanEndDt = SiteParams::getDayEndFromDatetime($aPaymentData['loan_expired_to']);
+$sSubscriptionEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['subscription_expired_to']));
+$sLoanEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['loan_expired_to']));
 
 $iSubscriptionTotal = $aPaymentData['subscription_balance'] + $aPaymentData['penalty_balance'];
 $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] + $aPaymentData['fine_balance'];
