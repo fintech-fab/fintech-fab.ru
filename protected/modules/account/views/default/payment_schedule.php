@@ -3,6 +3,8 @@
  * @var array $aPaymentData
  */
 
+$this->pageTitle = Yii::app()->name . ' - График платежей';
+
 $sSubscriptionEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['subscription_expired_to']));
 $sLoanEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['loan_expired_to']));
 
