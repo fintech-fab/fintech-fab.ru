@@ -82,7 +82,11 @@ use FintechFab\ActionsCalc\Models\Signal;
 						'id'    => 'addSignalInput',
 						'class' => 'btn btn-success',
 					)); ?>
+
+					<button id="removeLastSignal" type="button" class="btn btn-danger">Удалить сигнал</button>
+
 				</div>
+
 			</div>
 
 			<div class="modal-footer">
@@ -91,7 +95,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 					'id'    => 'actionBtn',
 					'class' => 'btn btn-success changeDataModal addDataRuleTable',
 				)); ?>
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+
 			</div>
 		</div>
 	</div>

@@ -155,12 +155,23 @@ $(document).ready(function () {
 
 		$('.addSignal').before('<div class="form-group row">​' +
 				'<label for="inputSignalSidAdd' + i + '" class="col-sm-3 control-label">signal_sid</label>' +
-				'<div class="col-sm-9"><div class="SignalSid' + i + '">' +
+				'<div class="col-sm-9"><div class="SignalSid SignalSid' + i + '">' +
 				'</div></div>' +
 				'<div id="errorSignalSidAdd' + i + '" class="text-danger text-center"></div></div>').after(function () {
 			$('#inputSignalSidAdd').clone().appendTo('.SignalSid' + i).val('').attr({"id": 'inputSignalSidAdd' + i}).addClass('inputSignalSidAdd').select2();
 			i++;
 		});
+
+	});
+
+
+	$('#removeLastSignal').click(function () {
+		var signalSid = $('.SignalSid');
+//		alert(signalSid);
+		if (signalSid.length > 1) {
+			$('.SignalSid:last').parent().parent().remove();
+		}
+
 
 	});
 
