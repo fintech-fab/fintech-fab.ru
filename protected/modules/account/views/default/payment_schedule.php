@@ -64,7 +64,7 @@ Yii::app()->clientScript->registerScript('detail_balance',
 	var content = $('#detail_info').html();
 	$('#detail').popover({
 		'selector': '',
-		'placement': 'top',
+		'placement': 'right',
 		'content': content,
 		'html': 'true'
 	});
