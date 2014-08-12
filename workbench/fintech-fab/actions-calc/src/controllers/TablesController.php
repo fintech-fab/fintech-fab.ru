@@ -83,7 +83,7 @@ class TablesController extends BaseController
 	{
 		$input = Input::only('id', 'name', 'event_sid');
 		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal['id'];
+		$input['terminal_id'] = $terminal->id;
 		//проверяем данные
 
 		$errors = Validators::getErrorFromChangeDataEventsTable($input);
@@ -92,9 +92,13 @@ class TablesController extends BaseController
 		}
 
 		//Изменяем данные
-		$eventData = Event::find($input['id']);
+		$event = Event::whereId($input['id'])->whereTerminalId($terminal->id)->first();
+
+		if (!$event) {
+			return array('message' => 'Событие не найдено');
+		}
 		$message = 'Данные изменены';
-		$eventData->changeEvent($input);
+		$event->changeEvent($input);
 
 		return array('message' => $message);
 
@@ -125,7 +129,7 @@ class TablesController extends BaseController
 	{
 		$input = Input::only('id', 'name', 'signal_sid');
 		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal['id'];
+		$input['terminal_id'] = $terminal->id;
 		//проверяем данные
 
 		$errors = Validators::getErrorFromChangeDataSignalsTable($input);
@@ -135,9 +139,13 @@ class TablesController extends BaseController
 
 
 		//Изменяем данные
-		$signalData = Signal::find($input['id']);
+		$signal = Signal::whereId($input['id'])->whereTerminalId($terminal->id)->first();
+
+		if (!$signal) {
+			return array('message' => 'Сигнал не найден');
+		}
 		$message = 'Данные изменены';
-		$signalData->changeSignal($input);
+		$signal->changeSignal($input);
 
 		return array('message' => $message);
 
@@ -154,7 +162,7 @@ class TablesController extends BaseController
 		}
 
 		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal['id'];
+		$input['terminal_id'] = $terminal->id;
 
 		$signal = New Signal();
 		$signal->newSignal($input);
@@ -188,14 +196,20 @@ class TablesController extends BaseController
 	{
 		$input = Input::all();
 		$input['name'] = e($input['name']);
-		$id = $input['id'];
 
 		$errors = Validators::getErrorFromChangeDataRuleTable($input);
+
 		if ($errors) {
+			if ($errors['errors']['id'] != '') {
+				return array('message' => 'Какая-то ошибка, повторите попытку');
+			}
+
 			return $errors;
 		}
 
 		//Изменяем данные
+		$id = $input['id'];
+
 		$rule = Rule::find($id);
 		$message = 'Данные изменены';
 		$rule->changeRule($input);
@@ -206,8 +220,7 @@ class TablesController extends BaseController
 	public function postAddDataRule()
 	{
 		$signal_id = Input::only('signal_id');
-		$sid = $signal_id{'signal_id'};
-
+		$sid = $signal_id['signal_id'];
 
 		$input = Input::only('event_id', 'rule', 'name');
 		$errors = Validators::getErrorFromAddDataRuleTable($input);
@@ -223,12 +236,12 @@ class TablesController extends BaseController
 			return $errors;
 		}
 		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal['id'];
+		$input['terminal_id'] = $terminal->id;
 
 		//Изменяем данные
 		$message = 'Данные изменены';
 
-		foreach ($sid as $key => $value) {
+		foreach ($sid as $value) {
 			$input['signal_id'] = $value;
 			$rule = New Rule();
 			$rule->newRule($input);

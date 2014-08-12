@@ -17,7 +17,7 @@ class QueueHandler
 	public function fire(Job $job, $data)
 	{
 		Log::info('Получен запрос через очередь с параметрами:', $data);
-		Validators::ValidateInput($data);
+		Validators::ValidateRequest($data);
 
 		$mainHandler = new MainHandler();
 		$mainHandler->processRequest($data);

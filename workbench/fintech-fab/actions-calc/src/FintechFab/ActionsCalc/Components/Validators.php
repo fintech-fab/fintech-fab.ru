@@ -178,19 +178,20 @@ class Validators
 
 	public static function rulesForTableDataRule()
 	{
+		$database = Config::get('database.connections.ff-actions-calc.database');
 		$rules = array(
 			'name'       => 'required',
 			'rule'       => 'required',
 			'signal_id'  => 'required|alpha_dash',
-			'signal_sid' => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.signals',
+			'signal_sid' => 'required|alpha_dash|exists:' . $database . '.signals',
 			'event_id'   => 'required|alpha_dash',
-			'event_sid'  => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.events',
+			'event_sid'  => 'required|alpha_dash|exists:' . $database . '.events',
 		);
 
 		return $rules;
 	}
 
-	public static function rulesForTablerulesWithEvent()
+	public static function rulesForTableRulesWithEvent()
 	{
 		$rules = array(
 			'event_id' => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.rules,event_id',
@@ -201,19 +202,34 @@ class Validators
 
 	public static function rulesForTableAddDataRule()
 	{
+		$database = Config::get('database.connections.ff-actions-calc.database');
 		$rules = array(
 			'name'     => 'required',
 			'rule'     => 'required',
-			'event_id' => 'required|alpha_dash',
+			'event_id' => 'required|alpha_dash|exists:' . $database . '.events,id',
 		);
 
 		return $rules;
 	}
 
-	public static function rulesForTableAddDataRuleSignals()
+	public static function rulesForTableChangeRule()
+	{
+		$database = Config::get('database.connections.ff-actions-calc.database');
+		$rules = array(
+			'id'        => 'required|integer',
+			'name'      => 'required',
+			'rule'      => 'required',
+			'event_id'  => 'required|alpha_dash|exists:' . $database . '.events,id',
+			'signal_id' => 'required|alpha_dash|exists:' . $database . '.signals,id',
+		);
+
+		return $rules;
+	}
+
+	public static function  rulesForTableAddDataRuleSignals()
 	{
 		$rules = array(
-			'signal_id' => 'required|alpha_dash',
+			'signal_id' => 'required|alpha_dash|exists:' . Config::get('database.connections.ff-actions-calc.database') . '.signals,id',
 		);
 
 		return $rules;
@@ -342,11 +358,12 @@ class Validators
 	public static function getErrorFromChangeDataRuleTable($data)
 	{
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, Validators::rulesForTableAddDataRule(), Validators::messagesForErrors());
+		$validator = Validator::make($data, Validators::rulesForTableChangeRule(), Validators::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
 			$result['errors'] = array(
+				'id' => $userMessages->first('id'),
 				'name'      => $userMessages->first('name'),
 				'rule'      => $userMessages->first('rule'),
 				'signal_id' => $userMessages->first('signal_id'),
@@ -363,7 +380,7 @@ class Validators
 
 	public static function rulesWithEvent($data)
 	{
-		$validator = Validator::make($data, Validators::rulesForTablerulesWithEvent(), Validators::messagesForErrorsRules());
+		$validator = Validator::make($data, Validators::rulesForTableRulesWithEvent(), Validators::messagesForErrorsRules());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {

@@ -21,7 +21,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 						Form::input('text', 'name', '', array(
 							'placeholder' => 'Название',
 							'class'       => 'form-control',
-							'id' => 'inputNameRule',
+							'id'          => 'inputNameRule',
 							'required'    => 'required',
 						));
 						?>

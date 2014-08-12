@@ -67,7 +67,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 						<div class="SignalSid">
 							<?=
 							Form::select('SignalSid', Signal::getSignalSid(), '', array(
-								'class' => 'form-control inputSignalSidAdd',
+								'class'    => 'form-control inputSignalSidAdd',
 								'id'       => 'inputSignalSidAdd',
 								'required' => 'required',
 							));

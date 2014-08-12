@@ -14,7 +14,9 @@ use Eloquent;
  *
  * @method static Event whereTerminalId()
  * @method static Event whereEventSid()
+ * @method static Event whereId()
  * @method static Event find()
+ * @method static Event first()
  * @method static Event links()
  *
  */
@@ -71,7 +73,7 @@ class Event extends Eloquent
 	{
 		$event = Event::select('id', 'name', 'event_sid')->get();
 		$result = array();
-		foreach ($event as $key => $value) {
+		foreach ($event as $value) {
 			$result[$value->id] = $value->event_sid . ' - (' . $value->name . ')';
 		}
 

@@ -63,4 +63,4 @@ class CalcErrorsTest extends CalcTestCase
 
 		$this->assertContains(json_encode(['error' => 'JSON error']), $response->original);
 	}
-} 
+}

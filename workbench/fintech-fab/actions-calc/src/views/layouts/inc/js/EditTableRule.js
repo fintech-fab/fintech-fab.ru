@@ -95,7 +95,7 @@ $(document).ready(function () {
 			var id = $(this).attr("id");
 			signalSid[id] = $(this).val();
 		});
-//		alert(signalSid);
+
 		var name = $('#inputNameAdd').val();
 		var rule = $('#inputRuleAdd').val();
 		$('button').attr('disabled', true);
@@ -107,9 +107,9 @@ $(document).ready(function () {
 			},
 			function (data) {
 				$('button').attr('disabled', false);
-//				data.appendTo('#addSignalInput');
+
 				if (data['errors']) {
-					for (id in data['errors']['signal_id']) {
+					for (var id in data['errors']['signal_id']) {
 						var errorId = 'error' + id.substring(5);
 
 						$('#' + errorId).html(data['errors']['signal_id'][id]);

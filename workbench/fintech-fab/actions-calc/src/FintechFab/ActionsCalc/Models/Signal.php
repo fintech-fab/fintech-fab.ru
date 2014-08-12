@@ -13,7 +13,10 @@ use Eloquent;
  * @property string  $created_at
  *
  * @method static Signal find()
+ * @method static Signal first()
  * @method static Signal links()
+ * @method static Signal whereId()
+ * @method static Signal whereTerminalId()
  */
 class Signal extends Eloquent
 {
@@ -53,7 +56,7 @@ class Signal extends Eloquent
 	{
 		$signal = Signal::select('id', 'name', 'signal_sid')->get();
 		$result = array();
-		foreach ($signal as $key => $value) {
+		foreach ($signal as $value) {
 			$result[$value->id] = $value->signal_sid . ' - (' . $value->name . ')';
 		}
 
