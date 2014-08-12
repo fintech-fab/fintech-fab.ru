@@ -11,5 +11,5 @@ return array(
 	'contactEmail'        => 'operator@kreddy.ru',
 	'emailFrom'           => 'info@kreddy.ru',
 	'landingApiSecretKey' => 'someSecretKeyJH45Gj9g5kj1hg',
-	'sDocumentPath' => '/tmp/',
+	'sDocumentsPath' => '/tmp/',
 );

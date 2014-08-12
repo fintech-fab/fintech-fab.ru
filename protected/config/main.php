@@ -46,7 +46,7 @@ $a = array(
 
 	'params'         => array(
 		'bShowAlert'     => true,
-		'sDocumentsPath' => '/var/www/',
+		'sDocumentsPath' => '/tmp/',
 	),
 
 	'theme'          => 'classic',
