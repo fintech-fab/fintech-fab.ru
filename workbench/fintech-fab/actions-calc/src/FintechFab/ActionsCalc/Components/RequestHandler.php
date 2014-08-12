@@ -70,13 +70,12 @@ class RequestHandler
 	private function resultsToQueue($aoFittedRules)
 	{
 		foreach ($aoFittedRules as $oRule) {
-			/**
-			 * @var ResultHandler $oResultHandler
-			 */
+			/** @var ResultHandler $oResultHandler */
 			$oResultHandler = App::make(ResultHandler::class);
 
 			$sTerminalUrl = $oRule->terminal->url;
 			$sTerminalQueue = $oRule->terminal->foreign_queue;
+			$sForeignJob = $oRule->terminal->foreign_job;
 
 			if ($sTerminalUrl != "") {
 				$oResultHandler->sendHttpToQueue($sTerminalUrl, $oRule->signal_id);
@@ -92,7 +91,7 @@ class RequestHandler
 				Registrator::registerSignal($aSignalAttributes, false, true, $sResultHash);
 
 				// result to queue to put it into external queue
-				$oResultHandler->resultToQueue($sTerminalQueue, $oRule->signal->signal_sid);
+				$oResultHandler->resultToQueue($sForeignJob, $sTerminalQueue, $oRule->signal->signal_sid);
 			}
 		}
 	}

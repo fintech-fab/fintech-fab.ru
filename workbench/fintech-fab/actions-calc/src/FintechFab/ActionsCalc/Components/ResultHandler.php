@@ -5,6 +5,7 @@ namespace FintechFab\ActionsCalc\Components;
 use Log;
 use Queue;
 use FintechFab\ActionsCalc\Queue\SendHttp;
+use FintechFab\ActionsCalc\Queue\ToForeign;
 
 /**
  * Class ResultHandler
@@ -21,6 +22,8 @@ class ResultHandler
 	}
 
 	/**
+	 * Response with results to queue.
+	 *
 	 * @param $url
 	 * @param $iSignalId
 	 */
@@ -37,18 +40,23 @@ class ResultHandler
 	}
 
 	/**
-	 * @param $queue
+	 * Result to queue.
+	 * Listening and attempting to put to foreign queue.
+	 * Because if putting to foreign queue fails, we'l have fatal.
+	 *
+	 * @param $foreign_job
+	 * @param $foreign_queue
 	 * @param $signalSid
 	 */
-	public function resultToQueue($queue, $signalSid)
+	public function resultToQueue($foreign_job, $foreign_queue, $signalSid)
 	{
-		Queue::connection('ff-actions-calc-result')->push($queue, array(
-			'sQueue'      => $queue,
-			'sSignalSid'  => $signalSid,
-			'sResultHash' => $this->_sResultHash,
-		));
+		Queue::connection('ff-actions-calc-result')->push(ToForeign::class, [
+			'sSignalSid'    => $signalSid,
+			'sForeignQueue' => $foreign_queue,
+			'sForeignJob'   => $foreign_job,
+			'sResultHash'   => $this->_sResultHash,
+		]);
 
-		// TODO: result to queue to put it in external queue XD
 		Log::info('Queue: resultToQueue,');
 	}
 

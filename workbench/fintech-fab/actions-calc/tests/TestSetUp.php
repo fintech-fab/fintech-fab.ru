@@ -41,13 +41,14 @@ class TestSetUp extends TestCase
 
 		// Terminal user
 		Terminal::create([
-			'id'          => 1,
-			'name'        => 'Терминал 1',
-			'key'         => 'key',
-			'password'    => Hash::make('password'),
-			'flag_active' => true,
-			'url'   => 'http://ya.ru',
-			'queue' => 'test_queue'
+			'id'            => 1,
+			'name'          => 'Терминал 1',
+			'key'           => 'key',
+			'password'      => Hash::make('password'),
+			'flag_active'   => true,
+			'url'           => 'http://ya.ru',
+			'foreign_queue' => 'test_queue',
+			'foreign_job'   => 'Some\Foreign\Job',
 		]);
 
 		// Events
