@@ -24,7 +24,7 @@
 	},
 	"require-dev": {
 		"barryvdh/laravel-ide-helper": "dev-master",
-		"phpunit/php-code-coverage": "3.0.*@dev",
+		"phpunit/php-code-coverage": "~2.0",
 		"phpunit/phpunit-mock-objects": "2.3.*@dev",
 		"phpunit/phpunit": "4.3.*@dev",
 		"zizaco/factory-muff": "dev-master",
