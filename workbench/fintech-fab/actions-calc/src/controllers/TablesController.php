@@ -81,20 +81,14 @@ class TablesController extends BaseController
 
 	public function postChangeDataEvents()
 	{
-		$input = Input::only('id', 'name', 'event_sid', 'unique');
-
+		$input = Input::only('id', 'name', 'event_sid');
+		$terminal = AuthCheck::getTerm();
+		$input['terminal_id'] = $terminal['id'];
 		//проверяем данные
-		if ($input['unique'] == 'true') {
-			$errors = Validators::getErrorFromChangeDataEventsTableUnique($input);
-			if ($errors) {
-				return $errors;
-			}
-		} else {
-			$errors = Validators::getErrorFromChangeDataEventsTable($input);
-			if ($errors) {
-				return $errors;
-			}
 
+		$errors = Validators::getErrorFromChangeDataEventsTable($input);
+		if ($errors) {
+			return $errors;
 		}
 
 		//Изменяем данные
@@ -111,7 +105,7 @@ class TablesController extends BaseController
 		$input = Input::only('name', 'event_sid');
 		$input['name'] = e($input['name']);
 		//проверяем данные
-		$errors = Validators::getErrorFromChangeDataEventsTable($input);
+		$errors = Validators::getErrorFromAddDataEventsTable($input);
 		if ($errors) {
 			return $errors;
 		}
@@ -129,22 +123,16 @@ class TablesController extends BaseController
 
 	public function postChangeDataSignals()
 	{
-		$input = Input::only('id', 'name', 'signal_sid', 'unique');
-
+		$input = Input::only('id', 'name', 'signal_sid');
+		$terminal = AuthCheck::getTerm();
+		$input['terminal_id'] = $terminal['id'];
 		//проверяем данные
-		if ($input['unique'] == 'true') {
-			$errors = Validators::getErrorFromChangeDataSignalsTableUnique($input);
-			if ($errors) {
-				return $errors;
-			}
-		} else {
 
-			$errors = Validators::getErrorFromChangeDataSignalsTable($input);
-			if ($errors) {
-				return $errors;
-			}
-
+		$errors = Validators::getErrorFromChangeDataSignalsTable($input);
+		if ($errors) {
+			return $errors;
 		}
+
 
 		//Изменяем данные
 		$signalData = Signal::find($input['id']);
@@ -160,7 +148,7 @@ class TablesController extends BaseController
 		$input = Input::only('name', 'signal_sid');
 		$input['name'] = e($input['name']);
 		//проверяем данные
-		$errors = Validators::getErrorFromChangeDataSignalsTable($input);
+		$errors = Validators::getErrorFromAddDataSignalsTable($input);
 		if ($errors) {
 			return $errors;
 		}
