@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-
-use FintechFab\Models\IGitHubModel;
-use FintechFab\Models\GitHubComments;
 use FintechFab\Components\GitHubAPI;
+use FintechFab\Models\GitHubComments;
+use FintechFab\Models\IGitHubModel;
+use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class FintechFabFromGitHub extends Command {
 	/**
@@ -40,6 +39,15 @@ class FintechFabFromGitHub extends Command {
 		$owner = Config::get("github.owner");
 		$repo = Config::get("github.trainingRepo");
 
+		// лучше: new GitHubAPI($owner, $repo)
+		// потому что setRepo здесь только один раз вызывается
+		// при создании класса
+
+		// еще может быть стоит, Config::get убрать в класс GitHubAPI
+		// т.е. пусть сам настройки читает из конфига
+		// но это зависит от того, насколько класс сильно связан с контекстом проекта.
+		// если может использоваться отдельно - то не надо в него убирать чтение конфига.
+
 		$this->gitHubAPI = new GitHubAPI();
 		$this->gitHubAPI->setRepo($owner, $repo);
 	}
@@ -63,6 +71,7 @@ class FintechFabFromGitHub extends Command {
 		switch($this->argument('Category')) {
 			case "comments":
 				$maxDate = GitHubComments::max('updated');
+				// комментарий бы... что такое $maxDate, зачем - непонятно
 				$param = empty($maxDate) ? "" : "since='" . str_replace(" ", "T", $maxDate) . "Z'";
 
 				$this->gitHubAPI->setNewRepoQuery('issues/comments', $param);
@@ -108,6 +117,7 @@ class FintechFabFromGitHub extends Command {
 	protected function getOptions()
 	{
 		return array(
+			// честно не понимаю, что значит *|all|:value_of_argument
 			array('helpArg', null, InputOption::VALUE_OPTIONAL, 'The help about used argument. --helpArg=*|all|:value_of_argument', null),
 		);
 	}

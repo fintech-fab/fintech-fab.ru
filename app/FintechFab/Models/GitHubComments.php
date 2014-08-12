@@ -21,6 +21,9 @@ use Eloquent;
   */
 class GitHubComments extends Eloquent implements IGitHubModel
 {
+
+	// почему не использованы стандартные timestamps?
+	// в чем смысл - называть поля по своему?
 	public $timestamps = false;
 
 	protected $table = 'github_comments';
@@ -50,6 +53,8 @@ class GitHubComments extends Eloquent implements IGitHubModel
 		$this->html_url = $inData->html_url;
 		$n = explode('/', $inData->issue_url);
 		$this->issue_number = $n[count($n)-1];
+		// к вопросу выше - зачем делать по своему?
+		// есть же стандартные названия - created_at, updated_at
 		$this->created = $inData->created_at;
 		$this->updated = $inData->updated_at;
 		$this->user_login = $inData->user->login;

@@ -124,13 +124,23 @@ class GitHubAPI
 	public function doNextRequest()
 	{
 		$this->messageOfResponse = '';
+
 		if($this->currentUrl == '')
 		{
 			return false;
 		}
+		// здесь else не нужен, т.к. уже "вышли" из метода выше
+		// лишних условных блоков лучше избегать
 		else
 		{
+			// отлично. отдельно выполняется запрос, потом разбирается результат
 			$status = $this->doGitHubRequest($this->currentUrl);
+
+			// отлично. теперь вижу, что код ответа действительно нужен и важен.
+			// но будет еще лучше, если вызвать какой нибудь метод типа $this->parseResponseStatus($status)
+			// просто для того, чтобы в методе не было много кода и чтобы данный метод -
+			// обращаю внимание - он называется doNextRequest (выполнить следующий запрос)
+			// выполнял запрос, а не разбирался с ответом. разбирательство с ответом можно поручить другому
 			switch($status)
 			{
 				case 0:
@@ -163,6 +173,8 @@ class GitHubAPI
 				}
 			}
 
+			// очень не сразу понял, что здесь происходит
+			// комментариев сильно не хватает
 			$this->usedUrl = $this->currentUrl;
 			if(isset($this->header['Link']['next']))
 			{
@@ -212,6 +224,8 @@ class GitHubAPI
 
 
 		$response = curl_exec($ch);
+
+		// 5+ при работе с curl примерно так всегда надо делать
 		if(curl_errno($ch) != 0){
 			$this->error = curl_error($ch);
 			$this->errno = curl_errno($ch);
@@ -227,6 +241,9 @@ class GitHubAPI
 		$response = trim(substr($response, $pos)); //альтернативный вариант отделения заголовка
 		$this->response = json_decode($response); //альтернативный вариант отделения заголовка
 
+		// лучше все таки регуляркой. как минимум - для тренировки.
+		// в любом случае работать с регулярными выражениями надо уметь.
+		// и все это можно сделать одной строкой
 		for($i = 1; $i < count($strArray); $i++)
 		{
 			$pos = strpos($strArray[$i], ":");
@@ -255,6 +272,7 @@ class GitHubAPI
 	 */
 	private static function decodePageLinks($inLinks)
 	{
+		// регулярка? :-)
 		$rel = ""; //Приходит из GitHub'а
 		$links = explode(",", $inLinks);
 		$pageLinks = array();
