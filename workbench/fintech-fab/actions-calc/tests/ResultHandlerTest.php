@@ -17,16 +17,12 @@ class ResultHandlerTest extends TestSetUp
 	public function setUp()
 	{
 		parent::setUp();
-		$this->_mock = m::mock(ResultHandler::class);
+		$this->_mock = m::mock(ResultHandler::class . '[sendHttpToQueue]');
 	}
 
 	public function testSendHttpToQueue()
 	{
-		$this->_mock->shouldReceive('getResultHash')->once();
-		$this->_mock->shouldReceive('resultToQueue')->once();
-		$this->_mock->shouldReceive('sendHttpToQueue')
-			->once()
-			->withArgs(['http://ya.ru', 2]);
+		$this->_mock->shouldReceive('sendHttpToQueue')->once()->withArgs(['http://ya.ru', 2]);
 
 		$this->app->instance(ResultHandler::class, $this->_mock);
 

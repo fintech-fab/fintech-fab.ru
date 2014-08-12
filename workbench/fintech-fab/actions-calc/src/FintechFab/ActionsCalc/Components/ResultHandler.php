@@ -48,8 +48,16 @@ class ResultHandler
 			'sResultHash' => $this->_sResultHash,
 		));
 
-		// TODO: queue -> queue XD
-		Log::info('Результат отправлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');
+		// TODO: result to queue to put it in external queue XD
+		Log::info('Queue: resultToQueue,');
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getResultHash()
+	{
+		return $this->_sResultHash;
 	}
 
 	/**
@@ -60,13 +68,5 @@ class ResultHandler
 	private function generateResultHash()
 	{
 		return uniqid('que_');
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getResultHash()
-	{
-		return $this->_sResultHash;
 	}
 }

@@ -36,6 +36,7 @@ class RequestHandler
 		Log::info('Request-data: ' . json_encode($aRequestData));
 		$oCalcHandler = new CalcHandler;
 
+		// request data validation
 		if ($this->validate($aRequestData)) {
 			// registering incoming event
 			Registrator::registerEvent($aRequestData);
@@ -46,9 +47,11 @@ class RequestHandler
 			App::abort(400, 'Validation failed');
 		}
 
+		// counting fitted rules
 		$iFittedRules = $oCalcHandler->getFittedRulesCount();
 		Log::info("Fitted rules count: $iFittedRules");
 
+		// more than one rule fits, to queue
 		if ($iFittedRules > 0) {
 			$aoFittedRules = $oCalcHandler->getFittedRules();
 			// All fitted rules, processing and to queue
@@ -73,7 +76,7 @@ class RequestHandler
 			$oResultHandler = App::make(ResultHandler::class);
 
 			$sTerminalUrl = $oRule->terminal->url;
-			$sTerminalQueue = $oRule->terminal->queue;
+			$sTerminalQueue = $oRule->terminal->foreign_queue;
 
 			if ($sTerminalUrl != "") {
 				$oResultHandler->sendHttpToQueue($sTerminalUrl, $oRule->signal_id);
@@ -84,15 +87,19 @@ class RequestHandler
 				$oSignal = Signal::find($oRule->signal_id)->first();
 				$aSignalAttributes = $oSignal->getAttributes();
 
+				// reqistering signal
 				$sResultHash = $oResultHandler->getResultHash();
 				Registrator::registerSignal($aSignalAttributes, false, true, $sResultHash);
 
+				// result to queue to put it into external queue
 				$oResultHandler->resultToQueue($sTerminalQueue, $oRule->signal->signal_sid);
 			}
 		}
 	}
 
 	/**
+	 * Validate request data.
+	 *
 	 * @param $aRequestData
 	 *
 	 * @return string
@@ -100,7 +107,7 @@ class RequestHandler
 	 */
 	private function validate($aRequestData)
 	{
-		// check clien signature
+		// check client signature
 		if (!AuthHandler::checkSign($aRequestData)) {
 			Log::info('Request. Wrong signature.');
 			App::abort(401, 'Wrong signature. Unauthorized.');

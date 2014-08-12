@@ -27,6 +27,7 @@ class SendHttp
 	{
 		Log::info('Queue SendHttp fire -', $aData);
 
+		/** @var Signal $oSignal */
 		$oSignal = Signal::find((int)$aData['iSignalId']);
 		if (is_null($oSignal)) {
 			$job->delete();
