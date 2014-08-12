@@ -22,47 +22,26 @@ $(document).ready(function () {
 
 		var name = $('#inputName').val();
 		var event_sid = $('#inputSid').val();
-		if (event_sid == sid) {
-			$.post('tableEvents/changeData/', {
-					id: id,
-					unique: false,
-					name: name,
-					event_sid: event_sid
-				},
-				function (data) {
-					if (data['errors']) {
-						$('#errorName').html(data['errors']['name']);
-						$('#errorSid').html(data['errors']['event_sid']);
-						return;
-					}
-					location.reload();
+		$.post('tableEvents/changeData/', {
+				id: id,
+				name: name,
+				event_sid: event_sid
+			},
+			function (data) {
+				if (data['errors']) {
+					$('#errorName').html(data['errors']['name']);
+					$('#errorSid').html(data['errors']['event_sid']);
+					return;
 				}
-			);
-		} else {
-			$.post('tableEvents/changeData/', {
-					id: id,
-					unique: true,
-					name: name,
-					event_sid: event_sid
-				},
-				function (data) {
-					if (data['errors']) {
-						$('#errorName').html(data['errors']['name']);
-						$('#errorSid').html(data['errors']['event_sid']);
-						return;
-					}
-					location.reload();
-				}
-			);
-
-		}
-
-
+				location.reload();
+			}
+		);
 	});
 
 	$('button#AddEventTable').click(function () {
 		var name = $('#inputNameAdd').val();
 		var event_sid = $('#inputSidAdd').val();
+
 		$.post('tableEvents/addData/', {
 				name: name,
 				event_sid: event_sid

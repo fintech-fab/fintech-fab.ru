@@ -135,8 +135,17 @@ class Validators
 		}
 	}
 
+	public static function rulesForTableDataEvents($data)
+	{
+		$rules = array(
+			'name'      => 'required',
+			'event_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.events,event_sid,' . $data['id'] . ',id,terminal_id,' . $data['terminal_id'],
+		);
 
-	public static function rulesForTableDataEventsUnique()
+		return $rules;
+	}
+
+	public static function rulesForTableAddDataEvents()
 	{
 		$rules = array(
 			'name'      => 'required',
@@ -146,31 +155,21 @@ class Validators
 		return $rules;
 	}
 
-	public static function rulesForTableDataEvents()
+	public static function rulesForTableDataSignals($data)
 	{
 		$rules = array(
-			'name'      => 'required',
-			'event_sid' => 'required|alpha_dash',
+			'name'       => 'required',
+			'signal_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.signals,signal_sid,' . $data['id'] . ',id,terminal_id,' . $data['terminal_id'],
 		);
 
 		return $rules;
 	}
 
-	public static function rulesForTableDataSignalsUnique()
+	public static function rulesForTableAddDataSignals()
 	{
 		$rules = array(
 			'name'       => 'required',
 			'signal_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.signals',
-		);
-
-		return $rules;
-	}
-
-	public static function rulesForTableDataSignals()
-	{
-		$rules = array(
-			'name'       => 'required',
-			'signal_sid' => 'required|alpha_dash',
 		);
 
 		return $rules;
@@ -221,29 +220,12 @@ class Validators
 	}
 
 
-	public static function getErrorFromChangeDataEventsTableUnique($data)
-	{
-		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, Validators::rulesForTableDataEventsUnique(), Validators::messagesForErrors());
-		$userMessages = $validator->messages();
-
-		if ($validator->fails()) {
-			$result['errors'] = array(
-				'name'      => $userMessages->first('name'),
-				'event_sid' => $userMessages->first('event_sid'),
-			);
-
-			return $result;
-		}
-
-		return null;
-
-	}
-
 	public static function getErrorFromChangeDataEventsTable($data)
 	{
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, Validators::rulesForTableDataEvents(), Validators::messagesForErrors());
+		$dataForChange['id'] = $data['id'];
+		$dataForChange['terminal_id'] = $data['terminal_id'];
+		$validator = Validator::make($data, Validators::rulesForTableDataEvents($dataForChange), Validators::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
@@ -259,10 +241,31 @@ class Validators
 
 	}
 
-	public static function getErrorFromChangeDataSignalsTableUnique($data)
+	public static function getErrorFromAddDataEventsTable($data)
 	{
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, Validators::rulesForTableDataSignalsUnique(), Validators::messagesForErrors());
+		$validator = Validator::make($data, Validators::rulesForTableAddDataEvents(), Validators::messagesForErrors());
+		$userMessages = $validator->messages();
+
+		if ($validator->fails()) {
+			$result['errors'] = array(
+				'name'      => $userMessages->first('name'),
+				'event_sid' => $userMessages->first('event_sid'),
+			);
+
+			return $result;
+		}
+
+		return null;
+
+	}
+
+	public static function getErrorFromChangeDataSignalsTable($data)
+	{
+		$data['name'] = e($data['name']);
+		$dataForChange['id'] = $data['id'];
+		$dataForChange['terminal_id'] = $data['terminal_id'];
+		$validator = Validator::make($data, Validators::rulesForTableDataSignals($dataForChange), Validators::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
@@ -278,10 +281,11 @@ class Validators
 
 	}
 
-	public static function getErrorFromChangeDataSignalsTable($data)
+	public static function getErrorFromAddDataSignalsTable($data)
 	{
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, Validators::rulesForTableDataSignals(), Validators::messagesForErrors());
+
+		$validator = Validator::make($data, Validators::rulesForTableAddDataSignals(), Validators::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
