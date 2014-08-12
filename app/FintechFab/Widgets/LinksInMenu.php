@@ -49,12 +49,12 @@ class LinksInMenu
 	public static function linkForMainMenu()
 	{
 		$link_main_menu = '';
-		if (Auth::check() && Route::has('accountIndex') && Route::has('createOrder')) {
+		if (Auth::check() && Route::has('qiwiGate_account') && Route::has('qiwiShop_createOrder')) {
 			$link_main_menu = '<li>
-									<a href ="' . URL::route('createOrder') . '">Терминал QIWI</a>
+									<a href ="' . URL::route('qiwiShop_createOrder') . '">Магазин QIWI</a>
 								</li>
 								<li>
-									<a href="' . URL::route('accountIndex') . '">Аккаунт QIWI</a>
+									<a href="' . URL::route('qiwiGate_account') . '">Терминал QIWI</a>
 								</li>';
 		}
 

@@ -3,9 +3,9 @@
 namespace FintechFab\Components;
 
 use Config;
+use Exception;
 use Illuminate\Mail\Message;
 use Mail;
-use Symfony\Component\Security\Acl\Exception\Exception;
 
 class MailSender
 {
@@ -28,8 +28,10 @@ class MailSender
 		});
 
 		$cntFails = count(Mail::failures());
+
 		return (0 == $cntFails);
 	}
+
 	/**
 	 *
 	 * @param array $data
@@ -45,8 +47,10 @@ class MailSender
 		});
 
 		$cntFails = count(Mail::failures());
+
 		return (0 == $cntFails);
 	}
+
 	/**
 	 * @param array $data
 	 * $data['baseMessage']
@@ -64,6 +68,7 @@ class MailSender
 		});
 
 		$cntFails = count(Mail::failures());
+
 		return (0 == $cntFails);
 	}
 
@@ -98,6 +103,7 @@ class MailSender
 			: "";
 
 	}
+
 	/**
 	 * Получим имя из адреса эл. почты
 	 *
