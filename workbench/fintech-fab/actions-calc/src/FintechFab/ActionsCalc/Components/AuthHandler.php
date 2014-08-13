@@ -41,7 +41,7 @@ class AuthHandler
 	 */
 	public static function isClientRegistered()
 	{
-		$iClientId = Config::get('ff-actions-calc::app.terminal_id');
+		$iClientId = Config::get('ff-actions-calc::terminal_id');
 		$iClientId = (int)$iClientId;
 
 		$terminal = Terminal::find($iClientId, ['id']);
