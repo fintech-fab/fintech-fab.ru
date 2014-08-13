@@ -15,7 +15,6 @@ use FintechFab\ActionsCalc\Models\Rule;
 class CalcHandler
 {
 	// method names for comparing rules with data
-	// TODO: not sure about constants, useful only for refactoring now, and rules consistency.
 	const OP_BOOL = 'bool';
 	const OP_GREATER = 'greater';
 	const OP_GREATER_OR_EQUAL = 'greaterOrEqaul';

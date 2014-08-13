@@ -35,7 +35,7 @@ class AuthHandler
 	}
 
 	/**
-	 * Authenticate client by hist config terminal_id and key
+	 * Authenticate client by hist config terminal_id
 	 *
 	 * @return bool
 	 */
