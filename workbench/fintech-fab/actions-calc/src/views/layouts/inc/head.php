@@ -10,9 +10,12 @@
 
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.4.8/select2.css">
-
 <script src="//cdn.jsdelivr.net/select2/3.4.8/select2.min.js "></script>
 
 <style type="text/css">
 	<?php require(__DIR__ . '/css/main.css') ?>
 </style>
+
+<script>
+	<?php require(__DIR__ . '/js/bootbox.min.js') ?>
+</script>

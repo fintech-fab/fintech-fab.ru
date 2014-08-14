@@ -20,7 +20,7 @@ use FintechFab\ActionsCalc\Models\Rule;
 
 
 <?=
-Form::button('Добавить', array(
+Form::button('Добавить правило', array(
 	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
 	'data-toggle' => 'modal',
 	'data-target' => '#addDataRuleModal',

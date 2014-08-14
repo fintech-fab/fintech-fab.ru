@@ -178,9 +178,7 @@ class TablesController extends BaseController
 			$rule->changeFlag(0);
 		}
 
-		$res = "Изменения произошли для правила с порядковым номером  $id";
-
-		return $res;
+		return $id;
 
 	}
 

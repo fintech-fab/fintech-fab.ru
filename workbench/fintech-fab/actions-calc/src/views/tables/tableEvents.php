@@ -19,6 +19,8 @@ use FintechFab\ActionsCalc\Models\Event;
 
 <?= View::make('ff-actions-calc::tables.inc.TableEvents.addDataEventModal') ?>
 
+<?= View::make('ff-actions-calc::tables.inc.TableEvents.addDataRuleModal') ?>
+
 <?=
 Form::button('Добавить событие', array(
 	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
@@ -51,8 +53,15 @@ echo '<br><br>'
 				)) ?>
 				<?=
 				Form::button('Правила', array(
-					'class'   => 'btn btn-sm btn-info tableGetRules',
+					'class' => 'btn btn-sm btn-info tableBtn tableGetRules',
 					'data-id' => $event->id,
+				))?>
+				<?=
+				Form::button('Добавить правило', array(
+					'class'       => 'btn btn-sm btn-info tableBtn addRule',
+					'data-toggle' => 'modal',
+					'data-target' => '#addDataRuleModal',
+					'data-id'     => $event->id,
 				))?>
 			</td>
 		</tr>
