@@ -10,8 +10,6 @@ var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var livereload = require('gulp-livereload');
 var eol = require('gulp-eol');
-var sequence = require('run-sequence');
-
 
 // paths
 var vendorPath = './vendor/';
@@ -34,7 +32,6 @@ gulp.task('app.css', function () {
 		.pipe(rename({suffix: '.min'}))
 		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'css'));
-//        .pipe(notify({message: 'Foundation5 scss->css complete.'}));
 });
 
 gulp.task('app.js', function () {
@@ -75,15 +72,3 @@ gulp.task('cf.js', function () {
 });
 
 gulp.task('build-all', ['app.js', 'cf.js', 'app.css']);
-
-gulp.task('watch', function () {
-
-	gulp.watch(vendorPath + 'foundation/scss/**/*.scss', ['unicss']);
-
-	var server = livereload();
-	livereload.listen();
-
-	gulp.watch([destPath + '**', destPathShop + '**']).on('change', function (file) {
-		server.changed(file.path);
-	});
-});

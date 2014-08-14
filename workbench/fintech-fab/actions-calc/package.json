@@ -12,8 +12,9 @@
     "gulp-ruby-sass": "^0.5.0",
     "gulp-cache": "^0.1.11",
     "gulp-jshint": "^1.6.3",
-    "gulp-imagemin": "^0.6.1",
+    "gulp-imagemin": "^0.6.2",
     "gulp-connect": "^2.0.5",
-    "gulp-eol": "^0.0.1"
+    "gulp-eol": "^0.0.1",
+    "orcherstrator": "^0.0.3"
   }
 }
