@@ -30,7 +30,8 @@ class ToForeign
 			]);
 			Log::info('Job ToForeign', $aData);
 			$job->delete();
-			exit();
+
+			return;
 		} else {
 			Log::info('Job release. Attempts: ' . $job->attempts(), $aData);
 			$job->release(60);
@@ -40,7 +41,8 @@ class ToForeign
 		if ($job->attempts() > 50) {
 			$job->delete();
 			Log::info('Queue attempts exceeded.', $aData);
-			exit();
+
+			return;
 		}
 	}
 

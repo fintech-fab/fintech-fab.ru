@@ -6,8 +6,7 @@
  */
 
 // main entry point
-Route::post('actions-calc/getRequest', [
-	'before' => 'ff.actions-calc.basic.auth',
+Route::post('actions-calc', [
 	'as'     => 'getRequest',
 	'uses'   => 'FintechFab\ActionsCalc\Controllers\RequestController@getRequest',
 ]);

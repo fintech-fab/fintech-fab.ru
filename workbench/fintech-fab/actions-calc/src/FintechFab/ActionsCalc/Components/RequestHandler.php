@@ -63,7 +63,9 @@ class RequestHandler
 
 	/**
 	 * Results to queue.
-	 * Curl request to queue | Нужно поставить в очередь, постановку в очередь результата, для внешнего слушателя.
+	 * 1. Curl response to queue.
+	 * 2. Result to queue.
+	 * 3. Listening connection(with results) and sending result to foreign queue.
 	 *
 	 * @param Rule[] $aoFittedRules
 	 */

@@ -31,7 +31,8 @@ class SendHttp
 		$oSignal = Signal::find((int)$aData['iSignalId']);
 		if (is_null($oSignal)) {
 			$job->delete();
-			exit();
+
+			return;
 		}
 		$sSignalSid = $oSignal->signal_sid;
 
@@ -43,14 +44,15 @@ class SendHttp
 
 			$job->delete();
 			// TODO: failed_jobs table.
-			exit();
+			return;
 		}
 
 		// job failed?
 		if ($job->attempts() > 50) {
 			$job->delete();
 			Log::info('Queue attempts exceeded.', $aData);
-			exit();
+
+			return;
 		}
 
 		Log::info('Job release. Attempts: ' . $job->attempts(), $aData);
