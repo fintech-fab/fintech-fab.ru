@@ -10,6 +10,7 @@ var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var livereload = require('gulp-livereload');
 var eol = require('gulp-eol');
+var sequence = require('run-sequence');
 
 
 // paths
@@ -19,11 +20,11 @@ var destPath = './public/';
 gulp.task('default', function () {
 });
 
-gulp.task('app-css', function () {
+gulp.task('app.css', function () {
 	var arrCssFiles = [
 		vendorPath + 'foundation/scss/normalize.scss',
 		vendorPath + 'foundation/scss/foundation.scss',
-		vendorPath + 'foundation/css/foundation-icons.css',
+		vendorPath + 'foundation/css/foundation-icons.css'
 	];
 
 	return gulp.src(arrCssFiles)
@@ -31,6 +32,7 @@ gulp.task('app-css', function () {
 		.pipe(minifycss())
 		.pipe(concat('app.css'))
 		.pipe(rename({suffix: '.min'}))
+		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'css'));
 //        .pipe(notify({message: 'Foundation5 scss->css complete.'}));
 });
@@ -38,7 +40,7 @@ gulp.task('app-css', function () {
 gulp.task('app.js', function () {
 	var arrAppFiles = [
 		vendorPath + 'foundation/js/vendor/modernizr.js',
-		vendorPath + 'foundation/js/vendor/jquery.js',
+		vendorPath + 'foundation/js/vendor/jquery.js'
 	];
 
 	return gulp.src(arrAppFiles)
@@ -50,7 +52,7 @@ gulp.task('app.js', function () {
 		.pipe(gulp.dest(destPath + 'js'));
 });
 
-gulp.task('cf-js', function () {
+gulp.task('cf.js', function () {
 
 	var zfJsPath = vendorPath + 'foundation/js/';
 
@@ -61,15 +63,18 @@ gulp.task('cf-js', function () {
 		zfJsPath + 'foundation/foundation.dropdown.js',
 		zfJsPath + 'foundation/foundation.offcanvas.js',
 		zfJsPath + 'foundation/foundation.reveal.js',
-		zfJsPath + 'foundation/foundation.accordion.js',
+		zfJsPath + 'foundation/foundation.accordion.js'
 	];
 
 	return gulp.src(arrJsFiles)
 		.pipe(rename({suffix: '.min'}))
 		.pipe(uglify())
 		.pipe(concat('cf.js'))
+		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'js'));
 });
+
+gulp.task('build-all', ['app.js', 'cf.js', 'app.css']);
 
 gulp.task('watch', function () {
 
