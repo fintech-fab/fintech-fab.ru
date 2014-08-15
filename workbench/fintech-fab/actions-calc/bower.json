@@ -1,28 +1,29 @@
 {
-	"name": "actions-calc",
-	"version": "1.0.0",
-	"homepage": "https://github.com/truetamtam/fintech-fab.ru",
-	"authors": [
-		"truetamtam <greenclever@gmail.com>"
-	],
-	"description": "Actions calculator",
-	"moduleType": [
-		"node"
-	],
-	"keywords": [
-		"actions-calc",
-		"laravel"
-	],
-	"license": "MIT",
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components",
-		"test",
-		"tests"
-	],
-	"directory": "./vendor",
-	"devDependencies": {
-		"foundation": "~5.3.0"
-	}
+  "name": "actions-calc",
+  "version": "1.0.0",
+  "homepage": "https://github.com/truetamtam/fintech-fab.ru",
+  "authors": [
+    "truetamtam <greenclever@gmail.com>"
+  ],
+  "description": "Actions calculator",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "actions-calc",
+    "laravel"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "directory": "./vendor",
+  "devDependencies": {
+    "foundation": "~5.3.0",
+    "select2": "~3.5.1"
+  }
 }

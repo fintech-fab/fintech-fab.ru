@@ -13,7 +13,7 @@ var eol = require('gulp-eol');
 
 // paths
 var vendorPath = './vendor/';
-var destPath = './public/';
+var destPath = './src/views/layout/';
 
 gulp.task('default', function () {
 });

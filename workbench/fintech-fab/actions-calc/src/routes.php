@@ -5,6 +5,10 @@
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
 
+Route::get('/actions-calc/manage', [
+	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@manage'
+]);
+
 // main entry point
 Route::post('actions-calc', [
 	'as'     => 'getRequest',
