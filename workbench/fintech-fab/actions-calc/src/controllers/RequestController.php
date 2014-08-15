@@ -32,8 +32,20 @@ class RequestController extends Controller
 		}
 
 		$mainHandler = new MainHandler();
+		$fitRules = $mainHandler->CalcFitRules($input);
+		if (isset($fitRules['error'])) {
+			return json_encode($fitRules);
+		}
 
-		return json_encode($mainHandler->processRequest($input));
+		if ($fitRules == null) {
+			Log::info('Соответствующих запросу правил не найдено');
+
+			return ['countFitRules' => 0];
+		}
+
+		$countFitRules = $mainHandler->processSendResults($fitRules, $input);
+
+		return json_encode($countFitRules);
 	}
 
 	/**

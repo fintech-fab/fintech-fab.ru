@@ -16,7 +16,7 @@ class RulesHandler
 	 * @param Rule[] $rules
 	 * @param array  $data
 	 *
-	 * @return Rule[]
+	 * @return Rule[]|null
 	 */
 	public function getFitRules($rules, $data)
 	{
@@ -34,7 +34,7 @@ class RulesHandler
 
 		}
 
-		return $this->fitRules;
+		return count($this->fitRules) == 0 ? null : $this->fitRules;
 	}
 
 	/** Проверка правила

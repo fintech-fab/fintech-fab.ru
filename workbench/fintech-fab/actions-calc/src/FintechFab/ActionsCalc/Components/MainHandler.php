@@ -12,13 +12,14 @@ use Log;
 
 class MainHandler
 {
+	private $incomeEvent;
 
 	/**
 	 * @param $data
 	 *
-	 * @return array
+	 * @return Rule[]
 	 */
-	public function processRequest($data)
+	public function CalcFitRules($data)
 	{
 		$eventData = json_decode($data['data'], true);
 
@@ -27,8 +28,8 @@ class MainHandler
 		}
 
 		//Записываем событие в базу
-		$incomeEvent = new IncomeEvent();
-		$incomeEvent->newIncomeEvent($data['term'], $data['event'], $eventData);
+		$this->incomeEvent = new IncomeEvent();
+		$this->incomeEvent->newIncomeEvent($data['term'], $data['event'], $eventData);
 
 		//Если не находим событие - отдаём ошибку
 		$event = Event::getEvent($data['term'], $data['event']);
@@ -47,12 +48,19 @@ class MainHandler
 		//Определяем соответсвующие запросу правила
 		$rulesHandler = new RulesHandler();
 		$fitRules = $rulesHandler->getFitRules($rules, $eventData);
-		$countFitRules = count($fitRules);
-		if ($countFitRules == 0) {
-			Log::info('Соответствующих запросу правил не найдено');
 
-			return ['countFitRules' => $countFitRules];
-		}
+		return $fitRules;
+	}
+
+	/**
+	 * @param Rule[] $fitRules
+	 * @param array  $data
+	 *
+	 * @return array
+	 */
+	public function processSendResults($fitRules, $data)
+	{
+		$countFitRules = count($fitRules);
 		Log::info("Найдено подходящих правил: $countFitRules");
 
 		//Проходим циклом по каждому правилу и отправляем результат
@@ -61,18 +69,18 @@ class MainHandler
 			$signalSid = $fitRule->signal->signal_sid;
 
 			$resultSignal = new ResultSignal;
-			$resultSignal->newResultSignal($incomeEvent->id, $signalSid);
+			$resultSignal->newResultSignal($this->incomeEvent->id, $signalSid);
 			Log::info("Запись в таблицу сигналов: id  = $resultSignal->id");
 
 			//Отправляем результат по http
 			$sendResults = App::make(SendResults::class);
-			$url = $incomeEvent->terminal->url;
+			$url = $this->incomeEvent->terminal->url;
 			if ($url != '') {
 				$sendResults->sendHttp($url, $resultSignal->id, $data);
 			}
 
 			//Отправляем результат в очередь
-			$queue = $incomeEvent->terminal->queue;
+			$queue = $this->incomeEvent->terminal->queue;
 			if ($queue != '') {
 				$sendResults->sendQueue($queue, $signalSid, $data);
 				$resultSignal->setFlagQueueTrue();
