@@ -16,19 +16,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>FintechFab::ActionsCalculator</title>
 
-	<style>
-		<?php require(__DIR__ . "/css/app.min.css"); ?>
-	</style>
+	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/app.min.css">
+	<script src="<?php echo $sPubPath; ?>/js/app.js"></script>
 
 	<!-- select2 -->
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.4.8/select2.css">
 	<script src="//cdn.jsdelivr.net/select2/3.4.8/select2.min.js"></script>
-
-	<!-- main app.js-->
-	<script>
-		<?php require(__DIR__ . "/js/app.js"); ?>
-	</script>
-
 </head>
 <body>
 
@@ -174,10 +167,8 @@
 	</div>
 </footer>
 
-<script>
-	<?php require(__DIR__ . "/js/cf.js"); ?>
-	$(document).foundation();
-</script>
+<script src="<?php echo $sPubPath; ?>/js/cf.js"></script>
+<script>$(document).foundation();</script>
 
 </body>
 </html>
