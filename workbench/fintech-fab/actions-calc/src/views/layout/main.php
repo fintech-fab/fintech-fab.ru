@@ -25,20 +25,17 @@
 </head>
 <body>
 
-
 <div class="row">
 	<div class="large-12 columns">
 		<div class="nav-bar right">
 			<ul class="button-group">
-				<li><a href="#" class="button">Link 1</a></li>
-				<li><a href="#" class="button">Link 2</a></li>
-				<li><a href="#" class="button">Link 3</a></li>
-				<li><a href="#" class="button">Link 4</a></li>
+				<li><a href="#" class="button">События(Events</a></li>
+				<li><a href="#" class="button">Правила(Rules)</a></li>
+				<li><a href="#" class="button">Сигналы(Signals)</a></li>
+				<li><a href="#" class="button">U</a></li>
 			</ul>
 		</div>
-		<h1>Blog
-			<small>This is my blog. It's awesome.</small>
-		</h1>
+		<h1><small>Калькулятор событий</small></h1>
 		<hr />
 	</div>
 </div>
@@ -51,6 +48,7 @@
 		<script>
 	        $(document).ready(function() { $("#e1").select2(); });
 	    </script>
+
 		<select id="e1">
 	        <option value="AL">Alabama</option>
 	        <option value="WY">Wyoming</option>
