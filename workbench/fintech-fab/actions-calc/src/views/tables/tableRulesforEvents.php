@@ -11,7 +11,7 @@ use FintechFab\ActionsCalc\Models\Rule;
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableRulesForEvent.js') ?>
 </script>
-<?= View::make('ff-actions-calc::tables.inc.TableRule.changeDataRuleModal', array('rule' => $rules)) ?>
+<?= View::make('ff-actions-calc::tables.inc.TableEvents.changeDataRuleModal', array('rule' => $rules)) ?>
 
 
 <?= '<br>' ?>

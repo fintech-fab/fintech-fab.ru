@@ -59,6 +59,7 @@ $(document).ready(function () {
 
 
 	$('button#saveChangeRule').click(function () {
+		$('.text-danger').empty();
 		var $btn = $(this);
 		var id = $btn.data('id');
 		var eventSidId = $('#inputEventSid').val();
@@ -77,51 +78,15 @@ $(document).ready(function () {
 			function (data) {
 				btn.button('reset');
 				if (data['errors']) {
-					$('#errorName').html(data['errors']['name']);
+					$('#errorNameRule').html(data['errors']['name']);
 					$('#errorEventSid').html(data['errors']['event_id']);
 					$('#errorRule').html(data['errors']['rule']);
 					$('#errorSignalSid').html(data['errors']['signal_id']);
 					return;
 				}
+				var div = $('#changeDataRuleModal');
+				div.modal('hide');
 				Example.show("Правило #" + id + " изменено!");
-			}
-		);
-	});
-
-	$('button.addDataRuleTable').click(function () {
-		$('.text-danger').empty();
-		var eventSid = $('#inputEventSidAdd').val();
-		var signalSid = {};
-		$('select.inputSignalSidAdd').each(function () {
-			var id = $(this).attr("id");
-			signalSid[id] = $(this).val();
-		});
-		var name = $('#inputNameAdd').val();
-		var rule = $('#inputRuleAdd').val();
-		var btn = $(this);
-		btn.button('loading');
-		$.post('tableRules/addData/', {
-				event_id: eventSid,
-				signal_id: signalSid,
-				rule: rule,
-				name: name
-			},
-			function (data) {
-				btn.button('reset');
-				if (data['errors']) {
-					for (id in data['errors']['signal_id']) {
-						var errorId = 'error' + id.substring(5);
-
-						$('#' + errorId).html(data['errors']['signal_id'][id]);
-					}
-
-					$('#errorNameAdd').html(data['errors']['name']);
-					$('#errorEventSidAdd').html(data['errors']['event_id']);
-					$('#errorRuleAdd').html(data['errors']['rule']);
-
-					return;
-				}
-				location.reload();
 			}
 		);
 	});

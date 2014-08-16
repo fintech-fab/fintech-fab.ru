@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 
 	$('button.addRule').click(function () {
-
+		$('.text-danger').empty();
 		var $btn = $(this);
 		var id = $btn.data('id');
 		$('#inputEventSidAdd').val(id);
@@ -156,7 +156,7 @@ $(document).ready(function () {
 			var id = $(this).attr("id");
 			signalSid[id] = $(this).val();
 		});
-		var name = $('#inputNameAdd').val();
+		var name = $('#inputNameAddRule').val();
 		var rule = $('#inputRuleAdd').val();
 		var btn = $(this);
 		btn.button('loading');
@@ -169,19 +169,22 @@ $(document).ready(function () {
 			function (data) {
 				btn.button('reset');
 				if (data['errors']) {
-					for (id in data['errors']['signal_id']) {
-						var errorId = 'error' + id.substring(5);
-
-						$('#' + errorId).html(data['errors']['signal_id'][id]);
+					if (data['errors']['signal_id']) {
+						for (id in data['errors']['signal_id']) {
+							var errorId = 'error' + id.substring(5);
+							$('#' + errorId).html(data['errors']['signal_id'][id]);
+						}
 					}
 
-					$('#errorNameAdd').html(data['errors']['name']);
+					$('#errorNameAddRule').html(data['errors']['name']);
 					$('#errorEventSidAdd').html(data['errors']['event_id']);
 					$('#errorRuleAdd').html(data['errors']['rule']);
-
 					return;
 				}
-				location.reload();
+				var div = $('#addDataRuleModal');
+				div.modal('hide');
+				Example.show("Правило добавлено!");
+//				location.reload();
 			}
 		);
 	});

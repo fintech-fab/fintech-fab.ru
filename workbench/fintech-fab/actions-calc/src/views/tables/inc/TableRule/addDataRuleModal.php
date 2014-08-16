@@ -95,7 +95,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 					'id'    => 'actionBtn',
 					'class' => 'btn btn-success changeDataModal addDataRuleTable',
 				)); ?>
-
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
 			</div>
 		</div>
 	</div>

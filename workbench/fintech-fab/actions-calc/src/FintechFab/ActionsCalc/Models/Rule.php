@@ -76,18 +76,4 @@ class Rule extends Eloquent
 		$this->signal_id = $data['signal_id'];
 		$this->save();
 	}
-
-
-	public function newRule($data)
-	{
-		$this->name = $data['name'];
-		$this->rule = $data['rule'];
-		$this->event_id = $data['event_id'];
-		$this->signal_id = $data['signal_id'];
-		$this->terminal_id = $data['terminal_id'];
-		$this->flag_active = 1;
-		$this->save();
-	}
-
-
 }

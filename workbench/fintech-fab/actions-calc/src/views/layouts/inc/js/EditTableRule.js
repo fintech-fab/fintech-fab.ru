@@ -111,10 +111,8 @@ $(document).ready(function () {
 				if (data['errors']) {
 					for (id in data['errors']['signal_id']) {
 						var errorId = 'error' + id.substring(5);
-
 						$('#' + errorId).html(data['errors']['signal_id'][id]);
 					}
-
 					$('#errorNameAdd').html(data['errors']['name']);
 					$('#errorEventSidAdd').html(data['errors']['event_id']);
 					$('#errorRuleAdd').html(data['errors']['rule']);
@@ -130,25 +128,6 @@ $(document).ready(function () {
 	$('select').select2();
 
 
-	$('.rulesForEvents').find('.pagination').find('a').click(function (event) {
-		event.preventDefault();
-		var href = this.href;
-		var split = href.split('tableEvents/getRules');
-		var btn = $('tr.active button.tableGetRules').data('id');
-
-		$.post(
-			('tableEvents/getRules/' + split[1]),
-			{ event_id: btn },
-			function (data) {
-				if (data['errors']) {
-					alert(data['errors']['event_id']);
-					return;
-				}
-				$('.rulesForEvents').empty().html(data);
-
-			});
-
-	});
 	var i = 1;
 	$('#addSignalInput').click(function () {
 		$('.addSignal').before('<div class="form-group row">​' +

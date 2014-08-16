@@ -21,12 +21,12 @@ use FintechFab\ActionsCalc\Models\Signal;
 						Form::input('text', 'name', '', array(
 							'placeholder' => 'Название',
 							'class'       => 'form-control',
-							'id' => 'inputNameRule',
+							'id'          => 'inputNameRule',
 							'required'    => 'required',
 						));
 						?>
 					</div>
-					<div id="errorName" class="text-danger text-center"></div>
+					<div id="errorNameRule" class="text-danger text-center"></div>
 				</div>
 
 				<div class="form-group row eventSid">
@@ -88,7 +88,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 			<div class="modal-footer">
 				<?=
 				Form::button('Сохранить', array(
-					'id' => 'saveChangeRule',
+					'id'    => 'saveChangeRule',
 					'class' => 'btn btn-success changeDataModal',
 				)); ?>
 				<button type="button" class="btn btn-danger cancelEdit" data-dismiss="modal">Отмена</button>
