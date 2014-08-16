@@ -19,3 +19,15 @@
 <script>
 	<?php require(__DIR__ . '/js/bootbox.min.js') ?>
 </script>
+
+<script>
+	<?php require(__DIR__ . '/js/example.js') ?>
+</script>
+
+<script>
+	$(function () {
+		Example.init({
+			"selector": ".bb-alert"
+		});
+	});
+</script>

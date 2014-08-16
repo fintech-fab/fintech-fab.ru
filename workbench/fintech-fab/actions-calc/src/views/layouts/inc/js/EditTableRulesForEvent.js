@@ -83,7 +83,7 @@ $(document).ready(function () {
 					$('#errorSignalSid').html(data['errors']['signal_id']);
 					return;
 				}
-				location.reload();
+				Example.show("Правило #" + id + " изменено!");
 			}
 		);
 	});
@@ -148,26 +148,6 @@ $(document).ready(function () {
 
 			});
 
-	});
-	var i = 1;
-	$('#addSignalInput').click(function () {
-		$('.addSignal').before('<div class="form-group row">​' +
-				'<label for="inputSignalSidAdd' + i + '" class="col-sm-3 control-label">signal_sid</label>' +
-				'<div class="col-sm-9"><div class="SignalSid SignalSid' + i + '">' +
-				'</div></div>' +
-				'<div id="errorSignalSidAdd' + i + '" class="text-danger text-center"></div></div>').after(function () {
-			$('#inputSignalSidAdd').clone().appendTo('.SignalSid' + i).val('').attr({"id": 'inputSignalSidAdd' + i}).addClass('inputSignalSidAdd').select2();
-			i++;
-		});
-
-	});
-
-
-	$('#removeLastSignal').click(function () {
-		var signalSid = $('.SignalSid');
-		if (signalSid.length > 1) {
-			$('.SignalSid:last').parent().parent().remove();
-		}
 	});
 
 });

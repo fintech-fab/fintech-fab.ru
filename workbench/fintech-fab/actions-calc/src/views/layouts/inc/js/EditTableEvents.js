@@ -73,6 +73,9 @@ $(document).ready(function () {
 			var btn = $(this);
 			btn.button('loading');
 			if (e.data.x) {
+				$('.active .refreshRules').attr({
+					'disabled': 'disabled'
+				});
 				$(e.data.x)
 					.closest('tr')
 					.removeClass('active')
@@ -84,6 +87,7 @@ $(document).ready(function () {
 			}
 			var $btn = $(this);
 			var $act = $btn.closest('tr').addClass('active');
+			$('.active .refreshRules').removeAttr('disabled');
 
 			$.post(
 				'tableEvents/getRules/',
@@ -106,6 +110,9 @@ $(document).ready(function () {
 
 			e.data.x = this;
 		} else {
+			$('.active .refreshRules').attr({
+				'disabled': 'disabled'
+			});
 			$(e.data.x)
 				.closest('tr')
 				.removeClass('active')
@@ -177,5 +184,20 @@ $(document).ready(function () {
 				location.reload();
 			}
 		);
+	});
+
+	$('.refreshRules').click(function () {
+		var btn = $(this);
+		var id = btn.data('id');
+		$.post(
+			('tableEvents/getRules/'),
+			{ event_id: id },
+			function (data) {
+				if (data['errors']) {
+					return;
+				}
+				$('.rulesForEvents').empty().html(data);
+
+			});
 	});
 });

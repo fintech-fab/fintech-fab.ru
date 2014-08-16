@@ -29,6 +29,9 @@ Form::button('Добавить событие', array(
 ));
 echo '<br><br>'
 ?>
+<div class="bb-alert alert alert-info" style="display:none;">
+	<span></span>
+</div>
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
 		<td><b>ID</b></td>
@@ -63,6 +66,10 @@ echo '<br><br>'
 					'data-target' => '#addDataRuleModal',
 					'data-id'     => $event->id,
 				))?>
+				<button type="button" class="btn btn-sm btn-info tableBtn refreshRules" data-toggle="modal" disabled="disabled" data-id="<?= $event->id ?>">
+					<span class="glyphicon glyphicon-refresh"></span>
+				</button>
+
 			</td>
 		</tr>
 	<?php endforeach ?>
