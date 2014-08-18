@@ -32,7 +32,7 @@
 				<li><a href="#" class="button">События(Events</a></li>
 				<li><a href="#" class="button">Правила(Rules)</a></li>
 				<li><a href="#" class="button">Сигналы(Signals)</a></li>
-				<li><a href="#" class="button">U</a></li>
+				<li><a href="#" class="button"><i class="fi-list-thumbnails"></i>U</a></li>
 			</ul>
 		</div>
 		<h1><small>Калькулятор событий</small></h1>

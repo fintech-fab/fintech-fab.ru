@@ -22,7 +22,7 @@ gulp.task('app.css', function () {
 	var arrCssFiles = [
 		vendorPath + 'foundation/scss/normalize.scss',
 		vendorPath + 'foundation/scss/foundation.scss',
-		vendorPath + 'foundation/css/foundation-icons.css'
+		vendorPath + 'foundation5fonts/css/foundation-icons.css'
 	];
 
 	return gulp.src(arrCssFiles)
@@ -69,6 +69,12 @@ gulp.task('cf.js', function () {
 		.pipe(concat('cf.js'))
 		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'js'));
+});
+
+gulp.task('cf.fonts', function() {
+	console.log('Moving font files.');
+	return gulp.src(vendorPath + "foundation5fonts/css/fonts/**.*")
+		.pipe(gulp.dest(destPath + 'css/fonts'));
 });
 
 gulp.task('build-all', ['app.js', 'cf.js', 'app.css']);
