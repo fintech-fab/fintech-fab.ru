@@ -170,7 +170,7 @@ $(document).ready(function () {
 				btn.button('reset');
 				if (data['errors']) {
 					if (data['errors']['signal_id']) {
-						for (id in data['errors']['signal_id']) {
+						for (var id in data['errors']['signal_id']) {
 							var errorId = 'error' + id.substring(5);
 							$('#' + errorId).html(data['errors']['signal_id'][id]);
 						}

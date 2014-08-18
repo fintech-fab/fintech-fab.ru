@@ -85,8 +85,7 @@ class TablesController extends BaseController
 	public function postChangeDataEvents()
 	{
 		$input = Input::only('id', 'name', 'event_sid');
-		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal->id;
+		$input['terminal_id'] = $this->getTerminalId();
 		//проверяем данные
 
 		$errors = Events::change($input);
@@ -95,7 +94,7 @@ class TablesController extends BaseController
 		}
 
 		//Изменяем данные
-		$event = Event::whereId($input['id'])->whereTerminalId($terminal->id)->first();
+		$event = Event::whereId($input['id'])->whereTerminalId($input['terminal_id'])->first();
 
 		if (!$event) {
 			return array('message' => 'Событие не найдено');
@@ -111,14 +110,12 @@ class TablesController extends BaseController
 	{
 		$input = Input::only('name', 'event_sid');
 		$input['name'] = e($input['name']);
+		$input['terminal_id'] = $this->getTerminalId();
 		//проверяем данные
 		$errors = Events::add($input);
 		if ($errors) {
 			return $errors;
 		}
-
-		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal['id'];
 
 		$event = New Event();
 		$event->newEvent($input);
@@ -131,8 +128,7 @@ class TablesController extends BaseController
 	public function postChangeDataSignals()
 	{
 		$input = Input::only('id', 'name', 'signal_sid');
-		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal->id;
+		$input['terminal_id'] = $this->getTerminalId();
 		//проверяем данные
 
 		$errors = Signals::change($input);
@@ -142,7 +138,7 @@ class TablesController extends BaseController
 
 
 		//Изменяем данные
-		$signal = Signal::whereId($input['id'])->whereTerminalId($terminal->id)->first();
+		$signal = Signal::whereId($input['id'])->whereTerminalId($input['terminal_id'])->first();
 
 		if (!$signal) {
 			return array('message' => 'Сигнал не найден');
@@ -158,14 +154,12 @@ class TablesController extends BaseController
 	{
 		$input = Input::only('name', 'signal_sid');
 		$input['name'] = e($input['name']);
+		$input['terminal_id'] = $this->getTerminalId();
 		//проверяем данные
 		$errors = Signals::add($input);
 		if ($errors) {
 			return $errors;
 		}
-
-		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal->id;
 
 		$signal = New Signal();
 		$signal->newSignal($input);
@@ -197,7 +191,7 @@ class TablesController extends BaseController
 	{
 		$input = Input::all();
 		$input['name'] = e($input['name']);
-
+		$input['terminal_id'] = $this->getTerminalId();
 		$errors = Rules::change($input);
 		if ($errors) {
 			if ($errors['errors']['id'] != '') {
@@ -222,9 +216,10 @@ class TablesController extends BaseController
 		$signal_id = Input::only('signal_id');
 		$sid = $signal_id['signal_id'];
 
-
 		$input = Input::only('event_id', 'rule', 'name');
+		$input['terminal_id'] = $this->getTerminalId();
 		$errors = Rules::add($input);
+		$data['terminal_id'] = $input['terminal_id'];
 		foreach ($sid as $key => $value) {
 			$data['signal_id'] = $value;
 			$error = Rules::checkSignals($data);
@@ -236,8 +231,6 @@ class TablesController extends BaseController
 		if ($errors) {
 			return $errors;
 		}
-		$terminal = AuthCheck::getTerm();
-		$input['terminal_id'] = $terminal->id;
 
 		//Изменяем данные
 		$message = 'Данные изменены';
@@ -256,5 +249,12 @@ class TablesController extends BaseController
 
 		return array('message' => $message);
 
+	}
+
+	private function getTerminalId()
+	{
+		$terminal = AuthCheck::getTerm();
+
+		return $terminal->id;
 	}
 }

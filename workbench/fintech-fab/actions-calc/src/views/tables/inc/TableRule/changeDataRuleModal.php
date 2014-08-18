@@ -88,7 +88,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 			<div class="modal-footer">
 				<?=
 				Form::button('Сохранить', array(
-					'id' => 'saveChangeRule',
+					'id'    => 'saveChangeRule',
 					'class' => 'btn btn-success changeDataModal',
 				)); ?>
 				<button type="button" class="btn btn-danger cancelEdit" data-dismiss="modal">Отмена</button>

@@ -56,7 +56,7 @@ echo '<br><br>'
 				)) ?>
 				<?=
 				Form::button('Правила', array(
-					'class' => 'btn btn-sm btn-info tableBtn tableGetRules',
+					'class'   => 'btn btn-sm btn-info tableBtn tableGetRules',
 					'data-id' => $event->id,
 				))?>
 				<?=

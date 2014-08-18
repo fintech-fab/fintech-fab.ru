@@ -3,7 +3,7 @@
 
 namespace FintechFab\ActionsCalc\Components\Validators;
 
-use App;
+use Config;
 use Validator;
 
 class Rules
@@ -27,34 +27,38 @@ class Rules
 	}
 
 
-	public static function rulesForAdd()
+	public static function rulesForAdd($data)
 	{
+		$database = Config::get('database.connections.ff-actions-calc.database');
 		$rules = array(
 			'name'     => 'required',
 			'rule'     => 'required',
-			'event_id' => 'required|alpha_dash',
+			'event_id' => 'required|alpha_dash|exists:' . $database . '.events,id,terminal_id,' . $data['terminal_id'],
 		);
 
 		return $rules;
 	}
 
-	public static function rulesForChange()
+	public static function rulesForChange($data)
 	{
+		$database = Config::get('database.connections.ff-actions-calc.database');
 		$rules = array(
+			'id'        => 'required|integer',
 			'name'      => 'required',
 			'rule'      => 'required',
-			'event_id'  => 'required|alpha_dash',
-			'signal_id' => 'required|alpha_dash',
+			'event_id'  => 'required|alpha_dash|exists:' . $database . '.events,id,terminal_id,' . $data['terminal_id'],
+			'signal_id' => 'required|alpha_dash|exists:' . $database . '.signals,id,terminal_id,' . $data['terminal_id'],
 		);
 
 		return $rules;
 	}
 
 
-	public static function rulesForCheckSignals()
+	public static function rulesForCheckSignals($data)
 	{
+		$database = Config::get('database.connections.ff-actions-calc.database');
 		$rules = array(
-			'signal_id' => 'required|alpha_dash',
+			'signal_id' => 'required|alpha_dash|exists:' . $database . '.signals,id,terminal_id,' . $data['terminal_id'],
 		);
 
 		return $rules;
@@ -65,7 +69,7 @@ class Rules
 	{
 		$data['name'] = e($data['name']);
 
-		$validator = Validator::make($data, self::rulesForAdd(), self::messagesForErrors());
+		$validator = Validator::make($data, self::rulesForAdd($data), self::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
@@ -84,10 +88,7 @@ class Rules
 
 	public static function checkSignals($data)
 	{
-
-		$val['signal_id'] = $data;
-		json_encode($val);
-		$validator = Validator::make($data, self::rulesForCheckSignals(), self::messagesForErrors());
+		$validator = Validator::make($data, self::rulesForCheckSignals($data), self::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
@@ -104,11 +105,12 @@ class Rules
 	public static function change($data)
 	{
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, self::rulesForChange(), self::messagesForErrors());
+		$validator = Validator::make($data, self::rulesForChange($data), self::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
 			$result['errors'] = array(
+				'id'        => $userMessages->first('id'),
 				'name'      => $userMessages->first('name'),
 				'rule'      => $userMessages->first('rule'),
 				'signal_id' => $userMessages->first('signal_id'),

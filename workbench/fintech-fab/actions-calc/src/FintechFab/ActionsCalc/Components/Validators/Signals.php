@@ -3,7 +3,6 @@
 
 namespace FintechFab\ActionsCalc\Components\Validators;
 
-use App;
 use Config;
 use Validator;
 
@@ -37,17 +36,6 @@ class Signals
 		return $rules;
 	}
 
-	public static function rulesForAdd()
-	{
-		$rules = array(
-			'name'       => 'required',
-			'signal_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.signals',
-		);
-
-		return $rules;
-	}
-
-
 	public static function change($data)
 	{
 		$data['name'] = e($data['name']);
@@ -74,7 +62,9 @@ class Signals
 	{
 		$data['name'] = e($data['name']);
 
-		$validator = Validator::make($data, self::rulesForAdd(), self::messagesForErrors());
+		$dataForChange['id'] = null;
+		$dataForChange['terminal_id'] = $data['terminal_id'];
+		$validator = Validator::make($data, self::rulesForChange($dataForChange), self::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {

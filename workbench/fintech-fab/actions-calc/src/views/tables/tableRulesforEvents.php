@@ -6,7 +6,6 @@ use FintechFab\ActionsCalc\Models\Rule;
  * @var Rule $rules
  * @var Rule $rule
  */
-
 ?>
 <script type="application/javascript">
 	<?php require(__DIR__ . '/../layouts/inc/js/EditTableRulesForEvent.js') ?>

@@ -12,7 +12,7 @@ $(document).ready(function () {
 		bootbox.confirm("Изменить правило #" + id + '?', function (result) {
 			if (result) {
 				$.post('tableRule/changeFlagRule/', {"id": id, "val": val},
-					function (res) {
+					function () {
 						if (val) {
 							Example.show("Правило #" + id + " активно!");
 						} else {

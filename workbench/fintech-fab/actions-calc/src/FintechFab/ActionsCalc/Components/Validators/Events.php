@@ -3,7 +3,6 @@
 
 namespace FintechFab\ActionsCalc\Components\Validators;
 
-use App;
 use Config;
 use Validator;
 
@@ -48,16 +47,6 @@ class Events
 		return $rules;
 	}
 
-	public static function rulesForAdd()
-	{
-		$rules = array(
-			'name'      => 'required',
-			'event_sid' => 'required|alpha_dash|unique:' . Config::get('database.connections.ff-actions-calc.database') . '.events',
-		);
-
-		return $rules;
-	}
-
 	public static function rulesForEventRules()
 	{
 		$rules = array(
@@ -91,8 +80,10 @@ class Events
 
 	public static function add($data)
 	{
+		$dataForChange['id'] = null;
+		$dataForChange['terminal_id'] = $data['terminal_id'];
 		$data['name'] = e($data['name']);
-		$validator = Validator::make($data, self::rulesForAdd(), self::messagesForErrors());
+		$validator = Validator::make($data, self::rulesForChange($dataForChange), self::messagesForErrors());
 		$userMessages = $validator->messages();
 
 		if ($validator->fails()) {
