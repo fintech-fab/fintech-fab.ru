@@ -29,13 +29,12 @@
 	<div class="large-12 columns">
 		<div class="nav-bar right">
 			<ul class="button-group">
-				<li><a href="#" class="button">События(Events</a></li>
-				<li><a href="#" class="button">Правила(Rules)</a></li>
-				<li><a href="#" class="button">Сигналы(Signals)</a></li>
-				<li><a href="#" class="button"><i class="fi-list-thumbnails"></i>U</a></li>
+				<li><a href="#" class="button"><i class="fi-torso"></i></a></li>
 			</ul>
 		</div>
-		<h1><small>Калькулятор событий</small></h1>
+		<h1>
+			<small>Калькулятор событий</small>
+		</h1>
 		<hr />
 	</div>
 </div>
@@ -43,105 +42,41 @@
 
 <div class="row">
 
-	<div class="large-9 columns" role="content">
+	<div class="large-12 columns" role="content">
 
-		<script>
-	        $(document).ready(function() { $("#e1").select2(); });
-	    </script>
+		<ul class="tabs" data-tab>
+			<li class="tab-title active"><a href="#panel0-1"><i class="fi-arrow-down"></i>&nbsp;Events</a></li>
+			<li class="tab-title"><a href="#panel0-2"><i class="fi-list-thumbnails"></i>&nbsp;Rules</a></li>
+			<li class="tab-title"><a href="#panel0-3"><i class="fi-arrow-right"></i>&nbsp;Signals</a></li>
+		</ul>
 
-		<select id="e1">
-	        <option value="AL">Alabama</option>
-	        <option value="WY">Wyoming</option>
-	        <option value="WY">Wyoming</option>
-	        <option value="WY">Wyoming</option>
-	        <option value="WY">Wyoming</option>
-	    </select>
-
-		<article>
-
-			<h3><a href="#">Blog Post Title</a></h3>
-			<h6>Written by <a href="#">John Smith</a> on August 12, 2012.</h6>
-
-			<div class="row">
-				<div class="large-6 columns">
-					<p>Bacon ipsum dolor sit amet nulla ham qui sint exercitation eiusmod commodo, chuck duis velit.
-						Aute in reprehenderit, dolore aliqua non est magna in labore pig pork biltong. Eiusmod swine
-						spare ribs reprehenderit culpa.</p>
-
-					<p>Boudin aliqua adipisicing rump corned beef. Nulla corned beef sunt ball tip, qui bresaola enim
-						jowl. Capicola short ribs minim salami nulla nostrud pastrami.</p>
-				</div>
-				<div class="large-6 columns">
-					<img src="http://placehold.it/400x240&text=[img]" />
-				</div>
+		<div class="tabs-content">
+			<div class="content active" id="panel0-1">
+				<p>First panel content goes here...</p>
 			</div>
+			<div class="content" id="panel0-2">
+				<p>Second panel content goes here...</p>
+				<script>
+					$(document).ready(function () {
+						$("#e1").select2();
+					});
+				</script>
 
-			<p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon
-				nulla pork belly cupidatat meatloaf cow. Nulla corned beef sunt ball tip, qui bresaola enim jowl.
-				Capicola short ribs minim salami nulla nostrud pastrami. Nulla corned beef sunt ball tip, qui bresaola
-				enim jowl. Capicola short ribs minim salami nulla nostrud pastrami.</p>
-
-			<p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon
-				nulla pork belly cupidatat meatloaf cow. Nulla corned beef sunt ball tip, qui bresaola enim jowl.
-				Capicola short ribs minim salami nulla nostrud pastrami.</p>
-
-		</article>
-
-		<hr />
-
-		<article>
-
-			<h3><a href="#">Blog Post Title</a></h3>
-			<h6>Written by <a href="#">John Smith</a> on August 12, 2012.</h6>
-
-			<div class="row">
-				<div class="large-6 columns">
-					<p>Bacon ipsum dolor sit amet nulla ham qui sint exercitation eiusmod commodo, chuck duis velit.
-						Aute in reprehenderit, dolore aliqua non est magna in labore pig pork biltong. Eiusmod swine
-						spare ribs reprehenderit culpa.</p>
-
-					<p>Boudin aliqua adipisicing rump corned beef. Nulla corned beef sunt ball tip, qui bresaola enim
-						jowl. Capicola short ribs minim salami nulla nostrud pastrami.</p>
-				</div>
-				<div class="large-6 columns">
-					<img src="http://placehold.it/400x240&text=[img]" />
-				</div>
+				<select id="e1">
+					<option value="AL">Alabama</option>
+					<option value="WY">Wyoming</option>
+					<option value="WY">Wyoming</option>
+					<option value="WY">Wyoming</option>
+					<option value="WY">Wyoming</option>
+				</select>
 			</div>
-
-			<p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon
-				nulla pork belly cupidatat meatloaf cow. Nulla corned beef sunt ball tip, qui bresaola enim jowl.
-				Capicola short ribs minim salami nulla nostrud pastrami. Nulla corned beef sunt ball tip, qui bresaola
-				enim jowl. Capicola short ribs minim salami nulla nostrud pastrami.</p>
-
-			<p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon
-				nulla pork belly cupidatat meatloaf cow. Nulla corned beef sunt ball tip, qui bresaola enim jowl.
-				Capicola short ribs minim salami nulla nostrud pastrami.</p>
-
-		</article>
+			<div class="content" id="panel0-3">
+				<p>Third panel content goes here...</p>
+			</div>
+		</div>
 
 	</div>
 
-
-	<aside class="large-3 columns">
-
-		<h5>Categories</h5>
-		<ul class="side-nav">
-			<li><a href="#">News</a></li>
-			<li><a href="#">Code</a></li>
-			<li><a href="#">Design</a></li>
-			<li><a href="#">Fun</a></li>
-			<li><a href="#">Weasels</a></li>
-		</ul>
-
-		<div class="panel">
-			<h5>Featured</h5>
-
-			<p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in. Swine short ribs meatball irure bacon
-				nulla pork belly cupidatat meatloaf cow.</p>
-			<a href="#">Read More →</a>
-		</div>
-
-	</aside>
 
 </div>
 
