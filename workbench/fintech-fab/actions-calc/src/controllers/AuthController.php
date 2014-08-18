@@ -2,14 +2,12 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
-use Controller;
-
 /**
  * Class AuthController
  *
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
-class AuthController extends Controller
+class AuthController extends BaseController
 {
 	public function login()
 	{

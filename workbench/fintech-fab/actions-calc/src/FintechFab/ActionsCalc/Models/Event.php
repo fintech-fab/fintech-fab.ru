@@ -18,6 +18,7 @@ use Eloquent;
  * @property string    $updated_at
  *
  * @method static Event whereEventSid()
+ * @method static Event whereTerminalId()
  */
 class Event extends Eloquent
 {

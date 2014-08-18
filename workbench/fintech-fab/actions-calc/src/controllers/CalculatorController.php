@@ -2,7 +2,7 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
-use Controller;
+use FintechFab\ActionsCalc\Models\Event;
 use View;
 
 /**
@@ -10,9 +10,17 @@ use View;
  *
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
-class CalculatorController extends Controller {
-	
-	public function manage() {
-	    return View::make('ff-actions-calc::layout.main');
+class CalculatorController extends BaseController
+{
+	protected $layout = 'main';
+
+	public function manage()
+	{
+		$aoEvents = Event::whereTerminalId($this->iTerminalId)->get()->all();
+
+		$content = View::make('ff-actions-calc::calculator.manage', [
+			'events' => $aoEvents,
+		]);
+		$this->layout->content = $content;
 	}
 }

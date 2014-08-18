@@ -7,14 +7,13 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
-use Controller;
 use App;
 use Input;
 use FintechFab\ActionsCalc\Components\RequestHandler;
 use Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class RequestController extends Controller
+class RequestController extends BaseController
 {
 	/**
 	 * @return \Illuminate\Http\JsonResponse
