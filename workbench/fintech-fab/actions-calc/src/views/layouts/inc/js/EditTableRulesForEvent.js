@@ -59,6 +59,7 @@ $(document).ready(function () {
 
 
 	$('button#saveChangeRule').click(function () {
+		$('.text-danger').empty();
 		var $btn = $(this);
 		var id = $btn.data('id');
 		var eventSidId = $('#inputEventSid').val();
@@ -77,49 +78,15 @@ $(document).ready(function () {
 			function (data) {
 				btn.button('reset');
 				if (data['errors']) {
-					$('#errorName').html(data['errors']['name']);
+					$('#errorNameRule').html(data['errors']['name']);
 					$('#errorEventSid').html(data['errors']['event_id']);
 					$('#errorRule').html(data['errors']['rule']);
 					$('#errorSignalSid').html(data['errors']['signal_id']);
 					return;
 				}
-				location.reload();
-			}
-		);
-	});
-
-	$('button.addDataRuleTable').click(function () {
-		$('.text-danger').empty();
-		var eventSid = $('#inputEventSidAdd').val();
-		var signalSid = {};
-		$('select.inputSignalSidAdd').each(function () {
-			var id = $(this).attr("id");
-			signalSid[id] = $(this).val();
-		});
-		var name = $('#inputNameAdd').val();
-		var rule = $('#inputRuleAdd').val();
-		var btn = $(this);
-		btn.button('loading');
-		$.post('tableRules/addData/', {
-				event_id: eventSid,
-				signal_id: signalSid,
-				rule: rule,
-				name: name
-			},
-			function (data) {
-				btn.button('reset');
-				if (data['errors']) {
-					for (var id in data['errors']['signal_id']) {
-						var errorId = 'error' + id.substring(5);
-						$('#' + errorId).html(data['errors']['signal_id'][id]);
-					}
-					$('#errorNameAdd').html(data['errors']['name']);
-					$('#errorEventSidAdd').html(data['errors']['event_id']);
-					$('#errorRuleAdd').html(data['errors']['rule']);
-
-					return;
-				}
-				location.reload();
+				var div = $('#changeDataRuleModal');
+				div.modal('hide');
+				Example.show("Правило #" + id + " изменено!");
 			}
 		);
 	});
@@ -128,25 +95,24 @@ $(document).ready(function () {
 	$('select').select2();
 
 
-	var i = 1;
-	$('#addSignalInput').click(function () {
-		$('.addSignal').before('<div class="form-group row">​' +
-				'<label for="inputSignalSidAdd' + i + '" class="col-sm-3 control-label">signal_sid</label>' +
-				'<div class="col-sm-9"><div class="SignalSid SignalSid' + i + '">' +
-				'</div></div>' +
-				'<div id="errorSignalSidAdd' + i + '" class="text-danger text-center"></div></div>').after(function () {
-			$('#inputSignalSidAdd').clone().appendTo('.SignalSid' + i).val('').attr({"id": 'inputSignalSidAdd' + i}).addClass('inputSignalSidAdd').select2();
-			i++;
-		});
+	$('.rulesForEvents').find('.pagination').find('a').click(function (event) {
+		event.preventDefault();
+		var href = this.href;
+		var split = href.split('tableEvents/getRules');
+		var btn = $('tr.active button.tableGetRules').data('id');
 
-	});
+		$.post(
+			('tableEvents/getRules/' + split[1]),
+			{ event_id: btn },
+			function (data) {
+				if (data['errors']) {
+					alert(data['errors']['event_id']);
+					return;
+				}
+				$('.rulesForEvents').empty().html(data);
 
+			});
 
-	$('#removeLastSignal').click(function () {
-		var signalSid = $('.SignalSid');
-		if (signalSid.length > 1) {
-			$('.SignalSid:last').parent().parent().remove();
-		}
 	});
 
 });

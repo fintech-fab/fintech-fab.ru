@@ -20,13 +20,16 @@ use FintechFab\ActionsCalc\Models\Rule;
 
 
 <?=
-Form::button('Добавить', array(
+Form::button('Добавить правило', array(
 	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
 	'data-toggle' => 'modal',
 	'data-target' => '#addDataRuleModal',
 ));
 echo '<br><br>'
 ?>
+<div class="bb-alert alert alert-info" style="display:none;">
+	<span></span>
+</div>
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
 		<td><b>ID</b></td>

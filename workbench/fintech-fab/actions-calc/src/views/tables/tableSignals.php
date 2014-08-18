@@ -25,6 +25,9 @@ Form::button('Добавить', array(
 ));
 echo '<br><br>'
 ?>
+<div class="bb-alert alert alert-info" style="display:none;">
+	<span></span>
+</div>
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
 		<td><b>ID</b></td>

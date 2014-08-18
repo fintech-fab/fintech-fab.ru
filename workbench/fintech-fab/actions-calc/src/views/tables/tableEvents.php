@@ -19,6 +19,8 @@ use FintechFab\ActionsCalc\Models\Event;
 
 <?= View::make('ff-actions-calc::tables.inc.TableEvents.addDataEventModal') ?>
 
+<?= View::make('ff-actions-calc::tables.inc.TableEvents.addDataRuleModal') ?>
+
 <?=
 Form::button('Добавить событие', array(
 	'class'       => 'btn btn-sm btn-info tableBtn tableAddBtn',
@@ -27,6 +29,9 @@ Form::button('Добавить событие', array(
 ));
 echo '<br><br>'
 ?>
+<div class="bb-alert alert alert-info" style="display:none;">
+	<span></span>
+</div>
 <table class="table table-striped table-hover" id="ordersTable">
 	<tr>
 		<td><b>ID</b></td>
@@ -51,9 +56,20 @@ echo '<br><br>'
 				)) ?>
 				<?=
 				Form::button('Правила', array(
-					'class'   => 'btn btn-sm btn-info tableGetRules',
+					'class' => 'btn btn-sm btn-info tableBtn tableGetRules',
 					'data-id' => $event->id,
 				))?>
+				<?=
+				Form::button('Добавить правило', array(
+					'class'       => 'btn btn-sm btn-info tableBtn addRule',
+					'data-toggle' => 'modal',
+					'data-target' => '#addDataRuleModal',
+					'data-id'     => $event->id,
+				))?>
+				<button type="button" class="btn btn-sm btn-info tableBtn refreshRules" data-toggle="modal" disabled="disabled" data-id="<?= $event->id ?>">
+					<span class="glyphicon glyphicon-refresh"></span>
+				</button>
+
 			</td>
 		</tr>
 	<?php endforeach ?>

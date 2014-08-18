@@ -5,6 +5,9 @@ namespace FintechFab\ActionsCalc\Controllers;
 
 use FintechFab\ActionsCalc\Components\AuthCheck;
 use FintechFab\ActionsCalc\Components\Validators;
+use FintechFab\ActionsCalc\Components\Validators\Events;
+use FintechFab\ActionsCalc\Components\Validators\Rules;
+use FintechFab\ActionsCalc\Components\Validators\Signals;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Signal;
@@ -51,7 +54,7 @@ class TablesController extends BaseController
 		$input = Input::only('event_id');
 		$event = event::find($input['event_id']);
 
-		$errors = Validators::rulesWithEvent($input);
+		$errors = Events::EventWithRules($input);
 		if ($errors) {
 			return $errors;
 		}
@@ -86,7 +89,7 @@ class TablesController extends BaseController
 		$input['terminal_id'] = $terminal->id;
 		//проверяем данные
 
-		$errors = Validators::getErrorFromChangeDataEventsTable($input);
+		$errors = Events::change($input);
 		if ($errors) {
 			return $errors;
 		}
@@ -109,7 +112,7 @@ class TablesController extends BaseController
 		$input = Input::only('name', 'event_sid');
 		$input['name'] = e($input['name']);
 		//проверяем данные
-		$errors = Validators::getErrorFromAddDataEventsTable($input);
+		$errors = Events::add($input);
 		if ($errors) {
 			return $errors;
 		}
@@ -132,7 +135,7 @@ class TablesController extends BaseController
 		$input['terminal_id'] = $terminal->id;
 		//проверяем данные
 
-		$errors = Validators::getErrorFromChangeDataSignalsTable($input);
+		$errors = Signals::change($input);
 		if ($errors) {
 			return $errors;
 		}
@@ -156,7 +159,7 @@ class TablesController extends BaseController
 		$input = Input::only('name', 'signal_sid');
 		$input['name'] = e($input['name']);
 		//проверяем данные
-		$errors = Validators::getErrorFromAddDataSignalsTable($input);
+		$errors = Signals::add($input);
 		if ($errors) {
 			return $errors;
 		}
@@ -186,9 +189,7 @@ class TablesController extends BaseController
 			$rule->changeFlag(0);
 		}
 
-		$res = "Изменения произошли для правила с порядковым номером  $id";
-
-		return $res;
+		return $id;
 
 	}
 
@@ -197,8 +198,7 @@ class TablesController extends BaseController
 		$input = Input::all();
 		$input['name'] = e($input['name']);
 
-		$errors = Validators::getErrorFromChangeDataRuleTable($input);
-
+		$errors = Rules::change($input);
 		if ($errors) {
 			if ($errors['errors']['id'] != '') {
 				return array('message' => 'Какая-то ошибка, повторите попытку');
@@ -222,11 +222,12 @@ class TablesController extends BaseController
 		$signal_id = Input::only('signal_id');
 		$sid = $signal_id['signal_id'];
 
+
 		$input = Input::only('event_id', 'rule', 'name');
-		$errors = Validators::getErrorFromAddDataRuleTable($input);
+		$errors = Rules::add($input);
 		foreach ($sid as $key => $value) {
 			$data['signal_id'] = $value;
-			$error = Validators::getErrorFromAddDataRuleTableSignals($data);
+			$error = Rules::checkSignals($data);
 			if ($error != null) {
 				$errors['errors']['signal_id'][$key] = $error;
 			}
@@ -244,7 +245,13 @@ class TablesController extends BaseController
 		foreach ($sid as $value) {
 			$input['signal_id'] = $value;
 			$rule = New Rule();
-			$rule->newRule($input);
+			$rule->name = $input['name'];
+			$rule->rule = $input['rule'];
+			$rule->event_id = $input['event_id'];
+			$rule->signal_id = $input['signal_id'];
+			$rule->terminal_id = $input['terminal_id'];
+			$rule->flag_active = 1;
+			$rule->save();
 		}
 
 		return array('message' => $message);

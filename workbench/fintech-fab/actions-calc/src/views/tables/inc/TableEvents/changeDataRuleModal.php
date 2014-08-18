@@ -26,7 +26,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 						));
 						?>
 					</div>
-					<div id="errorName" class="text-danger text-center"></div>
+					<div id="errorNameRule" class="text-danger text-center"></div>
 				</div>
 
 				<div class="form-group row eventSid">
@@ -88,7 +88,7 @@ use FintechFab\ActionsCalc\Models\Signal;
 			<div class="modal-footer">
 				<?=
 				Form::button('Сохранить', array(
-					'id' => 'saveChangeRule',
+					'id'    => 'saveChangeRule',
 					'class' => 'btn btn-success changeDataModal',
 				)); ?>
 				<button type="button" class="btn btn-danger cancelEdit" data-dismiss="modal">Отмена</button>
