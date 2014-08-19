@@ -59,6 +59,20 @@ class TestSetUp extends TestCase
 			'terminal_id' => 1
 		]);
 
+		Event::create([
+			'id'          => 2,
+			'event_sid'   => 'stay_smoking',
+			'name'        => 'Событие два',
+			'terminal_id' => 1
+		]);
+
+		Event::create([
+			'id'          => 3,
+			'event_sid'   => 'under_hail',
+			'name'        => 'Событие три',
+			'terminal_id' => 1
+		]);
+
 		// Rules
 		Rule::create([
 			'id'          => 1,

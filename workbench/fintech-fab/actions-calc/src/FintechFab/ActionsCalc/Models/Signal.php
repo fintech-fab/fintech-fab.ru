@@ -10,6 +10,7 @@ use Eloquent;
  * @author Ulashev Roman <truetamtam@gmail.com>
  *
  * @property int    $id
+ * @property string $name
  * @property string $signal_sid
  * @property int    $terminal_id
  * @property bool   $flag_url
@@ -21,7 +22,7 @@ class Signal extends Eloquent
 {
 	protected $connection = 'ff-actions-calc';
 	protected $table = 'signals';
-	protected $fillable = ['id', 'terminal_id', 'signal_sid'];
+	protected $fillable = ['id', 'name', 'terminal_id', 'signal_sid'];
 
 	public function terminal()
 	{

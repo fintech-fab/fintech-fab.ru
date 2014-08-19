@@ -39,4 +39,8 @@ class Rule extends Eloquent
 	{
 		return $this->belongsTo(Terminal::class);
 	}
+
+	public function events() {
+	    return $this->hasMany(Event::class, 'id', 'event_id');
+	}
 }

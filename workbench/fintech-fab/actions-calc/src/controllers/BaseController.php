@@ -8,13 +8,7 @@ use Request;
 
 class BaseController extends Controller
 {
-	protected $iTerminalId;
 	private $sLayoutFolderName = 'default';
-
-	function __construct()
-	{
-		$this->iTerminalId = \Config::get('ff-actions-calc::terminal_id');
-	}
 
 	protected function setupLayout()
 	{

@@ -34,6 +34,11 @@ class Terminal extends Eloquent
 	{
 		return $this->hasMany(Event::class, 'terminal_id', 'id');
 	}
+
+	public function signals()
+	{
+		return $this->hasMany(Signal::class, 'terminal_id', 'id');
+	}
 }
 
  

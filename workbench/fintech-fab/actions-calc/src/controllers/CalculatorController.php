@@ -2,7 +2,8 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
-use FintechFab\ActionsCalc\Models\Event;
+use Config;
+use FintechFab\ActionsCalc\Models\Terminal;
 use View;
 
 /**
@@ -12,15 +13,23 @@ use View;
  */
 class CalculatorController extends BaseController
 {
+	protected $iTerminalId;
 	protected $layout = 'main';
+
+	public function __construct()
+	{
+		$this->iTerminalId = Config::get('ff-actions-calc::terminal_id');
+	}
 
 	public function manage()
 	{
-		$aoEvents = Event::whereTerminalId($this->iTerminalId)->get()->all();
+		$oTerminal = Terminal::with(['events', 'signals'])->get()->find($this->iTerminalId);
 
-		$content = View::make('ff-actions-calc::calculator.manage', [
-			'events' => $aoEvents,
-		]);
+		$content = View::make('ff-actions-calc::calculator.manage')
+			->nest('_events', 'ff-actions-calc::calculator._events', ['events' => $oTerminal->events])
+			->nest('_rules', 'ff-actions-calc::calculator._rules', ['rules' => $oTerminal->rules])
+			->nest('_signals', 'ff-actions-calc::calculator._signals', ['signals' => $oTerminal->signals]);
+
 		$this->layout->content = $content;
 	}
 }
