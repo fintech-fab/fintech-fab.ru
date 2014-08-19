@@ -7,7 +7,7 @@ var errorHappened = false;
 $(document).ready(function () {
 	$(document).ajaxError(function (event, jqxhr, settings, exception) {
 		if (!errorHappened && exception != '' && exception != 'abort') {
-			bootbox.alert('Произошла ошибка! Перезагрузите страницу!', 'OK');
+			bootbox.alert('Произошла ошибка! Перезагрузи страницу!', 'OK');
 			//alertModal('Ошибка', 'Произошла ошибка! Перезагрузите страницу!', 'OK');
 			errorHappened = true;
 		}

@@ -46,7 +46,8 @@ $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] +
 
 	<div style="clear: both"></div>
 
-	<h4><strong>Оплата за позьзование деньгами</strong></h4>
+<?php if ($iLoanTotal > 0) { ?>
+	<h4><strong>Оплата за пользование деньгами</strong></h4>
 	<div class="alert alert-warning" style="float:left; width: 53%;">
 		<h5><strong>Мы перевели тебе: <?= $aPaymentData['loan_balance'] ?> руб.</strong></h5>
 		<h5><strong>Каждый день ты платишь проценты: <?= $aPaymentData['percent_daily'] ?> руб.</strong></h5>
@@ -60,6 +61,7 @@ $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] +
 		<h5><strong>Вернуть до: <br /><?= $sLoanEndDt ?></strong></h5>
 	</div>
 <?php
+}
 
 Yii::app()->clientScript->registerScript('detail_balance',
 	"

@@ -37,8 +37,8 @@ class DefaultController extends Controller
 				'allow',
 				'actions' => array(
 					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
-					'sendSmsPass', 'smsPassResend', 'subscribe', 'selectChannel', 'doSubscribe', 'doSubscribeCheckSmsCode',
-					'doSubscribeSmsConfirm', 'loan', 'doLoan', 'doLoanSmsConfirm', 'doLoanCheckSmsCode',
+					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
+					'doSubscribeConfirm', 'loan', 'doLoan', 'doLoanConfirm', 'doLoanCheckSmsCode', 'cancelLoan',
 					'addCard', 'verifyCard', 'successCard', 'refresh',
 					'changePassport', 'changePassportSendSmsCode', 'changePassportCheckSmsCode',
 					'changeEmail', 'changeEmailSendSmsCode', 'changeEmailCheckSmsCode',
@@ -52,7 +52,7 @@ class DefaultController extends Controller
 					'goIdentify',
 					'takeLoan', 'takeLoanCheckSmsCode',
 					'getDocument', 'getDocumentList',
-					'PaymentSchedule'
+					'PaymentSchedule',
 				),
 				'users'   => array('@'),
 			),
@@ -185,12 +185,18 @@ class DefaultController extends Controller
 		//$sClientInfoRender = $this->renderPartial($sClientInfoView, array(), true);
 
 		$bIsPossibleDoLoan = Yii::app()->adminKreddyApi->checkLoan();
+		$bIsNeedSubscriptionConfirm = Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus();
+		$bIsNeedSubscriptionPay = Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_SUBSCRIPTION_PAYMENT;
+		$bIsNeedLoanConfirm = Yii::app()->adminKreddyApi->checkConfirmLoan();
 
 		$this->render($sIndexView, array(
-				'sClientInfoView'   => $sClientInfoView,
-				'sPassFormRender'   => $sPassFormRender,
-				'sIdentifyRender'   => $sIdentifyRender,
-				'bIsPossibleDoLoan' => $bIsPossibleDoLoan,
+				'sClientInfoView'            => $sClientInfoView,
+				'sPassFormRender'            => $sPassFormRender,
+				'sIdentifyRender'            => $sIdentifyRender,
+				'bIsPossibleDoLoan'          => $bIsPossibleDoLoan,
+				'bIsNeedSubscriptionConfirm' => $bIsNeedSubscriptionConfirm,
+				'bIsNeedLoanConfirm'         => $bIsNeedLoanConfirm,
+				'bIsNeedSubscriptionPay'     => $bIsNeedSubscriptionPay,
 			)
 		);
 
@@ -215,7 +221,7 @@ class DefaultController extends Controller
 		//если вдруг запись почему-то не найдена (такого быть не может при корректной работе системы), ругаемся ошибкой
 		if (!$oClientData) {
 			Yii::app()->session['error'] = 'Произошла ошибка: не удалось перейти к заполнению анкеты.
-			 Попробуйте повторить через несколько минут.';
+			 Попробуй повторить через несколько минут.';
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
@@ -776,90 +782,51 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
-		//проверяем ответ checkSubscribe, не нужно ли привязать карту
+		//проверяем, не нужно ли привязать карту
 		if (Yii::app()->adminKreddyApi->checkSubscribeNeedCard()) {
 			$this->render('subscription/index', array('sView' => 'need_card', 'oModel' => null));
 			Yii::app()->end();
 		}
 
-		//выбираем представление в зависимости от статуса СМС-авторизации
-		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-
-			//проверяем, нужна ли повторная видеоидентификация
-			if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
-				$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
-				if ($aGetIdent) {
-					$oIdentify = new VideoIdentifyForm();
-					$oIdentify->setAttributes($aGetIdent);
-					$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
-					//выводим форму отправки на идентификацию
-					$this->render('subscription/index', array('sView' => 'need_identify', 'oModel' => $oIdentify));
-					Yii::app()->end();
-				}
-			} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
-				Yii::app()->user->setFlash('warning', Yii::app()->adminKreddyApi->formatMessage(AdminKreddyApiComponent::C_NEED_PASSPORT_DATA));
-
-				$this->redirect('/account/changePassport');
-			}
-
-			//удаляем сохраненные при регистрации данные продукта
-			//делается для того, чтобы в случае перехода на "ручной" выбор продукта после регистрации
-			//клиент смог выбрать новый продукт и оформить именно его, а не выбранный ранее
-			//(сделано дополнительно к приоритету POST-запроса в doSubscribe)
-			Yii::app()->user->setState('new_client', null);
-			Yii::app()->user->setState('product', null);
-			Yii::app()->user->setState('flex_time', null);
-			Yii::app()->user->setState('flex_amount', null);
-			Yii::app()->user->setState('channel_id', null);
-
-			$sView = 'subscribe';
-		} else {
-			$sView = 'subscribe_not_sms_auth';
-		}
-
-
 		$oProductForm = new ClientSubscribeForm();
 
-		$this->render('subscription/index', array('sView' => $sView, 'oModel' => $oProductForm));
-	}
-
-	/**
-	 * Записывает в сессию пакет, выбранный пользователем, и выводит форму выбора канала
-	 */
-	public function actionSelectChannel()
-	{
-		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
-			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+		//если не авторизован по СМС-авторизации
+		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
+			$this->render('subscription/index', array('sView' => 'subscribe_not_sms_auth', 'oModel' => $oProductForm));
 		}
 
-		//выбираем нужную модель
-		$oProductForm = new ClientSubscribeForm();
-
-		//если есть POST-запрос
-		if (Yii::app()->request->getIsPostRequest()) {
-			//получаем данные из POST-запроса
-			$aPost = Yii::app()->request->getPost(get_class($oProductForm), array());
-
-			$oProductForm->setAttributes($aPost);
-
-			if ($oProductForm->validate()) {
-				//сохраняем в сессию выбранный продукт
-				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
-
-				$this->render('subscription/index', array('sView' => 'select_channel', 'oModel' => $oProductForm));
-				//$this->render($sView, array('sFormName' => get_class($oProductForm)));
+		//проверяем, нужна ли повторная видеоидентификация
+		if (Yii::app()->adminKreddyApi->checkIsNeedIdentify()) {
+			$aGetIdent = Yii::app()->adminKreddyApi->getIdentify();
+			if ($aGetIdent) {
+				$oIdentify = new VideoIdentifyForm();
+				$oIdentify->setAttributes($aGetIdent);
+				$oIdentify->redirect_back_url = Yii::app()->createAbsoluteUrl("/account/subscribe");
+				//выводим форму отправки на идентификацию
+				$this->render('subscription/index', array('sView' => 'need_identify', 'oModel' => $oIdentify));
 				Yii::app()->end();
 			}
+		} elseif (Yii::app()->adminKreddyApi->checkIsNeedPassportData()) {
+			Yii::app()->user->setFlash('warning', Yii::app()->adminKreddyApi->formatMessage(AdminKreddyApiComponent::C_NEED_PASSPORT_DATA));
+
+			$this->redirect('/account/changePassport');
 		}
 
+		//удаляем сохраненные при регистрации данные продукта
+		//делается для того, чтобы в случае перехода на "ручной" выбор продукта после регистрации
+		//клиент смог выбрать новый продукт и оформить именно его, а не выбранный ранее
+		//(сделано дополнительно к приоритету POST-запроса в doSubscribe)
+		Yii::app()->user->setState('new_client', null);
+		Yii::app()->user->setState('product', null);
+		Yii::app()->user->setState('flex_time', null);
+		Yii::app()->user->setState('flex_amount', null);
+		Yii::app()->user->setState('channel_id', null);
+
 		$this->render('subscription/index', array('sView' => 'subscribe', 'oModel' => $oProductForm));
-		Yii::app()->end();
 	}
 
 	/**
 	 * Обработка данных от формы, переданной из /account/subscribe
-	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
 	 *
 	 * Сюда возможен редирект сразу после регистрации! В этом случае POST-запрос заменяется сохраненными
 	 * в setState данными, и эти данные загружаются в форму
@@ -868,7 +835,7 @@ class DefaultController extends Controller
 	{
 		//проверяем, возможно ли действие
 		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
-			$this->redirect(Yii::app()->createUrl('/account/subscribe'));
+			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
 		// устанавливаем returnUrl, чтобы после видеоидентификации пользователь вернулся на эту страницу
@@ -892,98 +859,79 @@ class DefaultController extends Controller
 			$this->redirect('/account/changePassport');
 		}
 
-		//получаем сохраненные при регистрации данные займа (если есть)
-		//TODO возможно, делать это только если есть state new_client
-		$sProduct = Yii::app()->user->getState('product');
-		$sChannelsId = Yii::app()->user->getState('channel_id');
-		$iPayType = Yii::app()->user->getState('pay_type');
-
-
-		//получаем из строкового списка каналов вида "1_2_3" (для мобильных каналов) один ID канала, доступного клиенту, в int формате
-		$iChannelId = Yii::app()->adminKreddyApi->getClientSelectedChannelByIdString($sChannelsId);
-		if ($iPayType) {
-			$iProduct = Yii::app()->productsChannels->getProductBySelectedType($sProduct, $iPayType);
-		} else {
-			$iProduct = (int)$sProduct;
-		}
-
-		$bIsRedirect = false;
-		$aData = array();
-		//если есть сохраненные данные в getState, то их переносим в массив $aData
-		if (!empty($iProduct) && !empty($sChannelsId)) { //для kreddy.ru
-			$bIsRedirect = true; //флаг "был произведен редирект с сохранением данных"
-			$aData = array('product' => $iProduct, 'channel_id' => $iChannelId);
-		}
-
-		/* если был редирект с сохранением данных, но выбранный канал равен 0,
-		 * т.е. выбранный канал отсутствовал в списке доступных клиенту
-		 * то нужно его отправить на привязку карты, с сообщением об этом
-		 */
-		if ($bIsRedirect && $iChannelId === 0) {
-			Yii::app()->user->setFlash('warning', AdminKreddyApiComponent::C_CARD_NOT_AVAILABLE);
-			$this->redirect('/account/addCard'); //после привязки редирект вернет клиента обратно
-		}
-
-		//выбираем нужную модель
-		$oProductForm = new ClientSubscribeForm('channelRequired');
-		//если есть POST-запрос или были данные в getState перед редиректом
-		if (Yii::app()->request->getIsPostRequest() || $bIsRedirect) {
-			//получаем данные из POST-запроса, либо из массива сохраненных до редиректа данных
-			if (Yii::app()->request->getIsPostRequest()) {
-				$aPost = Yii::app()->request->getParam(get_class($oProductForm), array());
-				$aPost['product'] = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-			} else {
-				$aPost = $aData;
-			}
-
+		$oProductForm = new ClientSubscribeForm('allValidate');
+		$aPost = Yii::app()->request->getPost(get_class($oProductForm));
+		if (!empty($aPost)) {
 			$oProductForm->setAttributes($aPost);
+			$oProductForm->setProductByAttributes();
 
-			if ($oProductForm->validate()) {
+			//сохраняем в сессию выбранный продукт
+			Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+		}
 
-				//сохраняем в сессию выбранный продукт
-				$oForm = new SMSCodeForm('sendRequired');
-				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
-				Yii::app()->adminKreddyApi->setSubscribeSelectedChannel($oProductForm->channel_id);
+		//Если клиент нажал кнопку "Продолжить"
+		if (Yii::app()->request->getPost('subscribe_accept')) {
+			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+			$bSubscribe = Yii::app()->adminKreddyApi->doSubscribe($iProduct);
 
-				$this->render('subscription/index', array('sView' => 'do_subscribe', 'oModel' => $oForm));
+			if ($bSubscribe) {
+				$this->render('subscription/index', array('sView' => 'subscribe_complete', 'oModel' => null));
 				Yii::app()->end();
 			}
 		}
+
+		//Отображение выбранных параметров и кнопка "продолжить"
+		if ($oProductForm->validate()) {
+			$this->render('subscription/index', array('sView' => 'do_subscribe', 'oModel' => null));
+			Yii::app()->end();
+		}
+
 		$this->render('subscription/index', array('sView' => 'subscribe', 'oModel' => $oProductForm));
 		Yii::app()->end();
 	}
 
 	/**
 	 * Обработка данных от /account/doSubscribe
-	 * проверяет, была ли нажата кнопка "Отправить" (наличие в POST-запросе значения sendSmSCode=1)
-	 * если нет, то редирект на /account/subscribe
-	 * если кнопка нажата, отправляет СМС и рисует форму ввода СМС-кода
+	 *
+	 * Клиент подтверждает создание подписки
+	 * Для пост-оплатных проктов
+	 * (для предоплатных продуктов фактом подтверждения является оплата)
 	 */
-	public function actionDoSubscribeSmsConfirm()
+	public function actionDoSubscribeConfirm()
 	{
-		//если действует мораторий
-		//или API ответил, что действие невозможно
-		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+		$iProductId = Yii::app()->adminKreddyApi->getSubscriptionProductId();
+
+		if (!$iProductId || Yii::app()->adminKreddyApi->getClientStatus() != AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
 		$oForm = new SMSCodeForm('sendRequired');
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
 		$oForm->setAttributes($aPost);
-		//проверяем, передан ли параметр sendSmsCode (валидируем по правилам формы, сценарий sendRequired)
-		if ($oForm->validate()) {
-			if (Yii::app()->adminKreddyApi->sendSmsSubscribe()) {
-				unset($oForm);
-				//создаем новую форму с новым сценарием валидации - codeRequired
-				$oForm = new SMSCodeForm('codeRequired');
-				$this->render('subscription/index', array('sView' => 'do_subscribe_check_sms_code', 'oModel' => $oForm));
+
+		if (empty($aPost)) {
+			$oProductForm = new ClientSubscribeForm();
+			$oProductForm->product = Yii::app()->adminKreddyApi->getSubscriptionProductId();
+			if ($oProductForm->validate()) {
+				$this->render('subscription/index', array('sView' => 'do_subscribe_confirm', 'oModel' => $oForm));
 				Yii::app()->end();
 			}
-			//рисуем ошибку
-			$this->render('subscription/index', array('sView' => 'do_subscribe_error', 'oModel' => $oForm));
-			Yii::app()->end();
+		} else {
+			//проверяем, передан ли параметр sendSmsCode (валидируем по правилам формы, сценарий sendRequired)
+			if ($oForm->validate()) {
+				if (Yii::app()->adminKreddyApi->doSmsConfirmSubscription()) {
+					unset($oForm);
+					//создаем новую форму с новым сценарием валидации - codeRequired
+					$oForm = new SMSCodeForm('codeRequired');
+					$this->render('subscription/index', array('sView' => 'do_subscribe_check_sms_code', 'oModel' => $oForm));
+					Yii::app()->end();
+				}
+				//рисуем ошибку
+				$this->render('subscription/index', array('sView' => 'do_subscribe_error', 'oModel' => $oForm));
+				Yii::app()->end();
+			}
 		}
+
 		$this->redirect(Yii::app()->createUrl('/account/subscribe'));
 
 	}
@@ -994,8 +942,9 @@ class DefaultController extends Controller
 	 */
 	public function actionDoSubscribeCheckSmsCode()
 	{
-		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkSubscribe()) {
+		$iProductId = Yii::app()->adminKreddyApi->getSubscriptionProductId();
+
+		if (!$iProductId || Yii::app()->adminKreddyApi->getClientStatus() != AdminKreddyApiComponent::C_SUBSCRIPTION_AWAITING_CONFIRMATION) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
@@ -1005,39 +954,29 @@ class DefaultController extends Controller
 
 		$oForm = new SMSCodeForm('codeRequired');
 		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
-		$bTriesExceed = false;
 
 		$oForm->setAttributes($aPost);
 		//валидируем
 		if ($oForm->validate()) {
-			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-			$iChannel = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
-			$iAmount = false;
-			$iTime = false;
 
-			if (($iProduct && $iChannel) || ($iProduct && $iAmount && $iChannel && $iTime)) {
-				//проверяем, не кончились ли попытки
-				//TODO: вынести из сессии в лог
-				$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
-				//если попытки не кончились, пробуем оформить подписку
-				if (!$bTriesExceed) {
-					//проверяем точку входа, делаем подписку согласно точке входа
-					$bSubscribe = Yii::app()->adminKreddyApi->doSubscribe($oForm->smsCode, $iProduct, $iChannel);
+			//проверяем, не кончились ли попытки
+			$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
+			//если попытки не кончились, пробуем оформить подписку
+			if (!$bTriesExceed) {
+				//проверяем точку входа, делаем подписку согласно точке входа
+				$bSubscribe = Yii::app()->adminKreddyApi->doCheckConfirmSubscription($oForm->smsCode);
 
-					if ($bSubscribe) {
-						//сбрасываем счетчик попыток ввода кода
-						Yii::app()->adminKreddyApi->resetSmsCodeTries();
+				if ($bSubscribe) {
+					//сбрасываем счетчик попыток ввода кода
+					Yii::app()->adminKreddyApi->resetSmsCodeTries();
 
-						$this->render('subscription/index', array('sView' => 'subscribe_complete', 'oModel' => null));
-						Yii::app()->end();
-					}
-				} else {
-					//устанвливаем сообщение об ошибке
-					$oForm->addError('smsCode', Dictionaries::C_ERR_CODE_TRIES);
-
+					$this->redirect(Yii::app()->createUrl('/account/'));
+					Yii::app()->end();
 				}
 			} else {
-				$oForm->addError('smsCode', AdminKreddyApiComponent::ERROR_MESSAGE_UNKNOWN);
+				//устанвливаем сообщение об ошибке
+				$oForm->addError('smsCode', Dictionaries::C_ERR_CODE_TRIES);
+
 			}
 
 
@@ -1070,17 +1009,8 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
-		if (Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()) {
-			$iChannelId = Yii::app()->adminKreddyApi->getSelectedChannelId();
-			Yii::app()->adminKreddyApi->setLoanSelectedChannel($iChannelId);
-			$oForm = new SMSCodeForm('sendRequired');
-			$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => $oForm));
-			Yii::app()->end();
-		}
-
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
-
 			$sView = 'loan';
 		} else {
 			$sView = 'loan_not_sms_auth';
@@ -1093,63 +1023,79 @@ class DefaultController extends Controller
 
 	/**
 	 * Обработка данных от формы, переданной из /account/loan
-	 * и вывод формы с требованием подтверждения по СМС (с кнопкой "Отправить смс")
+	 *
+	 * Отображается информация о переводе денег, обработка подтверждения на создание запроса на займ
 	 */
 	public function actionDoLoan()
 	{
 		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+		if (!Yii::app()->adminKreddyApi->checkLoan() && !Yii::app()->adminKreddyApi->checkConfirmLoan()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
 		$oLoanForm = new ClientLoanForm();
-		if (Yii::app()->request->getIsPostRequest()) {
-			$aPost = Yii::app()->request->getParam(get_class($oLoanForm), array());
-
+		$aPost = Yii::app()->request->getParam(get_class($oLoanForm), array());
+		if ($aPost) {
 			$oLoanForm->setAttributes($aPost);
+			Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
+		}
 
-			if ($oLoanForm->validate()) {
-				//сохраняем в сессию выбранный продукт
-				Yii::app()->adminKreddyApi->setLoanSelectedChannel($oLoanForm->channel_id);
-				$oForm = new SMSCodeForm('sendRequired');
-				$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => $oForm));
+		if (Yii::app()->request->getPost('loan_accept')) {
+			$iChannel = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
+			$bLoanCreated = Yii::app()->adminKreddyApi->doLoan($iChannel);
+
+			if ($bLoanCreated) {
+				$this->redirect(Yii::app()->createUrl('/account/doLoanConfirm'));
 				Yii::app()->end();
 			}
 		}
+
+		if ($oLoanForm->validate()) {
+			$this->render('loan/index', array('sView' => 'do_loan', 'oModel' => null));
+			Yii::app()->end();
+		}
+
 		$this->render('loan/index', array('sView' => 'loan', 'oModel' => $oLoanForm));
 		Yii::app()->end();
 	}
 
 	/**
 	 * Обработка данных от /account/doLoan
-	 * проверяет, была ли нажата кнопка "Отправить" (наличие в POST-запросе значения sendSmSCode=1)
-	 * если нет, то редирект на /account/loan
-	 * если кнопка нажата, отправляет СМС и рисует форму ввода СМС-кода
+	 *
+	 * Подтверждение запроса на займ (индивидуальных условий)
 	 */
-	public function actionDoLoanSmsConfirm()
+	public function actionDoLoanConfirm()
 	{
 		//если действует мораторий
 		//или API ответил, что действие невозможно
 		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+		if (!Yii::app()->adminKreddyApi->checkConfirmLoan()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
 		$oForm = new SMSCodeForm('sendRequired');
-		$aPost = Yii::app()->request->getParam('SMSCodeForm', array());
-		$oForm->setAttributes($aPost);
-		//проверяем, передан ли параметр sendSmsCode (валидируем по правилам формы, сценарий sendRequired)
-		if ($oForm->validate()) {
-			if (Yii::app()->adminKreddyApi->sendSmsLoan()) {
-				unset($oForm);
-				//создаем новую форму с новым сценарием валидации - codeRequired
-				$oForm = new SMSCodeForm('codeRequired');
-				$this->render('loan/index', array('sView' => 'do_loan_check_sms_code', 'oModel' => $oForm));
+		$aPost = Yii::app()->request->getPost('SMSCodeForm', array());
+
+		if (empty($aPost)) {
+			$this->render('loan/index', array('sView' => 'do_loan_confirm', 'oModel' => $oForm));
+			Yii::app()->end();
+		} else {
+			//проверяем, передан ли параметр sendSmsCode (валидируем по правилам формы, сценарий sendRequired)
+			$oForm->setAttributes($aPost);
+
+			if ($oForm->validate()) {
+
+				if (Yii::app()->adminKreddyApi->sendSmsLoanConfirm()) {
+					unset($oForm);
+					//создаем новую форму с новым сценарием валидации - codeRequired
+					$oForm = new SMSCodeForm('codeRequired');
+					$this->render('loan/index', array('sView' => 'do_loan_check_sms_code', 'oModel' => $oForm));
+					Yii::app()->end();
+				}
+				//рисуем ошибку
+				$this->render('loan/index', array('sView' => 'do_loan_error', 'oModel' => $oForm));
 				Yii::app()->end();
 			}
-			//рисуем ошибку
-			$this->render('loan/index', array('sView' => 'do_loan_error', 'oModel' => $oForm));
-			Yii::app()->end();
 		}
 		$this->redirect(Yii::app()->createUrl('/account/loan'));
 
@@ -1162,12 +1108,12 @@ class DefaultController extends Controller
 	public function actionDoLoanCheckSmsCode()
 	{
 		//проверяем, возможно ли действие
-		if (!Yii::app()->adminKreddyApi->checkLoan()) {
+		if (!Yii::app()->adminKreddyApi->checkConfirmLoan()) {
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
 		if (!Yii::app()->request->isPostRequest) {
-			$this->redirect(Yii::app()->createUrl('/account/loan'));
+			$this->redirect(Yii::app()->createUrl('/account/doLoanConfirm'));
 		}
 
 		$oForm = new SMSCodeForm('codeRequired');
@@ -1176,14 +1122,13 @@ class DefaultController extends Controller
 
 		$oForm->setAttributes($aPost);
 		if ($oForm->validate()) {
-			$iChannelId = Yii::app()->adminKreddyApi->getLoanSelectedChannel();
 			//получаем массив, содержащий ID продукта и тип канала получения
 			//проверяем, что в массиве 2 значения (ID и канал)
 			//проверяем, не кончились ли попытки
 			$bTriesExceed = Yii::app()->adminKreddyApi->getIsSmsCodeTriesExceed();
 			//если попытки не кончились, пробуем оформить заём
 			if (!$bTriesExceed) {
-				if (Yii::app()->adminKreddyApi->doLoan($oForm->smsCode, $iChannelId)) {
+				if (Yii::app()->adminKreddyApi->doLoanConfirm($oForm->smsCode)) {
 					//сбрасываем счетчик попыток ввода кода
 					Yii::app()->adminKreddyApi->resetSmsCodeTries();
 					$this->redirect(Yii::app()->createUrl('/account/loanComplete'));
@@ -1201,6 +1146,27 @@ class DefaultController extends Controller
 
 		}
 		$this->render('loan/index', array('sView' => 'do_loan_check_sms_code', 'oModel' => $oForm));
+	}
+
+
+	/**
+	 * Отмена запроса на займ (индивидуальных условий)
+	 */
+	public function actionCancelLoan()
+	{
+
+		if (!Yii::app()->adminKreddyApi->checkConfirmLoan()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+		$bResult = Yii::app()->adminKreddyApi->doCancelLoanRequest();
+		if ($bResult) {
+			Yii::app()->user->setFlash('success', AdminKreddyApiComponent::C_LOAN_REQUEST_CANCEL_SUCCESS);
+			$this->redirect(Yii::app()->createUrl('/account'));
+		} else {
+			Yii::app()->user->setFlash('success', AdminKreddyApiComponent::C_LOAN_REQUEST_CANCEL_SUCCESS);
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
+
 	}
 
 	/**

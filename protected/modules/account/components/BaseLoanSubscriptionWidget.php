@@ -11,10 +11,10 @@ class BaseLoanSubscriptionWidget extends CWidget
 	protected $sSendSmsButtonLabel = 'Отправить SMS с кодом подтверждения на номер +7';
 	protected $sSentSmsSuccessMessage = 'Код подтверждения операции успешно отправлен по SMS на номер +7';
 	protected $sSmsCodeConfirmButtonLabel = 'Подтвердить';
-	protected $sEnterCodeMessage = 'Для подтверждения операции введите код, отправленный Вам по SMS';
+	protected $sEnterCodeMessage = 'Для подтверждения операции введи код, отправленный по SMS';
 	protected $sSendSmsErrorMessage = 'При отправке SMS с кодом подтверждения произошла ошибка.
-		 Попробуйте снова запросить код подтверждения.<br />В случае, если ошибка повторяется,
-		 обратитесь в контактный центр.';
+		 Попробуй снова запросить код подтверждения.<br />В случае, если ошибка повторяется,
+		 обратись в контактный центр.';
 
 	protected $sWidgetViewsPath = '';
 
@@ -29,6 +29,11 @@ class BaseLoanSubscriptionWidget extends CWidget
 		$this->setTitle();
 
 		$this->render($this->sWidgetViewsPath . "/" . $this->sView, array('oModel' => $this->oModel));
+	}
+
+	public function getWidgetViewsPath()
+	{
+		return $this->sWidgetViewsPath;
 	}
 
 	/**
@@ -152,9 +157,9 @@ class BaseLoanSubscriptionWidget extends CWidget
 	{
 		if (Yii::app()->adminKreddyApi->isSelectedChannelBankCard()) {
 			?>
-			<p><i>Срок зачисления средств зависит от банка, выпустившего Вашу карту, и может составить от нескольких
-					минут до нескольких дней. Многие банки зачисляют средства на банковские карты в течение 15-30 минут
-					с момента перевода. В некоторых случаях срок зачисления может составить несколько дней.</i></p>
+			<p><i>Срок зачисления средств зависит от банка, выпустившего карту. Многие банки зачисляют средства на
+					банковские карты в течение 15-30 минут с момента перевода. В некоторых случаях срок зачисления может
+					составить несколько дней.</i></p>
 
 		<?php
 		}

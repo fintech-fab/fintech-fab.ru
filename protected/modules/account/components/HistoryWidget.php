@@ -29,35 +29,35 @@ class HistoryWidget extends TbGridView
 	protected static $aOperationTypes = array(
 		self::PRODUCT_TYPE_KREDDY              => array(
 			self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата Пакета',
-			self::C_INVOICE_TYPE_LOAN              => 'Погашение займа',
-			self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, займ)',
-			self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, займ)',
-			self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, займ)',
+			self::C_INVOICE_TYPE_LOAN              => 'Возврат тела долга',
+			self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, тело долга)',
+			self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, тело долга)',
+			self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, тело долга)',
 		),
 		self::PRODUCT_TYPE_IVANOVO             => array(
 			self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Оплата займа',
 			self::C_INVOICE_TYPE_LOAN              => 'Погашение займа',
-			self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, займ)',
-			self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, займ)',
-			self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, займ)',
+			self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, тело долга)',
+			self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, тело долга)',
+			self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, тело долга)',
 		),
 		self::PRODUCT_TYPE_KREDDYLINE          => array(
 			self::C_INVOICE_TYPE_SUBSCRIPTION      => 'Абонентская плата',
-			self::C_INVOICE_TYPE_LOAN              => 'Погашение займа',
-			self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, займ)',
-			self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, займ)',
-			self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, займ)',
+			self::C_INVOICE_TYPE_LOAN              => 'Возврат тела долга',
+			self::C_INVOICE_TYPE_LOAN_FINE         => 'Частичное погашение задолженности (пени, тело долга)',
+			self::C_INVOICE_TYPE_LOAN_PENALTY      => 'Частичное погашение задолженности (штраф, тело долга)',
+			self::C_INVOICE_TYPE_LOAN_FINE_PENALTY => 'Частичное погашение задолженности (штраф, пени, тело долга)',
 		),
 		self::PRODUCT_TYPE_KREDDYLINE_POSTPAID => array(
 			self::C_INVOICE_TYPE_SUBSCRIPTION_POSTPAID          => 'Абонентская плата',
-			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION              => 'Абонентская плата и займ',
-			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION_FINE         => 'Абонентская плата, займ и пени',
-			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION_PENALTY      => 'Абонентская плата, займ и штраф',
-			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION_FINE_PENALTY => 'Абонентская плата, займ, штраф и пени',
+			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION              => 'Абонентская плата и тело долга',
+			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION_FINE         => 'Абонентская плата, тело долга и пени',
+			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION_PENALTY      => 'Абонентская плата, тело долга и штраф',
+			self::C_INVOICE_TYPE_LOAN_SUBSCRIPTION_FINE_PENALTY => 'Абонентская плата, тело долга, штраф и пени',
 		),
 	);
 
-	const LOAN_TRANSFER_MESSAGE = 'Получение займа';
+	const LOAN_TRANSFER_MESSAGE = 'Получение денег';
 
 	public function run()
 	{
@@ -88,7 +88,7 @@ class HistoryWidget extends TbGridView
 			array(
 				'name'   => 'type_id',
 				'header' => 'Операция',
-				'value' => '$this->grid->formatOperation($data)',
+				'value'  => '$this->grid->formatOperation($data)',
 			),
 			array(
 				'name'   => 'amount',

@@ -18,8 +18,8 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 
 		// всегда обязательные поля
 		$aRules[] = array('product, channel_id', 'required');
-		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выберите сумму займа');
-		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выберите правильный способ получения займа');
+		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выбери сумму перевода');
+		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выбери правильный способ получения денег');
 
 		return $aRules;
 
@@ -32,8 +32,8 @@ class ClientSelectProductForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('product' => 'Выберите Пакет займов'),
-			array('channel_id' => 'Выберите способ получения займа')
+			array('product' => 'Выбери продукт'),
+			array('channel_id' => 'Выбери способ получения денег')
 		);
 	}
 

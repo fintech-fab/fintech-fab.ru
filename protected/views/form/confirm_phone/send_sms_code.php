@@ -13,9 +13,9 @@
 
 <h4>Подтверждение контактных данных</h4>
 
-Для завершения регистрации Вам необходимо подтвердить свой номер телефона и адрес электронной почты. <br />
-<br />Ваш номер телефона:<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br />Ваш адрес электронной почты:
-<strong><?= Yii::app()->clientForm->getSessionEmail() ?></strong> <br /><br />
+Для завершения регистрации тебе необходимо подтвердить свой номер телефона и адрес электронной почты. <br />
+<br />Твой номер телефона:<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong>
+<br />Твой адрес электронной почты:<strong><?= Yii::app()->clientForm->getSessionEmail() ?></strong> <br /><br />
 
 <div class="clearfix"></div>
 <div class="span12">

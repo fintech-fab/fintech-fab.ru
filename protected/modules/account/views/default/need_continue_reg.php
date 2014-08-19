@@ -7,7 +7,7 @@
 
 <br /><br />
 <div class="alert in alert-block alert-warning span7">
-	<h4>Вам необходимо заполнить анкету</h4>
+	<h4>Тебе необходимо заполнить анкету</h4>
 </div>
 <div class="clearfix"></div>
 <div class="center">

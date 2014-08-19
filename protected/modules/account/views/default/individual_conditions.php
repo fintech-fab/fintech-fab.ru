@@ -23,37 +23,34 @@ $this->pageTitle = Yii::app()->name . ' - Индивидуальные усло�
 		</p>
 		<?php if (isset($aActive['dt_confirm_to'])) { ?>
 			<h5>
-				<b>Подтвердить до: <?= SiteParams::formatRusDate($aActive['dt_confirm_to'], false); ?></b>
+				<b><strong>Подтвердить до:</strong> <?= SiteParams::formatRusDate($aActive['dt_confirm_to'], false); ?>
+				</b>
 			</h5>
 			<br />
 			<div class="center">
 				<?php
 				$this->widget('bootstrap.widgets.TbButton', array(
-					'size'        => 'large',
-					'label'       => 'Принять',
-					'htmlOptions' => array(
-						'class' => 'btn-success',
-					),
-				));
-				?>  <?php
-				$this->widget('bootstrap.widgets.TbButton', array(
-					'size'        => 'large',
-					'label'       => 'Отклонить',
-					'htmlOptions' => array(
-						'class' => 'btn-warning',
-					)
+					'label' => 'Принять решение',
+					'type'  => 'primary',
+					'url'   => Yii::app()->createUrl('/account/doLoanConfirm'),
 				));
 				?>
 			</div>
 			<br />
 		<?php } else { ?>
-			<span class="alert-success"> ПОДТВЕРЖДЕНЫ </span>
+			<span class="alert-success">&nbsp;<strong>ПОДТВЕРЖДЕНЫ</strong>&nbsp;</span>
 		<?php } ?>
+	</div>
+<?php } else { ?>
+	<div class="alert alert-warning">
+		<h5>Нет активных индивидуальных условий</h5>
 	</div>
 <?php } ?>
 <br />
 
-<?php if (count($aConditions)) { ?>
+<?php
+if (isset($aConditions['archive']) && count($aConditions['archive'])) {
+	?>
 	<div><a href="#" class="dotted" onclick="$('#archive_conditions').toggle(); return false;">Архив</a></div><br />
 
 	<table id="archive_conditions" style="display: none;">

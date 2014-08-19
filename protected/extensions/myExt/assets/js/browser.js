@@ -80,16 +80,16 @@ $(function () {
 		$("#attention_message").html(sMobileMessage);
 		var sYourBrowserHtml = "";
 		if (oBrowserCompatForVideo.getBrowser()) {
-			sYourBrowserHtml = " Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong> (мобильная версия). ";
+			sYourBrowserHtml = " Твой браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong> (мобильная версия). ";
 		} else {
-			sYourBrowserHtml = " Вы зашли на сайт с мобильного устройства. ";
+			sYourBrowserHtml = " Ты зашел на сайт с мобильного устройства. ";
 		}
-		$("#your_browser").html(sYourBrowserHtml + "Пожалуйста, зайдите на сайт с компьютера, если хотите пройти видеоидентификацию.");
+		$("#your_browser").html(sYourBrowserHtml + "Пожалуйста, зайди на сайт с компьютера, если хочешь пройти видеоидентификацию.");
 		$("#get_browser").hide();
 		$("#browserFormat").show();
 	} else if (oBrowserCompatForVideo.isNotCompatible()) {
 		if (oBrowserCompatForVideo.getBrowser()) {
-			$("#your_browser").html(" Ваш браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong>");
+			$("#your_browser").html(" Твой браузер: <strong>" + oBrowserCompatForVideo.getBrowser() + "</strong>");
 		}
 		$("#browserFormat").show();
 	}

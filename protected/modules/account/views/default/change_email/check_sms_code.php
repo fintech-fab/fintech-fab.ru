@@ -13,7 +13,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение адреса эле
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
 <div class="alert in alert-block alert-info">
-	Для подтверждения операции введите код, отправленный Вам по SMS
+	Для подтверждения операции введи код, отправленный по SMS
 </div>
 
 <div class="form" id="activeForm">

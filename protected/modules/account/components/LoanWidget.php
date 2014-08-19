@@ -8,13 +8,46 @@ Yii::import('application.modules.account.components.BaseLoanSubscriptionWidget')
  */
 class LoanWidget extends BaseLoanSubscriptionWidget
 {
-	protected $sTitle = 'Оформление займа';
-	protected $sInfoTitle = 'Информация о займе';
-	protected $sSelectChannelMessage = 'Выберите канал получения займа';
-	protected $sNeedSmsMessage = 'Для оформления займа требуется подтверждение одноразовым SMS-кодом';
+	protected $sTitle = 'Получить деньги';
+	protected $sInfoTitle = 'Информация';
+	protected $sSelectChannelMessage = 'Выбери канал';
+	protected $sNeedSmsMessage = 'Для оформления запроса на перевод требуется подтверждение одноразовым SMS-кодом';
 	protected $sSendSmsButtonLabel = 'Отправить SMS с кодом подтверждения на номер +7';
 
 	protected $sWidgetViewsPath = 'LoanWidget';
+
+	/**
+	 * Получение блока с индивидуальными условиями
+	 *
+	 * @return string
+	 */
+	public function getIndividualConditionInfo()
+	{
+
+		$aConditions = Yii::app()->adminKreddyApi->getIndividualConditionList();
+
+		if (!isset($aConditions['active'])) {
+			return '';
+		}
+		$aActiveCondition = $aConditions['active'];
+
+		ob_start();
+		?>
+		<div class="alert alert-info">
+			<h4>Для тебя подготовлены</h4>
+			<h5><strong>Индивидуальные условия:</strong> № <?= $aActiveCondition['contract_number'] ?></h5>
+
+			<p><strong>подтвердить до:</strong> <?= SiteParams::formatRusDate($aActiveCondition['dt_confirm_to']) ?></p>
+
+			<p>(<?=
+				CHtml::link('посмотреть', Yii::app()
+					->createUrl('/account/getDocument', ['id' => $aActiveCondition['hash']])) ?>)</p>
+		</div>
+		<?php
+
+		return ob_get_clean();
+	}
+
 
 	/**
 	 *
@@ -64,17 +97,17 @@ class LoanWidget extends BaseLoanSubscriptionWidget
 
 		<ul>
 			<li>
-				<strong>Пакет:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionProduct() ?>
+				<strong>Доступная сумма:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?>
+				&nbsp;рублей
 			</li>
-			<li><strong>Сумма займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanAmount() ?>&nbsp;рублей
-			</li>
-			<li><strong>Срок займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanLifetime() ?>&nbsp;дней
+			<li><strong>Срок пользования
+					деньгами:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getSubscriptionLoanLifetime() ?>&nbsp;дн.
 			</li>
 			<li><strong>Способ получения
-					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
+					денег:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
 			</li>
 			<li><strong>Время перечисления
-					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
+					денег:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
 			</li>
 		</ul>
 		<?php

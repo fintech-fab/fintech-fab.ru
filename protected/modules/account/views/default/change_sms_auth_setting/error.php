@@ -19,8 +19,8 @@ $oSmsCodeForm->sendSmsCode = 1;
 <?= $form->hiddenField($oSmsCodeForm, 'sendSmsCode'); ?>
 
 	<div class="alert in alert-block alert-error">
-		При отправке SMS с кодом произошла ошибка. Попробуйте снова запросить код.<br />В случае, если ошибка
-		повторяется, обратитесь в контактный центр.
+		При отправке SMS с кодом произошла ошибка. Попробуй снова запросить код.<br />В случае, если ошибка повторяется,
+		обратись в контактный центр.
 	</div>
 
 	<div class="form-actions">

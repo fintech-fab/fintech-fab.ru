@@ -3,9 +3,9 @@
 /* @var $form IkTbActiveForm */
 /* @var $iActiveTab int */
 
-$this->pageTitle = Yii::app()->name . ' - Ваши вопросы - Наши ответы'; ?>
+$this->pageTitle = Yii::app()->name . ' - Твои вопросы - Наши ответы'; ?>
 
-<h2>Ваши вопросы - Наши ответы</h2>
+<h2>Твои вопросы - Наши ответы</h2>
 
 <?php
 $this->widget(
@@ -17,7 +17,7 @@ $this->widget(
 			array(
 				'label'   => 'Частые вопросы',
 				'content' => $sTableQuestions,
-				'active' => ($iActiveTab == 1),
+				'active'  => ($iActiveTab == 1),
 			),
 			array(
 				'label'   => 'Задать вопрос',

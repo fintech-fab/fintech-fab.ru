@@ -17,7 +17,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 <div id="alertSmsSent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
-	Ваш номер телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
+	Твой номер телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
 </div>
 <div class="clearfix"></div>
 <div class="form" id="activeForm">
@@ -34,7 +34,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 			'autocomplete' => 'off',
 		),
 		'action'                 => Yii::app()
-			->createUrl('/account/resetPasswordResendSmsCode'),
+				->createUrl('/account/resetPasswordResendSmsCode'),
 	));
 	?>
 
@@ -72,7 +72,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	));
 	?>
 
-	<label>Введите код из SMS:</label>
+	<label>Введи код из SMS:</label>
 	<?= $form->textField($model, 'sms_code', array('class' => 'span4')); ?>
 	<?= $form->error($model, 'sms_code'); ?>
 

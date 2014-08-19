@@ -13,7 +13,7 @@
 
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'     => "checkCodes",
+	'id'                     => "checkCodes",
 	'enableClientValidation' => true,
 	'htmlOptions'            => array(
 		'class' => "span10",
@@ -22,7 +22,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action' => Yii::app()->createUrl('/form/checkCodes'),
+	'action'                 => Yii::app()->createUrl('/form/checkCodes'),
 ));
 ?>
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
@@ -35,7 +35,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 </div>
 
 
-<div class="clearfix"></div><label>Введите код из SMS:</label>
+<div class="clearfix"></div><label>Введи код из SMS:</label>
 <?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
 <?= $form->error($oClientCreateForm, 'sms_code'); ?>
 <?php
@@ -49,7 +49,7 @@ $this->widget('application.modules.account.components.ResendCodeWidget',
 );
 ?>
 <br />
-<div class="clearfix"></div>    <label>Введите код из электронного письма:</label>
+<div class="clearfix"></div>    <label>Введи код из электронного письма:</label>
 <?= $form->textField($oClientCreateForm, 'email_code', array('class' => 'span4')); ?>
 <?= $form->error($oClientCreateForm, 'email_code'); ?>
 <?php
@@ -96,6 +96,6 @@ $this->widget('application.modules.account.components.ResendCodeWidget',
 <div class="clearfix"></div>
 
 <div class="alert in alert-warning" style="font-size: 12pt;">
-	После ввода кодов из SMS-сообщения и электронного письма вы попадете в личный кабинет. Для продолжения регистрации
+	После ввода кодов из SMS-сообщения и электронного письма ты попадешь в личный кабинет. Для продолжения регистрации
 	потребуется заполнить анкету клиента.
 </div>

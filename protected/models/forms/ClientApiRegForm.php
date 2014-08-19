@@ -42,9 +42,9 @@ class ClientApiRegForm extends ClientFastRegForm
 			$aRequired
 		);
 
-		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выберите сумму займа');
-		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выберите правильный способ получения займа');
-		$aRules[] = array('pay_type', 'in', 'range' => array(3, 4), 'message' => 'Выберите правильный способ оплаты подключения');
+		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выбери сумму перевода');
+		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выбери правильный способ получения денег');
+		$aRules[] = array('pay_type', 'in', 'range' => array(3, 4), 'message' => 'Выбери правильный способ оплаты подключения');
 
 		return $aRules;
 	}
@@ -75,7 +75,7 @@ class ClientApiRegForm extends ClientFastRegForm
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('pay_type' => 'Выберите способ оплаты подключения')
+			array('pay_type' => 'Выбери способ оплаты подключения')
 		);
 	}
 

@@ -8,10 +8,10 @@ class AccountMenuWidget extends CWidget
 	protected $aMenu;
 
 	protected $sIndexLabel = 'Ваш Пакет займов';
-	protected $sCancelRequestLabel = 'Отказаться/изменить текущие условия';
+	protected $sCancelRequestLabel = 'Отказаться/изменить текущий тариф';
 	protected $sHistoryLabel = 'История операций';
 	protected $sSubscribeLabel = 'Подключение Пакета займов';
-	protected $sLoanLabel = 'Оформление займа';
+	protected $sLoanLabel = 'Получить деньги';
 
 	public function run()
 	{
@@ -49,6 +49,15 @@ class AccountMenuWidget extends CWidget
 			);
 
 		}
+		if (Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()) {
+
+			$this->aMenu[] = array(
+				'label' => $this->sSubscribeLabel,
+				'url'   => Yii::app()->createUrl('account/doSubscribeConfirm'),
+			);
+
+		}
+
 		if (Yii::app()->adminKreddyApi->checkLoan()) {
 			$this->aMenu[] = array(
 				'label' => $this->sLoanLabel,
@@ -61,7 +70,7 @@ class AccountMenuWidget extends CWidget
 		) {
 			$this->aMenu[] = array(
 				'label' => 'Оплатить задолженность',
-				'url'   => 'https://pay.kreddy.ru/'
+				'url'   => Yii::app()->params['payUrl'],
 			);
 		}
 		$this->aMenu[] = array(
@@ -78,7 +87,7 @@ class AccountMenuWidget extends CWidget
 				),
 				array(
 					'label' => 'График платежей',
-					'url' => array('/account/default/paymentSchedule')
+					'url'   => array('/account/default/paymentSchedule')
 				),
 			),
 		);
@@ -166,13 +175,18 @@ class AccountMenuWidget extends CWidget
 			echo '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб.';
 			echo '<a href="#" class="dashed" onclick="$(\'#detail_balance_info\').toggle(); return false;">детализация</a><br/>';
 			echo '<div id="detail_balance_info" class="hide">';
-			echo '<strong>Займ:</strong> ' . Yii::app()->adminKreddyApi->getAbsLoanBalance() . ' руб. <br/>';
+			echo '<strong>Тело:</strong> ' . Yii::app()->adminKreddyApi->getAbsLoanBalance() . ' руб. <br/>';
 			echo '<strong>Абонентская плата:</strong> ' . Yii::app()->adminKreddyApi->getAbsSubscriptionBalance() . ' руб. <br/>';
-			if (Yii::app()->adminKreddyApi->getAbsFineAndPenalty() != 0) {
-				echo '<strong>Пени/штраф:</strong> ' . Yii::app()->adminKreddyApi->getAbsFineAndPenalty() . ' руб. <br/>';
+			if (Yii::app()->adminKreddyApi->getAbsFine() != 0) {
+				echo '<strong>Неустойка:</strong> ' . Yii::app()->adminKreddyApi->getAbsFine() . ' руб. <br/>';
+			}
+			if (Yii::app()->adminKreddyApi->getAbsPenalty() != 0) {
+				echo '<strong>Штраф:</strong> ' . Yii::app()->adminKreddyApi->getAbsPenalty() . ' руб. <br/>';
+			}
+			if (Yii::app()->adminKreddyApi->getAbsPercent() != 0) {
+				echo '<strong>Проценты:</strong> ' . Yii::app()->adminKreddyApi->getAbsPercent() . ' руб. <br/>';
 			}
 			echo '</div>';
-			echo '<strong>Вернуть:</strong> ' . Yii::app()->adminKreddyApi->getCurrentProductLoanExpiredTo() . '<br/>';
 		} elseif (Yii::app()->adminKreddyApi->getBalance() >= 0) {
 			echo '<strong>Баланс:</strong> ' . Yii::app()->adminKreddyApi->getBalance() . ' руб. <br/>';
 		}

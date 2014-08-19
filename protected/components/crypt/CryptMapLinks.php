@@ -50,6 +50,7 @@ class CryptMapLinks extends CryptMap
 
 	/**
 	 * ссылка для модераторского входа
+	 *
 	 * @param string $email
 	 *
 	 * @return string
@@ -82,6 +83,7 @@ class CryptMapLinks extends CryptMap
 
 	/**
 	 * ссылка для подтверждения подписки
+	 *
 	 * @param integer $id
 	 *
 	 * @return string
@@ -99,6 +101,7 @@ class CryptMapLinks extends CryptMap
 
 	/**
 	 * переход по ссылке подтверждения подписки
+	 *
 	 * @param integer $id
 	 *
 	 * @return string
@@ -122,6 +125,7 @@ class CryptMapLinks extends CryptMap
 
 	/**
 	 * ссылка для отписки от рассылки
+	 *
 	 * @param integer $id
 	 *
 	 * @return string
@@ -153,7 +157,7 @@ class CryptMapLinks extends CryptMap
 			$oSubscriber->save();
 		}
 
-		self::getController()->flash('Сайт больше не будет отправлять вам сообщения о новых публикациях', 'warning');
+		self::getController()->flash('Сайт больше не будет отправлять тебе сообщения о новых публикациях', 'warning');
 		Yii::app()->getController()->redirect('/');
 
 	}

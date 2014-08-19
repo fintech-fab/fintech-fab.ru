@@ -130,7 +130,7 @@ class ProductsChannelsComponent
 					. "</span>";
 			}
 		} else {
-			$aProductsList = array('0' => '<span data-price="0" data-final-price="0" data-price-count="0 дней" data-count="0 займов" data-int-count="0" data-time="0">Произошла ошибка! Попробуйте перезагрузить страницу через минуту.</span>',);
+			$aProductsList = array('0' => '<span data-price="0" data-final-price="0" data-price-count="0 дней" data-count="0 займов" data-int-count="0" data-time="0">Произошла ошибка! Попробуй перезагрузить страницу через минуту.</span>',);
 		}
 
 		return $aProductsList;

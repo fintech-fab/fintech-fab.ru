@@ -5,64 +5,36 @@
  */
 class KreddyLineWidget extends SubscriptionWidget
 {
-	protected $sTitle = 'Подключение КРЕДДИтной линии';
-	protected $sSubscribeButtonLabel = 'Подключить КРЕДДИтную линию';
-	protected $sNeedIdentifyMessage = 'Для подключения КРЕДДИтной линии необходимо пройти идентификацию.';
-	protected $sNeedSmsMessage = 'Для подключения КРЕДДИтной линии требуется подтверждение одноразовым SMS-кодом';
-
-	/**
-	 * @return string
-	 */
-	protected function getProductInfo()
-	{
-		$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-
-		return 'Ваша КРЕДДИтная линия - &quot;'
-		. Yii::app()->adminKreddyApi->getProductNameById($iProductId)
-		. '&quot;<br /> Размер одного займа - '
-		. Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) .
-		'&nbsp;руб.';
-	}
+	protected $sTitle = 'Подключение КРЕДДИ';
+	protected $sSubscribeButtonLabel = 'Продолжить';
+	protected $sNeedIdentifyMessage = 'Для подключения КРЕДДИ необходимо пройти идентификацию.';
+	protected $sNeedSmsMessage = 'Для подключения КРЕДДИ требуется подтверждение одноразовым SMS-кодом';
 
 	/**
 	 * @return string
 	 */
 	protected function getFullInfo()
 	{
-		$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-		$iChannelId = Yii::app()->adminKreddyApi->getSubscribeSelectedChannel();
+		$iProductId = Yii::app()->adminKreddyApi->getSubscriptionProductId();
+		if (!$iProductId) {
+			$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+		}
 
 		ob_start();
 		?>
 		<ul>
 			<li>
-				<strong><?= Yii::app()->adminKreddyApi->getProductNameById($iProductId) ?></strong>
-			</li>
-			<li><strong>Сумма
-					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
+				<strong>Сумма:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) ?>
 				&nbsp;рублей
 			</li>
-			<li><strong>Количество займов в КРЕДДИтной линии:</strong>&nbsp;не ограничено</li>
-
-			<li><strong>Срок займа:</strong>&nbsp;от 1 до
-				&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
-				&nbsp;дней
-			</li>
-
 			<li>
-				<strong>Способ получения
-					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
-			</li>
-			<li><strong>Размер абонентской
-					платы:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId, $iChannelId) ?>
+				<strong>Размер абонентской
+					платы:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductCostById($iProductId) ?>
 				&nbsp;рублей
 			</li>
-			<li><strong>Срок действия КРЕДДИтной
-					линии:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
-				&nbsp;дней
-			</li>
-			<li><strong>Время перечисления
-					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelSpeed($iChannelId); ?>
+			<li>
+				<strong>Срок действия:</strong>&nbsp;
+				<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>&nbsp;дн.
 			</li>
 			<li>
 				<strong>Условия внесения абонентской
@@ -70,8 +42,6 @@ class KreddyLineWidget extends SubscriptionWidget
 			</li>
 		</ul>
 		<?php
-		$this->renderChannelSpeedMessage();
-
 		return ob_get_clean();
 
 	}

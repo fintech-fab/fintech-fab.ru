@@ -11,26 +11,21 @@
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'products-form',
-	'action' => Yii::app()->createUrl('/account/doSubscribe'),
+	'action' => Yii::app()->createUrl('/account/doSubscribeConfirm'),
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => $this->getInfoTitle(),
 	'content' => $this->getFullInfo(),
 ));
+$oModel->sendSmsCode = 1;
+echo $form->hiddenField($oModel, 'sendSmsCode');
 ?>
-	<div class="center">
-		<?php
-		$this->widget('bootstrap.widgets.TbButton', array(
-			'label'       => 'Отправить запрос на подключение',
-			'type'        => 'primary',
-			'buttonType'  => 'submit',
-			'htmlOptions' => array(
-				'name'  => 'subscribe_accept',
-				'value' => '1'
-			),
-		));
-		?>
+	<div class="alert in alert-block alert-warning">
+		<?= $this->getNeedSmsMessage(); ?>
 	</div>
+<? $this->renderSendSmsButton(); ?>
+
 <?php
+
 $this->endWidget();

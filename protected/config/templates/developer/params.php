@@ -11,5 +11,6 @@ return array(
 	'contactEmail'     => 'operator@kreddy.ru',
 	'emailFrom'        => 'info@kreddy.ru',
 	'ivPath'           => '/tmp/',
-	'sDocumentsPath' => '/tmp/',
+	'sDocumentsPath'   => '/tmp/',
+	'payUrl'           => 'http://pay.%MAIN_URL%',
 );

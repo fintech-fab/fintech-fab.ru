@@ -25,14 +25,14 @@ $this->breadcrumbs = array(
 		<div class="alert alert-info"><?= AdminKreddyApiComponent::C_SESSION_EXPIRED; ?></div>
 	<?php endif; ?>
 
-	<p class="note">Для входа в личный кабинет введите номер телефона, указанный в Анкете, и пароль</p>
+	<p class="note">Для входа в личный кабинет введи номер телефона, указанный в Анкете, и пароль</p>
 
 	<div class="row">
 		<?= $form->phoneMaskedRow($model, 'username'); ?>
 	</div>
 
 	<div class="row">
-		<?= $form->passwordFieldRow($model, 'password',array('autocomplete' => 'off')); ?>
+		<?= $form->passwordFieldRow($model, 'password', array('autocomplete' => 'off')); ?>
 	</div>
 
 	<div class="row buttons">
