@@ -19,6 +19,7 @@
 	<title>FintechFab::ActionsCalculator</title>
 
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/app.min.css">
+	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/custom.css">
 	<script src="<?php echo $sPubPath; ?>/js/app.js"></script>
 
 	<!-- select2 -->

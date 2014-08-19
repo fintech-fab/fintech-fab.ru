@@ -2,9 +2,11 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
+use Input;
 use Config;
 use FintechFab\ActionsCalc\Models\Terminal;
 use View;
+use FintechFab\ActionsCalc\Models\Rule;
 
 /**
  * Class CalculatorController
@@ -31,5 +33,22 @@ class CalculatorController extends BaseController
 			->nest('_signals', 'ff-actions-calc::calculator._signals', ['signals' => $oTerminal->signals]);
 
 		$this->layout->content = $content;
+	}
+
+	/**
+	 * Getting all rules
+	 */
+	public function getEventRules()
+	{
+		$iEventId = (int)Input::get('event_id');
+		$aoRules = Rule::whereEventId($iEventId)->get();
+
+		$sResult = '';
+
+		if ($aoRules->count() > 0) {
+			$sResult = View::make('ff-actions-calc::calculator._event_rules', ['rules' => $aoRules]);
+		}
+
+		return $sResult;
 	}
 }

@@ -8,10 +8,6 @@
  */
 ?>
 
-<?php foreach ($rules as $rule): ?>
-	<?php echo $rule->signal->name; ?>
-<?php endforeach; ?>
-
 <script>
 	$(document).ready(function () {
 		$("#e1").select2();

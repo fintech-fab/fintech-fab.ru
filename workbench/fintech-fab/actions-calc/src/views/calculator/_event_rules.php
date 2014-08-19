@@ -1,15 +1,14 @@
 <?php
 /**
- * File _signals.php
+ * File _event_rules.php
  *
  * @author Ulashev Roman <truetamtam@gmail.com>
  *
- * @var FintechFab\ActionsCalc\Models\Signal[] $signals
+ * @var FintechFab\ActionsCalc\Models\Rule[] $rules
  */
 ?>
-
-<div id="manage-signals-wrap">
-	<table id="manage-signals" width="100%">
+<div id="event-signals-wrap">
+	<table id="event-signals" width="100%">
 		<thead>
 		<tr>
 			<th width="200">sid</th>
@@ -18,10 +17,10 @@
 		</tr>
 		</thead>
 		<tbody>
-		<?php foreach ($signals as $signal): ?>
-			<tr data-id="<?php echo $signal->id ?>">
-				<td><?php echo $signal->signal_sid ?></td>
-				<td><?php echo $signal->name; ?></td>
+		<?php foreach ($rules as $rule): ?>
+			<tr data-id="<?php echo $rule->id ?>">
+				<td><?php echo $rule->signal_sid ?></td>
+				<td><?php echo $rule->name; ?></td>
 				<td>
 					<ul class="signal-buttons button-group right">
 						<li><a href="#" class="tiny button">&nbsp;<i class="fi-page-edit"></i></a></li>

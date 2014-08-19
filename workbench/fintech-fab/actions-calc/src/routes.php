@@ -9,6 +9,10 @@ Route::get('/actions-calc/manage', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@manage'
 ]);
 
+Route::post('/actions-calc/manage/get-event-rules', [
+	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@getEventRules'
+]);
+
 // main entry point
 Route::post('actions-calc', [
 	'as'     => 'getRequest',
