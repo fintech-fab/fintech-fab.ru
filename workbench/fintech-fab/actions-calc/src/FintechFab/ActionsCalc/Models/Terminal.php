@@ -25,6 +25,15 @@ class Terminal extends Eloquent
 	protected $table = 'terminals';
 	protected $fillable = ['id', 'name', 'url', 'foreign_queue', 'foreign_job', 'key', 'password'];
 
+	/**
+	 * Accessor for paginating events
+	 *
+	 * @return mixed
+	 */
+	public function getEventsAttribute() {
+	    return $this->events()->paginate(2);
+	}
+
 	public function rules()
 	{
 		return $this->hasMany(Rule::class, 'terminal_id', 'id');

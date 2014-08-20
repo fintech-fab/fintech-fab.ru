@@ -7,8 +7,8 @@
  * @var FintechFab\ActionsCalc\Models\Signal[] $signals
  */
 ?>
-
 <div id="manage-signals-wrap">
+	<a id="signal-add" href="#" class="button small right">Добавить сигнад <i class="fi-plus"></i></a>
 	<table id="manage-signals" width="100%">
 		<thead>
 		<tr>

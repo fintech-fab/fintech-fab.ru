@@ -7,22 +7,32 @@
  * @var FintechFab\ActionsCalc\Models\Rule[] $rules
  */
 ?>
-<div id="event-signals-wrap">
-	<table id="event-signals" width="100%">
+<div id="event-rules-wrap">
+	<table width="100%">
 		<thead>
 		<tr>
-			<th width="200">sid</th>
 			<th>Имя</th>
-			<th width="200" class="text-center">Правила</th>
+			<th>Правило</th>
+			<th class="text-center">Активно</th>
+			<th>Сигнал</th>
+			<th>Править</th>
 		</tr>
 		</thead>
 		<tbody>
 		<?php foreach ($rules as $rule): ?>
-			<tr data-id="<?php echo $rule->id ?>">
-				<td><?php echo $rule->signal_sid ?></td>
+			<tr data-id="<?php echo $rule->id; ?>">
 				<td><?php echo $rule->name; ?></td>
+				<td><?php echo str_limit($rule->rule, 100, '...'); ?></td>
 				<td>
-					<ul class="signal-buttons button-group right">
+					<div class="switch">
+						<input id="rule-flag-active-<?php echo $rule->id; ?>" type="checkbox"
+							<?php echo $rule->flag_active ? "checked" : ""; ?>>
+						<label class="toggle-rule-flag" for="rule-flag-active-<?php echo $rule->id; ?>"></label>
+					</div>
+				</td>
+				<td><?php echo $rule->signal->signal_sid; ?></td>
+				<td>
+					<ul class="events-buttons button-group right">
 						<li><a href="#" class="tiny button">&nbsp;<i class="fi-page-edit"></i></a></li>
 					</ul>
 				</td>

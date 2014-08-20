@@ -84,7 +84,7 @@ class TestSetUp extends TestCase
 			'terminal_id' => 1,
 			'event_id'    => 1,
 			'signal_id'   => 1,
-			'flag_active' => true,
+			'flag_active' => 1,
 		]);
 		Rule::create([
 			'id'          => 2,
@@ -93,7 +93,7 @@ class TestSetUp extends TestCase
 			'terminal_id' => 1,
 			'event_id'    => 1,
 			'signal_id'   => 3,
-			'flag_active' => true,
+			'flag_active' => 1,
 		]);
 		Rule::create([
 			'id'          => 3,
@@ -102,7 +102,7 @@ class TestSetUp extends TestCase
 			'terminal_id' => 1,
 			'event_id'    => 1,
 			'signal_id'   => 2,
-			'flag_active' => true,
+			'flag_active' => 1,
 		]);
 
 		// Signals

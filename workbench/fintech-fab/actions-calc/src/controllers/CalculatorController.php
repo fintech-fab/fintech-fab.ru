@@ -5,8 +5,10 @@ namespace FintechFab\ActionsCalc\Controllers;
 use Input;
 use Config;
 use FintechFab\ActionsCalc\Models\Terminal;
+use League\FactoryMuffin\Exceptions\ModelException;
 use View;
 use FintechFab\ActionsCalc\Models\Rule;
+use Whoops\Exception\ErrorException;
 
 /**
  * Class CalculatorController
@@ -50,5 +52,32 @@ class CalculatorController extends BaseController
 		}
 
 		return $sResult;
+	}
+
+	/**
+	 * Toggle rule active
+	 */
+	public function toggleRuleFlag()
+	{
+		$this->layout = null;
+		$aRuleData = Input::only('id', 'flag_active');
+
+		/** @var Rule $oRule */
+		$oRule = Rule::find((int)$aRuleData['id']);
+		$iRuleFlag = $aRuleData['flag_active'] == 'true' ? 1 : 0;
+		$oRule->flag_active = $iRuleFlag;
+
+		try {
+			if ($oRule->save()) {
+				echo json_encode(['status' => 'success', 'message' => '#' . $aRuleData['id'] . ' Правило сохранено.']);
+			}
+		} catch (ModelException $e) {
+			echo json_encode([
+				'status'        => 'error',
+				'message'       => 'Ошибка сохранение правила.',
+				'error_message' => $e->getMessage()
+			]);
+		}
+
 	}
 }

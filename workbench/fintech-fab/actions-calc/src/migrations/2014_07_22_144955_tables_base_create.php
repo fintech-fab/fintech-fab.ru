@@ -47,7 +47,7 @@ class TablesBaseCreate extends Migration
 			$table->increments('id');
 			$table->string('name');
 			$table->text('rule');
-			$table->tinyInteger('flag_active');
+			$table->tinyInteger('flag_active', false, true);
 			$table->integer('terminal_id');
 			$table->integer('event_id');
 			$table->integer('signal_id');

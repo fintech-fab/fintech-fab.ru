@@ -8,15 +8,15 @@
  */
 ?>
 
-<script>
-	$(document).ready(function () {
-		$("#e1").select2();
-	});
-</script>
-
-<select id="e1">
-	<option value="AL">Alabama</option>
-	<option value="WY">Wyoming</option>
-	<option value="WY">Wyoming</option>
-	<option value="WY">Wyoming</option>
-</select>
+<!--<script>-->
+<!--	$(document).ready(function () {-->
+<!--		$("#e1").select2();-->
+<!--	});-->
+<!--</script>-->
+<!---->
+<!--<select id="e1">-->
+<!--	<option value="AL">Alabama</option>-->
+<!--	<option value="WY">Wyoming</option>-->
+<!--	<option value="WY">Wyoming</option>-->
+<!--	<option value="WY">Wyoming</option>-->
+<!--</select>-->

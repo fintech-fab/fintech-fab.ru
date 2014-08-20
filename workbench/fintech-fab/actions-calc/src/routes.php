@@ -12,6 +12,15 @@ Route::get('/actions-calc/manage', [
 Route::post('/actions-calc/manage/get-event-rules', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@getEventRules'
 ]);
+Route::post('/actions-calc/manage/toggle-rule-flag', [
+	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@toggleRuleFlag'
+]);
+
+// Event
+Route::get('/actions-calc/event/create', [
+	'as' => 'event.create',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@create'
+]);
 
 // main entry point
 Route::post('actions-calc', [
@@ -19,7 +28,6 @@ Route::post('actions-calc', [
 	'uses'   => 'FintechFab\ActionsCalc\Controllers\RequestController@getRequest',
 ]);
 
-Route::get('actions-calc/login', [
-	'as'   => 'login',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\AuthController@login'
+Route::get('actions-calc/register', [
+	'uses' => 'FintechFab\ActionsCalc\Controllers\AuthController@register'
 ]);
