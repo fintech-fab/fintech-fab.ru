@@ -106,21 +106,21 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_ACTIVE            => 'Займ оформлен',
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно оформление займа',
 		self::C_SUBSCRIPTION_CANCEL            => '', //для Иваново не должно использоваться
-		self::C_SUBSCRIPTION_PAID => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
+		self::C_SUBSCRIPTION_PAID              => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
 
 		self::C_SUBSCRIPTION_PAYMENT           => '', //для Иваново не должно использоваться
 
-		self::C_SCORING_PROGRESS  => 'Твоя заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS               => 'Твоя заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 
 		self::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
 		self::C_LOAN_DEBT                      => 'Задолженность по займу',
-		self::C_LOAN_ACTIVE       => 'Деньги отправлены',
-		self::C_LOAN_TRANSFER     => 'Деньги отправлены',
-		self::C_LOAN_AVAILABLE    => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
-		self::C_LOAN_CREATED      => 'Деньги отправлены',
-		self::C_LOAN_PAID         => 'Деньги отправлены',
+		self::C_LOAN_ACTIVE                    => 'Деньги отправлены',
+		self::C_LOAN_TRANSFER                  => 'Деньги отправлены',
+		self::C_LOAN_AVAILABLE                 => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
+		self::C_LOAN_CREATED                   => 'Деньги отправлены',
+		self::C_LOAN_PAID                      => 'Деньги отправлены',
 
 		self::C_CLIENT_ACTIVE                  => 'Доступно оформление займа',
 		self::C_CLIENT_NEW                     => 'Выберите займ',
@@ -314,7 +314,7 @@ class AdminKreddyApiComponent
 
 			'{do_sub_pay_sum}'     => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
 
-			'{loan_amount}' => $this->getSubscriptionLoanAmount(), // сумма займа
+			'{loan_amount}'        => $this->getSubscriptionLoanAmount(), // сумма займа
 
 			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
 

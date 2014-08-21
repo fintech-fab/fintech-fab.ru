@@ -793,6 +793,7 @@ class DefaultController extends Controller
 		//если не авторизован по СМС-авторизации
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$this->render('subscription/index', array('sView' => 'subscribe_not_sms_auth', 'oModel' => $oProductForm));
+			Yii::app()->end();
 		}
 
 		//проверяем, нужна ли повторная видеоидентификация
@@ -863,15 +864,18 @@ class DefaultController extends Controller
 		$aPost = Yii::app()->request->getPost(get_class($oProductForm));
 		if (!empty($aPost)) {
 			$oProductForm->setAttributes($aPost);
-			$oProductForm->setProductByAttributes();
+			$oProductForm->validate();
 
 			//сохраняем в сессию выбранный продукт
-			Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+			if ($oProductForm->validate()) {
+				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);
+			}
 		}
 
 		//Если клиент нажал кнопку "Продолжить"
-		if (Yii::app()->request->getPost('subscribe_accept')) {
-			$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+		$iProduct = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
+		if ($iProduct && Yii::app()->request->getPost('subscribe_accept')) {
+
 			$bSubscribe = Yii::app()->adminKreddyApi->doSubscribe($iProduct);
 
 			if ($bSubscribe) {
@@ -887,7 +891,6 @@ class DefaultController extends Controller
 		}
 
 		$this->render('subscription/index', array('sView' => 'subscribe', 'oModel' => $oProductForm));
-		Yii::app()->end();
 	}
 
 	/**
@@ -1163,7 +1166,7 @@ class DefaultController extends Controller
 			Yii::app()->user->setFlash('success', AdminKreddyApiComponent::C_LOAN_REQUEST_CANCEL_SUCCESS);
 			$this->redirect(Yii::app()->createUrl('/account'));
 		} else {
-			Yii::app()->user->setFlash('success', AdminKreddyApiComponent::C_LOAN_REQUEST_CANCEL_SUCCESS);
+			Yii::app()->user->setFlash('error', AdminKreddyApiComponent::C_LOAN_REQUEST_CANCEL_ERROR);
 			$this->redirect(Yii::app()->createUrl('/account'));
 		}
 
@@ -1532,6 +1535,9 @@ class DefaultController extends Controller
 	 */
 	public function actionGetDocument($id, $download = 0)
 	{
+		// чистим данные от опасных символов
+		$id = str_replace(array('.', '/', '\\'), '', $id);
+
 		$sFileName = $id . '.pdf';
 
 		$sFilePath = Yii::app()->document->getFilePath($sFileName);

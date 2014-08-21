@@ -516,7 +516,7 @@ class Dictionaries
 	 * @var array
 	 */
 	public static $aConditionsTransferChannels = array(
-		self::C_CHANNEL_CARD => 'на счет банкцовской карты Заемщика',
+		self::C_CHANNEL_CARD => 'на счет банковской карты Заемщика',
 		self::C_CHANNEL_MOB  => 'на счет мобильного телефона заемщика, указанный в Заявлении',
 	);
 
