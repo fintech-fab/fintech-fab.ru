@@ -2,9 +2,11 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
+use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Event;
-use Request;
+use Validator;
 use Input;
+use View;
 
 class EventController extends BaseController
 {
@@ -14,10 +16,17 @@ class EventController extends BaseController
 		$oRequestData = Input::all();
 		$oRequestData['terminal_id'] = $this->iTerminalId;
 
-		$oEvent = Event::create($oRequestData);
-		$oEvent->push();
+		$validator = Validator::make($oRequestData, Validators::getEventRules());
 
-		return json_encode(['status' => 'success', 'message' => 'Новое событие создано.']);
+		if ($validator->fails()) {
+			return View::make('ff-actions-calc::event.create')->withErrors($validator);
+		} else {
+			$oEvent = Event::create($oRequestData);
+			$oEvent->push();
+
+			return json_encode(['status' => 'success', 'message' => 'Новое событие создано.']);
+		}
+
 	}
 
 	/**

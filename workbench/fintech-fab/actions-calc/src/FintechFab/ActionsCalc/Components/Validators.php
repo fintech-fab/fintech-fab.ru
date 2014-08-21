@@ -28,7 +28,7 @@ class Validators
 	public static function getEventRules()
 	{
 		return [
-			'event_sid' => 'required|alpha_dash|unique',
+			'event_sid' => 'required|alpha_dash',
 		];
 	}
 } 

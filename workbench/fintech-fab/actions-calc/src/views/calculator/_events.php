@@ -8,11 +8,13 @@
  */
 ?>
 
-<a data-reveal-id="manage-modal" id="event-create" href="<?php echo route('event.create'); ?>" class="button small right" data-reveal-ajax="true">
-	Добавить событие <i class="fi-plus"></i> </a>
+<a data-reveal-id="manage-modal" id="event-create" href="#" class="button small right"> Добавить событие
+	<i class="fi-plus"></i> </a>
 
 <!-- modal create event -->
-<div id="manage-modal" class="reveal-modal small" data-reveal></div><!-- /modal create event-->
+<div id="manage-modal" class="reveal-modal small" data-reveal>
+	<?php echo View::make('ff-actions-calc::event.create'); ?>
+</div><!-- /modal create event-->
 
 <!-- events table -->
 <div id="events-table-container">
@@ -22,6 +24,7 @@
 <script type="text/javascript">
 	$(document).ready(function () {
 
+		// modal event create
 		$('#manage-modal').on('click', '#button-event-create', function (e) {
 			e.preventDefault();
 
@@ -30,10 +33,11 @@
 			$.post('/actions-calc/event/create',
 				$th.closest('form').serialize(),
 				function (oData) {
-					console.log('create button data: ' + oData);
-					if(oData.status == 'success') {
+					if (oData.status == 'success') {
 						$('#manage-modal').foundation('reveal', 'close');
 						updateEventsTable();
+					} else {
+						$('#manage-modal').html(oData); // TODO: handle json errors
 					}
 				},
 				'json'
@@ -65,6 +69,7 @@
 		});
 
 		$('.see-rules').click(function () {
+
 			// $th clicked button "see rules"
 			var $th = $(this);
 			var $parentTr = $th.closest('tr');
