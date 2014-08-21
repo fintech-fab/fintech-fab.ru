@@ -2,6 +2,7 @@
 
 namespace FintechFab\ActionsCalc\Models;
 
+use Config;
 use Eloquent;
 
 /**
@@ -71,7 +72,8 @@ class Event extends Eloquent
 
 	public static function getEventSid()
 	{
-		$event = Event::select('id', 'name', 'event_sid')->get();
+		$termId = Config::get('ff-actions-calc::termId');
+		$event = Event::select('id', 'name', 'event_sid')->where('terminal_id', '=', $termId)->get();
 		$result = array();
 		foreach ($event as $value) {
 			$result[$value->id] = $value->event_sid . ' - (' . $value->name . ')';

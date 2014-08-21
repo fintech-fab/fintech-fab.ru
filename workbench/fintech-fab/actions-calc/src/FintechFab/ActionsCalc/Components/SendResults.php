@@ -23,7 +23,7 @@ class SendResults
 	{
 		Queue::connection('ff-actions-calc-result')->push($queue, array(
 			'class_queue' => $queue,
-			'signalSid' => $signalSid,
+			'signalSid'   => $signalSid,
 		));
 
 		Log::info('Результат отправлен в очередь, класс для выполнения FintechFab\\ActionsCalc\\Queue\\QueueHandler');

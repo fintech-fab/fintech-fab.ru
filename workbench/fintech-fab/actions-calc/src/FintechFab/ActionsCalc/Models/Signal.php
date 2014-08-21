@@ -2,6 +2,7 @@
 
 namespace FintechFab\ActionsCalc\Models;
 
+use Config;
 use Eloquent;
 
 /**
@@ -54,7 +55,8 @@ class Signal extends Eloquent
 
 	public static function getSignalSid()
 	{
-		$signal = Signal::select('id', 'name', 'signal_sid')->get();
+		$termId = Config::get('ff-actions-calc::termId');
+		$signal = Signal::select('id', 'name', 'signal_sid')->where('terminal_id', '=', $termId)->get();
 		$result = array();
 		foreach ($signal as $value) {
 			$result[$value->id] = $value->signal_sid . ' - (' . $value->name . ')';
