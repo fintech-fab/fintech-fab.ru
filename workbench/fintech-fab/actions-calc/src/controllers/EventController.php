@@ -2,29 +2,23 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
-class EventController extends BaseController {
+use FintechFab\ActionsCalc\Models\Event;
+use Request;
+use Input;
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		echo 'hi';
-	}
+class EventController extends BaseController
+{
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
 	public function create()
 	{
-		//
-	}
+		$oRequestData = Input::all();
+		$oRequestData['terminal_id'] = $this->iTerminalId;
 
+		$oEvent = Event::create($oRequestData);
+		$oEvent->push();
+
+		return json_encode(['status' => 'success', 'message' => 'Новое событие создано.']);
+	}
 
 	/**
 	 * Store a newly created resource in storage.
@@ -40,7 +34,8 @@ class EventController extends BaseController {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function show($id)
@@ -52,7 +47,8 @@ class EventController extends BaseController {
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function edit($id)
@@ -64,7 +60,8 @@ class EventController extends BaseController {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function update($id)
@@ -76,7 +73,8 @@ class EventController extends BaseController {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
+	 *
 	 * @return Response
 	 */
 	public function destroy($id)

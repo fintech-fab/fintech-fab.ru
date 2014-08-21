@@ -7,57 +7,40 @@
  * @var FintechFab\ActionsCalc\Models\Event[] $events
  */
 ?>
-<a id="event-create" href="#" class="button small right">Добавить событие <i class="fi-plus"></i></a>
-<table id="events-rules" width="100%">
-	<thead>
-	<tr>
-		<th width="200">sid</th>
-		<th>Имя</th>
-		<th width="200" class="text-center">Правила</th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($events as $event): ?>
-		<tr data-id="<?php echo $event->id; ?>">
-			<td><?php echo $event->event_sid ?></td>
-			<td><?php echo $event->name; ?></td>
-			<td>
-				<ul class="event-buttons button-group right">
-					<li>
-						<a data-rules-count="<?php echo $event->rules->count(); ?>" href="#" class="tiny button see-rules">
-							<?php echo $event->rules->count(); ?>&nbsp;<i class="fi-eye"></i> </a>
-						<a href="#" class="tiny button close-rules" style="display: none;">закрыть</a>
-					</li>
-					<li><a href="#" class="tiny button success"><i class="fi-plus"></i></a></li>
-				</ul>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</tbody>
-</table>
 
-<!-- pagination -->
-<?php if (method_exists($events, 'links')): ?>
-	<?php echo $events->links(); ?>
-<?php endif; ?>
-<!-- /pagination -->
+<a data-reveal-id="manage-modal" id="event-create" href="<?php echo route('event.create'); ?>" class="button small right" data-reveal-ajax="true">
+	Добавить событие <i class="fi-plus"></i> </a>
 
-<!-- modal -->
-<div id="manage-modal" class="reveal-modal" data-reveal>
-	<?php
-//	echo Form::open([
-//		'url' => 'EventController@create'
-//	]);
+<!-- modal create event -->
+<div id="manage-modal" class="reveal-modal small" data-reveal></div><!-- /modal create event-->
 
-	echo Form::open();
-	echo Form::text('name');
-	echo Form::submit('Добавить', ['class' => 'button small']);
-	?>
-</div>
-<!-- /modal -->
+<!-- events table -->
+<div id="events-table-container">
+	<?php echo View::make('ff-actions-calc::calculator._events_table', ['events' => $events]); ?>
+</div><!-- /events table -->
 
 <script type="text/javascript">
 	$(document).ready(function () {
+
+		$('#manage-modal').on('click', '#button-event-create', function (e) {
+			e.preventDefault();
+
+			var $th = $(this);
+
+			$.post('/actions-calc/event/create',
+				$th.closest('form').serialize(),
+				function (oData) {
+					console.log('create button data: ' + oData);
+					if(oData.status == 'success') {
+						$('#manage-modal').foundation('reveal', 'close');
+						updateEventsTable();
+					}
+				},
+				'json'
+			);
+
+			return false;
+		});
 
 		// toggle event rules flag
 		$('#events-rules').on('click', '.switch label', function () {
@@ -81,14 +64,6 @@
 			return bSwitchResult;
 		});
 
-		function activateCloseButton($th) {
-			$th.next('a.close-rules').click(function () {
-				$(this).toggle();
-				$th.toggle();
-				$th.closest('tr').next('tr').toggle();
-			});
-		}
-
 		$('.see-rules').click(function () {
 			// $th clicked button "see rules"
 			var $th = $(this);
@@ -106,8 +81,7 @@
 				// disabling button and preventing click while loading rules
 				$th.attr('disabled', 'disabled');
 				// ajax sending
-				$.post(
-					'/actions-calc/manage/get-event-rules',
+				$.post('/actions-calc/manage/get-event-rules',
 					{event_id: $parentTr.data('id')},
 					function (oData, sStatus) { // success function
 
@@ -132,9 +106,25 @@
 		});
 	});
 
-	$('#event-create').click(function(e) {
-		e.preventDefault();
-		$('#manage-modal').foundation('reveal', 'open');
-	});
+	function activateCloseButton($th) {
+		$th.next('a.close-rules').click(function () {
+			$(this).toggle();
+			$th.toggle();
+			$th.closest('tr').next('tr').toggle();
+		});
+	}
 
+	function updateEventsTable() {
+		var $eventTableContainer = $('#events-table-container');
+
+		$.get('/actions-calc/manage/events-table-update',
+			{},
+			function (oData) {
+				$eventTableContainer.html(oData);
+			},
+			'html'
+		);
+
+		return false;
+	}
 </script>

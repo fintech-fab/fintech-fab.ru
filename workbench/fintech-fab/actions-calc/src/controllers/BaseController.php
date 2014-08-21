@@ -5,10 +5,17 @@ namespace FintechFab\ActionsCalc\Controllers;
 use Controller;
 use View;
 use Request;
+use Config;
 
 class BaseController extends Controller
 {
+	protected $iTerminalId;
 	private $sLayoutFolderName = 'default';
+
+	public function __construct()
+	{
+		$this->iTerminalId = Config::get('ff-actions-calc::terminal_id');
+	}
 
 	protected function setupLayout()
 	{

@@ -3,12 +3,11 @@
 namespace FintechFab\ActionsCalc\Controllers;
 
 use Input;
-use Config;
 use FintechFab\ActionsCalc\Models\Terminal;
+use FintechFab\ActionsCalc\Models\Event;
 use League\FactoryMuffin\Exceptions\ModelException;
 use View;
 use FintechFab\ActionsCalc\Models\Rule;
-use Whoops\Exception\ErrorException;
 
 /**
  * Class CalculatorController
@@ -17,13 +16,7 @@ use Whoops\Exception\ErrorException;
  */
 class CalculatorController extends BaseController
 {
-	protected $iTerminalId;
 	protected $layout = 'main';
-
-	public function __construct()
-	{
-		$this->iTerminalId = Config::get('ff-actions-calc::terminal_id');
-	}
 
 	public function manage()
 	{
@@ -78,6 +71,15 @@ class CalculatorController extends BaseController
 				'error_message' => $e->getMessage()
 			]);
 		}
+	}
 
+	public function eventsTableUpdate()
+	{
+
+		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(2);
+
+		return View::make('ff-actions-calc::calculator._events_table', [
+			'events' => $aoEvents
+		]);
 	}
 }

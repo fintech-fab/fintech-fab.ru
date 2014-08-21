@@ -8,6 +8,11 @@
 Route::get('/actions-calc/manage', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@manage'
 ]);
+// update events table
+Route::get('/actions-calc/manage/events-table-update', [
+	'as' => 'event.table.update',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@eventsTableUpdate'
+]);
 
 Route::post('/actions-calc/manage/get-event-rules', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@getEventRules'
@@ -17,15 +22,20 @@ Route::post('/actions-calc/manage/toggle-rule-flag', [
 ]);
 
 // Event
-Route::get('/actions-calc/event/create', [
+Route::post('/actions-calc/event/create', [
 	'as' => 'event.create',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@create'
+]);
+Route::get('/actions-calc/event/create', [
+	'as' => 'event.create', function () {
+		return View::make('ff-actions-calc::event.create');
+	}
 ]);
 
 // main entry point
 Route::post('actions-calc', [
-	'as'     => 'getRequest',
-	'uses'   => 'FintechFab\ActionsCalc\Controllers\RequestController@getRequest',
+	'as'   => 'getRequest',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\RequestController@getRequest',
 ]);
 
 Route::get('actions-calc/register', [

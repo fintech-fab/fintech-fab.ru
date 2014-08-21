@@ -21,10 +21,13 @@
 
 <div class="tabs-content">
 	<div class="content active" id="panel0-1">
-		<?php echo $_events; ?>
-		<?php echo $_rules; ?>
+		<div id="events-container"><?php echo $_events; ?></div>
+		<div id="rules-container"><?php echo $_rules; ?></div>
 	</div>
 	<div class="content" id="panel0-2">
-		<?php echo $_signals; ?>
+		<div id="signals-container"><?php echo $_signals; ?></div>
 	</div>
 </div>
+
+<!-- reveal modal bg -->
+<div class="reveal-modal-bg" style="display: none"></div>

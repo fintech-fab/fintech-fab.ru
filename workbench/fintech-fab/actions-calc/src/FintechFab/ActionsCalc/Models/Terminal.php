@@ -41,7 +41,7 @@ class Terminal extends Eloquent
 
 	public function events()
 	{
-		return $this->hasMany(Event::class, 'terminal_id', 'id');
+		return $this->hasMany(Event::class, 'terminal_id', 'id')->orderBy('created_at', 'desc');
 	}
 
 	public function signals()

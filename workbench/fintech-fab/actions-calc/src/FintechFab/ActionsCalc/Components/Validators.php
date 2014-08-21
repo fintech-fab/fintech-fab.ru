@@ -24,4 +24,11 @@ class Validators
 			'data'        => 'required'
 		];
 	}
+
+	public static function getEventRules()
+	{
+		return [
+			'event_sid' => 'required|alpha_dash|unique',
+		];
+	}
 } 

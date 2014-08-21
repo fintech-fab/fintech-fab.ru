@@ -56,7 +56,13 @@
 </footer>
 
 <script src="<?php echo $sPubPath; ?>/js/cf.js"></script>
-<script>$(document).foundation();</script>
+<script>
+	$(document).foundation({
+		reveal: {
+			animation_speed: 50
+		}
+	});
+</script>
 
 </body>
 </html>
