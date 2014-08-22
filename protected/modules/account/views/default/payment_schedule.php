@@ -28,8 +28,8 @@ $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] +
 
 		<p style="display: none;" id="detail_info">
 			- Абонентка: <?= $aPaymentData['subscription_balance'] ?> руб. <br /> -
-			Штраф: <?= $aPaymentData['penalty_balance'] ?> руб. <br /> - Тело: <?= $aPaymentData['loan_balance'] ?> руб.
-			<br /> - Проценты: <?= $aPaymentData['percent_balance'] ?> руб. <br /> -
+			Штраф: <?= $aPaymentData['penalty_balance'] ?> руб. <br /> - Сумма
+			перевода: <?= $aPaymentData['loan_balance'] ?> руб. <br /> - Проценты: <?= $aPaymentData['percent_balance'] ?> руб. <br /> -
 			Неустойка: <?= $aPaymentData['fine_balance'] ?> руб. <br />
 		</p>
 	</div>

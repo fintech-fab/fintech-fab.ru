@@ -175,7 +175,7 @@ class AccountMenuWidget extends CWidget
 			echo '<strong>Задолженность:</strong> ' . Yii::app()->adminKreddyApi->getAbsBalance() . ' руб.';
 			echo '<a href="#" class="dashed" onclick="$(\'#detail_balance_info\').toggle(); return false;">детализация</a><br/>';
 			echo '<div id="detail_balance_info" class="hide">';
-			echo '<strong>Тело:</strong> ' . Yii::app()->adminKreddyApi->getAbsLoanBalance() . ' руб. <br/>';
+			echo '<strong>Сумма перевода:</strong> ' . Yii::app()->adminKreddyApi->getAbsLoanBalance() . ' руб. <br/>';
 			echo '<strong>Абонентская плата:</strong> ' . Yii::app()->adminKreddyApi->getAbsSubscriptionBalance() . ' руб. <br/>';
 			if (Yii::app()->adminKreddyApi->getAbsFine() != 0) {
 				echo '<strong>Неустойка:</strong> ' . Yii::app()->adminKreddyApi->getAbsFine() . ' руб. <br/>';
