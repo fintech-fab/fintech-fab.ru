@@ -864,7 +864,7 @@ class DefaultController extends Controller
 		$aPost = Yii::app()->request->getPost(get_class($oProductForm));
 		if (!empty($aPost)) {
 			$oProductForm->setAttributes($aPost);
-
+			$oProductForm->setProductByAttributes();
 			//сохраняем в сессию выбранный продукт
 			if ($oProductForm->validate()) {
 				Yii::app()->adminKreddyApi->setSubscribeSelectedProduct($oProductForm->product);

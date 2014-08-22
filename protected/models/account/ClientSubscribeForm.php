@@ -138,15 +138,4 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 
 	}
 
-	/**
-	 * @param array $values
-	 * @param bool  $safeOnly
-	 */
-	public function setAttributes($values, $safeOnly = true)
-	{
-		parent::setAttributes($values, $safeOnly);
-
-		$this->setProductByAttributes();
-	}
-
 }
