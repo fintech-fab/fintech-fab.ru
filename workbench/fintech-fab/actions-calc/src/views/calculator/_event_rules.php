@@ -15,7 +15,7 @@
 			<th>Правило</th>
 			<th class="text-center">Активно</th>
 			<th>Сигнал</th>
-			<th>Править</th>
+			<th width="15%" class="text-center">Править</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -34,6 +34,7 @@
 				<td>
 					<ul class="events-buttons button-group right">
 						<li><a href="#" class="tiny button">&nbsp;<i class="fi-page-edit"></i></a></li>
+						<li><a href="#" class="tiny button alert"><i class="fi-x"></i></a></li>
 					</ul>
 				</td>
 			</tr>

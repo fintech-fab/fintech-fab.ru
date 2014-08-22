@@ -23,7 +23,7 @@
   ],
   "directory": "./vendor",
   "devDependencies": {
-    "foundation": "~5.3.0",
+    "foundation": "~5.3.3",
     "select2": "~3.5.1"
   }
 }

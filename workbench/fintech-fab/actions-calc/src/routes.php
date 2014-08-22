@@ -5,11 +5,11 @@
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
 
-Route::get('/actions-calc/manage', [
+Route::get('/actions-calc/manage/{update?}', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@manage'
 ]);
 // update events table
-Route::get('/actions-calc/manage/events-table-update', [
+Route::post('/actions-calc/manage', [
 	'as' => 'event.table.update',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@eventsTableUpdate'
 ]);

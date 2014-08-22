@@ -19,14 +19,13 @@ class EventController extends BaseController
 		$validator = Validator::make($oRequestData, Validators::getEventRules());
 
 		if ($validator->fails()) {
-			return View::make('ff-actions-calc::event.create')->withErrors($validator);
+			return ['status' => 'error', 'errors' => $validator->errors()];
 		} else {
 			$oEvent = Event::create($oRequestData);
 			$oEvent->push();
 
 			return json_encode(['status' => 'success', 'message' => 'Новое событие создано.']);
 		}
-
 	}
 
 	/**

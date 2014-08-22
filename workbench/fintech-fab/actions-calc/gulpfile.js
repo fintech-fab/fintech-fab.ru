@@ -60,7 +60,8 @@ gulp.task('cf.js', function () {
 		zfJsPath + 'foundation/foundation.dropdown.js',
 		zfJsPath + 'foundation/foundation.offcanvas.js',
 		zfJsPath + 'foundation/foundation.reveal.js',
-		zfJsPath + 'foundation/foundation.accordion.js'
+		zfJsPath + 'foundation/foundation.accordion.js',
+		zfJsPath + 'foundation/foundation.abide.js'
 	];
 
 	return gulp.src(arrJsFiles)
