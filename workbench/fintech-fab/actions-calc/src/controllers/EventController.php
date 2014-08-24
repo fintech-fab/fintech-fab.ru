@@ -28,6 +28,16 @@ class EventController extends BaseController
 		}
 	}
 
+	public function updateEventTable()
+	{
+		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(10);
+		$aoEvents->setBaseUrl('events/table');
+
+		return View::make('ff-actions-calc::calculator._events_table', [
+			'events' => $aoEvents
+		]);
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *

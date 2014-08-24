@@ -73,10 +73,10 @@ class CalculatorController extends BaseController
 		}
 	}
 
-	public function eventsTableUpdate()
+	public function updateEventsTable()
 	{
-
 		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(10);
+		$aoEvents->setBaseUrl('events/table');
 
 		return View::make('ff-actions-calc::calculator._events_table', [
 			'events' => $aoEvents

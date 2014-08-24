@@ -33,11 +33,30 @@
 
 <!-- events table -->
 <div id="events-table-container">
+	<?php $events->setBaseUrl('events/table'); ?>
 	<?php echo View::make('ff-actions-calc::calculator._events_table', ['events' => $events]); ?>
 </div><!-- /events table -->
 
 <script type="text/javascript">
 	$(document).ready(function () {
+
+		// pagination through ajax
+		$('body').on('click', 'ul.pagination a', function (e) {
+			e.preventDefault();
+			console.log($(this).attr('href'));
+
+			var $eventTableContainer = $('#events-table-container');
+
+			$.get($(this).attr('href'),
+				{},
+				function (oData) {
+					$eventTableContainer.html(oData);
+				},
+				'html'
+			);
+
+			return false;
+		});
 
 		// modal event create
 		$('#manage-modal').submit(function (e) {
@@ -68,7 +87,7 @@
 		});
 
 		// toggle event rules flag
-		$('#events-rules').on('click', '.switch label', function () {
+		$(document).on('click', '.switch label', function () {
 			var $iRuleId = $(this).closest('tr').data('id');
 			var $bFlagActive = !!$(this).prev('input').attr('checked');
 			var bSwitchResult = true;
@@ -89,8 +108,9 @@
 			return bSwitchResult;
 		});
 
-		$('.see-rules').click(function () {
-
+		// see event rules
+		$(document).on('click', '.see-rules', function (e) {
+			e.preventDefault();
 			// $th clicked button "see rules"
 			var $th = $(this);
 			var $parentTr = $th.closest('tr');
@@ -117,20 +137,30 @@
 						buttonWakeUp($th);
 
 						$th.addClass('rules-loaded');
-						// make visible "close" button
-						$th.toggle();
-						$th.next('a').toggle();
+						// make visible "close" button and hiding self
+						$th.hide();
+						$th.next('a.close-rules').show();
 					},
 					'html'
 				);
 			} else {
-				$th.toggle();
-				$th.next('a').toggle();
-				$th.closest('tr').next('tr').toggle();
+				// if rules loaded, just showing them and toggling see-rules\close-rules buttons
+				$th.hide();
+				$th.next('a.close-rules').show();
+				$(this).closest('tr').next('tr').show();
 			}
 		});
-	});
 
+		// close rules button
+		$(document).on('click', 'a.close-rules', function(e) {
+			e.preventDefault();
+			console.log($(this));
+			$(this).hide();
+			$(this).prev('a.see-rules').show();
+			$(this).closest('tr').next('tr').hide();
+		});
+
+	});
 
 	// toggling "close button", showing opposite button
 	// and hiding rules table
@@ -143,19 +173,6 @@
 	});
 
 	/**
-	 * Activate close button
-	 *
-	 * @param $th
-	 */
-	function activateCloseButton($th) {
-		$th.next('a.close-rules').click(function () {
-			$(this).toggle();
-			$th.toggle();
-			$th.closest('tr').next('tr').toggle();
-		});
-	}
-
-	/**
 	 * Update event table
 	 *
 	 * @returns {boolean}
@@ -163,7 +180,7 @@
 	function updateEventsTable() {
 		var $eventTableContainer = $('#events-table-container');
 
-		$.post('/actions-calc/manage',
+		$.get('/actions-calc/manage/update-events-table',
 			{},
 			function (oData) {
 				$eventTableContainer.html(oData);
