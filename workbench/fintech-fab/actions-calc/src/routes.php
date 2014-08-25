@@ -14,34 +14,34 @@ Route::get('/actions-calc/manage/update-events-table', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@updateEventsTable'
 ]);
 
-// update events table
-//Route::post('/actions-calc/manage', [
-//	'as' => 'event.table.update',
-//	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@eventsTableUpdate'
-//]);
+// events
+// delete event //TODO: check if user allowed to do sturff. Through filter.
+Route::post('/actions-calc/event/delete', [
+	'as'   => 'event.delete',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@delete'
+]);
+// update event
+Route::match(['POST', 'GET'], '/actions-calc/event/update/{id?}', [
+	'as'   => 'event.update',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@update',
+])->where('id', '[0-9]+');
+// create event
+Route::post('/actions-calc/event/create', [
+	'as'   => 'event.create',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@create'
+]);
+// events table pagination
+Route::get('actions-calc/events/table{page?}', [
+	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@updateEventsTable',
+]);
 
+// events -> rules
 Route::post('/actions-calc/manage/get-event-rules', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@getEventRules'
 ]);
 Route::post('/actions-calc/manage/toggle-rule-flag', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\CalculatorController@toggleRuleFlag'
 ]);
-
-// Events
-Route::post('/actions-calc/event/create', [
-	'as'   => 'event.create',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@create'
-]);
-Route::get('/actions-calc/event/create', [
-	'as' => 'event.create', function () {
-		return View::make('ff-actions-calc::event.create');
-	}
-]);
-// events table pagination
-Route::get('actions-calc/events/table{page?}', [
-	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@updateEventTable',
-]);
-
 
 // main entry point
 Route::post('actions-calc', [

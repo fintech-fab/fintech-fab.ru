@@ -11,7 +11,7 @@
 	<table width="100%">
 		<thead>
 		<tr>
-			<th>Имя</th>
+			<th width="15%">Имя</th>
 			<th>Правило</th>
 			<th class="text-center">Активно</th>
 			<th>Сигнал</th>

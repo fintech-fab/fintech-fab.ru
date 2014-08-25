@@ -11,6 +11,7 @@
 <table id="events-rules" width="100%">
 	<thead>
 	<tr>
+		<th width="14%">Действия</th>
 		<th width="200">sid</th>
 		<th>Имя</th>
 		<th width="200" class="text-center">Правила</th>
@@ -19,8 +20,14 @@
 	<tbody>
 	<?php foreach ($events as $event): ?>
 		<tr data-id="<?php echo $event->id; ?>">
-			<td><?php echo $event->event_sid ?></td>
-			<td><?php echo $event->name; ?></td>
+			<td>
+				<ul class="button-group">
+					<li><a href="#" class="button alert tiny delete-rule"><i class="fi-x"></i></a></li>
+					<li><a href="#" class="button tiny edit-rule"><i class="fi-page-edit"></i></a></li>
+				</ul>
+			</td>
+			<td class="event-sid"><?php echo $event->event_sid ?></td>
+			<td class="event-name"><?php echo $event->name; ?></td>
 			<td>
 				<ul class="event-buttons button-group right">
 					<li>

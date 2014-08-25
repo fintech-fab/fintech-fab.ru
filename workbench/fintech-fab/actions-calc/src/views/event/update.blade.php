@@ -1,4 +1,4 @@
-{{ Form::open(['action' => 'event.create']) }}
+{{ Form::model($event, ['action' => 'event.update', 'data-id' => $event->id]) }}
 
 <div class="event-field">
 	{{ Form::label('event_sid', 'Строковый идентификатор(sid)') }}
@@ -12,6 +12,8 @@
 	<small class="hide" id="name-error">Имя обязательно.</small>
 </div>
 
+{{ Form::hidden('id', $event->id) }}
+
 <a class="close-reveal-modal">&#215;</a>
 
 {{-- alert for errors --}}
@@ -19,4 +21,4 @@
   <a href="#" class="close">&times;</a>
 </div>
 
-{{ Form::submit('Добавить', ['id' => 'button-event-create', 'class' => 'button small right']) }}
+{{ Form::submit('Обновить', ['id' => 'button-event-update', 'class' => 'button small right']) }}

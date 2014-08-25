@@ -25,11 +25,19 @@ class Validators
 		];
 	}
 
-	public static function getEventRules()
+	public static function getEventRulesCreate()
 	{
 		return [
 			'name'      => 'required',
 			'event_sid' => 'required|alpha_dash|unique:events',
+		];
+	}
+
+	public static function getEventRulesUpdate()
+	{
+		return [
+			'name'      => 'required',
+			'event_sid' => 'required|alpha_dash',
 		];
 	}
 } 

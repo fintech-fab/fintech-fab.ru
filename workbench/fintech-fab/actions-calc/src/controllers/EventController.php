@@ -7,28 +7,91 @@ use FintechFab\ActionsCalc\Models\Event;
 use Validator;
 use Input;
 use View;
+use Request;
 
 class EventController extends BaseController
 {
 
+	public $restful = true;
+
+	/**
+	 * Create event
+	 *
+	 * @return array|string
+	 */
 	public function create()
 	{
 		$oRequestData = Input::all();
 		$oRequestData['terminal_id'] = $this->iTerminalId;
 
-		$validator = Validator::make($oRequestData, Validators::getEventRules());
+		$validator = Validator::make($oRequestData, Validators::getEventRulesCreate());
 
 		if ($validator->fails()) {
-			return ['status' => 'error', 'errors' => $validator->errors()];
-		} else {
-			$oEvent = Event::create($oRequestData);
-			$oEvent->push();
-
-			return json_encode(['status' => 'success', 'message' => 'Новое событие создано.']);
+			return json_encode(['status' => 'error', 'errors' => $validator->errors()]);
 		}
+
+		$oEvent = Event::create($oRequestData);
+		$oEvent->push();
+
+		return json_encode(['status' => 'success', 'message' => 'Новое событие создано.']);
 	}
 
-	public function updateEventTable()
+	/**
+	 * Update event
+	 *
+	 * @param $id
+	 *
+	 * @return \Illuminate\View\View|string
+	 */
+	public function update($id)
+	{
+		/** @var Event $event */
+		$event = Event::find($id);
+
+		if (Request::isMethod('GET')) {
+			return View::make('ff-actions-calc::event.update', ['event' => $event]);
+		}
+
+		$oRequestData = Input::only('id', 'event_sid', 'name');
+		$validator = Validator::make($oRequestData, Validators::getEventRulesUpdate());
+
+		if ($validator->fails()) {
+			return json_encode(['status' => 'error', 'errors' => $validator->errors()]);
+		}
+
+		$event->name = $oRequestData['name'];
+		$event->event_sid = $oRequestData['event_sid'];
+
+		if ($event->save()) {
+			return json_encode(['status' => 'success', 'message' => 'Событие обновлено.', 'update' => $oRequestData]);
+		}
+
+		return json_encode(['status' => 'error', 'message' => 'Не удалось обновить событие.']);
+	}
+
+	/**
+	 * Delete event
+	 *
+	 * @return string
+	 */
+	public function delete()
+	{
+		$aRequest = Input::only('id');
+		$event = Event::find((int)$aRequest['id']);
+
+		if ($event->delete()) {
+			return json_encode(['status' => 'success', 'message' => 'Событие удалено.']);
+		}
+
+		return json_encode(['status' => 'error', 'message' => 'Не удалось удалить событие.']);
+	}
+
+	/**
+	 * Update events table
+	 *
+	 * @return \Illuminate\View\View|string
+	 */
+	public function updateEventsTable()
 	{
 		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(10);
 		$aoEvents->setBaseUrl('events/table');
@@ -37,68 +100,5 @@ class EventController extends BaseController
 			'events' => $aoEvents
 		]);
 	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int $id
-	 *
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int $id
-	 *
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
 
 }

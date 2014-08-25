@@ -2,12 +2,12 @@
 	margin-bottom: 0;
 }
 
-.signal-buttons li a, .events-buttons li a, div.switch label {
-	margin-bottom: 0;
-}
-
 #manage-signals-wrap {
 	max-height: 720px;
 	overflow: scroll;
 	overflow-x: hidden;
+}
+
+#events-rules a.button {
+	margin-bottom: 0;
 }
