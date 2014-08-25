@@ -41,6 +41,9 @@
 <!-- modal update event -->
 <div id="modal-update-event" class="reveal-modal small" data-reveal></div><!-- /modal update event-->
 
+<!-- modal rule update -->
+<div id="modal-rule-update" class="reveal-modal small" data-reveal></div><!-- /modal rule update -->
+
 <!-- events table -->
 <div id="events-table-container">
 	<?php /** @noinspection PhpUndefinedMethodInspection */
@@ -252,6 +255,46 @@ $(document).ready(function () {
 	});
 
 	// events -> rules:
+	// add rule button // TODO: add rule.
+	$(document).on('click', 'a.close-rules', function (e) {
+		e.preventDefault();
+		$('#modal-rule-add').foundation('reveal', 'open');
+	});
+
+	// events -> rules:
+	// rule update button
+	$(document).on('click', 'a.rule-update', function (e) {
+		e.preventDefault();
+
+		var $th = $(this);
+		var $ruleId = $th.closest('tr').data('id');
+
+		buttonSleep($th);
+
+		$.get(
+			'/actions-calc/rule/update/' + $ruleId,
+			$th.closest('form').serialize(),
+			function (oData) {
+				$('#modal-rule-update').html(oData).foundation('reveal', 'open');
+				var $sRule = $('#modal-rule-update').find('form > input[name="rule"]').val();
+
+				// TODO: this for update.
+				var $oRule = $.parseJSON($sRule);
+				console.log($oRule);
+				$.each($oRule, function (index, rule) {
+					console.log(rule.name + ' ' + rule.operator);
+				});
+			},
+			'html'
+		).always(function () {
+				buttonWakeUp($th);
+			});
+
+		return false;
+
+	});
+
+	// events -> rules:
 	// close rules button
 	$(document).on('click', 'a.close-rules', function (e) {
 		e.preventDefault();
@@ -262,6 +305,43 @@ $(document).ready(function () {
 	});
 
 });
+
+var rulesFactory = function () {
+
+//	const OP_BOOL = 'bool';
+//	const OP_GREATER = 'greater';
+//	const OP_GREATER_OR_EQUAL = 'greaterOrEqaul';
+//	const OP_LESS = 'less';
+//	const OP_LESS_OR_EQUAL = 'lessOrEqual';
+//	const OP_EQUAL = 'equal';
+//	const OP_NOT_EQUAL = 'notEqual';
+
+	this.placeOn = function (sSelector) {
+		var $container = $(sSelector);
+	};
+
+	this.buildByJson = function () {
+
+	};
+
+	this.operators = [
+		{'bool': 'OP_BOOL'},
+		{'>': 'OP_GREATER'},
+		{'>=': 'OP_GREATER_OR_EQUAL'},
+		{'<': 'OP_LESS'},
+		{'<=': 'OP_LESS_OR_EQUAL'},
+		{'=': 'OP_EQUAL'},
+		{'!=': 'OP_NOT_EQUAL'}
+	];
+
+	// container :: rules container :: input\selects
+	// input\selects model:
+	// - 1st [key]-[value]-[operator^},
+	// - 2nd [rule_operator]-[key]-[value]-[operator^}
+	this.settings = {
+	};
+
+};
 
 /**
  * Update event table

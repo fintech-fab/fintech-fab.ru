@@ -10,11 +10,11 @@ use View;
 use FintechFab\ActionsCalc\Models\Rule;
 
 /**
- * Class CalculatorController
+ * Class ManageController
  *
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
-class CalculatorController extends BaseController
+class ManageController extends BaseController
 {
 	protected $layout = 'main';
 

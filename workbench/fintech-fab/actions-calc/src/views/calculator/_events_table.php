@@ -35,7 +35,7 @@
 							<?php echo $event->rules->count(); ?>&nbsp;<i class="fi-eye"></i> </a>
 						<a href="#" class="tiny button close-rules" style="display: none;">закрыть</a>
 					</li>
-					<li><a href="#" class="tiny button success"><i class="fi-plus"></i></a></li>
+					<li><a href="#" class="tiny button success add-rule"><i class="fi-plus"></i></a></li>
 				</ul>
 			</td>
 		</tr>

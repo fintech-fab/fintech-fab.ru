@@ -1,6 +1,7 @@
 <?php
 /**
  * File _event_rules.php
+ * Rules loaded in next to parent event tr
  *
  * @author Ulashev Roman <truetamtam@gmail.com>
  *
@@ -33,8 +34,8 @@
 				<td><?php echo $rule->signal->signal_sid; ?></td>
 				<td>
 					<ul class="events-buttons button-group right">
-						<li><a href="#" class="tiny button">&nbsp;<i class="fi-page-edit"></i></a></li>
-						<li><a href="#" class="tiny button alert"><i class="fi-x"></i></a></li>
+						<li><a href="#" class="tiny button rule-update">&nbsp;<i class="fi-page-edit"></i></a></li>
+						<li><a href="#" class="tiny button alert rule-delete"><i class="fi-x"></i></a></li>
 					</ul>
 				</td>
 			</tr>

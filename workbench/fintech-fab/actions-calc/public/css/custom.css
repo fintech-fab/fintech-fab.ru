@@ -8,6 +8,6 @@
 	overflow-x: hidden;
 }
 
-#events-rules a.button {
+#events-rules a.button, .switch label.toggle-rule-flag {
 	margin-bottom: 0;
 }

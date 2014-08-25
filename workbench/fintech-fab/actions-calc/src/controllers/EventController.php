@@ -48,10 +48,12 @@ class EventController extends BaseController
 		/** @var Event $event */
 		$event = Event::find($id);
 
+		// only view on GET
 		if (Request::isMethod('GET')) {
 			return View::make('ff-actions-calc::event.update', ['event' => $event]);
 		}
 
+		// update process
 		$oRequestData = Input::only('id', 'event_sid', 'name');
 		$validator = Validator::make($oRequestData, Validators::getEventRulesUpdate());
 
