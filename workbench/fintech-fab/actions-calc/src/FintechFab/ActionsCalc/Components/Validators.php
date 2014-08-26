@@ -21,7 +21,7 @@ class Validators
 		return [
 			'terminal_id' => 'required|integer',
 			'event_sid'   => 'required|alpha_dash',
-			'data'        => 'required'
+			'data' => 'required',
 		];
 	}
 
@@ -38,6 +38,15 @@ class Validators
 		return [
 			'name'      => 'required',
 			'event_sid' => 'required|alpha_dash',
+		];
+	}
+
+	public static function getRuleValidationRules()
+	{
+		return [
+			'name'      => 'required',
+			'event_id'  => 'required|integer',
+			'signal_id' => 'required|integer',
 		];
 	}
 } 

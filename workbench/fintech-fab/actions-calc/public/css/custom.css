@@ -8,6 +8,6 @@
 	overflow-x: hidden;
 }
 
-#events-rules a.button, .switch label.toggle-rule-flag {
+#events-rules a.button, .switch label.toggle-rule-flag, #event-rules-translate a.delete-event-rule {
 	margin-bottom: 0;
 }

@@ -42,7 +42,7 @@
 <div id="modal-update-event" class="reveal-modal small" data-reveal></div><!-- /modal update event-->
 
 <!-- modal rule update -->
-<div id="modal-rule-update" class="reveal-modal small" data-reveal></div><!-- /modal rule update -->
+<div id="modal-rule-update" class="reveal-modal medium" data-reveal></div><!-- /modal rule update -->
 
 <!-- events table -->
 <div id="events-table-container">
@@ -50,6 +50,33 @@
 	$events->setBaseUrl('events/table'); ?>
 	<?php echo View::make('ff-actions-calc::calculator._events_table', ['events' => $events]); ?>
 </div><!-- /events table -->
+
+<!-- event rules template -->
+<div id="event-rules-template" style="display: none;">
+	<div class="event-rule">
+		<div class="large-4 columns">
+			<input class="event-rule-name" name="event-rule-name" type="text" placeholder="имя">
+		</div>
+		<div class="large-2 columns">
+			<select class="event-rule-operator" name="event-rule-operator">
+				<option value="OP_BOOL">bool</option>
+				<option value="OP_GREATER">></option>
+				<option value="OP_GREATER_OR_EQUAL">>=</option>
+				<option value="OP_LESS"><</option>
+				<option value="OP_LESS_OR_EQUAL"><=</option>
+				<option value="OP_EQUAL">=</option>
+				<option value="OP_NOT_EQUAL">!=</option>
+			</select>
+		</div>
+		<div class="large-4 columns">
+			<input class="event-rule-value" name="event-rule-value" type="text" placeholder="значение">
+		</div>
+		<div class="large-2 columns">
+			<a href="#" class="button secondary tiny delete-event-rule"><i class="fi-x"></i></a>
+		</div>
+	</div>
+</div><!-- /event rules template -->
+
 
 <script type="text/javascript">
 $(document).ready(function () {
@@ -104,7 +131,7 @@ $(document).ready(function () {
 	});
 
 	// events:
-	// event udpate open
+	// event udpate modal - open
 	$(document).on('click', 'a.edit-rule', function (e) {
 		e.preventDefault();
 
@@ -124,7 +151,7 @@ $(document).ready(function () {
 			});
 	});
 	// events:
-	// event udpate update
+	// event udpate modal - update
 	$(document).on('click', '#button-event-update', function (e) {
 		e.preventDefault();
 
@@ -262,7 +289,7 @@ $(document).ready(function () {
 	});
 
 	// events -> rules:
-	// rule update button
+	// rule update button - open
 	$(document).on('click', 'a.rule-update', function (e) {
 		e.preventDefault();
 
@@ -270,20 +297,15 @@ $(document).ready(function () {
 		var $ruleId = $th.closest('tr').data('id');
 
 		buttonSleep($th);
-
 		$.get(
 			'/actions-calc/rule/update/' + $ruleId,
 			$th.closest('form').serialize(),
 			function (oData) {
 				$('#modal-rule-update').html(oData).foundation('reveal', 'open');
-				var $sRule = $('#modal-rule-update').find('form > input[name="rule"]').val();
 
-				// TODO: this for update.
-				var $oRule = $.parseJSON($sRule);
-				console.log($oRule);
-				$.each($oRule, function (index, rule) {
-					console.log(rule.name + ' ' + rule.operator);
-				});
+				var $sRule = $('#modal-rule-update').find('input[name="rule"]').val();
+				var rulesFactory = new RulesFactory();
+				rulesFactory.formFromJson($sRule);
 			},
 			'html'
 		).always(function () {
@@ -291,7 +313,55 @@ $(document).ready(function () {
 			});
 
 		return false;
+	});
+	// events -> rules:
+	// rule update button - update
+	// forming JSON string from rule conditions
+	$(document).on('click', '#button-rule-update', function (e) {
+		e.preventDefault();
 
+		// finding container with rule conditions
+		var $th = $(this);
+		var $rulesContainer = $('#event-rules-translate');
+		var aoRuleData = [];
+		var $aRules = $rulesContainer.find('div.event-rule');
+
+		// forming condition objects
+		$.each($aRules, function (index, rule) {
+			aoRuleData.push({
+				name: $(rule).find('input.event-rule-name').val(),
+				value: $(rule).find('input.event-rule-value').val(),
+				operator: $(rule).find('select.event-rule-operator > option:selected').val()
+			});
+		});
+
+		var sRules = JSON.stringify(aoRuleData);
+		var oValidRules = JSON.parse(sRules);
+		var sValidRules = JSON.stringify(oValidRules);
+
+		// updating hidden input with rules
+		$th.closest('form').find('input[name="rule"]').val(sValidRules);
+
+		var $ruleId = $th.closest('form').data('id');
+
+		// update rule request
+		buttonSleep($th);
+		$.post(
+			'/actions-calc/rule/update/' + $ruleId,
+			$th.closest('form').serialize(),
+			function (oData) {
+				if (oData.status == 'success') {
+					$('#modal-rule-update').foundation('reveal', 'close');
+				} else if (oData.status == 'error') {
+					revealFormErrors($th.closest('form'), oData.errors);
+				}
+			},
+			'json'
+		).always(function () {
+				buttonWakeUp($th);
+			});
+
+		return false;
 	});
 
 	// events -> rules:
@@ -304,25 +374,46 @@ $(document).ready(function () {
 		$(this).closest('tr').next('tr').hide();
 	});
 
+	// for RulesFactory // TODO: bring handlers below, to rulesFactory.
+	// operator changing and setting selected for further reading, and forming result JSON.
+	$(document).on('change', '.event-rule-operator', function () {
+		var $th = $(this);
+		// toggle selected option.
+		$th.find('option[selected]').removeAttr('selected');
+		$th.find('option[value=' + $th.val() + ']').attr('selected', 'selected');
+	});
+
+	$(document).on('click', '#event-rules-translate a.delete-event-rule', function (e) {
+		e.preventDefault();
+		$(this).closest('div.event-rule').remove();
+		return false;
+	});
+
+	// event -> rules -> conditions:
+	// event rule add new condition for rule
+	$(document).on('click', '#event-rule-add-condition', function (e) {
+		e.preventDefault();
+
+		var $template = $('#event-rules-template');
+		var $ruleCondition = $template.find('div.event-rule').clone();
+		// making first option selected
+		$ruleCondition.find('select.event-rule-operator > option:first').attr('selected', 'selected');
+		$('#event-rules-translate').append($ruleCondition);
+
+		return false;
+	});
+
 });
 
-var rulesFactory = function () {
+// Rules factory class
+// needs template
+// container :: rules container :: input\selects
+// input\selects model:
+// - 1st [key]-[operator^}-[value],
+// - 2nd [rule_operator]-[key]-[operator^}-[value]
+RulesFactory = function () {
 
-//	const OP_BOOL = 'bool';
-//	const OP_GREATER = 'greater';
-//	const OP_GREATER_OR_EQUAL = 'greaterOrEqaul';
-//	const OP_LESS = 'less';
-//	const OP_LESS_OR_EQUAL = 'lessOrEqual';
-//	const OP_EQUAL = 'equal';
-//	const OP_NOT_EQUAL = 'notEqual';
-
-	this.placeOn = function (sSelector) {
-		var $container = $(sSelector);
-	};
-
-	this.buildByJson = function () {
-
-	};
+	var $template = $('#event-rules-template');
 
 	this.operators = [
 		{'bool': 'OP_BOOL'},
@@ -334,10 +425,29 @@ var rulesFactory = function () {
 		{'!=': 'OP_NOT_EQUAL'}
 	];
 
-	// container :: rules container :: input\selects
-	// input\selects model:
-	// - 1st [key]-[value]-[operator^},
-	// - 2nd [rule_operator]-[key]-[value]-[operator^}
+	// forming event rules[] to editable inputs
+	this.formFromJson = function ($sRule) {
+		console.log('rules raw: ');
+		console.log($sRule);
+		var $oRule = $.parseJSON($sRule);
+		console.log('parsed to formJSON: ');
+		console.log($oRule);
+
+		$.each($oRule, function (index, rule) {
+			var $ruleCondition = $template.find('div.event-rule').clone();
+
+			$ruleCondition.find('input[name="event-rule-name"]').val(rule.name);
+			$ruleCondition.find('input[name="event-rule-value"]').val(rule.value).attr('value-type', typeof rule.value);
+			$ruleCondition.find('option[value=' + rule.operator + ']').attr('selected', 'selected');
+
+			$ruleCondition.appendTo('#event-rules-translate');
+		});
+	};
+
+	this.clear = function () {
+		$(document).off('change', '.event-rule-operator');
+	};
+
 	this.settings = {
 	};
 
