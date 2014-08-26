@@ -330,14 +330,25 @@ $(document).ready(function () {
 		$.each($aRules, function (index, rule) {
 			aoRuleData.push({
 				name: $(rule).find('input.event-rule-name').val(),
-				value: $(rule).find('input.event-rule-value').val(),
+				value: eval($(rule).find('input.event-rule-value').val()),
 				operator: $(rule).find('select.event-rule-operator > option:selected').val()
 			});
 		});
 
+		console.log('aoRuleData');
+		console.log(aoRuleData);
+
 		var sRules = JSON.stringify(aoRuleData);
+		console.log('sRules');
+		console.log(sRules);
+
 		var oValidRules = JSON.parse(sRules);
+		console.log('oValidRules');
+		console.log(oValidRules);
+
 		var sValidRules = JSON.stringify(oValidRules);
+		console.log('sValidRules');
+		console.log(sValidRules);
 
 		// updating hidden input with rules
 		$th.closest('form').find('input[name="rule"]').val(sValidRules);
