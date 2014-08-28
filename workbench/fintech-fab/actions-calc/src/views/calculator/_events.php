@@ -68,12 +68,18 @@
 				<option value="OP_NOT_EQUAL">!=</option>
 			</select>
 		</div>
-		<div class="large-4 columns">
+		<div class="large-4 columns event-rule-value-wrap">
 			<input class="event-rule-value" name="event-rule-value" type="text" placeholder="значение">
 		</div>
 		<div class="large-2 columns">
 			<a href="#" class="button secondary tiny delete-event-rule"><i class="fi-x"></i></a>
 		</div>
+	</div>
+	<div class="rule-condition-bool">
+		<select class="condition-bool">
+			<option value="true">true</option>
+			<option value="false">false</option>
+		</select>
 	</div>
 </div><!-- /event rules template -->
 
@@ -215,7 +221,7 @@ $(document).ready(function () {
 
 	// event -> rules:
 	// toggle event rules flag
-	$(document).on('click', '.switch label', function () {
+	$(document).on('click', '#event-rules-wrap div.switch label', function () {
 		var $iRuleId = $(this).closest('tr').data('id');
 		var $bFlagActive = !!$(this).prev('input').attr('checked');
 		var bSwitchResult = true;
@@ -328,10 +334,18 @@ $(document).ready(function () {
 
 		// forming condition objects
 		$.each($aRules, function (index, rule) {
+
+			var sRuleOperator = $(rule).find('select.event-rule-operator > option:selected').val();
+			var ruleValue = (sRuleOperator == 'OP_BOOL') ? $(rule).find('select.condition-bool > option:selected').val() :
+				$(rule).find('input.event-rule-value').val();
+
+			console.log('bRuleValue');
+			ruleValue = (ruleValue === undefined || ruleValue == "undefined") ? !!ruleValue : ruleValue;
+
 			aoRuleData.push({
 				name: $(rule).find('input.event-rule-name').val(),
-				value: eval($(rule).find('input.event-rule-value').val()),
-				operator: $(rule).find('select.event-rule-operator > option:selected').val()
+				value: ruleValue,
+				operator: sRuleOperator
 			});
 		});
 
@@ -339,19 +353,19 @@ $(document).ready(function () {
 		console.log(aoRuleData);
 
 		var sRules = JSON.stringify(aoRuleData);
-		console.log('sRules');
+		console.log('stringify sRules');
 		console.log(sRules);
 
 		var oValidRules = JSON.parse(sRules);
-		console.log('oValidRules');
+		console.log('parse oValidRules');
 		console.log(oValidRules);
 
 		var sValidRules = JSON.stringify(oValidRules);
-		console.log('sValidRules');
+		console.log('stringify sValidRules');
 		console.log(sValidRules);
 
 		// updating hidden input with rules
-		$th.closest('form').find('input[name="rule"]').val(sValidRules);
+		$th.closest('form').find('input[name="rule"]').val(sRules);
 
 		var $ruleId = $th.closest('form').data('id');
 
@@ -386,14 +400,31 @@ $(document).ready(function () {
 	});
 
 	// for RulesFactory // TODO: bring handlers below, to rulesFactory.
-	// operator changing and setting selected for further reading, and forming result JSON.
-	$(document).on('change', '.event-rule-operator', function () {
+	// operator and bool condition attribute change,
+	// and input type change on OP_BOOL
+	$(document).on('change', '.event-rule-operator, .condition-bool', function () {
 		var $th = $(this);
 		// toggle selected option.
 		$th.find('option[selected]').removeAttr('selected');
 		$th.find('option[value=' + $th.val() + ']').attr('selected', 'selected');
+
+		if ($th.hasClass('event-rule-operator')) {
+			var $template = $('#event-rules-template');
+
+			// switching bool and input[type=text]
+			if ($th.find('option:selected').val() == 'OP_BOOL') {
+				var $conditionBool = $template.find('select.condition-bool').clone();
+				$conditionBool.find('option:first').attr('selected', 'selected');
+				$th.parents('div.event-rule').find('input.event-rule-value').replaceWith($conditionBool);
+			} else {
+				var $conditionValue = $template.find('input.event-rule-value').clone();
+				$th.parents('div.event-rule').find('select.condition-bool').replaceWith($conditionValue);
+			}
+		}
 	});
 
+	// event -> rules -> conditions:
+	// delete condition
 	$(document).on('click', '#event-rules-translate a.delete-event-rule', function (e) {
 		e.preventDefault();
 		$(this).closest('div.event-rule').remove();
@@ -401,15 +432,16 @@ $(document).ready(function () {
 	});
 
 	// event -> rules -> conditions:
-	// event rule add new condition for rule
+	// add condition for rule
 	$(document).on('click', '#event-rule-add-condition', function (e) {
 		e.preventDefault();
 
 		var $template = $('#event-rules-template');
 		var $ruleCondition = $template.find('div.event-rule').clone();
 		// making first option selected
-		$ruleCondition.find('select.event-rule-operator > option:first').attr('selected', 'selected');
-		$('#event-rules-translate').append($ruleCondition);
+		$ruleCondition.find('select.event-rule-operator > option').eq(1).attr('selected', 'selected');
+		var $resultHtml = $('<div>', {'class': 'row'}).append($ruleCondition);
+		$('#event-rules-translate').append($resultHtml);
 
 		return false;
 	});
@@ -437,21 +469,28 @@ RulesFactory = function () {
 	];
 
 	// forming event rules[] to editable inputs
+	// placing inside form
 	this.formFromJson = function ($sRule) {
-		console.log('rules raw: ');
-		console.log($sRule);
+
 		var $oRule = $.parseJSON($sRule);
-		console.log('parsed to formJSON: ');
-		console.log($oRule);
 
 		$.each($oRule, function (index, rule) {
-			var $ruleCondition = $template.find('div.event-rule').clone();
+			var $conditionsHtml = $template.find('div.event-rule').clone();
 
-			$ruleCondition.find('input[name="event-rule-name"]').val(rule.name);
-			$ruleCondition.find('input[name="event-rule-value"]').val(rule.value).attr('value-type', typeof rule.value);
-			$ruleCondition.find('option[value=' + rule.operator + ']').attr('selected', 'selected');
+			$conditionsHtml.find('input[name="event-rule-name"]').val(rule.name);
+			if (rule.operator == 'OP_BOOL') {
+				// putting switch trigger
+				var $selectBool = $template.find('select.condition-bool').clone();
+				$selectBool.find('option[value=' + rule.value + ']').attr('selected', 'selected');
+				$conditionsHtml.find('input.event-rule-value').replaceWith($selectBool);
+			} else {
+				// common text input
+				$conditionsHtml.find('input[name="event-rule-value"]').val(rule.value);
+			}
+			$conditionsHtml.find('option[value=' + rule.operator + ']').attr('selected', 'selected');
 
-			$ruleCondition.appendTo('#event-rules-translate');
+			var $resultHtml = $('<div>', {'class': 'row'}).append($conditionsHtml);
+			$resultHtml.appendTo('#event-rules-translate');
 		});
 	};
 
@@ -571,4 +610,15 @@ function buttonBusy(button) {
 	return !!button.attr('disabled');
 }
 
+function typeFromString(string) {
+
+	switch (string) {
+		case 'true'
+			return true;
+			break;
+
+		default :
+			break;
+	}
+}
 </script>
