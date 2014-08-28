@@ -8,6 +8,7 @@ use Validator;
 use Input;
 use View;
 use Request;
+use App;
 
 class RuleController extends BaseController
 {
@@ -38,14 +39,40 @@ class RuleController extends BaseController
 
 		$oRule->fill($oRequestData);
 
-//		$oRule->name = $oRequestData['name'];
-//		$oRule->event_sid = $oRequestData['event_sid'];
-
 		if ($oRule->save()) {
 			return json_encode(['status' => 'success', 'message' => 'Правило обновлено.', 'update' => $oRequestData]);
 		}
 
 		return json_encode(['status' => 'error', 'message' => 'Не удалось обновить событие.']);
+	}
+
+	/**
+	 * Rule delete
+	 *
+	 * @param $id
+	 *
+	 * @return string
+	 */
+	public function delete($id)
+	{
+		/** @var Rule $rule */
+		$rule = Rule::find($id);
+
+		if (is_null($rule)) {
+			App::abort(401, 'Нет такого правила');
+		}
+
+		if ($rule->delete()) {
+			$iRulesCount = $rule->count('id');
+
+			return json_encode([
+				'status'  => 'success',
+				'message' => 'Событие удалено.',
+				'data'    => ['count' => $iRulesCount]
+			]);
+		}
+
+		return json_encode(['status' => 'error', 'message' => 'Не удалось удалить событие.']);
 	}
 
 }

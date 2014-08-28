@@ -22,8 +22,12 @@
 		<tr data-id="<?php echo $event->id; ?>">
 			<td>
 				<ul class="button-group">
-					<li><a href="#" class="button alert tiny delete-rule"><i class="fi-x"></i></a></li>
-					<li><a href="#" class="button tiny edit-rule"><i class="fi-page-edit"></i></a></li>
+					<li>
+						<button class="button alert tiny delete-rule"><i class="fi-x"></i></button>
+					</li>
+					<li>
+						<button class="button tiny edit-rule"><i class="fi-page-edit"></i></button>
+					</li>
 				</ul>
 			</td>
 			<td class="event-sid"><?php echo $event->event_sid ?></td>
@@ -31,9 +35,9 @@
 			<td>
 				<ul class="event-buttons button-group right">
 					<li>
-						<a data-rules-count="<?php echo $event->rules->count(); ?>" href="#" class="tiny button see-rules">
-							<?php echo $event->rules->count(); ?>&nbsp;<i class="fi-eye"></i> </a>
-						<a href="#" class="tiny button close-rules" style="display: none;">закрыть</a>
+						<button data-rules-count="<?php echo $event->rules->count(); ?>" class="tiny button see-rules">
+							<span><?php echo $event->rules->count(); ?></span>&nbsp;<i class="fi-eye"></i></button>
+						<button class="tiny button close-rules" style="display: none;">закрыть</button>
 					</li>
 					<li><a href="#" class="tiny button success add-rule"><i class="fi-plus"></i></a></li>
 				</ul>

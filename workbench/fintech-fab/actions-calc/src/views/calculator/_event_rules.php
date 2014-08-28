@@ -34,8 +34,12 @@
 				<td><?php echo $rule->signal->signal_sid; ?></td>
 				<td>
 					<ul class="events-buttons button-group right">
-						<li><a href="#" class="tiny button rule-update">&nbsp;<i class="fi-page-edit"></i></a></li>
-						<li><a href="#" class="tiny button alert rule-delete"><i class="fi-x"></i></a></li>
+						<li>
+							<button class="tiny button rule-update">&nbsp;<i class="fi-page-edit"></i></button>
+						</li>
+						<li>
+							<button class="tiny button alert rule-delete"><i class="fi-x"></i></button>
+						</li>
 					</ul>
 				</td>
 			</tr>

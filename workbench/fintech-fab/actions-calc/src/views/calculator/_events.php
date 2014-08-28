@@ -87,6 +87,8 @@
 <script type="text/javascript">
 $(document).ready(function () {
 
+	var $body = $('body');
+
 	// events:
 	// events table pagination
 	// pagination through ajax
@@ -138,7 +140,7 @@ $(document).ready(function () {
 
 	// events:
 	// event udpate modal - open
-	$(document).on('click', 'a.edit-rule', function (e) {
+	$(document).on('click', 'button.edit-rule', function () {
 		e.preventDefault();
 
 		var $th = $(this);
@@ -172,7 +174,7 @@ $(document).ready(function () {
 				if (oData.status == 'success') {
 					$('#modal-update-event').foundation('reveal', 'close');
 					console.log(oData);
-					updateTableRow(oData.update);
+					updateRuleRow(oData.update);
 					clearFormErrors($th);
 				} else if (oData.status == 'error') {
 					revealFormErrors($th.closest('form'), oData.errors);
@@ -185,13 +187,10 @@ $(document).ready(function () {
 
 		return false;
 	});
-
 	// events:
 	// modal event delete
-	$(document).on('click', '#events-rules a.delete-rule', function (e) {
-		e.preventDefault();
-
-		// $th clicked close button
+	$body.on('click', '#events-rules button.delete-rule', function () {
+		// $th clicked delete button
 		var $th = $(this);
 		buttonSleep($th);
 
@@ -244,15 +243,14 @@ $(document).ready(function () {
 
 	// events -> rules:
 	// see event rules
-	$(document).on('click', '.see-rules', function (e) {
-		e.preventDefault();
+	$body.on('click', 'button.see-rules', function () {
 		// $th clicked button "see rules"
 		var $th = $(this);
 		var $parentTr = $th.closest('tr');
 		var iTdCount = $parentTr.children('td').length;
 
 		// no rules = no moves, also not doing anything while button disabled
-		if (+$th.data('rules-count') < 1 || buttonBusy($th)) {
+		if ($th.data('rules-count') == 0 || buttonBusy($th)) {
 			return false;
 		}
 
@@ -275,29 +273,28 @@ $(document).ready(function () {
 					$th.addClass('rules-loaded');
 					// make visible "close" button and hiding self
 					$th.hide();
-					$th.next('a.close-rules').show();
+					$th.next('button.close-rules').show();
 				},
 				'html'
 			);
 		} else {
 			// if rules loaded, just showing them and toggling see-rules\close-rules buttons
 			$th.hide();
-			$th.next('a.close-rules').show();
+			$th.next('button.close-rules').show();
 			$(this).closest('tr').next('tr').show();
 		}
 	});
 
 	// events -> rules:
 	// add rule button // TODO: add rule.
-	$(document).on('click', 'a.close-rules', function (e) {
+	$(document).on('click', 'button.close-rules', function (e) {
 		e.preventDefault();
 		$('#modal-rule-add').foundation('reveal', 'open');
 	});
 
 	// events -> rules:
 	// rule update button - open
-	$(document).on('click', 'a.rule-update', function (e) {
-		e.preventDefault();
+	$body.on('click', 'button.rule-update', function () {
 
 		var $th = $(this);
 		var $ruleId = $th.closest('tr').data('id');
@@ -336,10 +333,11 @@ $(document).ready(function () {
 		$.each($aRules, function (index, rule) {
 
 			var sRuleOperator = $(rule).find('select.event-rule-operator > option:selected').val();
+			// checking if different input types input|select
 			var ruleValue = (sRuleOperator == 'OP_BOOL') ? $(rule).find('select.condition-bool > option:selected').val() :
 				$(rule).find('input.event-rule-value').val();
 
-			console.log('bRuleValue');
+			ruleValue = typeFromString(ruleValue);
 			ruleValue = (ruleValue === undefined || ruleValue == "undefined") ? !!ruleValue : ruleValue;
 
 			aoRuleData.push({
@@ -349,20 +347,12 @@ $(document).ready(function () {
 			});
 		});
 
-		console.log('aoRuleData');
+		console.log('object aoRuleData');
 		console.log(aoRuleData);
 
 		var sRules = JSON.stringify(aoRuleData);
 		console.log('stringify sRules');
 		console.log(sRules);
-
-		var oValidRules = JSON.parse(sRules);
-		console.log('parse oValidRules');
-		console.log(oValidRules);
-
-		var sValidRules = JSON.stringify(oValidRules);
-		console.log('stringify sValidRules');
-		console.log(sValidRules);
 
 		// updating hidden input with rules
 		$th.closest('form').find('input[name="rule"]').val(sRules);
@@ -388,14 +378,49 @@ $(document).ready(function () {
 
 		return false;
 	});
+	// events -> rules:
+	// rule delete button - delete
+	$body.on('click', 'button.rule-delete', function () {
+
+		// $th clicked delete button
+		var $th = $(this);
+		buttonSleep($th);
+
+		var $thisRow = $th.closest('tr');
+		var $ruleId = $thisRow.data('id');
+
+		$.post('/actions-calc/rule/delete/' + $ruleId,
+			function (oData) {
+				if (oData.status == 'success') { // success
+					// update event -> rules button counter
+					updateRulesCounter($th, oData);
+					console.log($('button.see-rules').data('rules-count'));
+					// deleted, removing table records and opened rules, if exists
+					$thisRow.fadeOut();
+					// closing rules table if 0 rules
+					if (oData.data.count <= 0) {
+						var iParentEventId = $th.parents('tr.event-rules-row').data('event-rules');
+						$('#events-rules').find('tr[data-id=' + iParentEventId + ']').find('button.close-rules').click();
+					}
+				} else if (oData.error) {
+					alert(oData.error);
+				}
+				buttonWakeUp($th);
+				return false;
+			},
+			'json'
+		).always(function () {
+				buttonWakeUp($th);
+			});
+
+		return false;
+	});
 
 	// events -> rules:
 	// close rules button
-	$(document).on('click', 'a.close-rules', function (e) {
-		e.preventDefault();
-
+	$body.on('click', 'button.close-rules', function () {
 		$(this).hide();
-		$(this).prev('a.see-rules').show();
+		$(this).prev('button.see-rules').show();
 		$(this).closest('tr').next('tr').hide();
 	});
 
@@ -526,7 +551,7 @@ function updateEventsTable() {
  * Update table row
  * @param oData
  */
-function updateTableRow(oData) {
+function updateRuleRow(oData) {
 	var $row = $('tr[data-id="' + oData.id + '"]');
 	$row.find('td.event-name').html(oData.name);
 	$row.find('td.event-sid').html(oData.event_sid);
@@ -610,15 +635,38 @@ function buttonBusy(button) {
 	return !!button.attr('disabled');
 }
 
+/**
+ * When forming rule JSON from inputs
+ * returning right type
+ *
+ * @param string
+ * @returns {*}
+ */
 function typeFromString(string) {
 
-	switch (string) {
-		case 'true'
-			return true;
-			break;
-
-		default :
-			break;
+	if (string === 'true') {
+		return true;
+	} else if (string === 'false') {
+		return false;
+	} else if (isNaN(parseFloat(string))) {
+		return string;
+	} else {
+		return parseFloat(string);
 	}
+}
+
+/**
+ * Update rules counter inside see-rules button
+ *
+ * @param $th
+ * @param oData
+ */
+function updateRulesCounter($th, oData) {
+	var $eventId = $th.closest('tr.event-rules-row').data('event-rules');
+	var $ruleRow = $('#events-rules').find('tr[data-id=' + $eventId + ']');
+	var $seeRules = $ruleRow.find('button.see-rules');
+
+	$seeRules.data('rules-count', oData.data.count);
+	$seeRules.find('span').text(oData.data.count);
 }
 </script>

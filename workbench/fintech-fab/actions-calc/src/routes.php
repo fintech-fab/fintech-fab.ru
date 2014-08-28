@@ -50,6 +50,12 @@ Route::match(['POST', 'GET'], '/actions-calc/rule/update/{id?}', [
 	'as'   => 'rule.update',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\RuleController@update',
 ])->where('id', '[0-9]+');
+// event -> rules:
+// rule delete
+Route::post('/actions-calc/rule/delete/{id}', [
+	'as'   => 'rule.delete',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\RuleController@delete'
+])->where('id', '[0-9]+');
 
 // main entry point
 Route::post('actions-calc', [
