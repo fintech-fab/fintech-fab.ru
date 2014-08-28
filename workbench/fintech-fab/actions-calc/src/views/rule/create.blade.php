@@ -1,6 +1,4 @@
-{{ Form::model($rule, ['action' => 'rule.update', 'data-id' => $rule->id]) }}
-
-{{ Form::hidden('id', $rule->id) }}
+{{ Form::open(['action' => 'rule.create']) }}
 
 <div class="row">
 	<div class="large-12 columns">
@@ -39,7 +37,7 @@
 	{{ Form::label('signal_id', 'Сигнал') }}
 	{{ Form::input('text', 'signal_id') }}
 
-	{{ Form::submit('Обновить', ['id' => 'button-rule-update', 'class' => 'button small right']) }}
+	{{ Form::submit('Создать', ['id' => 'button-rule-create', 'class' => 'button small right']) }}
 	</div>
 </div>
 

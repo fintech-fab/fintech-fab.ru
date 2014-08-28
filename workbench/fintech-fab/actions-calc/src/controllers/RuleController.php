@@ -13,6 +13,11 @@ use App;
 class RuleController extends BaseController
 {
 
+	public function create()
+	{
+		return View::make('ff-actions-calc::rule.create');
+	}
+
 	/**
 	 * Update the specified resource in storage.
 	 *

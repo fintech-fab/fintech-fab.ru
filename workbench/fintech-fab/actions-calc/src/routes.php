@@ -44,6 +44,13 @@ Route::post('/actions-calc/manage/get-event-rules', [
 Route::post('/actions-calc/manage/toggle-rule-flag', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@toggleRuleFlag'
 ]);
+
+// event -> rules:
+// rule update
+Route::get('/actions-calc/rule/create', [
+	'as'   => 'rule.create',
+	'uses' => 'FintechFab\ActionsCalc\Controllers\RuleController@create',
+]);
 // event -> rules:
 // rule update
 Route::match(['POST', 'GET'], '/actions-calc/rule/update/{id?}', [

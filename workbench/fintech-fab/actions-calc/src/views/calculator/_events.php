@@ -41,6 +41,8 @@
 <!-- modal update event -->
 <div id="modal-update-event" class="reveal-modal small" data-reveal></div><!-- /modal update event-->
 
+<!-- modal rule create -->
+<div id="modal-rule-create" class="reveal-modal medium" data-reveal></div><!-- /modal rule update -->
 <!-- modal rule update -->
 <div id="modal-rule-update" class="reveal-modal medium" data-reveal></div><!-- /modal rule update -->
 
@@ -140,8 +142,7 @@ $(document).ready(function () {
 
 	// events:
 	// event udpate modal - open
-	$(document).on('click', 'button.edit-rule', function () {
-		e.preventDefault();
+	$body.on('click', 'button.edit-rule', function () {
 
 		var $th = $(this);
 		var $eventId = $th.closest('tr').data('id');
@@ -286,29 +287,23 @@ $(document).ready(function () {
 	});
 
 	// events -> rules:
-	// add rule button // TODO: add rule.
-	$(document).on('click', 'button.close-rules', function (e) {
-		e.preventDefault();
-		$('#modal-rule-add').foundation('reveal', 'open');
-	});
-
-	// events -> rules:
-	// rule update button - open
-	$body.on('click', 'button.rule-update', function () {
+	// [Rule Create] - open
+	$body.on('click', 'button.rule-create', function () {
 
 		var $th = $(this);
-		var $ruleId = $th.closest('tr').data('id');
+		var $modalRuleCreate = $('#modal-rule-create');
+		var $toEventId = $th.closest('tr').data('id');
 
 		buttonSleep($th);
 		$.get(
-			'/actions-calc/rule/update/' + $ruleId,
+			'/actions-calc/rule/create',
 			$th.closest('form').serialize(),
 			function (oData) {
-				$('#modal-rule-update').html(oData).foundation('reveal', 'open');
+				$modalRuleCreate.html(oData).foundation('reveal', 'open');
 
-				var $sRule = $('#modal-rule-update').find('input[name="rule"]').val();
-				var rulesFactory = new RulesFactory();
-				rulesFactory.formFromJson($sRule);
+//				var $sRule = $modalRuleCreate.find('input[name="rule"]').val();
+//				var rulesFactory = new RulesFactory();
+//				rulesFactory.formFromJson($sRule);
 			},
 			'html'
 		).always(function () {
@@ -318,7 +313,93 @@ $(document).ready(function () {
 		return false;
 	});
 	// events -> rules:
-	// rule update button - update
+	// [Rule Create]
+	// forming JSON string from rule conditions
+	$body.on('click', '#button-rule-create', function () {
+
+		// finding container with rule conditions
+		var $th = $(this);
+		var $rulesContainer = $('#event-rules-translate');
+		var aoRuleData = [];
+		var $aRules = $rulesContainer.find('div.event-rule');
+
+		// forming condition objects
+		$.each($aRules, function (index, rule) {
+
+			var sRuleOperator = $(rule).find('select.event-rule-operator > option:selected').val();
+			// checking if different input types input|select
+			var ruleValue = (sRuleOperator == 'OP_BOOL') ? $(rule).find('select.condition-bool > option:selected').val() :
+				$(rule).find('input.event-rule-value').val();
+
+			ruleValue = typeFromString(ruleValue);
+			ruleValue = (ruleValue === undefined || ruleValue == "undefined") ? !!ruleValue : ruleValue;
+
+			aoRuleData.push({
+				name: $(rule).find('input.event-rule-name').val(),
+				value: ruleValue,
+				operator: sRuleOperator
+			});
+		});
+
+		console.log('object aoRuleData');
+		console.log(aoRuleData);
+
+		var sRules = JSON.stringify(aoRuleData);
+		console.log('stringify sRules');
+		console.log(sRules);
+
+		// updating hidden input with rules
+		$th.closest('form').find('input[name="rule"]').val(sRules);
+
+		var $ruleId = $th.closest('form').data('id');
+
+		// update rule request
+		buttonSleep($th);
+		$.post(
+			'/actions-calc/rule/create/' + $ruleId,
+			$th.closest('form').serialize(),
+			function (oData) {
+				if (oData.status == 'success') {
+					$('#modal-rule-update').foundation('reveal', 'close');
+				} else if (oData.status == 'error') {
+					revealFormErrors($th.closest('form'), oData.errors);
+				}
+			},
+			'json'
+		).always(function () {
+				buttonWakeUp($th);
+			});
+
+		return false;
+	});
+	// events -> rules:
+	// [Rule Update] - open
+	$body.on('click', 'button.rule-update', function () {
+
+		var $th = $(this);
+		var $ruleId = $th.closest('tr').data('id');
+		var $modalRuleUpdate = $('#modal-rule-update');
+
+		buttonSleep($th);
+		$.get(
+			'/actions-calc/rule/update/' + $ruleId,
+			$th.closest('form').serialize(),
+			function (oData) {
+				$modalRuleUpdate.html(oData).foundation('reveal', 'open');
+
+				var $sRule = $modalRuleUpdate.find('input[name="rule"]').val();
+				var rulesFactory = new RulesFactory();
+				rulesFactory.formFromJson($sRule, $modalRuleUpdate.find('.event-rules-translate'));
+			},
+			'html'
+		).always(function () {
+				buttonWakeUp($th);
+			});
+
+		return false;
+	});
+	// events -> rules:
+	// [Rule Update] - update
 	// forming JSON string from rule conditions
 	$(document).on('click', '#button-rule-update', function (e) {
 		e.preventDefault();
@@ -450,23 +531,24 @@ $(document).ready(function () {
 
 	// event -> rules -> conditions:
 	// delete condition
-	$(document).on('click', '#event-rules-translate a.delete-event-rule', function (e) {
+	$body.on('click', '.event-rules-translate a.delete-event-rule', function (e) {
 		e.preventDefault();
 		$(this).closest('div.event-rule').remove();
 		return false;
 	});
 
 	// event -> rules -> conditions:
-	// add condition for rule
-	$(document).on('click', '#event-rule-add-condition', function (e) {
-		e.preventDefault();
+	// [Condition Add] for rule
+	$body.on('click', 'button.event-rule-add-condition', function () {
 
 		var $template = $('#event-rules-template');
 		var $ruleCondition = $template.find('div.event-rule').clone();
 		// making first option selected
 		$ruleCondition.find('select.event-rule-operator > option').eq(1).attr('selected', 'selected');
 		var $resultHtml = $('<div>', {'class': 'row'}).append($ruleCondition);
-		$('#event-rules-translate').append($resultHtml);
+		// finding rules-translate container
+		// and pushing new condition
+		$(this).parent().prev('fieldset').find('.event-rules-translate').append($resultHtml);
 
 		return false;
 	});
@@ -495,7 +577,7 @@ RulesFactory = function () {
 
 	// forming event rules[] to editable inputs
 	// placing inside form
-	this.formFromJson = function ($sRule) {
+	this.formFromJson = function ($sRule, selector) {
 
 		var $oRule = $.parseJSON($sRule);
 
@@ -515,7 +597,8 @@ RulesFactory = function () {
 			$conditionsHtml.find('option[value=' + rule.operator + ']').attr('selected', 'selected');
 
 			var $resultHtml = $('<div>', {'class': 'row'}).append($conditionsHtml);
-			$resultHtml.appendTo('#event-rules-translate');
+			$resultHtml.appendTo(selector.closest('.event-rules-translate'));
+//			$resultHtml.appendTo('#event-rules-translate');
 		});
 	};
 

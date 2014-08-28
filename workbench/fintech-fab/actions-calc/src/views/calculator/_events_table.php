@@ -39,7 +39,11 @@
 							<span><?php echo $event->rules->count(); ?></span>&nbsp;<i class="fi-eye"></i></button>
 						<button class="tiny button close-rules" style="display: none;">закрыть</button>
 					</li>
-					<li><a href="#" class="tiny button success add-rule"><i class="fi-plus"></i></a></li>
+					<li>
+						<button class="tiny button success rule-create">
+							<i class="fi-plus"></i>&nbsp;правило
+						</button>
+					</li>
 				</ul>
 			</td>
 		</tr>
