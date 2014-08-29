@@ -11,6 +11,7 @@ class PixelFilter extends CFilter
 	const C_EPROMO = 'epromo';
 	const C_LEADS24 = 'leads24';
 	const C_MASTERTARGET = 'mastertarget';
+	const C_TOPADW = 'topadw';
 
 	// Дополнительные параметры, которые принимаются из GET-запроса, по которому клиент попадает на наш сайт
 	public static $aAdditionalFields = array(
@@ -19,6 +20,7 @@ class PixelFilter extends CFilter
 		self::C_EPROMO => array(),
 		self::C_LEADS24 => array(),
 		self::C_MASTERTARGET => array(),
+		self::C_TOPADW => array(),
 	);
 
 	public function preFilter($aFilterChain)
