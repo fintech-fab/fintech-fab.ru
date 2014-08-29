@@ -16,5 +16,4 @@
 </div>
 
 
-<? $this->widget('ext.linkprofit.LinkprofitWidget') ?>
-<? $this->widget('ext.banki_ru.BankiRuWidget') ?>
+<? $this->widget('ext.pixels.PixelWidget') ?>
