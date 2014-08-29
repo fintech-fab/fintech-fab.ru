@@ -12,7 +12,7 @@ class PixelFilter extends CFilter
 	const C_LEADS24 = 'leads24';
 	const C_MASTERTARGET = 'mastertarget';
 	const C_TOPADW = 'topadw';
-	const C_ADMITAD = 'admitad';
+	const C_ADMITAD = 'cpamit';
 
 	// Дополнительные параметры, которые принимаются из GET-запроса, по которому клиент попадает на наш сайт
 	public static $aAdditionalFields = array(
@@ -22,7 +22,7 @@ class PixelFilter extends CFilter
 		self::C_LEADS24 => array(),
 		self::C_MASTERTARGET => array(),
 		self::C_TOPADW => array(),
-		self::C_ADMITAD => array('admitad_uid'),
+		self::C_ADMITAD => array('cpamit_uid'),
 	);
 
 	public function preFilter($aFilterChain)
@@ -38,7 +38,7 @@ class PixelFilter extends CFilter
 	 */
 	private function detectLink()
 	{
-		$sUid = Yii::app()->request->getQuery('pk_campaign');
+		$sUid = strtolower(Yii::app()->request->getQuery('pk_campaign'));
 
 		// Если не пусто или нет в нашем списке лидогенераторов
 		if (!$sUid || !array_key_exists($sUid, self::$aAdditionalFields)) {
