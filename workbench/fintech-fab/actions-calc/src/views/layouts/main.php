@@ -21,10 +21,6 @@
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/app.min.css">
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/custom.css">
 	<script src="<?php echo $sPubPath; ?>/js/app.js"></script>
-
-	<!-- select2 -->
-<!--	<link rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.4.8/select2.css">-->
-<!--	<script src="//cdn.jsdelivr.net/select2/3.4.8/select2.min.js"></script>-->
 </head>
 <body>
 

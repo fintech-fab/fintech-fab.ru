@@ -8,6 +8,9 @@
 	overflow-x: hidden;
 }
 
-#events-rules button, .switch label.toggle-rule-flag, #event-rules-translate a.delete-event-rule {
+#events-rules button,
+.switch label.toggle-rule-flag,
+.event-rules-translate a.delete-event-rule,
+#manage-signals button {
 	margin-bottom: 0;
 }

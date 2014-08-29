@@ -7,7 +7,6 @@
  * @var FintechFab\ActionsCalc\Models\Event[] $events
  */
 ?>
-
 <!-- buttons: search and add event -->
 <div class="row">
 	<div class="large-3 columns">
@@ -26,15 +25,16 @@
 				<a id="manage-chain" href="#" class="button secondary small right">
 					Цепочкой&nbsp;<i class="fi-plus"></i>&nbsp;<i class="fi-plus"></i></a>
 			</li>
-			<li><a data-reveal-id="manage-modal" id="event-create" href="#" class="button small right"> Добавить событие
-					<i class="fi-plus"></i></a>
+			<li>
+				<button data-reveal-id="modal-event-create" id="event-create" class="button small right"> Добавить
+					событие <i class="fi-plus"></i></button>
 			</li>
 		</ul>
 	</div>
 </div><!-- /buttons: search and add event -->
 
 <!-- modal create event -->
-<div id="manage-modal" class="reveal-modal small" data-reveal>
+<div id="modal-event-create" class="reveal-modal small" data-reveal>
 	<?php echo View::make('ff-actions-calc::event.create'); ?>
 </div><!-- /modal create event-->
 
@@ -94,7 +94,7 @@ $(document).ready(function () {
 	// events:
 	// events table pagination
 	// pagination through ajax
-	$(document).on('click', 'ul.pagination a', function (e) {
+	$body.on('click', 'ul.pagination a', function (e) {
 		e.preventDefault();
 		console.log($(this).attr('href'));
 
@@ -113,31 +113,33 @@ $(document).ready(function () {
 
 	// events:
 	// modal event create
-	$('#manage-modal').submit(function (e) {
+	$body.on('click', '#button-event-create', function (e) {
 		e.preventDefault();
 
-		// $th form create event
-		var $th = $(this);
-		var $submit = $th.find('#button-event-create');
+		// $th button event create
+		var $button = $(this);
+		var $form = $button.closest('form');
 
-		buttonSleep($submit);
+		buttonSleep($button);
 
 		$.post('/actions-calc/event/create',
-			$th.find('form').serialize(),
+			$form.serialize(),
 			function (oData) {
 				if (oData.status == 'success') {
-					$('#manage-modal').foundation('reveal', 'close');
+					$('#modal-event-create').foundation('reveal', 'close');
 					updateEventsTable();
-					clearFormErrors($th);
+					clearFormErrors($form);
 				} else if (oData.status == 'error') {
-					revealFormErrors($th, oData.errors);
+					revealFormErrors($form, oData.errors);
 				}
-
-				buttonWakeUp($submit);
 				return false;
 			},
 			'json'
-		);
+		).always(function () {
+				buttonWakeUp($button);
+			});
+
+		return false;
 	});
 
 	// events:
@@ -161,7 +163,7 @@ $(document).ready(function () {
 	});
 	// events:
 	// event udpate modal - update
-	$(document).on('click', '#button-event-update', function (e) {
+	$body.on('click', '#button-event-update', function (e) {
 		e.preventDefault();
 
 		var $th = $(this);
@@ -221,7 +223,7 @@ $(document).ready(function () {
 
 	// event -> rules:
 	// toggle event rules flag
-	$(document).on('click', '#event-rules-wrap div.switch label', function () {
+	$body.on('click', '#event-rules-wrap div.switch label', function () {
 		var $iRuleId = $(this).closest('tr').data('id');
 		var $bFlagActive = !!$(this).prev('input').attr('checked');
 		var bSwitchResult = true;
@@ -284,6 +286,8 @@ $(document).ready(function () {
 			$th.next('button.close-rules').show();
 			$(this).closest('tr').next('tr').show();
 		}
+
+		return false;
 	});
 
 	// events -> rules:
@@ -299,27 +303,30 @@ $(document).ready(function () {
 			'/actions-calc/rule/create',
 			$th.closest('form').serialize(),
 			function (oData) {
-				$modalRuleCreate.html(oData).foundation('reveal', 'open');
-
-//				var $sRule = $modalRuleCreate.find('input[name="rule"]').val();
-//				var rulesFactory = new RulesFactory();
-//				rulesFactory.formFromJson($sRule);
+				$modalRuleCreate.html(oData);
+				// event id to hidden input
+				$modalRuleCreate.find('input[name="event_id"]').val($toEventId);
+				$modalRuleCreate.find('select.s2').select2();
+				$modalRuleCreate.foundation('reveal', 'open');
 			},
 			'html'
 		).always(function () {
 				buttonWakeUp($th);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
 			});
 
 		return false;
 	});
 	// events -> rules:
-	// [Rule Create]
+	// [Rule Create] - create
 	// forming JSON string from rule conditions
 	$body.on('click', '#button-rule-create', function () {
 
+		var $submit = $(this);
+		var $modalRuleCreate = $('#modal-rule-create');
 		// finding container with rule conditions
-		var $th = $(this);
-		var $rulesContainer = $('#event-rules-translate');
+		var $rulesContainer = $modalRuleCreate.find('.event-rules-translate');
 		var aoRuleData = [];
 		var $aRules = $rulesContainer.find('div.event-rule');
 
@@ -349,25 +356,26 @@ $(document).ready(function () {
 		console.log(sRules);
 
 		// updating hidden input with rules
-		$th.closest('form').find('input[name="rule"]').val(sRules);
-
-		var $ruleId = $th.closest('form').data('id');
+		$submit.closest('form').find('input[name="rule"]').val(sRules);
 
 		// update rule request
-		buttonSleep($th);
+		buttonSleep($submit);
+
 		$.post(
-			'/actions-calc/rule/create/' + $ruleId,
-			$th.closest('form').serialize(),
+			'/actions-calc/rule/create',
+			$submit.closest('form').serialize(),
 			function (oData) {
 				if (oData.status == 'success') {
-					$('#modal-rule-update').foundation('reveal', 'close');
+					$modalRuleCreate.foundation('reveal', 'close');
 				} else if (oData.status == 'error') {
-					revealFormErrors($th.closest('form'), oData.errors);
+					revealFormErrors($submit.closest('form'), oData.errors);
 				}
 			},
 			'json'
 		).always(function () {
-				buttonWakeUp($th);
+				buttonWakeUp($submit);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
 			});
 
 		return false;
@@ -401,12 +409,12 @@ $(document).ready(function () {
 	// events -> rules:
 	// [Rule Update] - update
 	// forming JSON string from rule conditions
-	$(document).on('click', '#button-rule-update', function (e) {
+	$body.on('click', '#button-rule-update', function (e) {
 		e.preventDefault();
 
 		// finding container with rule conditions
 		var $th = $(this);
-		var $rulesContainer = $('#event-rules-translate');
+		var $rulesContainer = $th.closest('form').find('div.event-rules-translate');
 		var aoRuleData = [];
 		var $aRules = $rulesContainer.find('div.event-rule');
 
@@ -483,8 +491,6 @@ $(document).ready(function () {
 						var iParentEventId = $th.parents('tr.event-rules-row').data('event-rules');
 						$('#events-rules').find('tr[data-id=' + iParentEventId + ']').find('button.close-rules').click();
 					}
-				} else if (oData.error) {
-					alert(oData.error);
 				}
 				buttonWakeUp($th);
 				return false;
@@ -492,7 +498,10 @@ $(document).ready(function () {
 			'json'
 		).always(function () {
 				buttonWakeUp($th);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
 			});
+		;
 
 		return false;
 	});
@@ -503,12 +512,13 @@ $(document).ready(function () {
 		$(this).hide();
 		$(this).prev('button.see-rules').show();
 		$(this).closest('tr').next('tr').hide();
+		return false;
 	});
 
 	// for RulesFactory // TODO: bring handlers below, to rulesFactory.
 	// operator and bool condition attribute change,
 	// and input type change on OP_BOOL
-	$(document).on('change', '.event-rule-operator, .condition-bool', function () {
+	$body.on('change', '.event-rule-operator, .condition-bool', function () {
 		var $th = $(this);
 		// toggle selected option.
 		$th.find('option[selected]').removeAttr('selected');
@@ -603,7 +613,7 @@ RulesFactory = function () {
 	};
 
 	this.clear = function () {
-		$(document).off('change', '.event-rule-operator');
+		$('body').off('change', '.event-rule-operator');
 	};
 
 	this.settings = {
@@ -692,7 +702,7 @@ function clearFormErrors(form) {
  */
 function buttonWakeUp(button) {
 	button.removeAttr('disabled');
-	$('body').off('click', button);
+	$(document).off('click', button);
 }
 
 /**
@@ -702,7 +712,7 @@ function buttonWakeUp(button) {
  */
 function buttonSleep(button) {
 	button.attr('disabled', 'disabled');
-	$('body').on('click', button, function () {
+	$(document).on('click', button, function () {
 		var bIsButtonDisabled = !!button.attr('disabled');
 		return !bIsButtonDisabled;
 	});

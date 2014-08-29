@@ -25,23 +25,25 @@ class Validators
 		];
 	}
 
-	public static function getEventRulesCreate()
+	/**
+	 * Event validators
+	 *
+	 * @return array
+	 */
+	public static function getEventRules()
 	{
 		return [
 			'name'      => 'required',
-			'event_sid' => 'required|alpha_dash|unique:events',
+			'event_sid' => 'required|alpha_dash|unique:events,event_sid',
 		];
 	}
 
-	public static function getEventRulesUpdate()
-	{
-		return [
-			'name'      => 'required',
-			'event_sid' => 'required|alpha_dash',
-		];
-	}
-
-	public static function getRuleValidationRules()
+	/**
+	 * Rules validators
+	 *
+	 * @return array
+	 */
+	public static function getRuleValidators()
 	{
 		return [
 			'name'      => 'required',

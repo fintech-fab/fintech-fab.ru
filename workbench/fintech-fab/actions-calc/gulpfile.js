@@ -22,7 +22,8 @@ gulp.task('app.css', function () {
 	var arrCssFiles = [
 		vendorPath + 'foundation/scss/normalize.scss',
 		vendorPath + 'foundation/scss/foundation.scss',
-		vendorPath + 'foundation5fonts/css/foundation-icons.css'
+		vendorPath + 'foundation5fonts/css/foundation-icons.css',
+		vendorPath + 'select2/select2.css'
 	];
 
 	return gulp.src(arrCssFiles)
@@ -37,7 +38,8 @@ gulp.task('app.css', function () {
 gulp.task('app.js', function () {
 	var arrAppFiles = [
 		vendorPath + 'foundation/js/vendor/modernizr.js',
-		vendorPath + 'foundation/js/vendor/jquery.js'
+		vendorPath + 'foundation/js/vendor/jquery.js',
+		vendorPath + 'select2/select2.js'
 	];
 
 	return gulp.src(arrAppFiles)
@@ -60,8 +62,7 @@ gulp.task('cf.js', function () {
 		zfJsPath + 'foundation/foundation.dropdown.js',
 		zfJsPath + 'foundation/foundation.offcanvas.js',
 		zfJsPath + 'foundation/foundation.reveal.js',
-		zfJsPath + 'foundation/foundation.accordion.js',
-		zfJsPath + 'foundation/foundation.abide.js'
+		zfJsPath + 'foundation/foundation.accordion.js'
 	];
 
 	return gulp.src(arrJsFiles)
@@ -76,6 +77,19 @@ gulp.task('cf.fonts', function() {
 	console.log('Moving font files.');
 	return gulp.src(vendorPath + "foundation5fonts/css/fonts/**.*")
 		.pipe(gulp.dest(destPath + 'css/fonts'));
+});
+
+gulp.task('select2.files', function () {
+
+	var aSelect2Files = [
+		vendorPath + 'select2/select2.png',
+		vendorPath + 'select2/select2-spinner.gif',
+		vendorPath + 'select2/select2x2.png'
+	];
+
+	console.log('Moving select2 files');
+	return gulp.src(aSelect2Files)
+		.pipe(gulp.dest(destPath + 'css'));
 });
 
 gulp.task('build-all', ['app.js', 'cf.js', 'app.css']);

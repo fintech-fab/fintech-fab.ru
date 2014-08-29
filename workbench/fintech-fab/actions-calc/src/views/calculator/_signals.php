@@ -23,7 +23,9 @@
 			<td><?php echo $signal->name; ?></td>
 			<td>
 				<ul class="signal-buttons button-group right">
-					<li><a href="#" class="tiny button">&nbsp;<i class="fi-page-edit"></i></a></li>
+					<li>
+						<button class="tiny button">&nbsp;<i class="fi-page-edit"></i></button>
+					</li>
 				</ul>
 			</td>
 		</tr>

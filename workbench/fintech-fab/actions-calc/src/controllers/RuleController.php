@@ -4,6 +4,7 @@ namespace FintechFab\ActionsCalc\Controllers;
 
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Rule;
+use FintechFab\ActionsCalc\Models\Signal;
 use Validator;
 use Input;
 use View;
@@ -15,7 +16,31 @@ class RuleController extends BaseController
 
 	public function create()
 	{
-		return View::make('ff-actions-calc::rule.create');
+		if (Request::isMethod('GET')) {
+			$signals = Signal::all(['id', 'signal_sid', 'name']);
+
+			return View::make('ff-actions-calc::rule.create', compact('signals'));
+		}
+
+		$oRequestData = Input::all();
+		if (isset($oRequestData['flag_active'])) {
+			$oRequestData['flag_active'] = ($oRequestData['flag_active'] == 'on') ? 1 : 0;
+		}
+		$oRequestData['terminal_id'] = $this->iTerminalId;
+
+		$validator = Validator::make($oRequestData, Validators::getRuleValidators());
+
+		if ($validator->fails()) {
+			return json_encode(['status' => 'error', 'errors' => $validator->errors()]);
+		}
+
+		$oEvent = Rule::create($oRequestData);
+
+		if (!$oEvent->push()) {
+			return json_encode(['status' => 'error', 'message' => 'Не удалось создать правило.']);
+		}
+
+		return json_encode(['status' => 'success', 'message' => 'Новое правило создано.']);
 	}
 
 	/**
@@ -36,7 +61,7 @@ class RuleController extends BaseController
 
 		// update process
 		$oRequestData = Input::only('name', 'rule', 'event_id', 'signal_id');
-		$validator = Validator::make($oRequestData, Validators::getRuleValidationRules());
+		$validator = Validator::make($oRequestData, Validators::getRuleValidators());
 
 		if ($validator->fails()) {
 			return json_encode(['status' => 'error', 'errors' => $validator->errors()]);

@@ -24,7 +24,7 @@ class EventController extends BaseController
 		$oRequestData = Input::all();
 		$oRequestData['terminal_id'] = $this->iTerminalId;
 
-		$validator = Validator::make($oRequestData, Validators::getEventRulesCreate());
+		$validator = Validator::make($oRequestData, Validators::getEventRules());
 
 		if ($validator->fails()) {
 			return json_encode(['status' => 'error', 'errors' => $validator->errors()]);
@@ -55,7 +55,11 @@ class EventController extends BaseController
 
 		// update process
 		$oRequestData = Input::only('id', 'event_sid', 'name');
-		$validator = Validator::make($oRequestData, Validators::getEventRulesUpdate());
+
+		$aValidators = Validators::getEventRules();
+		// ignoring uniquiness of event_sid on update
+		$aValidators['event_sid'] = $aValidators['event_sid'] . ',' . $id;
+		$validator = Validator::make($oRequestData, $aValidators);
 
 		if ($validator->fails()) {
 			return json_encode(['status' => 'error', 'errors' => $validator->errors()]);
