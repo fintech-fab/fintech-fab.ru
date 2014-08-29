@@ -14,6 +14,12 @@ use App;
 class RuleController extends BaseController
 {
 
+	/**
+	 * Create rule.
+	 * On GET sending view. On POST creating rule.
+	 *
+	 * @return string
+	 */
 	public function create()
 	{
 		if (Request::isMethod('GET')) {
@@ -40,7 +46,11 @@ class RuleController extends BaseController
 			return json_encode(['status' => 'error', 'message' => 'Не удалось создать правило.']);
 		}
 
-		return json_encode(['status' => 'success', 'message' => 'Новое правило создано.']);
+		return json_encode([
+			'status'  => 'success',
+			'message' => 'Новое правило создано.',
+			'data'    => ['count' => $oEvent->count('id')]
+		]);
 	}
 
 	/**

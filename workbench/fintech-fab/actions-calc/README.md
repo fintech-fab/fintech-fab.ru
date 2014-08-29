@@ -6,6 +6,7 @@
 
 ###data###
 data in: POST request
+default route http://host.net/actions-calc
 
  - terminal_id
  - auth_sign

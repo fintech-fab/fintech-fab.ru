@@ -366,6 +366,10 @@ $(document).ready(function () {
 			$submit.closest('form').serialize(),
 			function (oData) {
 				if (oData.status == 'success') {
+					updRulesCountFromEvent(oData);
+					// finding rule_id passed to #modal-rule-create
+					var $ruleId = $('#modal-rule-create').find('input[name="event_id"]').val();
+					updateEventRules($ruleId);
 					$modalRuleCreate.foundation('reveal', 'close');
 				} else if (oData.status == 'error') {
 					revealFormErrors($submit.closest('form'), oData.errors);
@@ -455,6 +459,7 @@ $(document).ready(function () {
 			$th.closest('form').serialize(),
 			function (oData) {
 				if (oData.status == 'success') {
+					updateEventRules($ruleId);
 					$('#modal-rule-update').foundation('reveal', 'close');
 				} else if (oData.status == 'error') {
 					revealFormErrors($th.closest('form'), oData.errors);
@@ -463,6 +468,8 @@ $(document).ready(function () {
 			'json'
 		).always(function () {
 				buttonWakeUp($th);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
 			});
 
 		return false;
@@ -482,7 +489,7 @@ $(document).ready(function () {
 			function (oData) {
 				if (oData.status == 'success') { // success
 					// update event -> rules button counter
-					updateRulesCounter($th, oData);
+					updRulesCountFromRules($th, oData);
 					console.log($('button.see-rules').data('rules-count'));
 					// deleted, removing table records and opened rules, if exists
 					$thisRow.fadeOut();
@@ -622,7 +629,7 @@ RulesFactory = function () {
 };
 
 /**
- * Update event table
+ * Update events table
  *
  * @returns {boolean}
  */
@@ -630,7 +637,6 @@ function updateEventsTable() {
 	var $eventTableContainer = $('#events-table-container');
 
 	$.get('/actions-calc/manage/update-events-table',
-		{},
 		function (oData) {
 			$eventTableContainer.html(oData);
 		},
@@ -641,7 +647,32 @@ function updateEventsTable() {
 }
 
 /**
- * Update table row
+ * Get event rules
+ *
+ * @param id
+ */
+function updateEventRules(id) {
+	$.post(
+		'/actions-calc/manage/get-event-rules',
+		{event_id: id},
+		function (oData) {
+			var $eventsContainer = $('#events-table-container');
+			var $eventRulesTable = $eventsContainer.find('tr[data-event-rules=' + id + ']');
+
+			if ($eventRulesTable !== undefined) {
+				$eventRulesTable.find('#event-rules-wrap').replaceWith(oData);
+			}
+		},
+		'html'
+	).fail(function (xhr) {
+			alert(xhr.responseText);
+		});
+
+	return false;
+}
+
+/**
+ * Update event name and event_sid on update
  * @param oData
  */
 function updateRuleRow(oData) {
@@ -749,12 +780,12 @@ function typeFromString(string) {
 }
 
 /**
- * Update rules counter inside see-rules button
+ * Update rules counter inside see-rules button, from rules table
  *
  * @param $th
  * @param oData
  */
-function updateRulesCounter($th, oData) {
+function updRulesCountFromRules($th, oData) {
 	var $eventId = $th.closest('tr.event-rules-row').data('event-rules');
 	var $ruleRow = $('#events-rules').find('tr[data-id=' + $eventId + ']');
 	var $seeRules = $ruleRow.find('button.see-rules');
@@ -762,4 +793,19 @@ function updateRulesCounter($th, oData) {
 	$seeRules.data('rules-count', oData.data.count);
 	$seeRules.find('span').text(oData.data.count);
 }
+
+/**
+ * Update rules counter inside see-rules button, from event
+ *
+ * @param oData
+ */
+function updRulesCountFromEvent(oData) {
+	var $eventId = $('#modal-rule-create').find('input[name="event_id"]').val();
+	var $ruleRow = $('#events-rules').find('tr[data-id=' + $eventId + ']');
+	var $seeRules = $ruleRow.find('button.see-rules');
+
+	$seeRules.data('rules-count', oData.data.count);
+	$seeRules.find('span').text(oData.data.count);
+}
+
 </script>

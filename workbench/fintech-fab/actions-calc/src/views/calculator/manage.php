@@ -22,7 +22,7 @@
 <div class="tabs-content">
 	<div class="content active" id="panel0-1">
 		<div id="events-container"><?php echo $_events; ?></div>
-		<div id="rules-container"><?php echo $_rules; ?></div>
+		<!--		<div id="rules-container">--><?php //echo $_rules; ?><!--</div>-->
 	</div>
 	<div class="content" id="panel0-2">
 		<div id="signals-container"><?php echo $_signals; ?></div>

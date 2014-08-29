@@ -24,7 +24,6 @@ class ManageController extends BaseController
 
 		$content = View::make('ff-actions-calc::calculator.manage')
 			->nest('_events', 'ff-actions-calc::calculator._events', ['events' => $oTerminal->events])
-			->nest('_rules', 'ff-actions-calc::calculator._rules', ['rules' => $oTerminal->rules])
 			->nest('_signals', 'ff-actions-calc::calculator._signals', ['signals' => $oTerminal->signals]);
 
 		$this->layout->content = $content;

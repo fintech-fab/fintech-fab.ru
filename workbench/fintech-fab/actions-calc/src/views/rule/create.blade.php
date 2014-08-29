@@ -27,16 +27,6 @@
 
 {{ Form::hidden('event_id') }}
 
-{{--<div class="row">--}}
-	{{--<div class="large-12 columns">--}}
-		{{--<div class="signal_id-field">--}}
-			{{--{{ Form::label('signal_id', 'Сигнал') }}--}}
-			{{--{{ Form::input('text', 'signal_id') }}--}}
-			{{--<small class="hide" id="signal_id-error">Сигнал обязателен.</small>--}}
-		{{--</div>--}}
-	{{--</div>--}}
-{{--</div>--}}
-
 <div class="row">
 	<div class="large-3 large-centered columns">
 		{{ Form::label('signal_id', 'Сигнал') }}
