@@ -785,7 +785,7 @@ function typeFromString(string) {
  * @param $th
  * @param oData
  */
-function updRulesCountFromRules($th, oData) {
+function updRulesCountFromRules($th, oData) { // TODO: bug adding to different rules.
 	var $eventId = $th.closest('tr.event-rules-row').data('event-rules');
 	var $ruleRow = $('#events-rules').find('tr[data-id=' + $eventId + ']');
 	var $seeRules = $ruleRow.find('button.see-rules');

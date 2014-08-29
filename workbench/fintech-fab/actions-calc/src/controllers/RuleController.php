@@ -49,7 +49,7 @@ class RuleController extends BaseController
 		return json_encode([
 			'status'  => 'success',
 			'message' => 'Новое правило создано.',
-			'data'    => ['count' => $oEvent->count('id')]
+			'data' => ['count' => $oEvent::whereEventId($oRequestData['event_id'])->count()]
 		]);
 	}
 
@@ -103,7 +103,8 @@ class RuleController extends BaseController
 		}
 
 		if ($rule->delete()) {
-			$iRulesCount = $rule->count('id');
+
+			$iRulesCount = $rule::whereEventId($rule->event_id)->count();
 
 			return json_encode([
 				'status'  => 'success',
