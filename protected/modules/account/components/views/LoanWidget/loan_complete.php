@@ -14,6 +14,3 @@
 
 	</div>
 </div>
-
-
-<? $this->widget('ext.pixels.PixelWidget') ?>
