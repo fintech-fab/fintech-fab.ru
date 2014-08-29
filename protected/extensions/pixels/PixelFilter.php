@@ -47,12 +47,12 @@ class PixelFilter extends CFilter
 			$aParams[$sFieldName] = Yii::app()->request->getQuery($sFieldName);
 		}
 
-		$oCookie = new CHttpCookie('lidogenerator', $sUid, $aParams);
+		$oCookie = new CHttpCookie('lead_generator', $sUid, $aParams);
 
 		$oCookie->expire = SiteParams::getTime() + SiteParams::CTIME_MONTH;
 		$oCookie->httpOnly = true;
 
-		Yii::app()->request->cookies->add('lidogenerator', $oCookie);
+		Yii::app()->request->cookies->add('lead_generator', $oCookie);
 
 	}
 

@@ -14,10 +14,10 @@ class PixelWidget extends CWidget
 
 	public function run()
 	{
-		$oCookie = Yii::app()->request->cookies['lidogenerator'];
+		$oCookie = Yii::app()->request->cookies['lead_generator'];
 
 		if ($oCookie) {
-			Yii::app()->request->cookies->remove('lidogenerator');
+			Yii::app()->request->cookies->remove('lead_generator');
 
 			if (array_key_exists($oCookie->value, PixelFilter::$aAdditionalFields)) {
 				$this->render($oCookie->value, ['oParams' => $oCookie, 'sOrderId' => time()]);
