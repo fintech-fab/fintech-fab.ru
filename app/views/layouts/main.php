@@ -8,7 +8,13 @@
 <body>
 <div class="container">
 	<div><img src="/assets/main/logo.png" border="0" width="370" height="175" class="img" /></div>
-	<div class="row text-center"><h2>[cайт на стадии разработки] <a href="/vanguard">[программа стажировки]</a></h2>
+	<div class="row text-center">
+		<h2>
+			[cайт на стадии разработки] <a href="/vanguard">[программа стажировки]</a>
+			<?php if (Route::has('qiwiGate_about')) { ?>
+				<a href="<?= URL::route('qiwiGate_about') ?>">[эмулятор qiwi]</a>
+			<?php } ?>
+		</h2>
 	</div>
 
 	<div class="row mt20">
