@@ -9,12 +9,14 @@ class PixelFilter extends CFilter
 	const C_BANKI_RU = 'banki_ru';
 	const C_LINKPROFIT = 'linkprofit';
 	const C_EPROMO = 'epromo';
+	const C_LEADS24 = 'leads24';
 
 	// Дополнительные параметры, которые принимаются из GET-запроса, по которому клиент попадает на наш сайт
 	public static $aAdditionalFields = array(
 		self::C_BANKI_RU   => array(),
 		self::C_LINKPROFIT => array(),
 		self::C_EPROMO => array(),
+		self::C_LEADS24 => array(),
 	);
 
 	public function preFilter($aFilterChain)
