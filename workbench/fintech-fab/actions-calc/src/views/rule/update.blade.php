@@ -26,23 +26,28 @@
 </div>
 
 <hr/>
-
+	{{ Form::hidden('event_id') }}
 <div class="row">
-	<div class="large-12 columns">
-	{{ Form::label('event_id', 'Событие') }}
-	{{ Form::input('text', 'event_id') }}
+	<div class="large-3 large-centered columns">
+		{{ Form::label('signal_id', 'Сигнал') }}
+
+		<select name="signal_id" class="s2">
+            @foreach(FintechFab\ActionsCalc\Models\Signal::all(['id', 'name', 'signal_sid']) as $signal)
+                <option value="{{ $signal->id }}" @if($rule->signal_id == $signal->id) selected="selected" @endif>
+                    {{ $signal->signal_sid }}&nbsp;({{ $signal->name }})
+                </option>
+            @endforeach
+        </select>
 	</div>
 </div>
 
 <div class="row">
 	<div class="large-12 columns">
-	{{ Form::label('signal_id', 'Сигнал') }}
-	{{ Form::input('text', 'signal_id') }}
-
 	{{ Form::submit('Обновить', ['id' => 'button-rule-update', 'class' => 'button small right']) }}
 	</div>
 </div>
 
+{{-- modal close markup --}}
 <a class="close-reveal-modal">&#215;</a>
 
 {{-- alert for errors --}}

@@ -369,7 +369,7 @@ $(document).ready(function () {
 					updRulesCountFromEvent(oData);
 					// finding rule_id passed to #modal-rule-create
 					var $ruleId = $('#modal-rule-create').find('input[name="event_id"]').val();
-					updateEventRules($ruleId);
+					updateEventRules($ruleId, $('#events-table-container'));
 					$modalRuleCreate.foundation('reveal', 'close');
 				} else if (oData.status == 'error') {
 					revealFormErrors($submit.closest('form'), oData.errors);
@@ -397,7 +397,9 @@ $(document).ready(function () {
 			'/actions-calc/rule/update/' + $ruleId,
 			$th.closest('form').serialize(),
 			function (oData) {
-				$modalRuleUpdate.html(oData).foundation('reveal', 'open');
+				$modalRuleUpdate.html(oData);
+				$modalRuleUpdate.find('select.s2').select2();
+				$modalRuleUpdate.foundation('reveal', 'open');
 
 				var $sRule = $modalRuleUpdate.find('input[name="rule"]').val();
 				var rulesFactory = new RulesFactory();
@@ -459,7 +461,7 @@ $(document).ready(function () {
 			$th.closest('form').serialize(),
 			function (oData) {
 				if (oData.status == 'success') {
-					updateEventRules($ruleId);
+					updateEventRules($ruleId, $('#events-table-container'));
 					$('#modal-rule-update').foundation('reveal', 'close');
 				} else if (oData.status == 'error') {
 					revealFormErrors($th.closest('form'), oData.errors);
@@ -647,17 +649,17 @@ function updateEventsTable() {
 }
 
 /**
- * Get event rules
+ * Put event rules in container
  *
- * @param id
+ * @param ruleId
+ * @param $eventsContainer
  */
-function updateEventRules(id) {
+function updateEventRules(ruleId, $eventsContainer) {
 	$.post(
 		'/actions-calc/manage/get-event-rules',
-		{event_id: id},
+		{event_id: ruleId},
 		function (oData) {
-			var $eventsContainer = $('#events-table-container');
-			var $eventRulesTable = $eventsContainer.find('tr[data-event-rules=' + id + ']');
+			var $eventRulesTable = $eventsContainer.find('tr[data-event-rules=' + ruleId + ']');
 
 			if ($eventRulesTable !== undefined) {
 				$eventRulesTable.find('#event-rules-wrap').replaceWith(oData);
