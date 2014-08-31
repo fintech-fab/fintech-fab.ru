@@ -51,8 +51,13 @@
 	</tbody>
 </table>
 
+<?php if (count($events) < 1): ?>
+	<p>Событий не найдено.</p>
+<?php endif; ?>
+
 <!-- pagination -->
 <?php if (method_exists($events, 'links')): ?>
 	<?php echo $events->links(); ?>
+	<span id="pagination-events-current-page" class="hide"><?php echo $events->getCurrentPage(); ?></span>
 <?php endif; ?>
 <!-- /pagination -->

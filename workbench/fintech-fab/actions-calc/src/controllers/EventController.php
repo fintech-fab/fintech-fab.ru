@@ -99,11 +99,34 @@ class EventController extends BaseController
 	 */
 	public function updateEventsTable()
 	{
+
+		$input = Input::all();
+		$iPage = (int)$input['page'];
+
+		\Paginator::setCurrentPage($iPage);
+		// setting page that stored in span#pagination-events-current-page in _events.php
+//		Event::getConnectionResolver()->connection('ff-actions-calc')->getPaginator()->setCurrentPage($iPage);
+
 		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(10);
-		$aoEvents->setBaseUrl('events/table');
+		$aoEvents->setBaseUrl('/actions-calc/events/table');
 
 		return View::make('ff-actions-calc::calculator._events_table', [
 			'events' => $aoEvents
+		]);
+	}
+
+	/**
+	 * Event search
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function search()
+	{
+		$q = e(Input::get('q'));
+		$aoEvents = Event::where('event_sid', 'LIKE', "%$q%")->get();
+
+		return View::make('ff-actions-calc::calculator._events_table', [
+			'events' => $aoEvents,
 		]);
 	}
 

@@ -9,10 +9,10 @@ Route::get('/actions-calc/manage', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@manage'
 ]);
 // update events table
-Route::get('/actions-calc/manage/update-events-table', [
-	'as'   => 'update.events.table',
-	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@updateEventsTable'
-]);
+//Route::get('/actions-calc/manage/update-events-table', [
+//	'as'   => 'update.events.table',
+//	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@updateEventsTable'
+//]);
 
 // events
 // delete event //TODO: check if user allowed to do sturff. Through filter.
@@ -31,8 +31,12 @@ Route::post('/actions-calc/event/create', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@create'
 ]);
 // events table pagination
-Route::get('actions-calc/events/table{page?}', [
+Route::get('/actions-calc/events/table{page?}', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@updateEventsTable',
+]);
+// events search
+Route::get('actions-calc/event/search', [
+	'uses' => 'FintechFab\ActionsCalc\Controllers\EventController@search',
 ]);
 
 // events -> rules:

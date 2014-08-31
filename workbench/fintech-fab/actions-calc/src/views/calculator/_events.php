@@ -11,13 +11,18 @@
 <div class="row">
 	<div class="large-3 columns">
 		<div class="row collapse postfix">
-			<div class="large-9 columns">
-				<input type="text" placeholder="Искать в базе">
+			<div class="large-9 columns search-field-wrap">
+				<input id="search-event-text" name="search-event" type="text" placeholder="Искать события">
 			</div>
 			<div class="large-3 columns">
-				<a href="#" class="button postfix">Go</a>
+				<button id="search-event" class="button postfix"><i class="fi-magnifying-glass"></i></button>
 			</div>
 		</div>
+	</div>
+	<div class="large-3 columns">
+		<button id="search-revert" class="button success tiny" style="display: none;"><i class="fi-loop"></i>&nbsp;к
+			событиям
+		</button>
 	</div>
 	<div class="large-6 columns">
 		<ul class="button-group right">
@@ -37,9 +42,8 @@
 <div id="modal-event-create" class="reveal-modal small" data-reveal>
 	<?php echo View::make('ff-actions-calc::event.create'); ?>
 </div><!-- /modal create event-->
-
 <!-- modal update event -->
-<div id="modal-update-event" class="reveal-modal small" data-reveal></div><!-- /modal update event-->
+<div id="modal-update-event" class="reveal-modal small" data-reveal></div><!-- /modal update event--><!-- modal search event -->
 
 <!-- modal rule create -->
 <div id="modal-rule-create" class="reveal-modal medium" data-reveal></div><!-- /modal rule update -->
@@ -49,9 +53,12 @@
 <!-- events table -->
 <div id="events-table-container">
 	<?php /** @noinspection PhpUndefinedMethodInspection */
-	$events->setBaseUrl('events/table'); ?>
+	$events->setBaseUrl('/actions-calc/events/table'); ?>
 	<?php echo View::make('ff-actions-calc::calculator._events_table', ['events' => $events]); ?>
 </div><!-- /events table -->
+
+<!-- temp storage -->
+<div id="events-table-container-search" class="hide search-mode"></div><!-- /temp storage -->
 
 <!-- event rules template -->
 <div id="event-rules-template" style="display: none;">
@@ -141,7 +148,6 @@ $(document).ready(function () {
 
 		return false;
 	});
-
 	// events:
 	// event udpate modal - open
 	$body.on('click', 'button.edit-rule', function () {
@@ -191,7 +197,7 @@ $(document).ready(function () {
 		return false;
 	});
 	// events:
-	// modal event delete
+	// modal event delete // TODO: count event on every deletion, if less than 10, update events table.
 	$body.on('click', '#events-rules button.delete-rule', function () {
 		// $th clicked delete button
 		var $th = $(this);
@@ -220,6 +226,96 @@ $(document).ready(function () {
 
 		return false;
 	});
+	// events:
+	// events search
+	$body.on('click', 'button#search-event', function () {
+
+		var $button = $(this);
+		var sSearchQuery = $('input#search-event-text').val();
+
+		buttonSleep($button);
+		$.get(
+			'/actions-calc/event/search?q=' + sSearchQuery,
+			function (oData) {
+
+				var $eventTableContainer = $('#events-table-container');
+
+				// finding search container, pulling data, changing id
+				if ($eventTableContainer.hasClass('search-mode') == false) {
+
+					var $containerSearch = $('#events-table-container-search');
+
+					// find results to separate container
+					$containerSearch.html(oData);
+					$containerSearch.attr('id', 'events-table-container');
+					$containerSearch.removeClass('hide');
+
+					// hiding earlier showed events
+					$('#events-table-container:not(.search-mode)').attr('id', 'events-table-container-hidden').addClass('hide');
+
+					// showing revert to get back to normal events showing
+					$('#search-revert').fadeIn(50);
+				} else {
+					$eventTableContainer.html(oData);
+				}
+			},
+			'html'
+		).always(function () {
+				buttonWakeUp($button);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
+			});
+
+		return false;
+	});
+	// events:
+	// events search revert button
+	// hides search table, reveals opened earlier
+	$body.on('click', 'button#search-revert', function () {
+
+		var $button = $(this);
+
+		buttonSleep($button);
+		// switching event tables: search results -><- opened results
+		var $eventTableContainer = $('#events-table-container.search-mode');
+		var $eventHidden = $('#events-table-container-hidden');
+
+		$eventTableContainer.addClass('hide');
+		$eventTableContainer.attr('id', 'events-table-container-search');
+
+		$eventHidden.removeClass('hide');
+		$eventHidden.attr('id', 'events-table-container');
+
+		// updating hidden events table
+		updateEventsTable();
+		buttonWakeUp($button);
+
+		// hiding search revert button
+		$button.hide(); // TODO: add event table update, on certain page.
+
+		return false;
+	});
+	// events:
+	// search field keydown activate search on [enter]
+	$body.on('keydown', 'input#search-event-text', function (e) {
+
+		var $input = $(this);
+		var sQuery = $input.val();
+
+		// hit [enter]
+		if (e.keyCode == 13) {
+			console.log(sQuery);
+			console.log(sQuery.length);
+			if (sQuery.length < 2 || sQuery === undefined) {
+				//			updateEventsTable();
+				return false;
+			}
+
+			$('button#search-event').trigger('click');
+
+			return false;
+		}
+	});
 
 	// event -> rules:
 	// toggle event rules flag
@@ -243,7 +339,6 @@ $(document).ready(function () {
 
 		return bSwitchResult;
 	});
-
 	// events -> rules:
 	// see event rules
 	$body.on('click', 'button.see-rules', function () {
@@ -481,32 +576,33 @@ $(document).ready(function () {
 	$body.on('click', 'button.rule-delete', function () {
 
 		// $th clicked delete button
-		var $th = $(this);
-		buttonSleep($th);
+		var $delButton = $(this);
+		buttonSleep($delButton);
 
-		var $thisRow = $th.closest('tr');
+		var $thisRow = $delButton.closest('tr');
 		var $ruleId = $thisRow.data('id');
 
 		$.post('/actions-calc/rule/delete/' + $ruleId,
 			function (oData) {
 				if (oData.status == 'success') { // success
 					// update event -> rules button counter
-					updRulesCountFromRules($th, oData);
+					updRulesCountFromRules($delButton, oData);
 					console.log($('button.see-rules').data('rules-count'));
 					// deleted, removing table records and opened rules, if exists
 					$thisRow.fadeOut();
 					// closing rules table if 0 rules
 					if (oData.data.count <= 0) {
-						var iParentEventId = $th.parents('tr.event-rules-row').data('event-rules');
-						$('#events-rules').find('tr[data-id=' + iParentEventId + ']').find('button.close-rules').click();
+						var $parentEventRow = $delButton.parents('tr.event-rules-row');
+						var iParentEventId = $parentEventRow.data('event-rules');
+						$parentEventRow.prev('tr[data-id=' + iParentEventId + ']').find('button.close-rules').click();
 					}
 				}
-				buttonWakeUp($th);
+				buttonWakeUp($delButton);
 				return false;
 			},
 			'json'
 		).always(function () {
-				buttonWakeUp($th);
+				buttonWakeUp($delButton);
 			}).fail(function (xhr) {
 				alert(xhr.responseText);
 			});
@@ -514,7 +610,6 @@ $(document).ready(function () {
 
 		return false;
 	});
-
 	// events -> rules:
 	// close rules button
 	$body.on('click', 'button.close-rules', function () {
@@ -555,7 +650,6 @@ $(document).ready(function () {
 		$(this).closest('div.event-rule').remove();
 		return false;
 	});
-
 	// event -> rules -> conditions:
 	// [Condition Add] for rule
 	$body.on('click', 'button.event-rule-add-condition', function () {
@@ -638,7 +732,9 @@ RulesFactory = function () {
 function updateEventsTable() {
 	var $eventTableContainer = $('#events-table-container');
 
-	$.get('/actions-calc/manage/update-events-table',
+	var iPage = $('#pagination-events-current-page').text();
+
+	$.get('/actions-calc/events/table?page=' + iPage,
 		function (oData) {
 			$eventTableContainer.html(oData);
 		},
@@ -784,16 +880,17 @@ function typeFromString(string) {
 /**
  * Update rules counter inside see-rules button, from rules table
  *
- * @param $th
+ * @param $button
  * @param oData
  */
-function updRulesCountFromRules($th, oData) { // TODO: bug adding to different rules.
-	var $eventId = $th.closest('tr.event-rules-row').data('event-rules');
-	var $ruleRow = $('#events-rules').find('tr[data-id=' + $eventId + ']');
-	var $seeRules = $ruleRow.find('button.see-rules');
+function updRulesCountFromRules($button, oData) {
+	// finding parent row with button, comparing id's
+	var $rulesTableRow = $button.closest('tr.event-rules-row');
+	var $eventId = $rulesTableRow.data('event-rules');
+	var $buttonSeeRules = $rulesTableRow.prev('tr[data-id=' + $eventId + ']').find('button.see-rules');
 
-	$seeRules.data('rules-count', oData.data.count);
-	$seeRules.find('span').text(oData.data.count);
+	$buttonSeeRules.data('rules-count', oData.data.count);
+	$buttonSeeRules.find('span').text(oData.data.count);
 }
 
 /**
@@ -802,8 +899,8 @@ function updRulesCountFromRules($th, oData) { // TODO: bug adding to different r
  * @param oData
  */
 function updRulesCountFromEvent(oData) {
-	var $eventId = $('#modal-rule-create').find('input[name="event_id"]').val();
-	var $ruleRow = $('#events-rules').find('tr[data-id=' + $eventId + ']');
+	var iEventId = $('#modal-rule-create').find('input[name="event_id"]').val();
+	var $ruleRow = $('#events-table-container:not(.in-modal)').find('tbody tr[data-id=' + iEventId + ']');
 	var $seeRules = $ruleRow.find('button.see-rules');
 
 	$seeRules.data('rules-count', oData.data.count);
