@@ -1,5 +1,5 @@
 <?php
-
+Yii::import('ext.pixels.PixelCookie');
 
 /**
  * Class PixelWidget
@@ -14,14 +14,22 @@ class PixelWidget extends CWidget
 
 	public function run()
 	{
+
 		$oCookie = Yii::app()->request->cookies['lead_generator'];
 
-		if ($oCookie) {
+		if ($oCookie && isset($oCookie->value['sUid']) && array_key_exists($oCookie->value['sUid'], PixelFilter::$aAdditionalFields)) {
+
+			$iOrderId = $oCookie->value['iOrderId'];
+			$oLeadsHistory = LeadsHistory::model()->findByPk($iOrderId);
+			if ($oLeadsHistory) {
+				$oLeadsHistory->flag_showed = 1;
+				$oLeadsHistory->dt_show = date('Y-m-d H:i:s', SiteParams::getTime());
+				$oLeadsHistory->save();
+			}
+
 			Yii::app()->request->cookies->remove('lead_generator');
 
-			if (array_key_exists($oCookie->value, PixelFilter::$aAdditionalFields)) {
-				$this->render($oCookie->value, ['oParams' => $oCookie, 'sOrderId' => time()]);
-			}
+			$this->render($oCookie->value['sUid'], ['aParams' => $oCookie->value]);
 		}
 	}
 
