@@ -67,3 +67,9 @@ Route::group(array('before' => 'auth'), function () {
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
 });
+
+Route::get('dinner', array(
+    'before' => 'auth|roleEmployee',
+    'as' => 'dinner',
+    'uses' => 'App\Controllers\Dinner\DinnerController@dinner'
+));
