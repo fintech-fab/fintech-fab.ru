@@ -13,6 +13,7 @@ class PixelFilter extends CFilter
 	const C_MASTERTARGET = 'mastertarget';
 	const C_TOPADW = 'topadw';
 	const C_ADMITAD = 'cpamit';
+	const C_TRADETRACKER = 'tradetracker';
 
 	// Дополнительные параметры, которые принимаются из GET-запроса, по которому клиент попадает на наш сайт
 	public static $aAdditionalFields = array(
@@ -23,6 +24,7 @@ class PixelFilter extends CFilter
 		self::C_MASTERTARGET => array(),
 		self::C_TOPADW => array(),
 		self::C_ADMITAD => array('cpamit_uid'),
+		self::C_ADMITAD => array(),
 	);
 
 	public function preFilter($aFilterChain)
