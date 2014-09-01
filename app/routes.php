@@ -69,7 +69,7 @@ Route::group(array('before' => 'auth'), function () {
 });
 
 Route::get('dinner', array(
-    'before' => 'auth|roleEmployee',
+    'before' => 'auth|testRole:employee',
     'as' => 'dinner',
     'uses' => 'App\Controllers\Dinner\DinnerController@dinner'
 ));
