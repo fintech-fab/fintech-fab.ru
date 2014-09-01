@@ -695,6 +695,8 @@ class AdminKreddyApiComponent
 
 			'loan_purpose'        => null,
 			'birthplace'          => null,
+
+			'order_id' => null,
 		);
 
 		//получаем массив, соджержащий только заданные поля

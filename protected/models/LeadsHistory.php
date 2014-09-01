@@ -92,6 +92,7 @@ class LeadsHistory extends CActiveRecord
 			'CTimestampBehavior' => array(
 				'class'           => 'zii.behaviors.CTimestampBehavior',
 				'createAttribute' => 'dt_add',
+				'updateAttribute' => null,
 			)
 		);
 	}
