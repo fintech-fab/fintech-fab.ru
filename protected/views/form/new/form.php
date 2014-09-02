@@ -71,7 +71,7 @@
 						<div class="mb1_images">
 							<img src="static/newmain/images/mb1_img1.png" />
 
-							<p>Деньги в займы мгновенно</p>
+							<p>Деньги взаймы мгновенно</p>
 						</div>
 					</div>
 					<div class="col-sm-3 col-xs-6">
