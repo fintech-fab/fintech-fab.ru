@@ -14,10 +14,10 @@ $this->pageTitle = Yii::app()->name;
 ?>
 
 <?php $this->widget('YaMetrikaGoalsWidget', array('sForceGoal' => 'fr_client_exists')); ?>
-
+<div class="container" style="margin-top: 20px; margin-bottom: 20px; height: 500px;">
 <div class="row">
 
-	<div class="span12">
+	<div class="col-xs-8">
 		<div class="center"><h3>Мы уже знаем о тебе!</h3></div>
 		<h4><strong>Если ты регистрировался ранее, выполни вход в личный кабинет.</strong></h4>
 		<h4><strong>В противном случае обратить в наш контактный центр.</strong></h4>        <br /> <br />
@@ -35,6 +35,7 @@ $this->pageTitle = Yii::app()->name;
 				'bootstrap.widgets.TbButton',
 				array(
 					'label' => 'Перейти в личный кабинет',
+					'type'  => 'success',
 					'url'   => Yii::app()->createUrl('/account/login'),
 				)
 			); ?>
@@ -44,3 +45,4 @@ $this->pageTitle = Yii::app()->name;
 </div>
 
 
+</div>

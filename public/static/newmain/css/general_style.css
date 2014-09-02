@@ -105,6 +105,10 @@ div#checkCodes{
 	font-size: 14px;
 }
 
+.login_block a {
+	color: #fff;
+}
+
 .headr_rightblock {
 	text-align: right;
 }
@@ -839,6 +843,27 @@ input.check_input:focus {
 	opacity: 0.8;
 }
 
+.btn-link.location {
+	border-bottom: 1px dashed;
+	border-color: transparent transparent -moz-use-text-color;
+	border-radius: 0;
+	cursor: pointer;
+	font-size: 12pt;
+	padding: 0;
+	text-decoration: none;
+}
+
+
+#modal-frame .modal-dialog{
+	width: 760px;
+	margin: 30px auto;
+}
+
+#modal-frame .modal-body {
+	max-height: 500px;
+	text-align: left;
+}
+
 @media screen and (max-width: 991px) {
 
 	.headlb_left {
@@ -1168,7 +1193,7 @@ input.check_input:focus {
 	}
 
 	.ascapleft img {
-		width: 50px;
+		width: 120px;
 	}
 
 	.slider_check {

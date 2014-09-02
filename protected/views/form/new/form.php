@@ -8,7 +8,7 @@
 ?>
 
 
-<div id="slider_wrapper">
+<div id="slider_wrapper" xmlns="http://www.w3.org/1999/html">
 	<div id="mainpage_carousel" class="carousel slide" data-ride="carousel">
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner">
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 		<div class="mb1_redtext">
-			<a href="#">Подробнее о тарифах &#9658;</a>
+			<a href="<?= Yii::app()->createUrl('/pages/view/tariffsdetails'); ?>">Подробнее о тарифах &#9658;</a>
 		</div>
 	</div>
 </div>
@@ -137,16 +137,16 @@
 			<div class="col-sm-8 col-sm-offset-2 mb3_firstrow">
 				<div class="row">
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/21.png" /> <a href="#">Банковская карта</a>
+						<img src="static/newmain/images/21.png" /> <a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>">Банковская карта</a>
 					</div>
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/17.png" /> <a href="#">Терминал МКБ</a>
+						<img src="static/newmain/images/17.png" /> <a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>">Терминал МКБ</a>
 					</div>
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/18.png" /> <a href="#">QIWI-кошелек</a>
+						<img src="static/newmain/images/18.png" /> <a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">QIWI-кошелек</a>
 					</div>
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/19.png" /> <a href="#">Терминал Элекснет</a>
+						<img src="static/newmain/images/19.png" /> <a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>">Терминал Элекснет</a>
 					</div>
 				</div>
 			</div>
@@ -154,13 +154,13 @@
 			<div class="col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
 				<div class="row">
 					<div class="col-xs-4 mb3_block">
-						<img src="static/newmain/images/22.png" /> <a href="#">Мобильный телефон</a>
+						<img src="static/newmain/images/22.png" /> <a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>">Мобильный телефон</a>
 					</div>
 					<div class="col-xs-4 mb3_block">
-						<img src="static/newmain/images/23.png" /> <a href="#">Яндекс-деньги</a>
+						<img src="static/newmain/images/23.png" /> <a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">Яндекс-деньги</a>
 					</div>
 					<div class="col-xs-4 mb3_block">
-						<img src="static/newmain/images/20.png" /> <a href="#">Терминал DeltaPay</a>
+						<img src="static/newmain/images/20.png" /> <a href="<?= Yii::app()->createUrl('pages/view/deltapay'); ?>">Терминал DeltaPay</a>
 					</div>
 				</div>
 			</div>
@@ -171,34 +171,34 @@
 				<div class="row">
 
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/21.png" /> <a href="#">Банковская карта</a>
+						<img src="static/newmain/images/21.png" /> <a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>">Банковская карта1</a>
 					</div>
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/17.png" /> <a href="#">Терминал МКБ</a>
-					</div>
-
-					<div class="clearfix"></div>
-
-					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/22.png" /> <a href="#">Мобильный телефон</a>
-					</div>
-					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/23.png" /> <a href="#">Яндекс-деньги</a>
+						<img src="static/newmain/images/17.png" /> <a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>">Терминал МКБ</a>
 					</div>
 
 					<div class="clearfix"></div>
 
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/18.png" /> <a href="#">QIWI-кошелек</a>
+						<img src="static/newmain/images/22.png" /> <a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>">Мобильный телефон</a>
 					</div>
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/19.png" /> <a href="#">Терминал Элекснет</a>
+						<img src="static/newmain/images/23.png" /> <a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">Яндекс-деньги</a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/18.png" /> <a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">QIWI-кошелек</a>
+					</div>
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/19.png" /> <a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>">Терминал Элекснет</a>
 					</div>
 
 					<div class="clearfix"></div>
 
 					<div class="col-xs-12 mb3_block">
-						<img src="static/newmain/images/20.png" /> <a href="#">Терминал DeltaPay</a>
+						<img src="static/newmain/images/20.png" /> <a href="<?= Yii::app()->createUrl('pages/view/deltapay'); ?>">Терминал DeltaPay</a>
 					</div>
 				</div>
 			</div>
@@ -323,8 +323,8 @@
 			<?php if (CCaptcha::checkRequirements()): ?>
 			<div class="ask_captcha hidden-xs">
 				<div class="ascapleft">
-					<p>Введите код сообщения</p>
-					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha')); ?><br />
+					<p>Введите код сообщения
+					<span style="width: 120px; display: inline-block; vertical-align: middle; "><?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha','buttonLabel'=>'обновить')); ?></span></p>
 				</div>
 				<div class="ascapright">
 					<?php echo $form->textField($model, 'verifyCode', array('class' => 'askf_input input_captcha')); ?>
@@ -335,7 +335,7 @@
 					<p>Введите код сообщения</p>
 				</div>
 				<div class="col-xs-12 ascapright2">
-					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha')); ?><br />
+					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha','buttonLabel'=>'<br/>обновить')); ?></p><br />
 					<?php echo $form->textField($model, 'verifyCode', array('class' => 'askf_input input_captcha')); ?>
 				</div>
 			</div>
@@ -362,12 +362,12 @@
 	<div class="row">
 		<div class="col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 unas_wrap">
 			<div class="row">
-				<a href="#" class="col-sm-4 col-sm-offset-0 col-xs-3 col-xs-offset-1 unask_bl ua_bl1"><img src="static/newmain/images/1.png" />SMS-инфо</a>
+				<a href="<?= Yii::app()->createUrl('pages/view/smsinfopost'); ?>" class="col-sm-4 col-sm-offset-0 col-xs-3 col-xs-offset-1 unask_bl ua_bl1"><img src="static/newmain/images/1.png" />SMS-инфо</a>
 
 				<div class="col-sm-4 col-sm-offset-0 col-xs-3 col-xs-offset-1 unask_bl ua_bl2">
 					<img src="static/newmain/images/2.png" />Безопасность
 				</div>
-				<a href="#" class="col-sm-4 col-sm-offset-0 col-xs-4 col-xs-offset-0 unask_bl ua_bl3"><img src="static/newmain/images/3.png" />Вопросы
+				<a href="<?= Yii::app()->createUrl('site/faq'); ?>" class="col-sm-4 col-sm-offset-0 col-xs-4 col-xs-offset-0 unask_bl ua_bl3"><img src="static/newmain/images/3.png" />Вопросы
 					и ответы</a>
 			</div>
 		</div>
@@ -375,7 +375,7 @@
 	<div class="clearfix"></div>
 	<div class="row">
 		<div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3 cards_block">
-			<a href="#" class="pcard_block"> <img src="static/newmain/images/4.png" /> </a>
+			<a target="_blank" href="https://kreddy.ru/static/docs/pcidss.pdf" class="pcard_block"> <img src="static/newmain/images/4.png" /> </a>
 			<a href="#" class="pcard_block"> <img src="static/newmain/images/5.png" /> </a>
 			<a href="#" class="pcard_block"> <img src="static/newmain/images/6.png" /> </a>
 			<a href="#" class="pcard_block"> <img src="static/newmain/images/7.png" /> </a>
@@ -393,7 +393,7 @@
 				<div class="col-xs-12">
 					<div class="row">
 						<div class="col-xs-12 cards_block">
-							<a href="#" class="pcard_block"> <img src="static/newmain/images/4.png" /> </a>
+							<a target="_blank" href="https://kreddy.ru/static/docs/pcidss.pdf" class="pcard_block"> <img src="static/newmain/images/4.png" /> </a>
 							<a href="#" class="pcard_block"> <img src="static/newmain/images/5.png" /> </a>
 							<a href="#" class="pcard_block"> <img src="static/newmain/images/6.png" /> </a>
 							<a href="#" class="pcard_block"> <img src="static/newmain/images/7.png" /> </a>

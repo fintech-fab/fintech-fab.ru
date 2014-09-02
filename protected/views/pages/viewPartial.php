@@ -3,6 +3,7 @@
 /* @var $model Pages */
 
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->page_title);
+Yii::app()->bootstrap->registerBootstrapCss();
 ?>
 <!DOCTYPE html>
 <html lang="en">

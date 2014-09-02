@@ -29,6 +29,7 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 				array(
 					'label' => 'Перейти в личный кабинет »',
 					'type'  => 'primary',
+					'type'  => 'success',
 					'url'   => Yii::app()->createUrl('/account/doSubscribe'),
 				)
 			); ?>

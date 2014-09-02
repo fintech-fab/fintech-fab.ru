@@ -18,6 +18,7 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 	<!--script type="text/javascript" src="/static/newmain/js/bootstrap.min.js"></script-->
 	<script type="text/javascript" src="/static/newmain/js/TweenMax.min.js"></script>
 	<script type="text/javascript" src="/static/newmain/js/jquery.gsap.min.js"></script>
+	<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=5"></script>
 
 	<!-- Bootstrap -->
 	<link href="/static/newmain/css/bootstrap.min.css" type="text/css" media="screen" rel="stylesheet">
@@ -69,7 +70,7 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 					</div>
 					<div class="col-md-2 col-xs-12 headlb_right">
 						<div class="login_block">
-							Войти
+							<a href="<?= Yii::app()->createUrl('/account/'); ?>">Войти</a>
 						</div>
 					</div>
 				</div>
@@ -82,10 +83,10 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 
 					<div class="up_line"></div>
 					<div class="up_socico">
-						<a href="#" class="up_si usi_vk"> <img src="/static/newmain/images/11.png" /> </a>
-						<a href="#" class="up_si usi_f"> <img src="/static/newmain/images/10.png" /> </a>
-						<a href="#" class="up_si usi_o"> <img src="/static/newmain/images/9.png" /> </a>
-						<a href="#" class="up_si usi_i"> <img src="/static/newmain/images/8.png" /> </a>
+						<a href="https://vk.com/kreddyru" class="up_si usi_vk"> <img src="/static/newmain/images/11.png" /> </a>
+						<a href="https://www.facebook.com/pages/%D0%9A%D1%80%D0%B5%D0%B4%D0%B4%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%B2-%D1%82%D0%B2%D0%BE%D0%B5%D0%BC-%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%B5/560011590772925?fref=ts" class="up_si usi_f"> <img src="/static/newmain/images/10.png" /> </a>
+						<a href="http://www.odnoklassniki.ru/group/53026435498223" class="up_si usi_o"> <img src="/static/newmain/images/9.png" /> </a>
+						<!--a href="#" class="up_si usi_i"> <img src="/static/newmain/images/8.png" /> </a-->
 					</div>
 				</div>
 			</div>
@@ -106,16 +107,39 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12 text-center footer_hrefs">
-				<a href="#">Свидетельство о внесении в государственный реестр МФО</a> <a href="#">Правила предоставления
-					микрозайма</a> <a href="#">Информация об условиях предоставления, использования и возврата займа</a>
-				<a href="#">Архив правил предоставления микрозайма</a> <a href="#">PCI DSS</a> <a href="#">Проверить
-					браузер</a>
+				<?php
+				$this->widget('FooterLinksWidget');
+				?>
 			</div>
 			<div class="clearfix"></div>
 			<div class="col-sm-8 col-sm-offset-2 col-xs-offset-12 col-xs-offset-0 text-center footer_text">
 				<p>Микрофинансовая организация общество с ограниченной ответственностью “Финансовые Решения”
 					Регистрационный номер записи в государственном реестре МФО №2110177000213 от 19 июля 2011 г. ОГРН
 					1117746371270<br> г. Москва, Гончарная наб. 1, стр. 4<br> тел. 8-800-555-75-78</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="modal-frame" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<iframe style="width: 100%;height: 450px; border: 0;"></iframe>
+			</div>
+			<div class="modal-footer">
+				<?php
+				$this->widget('bootstrap.widgets.TbButton', array(
+					'label'       => 'Закрыть',
+					'type'        => 'warning',
+					'url'         => '#',
+					'htmlOptions' => array('data-dismiss' => 'modal'),
+				));
+				?>
 			</div>
 		</div>
 	</div>
@@ -174,23 +198,13 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 	<div><img src="//mc.yandex.ru/watch/21390544" style="position:absolute; left:-9999px;" alt="" /></div>
 </noscript>
 
-<!--<!-- Piwik -->-->
-<!--<script type="text/javascript">-->
-<!--	var _paq = _paq || [];-->
-<!--	_paq.push(['trackPageView']);-->
-<!--	_paq.push(['enableLinkTracking']);-->
-<!--	(function () {-->
+<!--<!-- Piwik -->--><!--<script type="text/javascript">--><!--	var _paq = _paq || [];-->
+<!--	_paq.push(['trackPageView']);--><!--	_paq.push(['enableLinkTracking']);--><!--	(function () {-->
 <!--		var u = (("https:" == document.location.protocol) ? "https" : "http") + "://metric.kreddy.ru/piwik/";-->
-<!--		_paq.push(['setTrackerUrl', u + 'piwik.php']);-->
-<!--		_paq.push(['setSiteId', 1]);-->
+<!--		_paq.push(['setTrackerUrl', u + 'piwik.php']);--><!--		_paq.push(['setSiteId', 1]);-->
 <!--		var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];-->
-<!--		g.type = 'text/javascript';-->
-<!--		g.defer = true;-->
-<!--		g.async = true;-->
-<!--		g.src = u + 'piwik.js';-->
-<!--		s.parentNode.insertBefore(g, s);-->
-<!--	})();-->
-<!---->
+<!--		g.type = 'text/javascript';--><!--		g.defer = true;--><!--		g.async = true;-->
+<!--		g.src = u + 'piwik.js';--><!--		s.parentNode.insertBefore(g, s);--><!--	})();--><!---->
 <!--</script>-->
 <!--<noscript><p><img src="http://metric.kreddy.ru/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>-->
 <!--<!-- End Piwik Code -->-->

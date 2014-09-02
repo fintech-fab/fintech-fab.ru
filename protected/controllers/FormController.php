@@ -423,6 +423,7 @@ class FormController extends Controller
 			} elseif (Yii::app()->adminKreddyApi->getIsClientExistsError()) {
 				Yii::app()->clientForm->clearClientSession();
 				// Клиент существует по email-у или телефону
+				$this->layout = '//layouts/main_new';
 				$this->render('client_exists');
 
 				return;
