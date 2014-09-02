@@ -97,6 +97,7 @@ class Cookie
 	 */
 	public static function removeCookie($sCookieName)
 	{
+		self::saveDataToCookie($sCookieName,array());
 		Yii::app()->request->cookies->remove($sCookieName);
 	}
 

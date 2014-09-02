@@ -33,9 +33,9 @@ class ClientPassportDataForm extends ClientFullForm
 			array(
 				array(
 					'passport_date', 'checkValidPassportDate', 'birthDate'            => 'birthday',
-					                                           'message'              => 'Введите корректное значение даты выдачи паспорта',
-					                                           'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
-					                                           'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
+					                                           'message'              => 'Введи корректное значение даты выдачи паспорта',
+					                                           'messageExpiredDate'   => 'Паспорт просрочен (проверь корректность введенной даты рождения)',
+					                                           'messageEmptyBirthday' => 'Сначала введи корректное значение даты рождения',
 				),
 				array(
 					'passport_full_number', 'match', 'message' => 'Серия и номер паспорта должны состоять из ' . (SiteParams::C_PASSPORT_S_LENGTH + SiteParams::C_PASSPORT_N_LENGTH) . ' цифр и вводиться в формате 1234 / 567890', 'pattern' => '/^\d{' . (SiteParams::C_PASSPORT_S_LENGTH + SiteParams::C_PASSPORT_N_LENGTH) . '}$/'

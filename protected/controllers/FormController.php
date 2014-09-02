@@ -10,6 +10,12 @@ class FormController extends Controller
 {
 	public $showTopPageWidget = false;
 
+	/**
+	 * Тут отключаем авторегистрацию CSS бутстрапа, она будет включаться "вручную" в конкретных случаях
+	 *
+	 * @var bool
+	 */
+	public $bBootstrapCss = false;
 
 	public function actionResendSms()
 	{
@@ -130,12 +136,6 @@ class FormController extends Controller
 		if (Yii::app()->clientForm->tryGoNextStep()) {
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
-
-		//проверяем, что для текущего сайта выбран продукт
-		Yii::app()->clientForm->checkSiteSelectedProduct();
-
-		//запустим проверку типа регистрации, она переключит "режим" анкеты, если потребуется
-		Yii::app()->clientForm->checkRegistrationType();
 
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
@@ -421,7 +421,7 @@ class FormController extends Controller
 
 
 			} elseif (Yii::app()->adminKreddyApi->getIsClientExistsError()) {
-
+				Yii::app()->clientForm->clearClientSession();
 				// Клиент существует по email-у или телефону
 				$this->render('client_exists');
 
@@ -503,6 +503,7 @@ class FormController extends Controller
 	 */
 	public function actionFastSuccess()
 	{
+		$this->layout = '//layouts/main_new';
 		$sRedirectUrl = Yii::app()->createUrl('account/doSubscribe');
 		$this->success('form_sent', $sRedirectUrl);
 	}

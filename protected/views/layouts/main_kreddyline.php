@@ -3,6 +3,8 @@
  * @var            $content
  * @var Controller $this
  */
+
+Yii::app()->bootstrap->registerBootstrapCss();
 ?>
 <!DOCTYPE html>
 <html>

@@ -25,7 +25,7 @@ class ClientSelectChannelForm extends ClientCreateFormAbstract
 			),
 			$aRequired
 		);
-		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Dictionaries::aChannels(Yii::app()->clientForm->getSessionProduct())), 'message' => 'Выберите правильный способ');
+		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Dictionaries::aChannels(Yii::app()->clientForm->getSessionProduct())), 'message' => 'Выбери правильный способ');
 
 		return $aRules;
 

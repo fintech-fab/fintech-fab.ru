@@ -54,7 +54,7 @@
 		</div>
 
 		<div class="row">
-			<?php echo $form->dropDownListRow($model, 'subject', Dictionaries::$aSubjectsQuestions, array('class' => 'span4')); ?>
+			<?php echo $form->textFieldRow($model, 'subject', array('class' => 'span4')); ?>
 		</div>
 
 		<div class="row">

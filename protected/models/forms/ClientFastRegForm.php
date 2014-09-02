@@ -52,8 +52,8 @@ class ClientFastRegForm extends ClientFullForm
 			$aRequired
 		);
 
-		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выберите сумму займа');
-		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выберите правильный способ получения займа');
+		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выбери сумму займа');
+		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выбери правильный способ получения займа');
 		$aRules[] = array('fast_reg', 'safe');
 
 		//если не быстрая регистрация, то нужно сделать это поле безопасным во избежание warnings
@@ -88,8 +88,8 @@ class ClientFastRegForm extends ClientFullForm
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('product' => 'Выберите Пакет займов'),
-			array('channel_id' => 'Выберите способ получения займа')
+			array('product' => 'Выбери Пакет займов'),
+			array('channel_id' => 'Выбери способ получения займа')
 		);
 	}
 

@@ -55,7 +55,7 @@ class AddCardForm extends CFormModel
 			array(
 				'sCardPan', 'checkValidCardPan',
 				'iCardType' => 'iCardType',
-				'message'   => 'Номер карты неправильный. Проверьте тип выбранной карты и ее номер.',
+				'message'   => 'Номер карты неправильный. Проверь тип выбранной карты и ее номер.',
 			),
 			array(
 				'sCardHolderName', 'match', 'message' => 'Имя держателя не должно содержать цифр и русских букв',

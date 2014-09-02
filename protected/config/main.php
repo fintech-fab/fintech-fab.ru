@@ -77,6 +77,7 @@ $a = array(
 			'class'           => 'ext.bootstrap.components.Bootstrap',
 			'tooltipSelector' => '[rel=tooltip]',
 			'responsiveCss'   => false,
+			'bootstrapCss'    => false,
 		),
 		'image'            => array(
 			'class'  => 'application.extensions.image.CImageComponent',

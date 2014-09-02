@@ -138,7 +138,7 @@ class SiteController extends Controller
 			$oModel->setAttributes($aPost);
 			if ($oModel->validate()) {
 				$sEmail = SiteParams::getContactEmail();
-				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[$oModel->subject];
+				$sSubject = $oModel->subject;
 				$sMessage =
 					"Имя: " . $oModel->name . "\r\n" .
 					"Телефон: " . $oModel->phone . "\r\n" .

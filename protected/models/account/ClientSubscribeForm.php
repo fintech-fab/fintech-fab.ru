@@ -32,8 +32,8 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'channel_id' => 'Выберите продукт',
-				'product' => 'Выберите канал',
+				'channel_id' => 'Выбери продукт',
+				'product' => 'Выбери канал',
 			)
 		);
 	}

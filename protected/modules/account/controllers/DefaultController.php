@@ -108,11 +108,11 @@ class DefaultController extends Controller
 			//но вызванное действие не входит в доступные
 			if (!in_array($sActionId, $aActionsForFastRegUser)) {
 				//покажем приглашение к продолжению регистрации
+				parent::beforeAction($aAction);
 				$this->render('need_continue_reg');
 				Yii::app()->end();
 			}
 		}
-
 
 		return parent::beforeAction($aAction);
 	}

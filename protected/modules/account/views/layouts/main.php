@@ -1,5 +1,7 @@
 <?php /* @var $this Controller */
 /* @var $content */
+
+Yii::app()->bootstrap->registerBootstrapCss();
 ?>
 <!DOCTYPE html>
 <html lang="en">

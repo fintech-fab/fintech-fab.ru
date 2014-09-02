@@ -1,0 +1,411 @@
+<?php
+/**
+ * @var FormController           $this
+ * @var IkTbActiveForm           $form
+ * @var ClientCreateFormAbstract $oClientCreateForm
+ * @var string                   $sSubView
+ */
+?>
+
+
+<div id="slider_wrapper">
+	<div id="mainpage_carousel" class="carousel slide" data-ride="carousel">
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			<div class="item active">
+				<span class="car_inner car_img1"></span>
+			</div>
+			<div class="item">
+				<span class="car_inner car_img2"></span>
+			</div>
+			<div class="item">
+				<span class="car_inner car_img3"></span>
+			</div>
+			<div class="item">
+				<span class="car_inner car_img4"></span>
+			</div>
+			<div class="item">
+				<span class="car_inner car_img5"></span>
+			</div>
+			<div class="item">
+				<span class="car_inner car_img6"></span>
+			</div>
+			<!--<div class="item active">-->            <!--    <img src="images/upbg_1.jpg" alt="...">       -->
+			<!--</div>-->            <!--<div class="item">-->
+			<!--    <img src="images/upbg_2.jpg" alt="...">-->            <!--    <!--<div class="carousel-caption">-->
+			<!--    <!--  ...-->            <!--    <!--</div>-->            <!--</div>-->
+			<!--<div class="item">-->            <!--    <img src="images/upbg_3.jpg" alt="...">       -->
+			<!--</div>-->            <!--<div class="item">-->
+			<!--    <img src="images/upbg_4.jpg" alt="...">       -->            <!--</div>-->
+		</div>
+	</div>
+	<div class="slider_form col-lg-8 col-md-9">
+		<?php $this->renderPartial($sSubView, array('oClientCreateForm' => $oClientCreateForm)) ?>
+		<!--form action="#" method="post">
+			<div class="first_inprow">
+				<input class="slider_input" type="text" name="fi_name" placeholder="Имя" />
+				<input class="slider_input" type="text" name="se_name" placeholder="Отчество" />
+				<input class="slider_input" type="text" name="se_name" placeholder="Фамилия" />
+				<input class="slider_submit not_link" type="submit" name="sli_submit" value="Зарегистрируйся" />
+			</div>
+			<div class="second_inprow">
+				<input class="slider_input" type="text" name="mail" placeholder="E-mail" />
+				<input class="slider_input" type="text" name="phone" placeholder="Телефон" />
+
+				<div class="input_check">
+					<input class="slider_check" type="checkbox" name="approve" /><span class="slidr_checkbox">Я подтверждаю достоверность введенных данных и даю согласие на обработку(<a href="#">подробная
+							информация</a>)</span></div>
+				<input class="slider_submit" type="submit" name="sli_submit" value="Зарегистрируйся" />
+			</div>
+
+		</form-->
+	</div>
+</div>
+
+<div id="mid_block1">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 mb1_ico">
+				<div class="row">
+					<div class="col-sm-3 col-xs-6">
+						<div class="mb1_images">
+							<img src="static/newmain/images/mb1_img1.png" />
+
+							<p>Деньги в займы мгновенно</p>
+						</div>
+					</div>
+					<div class="col-sm-3 col-xs-6">
+						<div class="mb1_images">
+							<img src="static/newmain/images/mb1_img2.png" />
+
+							<p>В любом месте, где тебе удобно</p>
+						</div>
+					</div>
+					<div class="col-sm-3 col-xs-6">
+						<div class="mb1_images">
+							<img src="static/newmain/images/mb1_img3.png" />
+
+							<p>На карту или мобильный</p>
+						</div>
+					</div>
+					<div class="col-sm-3 col-xs-6">
+						<div class="mb1_images">
+							<img src="static/newmain/images/mb1_img4.png" />
+
+							<p>Круглосуточно 7 дней в неделю</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="mb1_redtext">
+			<a href="#">Подробнее о тарифах &#9658;</a>
+		</div>
+	</div>
+</div>
+
+<div class="page_separator"></div>
+
+<div id="mid_block2">
+	<div class="container">
+		<div class="row">
+			<!--<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">-->
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="mb2_header">Получи деньги на карту или мобильный</div>
+					<div class="col-sm-12 col-sm-offset-0 hidden-xs mb2_img">
+						<img src="static/newmain/images/kreddy_lg.jpg" />
+					</div>
+					<div class="col-xs-8 col-xs-offset-2 visible-xs mb2_img">
+						<img src="static/newmain/images/kreddi_sm.jpg" />
+					</div>
+					<!--<div class="clearfix"></div>-->
+					<!--<div class="col-xs-3 mb2_text mbt1">Заполни анкету</div>-->
+					<!--<div class="col-xs-3 mb2_text mbt2">Пройди идентификацию</div>-->
+					<!--<div class="col-xs-3 mb2_text mbt3">Узнай решение</div>-->
+					<!--<div class="col-xs-3 mb2_text mbt4">Получи деньги</div>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="mid_block3">
+	<div class="container">
+		<div class="row hidden-xs">
+			<div class="mb2_header">Оплати сервис любым удобным способом</div>
+			<div class="col-sm-8 col-sm-offset-2 mb3_firstrow">
+				<div class="row">
+					<div class="col-xs-3 mb3_block">
+						<img src="static/newmain/images/21.png" /> <a href="#">Банковская карта</a>
+					</div>
+					<div class="col-xs-3 mb3_block">
+						<img src="static/newmain/images/17.png" /> <a href="#">Терминал МКБ</a>
+					</div>
+					<div class="col-xs-3 mb3_block">
+						<img src="static/newmain/images/18.png" /> <a href="#">QIWI-кошелек</a>
+					</div>
+					<div class="col-xs-3 mb3_block">
+						<img src="static/newmain/images/19.png" /> <a href="#">Терминал Элекснет</a>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
+				<div class="row">
+					<div class="col-xs-4 mb3_block">
+						<img src="static/newmain/images/22.png" /> <a href="#">Мобильный телефон</a>
+					</div>
+					<div class="col-xs-4 mb3_block">
+						<img src="static/newmain/images/23.png" /> <a href="#">Яндекс-деньги</a>
+					</div>
+					<div class="col-xs-4 mb3_block">
+						<img src="static/newmain/images/20.png" /> <a href="#">Терминал DeltaPay</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row visible-xs">
+			<div class="mb2_header">Оплати сервис любым удобным способом</div>
+			<div class="col-xs-12 col-xs-offset-0 mb3_firstrow">
+				<div class="row">
+
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/21.png" /> <a href="#">Банковская карта</a>
+					</div>
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/17.png" /> <a href="#">Терминал МКБ</a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/22.png" /> <a href="#">Мобильный телефон</a>
+					</div>
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/23.png" /> <a href="#">Яндекс-деньги</a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/18.png" /> <a href="#">QIWI-кошелек</a>
+					</div>
+					<div class="col-xs-6 mb3_block">
+						<img src="static/newmain/images/19.png" /> <a href="#">Терминал Элекснет</a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<div class="col-xs-12 mb3_block">
+						<img src="static/newmain/images/20.png" /> <a href="#">Терминал DeltaPay</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="ask_block">
+<div class="container">
+	<div class="row">
+		<div class="mb2_header ask_header">Задай вопрос</div>
+
+		<!--включить при необходимости - переключалка на соц.сети-->
+
+		<!---<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 ask_upbuttons">
+			<div class="row">
+				<div class="col-xs-6 ask_butt askbu_left">Напиши заявку на сайте</div>
+				<div class="col-xs-6 ask_butt askbu_right">Напиши в соц. сети</div>
+			</div>
+		</div>-->
+
+		<!--END-включить при необходимости - переключалка на соц.сети-->
+
+		<div class="col-xs-12 col-xs-offset-0 ask_form soc_ask">
+			<div class="row">
+
+				<div class="col-xs-12">
+					<div class="sa_block">
+
+						<div class="savi savi_vk" id="vk">
+							<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+								<script type="text/javascript" src="//vk.com/js/api/openapi.js?115"></script>
+								<!-- VK Widget -->
+								<div id="vk_groups"></div>
+								<script type="text/javascript">
+									VK.Widgets.Group("vk_groups", {mode: 0, width: "auto", height: "250", color1: 'FFFFFF', color2: '2B587A', color3: '5B7FA6'}, 68363898);
+								</script>
+							</div>
+						</div>
+
+						<div class="savi savi_f" id="f">
+							<div class="hidden-xs col-xs-12">
+								<div class="fb-like-box" data-href="https://www.facebook.com/kreddyru" data-width="750px" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
+							</div>
+							<div class="visible-xs">
+								<div class="fb-like-box" data-href="https://www.facebook.com/kreddyru" data-width="290px" data-height="300px" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
+							</div>
+						</div>
+
+						<div class="savi savi_od" id="od">
+							<div class="col-xs-12">
+								<div id="ok_group_widget"></div>
+								<script>
+									!function (d, id, did, st) {
+										var js = d.createElement("script");
+										js.src = "http://connect.ok.ru/connect.js";
+										js.onload = js.onreadystatechange = function () {
+											if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+												if (!this.executed) {
+													this.executed = true;
+													setTimeout(function () {
+														OK.CONNECT.insertGroupWidget(id, did, st);
+													}, 0);
+												}
+											}
+										}
+										d.documentElement.appendChild(js);
+									}(document, "ok_group_widget", "53026435498223", "{width:250,height:285}");
+								</script>
+							</div>
+						</div>
+
+						<div class="savi savi_inst" id="inst">
+							<div class="col-sm-8 col-sm-offset-2 2col-xs-12 col-xs-0">
+								<!-- SnapWidget -->
+								<script src="http://snapwidget.com/js/snapwidget.js"></script>
+								<iframe src="http://snapwidget.com/in/?u=a3JlZGR5LnJ1fGlufDEyNXwzfDN8fG5vfDV8bm9uZXxvblN0YXJ0fHllc3x5ZXM=&ve=260814" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%;"></iframe>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="ask_siblock">
+					<div class="ask_sibl ask_si1 act"></div>
+					<div class="ask_sibl ask_si2"></div>
+					<div class="ask_sibl ask_si3"></div>
+					<div class="ask_sibl ask_si4"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 ask_form not_socask">
+			<?php
+
+			$model = new ContactForm;
+
+			$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
+				'id'                     => 'contact-form',
+				'type'                   => 'inline',
+				'action'                 => Yii::app()->createUrl('/site/faq/'),
+				'enableClientValidation' => false,
+			)); ?>
+
+			<div class="col-sm-6 col-xs-12">
+				<?php echo $form->textFieldRow($model, 'name', array('class' => 'askf_input')); ?>
+			</div>
+			<div class="col-sm-6 col-xs-12">
+				<?php echo $form->phoneMaskedRow($model, 'phone', array('class' => 'askf_input')); ?>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-sm-6 col-xs-12">
+				<?php echo $form->textFieldRow($model, 'email', array('class' => 'askf_input')); ?>
+			</div>
+			<div class="col-sm-6 col-xs-12">
+				<?php echo $form->textFieldRow($model, 'subject', array('class' => 'askf_input')); ?>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-xs-12">
+				<?php echo $form->textAreaRow($model, 'body', array('class' => 'askf_textar')); ?>
+			</div>
+			<div class="clearfix"></div>
+			<?php if (CCaptcha::checkRequirements()): ?>
+			<div class="ask_captcha hidden-xs">
+				<div class="ascapleft">
+					<p>Введите код сообщения</p>
+					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha')); ?><br />
+				</div>
+				<div class="ascapright">
+					<?php echo $form->textField($model, 'verifyCode', array('class' => 'askf_input input_captcha')); ?>
+				</div>
+			</div>
+			<div class="ask_captcha2 visible-xs">
+				<div class="col-xs-12 ascapleft2">
+					<p>Введите код сообщения</p>
+				</div>
+				<div class="col-xs-12 ascapright2">
+					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha')); ?><br />
+					<?php echo $form->textField($model, 'verifyCode', array('class' => 'askf_input input_captcha')); ?>
+				</div>
+			</div>
+			<?php endif; ?>
+
+			<div class="row">
+				<?php
+				$this->widget('bootstrap.widgets.TbButton', array(
+					'id'         => 'send',
+					'buttonType' => 'submit',
+					'type'       => 'primary',
+					'label'      => 'Спросить',
+				));
+				?>
+			</div>
+
+			<?php $this->endWidget(); ?>
+
+
+		</div>
+	</div>
+</div>
+<div class="container underask_block hidden-xs">
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 unas_wrap">
+			<div class="row">
+				<a href="#" class="col-sm-4 col-sm-offset-0 col-xs-3 col-xs-offset-1 unask_bl ua_bl1"><img src="static/newmain/images/1.png" />SMS-инфо</a>
+
+				<div class="col-sm-4 col-sm-offset-0 col-xs-3 col-xs-offset-1 unask_bl ua_bl2">
+					<img src="static/newmain/images/2.png" />Безопасность
+				</div>
+				<a href="#" class="col-sm-4 col-sm-offset-0 col-xs-4 col-xs-offset-0 unask_bl ua_bl3"><img src="static/newmain/images/3.png" />Вопросы
+					и ответы</a>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="row">
+		<div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3 cards_block">
+			<a href="#" class="pcard_block"> <img src="static/newmain/images/4.png" /> </a>
+			<a href="#" class="pcard_block"> <img src="static/newmain/images/5.png" /> </a>
+			<a href="#" class="pcard_block"> <img src="static/newmain/images/6.png" /> </a>
+			<a href="#" class="pcard_block"> <img src="static/newmain/images/7.png" /> </a>
+		</div>
+	</div>
+</div>
+<div class="container underask_block_xs visible-xs">
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0 unas_wrap">
+			<div class="row">
+				<a href="#" class="col-xs-12 unask_xs ua_xs1"><img src="static/newmain/images/1.png" />SMS-инфо</a>
+
+				<div class="col-xs-12 unask_xs ua_xs2"><img src="static/newmain/images/2.png" />Безопасность</div>
+				<div class="clearfix"></div>
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12 cards_block">
+							<a href="#" class="pcard_block"> <img src="static/newmain/images/4.png" /> </a>
+							<a href="#" class="pcard_block"> <img src="static/newmain/images/5.png" /> </a>
+							<a href="#" class="pcard_block"> <img src="static/newmain/images/6.png" /> </a>
+							<a href="#" class="pcard_block"> <img src="static/newmain/images/7.png" /> </a>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<a href="#" class="ccol-xs-12 unask_xs ua_xs3"><img src="static/newmain/images/3.png" />Вопросы и ответы</a>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</div>
+<?php $this->widget('YaMetrikaGoalsWidget'); ?>

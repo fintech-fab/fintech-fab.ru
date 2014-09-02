@@ -32,8 +32,8 @@ class ClientSubscribeFlexibleProductForm extends ClientCreateFormAbstract
 	{
 		return array_merge(
 			parent::attributeLabels(),
-			array('amount' => 'Выберите сумму займа',),
-			array('time' => 'Выберите период',),
+			array('amount' => 'Выбери сумму займа',),
+			array('time' => 'Выбери период',),
 			array('channel_id' => 'ID канала получения',)
 		);
 	}

@@ -80,7 +80,7 @@ $this->beginWidget(
 	</div>
 
 	<div class="modal-body" style="height: 100px;">
-		Начните вводить название города, а затем выберите свой город из списка:
+		Начни вводить название города, а затем выбери свой город из списка:
 		<?= $sModalBody ?>
 	</div>
 <?php $this->endWidget(); ?>

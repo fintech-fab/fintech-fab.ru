@@ -28,7 +28,7 @@ class ClientKreddyLineSelectPayTypeForm extends ClientCreateFormAbstract
 	 */
 	public function attributeLabels()
 	{
-		return array('pay_type' => 'Выберите метод оплаты');
+		return array('pay_type' => 'Выбери метод оплаты');
 
 	}
 

@@ -35,7 +35,7 @@ class ChangeEmailForm extends ClientFullForm
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'email' => 'Введите новый адрес электронной почты'
+				'email' => 'Введи новый адрес электронной почты'
 
 			)
 		);
