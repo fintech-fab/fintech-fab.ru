@@ -41,11 +41,6 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<?= $form->error($oClientCreateForm, 'sms_code'); ?>
 	</div>
 </div>
-
-
-<div class="clearfix"></div><label>Введите код из SMS:</label>
-<?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
-<?= $form->error($oClientCreateForm, 'sms_code'); ?>
 <?php
 $this->widget('application.modules.account.components.ResendCodeWidget',
 	array(
