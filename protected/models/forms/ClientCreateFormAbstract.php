@@ -738,7 +738,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'sex'                    => 'Пол',
 			'birthday'               => 'Дата рождения',
 			'numeric_code' => 'Цифровой код (для подтверждения повторных переводов)',
-			'email'                  => 'Email',
+			'email'                  => 'E-mail',
 			'marital_status'         => 'Семейное положение',
 
 			'document'               => 'Тип документа',
