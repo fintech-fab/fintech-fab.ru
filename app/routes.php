@@ -67,8 +67,3 @@ Route::group(array('before' => 'auth'), function () {
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
 });
-
-Route::get('developnews', array(
-		'as' => 'developNews',
-		'uses' => 'App\Controllers\Site\DevelopNewsController@developNews')
-);

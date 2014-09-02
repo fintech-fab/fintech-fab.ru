@@ -11,6 +11,7 @@ class RoleTableSeeder extends Seeder
 		DB::insert($sql, array('user', 'Пользователь'));
 		DB::insert($sql, array('messageSender', 'Отправитель сообщений'));
 		DB::insert($sql, array('messageSubscriber', 'Подписчик на получение сообщений'));
-	}
+        DB::insert($sql, array('employee', 'Сотрудник'));
+    }
 
 }
