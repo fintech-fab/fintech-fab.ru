@@ -14,7 +14,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Проверьте введенные данные',
+	'title'   => 'Проверь введенные данные',
 	'content' => $this->renderPartial('change_passport_data/_data', array(), true)
 ));
 $oSmsCodeForm->sendSmsCode = 1;

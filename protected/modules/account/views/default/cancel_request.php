@@ -2,16 +2,16 @@
 /* @var DefaultController $this */
 /* @var IkTbActiveForm $form */
 
-$this->pageTitle = Yii::app()->name . " - Отказаться/изменить текущие условия";
+$this->pageTitle = Yii::app()->name . " - Отказаться/изменить текущий тариф";
 
 ?>
-<h4>Отказаться/изменить текущие условия</h4>
+<h4>Отказаться/изменить текущий тариф</h4>
 
 <strong>Статус:</strong> <?= Yii::app()->adminKreddyApi->getStatusMessage() ?>
 &nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameForStatus(); ?>
 <br /><br />
 <div class="alert in alert-block alert-warning">
-	Вы передумали подключать пакет <?= Yii::app()->adminKreddyApi->getSubscriptionProduct(); ?>?
+	Ты передумал подключать текущий тариф?
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'action'               => Yii::app()->createUrl('account/cancelRequest'),
@@ -35,8 +35,8 @@ $this->pageTitle = Yii::app()->name . " - Отказаться/изменить 
 			'htmlOptions' => array(
 				'name'    => 'cancel',
 				'value'   => 1,
-				'confirm' => 'Вы действительно хотите отменить подключение пакета ' . Yii::app()->adminKreddyApi->getSubscriptionProduct() . "?\n"
-					. 'Обращаем Ваше внимание, воспользоваться отменой подключения пакета можно не более 1-го раза в месяц.',
+				'confirm' => "Ты действительно хочешь отменить подключение текущего тарифа?\n
+					ВНИМАНИЕ! Воспользоваться отменой подключения можно не более одного раза в месяц.",
 			),
 		)); ?>
 		&nbsp;

@@ -4,14 +4,14 @@
  */
 ?>
 <div class="conditions">
-	<strong>Ваши условия</strong>
+	<strong>Твои условия</strong>
 	<ul>
-		<li id="scrollAnchor">Размер займа:
+		<li id="scrollAnchor">Сумма перевода:
 			<span class="cost final_price"><?= ""; //Dictionaries::$aDataFinalPrices[$this->chosenProduct] ?></span>&nbsp;рублей
 		</li>
 		<li>Канал получения: <span class="cost channel"></span>
 		</li>
-		<li>Дата возврата займа: &nbsp;<span class="cost date"></span>
+		<li>Дата возврата денег: &nbsp;<span class="cost date"></span>
 		</li>
 		<li>Необходимо вернуть:
 			<span class="cost price_count"><?= ""; //Dictionaries::$aDataPrices[$this->chosenProduct] ?></span>&nbsp;рублей

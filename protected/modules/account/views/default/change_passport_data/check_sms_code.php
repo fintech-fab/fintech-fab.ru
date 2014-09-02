@@ -9,7 +9,7 @@ $this->pageTitle = Yii::app()->name . " - Изменение паспортны�
 <?php
 
 $this->widget('bootstrap.widgets.TbBox', array(
-	'title'   => 'Проверьте введенные данные',
+	'title'   => 'Проверь введенные данные',
 	'content' => $this->renderPartial('change_passport_data/_data', array(), true)
 ));
 ?>
@@ -17,7 +17,7 @@ $this->widget('bootstrap.widgets.TbBox', array(
 	Код подтверждения операции успешно отправлен по SMS на номер +7<?= Yii::app()->user->getMaskedId() ?>
 </div>
 <div class="alert in alert-block alert-info">
-	Для подтверждения операции введите код, отправленный Вам по SMS
+	Для подтверждения операции введи код, отправленный по SMS
 </div>
 <div class="form" id="activeForm">
 	<?php

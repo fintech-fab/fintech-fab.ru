@@ -48,7 +48,7 @@ class UserCityWidget extends CWidget
 
 		//TODO возможно, вынести в отдельные представления
 		if (!$oCityNameCookie && $this->sCityName) {
-			$sDataContent = 'Мы автоматически определили ваш город: ';
+			$sDataContent = 'Мы автоматически определили твой город: ';
 			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong>';
 			$sDataContent .= '<br/> Правильно? <br/>';
 			$sDataContent .= $this->widget(
@@ -79,7 +79,7 @@ class UserCityWidget extends CWidget
 					true
 				);
 		} elseif ($this->sCityName) {
-			$sDataContent = 'Ваш город: ';
+			$sDataContent = 'Твой город: ';
 			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong><br/>';
 			$sDataContent .= '&nbsp;' . $this->widget(
 					'bootstrap.widgets.TbButton',
@@ -96,7 +96,7 @@ class UserCityWidget extends CWidget
 				);
 		} else {
 			$this->sCityName = "город не определён";
-			$sDataContent = 'Ваш город не удалось определить. Укажите город самостоятельно. ';
+			$sDataContent = 'Твой город не удалось определить. Укажи город самостоятельно. ';
 			$sDataContent .= '&nbsp;' . $this->widget(
 					'bootstrap.widgets.TbButton',
 					array(
@@ -142,11 +142,11 @@ class UserCityWidget extends CWidget
 										return "Ничего не найдено";
 									}',
 					'formatSearching'     => 'js: function() {
-										return "Подождите, идёт поиск...";
+										return "Подожди, идёт поиск...";
 									}',
 					'formatInputTooShort' => 'js: function (input, min) {
 										var n = min - input.length;
-										return "Пожалуйста, введите ещё " + n + " символ" + (n == 1 ? "" : "а") + " для начала поиска";
+										return "Пожалуйста, введи ещё " + n + " символ" + (n == 1 ? "" : "а") + " для начала поиска";
 									}',
 					'formatResult'        => 'js: function (object) {
 										return object.cityAndRegion;

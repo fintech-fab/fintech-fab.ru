@@ -6,8 +6,9 @@
  */
 
 ?>
-<h4><?= $this->getHeader(); ?></h4>
+<h4>Индивидуальные условия договора потребительского займа</h4>
 <?php
+echo $this->getIndividualConditionInfo();
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => $this->getInfoTitle(),
 	'content' => $this->getFullInfo(),

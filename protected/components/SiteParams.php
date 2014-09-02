@@ -308,6 +308,34 @@ class SiteParams
 	}
 
 	/**
+	 * Форматируем дату в вид 01.01.2013 00:00
+	 *
+	 * @param      $sDate
+	 * @param bool $bWithTime выводить ли время
+	 *
+	 * @return bool|string
+	 */
+	public static function formatRusDate($sDate, $bWithTime = true)
+	{
+		if (!is_numeric($sDate)) {
+			$sDate = strtotime($sDate);
+		}
+
+		if ($sDate) {
+			if ($bWithTime) {
+				$sDate = date('d.m.Y H:i', $sDate);
+
+				$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
+				$sDate .= CHtml::closeTag('i');
+			} else {
+				$sDate = date('d.m.Y', $sDate);
+			}
+		}
+
+		return $sDate;
+	}
+
+	/**
 	 * @param null $sLocalLink
 	 *
 	 * @return string

@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Class ChangePasswordForm
  */
-
 class ChangePasswordForm extends ClientFullForm
 {
 
@@ -20,8 +20,7 @@ class ChangePasswordForm extends ClientFullForm
 			'password_repeat',
 		);
 		$aMyRules =
-			array(
-			);
+			array();
 		$aRules = array_merge($this->getRulesByFields(
 			array(
 				'old_password',
@@ -30,6 +29,7 @@ class ChangePasswordForm extends ClientFullForm
 			),
 			$aRequired
 		), $aMyRules);
+
 		return $aRules;
 
 	}
@@ -42,9 +42,9 @@ class ChangePasswordForm extends ClientFullForm
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'old_password'=>'Старый пароль',
-				'password'=>'Новый пароль',
-				'password_repeat'=>'Повторите новый пароль'
+				'old_password'    => 'Старый пароль',
+				'password'        => 'Новый пароль',
+				'password_repeat' => 'Повтори новый пароль'
 
 			)
 		);

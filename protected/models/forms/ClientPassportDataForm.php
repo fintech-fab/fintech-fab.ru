@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientPassportDataForm
  */
@@ -34,7 +35,7 @@ class ClientPassportDataForm extends ClientFullForm
 				array(
 					'passport_date', 'checkValidPassportDate', 'birthDate'            => 'birthday',
 					                                           'message'              => 'Введи корректное значение даты выдачи паспорта',
-					                                           'messageExpiredDate'   => 'Паспорт просрочен (проверь корректность введенной даты рождения)',
+					                                           'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
 					                                           'messageEmptyBirthday' => 'Сначала введи корректное значение даты рождения',
 				),
 				array(

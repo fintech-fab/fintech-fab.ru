@@ -26,7 +26,9 @@ $a = array(
 		'account' => array(),
 	),
 
-	'params'         => array(),
+	'params' => array(
+		'sDocumentsPath' => '/tmp/',
+	),
 
 
 	'components'     => array(
@@ -47,5 +49,6 @@ $a = array(
 );
 
 $a['components'] = CMap::mergeArray($a['components'], require(__DIR__ . '/custom/db.php'));
+$a['params'] = CMap::mergeArray($a['params'], require(__DIR__ . '/custom/cron_params.php'));
 
 return $a;

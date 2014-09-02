@@ -73,7 +73,7 @@ class TornadoController extends Controller
 		$sSmsCode = Yii::app()->clientForm->generateCode(SiteParams::C_SMS_CODE_LENGTH);
 		$sEmailCode = Yii::app()->clientForm->generateCode(SiteParams::C_EMAIL_CODE_LENGTH);
 
-		$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+		$sMessage = "Твой код подтверждения: " . $sSmsCode;
 		// отправляем СМС через API
 		$bSmsSentOk = $this->sendSms($aClientData['phone'], $sMessage);
 
@@ -333,7 +333,7 @@ class TornadoController extends Controller
 			// отправляем email через API
 			$bSentOk = $this->sendEmailCode($oClient->email, $oClient->email_code);
 		} else {
-			$sMessage = "Ваш код подтверждения: " . $oClient->sms_code;
+			$sMessage = "Твой код подтверждения: " . $oClient->sms_code;
 			// отправляем СМС через API
 			$bSentOk = $this->sendSms($oClient->phone, $sMessage);
 

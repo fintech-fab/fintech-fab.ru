@@ -42,8 +42,8 @@ class ClientApiRegForm extends ClientFastRegForm
 			$aRequired
 		);
 
-		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выбери сумму займа');
-		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выбери правильный способ получения займа');
+		$aRules[] = array('product', 'in', 'range' => array_keys(Yii::app()->productsChannels->getProducts()), 'message' => 'Выбери сумму перевода');
+		$aRules[] = array('channel_id', 'in', 'range' => array_keys(Yii::app()->productsChannels->getChannels()), 'message' => 'Выбери правильный способ получения денег');
 		$aRules[] = array('pay_type', 'in', 'range' => array(3, 4), 'message' => 'Выбери правильный способ оплаты подключения');
 
 		return $aRules;

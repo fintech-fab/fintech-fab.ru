@@ -8,7 +8,7 @@
 class UserIdentity extends CUserIdentity
 {
 	const ERROR_TRIES_EXCEED = 3;
-	const ERROR_MESSAGE_TRIES_EXCEED = 'Количество попыток входа в личный кабинет исчерпано. Попробуйте позже.';
+	const ERROR_MESSAGE_TRIES_EXCEED = 'Количество попыток входа в личный кабинет исчерпано. Попробуй позже.';
 
 	/**
 	 * Authenticates a user.

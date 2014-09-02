@@ -40,46 +40,46 @@ class IdentifyApiComponent
 	public static $aIdentifySteps = array(
 		self::STEP_FACE      => array(
 			'type'        => self::C_TYPE_PHOTO,
-			'instruction' => 'Сфотографируйтесь',
+			'instruction' => 'Сфотографируйся',
 			'title'       => 'Фотография лица',
 		),
 		self::STEP_DOCUMENT1 => array(
 			'type'        => self::C_TYPE_PASSPORT_FRONT_FIRST,
-			'instruction' => 'Сфотографируйте лицевую сторону паспорта (с информацией о дате выдачи)',
+			'instruction' => 'Сфотографируй лицевую сторону паспорта (с информацией о дате выдачи)',
 			'title'       => 'Паспорт - лицевая сторона (первая часть)',
 			'description' => 'Пример фотографии лицевой стороны паспорта',
-			'example' => 'https://kreddy.ru/static/images/documents/example1.jpg',
+			'example'     => 'https://kreddy.ru/static/images/documents/example1.jpg',
 		),
 		self::STEP_DOCUMENT2 => array(
 			'type'        => self::C_TYPE_PASSPORT_FRONT_SECOND,
-			'instruction' => 'Сфотографируйте лицевую сторону паспорта (с Вашей фотографией, ФИО и т.д.)',
+			'instruction' => 'Сфотографируй лицевую сторону паспорта (с твоей фотографией, ФИО и т.д.)',
 			'title'       => 'Паспорт - лицевая сторона (вторая часть)',
 			'description' => 'Пример фотографии лицевой стороны паспорта',
-			'example' => 'https://kreddy.ru/static/images/documents/example2.jpg',
+			'example'     => 'https://kreddy.ru/static/images/documents/example2.jpg',
 		),
 		self::STEP_DOCUMENT3 => array(
 			'type'        => self::C_TYPE_PASSPORT_NOTIFICATION,
-			'instruction' => 'Сфотографируйте страницу паспорта с информацией о месте регистрации',
+			'instruction' => 'Сфотографируй страницу паспорта с информацией о месте регистрации',
 			'title'       => 'Паспорт - страница регистрации',
 			'description' => 'Пример фотографии страницы паспорта с регистрацией',
-			'example' => 'https://kreddy.ru/static/images/documents/example3.jpg',
+			'example'     => 'https://kreddy.ru/static/images/documents/example3.jpg',
 		),
 		self::STEP_DOCUMENT4 => array(
 			'type'        => self::C_TYPE_PASSPORT_LAST,
-			'instruction' => 'Сфотографируйте последнюю страницу паспорта (с информацией о выданных документах), даже если она пуста.',
+			'instruction' => 'Сфотографируй последнюю страницу паспорта (с информацией о выданных документах), даже если она пуста.',
 			'title'       => 'Паспорт - последняя страница',
 			'description' => 'Пример фотографии страницы паспорта с информацией о документах',
-			'example' => 'https://kreddy.ru/static/images/documents/example4.jpg',
+			'example'     => 'https://kreddy.ru/static/images/documents/example4.jpg',
 		),
 		self::STEP_DOCUMENT5 => array(
 			'type'        => self::C_TYPE_DOCUMENT,
-			'instruction' => 'Сфотографируйте второй документ (ИНН, загр. паспорт, пенс. уд-е, вод. уд-е, в/билет, свид-во пенс. страхования)',
+			'instruction' => 'Сфотографируй второй документ (ИНН, загр. паспорт, пенс. уд-е, вод. уд-е, в/билет, свид-во пенс. страхования)',
 			'title'       => 'Второй документ',
 			'description' => 'Пример фотографии второго документа',
-			'example' => 'https://kreddy.ru/static/images/documents/second.png',
+			'example'     => 'https://kreddy.ru/static/images/documents/second.png',
 		),
 		self::STEP_DONE      => array(
-			'instruction' => 'Вы успешно прошли идентификацию. Зайдите в Личный Кабинет.',
+			'instruction' => 'Ты успешно прошел идентификацию. Зайди в Личный Кабинет.',
 			'title'       => 'Идентификация успешно завершена!',
 			'description' => 'Идентификация успешно завершена!',
 		),
@@ -134,7 +134,7 @@ class IdentifyApiComponent
 
 		// проверить, что содержит логин и пароль, иначе вернуть код -1;
 		if (empty($sPhone) || empty($sPassword)) {
-			return $this->formatErrorResponse('Укажите логин и пароль');
+			return $this->formatErrorResponse('Укажи логин и пароль');
 		}
 
 		$sApiToken = Yii::app()->adminKreddyApi->getIdentifyApiAuth($sPhone, $sPassword, $this->bTest);
@@ -473,10 +473,10 @@ class IdentifyApiComponent
 	{
 		// для теста используем файл в качестве источника списка документов
 		if ($this->bTest && !$this->aNeedDocuments && file_exists(Yii::app()
-				->getBasePath() . '/tests/files/documents.txt')
+					->getBasePath() . '/tests/files/documents.txt')
 		) {
 			$this->aNeedDocuments = explode(".", file_get_contents(Yii::app()
-				->getBasePath() . '/tests/files/documents.txt'));
+					->getBasePath() . '/tests/files/documents.txt'));
 		}
 	}
 }

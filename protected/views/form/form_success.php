@@ -22,7 +22,7 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 <div class="row">
 
 	<div class="span12">
-		<div class="alert in alert-block fade alert-success"><strong>Вы успешно зарегистрировались в системе. </strong>
+		<div class="alert in alert-block fade alert-success"><strong>Ты успешно зарегистрировался в системе. </strong>
 		</div>
 
 		<?php $this->widget(
@@ -30,7 +30,7 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 			array(
 				'label' => 'Перейти в личный кабинет »',
 				'type'  => 'primary',
-				'url' => Yii::app()->createUrl('/account/doSubscribe'),
+				'url'   => Yii::app()->createUrl('/account/doSubscribe'),
 			)
 		); ?>
 	</div>

@@ -19,20 +19,19 @@
 
 <?php else: ?>
 
-	<p>Не нашли ответ в разделе «<a data-toggle="tab" href="#faq_tab_1" onclick="make1TabActive()">Частые вопросы</a>»?
-	</p>
+	<p>Нет ответа в разделе «<a data-toggle="tab" href="#faq_tab_1" onclick="make1TabActive()">Частые вопросы</a>»? </p>
 
-	<p>Вы всегда можете получить полную информацию у специалиста Контактного центра <b>8-800-555-75-78</b> или <b>задать
+	<p>Ты всегда можешь получить полную информацию у специалиста Контактного центра <b>8-800-555-75-78</b> или <b>задать
 			свой вопрос на нашем сайте</b>. </p>
 
-	<p>Мы с радостью ответим на Ваш вопрос о сервисе «Кредди». </p>
+	<p>Мы с радостью ответим на твой вопрос о сервисе «Кредди». </p>
 
 
 	<div class="form">
 
 		<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'id'                     => 'contact-form',
-			'action' => Yii::app()->createUrl('/site/faq/'),
+			'action'                 => Yii::app()->createUrl('/site/faq/'),
 			'enableClientValidation' => true,
 			'clientOptions'          => array(
 				'validateOnSubmit' => true,
@@ -78,7 +77,7 @@
 				'id'         => 'send',
 				'buttonType' => 'submit',
 				'type'       => 'primary',
-				'label' => 'Спросить',
+				'label'      => 'Спросить',
 			));
 			?>
 		</div>

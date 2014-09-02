@@ -9,8 +9,8 @@ class ShowChannelsWidget extends CWidget
 	const C_CARD = 'card';
 
 	const MSG_CHANNEL_NOT_AVAILABLE = 'Данный канал недоступен!';
-	const MSG_NO_CARD_WARNING = '<b style="color: #ff0000;">ВНИМАНИЕ!</b> У Вас нет привязанной банковской карты. Для получения займов на банковскую карту пройдите процедуру привязки карты.';
-	const MSG_CONFIRM_CHANNEL_PHONE = "Вы уверены, что хотите выбрать в качестве канала получения мобильный телефон? Изменить канал после подтверждения заявки нельзя!";
+	const MSG_NO_CARD_WARNING = '<b style="color: #ff0000;">ВНИМАНИЕ!</b> У тебя нет привязанной банковской карты. Для получения денег на банковскую карту пройди процедуру привязки карты.';
+	const MSG_CONFIRM_CHANNEL_PHONE = "Ты уверен, что хочешь выбрать в качестве канала получения мобильный телефон? Изменить канал после подтверждения заявки нельзя!";
 
 	const BTN_WIDTH_PX = 190;
 
@@ -49,7 +49,7 @@ class ShowChannelsWidget extends CWidget
 	{
 		$sButton = $this->widget('bootstrap.widgets.TbButton',
 			array(
-				'label'       => ('Получить займ ' . self::$aChannelNames[self::C_CARD]),
+				'label'       => ('Получить деньги ' . self::$aChannelNames[self::C_CARD]),
 				'htmlOptions' => array(
 					'disabled' => 'disabled',
 					'title'    => self::MSG_CHANNEL_NOT_AVAILABLE,
@@ -75,7 +75,7 @@ class ShowChannelsWidget extends CWidget
 			array(
 				'buttonType'  => 'submit',
 				'type'        => 'primary',
-				'label'       => ('Получить займ ' . self::$aChannelNames[$sChannelType]),
+				'label'       => ('Получить деньги ' . self::$aChannelNames[$sChannelType]),
 				'htmlOptions' => array(
 					'value'   => $this->aAvailableChannels[$sChannelType],
 					'name'    => $this->sFormName . '[channel_id]',

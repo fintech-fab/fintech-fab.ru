@@ -219,7 +219,7 @@ class ClientFullFormTest extends \PHPUnit_Framework_TestCase
 		$oForm->validate(array('sex'));
 		$aErrors = $oForm->getErrors();
 		$this->assertNotEmpty($aErrors['sex']);
-		$this->assertEquals('Укажите пол', $aErrors['sex'][0]);
+		$this->assertEquals('Укажи пол', $aErrors['sex'][0]);
 	}
 
 	/**

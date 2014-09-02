@@ -41,6 +41,11 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		<?= $form->error($oClientCreateForm, 'sms_code'); ?>
 	</div>
 </div>
+
+
+<div class="clearfix"></div><label>Введите код из SMS:</label>
+<?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
+<?= $form->error($oClientCreateForm, 'sms_code'); ?>
 <?php
 $this->widget('application.modules.account.components.ResendCodeWidget',
 	array(
@@ -55,7 +60,7 @@ $this->widget('application.modules.account.components.ResendCodeWidget',
 
 <div class="clearfix"></div>
 <div class="form-group">
-	<label>Введите код из электронного письма:</label>
+	<label>Введи код из электронного письма:</label>
 
 	<div class="col-lg-12">
 		<?= $form->textField($oClientCreateForm, 'email_code', array('class' => 'check_input form-control')); ?>
@@ -107,6 +112,6 @@ $this->widget('application.modules.account.components.ResendCodeWidget',
 <div class="clearfix"></div>
 
 <div class="alert in alert-warning" style="font-size: 12pt;">
-	После ввода кодов из SMS-сообщения и электронного письма вы попадете в личный кабинет. Для продолжения регистрации
+	После ввода кодов из SMS-сообщения и электронного письма ты попадешь в личный кабинет. Для продолжения регистрации
 	потребуется заполнить анкету клиента.
 </div>

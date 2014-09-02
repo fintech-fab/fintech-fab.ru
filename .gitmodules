@@ -1,0 +1,3 @@
+[submodule "protected/vendor/mpdf"]
+	path = protected/vendor/mpdf
+	url = http://github.com/fintech-fab/mpdf.git

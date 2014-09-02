@@ -598,7 +598,7 @@ class ClientFormComponent
 				$sSmsCode = $this->generateCode(SiteParams::C_SMS_CODE_LENGTH);
 			}
 			//отправляем СМС
-			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+			$sMessage = "Твой код подтверждения: " . $sSmsCode;
 			//отправляем СМС через API
 			$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
 			$aClientForm['sms_code'] = $sSmsCode;

@@ -19,7 +19,7 @@ Yii::app()->clientScript->registerScript('goIdentify', '
 <h4>Идентификация</h4>
 
 <?php if (!Yii::app()->adminKreddyApi->isFirstIdentification()): ?>
-	<p>Уважаемый Клиент, идентификация - это процедура подтверждения Вашей личности.</p>
+	<p>Уважаемый Клиент, идентификация - это процедура подтверждения твоей личности.</p>
 	<p>После идентификации потребуется ввести данные документов, использованных при идентификации.</p>
 
 	<?php $this->widget("CheckBrowserWidget"); ?>
@@ -72,7 +72,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 					'htmlOptions' => array(
 						'class'   => 'btn-warning',
 						'onClick' => 'return doOpenModalFrame(\'/pages/viewPartial/videoInstruction\', \'Инструкция\')',
-						'style' => 'margin-top: 10px;',
+						'style'   => 'margin-top: 10px;',
 					)
 				));
 				?>
@@ -81,7 +81,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	</div>
 	<div class="span4">
 		<div class="alert in alert-block alert-info" style="height: 185px;">
-		<h4>Идентификация с загрузкой фото</h4>
+			<h4>Идентификация с загрузкой фото</h4>
 			Нужен фотоаппарат или мобильный телефон с фотокамерой <br /><br />
 
 			<div class="center">

@@ -27,7 +27,7 @@
  * @property AdminKreddyApiComponent    $adminKreddyApi
  * @property AntiBotComponent           $antiBot
  * @property TornadoApiComponent        $tornadoApi
- *
+ * @property DocumentComponent          $document
  *
  * @property CDbAuthManager             $authManager
  * @property CDummyCache                $cache

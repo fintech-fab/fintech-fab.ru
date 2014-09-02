@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class ClientSubscribeForm
  *
@@ -13,8 +14,8 @@ class ClientLoanForm extends ClientCreateFormAbstract
 	public function rules()
 	{
 		$aRules = array(
-			array('channel_id', 'required', 'message' => 'Для оформления займа требуется выбрать способ его получения'),
-			array('channel_id', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getClientSubscriptionChannels()), 'message' => 'Для оформления займа требуется выбрать способ его получения'),
+			array('channel_id', 'required', 'message' => 'Для оформления запроса на перевод денег требуется выбрать способ получения'),
+			array('channel_id', 'in', 'range' => array_values(Yii::app()->adminKreddyApi->getClientSubscriptionChannels()), 'message' => 'Для оформления запроса на перевод денег требуется выбрать способ получения'),
 		);
 
 		return $aRules;
@@ -27,7 +28,7 @@ class ClientLoanForm extends ClientCreateFormAbstract
 	public function attributeLabels()
 	{
 		return array_merge(
-			array('channel_id' => 'Выбери способ получения продукта')
+			array('channel_id' => 'Выбери способ получения денег')
 		);
 	}
 

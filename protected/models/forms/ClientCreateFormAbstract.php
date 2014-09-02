@@ -239,17 +239,17 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'birthday':
 					$aRules[] = array($sFieldName, 'date', 'message' => 'Введи корректное значение для даты', 'format' => 'dd.MM.yyyy');
-					$aRules[] = array($sFieldName, 'checkValidAge', 'message' => 'Дата рождения указана некорректно');
+					$aRules[] = array($sFieldName, 'checkValidAge', 'message' => 'Введи корректное значение даты рождения');
 					break;
 
 				case 'passport_date':
-					$aRules[] = array($sFieldName, 'date', 'message' => 'Введикорректное значение для даты', 'format' => 'dd.MM.yyyy');
+					$aRules[] = array($sFieldName, 'date', 'message' => 'Введи корректное значение для даты', 'format' => 'dd.MM.yyyy');
 					//TODO вынести проверку в модель уровнем выше, либо решить проблему с привязкой к ДР (например, добавить в формы смены паспортных данных еще и ДР)
 					/*$aRules[] = array(
 						'passport_date', 'checkValidPassportDate', 'birthDate'            => 'birthday',
-						                                           'message'              => 'Введите корректное значение даты выдачи паспорта',
+						                                           'message'              => 'Введи корректное значение даты выдачи паспорта',
 						                                           'messageExpiredDate'   => 'Паспорт просрочен (проверьте корректность введенной даты рождения)',
-						                                           'messageEmptyBirthday' => 'Сначала введите корректное значение даты рождения',
+						                                           'messageEmptyBirthday' => 'Сначала введи корректное значение даты рождения',
 					);*/
 					break;
 
@@ -303,14 +303,14 @@ class ClientCreateFormAbstract extends CFormModel
 					break;
 				case 'friends_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
-					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с твоим номером телефона!');
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'relatives_one_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном контактного лица!');
 
 					$aRules[] = array($sFieldName, 'checkFriendsOnJobPhone', 'phone' => 'phone', 'job_phone' => 'job_phone', 'message' => 'Если номер рабочего телефона совпадает с мобильным, то обязательно требуется дополнительный контакт!', 'message2' => 'Номер не должен совпадать с номером рабочего телефона!');
 					break;
 				case 'relatives_one_phone':
 					$aRules[] = array($sFieldName, 'checkValidClientPhone', 'message' => 'Номер телефона должен содержать десять цифр');
-					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с вашим номером телефона!');
+					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'phone', 'message' => 'Номер не должен совпадать с твоим номером телефона!');
 
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'job_phone', 'message' => 'Номер не должен совпадать с номером рабочего телефона!');
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!');
@@ -333,8 +333,8 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'have_credit':
 				case 'have_past_credit':
 				case 'have_dependents':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери значение из списка', 'range' => array_keys(Dictionaries::$aYesNo));
-					break;
+				$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери значение из списка', 'range' => array_keys(Dictionaries::$aYesNo));
+				break;
 
 				case 'status':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери статус из списка', 'range' => array_keys(Dictionaries::$aStatuses));
@@ -345,13 +345,13 @@ class ClientCreateFormAbstract extends CFormModel
 				case    'job_company':
 					$aRules[] = array(
 						$sFieldName, 'checkValidJobCompany', 'statusField' => 'status',
-						                                     'message'     => 'Заполни поле',
+						                                     'message' => 'Заполни поле',
 					);
 					break;
 				case 'job_position':
 					$aRules[] = array(
 						$sFieldName, 'checkValidJobPosition', 'statusField' => 'status',
-						                                      'message'     => 'Заполни поле',
+						                                      'message' => 'Заполни поле',
 					);
 					break;
 				case 'job_phone':
@@ -383,13 +383,13 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'income_source':
 					$aRules[] = array(
 						$sFieldName, 'checkValidIncomeSource', 'statusField' => 'status',
-						                                       'message'     => 'Заполни поле',
+						                                       'message' => 'Заполни поле',
 					);
 					break;
 				case 'educational_institution_name':
 					$aRules[] = array(
 						$sFieldName, 'checkValidEducationalInstitutionName', 'statusField' => 'status',
-						                                                     'message'     => 'Заполни поле',
+						                                                     'message' => 'Заполни поле',
 					);
 					break;
 				case 'educational_institution_phone':
@@ -402,8 +402,8 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'job_salary_date':
 				case 'job_prepay_date':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение дней начисления', 'range' => array_keys(Dictionaries::$aMoneyDays));
-					break;
+				$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение дней начисления', 'range' => array_keys(Dictionaries::$aMoneyDays));
+				break;
 
 				case 'secret_question':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери значение поля из списка', 'range' => array_keys(Dictionaries::$aSecretQuestions));
@@ -419,8 +419,8 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'job_monthly_income':
 				case 'job_monthly_outcome':
-					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение для ежемесячного дохода.', 'range' => array_keys(Dictionaries::$aMonthlyMoney));
-					break;
+				$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение для ежемесячного дохода.', 'range' => array_keys(Dictionaries::$aMonthlyMoney));
+				break;
 
 				case 'liabilities':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение для ежемесячного дополнительного расхода.', 'range' => array_keys(Dictionaries::$aLiabilities));
@@ -737,7 +737,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 			'sex'                    => 'Пол',
 			'birthday'               => 'Дата рождения',
-			'numeric_code'           => 'Цифровой код (для подтверждения повторных займов)',
+			'numeric_code' => 'Цифровой код (для подтверждения повторных переводов)',
 			'email'                  => 'Email',
 			'marital_status'         => 'Семейное положение',
 
@@ -837,26 +837,26 @@ class ClientCreateFormAbstract extends CFormModel
 			'third_name'                    => 'Пожалуйста, введи свое отчество.',
 			'birthday'                      => 'Пожалуйста, укажи свою дату рождения в формате ДД.ММ.ГГГГ',
 			'phone'                         => 'Для успешной идентификации введи свой личный номер мобильного телефона.',
-			'email'                         => 'Введи свой адрес электронной почты.',
+			'email'                         => 'Введи адрес электронной почты.',
 			"passport_number"               => 'Пожалуйста, укажи серию и номер своего паспорта.',
 			'passport_date'                 => 'Пожалуйста, укажи дату выдачи паспорта в формате ДД.ММ.ГГГГ',
 			'passport_code'                 => 'Пожалуйста, введи код подразделения, выдавшего твой паспорт – указан на второй странице паспорта.',
 			'passport_issued'               => 'Пожалуйста, укажи государственный орган, выдавший паспорт.',
-			'document'                      => 'Пожалуйста, выбери из списка название твоего второго документа.',
-			'document_number'               => 'Пожалуйста, выбери из списка название твоего второго документа.',
+			'document'                      => 'Пожалуйста, выбери из списка название своего второго документа.',
+			'document_number'               => 'Пожалуйста, выбери из списка название своего второго документа.',
 
 			'birthplace'                    => 'Пожалуйста, введи место рождения по паспорту.',
 
 			'address_reg_region'            => 'Пожалуйста, укажи регион постоянной регистрации.',
 			'address_reg_city'              => 'Пожалуйста, введи название своего населенного пункта в соответствии с постоянной регистрацией.',
 			'address_reg_address'           => 'Пожалуйста, введи данные постоянной регистрации: название улицы, номер дома, номер корпуса/строения, номер квартиры.',
-			'relatives_one_fio'             => 'Пожалуйста, введи фамилию, имя, отчество любого родственника или знакомого, данный контакт необходим в случае, если мы не сможем с тобой связаться.',
-			'relatives_one_phone'           => 'Пожалуйста, введи номер телефона своего родственника или знакомого, данный контакт необходим в случае, если мы не сможем с тобой связаться (должен отличаться от других номеров в анкете).',
+			'relatives_one_fio'             => '',
+			'relatives_one_phone'           => '',
 			'friends_fio'                   => 'Пожалуйста, введи фамилию, имя, отчество.',
 			'friends_phone'                 => 'Пожалуйста, введи номер телефона (должен отличаться от других номеров в анкете).',
-			'address_res_region'            => 'Пожалуйста, укажи регион твоего фактического проживания.',
+			'address_res_region'            => 'Пожалуйста, укажи регион своего фактического проживания.',
 			'address_res_city'              => 'Пожалуйста, введи название населенного пункта, в котором ты фактически проживаешь.',
-			'address_res_address'           => 'Пожалуйста, введи адрес твоего фактического проживания : название улицы, номер дома, номер корпуса/строения, номер квартиры.',
+			'address_res_address'           => 'Пожалуйста, введи адрес своего фактического проживания : название улицы, номер дома, номер корпуса/строения, номер квартиры.',
 
 
 			'status'                        => 'Пожалуйста, укажи свой трудовой статус. ',
@@ -868,12 +868,12 @@ class ClientCreateFormAbstract extends CFormModel
 			'job_phone'                     => 'Введи номер рабочего телефона (должен отличаться от других номеров в анкете).',
 			'job_time'                      => 'Введи свой трудовой стаж на текущем месте работы.',
 
-			'job_monthly_income'            => 'Пожалуйста, укажи свой среднемесячный доход.',
+			'job_monthly_income'            => 'Пожалуйста, укажи среднемесячный доход.',
 			'job_monthly_outcome'           => 'Пожалуйста, укажи сумму твоих среднемесячных расходов.',
 
-			'loan_purpose'                  => 'Пожалуйста, выбери цель займа.',
+			'loan_purpose'                  => 'Пожалуйста, выбери цель получения денег.',
 
-			'have_past_credit'              => 'Пожалуйста, укажите, были ли у Вас кредиты в прошлом',
+			'have_past_credit'              => 'Пожалуйста, укажи наличие кредитов в прошлом',
 
 			'numeric_code'                  => 'Пожалуйста, придумай и введи в поле свой цифровой код. Количество символов – от 4 до 8. ',
 			'secret_question'               => 'Пожалуйста, выбери секретный вопрос.',

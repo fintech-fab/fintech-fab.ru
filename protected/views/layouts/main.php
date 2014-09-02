@@ -40,7 +40,7 @@ $this->endContent();
 	<div class="row">
 		<h2 class="learn-more">Узнай больше о нас!</h2>
 
-		<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотрите ответы', Yii::app()
+		<p class="intro learn-more">Возникли вопросы? <?php echo CHtml::link('Посмотри ответы', Yii::app()
 				->createUrl('site/faq')); ?>! </p>
 	</div>
 
@@ -57,7 +57,7 @@ $this->endContent();
 			<p class="intro">
 				Со всей информацией, касающейся финансовой ответственности Клиента в случае просрочки платежа (штрафы и
 				пени), методах взыскания задолженности ООО "Финансовые Решения", а так же условий возобновления займа,
-				можно ознакомиться в Оферте перейдя по
+				можно ознакомиться в Оферте по
 				<a href="#" class="dotted" onclick="return doOpenModalFrame('/footerLinks/view/offer_kreddyline', 'Оферта на дистанционный займ');">ссылке</a>
 			</p>
 		</div>

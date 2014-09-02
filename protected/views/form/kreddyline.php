@@ -14,14 +14,14 @@
 				<h2>Как подключить КРЕДДИтную линию?</h2>
 				<ul>
 					<li class="tooltip_notice">
-					<img src="static/kreddyline/images/connect_icon1.png" alt="">
+						<img src="static/kreddyline/images/connect_icon1.png" alt="">
 
 						<p><a onclick="return false;" href="#" class="dotted">Заполни анкету<br />(потребуется 2
 								документа)</a></p>
 
 						<p class="hidden">
-							Паспорт гражданина РФ и второй документ из списка:<br /> - Водительское удостоверение<br /> - Заграничный паспорт<br /> - Военный билет<br /> - Свидетельство
-							СНИЛС<br />
+							Паспорт гражданина РФ и второй документ из списка:<br /> - Водительское удостоверение<br />
+							- Заграничный паспорт<br /> - Военный билет<br /> - Свидетельство СНИЛС<br />
 						</p>
 					</li>
 					<li class="tooltip_notice">
@@ -85,7 +85,7 @@
 			</div>
 		</div>
 	</div>
-	<!--================/select-credit================-->		<!--================info-credit================-->
+	<!--================/select-credit================-->        <!--================info-credit================-->
 	<div class="info-credit">
 		<div class="container">
 			<div class="row-fluid">
@@ -150,7 +150,7 @@
 			<div class="row-fluid">
 				<h6 class="inner4"><img src="static/kreddyline/images/info-credit-icon4.png" alt="">Вопросы и ответы
 				</h6>
-				<a class="a-center" href="<?= Yii::app()->createUrl('site/faq'); ?>">Возникли вопросы? Посмотрите
+				<a class="a-center" href="<?= Yii::app()->createUrl('site/faq'); ?>">Возникли вопросы? Посмотр
 					ответы!</a>
 			</div>
 		</div>
