@@ -137,16 +137,16 @@
 			<div class="col-sm-8 col-sm-offset-2 mb3_firstrow">
 				<div class="row">
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/21.png" /> <a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>">Банковская карта</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>"><img src="static/newmain/images/21.png" /> Банковская карта</a>
 					</div>
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/17.png" /> <a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>">Терминал МКБ</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>"><img src="static/newmain/images/17.png" /> Терминал МКБ</a>
 					</div>
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/18.png" /> <a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">QIWI-кошелек</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>"><img src="static/newmain/images/18.png" /> QIWI-кошелек</a>
 					</div>
 					<div class="col-xs-3 mb3_block">
-						<img src="static/newmain/images/19.png" /> <a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>">Терминал Элекснет</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>"><img src="static/newmain/images/19.png" /> Терминал Элекснет</a>
 					</div>
 				</div>
 			</div>
@@ -154,13 +154,13 @@
 			<div class="col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
 				<div class="row">
 					<div class="col-xs-4 mb3_block">
-						<img src="static/newmain/images/22.png" /> <a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>">Мобильный телефон</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>"><img src="static/newmain/images/22.png" /> Мобильный телефон</a>
 					</div>
 					<div class="col-xs-4 mb3_block">
-						<img src="static/newmain/images/23.png" /> <a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">Яндекс-деньги</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>"><img src="static/newmain/images/23.png" /> Яндекс-деньги</a>
 					</div>
 					<div class="col-xs-4 mb3_block">
-						<img src="static/newmain/images/20.png" /> <a href="<?= Yii::app()->createUrl('pages/view/deltapay'); ?>">Терминал DeltaPay</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/deltapay'); ?>"><img src="static/newmain/images/20.png" /> Терминал DeltaPay</a>
 					</div>
 				</div>
 			</div>
@@ -171,34 +171,34 @@
 				<div class="row">
 
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/21.png" /> <a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>">Банковская карта1</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/cc'); ?>"><img src="static/newmain/images/21.png" /> Банковская карта1</a>
 					</div>
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/17.png" /> <a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>">Терминал МКБ</a>
-					</div>
-
-					<div class="clearfix"></div>
-
-					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/22.png" /> <a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>">Мобильный телефон</a>
-					</div>
-					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/23.png" /> <a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">Яндекс-деньги</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/mkb'); ?>"><img src="static/newmain/images/17.png" /> Терминал МКБ</a>
 					</div>
 
 					<div class="clearfix"></div>
 
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/18.png" /> <a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">QIWI-кошелек</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/paymobile'); ?>"><img src="static/newmain/images/22.png" /> Мобильный телефон</a>
 					</div>
 					<div class="col-xs-6 mb3_block">
-						<img src="static/newmain/images/19.png" /> <a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>">Терминал Элекснет</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>"><img src="static/newmain/images/23.png" /> Яндекс-деньги</a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<div class="col-xs-6 mb3_block">
+						<a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>"><img src="static/newmain/images/18.png" /> QIWI-кошелек</a>
+					</div>
+					<div class="col-xs-6 mb3_block">
+						<a href="<?= Yii::app()->createUrl('pages/view/elecsnet'); ?>"><img src="static/newmain/images/19.png" /> Терминал Элекснет</a>
 					</div>
 
 					<div class="clearfix"></div>
 
 					<div class="col-xs-12 mb3_block">
-						<img src="static/newmain/images/20.png" /> <a href="<?= Yii::app()->createUrl('pages/view/deltapay'); ?>">Терминал DeltaPay</a>
+						<a href="<?= Yii::app()->createUrl('pages/view/deltapay'); ?>"><img src="static/newmain/images/20.png" /> Терминал DeltaPay</a>
 					</div>
 				</div>
 			</div>
