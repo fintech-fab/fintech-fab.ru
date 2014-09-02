@@ -20,3 +20,5 @@
 </div>
 
 {{ Form::submit('Добавить', ['id' => 'button-event-create', 'class' => 'button small right']) }}
+
+{{ Form::close() }}

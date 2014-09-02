@@ -17,6 +17,8 @@ use Eloquent;
  * @property bool   $flag_queue
  * @property string $created_at
  * @property string $updated_at
+ *
+ * @method static Signal whereSignalId()
  */
 class Signal extends Eloquent
 {

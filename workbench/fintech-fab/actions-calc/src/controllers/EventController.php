@@ -4,6 +4,7 @@ namespace FintechFab\ActionsCalc\Controllers;
 
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Event;
+use Paginator;
 use Validator;
 use Input;
 use View;
@@ -99,13 +100,11 @@ class EventController extends BaseController
 	 */
 	public function updateEventsTable()
 	{
-
 		$input = Input::all();
 		$iPage = (int)$input['page'];
 
-		\Paginator::setCurrentPage($iPage);
 		// setting page that stored in span#pagination-events-current-page in _events.php
-//		Event::getConnectionResolver()->connection('ff-actions-calc')->getPaginator()->setCurrentPage($iPage);
+		Paginator::setCurrentPage($iPage);
 
 		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(10);
 		$aoEvents->setBaseUrl('/actions-calc/events/table');

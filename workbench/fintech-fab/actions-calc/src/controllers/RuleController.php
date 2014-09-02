@@ -28,12 +28,16 @@ class RuleController extends BaseController
 			return View::make('ff-actions-calc::rule.create', compact('signals'));
 		}
 
+		// request data handling
 		$oRequestData = Input::all();
+
 		if (isset($oRequestData['flag_active'])) {
 			$oRequestData['flag_active'] = ($oRequestData['flag_active'] == 'on') ? 1 : 0;
 		}
+
 		$oRequestData['terminal_id'] = $this->iTerminalId;
 
+		// validation
 		$validator = Validator::make($oRequestData, Validators::getRuleValidators());
 
 		if ($validator->fails()) {

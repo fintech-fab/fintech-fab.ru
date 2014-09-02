@@ -38,17 +38,23 @@
 	</div>
 </div><!-- /buttons: search and add event -->
 
-<!-- modal create event -->
+<!-- modal event create -->
 <div id="modal-event-create" class="reveal-modal small" data-reveal>
 	<?php echo View::make('ff-actions-calc::event.create'); ?>
-</div><!-- /modal create event-->
-<!-- modal update event -->
+</div><!-- /modal create event--><!-- modal event update-->
 <div id="modal-update-event" class="reveal-modal small" data-reveal></div><!-- /modal update event--><!-- modal search event -->
 
 <!-- modal rule create -->
 <div id="modal-rule-create" class="reveal-modal medium" data-reveal></div><!-- /modal rule update -->
 <!-- modal rule update -->
 <div id="modal-rule-update" class="reveal-modal medium" data-reveal></div><!-- /modal rule update -->
+
+<!-- modal signal create -->
+<div id="modal-signal-create" class="reveal-modal small" data-reveal>
+	<?php echo View::make('ff-actions-calc::signal.create'); ?>
+</div><!-- /modal signal create --><!-- modal signal create -->
+<div id="modal-signal-udpate" class="reveal-modal small" data-reveal></div><!-- /modal signal create -->
+
 
 <!-- events table -->
 <div id="events-table-container">
@@ -98,22 +104,60 @@ $(document).ready(function () {
 
 	var $body = $('body');
 
+	// datatable
+	var $signalsTable = $('#manage-signals').DataTable({
+		language: {
+			"sProcessing": "Подождите...",
+			"sLengthMenu": "Показать _MENU_ записей",
+			"sZeroRecords": "Записи отсутствуют.",
+			"sInfo": "Записи с _START_ до _END_ из _TOTAL_ записей",
+			"sInfoEmpty": "Записи с 0 до 0 из 0 записей",
+			"sInfoFiltered": "(отфильтровано из _MAX_ записей)",
+			"sInfoPostFix": "",
+			"sSearch": "Поиск: ",
+			"sUrl": "",
+			"oPaginate": {
+				"sFirst": "Первая",
+				"sPrevious": "Предыдущая",
+				"sNext": "Следующая",
+				"sLast": "Последняя"
+			},
+			"oAria": {
+				"sSortAscending": ": активировать для сортировки столбца по возрастанию",
+				"sSortDescending": ": активировать для сортировки столбцов по убыванию"
+			}
+		}
+	});
+	var oButtons = {
+		edit: '<ul class="signal-buttons button-group right">' +
+		'<li><button class="tiny button signal-edit">&nbsp;<i class="fi-page-edit"></i></button>' +
+		'<button class="tiny button alert signal-delete">&nbsp;<i class="fi-x"></i></button></li></ul>'
+	};
+	var oSignalRow = {
+		DT_RowId: null,
+		0: '',
+		1: '',
+		2: oButtons.edit
+	};
+
 	// events:
 	// events table pagination
 	// pagination through ajax
 	$body.on('click', 'ul.pagination a', function (e) {
 		e.preventDefault();
-		console.log($(this).attr('href'));
 
 		var $eventTableContainer = $('#events-table-container');
+		$eventTableContainer.prepend($('<div class="table-loading"></div>'));
 
 		$.get($(this).attr('href'),
-			{},
 			function (oData) {
-				$eventTableContainer.html(oData);
+				$eventTableContainer.empty();
+				$eventTableContainer.append(oData);
 			},
 			'html'
-		);
+		).always(function () {
+				$eventTableContainer.find('div.table-loading').remove();
+			});
 
 		return false;
 	});
@@ -616,6 +660,130 @@ $(document).ready(function () {
 		$(this).hide();
 		$(this).prev('button.see-rules').show();
 		$(this).closest('tr').next('tr').hide();
+		return false;
+	});
+
+	// signals
+	// signal store
+	$body.on('click', '#button-signal-create', function () {
+
+		var $button = $(this);
+		var $form = $button.closest('form');
+
+		buttonSleep($button);
+
+		$.post(
+			'/signal',
+			$button.closest('form').serialize(),
+			function (oData) {
+				if (oData.status == 'success') {
+
+					clearFormErrors($form);
+					$('#modal-signal-create').foundation('reveal', 'close');
+
+					// new row to datatable
+					oSignalRow.DT_RowId = oData.data.id;
+					oSignalRow[0] = oData.data.signal_sid;
+					oSignalRow[1] = oData.data.name;
+
+					$signalsTable.row.add(oSignalRow).draw().node();
+				} else if (oData.status == 'error') {
+					revealFormErrors($form, oData.errors);
+				}
+			},
+			'json'
+		).always(function () {
+				buttonWakeUp($button);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
+			});
+
+		return false;
+	});
+	// signal update - open form
+	$body.on('click', '.signal-edit', function () {
+
+		var $button = $(this);
+		var iSignalId = +$button.closest('tr').attr('id');
+
+		buttonSleep($button);
+
+		$.get(
+			'/signal/' + iSignalId + '/edit',
+			function (oData) {
+				var $modalUpdate = $('#modal-signal-udpate');
+				$modalUpdate.html(oData);
+				$modalUpdate.foundation('reveal', 'open');
+			},
+			'html'
+		).always(function () {
+				buttonWakeUp($button);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
+			});
+
+		return false;
+	});
+	// signal delete
+	$body.on('click', '.signal-delete', function () {
+
+		var $button = $(this);
+		var iSignalId = +$button.closest('tr').attr('id');
+
+		buttonSleep($button);
+
+		$.ajax({
+			method: 'DELETE',
+			url: '/signal/' + iSignalId,
+			success: function (oData) {
+				if (oData.status == 'success') {
+					$button.closest('tr[id=' + iSignalId + ']').fadeOut();
+				}
+			},
+			dataType: 'json'
+		}).always(function () {
+			buttonWakeUp($button);
+		}).fail(function (xhr) {
+			alert(xhr.responseText);
+		});
+
+		return false;
+	});
+	// signal update - put signal
+	$body.on('click', '#signal-update-button', function (e) {
+		e.preventDefault();
+
+		var $button = $(this);
+		var $form = $button.closest('form');
+		var iSignalId = $form.data('id');
+
+		buttonSleep($button);
+
+		$.ajax({
+			method: 'PUT',
+			url: '/signal/' + iSignalId,
+			data: $form.serialize(),
+			success: function (oData) {
+				if (oData.status == 'success') {
+					$('#modal-signal-udpate').foundation('reveal', 'close');
+					clearFormErrors($form);
+
+					// updating signals table
+					oSignalRow[0] = oData.data.signal_sid;
+					oSignalRow[1] = oData.data.name;
+					$signalsTable.row('[id=' + iSignalId + ']').data(oSignalRow).draw();
+
+				} else if (oData.status == 'error') {
+					revealFormErrors($form, oData.errors);
+				}
+			},
+			dataType: 'json'
+		}).always(function () {
+			buttonWakeUp($button);
+		}).fail(function (xhr) {
+			alert(xhr.responseText);
+		});
+
 		return false;
 	});
 

@@ -41,6 +41,8 @@ class TablesBaseCreate extends Migration
 			$table->string('signal_sid');
 			$table->integer('terminal_id');
 			$table->timestamps();
+
+			$table->unique('signal_sid');
 		});
 
 		Schema::connection('ff-actions-calc')->create('rules', function (Blueprint $table) {

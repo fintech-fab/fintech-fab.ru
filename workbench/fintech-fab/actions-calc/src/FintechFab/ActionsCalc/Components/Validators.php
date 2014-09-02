@@ -51,4 +51,13 @@ class Validators
 			'signal_id' => 'required|integer',
 		];
 	}
+
+	public static function getSignalValidator()
+	{
+		return [
+			'name'        => 'required',
+			'signal_sid'  => 'required|alpha_dash|unique:signals,signal_sid',
+			'terminal_id' => 'integer',
+		];
+	}
 } 

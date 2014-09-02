@@ -20,7 +20,11 @@
 
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/app.min.css">
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/custom.css">
+	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/datatables/plugins/foundation/dataTables.foundation.css">
+
 	<script src="<?php echo $sPubPath; ?>/js/app.js"></script>
+	<script src="<?php echo $sPubPath; ?>/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="<?php echo $sPubPath; ?>/datatables/plugins/foundation/dataTables.foundation.js"></script>
 </head>
 <body>
 

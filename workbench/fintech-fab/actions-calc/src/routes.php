@@ -8,11 +8,9 @@
 Route::get('/actions-calc/manage', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@manage'
 ]);
-// update events table
-//Route::get('/actions-calc/manage/update-events-table', [
-//	'as'   => 'update.events.table',
-//	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@updateEventsTable'
-//]);
+
+// signals
+Route::resource('signal', 'FintechFab\ActionsCalc\Controllers\SignalController');
 
 // events
 // delete event //TODO: check if user allowed to do sturff. Through filter.
@@ -48,7 +46,6 @@ Route::post('/actions-calc/manage/get-event-rules', [
 Route::post('/actions-calc/manage/toggle-rule-flag', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@toggleRuleFlag'
 ]);
-
 // event -> rules:
 // rule create
 Route::match(['GET', 'POST'], '/actions-calc/rule/create', [
