@@ -33,7 +33,7 @@ class KreddyLineWidget extends SubscriptionWidget
 				&nbsp;рублей
 			</li>
 			<li>
-				<strong>Срок действия:</strong>&nbsp;
+				<strong>Срок действия сервиса:</strong>&nbsp;
 				<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>&nbsp;дн.
 			</li>
 			<li>

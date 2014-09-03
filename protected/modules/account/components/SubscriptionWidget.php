@@ -72,7 +72,7 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 				&nbsp;рублей
 			</li>
 			<li><strong>Срок действия
-					подключения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
+					сервиса:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
 				&nbsp;дней
 			</li>
 			<li><strong>Время перечисления
