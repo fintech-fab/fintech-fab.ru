@@ -13,7 +13,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnSubmit' => true,
 		'hideErrorMessage' => true,
 	),
-	'action' => Yii::app()->createUrl('/form'),
+	'action'               => Yii::app()->createUrl('/form'),
 ));
 
 //снимаем все эвенты с кнопки, т.к. после загрузки ajax-ом содержимого эвент снова повесится на кнопку
@@ -36,7 +36,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 <div class="row">
 	<div class="span6">
 		<div class="row">
-			<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'numeric_code')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'numeric_code') + array('maxlength' => 4)); ?>
 			<?= $form->dropDownListRow2($oClientCreateForm, 'secret_question', Dictionaries::$aSecretQuestions, SiteParams::getHintHtmlOptions($oClientCreateForm, 'secret_question')); ?>
 			<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', SiteParams::getHintHtmlOptions($oClientCreateForm, 'secret_answer')); ?>
 		</div>
@@ -58,7 +58,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 				'ajaxOptions' => array(
 					'complete' => 'checkBlankResponse',
 					'type'     => 'POST',
-					'update' => '#formBody',
+					'update'   => '#formBody',
 				),
 				'url'         => Yii::app()
 						->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),
@@ -67,11 +67,11 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 		</div>
 
 		<div class="span2 offset2">
-		<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'id'          => 'submitButton',
+			<?php $this->widget('bootstrap.widgets.TbButton', array(
+				'id'         => 'submitButton',
 				'buttonType' => 'submit',
-				'type'        => 'primary',
-				'label'       => SiteParams::C_BUTTON_LABEL_NEXT,
+				'type'       => 'primary',
+				'label'      => SiteParams::C_BUTTON_LABEL_NEXT,
 			)); ?>
 		</div>
 	</div>

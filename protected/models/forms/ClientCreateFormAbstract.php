@@ -316,7 +316,7 @@ class ClientCreateFormAbstract extends CFormModel
 					$aRules[] = array($sFieldName, 'compare', 'operator' => '!=', 'compareAttribute' => 'friends_phone', 'allowEmpty' => true, 'message' => 'Номер не должен совпадать с телефоном дополнительного контакта!');
 					break;
 				case 'numeric_code':
-					$aRules[] = array($sFieldName, 'checkValidClientNumericCode', 'message' => 'Цифровой код должен состоять не менее, чем из ' . SiteParams::C_NUMERIC_CODE_MIN_LENGTH . ' цифр и не более чем из ' . SiteParams::C_NUMERIC_CODE_MAX_LENGTH . ' цифр');
+					$aRules[] = array($sFieldName, 'checkValidClientNumericCode', 'message' => 'Пожалуйста, придумай и введи в поле свой цифровой код. Количество цифр - ' . SiteParams::C_NUMERIC_CODE_MIN_LENGTH);
 					$aRules[] = array($sFieldName, 'numerical', 'integerOnly' => true, 'min' => 1, 'tooSmall' => 'Введи цифровой код не состоящий из нулей!');
 					break;
 
@@ -875,7 +875,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 			'have_past_credit'              => 'Пожалуйста, укажи наличие кредитов в прошлом',
 
-			'numeric_code'                  => 'Пожалуйста, придумай и введи в поле свой цифровой код. Количество символов – от 4 до 8. ',
+			'numeric_code'                  => 'Пожалуйста, придумай и введи в поле свой цифровой код. Количество символов – 4',
 			'secret_question'               => 'Пожалуйста, выбери секретный вопрос.',
 			'secret_answer'                 => 'Пожалуйста, введи ответ на секретный вопрос.',
 			'password'                      => 'Придумай и введи свой пароль (не менее 8 символов в английской раскладке клавиатуры).',

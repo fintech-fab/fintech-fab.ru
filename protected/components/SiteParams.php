@@ -116,7 +116,7 @@ class SiteParams
 	const C_PHONE_LENGTH = 10;
 
 	const C_NUMERIC_CODE_MIN_LENGTH = 4;
-	const C_NUMERIC_CODE_MAX_LENGTH = 10;
+	const C_NUMERIC_CODE_MAX_LENGTH = 4;
 
 	/**
 	 * максимальное число попыток ввода кода из SMS
