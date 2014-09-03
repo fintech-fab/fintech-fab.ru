@@ -285,7 +285,7 @@
 					<p>Введите код сообщения</p>
 				</div>
 				<div class="col-xs-12 ascapright2">
-					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha','buttonLabel'=>'<br/>обновить')); ?></p><br />
+					<?php $this->widget('CCaptcha',array('captchaAction'=>'site/captcha','buttonLabel'=>'<br/>обновить')); ?><br />
 					<?php echo $form->textField($model, 'verifyCode', array('class' => 'askf_input input_captcha')); ?>
 				</div>
 			</div>

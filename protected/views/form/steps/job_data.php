@@ -47,7 +47,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 	</div>
 	<div class="span6">
 		<div class="row">
-			<h5>Контакты родственников/друзей</h5>
+			<h5>Дополнительные контакты</h5>
 			<?= $form->textFieldRow($oClientCreateForm, 'relatives_one_fio', SiteParams::getHintHtmlOptions($oClientCreateForm, 'relatives_one_fio')); ?>
 			<?= $form->phoneMaskedRow($oClientCreateForm, 'relatives_one_phone', SiteParams::getHintHtmlOptions($oClientCreateForm, 'relatives_one_phone')); ?>
 		</div>

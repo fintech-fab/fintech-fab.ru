@@ -779,13 +779,13 @@ class ClientCreateFormAbstract extends CFormModel
 			'have_dependents'        => 'Есть иждивенцы',
 
 			'relatives_degree'       => 'Степень родства',
-			'relatives_fio'          => 'ФИО',
+			'relatives_fio'          => 'Имя и отчество',
 			'relatives_phone'        => 'Телефон',
 
-			'relatives_one_fio'      => 'ФИО знакомого/родственника',
+			'relatives_one_fio'      => 'Имя и отчество знакомого/родственника',
 			'relatives_one_phone'    => 'Телефон знакомого/родственника',
 
-			'friends_fio'            => 'ФИО',
+			'friends_fio'            => 'Имя и отчество',
 			'friends_phone'          => 'Телефон',
 
 
