@@ -4,4 +4,4 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
 HOME=/var/www/kreddy.ru.new/cron/sh
 
 25 6 * * * sh $HOME/mysql-clear-base.sh
-0 * * * ** sh $HOME/file-cleaner.sh
+30 4 * * * sh $HOME/file-cleaner.sh
