@@ -60,6 +60,12 @@ div#checkCodes{
 	text-align: right;
 }
 
+.modal-error .modal-content {
+	width: 300px;
+	margin: 0 auto 0 auto;
+}
+
+
 .up_logo {
 	display: block;
 	margin-top: 43px;

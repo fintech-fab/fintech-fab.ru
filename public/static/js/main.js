@@ -7,33 +7,36 @@ var errorHappened = false;
 jQuery(document).ready(function () {
 	jQuery(document).ajaxError(function (event, jqxhr, settings, exception) {
 		if (!errorHappened && exception != '' && exception != 'abort') {
-			bootbox.alert('Произошла ошибка! Перезагрузи страницу!', 'OK');
-			//alertModal('Ошибка', 'Произошла ошибка! Перезагрузите страницу!', 'OK');
+			//bootbox.alert('Произошла ошибка! Перезагрузи страницу!', 'OK');
+			alertModal('Ошибка', 'Произошла ошибка! Перезагрузите страницу!', 'OK');
 			errorHappened = true;
 		}
 	});
 });
 
-
 function alertModal(heading, question, okButtonTxt) {
-
 	var confirmModal =
-		jQuery('<div class="modal fade modal-error">' +
-			'<div class="modal-header">' +
-			'<a class="close" data-dismiss="modal" >&times;</a>' +
-			'<h3>' + heading + '</h3>' +
-			'</div>' +
+		jQuery(
+			'<div class="modal fade modal-error">' +
+				'<div class="modal-dialog">' +
+				'<div class="modal-content">' +
+				'<div class="modal-header">' +
+				'<a class="close" data-dismiss="modal" >&times;</a>' +
+				'<h3>' + heading + '</h3>' +
+				'</div>' +
 
-			'<div class="modal-body">' +
-			'<p>' + question + '</p>' +
-			'</div>' +
+				'<div class="modal-body">' +
+				'<p>' + question + '</p>' +
+				'</div>' +
 
-			'<div class="modal-footer">' +
-			'<a href="#" id="okButton" class="btn btn-primary">' +
-			okButtonTxt +
-			'</a>' +
-			'</div>' +
-			'</div>');
+				'<div class="modal-footer">' +
+				'<a href="#" id="okButton" class="btn btn-primary">' +
+				okButtonTxt +
+				'</a>' +
+				'</div>' +
+				'</div>' +
+				'</div>' +
+				'</div>');
 
 	confirmModal.find('#okButton').click(function (event) {
 		confirmModal.modal('hide');
