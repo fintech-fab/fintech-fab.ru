@@ -21,7 +21,7 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 <div class="container" style="margin-top: 20px; margin-bottom: 20px; height: 500px;">
 	<div class="row">
 		<div class="col-xs-8">
-			<div class="alert in alert-block fade alert-success"><strong>Ты успешно зарегистрировался в системе. </strong>
+			<div class="alert in alert-block fade alert-success"><strong>Регистрация в системе прошла успешно!</strong>
 			</div>
 
 			<?php $this->widget(
