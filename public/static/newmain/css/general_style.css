@@ -22,7 +22,7 @@ html, body {
 	min-height: 1000px;
 }
 
-* {
+html, body {
 	font-family: 'MyriadWebPro' !important;
 	/* font-size: 8px; */
 }
@@ -93,16 +93,10 @@ div#checkCodes{
 
 .login_block {
 	display: inline-block;
-	color: #fff;
-	background: #201f50 url(../images/siluet.png) 8px 5px no-repeat;
 	width: 98px;
 	height: 32px;
-	border-radius: 3px;
-	padding: 7px 47px;
-	cursor: pointer;
 	margin-top: 50px;
 	margin-right: 0px;
-	font-size: 14px;
 }
 
 .login_block a {
