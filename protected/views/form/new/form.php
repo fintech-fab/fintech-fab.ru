@@ -185,51 +185,7 @@
 			<div class="row">
 
 				<div class="col-xs-12">
-					<div class="sa_block">
-
-						<div class="savi savi_vk" id="vk">
-							<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
-								<script type="text/javascript" src="//vk.com/js/api/openapi.js?115"></script>
-								<!-- VK Widget -->
-								<div id="vk_groups"></div>
-								<script type="text/javascript">
-									VK.Widgets.Group("vk_groups", {mode: 0, width: "auto", height: "250", color1: 'FFFFFF', color2: '2B587A', color3: '5B7FA6'}, 68363898);
-								</script>
-							</div>
-						</div>
-
-						<div class="savi savi_f" id="f">
-							<div class="hidden-xs col-xs-12">
-								<div class="fb-like-box" data-href="https://www.facebook.com/kreddyru" data-width="750px" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
-							</div>
-							<div class="visible-xs">
-								<div class="fb-like-box" data-href="https://www.facebook.com/kreddyru" data-width="290px" data-height="300px" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
-							</div>
-						</div>
-
-						<div class="savi savi_od" id="od">
-							<div class="col-xs-12">
-								<div id="ok_group_widget"></div>
-								<script>
-									!function (d, id, did, st) {
-										var js = d.createElement("script");
-										js.src = "http://connect.ok.ru/connect.js";
-										js.onload = js.onreadystatechange = function () {
-											if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-												if (!this.executed) {
-													this.executed = true;
-													setTimeout(function () {
-														OK.CONNECT.insertGroupWidget(id, did, st);
-													}, 0);
-												}
-											}
-										}
-										d.documentElement.appendChild(js);
-									}(document, "ok_group_widget", "53026435498223", "{width:250,height:285}");
-								</script>
-							</div>
-						</div>
-					</div>
+					<div class="sa_block"></div>
 				</div>
 				<div class="clearfix"></div>
 				<div class="ask_siblock">
