@@ -144,7 +144,7 @@ class SiteController extends Controller
 			$oModel->setAttributes($aPost);
 			if ($oModel->validate()) {
 				$sEmail = SiteParams::getContactEmail();
-				$sSubject = $oModel->subject;
+				$sSubject = 'Вопрос с сайта';
 				$sMessage =
 					"Имя: " . $oModel->name . "\r\n" .
 					"Телефон: " . $oModel->phone . "\r\n" .

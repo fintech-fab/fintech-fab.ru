@@ -703,31 +703,52 @@ input.check_input:focus {
 	margin-top: 15px;
 }
 
-.ask_captcha {
-	display: inline-block;
-	float: left;
+@media (max-width: 767px) {
+	.ask_captcha {
+	}
+
+	.ascapleft {
+		font-size: 12px;
+		font-style: italic;
+		text-align: center;
+	}
+
+	.ascapright {
+		text-align: center;
+	}
 }
 
-.ascapleft {
-	float: left;
-	display: inline-block;
-	margin-left: 15px;
+
+@media (min-width: 768px) {
+	.ask_captcha {
+		display: inline-block;
+		float: left;
+	}
+
+
+	.ascapleft {
+		float: left;
+		display: inline-block;
+		margin-left: 15px;
+	}
+
+	.ascapleft p {
+		font-size: 14px;
+		font-style: italic;
+		color: #56595e;
+		margin-bottom: 0;
+	}
+
+	.ascapleft img {
+	}
+
+	.ascapright {
+		display: inline-block;
+		margin-left: 15px;
+	}
 }
 
-.ascapleft p {
-	font-size: 14px;
-	font-style: italic;
-	color: #56595e;
-	margin-bottom: 0;
-}
 
-.ascapleft img {
-}
-
-.ascapright {
-	display: inline-block;
-	margin-left: 15px;
-}
 
 .askf_input.input_captcha {
 	height: 45px;
@@ -773,18 +794,6 @@ input.check_input:focus {
 	margin-bottom: 20px;
 }
 
-.ask_captcha2 {
-}
-
-.ascapleft2 {
-	font-size: 16px;
-	font-style: italic;
-	text-align: center;
-}
-
-.ascapright2 {
-	text-align: center;
-}
 
 .ask_submit2 {
 	border: none;
@@ -1182,9 +1191,9 @@ input.check_input:focus {
 		font-size: 18px;
 	}
 
-	.ascapleft p {
-		font-size: 7px;
-	}
+	/*.ascapleft p {*/
+		/*font-size: 7px;*/
+	/*}*/
 
 	.askf_input.input_captcha {
 		height: 51px;
@@ -1450,7 +1459,7 @@ input.check_input:focus {
 	}
 
 	.ascapleft p {
-		font-size: 11px;
+		font-size: 14px;
 	}
 
 	.askf_input.input_captcha {
@@ -1658,7 +1667,7 @@ input.check_input:focus {
 
 @media screen and (max-width: 400px) {
 	.ascapleft {
-		width: 46px;
+		width: 270px;
 	}
 
 	.footer_hrefs a {

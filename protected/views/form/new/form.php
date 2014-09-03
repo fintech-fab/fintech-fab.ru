@@ -253,23 +253,13 @@
 					</div>
 					<div class="clearfix"></div>
 					<?php if (CCaptcha::checkRequirements()): ?>
-						<div class="ask_captcha hidden-xs">
+						<div class="ask_captcha">
 							<div class="ascapleft">
 								<p>Введите код сообщения
 									<span style="width: 120px; display: inline-block; vertical-align: middle; "><?php $this->widget('CCaptcha', array('captchaAction' => 'site/captcha', 'buttonLabel' => 'обновить')); ?></span>
 								</p>
 							</div>
 							<div class="ascapright">
-								<?php echo $form->textFieldRow($model, 'verifyCode', array('placeholder' => false, 'class' => 'askf_input input_captcha')); ?>
-							</div>
-						</div>
-						<div class="ask_captcha2 visible-xs">
-							<div class="col-xs-12 ascapleft2">
-								<p>Введите код сообщения</p>
-							</div>
-							<div class="col-xs-12 ascapright2">
-								<?php $this->widget('CCaptcha', array('captchaAction' => 'site/captcha', 'buttonLabel' => '<br/>обновить')); ?>
-								<br />
 								<?php echo $form->textFieldRow($model, 'verifyCode', array('placeholder' => false, 'class' => 'askf_input input_captcha')); ?>
 							</div>
 						</div>
