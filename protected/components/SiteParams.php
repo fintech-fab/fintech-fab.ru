@@ -456,7 +456,7 @@ class SiteParams
 	/**
 	 * @return bool
 	 */
-	public function isLocalServer()
+	public static function isLocalServer()
 	{
 
 		return (

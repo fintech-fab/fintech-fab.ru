@@ -7,8 +7,14 @@ class PiwikWidget extends CWidget
 {
 	public $iSiteId = 1;
 
+	public $sUrl = 'http://metric.kreddy.ru';
+
 	public function run()
 	{
+		if(SiteParams::isLocalServer()){
+			return;
+		}
+
 		?>
 		<!-- Piwik -->
 		<script type="text/javascript">
@@ -28,7 +34,7 @@ class PiwikWidget extends CWidget
 			})();
 
 		</script>
-		<noscript><p><img src="http://metric.kreddy.ru/piwik/piwik.php?idsite=<?= $this->iSiteId ?>" style="border:0;" alt="" /></p></noscript>
+		<noscript><p><img src="<?= $this->sUrl ?>/piwik/piwik.php?idsite=<?= $this->iSiteId ?>" style="border:0;" alt="" /></p></noscript>
 		<!-- End Piwik Code -->
 	<?php
 

@@ -29,8 +29,8 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 	<style>
 		@font-face {
 			font-family: 'MyriadWebPro';
-			src: url('/static/fonts/MyriadWebPro.ttf');
-			src: url('/static/fonts/MyriadWebPro.eot?#iefix') format('embedded-opentype'), url('/static/fonts/MyriadWebPro.woff') format('woff'), url('/static/fonts/MyriadWebPro.ttf') format('truetype'), url('/static/fonts/MyriadWebPro.svg#MyriadWebPro') format('svg');
+			src: url('/static/newmain/fonts/MyriadWebPro.ttf');
+			src: url('/static/newmain/fonts/MyriadWebPro.eot?#iefix') format('embedded-opentype'), url('/static/newmain/fonts/MyriadWebPro.woff') format('woff'), url('/static/newmain/fonts/MyriadWebPro.ttf') format('truetype'), url('/static/newmain/fonts/MyriadWebPro.svg#MyriadWebPro') format('svg');
 			font-weight: normal;
 			font-style: normal;
 		}
@@ -70,7 +70,7 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 					</div>
 					<div class="col-md-2 col-xs-12 headlb_right">
 						<div class="login_block">
-							<a href="<?= Yii::app()->createUrl('/account/'); ?>">Войти</a>
+							<a href="<?= Yii::app()->createUrl('/account/'); ?>" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Войти</a>
 						</div>
 					</div>
 				</div>
