@@ -10,12 +10,12 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => get_class($oClientCreateForm),
-	'enableAjaxValidation' => true,
+	'enableAjaxValidation' => false,
 	'type'                 => 'inline',
 	'clientOptions'        => array(
 		'hideErrorMessage' => true,
-		'validateOnChange' => true,
-		'validateOnSubmit' => true,
+		'validateOnChange' => false,
+		'validateOnSubmit' => false,
 	),
 	'action'               => Yii::app()->createUrl('/form'),
 ));

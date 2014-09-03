@@ -21,7 +21,7 @@ class ContactForm extends CFormModel
 	{
 		return array(
 			// name, email, subject and body are required
-			array('name, phone, email, subject, body, verifyCode', 'required'),
+			array('name, phone, email, subject, body', 'required'),
 			//array('subject', 'in', 'range' => array_keys(Dictionaries::$aSubjectsQuestions), 'message' => 'Укажи тему вопроса'),
 			// email has to be a valid email address
 			array('email', 'email'),

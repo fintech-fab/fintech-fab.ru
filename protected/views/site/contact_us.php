@@ -32,7 +32,7 @@
 		<?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			'id'                     => 'contact-form',
 			'action'                 => Yii::app()->createUrl('/site/faq/'),
-			'enableClientValidation' => true,
+			'enableAjaxValidation' => true,
 			'clientOptions'          => array(
 				'validateOnSubmit' => true,
 			),

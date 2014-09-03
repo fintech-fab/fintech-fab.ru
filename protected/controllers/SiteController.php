@@ -122,6 +122,12 @@ class SiteController extends Controller
 		$oModel = new ContactForm;
 		$aPost = Yii::app()->request->getPost('ContactForm');
 
+		//ajax-валидация
+		if(Yii::app()->request->isAjaxRequest){
+			echo IkTbActiveForm::validate($oModel);
+			Yii::app()->end();
+		}
+
 		$iSite = 1;
 		if (SiteParams::getIsIvanovoSite()) {
 			$iSite = 2;

@@ -9,6 +9,8 @@ class IkTbActiveForm extends TbActiveForm
 {
 	public $bShowRequired = true;
 
+	const INPUT_INLINE = 'application.components.utils.IkTbInputInline';
+
 	/**
 	 * Renders an HTML label for a model attribute.
 	 * This method is a wrapper of {@link CHtml::activeLabelEx}.
@@ -373,4 +375,34 @@ class IkTbActiveForm extends TbActiveForm
 
 	}
 
+	/**
+	 * Returns the input widget class name suitable for the form.
+	 *
+	 * @return string the class name
+	 */
+	protected function getInputClassName()
+	{
+		if (isset($this->input)) {
+			return $this->input;
+		} else {
+			switch ($this->type) {
+				case self::TYPE_HORIZONTAL:
+					return self::INPUT_HORIZONTAL;
+					break;
+
+				case self::TYPE_INLINE:
+					return self::INPUT_INLINE;
+					break;
+
+				case self::TYPE_SEARCH:
+					return self::INPUT_SEARCH;
+					break;
+
+				case self::TYPE_VERTICAL:
+				default:
+					return self::INPUT_VERTICAL;
+					break;
+			}
+		}
+	}
 }
