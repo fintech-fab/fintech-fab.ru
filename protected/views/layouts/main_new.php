@@ -83,9 +83,12 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 
 					<div class="up_line"></div>
 					<div class="up_socico">
-						<a href="https://vk.com/kreddyru" class="up_si usi_vk"> <img src="/static/newmain/images/11.png" /> </a>
-						<a href="https://www.facebook.com/pages/%D0%9A%D1%80%D0%B5%D0%B4%D0%B4%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%B2-%D1%82%D0%B2%D0%BE%D0%B5%D0%BC-%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%B5/560011590772925?fref=ts" class="up_si usi_f"> <img src="/static/newmain/images/10.png" /> </a>
-						<a href="http://www.odnoklassniki.ru/group/53026435498223" class="up_si usi_o"> <img src="/static/newmain/images/9.png" /> </a>
+						<a href="https://vk.com/kreddyru" class="up_si usi_vk">
+							<img src="/static/newmain/images/11.png" /> </a>
+						<a href="https://www.facebook.com/pages/%D0%9A%D1%80%D0%B5%D0%B4%D0%B4%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-%D0%B2-%D1%82%D0%B2%D0%BE%D0%B5%D0%BC-%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%B5/560011590772925?fref=ts" class="up_si usi_f">
+							<img src="/static/newmain/images/10.png" /> </a>
+						<a href="http://www.odnoklassniki.ru/group/53026435498223" class="up_si usi_o">
+							<img src="/static/newmain/images/9.png" /> </a>
 						<!--a href="#" class="up_si usi_i"> <img src="/static/newmain/images/8.png" /> </a-->
 					</div>
 				</div>
@@ -198,26 +201,7 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 	<div><img src="//mc.yandex.ru/watch/21390544" style="position:absolute; left:-9999px;" alt="" /></div>
 </noscript>
 
-<!-- Piwik -->
-<script type="text/javascript">
-	var _paq = _paq || [];
-	_paq.push(['trackPageView']);
-	_paq.push(['enableLinkTracking']);
-	(function () {
-		var u = (("https:" == document.location.protocol) ? "https" : "http") + "://metric.kreddy.ru/piwik/";
-		_paq.push(['setTrackerUrl', u + 'piwik.php']);
-		_paq.push(['setSiteId', 1]);
-		var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-		g.type = 'text/javascript';
-		g.defer = true;
-		g.async = true;
-		g.src = u + 'piwik.js';
-		s.parentNode.insertBefore(g, s);
-	})();
-
-</script>
-<noscript><p><img src="http://metric.kreddy.ru/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
-<!-- End Piwik Code -->
+<?php $this->widget('PiwikWidget', array('iSiteId' => 1)); ?>
 
 </body>
 </html>
