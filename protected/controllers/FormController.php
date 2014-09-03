@@ -10,13 +10,6 @@ class FormController extends Controller
 {
 	public $showTopPageWidget = false;
 
-	/**
-	 * Тут отключаем авторегистрацию CSS бутстрапа, она будет включаться "вручную" в конкретных случаях
-	 *
-	 * @var bool
-	 */
-	public $bBootstrapCss = false;
-
 	public function actionResendSms()
 	{
 		$iResendTime = $this->getResendTime('sms');
