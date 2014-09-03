@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class CarouselWidget
+ * Class PiwikWidget
  */
 class PiwikWidget extends CWidget
 {
