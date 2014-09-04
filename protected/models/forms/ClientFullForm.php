@@ -131,7 +131,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'relatives_one_fio'             => 'ФИО',
+				'relatives_one_fio' => 'Имя и отчество',
 				'relatives_one_phone'           => 'Телефон',
 
 				'friends_fio'                   => 'ФИО',
