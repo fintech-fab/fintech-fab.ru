@@ -1,17 +1,18 @@
 <?php
 
+use FintechFab\Models\Role;
+
 class RoleTableSeeder extends Seeder
 {
 
 	public function run()
 	{
-		$sql = 'insert into ' . DB::getTablePrefix() . 'roles (role, role_name) values (?, ?)';
-		DB::insert($sql, array('admin', 'Админ'));
-		DB::insert($sql, array('moderator', 'Модератор'));
-		DB::insert($sql, array('user', 'Пользователь'));
-		DB::insert($sql, array('messageSender', 'Отправитель сообщений'));
-		DB::insert($sql, array('messageSubscriber', 'Подписчик на получение сообщений'));
-        DB::insert($sql, array('employee', 'Сотрудник'));
-    }
+		Role::insert(['role' => 'admin', 'role_name' => 'Админ']);
+		Role::insert(['role' => 'moderator', 'role_name' => 'Модератор']);
+		Role::insert(['role' => 'user', 'role_name' => 'Пользователь']);
+		Role::insert(['role' => 'messageSender', 'role_name' => 'Отправитель сообщений']);
+		Role::insert(['role' => 'messageSubscriber', 'role_name' => 'Подписчик на получение сообщений']);
+		Role::insert(['role' => 'employee', 'role_name' => 'Сотрудник']);
+	}
 
 }
