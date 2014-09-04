@@ -2,6 +2,7 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
+use App;
 use Controller;
 use View;
 use Request;
@@ -18,6 +19,9 @@ class BaseController extends Controller
 	 */
 	private $sLayoutFolderName = 'default';
 
+	/**
+	 *
+	 */
 	public function __construct()
 	{
 		$this->iTerminalId = Config::get('ff-actions-calc::terminal_id');
@@ -29,7 +33,6 @@ class BaseController extends Controller
 	protected function setupLayout()
 	{
 		if (!is_null($this->layout)) {
-			$this->sLayoutFolderName = $this->layout;
 			$this->layout = View::make('ff-actions-calc::layouts.' . $this->layout);
 		}
 	}
@@ -45,7 +48,7 @@ class BaseController extends Controller
 		if (Request::ajax()) {
 			return $this->makePartial($sTemplate, $aParams);
 		} else {
-			return $this->layout->nest('content', $this->sLayoutFolderName . '.' . $sTemplate, $aParams);
+			return $this->layout->nest('content', 'ff-actions-calc::' . $sTemplate, $aParams);
 		}
 	}
 

@@ -30,8 +30,9 @@ class Terminal extends Eloquent
 	 *
 	 * @return mixed
 	 */
-	public function getEventsAttribute() {
-	    return $this->events()->paginate(10);
+	public function getEventsAttribute()
+	{
+		return $this->events()->paginate(10);
 	}
 
 	public function rules()

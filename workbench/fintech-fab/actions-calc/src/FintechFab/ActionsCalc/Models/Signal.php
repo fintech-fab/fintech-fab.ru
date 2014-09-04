@@ -19,6 +19,7 @@ use Eloquent;
  * @property string $updated_at
  *
  * @method static Signal whereSignalId()
+ * @method static Signal whereTerminalId()
  */
 class Signal extends Eloquent
 {
@@ -26,7 +27,7 @@ class Signal extends Eloquent
 	protected $table = 'signals';
 	protected $fillable = ['id', 'name', 'terminal_id', 'signal_sid'];
 
-	public function terminal()
+	public function terminal() // TODO: events for certain terminal.
 	{
 		$this->belongsTo('Terminal', 'terminal_id');
 	}

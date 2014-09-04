@@ -50,14 +50,14 @@ class ResultHandler
 	 */
 	public function resultToQueue($foreign_job, $foreign_queue, $signalSid)
 	{
-		Queue::connection('ff-actions-calc-result')->push(ToForeign::class, [
+		Queue::connection('ff-actions-calc')->push(ToForeign::class, [
 			'sSignalSid'    => $signalSid,
 			'sForeignQueue' => $foreign_queue,
 			'sForeignJob'   => $foreign_job,
 			'sResultHash'   => $this->_sResultHash,
 		]);
 
-		Log::info('Queue: resultToQueue,');
+		Log::info('Queue: resultToQueue,', ['hash' => $this->_sResultHash]);
 	}
 
 	/**

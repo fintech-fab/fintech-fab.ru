@@ -244,10 +244,10 @@ $(document).ready(function () {
 	// modal event delete // TODO: count event on every deletion, if less than 10, update events table.
 	$body.on('click', '#events-rules button.delete-rule', function () {
 		// $th clicked delete button
-		var $th = $(this);
-		buttonSleep($th);
+		var $button = $(this);
+		buttonSleep($button);
 
-		var $thisRow = $th.closest('tr');
+		var $thisRow = $button.closest('tr');
 		var $eventId = $thisRow.data('id');
 		var $nextRow = $thisRow.next('tr.event-rules-row');
 		var $nextRowId = $nextRow.data('event-rules');
@@ -261,12 +261,17 @@ $(document).ready(function () {
 						$nextRow.fadeOut();
 					}
 					$thisRow.fadeOut();
+				} else if (oData.status == 'error') {
+					alert(oData.message);
 				}
-				buttonWakeUp($th);
 				return false;
 			},
 			'json'
-		);
+		).always(function () {
+				buttonWakeUp($button);
+			}).fail(function (xhr) {
+				alert(xhr.responseText);
+			});
 
 		return false;
 	});

@@ -84,7 +84,13 @@ class EventController extends BaseController
 	public function delete()
 	{
 		$aRequest = Input::only('id');
+
+		/** @var Event $event */
 		$event = Event::find((int)$aRequest['id']);
+
+		if ($event->rules->count() > 0) {
+			return ['status' => 'error', 'message' => 'Сначала удалите правила'];
+		}
 
 		if ($event->delete()) {
 			return json_encode(['status' => 'success', 'message' => 'Событие удалено.']);

@@ -32,7 +32,7 @@
 		{{ Form::label('signal_id', 'Сигнал') }}
 
 		<select name="signal_id" class="s2">
-            @foreach(FintechFab\ActionsCalc\Models\Signal::all(['id', 'name', 'signal_sid']) as $signal)
+            @foreach($signals as $signal)
                 <option value="{{ $signal->id }}" @if($rule->signal_id == $signal->id) selected="selected" @endif>
                     {{ $signal->signal_sid }}&nbsp;({{ $signal->name }})
                 </option>

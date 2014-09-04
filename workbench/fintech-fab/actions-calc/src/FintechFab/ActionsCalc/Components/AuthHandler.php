@@ -46,6 +46,6 @@ class AuthHandler
 
 		$terminal = Terminal::find($iClientId, ['id']);
 
-		return (!is_null($terminal));
+		return !(is_null($terminal));
 	}
 }

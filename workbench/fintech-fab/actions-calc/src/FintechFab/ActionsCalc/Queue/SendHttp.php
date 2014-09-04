@@ -56,7 +56,7 @@ class SendHttp
 		}
 
 		Log::info('Job release. Attempts: ' . $job->attempts(), $aData);
-		$job->release(5); // 60
+		$job->release(60);
 	}
 
 	/**

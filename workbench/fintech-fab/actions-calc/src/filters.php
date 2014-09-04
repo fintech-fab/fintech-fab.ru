@@ -7,8 +7,9 @@
 
 use FintechFab\ActionsCalc\Components\AuthHandler;
 
-Route::filter('ff.actions-calc.basic.auth', function () {
+Route::filter('ff-actions-calc.auth', function () {
+
 	if (AuthHandler::isClientRegistered() === false) {
-		return Redirect::route('registration');
+		return Redirect::route('auth.registration');
 	}
 });

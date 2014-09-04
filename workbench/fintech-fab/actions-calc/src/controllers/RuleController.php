@@ -23,7 +23,7 @@ class RuleController extends BaseController
 	public function create()
 	{
 		if (Request::isMethod('GET')) {
-			$signals = Signal::all(['id', 'signal_sid', 'name']);
+			$signals = Signal::whereTerminalId($this->iTerminalId)->get(['id', 'name', 'signal_sid']);
 
 			return View::make('ff-actions-calc::rule.create', compact('signals'));
 		}
@@ -68,9 +68,10 @@ class RuleController extends BaseController
 	{
 		/** @var Rule $oRule */
 		$oRule = Rule::find($id);
+		$aoSignals = Signal::whereTerminalId($this->iTerminalId)->get(['id', 'name', 'signal_sid']);
 
 		if (Request::isMethod('GET')) {
-			return View::make('ff-actions-calc::rule.update', ['rule' => $oRule]);
+			return View::make('ff-actions-calc::rule.update', ['rule' => $oRule, 'signals' => $aoSignals]);
 		}
 
 		// update process

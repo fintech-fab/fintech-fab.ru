@@ -32,7 +32,9 @@
 	<div class="large-12 columns">
 		<div class="nav-bar right">
 			<ul class="button-group">
-				<li><a href="#" class="button"><i class="fi-torso"></i></a></li>
+				<?php if (\FintechFab\ActionsCalc\Components\AuthHandler::isClientRegistered()): ?>
+					<li><a href="#" class="button"><i class="fi-torso"></i></a></li>
+				<?php endif; ?>
 			</ul>
 		</div>
 		<h1>

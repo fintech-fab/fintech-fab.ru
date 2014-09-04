@@ -60,4 +60,18 @@ class Validators
 			'terminal_id' => 'integer',
 		];
 	}
+
+	public static function getTerminalValidators()
+	{
+		return [
+			'id'                    => 'integer|unique:terminals',
+			'name'                  => 'required',
+			'url'                   => 'required|url',
+			'foreign_queue'         => '',
+			'foreign_job'           => '',
+			'key'                   => 'alpha_num',
+			'password'              => 'required|confirmed',
+			'password_confirmation' => 'required'
+		];
+	}
 } 
