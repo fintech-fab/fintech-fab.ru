@@ -40,8 +40,12 @@ class LoanWidget extends BaseLoanSubscriptionWidget
 			<p><strong>подтвердить до:</strong> <?= SiteParams::formatRusDate($aActiveCondition['dt_confirm_to']) ?></p>
 
 			<p>(<?=
-				CHtml::link('посмотреть', Yii::app()
-					->createUrl('/account/getDocument', ['id' => $aActiveCondition['hash']])) ?>)</p>
+				CHtml::link(
+					'посмотреть',
+					Yii::app()->createUrl('/account/getDocument', ['id' => $aActiveCondition['hash']]),
+					array('target' => '_blank')
+				)
+				?>)</p>
 		</div>
 		<?php
 
