@@ -5,11 +5,17 @@
 
 $this->pageTitle = Yii::app()->name . ' - График платежей';
 
+if (!Yii::app()->adminKreddyApi->isSubscriptionActive()) {
+	$aPaymentData['subscription_balance'] = 0;
+}
+
 $sSubscriptionEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['subscription_expired_to']));
 $sLoanEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['loan_expired_to']));
 
 $iSubscriptionTotal = $aPaymentData['subscription_balance'] + $aPaymentData['penalty_balance'];
 $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] + $aPaymentData['fine_balance'];
+
+$iTotal = $iLoanTotal + $iSubscriptionTotal;
 
 
 ?>
@@ -29,8 +35,8 @@ $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] +
 		<p style="display: none;" id="detail_info">
 			- Абонентка: <?= $aPaymentData['subscription_balance'] ?> руб. <br /> -
 			Штраф: <?= $aPaymentData['penalty_balance'] ?> руб. <br /> - Сумма
-			перевода: <?= $aPaymentData['loan_balance'] ?> руб. <br /> - Проценты: <?= $aPaymentData['percent_balance'] ?> руб. <br /> -
-			Неустойка: <?= $aPaymentData['fine_balance'] ?> руб. <br />
+			перевода: <?= $aPaymentData['loan_balance'] ?> руб. <br /> -
+			Проценты: <?= $aPaymentData['percent_balance'] ?> руб. <br /> - Неустойка: <?= $aPaymentData['fine_balance'] ?> руб. <br />
 		</p>
 	</div>
 
