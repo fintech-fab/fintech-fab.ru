@@ -179,9 +179,16 @@ class ClientData extends CActiveRecord
 			$oClientData = new self;
 		}
 
-		if ($oClientData && $oClientData->complete == 1) {
+		// архивируем запись, если она завершена, но телефон не был подтвержден СМС-кодом
+		if ($oClientData && $oClientData->complete == 1 && $oClientData->flag_sms_confirmed != 1) {
 			$oClientData->flag_archived = 1;
 			$oClientData->save();
+			$oClientData = new self;
+		}
+
+		// если есть уже подтвержденный номер телефона, то создадим новую запись, не архивируя старую
+		// активной (не архивной) останется запись с номером телефона, подтвержденным по СМС
+		if($oClientData && $oClientData->flag_sms_confirmed == 1) {
 			$oClientData = new self;
 		}
 
