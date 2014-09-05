@@ -152,20 +152,6 @@
 				<span data-toggle="popover" data-html="true" data-content="<p style='text-align: center;'>Абонентка (750 р.)</p><p style='text-align: center;'>+</p><p style='text-align: center;'>Проценты за использование денег (до 450 р.)</p>" data-trigger="hover" data-placement="top"><i class="fa fa-question-circle"></i></span>
 			</td>
 		</tr>
-		<!--
-		<tr>
-			<td>Период подключения сервиса</td>
-			<td>30 дней</td>
-			<td>30 дней</td>
-			<td>30 дней</td>
-		</tr>
-		<tr>
-			<td>Доступные суммы</td>
-			<td>2000, 3000, 4000,<br>5000, 6000, 7000 р.</td>
-			<td>2000, 3000, 4000,<br>5000, 6000, 7000 р.</td>
-			<td>2000, 3000, 4000,<br>5000, 6000, 7000 р.</td>
-		</tr>
--->
 		<tr>
 			<td style="border-bottom: none;"></td>
 			<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
@@ -221,59 +207,98 @@
 <div class="page-divider"></div>
 
 <div class="modal hide fade tariffs-modal">
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<h3>Тариф &laquo;МИНИМУМ&raquo;</h3>
-</div>
-<div class="modal-body">
-	<div class="accordion" id="accordion-rate-minimum">
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c11">
-					<span class="dashed">Сколько стоит сервис?</span> </a>
-			</div>
-			<div id="c11" class="accordion-body collapse">
-				<div class="accordion-inner">
-					<p><strong>Стоимость за пользование деньгами в месяц – от 1800 до 6800 р.</strong></p>
-
-					<p>Стоимость напрямую зависит от одобренной суммы и включает в себя только проценты за пользования
-						деньгами.</p>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Тариф &laquo;МИНИМУМ&raquo;</h3>
+	</div>
+	<div class="modal-body">
+		<div class="accordion" id="accordion-rate-minimum">
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c11">
+						<span class="dashed">Сколько стоит сервис?</span> </a>
 				</div>
-			</div>
-		</div>
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c12">
-					<span class="dashed">Какие суммы доступны?</span> </a>
-			</div>
-			<div id="c12" class="accordion-body collapse">
-				<div class="accordion-inner">
-					<p>2000, 3000, 4000, 5000, 6000, 7000 р.</p>
+				<div id="c11" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<p><strong>Стоимость за пользование деньгами в месяц – от 1800 до 6800 р.</strong></p>
 
-					<p>Не всегда твои желания совпадают с нашими возможностями – в некоторых случаях может быть одобрена
-						меньшая сумма.</p>
-				</div>
-			</div>
-		</div>
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c13">
-					<div id="c16" class="accordion-body collapse">
-						<div class="accordion-inner">
-							<ul>
-								<li>КРЕДДИ – онлайн (проверка баланса, получение и возврат денег, продление подключения,
-									выбор или смена тарифа, история платежей, архив документов)
-								</li>
-								<li>Один канал получения денег - Мобильный телефон.</li>
-								<li>2 способа оплаты с моментальным зачислением и без комиссии (банковской картой на
-									сайте, через терминалы Элекснет, МКБ)
-								</li>
-								<li>Служба поддержки 24/7 (SMS и E-mail информирование, Контактный центр
-									8-800-555-75-78)
-								</li>
-							</ul>
-						</div>
+						<p>Стоимость напрямую зависит от одобренной суммы и включает в себя только проценты за
+							пользования деньгами.</p>
 					</div>
+				</div>
+			</div>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c12">
+						<span class="dashed">Какие суммы доступны?</span> </a>
+				</div>
+				<div id="c12" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<p>2000, 3000, 4000, 5000, 6000, 7000 р.</p>
+
+						<p>Не всегда твои желания совпадают с нашими возможностями – в некоторых случаях может быть
+							одобрена меньшая сумма.</p>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c13">
+						<span class="dashed">На сколько дней можно брать деньги?</span> </a>
+				</div>
+				<div id="c13" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<p>Наше требование – возврат денег на 30-й день с момента получения денег. Если хочешь вернуть
+							раньше – как тебе нравится.</p>
+
+						<p>Получение денег сразу после оплаты процентов за пользование деньгами.</p>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c14">
+						<span class="dashed">Как оплачивать?</span> </a>
+				</div>
+				<div id="c14" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<p>Проценты оплачиваешь сразу.</p>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c15">
+						<span class="dashed">Сколько раз можно брать деньги?</span> </a>
+				</div>
+				<div id="c15" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<p>Без ограничений.</p>
+
+						<p>Основное правило – верни всю сумму и можешь брать деньги повторно.</p>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c16">
+						<span class="dashed">Какие функции доступны?</span> </a>
+				</div>
+				<div id="c16" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<ul>
+							<li>КРЕДДИ – онлайн (проверка баланса, получение и возврат денег, продление подключения,
+								выбор или смена тарифа, история платежей, архив документов)
+							</li>
+							<li>Один канал получения денег - Мобильный телефон.</li>
+							<li>2 способа оплаты с моментальным зачислением и без комиссии (банковской картой на сайте,
+								через терминалы Элекснет, МКБ)
+							</li>
+							<li>Служба поддержки 24/7 (SMS и E-mail информирование, Контактный центр 8-800-555-75-78)
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 			<div class="accordion-group">
 				<div class="accordion-heading">
@@ -471,8 +496,7 @@
 						<ol>
 							<li>Заполни анкету (потребуются 2 документа)</li>
 							<li>Пройди видео- или фотоидентификацию – по твоему выбору.</li>
-							<li>Выбери тариф &laquo;ВСЕ ВКЛЮЧЕНО&raquo; с опцией &laquo;Оплатить абонентку
-								сразу&raquo;.
+							<li>Выбери тариф &laquo;ВСЕ ВКЛЮЧЕНО&raquo; с опцией &laquo;Оплатить абонентку сразу&raquo;.
 							</li>
 							<li>Получи одобрение на подключение сервиса и на доступный размер перевода.</li>
 							<li>Оплати абонентку сразу – 750 руб. (любым удобным способом, на выбор - 7 вариантов)</li>
@@ -755,6 +779,4 @@
 			</div>
 		</div>
 	</div>
-</div>
-<!-- footer end-->
- 
+</div><!-- footer end-->
