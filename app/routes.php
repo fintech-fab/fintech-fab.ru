@@ -3,6 +3,9 @@ Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainContr
 Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
 Route::post('vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
+
+Route::get('dinner' , 'App\Controllers\Dinner\DinnerController@getDinner');
+
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',
 		'as' => 'notices',
