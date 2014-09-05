@@ -28,8 +28,8 @@ $iTotal = $iLoanTotal + $iSubscriptionTotal;
 	</div>
 
 	<div class="alert alert-warning">
-		<h5><strong>Общая сумма к возврату: <?= $aPaymentData['balance'] ?> руб.</strong>
-			<a href="#" class="dotted" id="detail" onclick="return false;">детализация</a>
+		<h5><strong>Общая сумма к возврату: <?= $iTotal ?>
+				руб.</strong> <a href="#" class="dotted" id="detail" onclick="return false;">детализация</a>
 		</h5>
 
 		<p style="display: none;" id="detail_info">
