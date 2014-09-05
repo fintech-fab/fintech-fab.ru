@@ -1425,7 +1425,15 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24;
+		$oCurrTime = new DateTime();
+		$oCurrTime->setTimestamp(SiteParams::getTime());
+
+		$oExpiredTime = new DateTime();
+		$oExpiredTime->setTimestamp(SiteParams::strtotime($aClientInfo['subscription']['activity_to']));
+
+		$oDateInterval = $oCurrTime->diff($oExpiredTime);
+
+		return $oDateInterval->days;
 	}
 
 	/**
