@@ -6,5 +6,5 @@
  */
 
 return [
-	'terminal_id' => 2,
+	'terminal_id' => 1,
 ];

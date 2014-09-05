@@ -89,7 +89,7 @@ class EventController extends BaseController
 		$event = Event::find((int)$aRequest['id']);
 
 		if ($event->rules->count() > 0) {
-			return ['status' => 'error', 'message' => 'Сначала удалите правила'];
+			return ['status' => 'error', 'message' => 'Сначала удалите правила.'];
 		}
 
 		if ($event->delete()) {

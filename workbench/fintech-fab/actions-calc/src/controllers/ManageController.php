@@ -18,6 +18,9 @@ class ManageController extends BaseController
 {
 	protected $layout = 'main';
 
+	/**
+	 * Render manaage calculator.
+	 */
 	public function manage()
 	{
 		$oTerminal = Terminal::with(['events', 'signals'])->get()->find($this->iTerminalId);
@@ -31,6 +34,8 @@ class ManageController extends BaseController
 
 	/**
 	 * Getting all rules
+	 *
+	 * @return string
 	 */
 	public function getEventRules()
 	{
@@ -47,7 +52,9 @@ class ManageController extends BaseController
 	}
 
 	/**
-	 * Toggle rule active
+	 * Toggle rule active.
+	 *
+	 * @return array
 	 */
 	public function toggleRuleFlag()
 	{
@@ -56,22 +63,32 @@ class ManageController extends BaseController
 
 		/** @var Rule $oRule */
 		$oRule = Rule::find((int)$aRuleData['id']);
-		$iRuleFlag = $aRuleData['flag_active'] == 'true' ? 1 : 0;
+		$iRuleFlag = $aRuleData['flag_active'] == 'on' ? 1 : 0;
 		$oRule->flag_active = $iRuleFlag;
 
 		try {
-			if ($oRule->save()) {
-				echo json_encode(['status' => 'success', 'message' => '#' . $aRuleData['id'] . ' Правило сохранено.']);
-			}
+			$oRule->save();
 		} catch (ModelException $e) {
-			echo json_encode([
+			return [
 				'status'        => 'error',
 				'message'       => 'Ошибка сохранение правила.',
 				'error_message' => $e->getMessage()
-			]);
+			];
 		}
+
+		$sState = ($iRuleFlag == 1) ? 'вкл.' : 'выкл.';
+
+		return [
+			'status'  => 'success',
+			'message' => 'Правило: "' . $oRule->name . '" ' . $sState
+		];
 	}
 
+	/**
+	 * Update events table.
+	 *
+	 * @return \Illuminate\View\View
+	 */
 	public function updateEventsTable()
 	{
 		$aoEvents = Event::where('terminal_id', '=', $this->iTerminalId)->orderBy('created_at', 'desc')->paginate(10);

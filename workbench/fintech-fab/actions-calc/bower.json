@@ -25,6 +25,7 @@
   "devDependencies": {
     "foundation": "~5.3.3",
 	  "select2": "~3.5.1",
-	  "datatables-plugins": "*"
+	  "datatables-plugins": "*",
+	  "toastr": "~2.0.3"
   }
 }

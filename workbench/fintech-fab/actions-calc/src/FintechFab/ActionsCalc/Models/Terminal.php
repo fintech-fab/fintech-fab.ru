@@ -26,7 +26,7 @@ class Terminal extends Eloquent
 	protected $fillable = ['id', 'name', 'url', 'foreign_queue', 'foreign_job', 'key', 'password'];
 
 	/**
-	 * Accessor for paginating events
+	 * Accessor for paginating events on manage page.
 	 *
 	 * @return mixed
 	 */
@@ -35,16 +35,25 @@ class Terminal extends Eloquent
 		return $this->events()->paginate(10);
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function rules()
 	{
 		return $this->hasMany(Rule::class, 'terminal_id', 'id');
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function events()
 	{
 		return $this->hasMany(Event::class, 'terminal_id', 'id')->orderBy('created_at', 'desc');
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function signals()
 	{
 		return $this->hasMany(Signal::class, 'terminal_id', 'id');

@@ -110,7 +110,7 @@ class SignalController extends BaseController
 		$oRules = Rule::where('signal_id', '=', $id)->first();
 
 		if (!is_null($oRules)) {
-			return ['status' => 'error', 'message' => 'Сигнал используется. Нельзя удалить'];
+			return ['status' => 'error', 'message' => 'Сигнал используется.'];
 		}
 
 		if (is_null($oSignal)) {

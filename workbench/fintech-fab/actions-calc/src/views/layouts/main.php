@@ -10,21 +10,18 @@
 
 <?php $sPubPath = asset('packages/fintech-fab/actions-calc/'); ?>
 
-<!DOCTYPE html>
+<!DOCTYPE html><!--suppress HtmlUnknownTarget -->
 <html class="no-js" lang="ru">
 
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>FintechFab::ActionsCalculator</title>
+	<title>FintechFab::actions-calc(Калькулятор событий)</title>
 
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/app.min.css">
 	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/css/custom.css">
-	<link rel="stylesheet" href="<?php echo $sPubPath; ?>/datatables/plugins/foundation/dataTables.foundation.css">
 
-	<script src="<?php echo $sPubPath; ?>/js/app.js"></script>
-	<script src="<?php echo $sPubPath; ?>/datatables/js/jquery.dataTables.min.js"></script>
-	<script src="<?php echo $sPubPath; ?>/datatables/plugins/foundation/dataTables.foundation.js"></script>
+	<script src="<?php echo $sPubPath; ?>/js/app.min.js"></script>
 </head>
 <body>
 
@@ -33,19 +30,21 @@
 		<div class="nav-bar right">
 			<ul class="button-group">
 				<?php if (\FintechFab\ActionsCalc\Components\AuthHandler::isClientRegistered()): ?>
-					<li><a href="#" class="button"><i class="fi-torso"></i></a></li>
+					<li>
+						<button id="auth-profile" class="button secondary small"><i class="fi-torso"></i></button>
+					</li>
 				<?php endif; ?>
 			</ul>
 		</div>
 		<h1>
-			<small>Калькулятор событий</small>
+			<small><?php echo link_to_route('calc.manage', 'Калькулятор событий'); ?></small>
 		</h1>
 		<hr />
 	</div>
 </div>
 
 <div class="row">
-	<div class="large-12 columns" role="content">
+	<div class="large-12 columns">
 		<?php echo $content; ?>
 	</div>
 </div>
@@ -57,7 +56,9 @@
 	</div>
 </footer>
 
-<script src="<?php echo $sPubPath; ?>/js/cf.js"></script>
+<!-- f5 framework -->
+<script src="<?php echo $sPubPath; ?>/js/cf.min.js"></script>
+<!-- /f5 framework -->
 <script>
 	$(document).foundation({
 		reveal: {

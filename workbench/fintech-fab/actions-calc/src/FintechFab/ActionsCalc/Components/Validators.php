@@ -11,8 +11,8 @@ namespace FintechFab\ActionsCalc\Components;
 class Validators
 {
 	/**
-	 * Incoming request validation rules
-	 * 'terminal_id', 'event_sid', 'auth_sign', 'data'
+	 * Incoming request validation rules.
+	 * incoming names: 'terminal_id', 'event_sid', 'auth_sign', 'data'
 	 *
 	 * @return array
 	 */
@@ -26,7 +26,7 @@ class Validators
 	}
 
 	/**
-	 * Event validators
+	 * Event validators.
 	 *
 	 * @return array
 	 */
@@ -39,7 +39,7 @@ class Validators
 	}
 
 	/**
-	 * Rules validators
+	 * Rules validators.
 	 *
 	 * @return array
 	 */
@@ -52,6 +52,11 @@ class Validators
 		];
 	}
 
+	/**
+	 * Signal validators.
+	 *
+	 * @return array
+	 */
 	public static function getSignalValidator()
 	{
 		return [
@@ -61,15 +66,55 @@ class Validators
 		];
 	}
 
+	/**
+	 * Terminal validators.
+	 *
+	 * @return array
+	 */
 	public static function getTerminalValidators()
 	{
 		return [
 			'id'                    => 'integer|unique:terminals',
 			'name'                  => 'required',
-			'url'                   => 'required|url',
+			'url'                   => 'url',
 			'foreign_queue'         => '',
 			'foreign_job'           => '',
 			'key'                   => 'alpha_num',
+			'password'              => 'required|confirmed',
+			'password_confirmation' => 'required'
+		];
+	}
+
+	/**
+	 * Profile(terminal) validators.
+	 *
+	 * @return array
+	 */
+	public static function getProfileValidators()
+	{
+		return [
+			'name'          => 'required',
+			'url'           => 'url',
+			'foreign_queue' => '',
+			'foreign_job'   => '',
+			'key'           => 'alpha_num',
+		];
+	}
+
+	/**
+	 * Profile(terminal) validators on password change.
+	 *
+	 * @return array
+	 */
+	public static function getProfileChangePassValidators()
+	{
+		return [
+			'name'             => 'required',
+			'url'              => 'url',
+			'foreign_queue'    => '',
+			'foreign_job'      => '',
+			'key'              => 'alpha_num',
+			'current_password' => 'required',
 			'password'              => 'required|confirmed',
 			'password_confirmation' => 'required'
 		];

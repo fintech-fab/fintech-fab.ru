@@ -18,39 +18,48 @@ var destPath = './public/';
 gulp.task('default', function () {
 });
 
+
+// main app.css
 gulp.task('app.css', function () {
 	var arrCssFiles = [
 		vendorPath + 'foundation/scss/normalize.scss',
 		vendorPath + 'foundation/scss/foundation.scss',
-		vendorPath + 'foundation5fonts/css/foundation-icons.css',
-		vendorPath + 'select2/select2.css'
+		vendorPath + 'foundation5fonts/css/foundation-icons.css'
 	];
 
-	return gulp.src(arrCssFiles)
+	gulp.src(arrCssFiles)
 		.pipe(sass({style: 'compressed'}))
 		.pipe(minifycss())
 		.pipe(concat('app.css'))
 		.pipe(rename({suffix: '.min'}))
 		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'css'));
+
+	// fonts
+	console.log('Moving font files.');
+	gulp.src(vendorPath + "foundation5fonts/css/fonts/**.*")
+		.pipe(eol("\r\n"))
+		.pipe(gulp.dest(destPath + 'css/fonts'));
 });
 
+
+// main app.js (jquery, modernizr)
 gulp.task('app.js', function () {
 	var arrAppFiles = [
 		vendorPath + 'foundation/js/vendor/modernizr.js',
-		vendorPath + 'foundation/js/vendor/jquery.js',
-		vendorPath + 'select2/select2.js'
+		vendorPath + 'foundation/js/vendor/jquery.js'
 	];
 
-	return gulp.src(arrAppFiles)
-		.pipe(eol("\r\n"))
-		.pipe(rename({suffix: '.min'}))
+	gulp.src(arrAppFiles)
 		.pipe(uglify())
 		.pipe(concat('app.js'))
+		.pipe(rename({suffix: '.min'}))
 		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'js'));
 });
 
+
+// foundation5 css/js framework
 gulp.task('cf.js', function () {
 
 	var zfJsPath = vendorPath + 'foundation/js/';
@@ -58,38 +67,113 @@ gulp.task('cf.js', function () {
 	var arrJsFiles = [
 		zfJsPath + 'vendor/fastclick.js',
 		zfJsPath + 'foundation.js',
-		zfJsPath + 'foundation/foundation.topbar.js',
-		zfJsPath + 'foundation/foundation.dropdown.js',
-		zfJsPath + 'foundation/foundation.offcanvas.js',
 		zfJsPath + 'foundation/foundation.reveal.js',
-		zfJsPath + 'foundation/foundation.accordion.js'
+		zfJsPath + 'foundation/foundation.tooltips.js'
 	];
 
-	return gulp.src(arrJsFiles)
-		.pipe(rename({suffix: '.min'}))
+	gulp.src(arrJsFiles)
 		.pipe(uglify())
 		.pipe(concat('cf.js'))
+		.pipe(rename({suffix: '.min'}))
 		.pipe(eol("\r\n"))
 		.pipe(gulp.dest(destPath + 'js'));
 });
 
-gulp.task('cf.fonts', function() {
-	console.log('Moving font files.');
-	return gulp.src(vendorPath + "foundation5fonts/css/fonts/**.*")
-		.pipe(gulp.dest(destPath + 'css/fonts'));
-});
 
-gulp.task('select2.files', function () {
+// select2
+gulp.task('select2', function () {
 
+	// files
 	var aSelect2Files = [
 		vendorPath + 'select2/select2.png',
 		vendorPath + 'select2/select2-spinner.gif',
 		vendorPath + 'select2/select2x2.png'
 	];
 
-	console.log('Moving select2 files');
-	return gulp.src(aSelect2Files)
-		.pipe(gulp.dest(destPath + 'css'));
+	gulp.src(aSelect2Files)
+		.pipe(gulp.dest(destPath + 'select2/css'));
+
+	// css
+	gulp.src([vendorPath + 'select2/select2.css'])
+		.pipe(rename({suffix: '.min'}))
+		.pipe(minifycss())
+		.pipe(eol("\r\n"))
+		.pipe(gulp.dest(destPath + 'select2/css'));
+
+	// js
+	gulp.src([vendorPath + 'select2/select2.min.js'])
+		.pipe(eol("\r\n"))
+		.pipe(gulp.dest(destPath + 'select2/js'));
 });
 
-gulp.task('build-all', ['app.js', 'cf.js', 'app.css']);
+
+// datatables
+gulp.task('datatables', function () {
+
+	// js
+	gulp.src([vendorPath + 'datatables/datatables/media/js/jquery.dataTables.js'])
+		.pipe(uglify())
+		.pipe(eol("\r\n"))
+		.pipe(rename({
+			basename: 'datatables',
+			suffix: '.min',
+			extname: '.js'
+		}))
+		.pipe(gulp.dest(destPath + 'datatables/js'));
+
+	// plugins
+	// foundation plugin
+	// js
+	gulp.src([vendorPath + 'datatables-plugins/integration/foundation/dataTables.foundation.js'])
+		.pipe(uglify())
+		.pipe(eol("\r\n"))
+		.pipe(rename({
+			prefix: 'foundation.',
+			basename: 'datatables',
+			suffix: '.min',
+			extname: '.js'
+		}))
+		.pipe(gulp.dest(destPath + 'datatables/plugins/foundation'));
+
+	// css
+	gulp.src([vendorPath + 'datatables-plugins/integration/foundation/dataTables.foundation.css'])
+		.pipe(minifycss())
+		.pipe(eol("\r\n"))
+		.pipe(rename({
+			prefix: 'foundation.',
+			basename: 'datatables',
+			suffix: '.min',
+			extname: '.css'
+		}))
+		.pipe(gulp.dest(destPath + 'datatables/plugins/foundation'));
+
+	// images
+	gulp.src([vendorPath + 'datatables-plugins/integration/foundation/images/**.*'])
+		.pipe(gulp.dest(destPath + 'datatables/plugins/foundation/images'));
+});
+
+
+// toastr
+gulp.task('toastr', function () {
+
+	// js
+	gulp.src([vendorPath + 'toastr/toastr.min.js'])
+		.pipe(eol("\r\n"))
+		.pipe(gulp.dest(destPath + 'toastr'));
+
+	// css
+	gulp.src([vendorPath + 'toastr/toastr.min.css'])
+		.pipe(eol("\r\n"))
+		.pipe(gulp.dest(destPath + 'toastr'));
+});
+
+
+// buid all
+gulp.task('build-all', [
+	'app.js',
+	'app.css',
+	'cf.js',
+	'select2',
+	'datatables',
+	'toastr'
+]);

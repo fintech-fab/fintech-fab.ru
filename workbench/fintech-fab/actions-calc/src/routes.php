@@ -11,7 +11,7 @@ Route::post('actions-calc', [
 	'uses' => 'FintechFab\ActionsCalc\Controllers\RequestController@getRequest',
 ]);
 
-// auth
+// auth registration
 Route::any('/actions-calc/registration', [
 	'as'   => 'auth.registration',
 	'uses' => 'FintechFab\ActionsCalc\Controllers\AuthController@registration'
@@ -79,6 +79,12 @@ Route::group(['before' => 'ff-actions-calc.auth'], function () {
 	Route::get('/actions-calc/manage', [
 		'as'   => 'calc.manage',
 		'uses' => 'FintechFab\ActionsCalc\Controllers\ManageController@manage'
+	]);
+
+	// auth profile
+	Route::any('/actions-calc/profile', [
+		'as'   => 'auth.profile',
+		'uses' => 'FintechFab\ActionsCalc\Controllers\AuthController@profile'
 	]);
 
 });

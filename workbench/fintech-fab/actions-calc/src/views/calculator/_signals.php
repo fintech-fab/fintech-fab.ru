@@ -33,6 +33,8 @@
 				<ul class="signal-buttons button-group right">
 					<li>
 						<button class="tiny button signal-edit">&nbsp;<i class="fi-page-edit"></i></button>
+					</li>
+					<li>
 						<button class="tiny button alert signal-delete">&nbsp;<i class="fi-x"></i></button>
 					</li>
 				</ul>
@@ -41,44 +43,3 @@
 	<?php endforeach; ?>
 	</tbody>
 </table>
-
-<script type="text/javascript">
-	//	$(document).ready(function () {
-
-	//		$('#signal-add').click(function () {
-	//
-	//			oSignalRow[0] = 'new signal';
-	//			oSignalRow[1] = 'Новый сигнал';
-	//
-	//			$signalsTable.row.add(oSignalRow).draw().node();
-	//
-	//			return false;
-	//		});
-
-	//		$('#signal-add-end').click(function () {
-	//
-	//			$signalsTable.row.add([
-	//				'zabigale',
-	//				'яа тест таблицы',
-	//				oButtons.edit
-	//			]).draw().node();
-	//
-	//			return false;
-	//		});
-	//
-	//		$('#signal-search').click(function () {
-	//			var response = {
-	//				event_sid: "response sid",
-	//				event_name: "response name"
-	//			};
-	//
-	//			oSignalRow[0] = response.event_sid;
-	//			oSignalRow[1] = response.event_name;
-	//
-	//			$signalsTable.row('[data-id="2"]').data(oSignalRow).draw();
-	//
-	//			return false;
-	//		});
-
-	//	});
-</script>
