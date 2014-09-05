@@ -56,7 +56,11 @@ class AdminKreddyApiComponent
 
 	private $aSubscriptionActiveStates = array(
 		self::C_SUBSCRIPTION_ACTIVE,
+		self::C_SUBSCRIPTION_PAID,
 		self::C_LOAN_AVAILABLE,
+		self::C_LOAN_ACTIVE,
+		self::C_LOAN_REQUEST,
+		self::C_LOAN_CONFIRMED,
 		self::C_LOAN_CREATED,
 		self::C_LOAN_TRANSFER,
 		self::C_LOAN_DEBT,
