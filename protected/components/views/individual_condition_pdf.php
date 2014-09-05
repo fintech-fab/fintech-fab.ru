@@ -43,7 +43,7 @@ $aData = array(
 	array(
 		'condition'     => "Количество, размер и периодичность (сроки) платежей заемщика по договору или порядок определения этих платежей",
 		'conditionText' => "Количество платежей – 1<br>
-							Размер платежа – {$aConditionInfo['total_amount']} руб.<br>
+							Размер платежа – {$aConditionInfo['pay_amount']} руб.<br>
 							Срок платежа – через {$aConditionInfo['loan_lifetime']} дней с даты заключения Договора.",
 	),
 	array(
