@@ -3,6 +3,8 @@
 /* @var VideoIdentifyForm $model */
 /* @var IkTbActiveForm $form */
 
+$this->pageTitle = Yii::app()->name.' - Продожение регистрации'
+
 ?>
 
 <br /><br />
