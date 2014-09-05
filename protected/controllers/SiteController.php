@@ -114,6 +114,11 @@ class SiteController extends Controller
 		$this->render('contact');
 	}
 
+	public function actionTariffs()
+	{
+		$this->render('tariffs');
+	}
+
 	public function actionFaq()
 	{
 		// номер активной вкладки, по умолчанию - первая
@@ -123,7 +128,7 @@ class SiteController extends Controller
 		$aPost = Yii::app()->request->getPost('ContactForm');
 
 		//ajax-валидация
-		if(Yii::app()->request->isAjaxRequest){
+		if (Yii::app()->request->isAjaxRequest) {
 			echo IkTbActiveForm::validate($oModel);
 			Yii::app()->end();
 		}

@@ -74,7 +74,7 @@
 				</div>
 			</div>
 			<div class="mb1_redtext">
-				<a href="<?= Yii::app()->createUrl('/pages/view/tariffsdetails'); ?>">Подробнее о тарифах &#9658;</a>
+				<a href="<?= Yii::app()->createUrl('/site/tariffs'); ?>">Подробнее о тарифах &#9658;</a>
 			</div>
 		</div>
 	</div>
