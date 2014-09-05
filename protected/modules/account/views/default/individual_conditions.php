@@ -18,7 +18,7 @@ $this->pageTitle = Yii::app()->name . ' - Индивидуальные усло�
 		</h5>
 
 		<p>
-			<?= CHtml::link('Посмотреть', array('/account/getDocument/', 'id' => $aActive['hash'])); ?>
+			<?= CHtml::link('Посмотреть', array('/account/getDocument/', 'id' => $aActive['hash']), ['target' => '_blank']); ?>
 			<?= CHtml::link('Скачать', array('/account/getDocument/', 'id' => $aActive['hash'], 'download' => '1')); ?>
 		</p>
 		<?php if (isset($aActive['dt_confirm_to'])) { ?>
