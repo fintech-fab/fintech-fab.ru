@@ -5,17 +5,11 @@
 
 $this->pageTitle = Yii::app()->name . ' - График платежей';
 
-if (!Yii::app()->adminKreddyApi->isSubscriptionActive()) {
-	$aPaymentData['subscription_balance'] = 0;
-}
-
 $sSubscriptionEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['subscription_expired_to']));
 $sLoanEndDt = SiteParams::formatRusDate(SiteParams::getDayEndFromDatetime($aPaymentData['loan_expired_to']));
 
 $iSubscriptionTotal = $aPaymentData['subscription_balance'] + $aPaymentData['penalty_balance'];
 $iLoanTotal = $aPaymentData['loan_balance'] + $aPaymentData['percent_balance'] + $aPaymentData['fine_balance'];
-
-$iTotal = $iLoanTotal + $iSubscriptionTotal;
 
 
 ?>
@@ -28,7 +22,7 @@ $iTotal = $iLoanTotal + $iSubscriptionTotal;
 	</div>
 
 	<div class="alert alert-warning">
-		<h5><strong>Общая сумма к возврату: <?= $iTotal ?>
+		<h5><strong>Общая сумма к возврату: <?= $aPaymentData['balance'] ?>
 				руб.</strong> <a href="#" class="dotted" id="detail" onclick="return false;">детализация</a>
 		</h5>
 

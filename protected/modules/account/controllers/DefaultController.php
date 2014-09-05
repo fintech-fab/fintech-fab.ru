@@ -1495,8 +1495,14 @@ class DefaultController extends Controller
 		$this->redirect(Yii::app()->createUrl('/account/doSubscribe'));
 	}
 
+	/**
+	 * График платежей
+	 */
 	public function actionPaymentSchedule()
 	{
+		if (!Yii::app()->adminKreddyApi->isSubscriptionActive()) {
+			$this->redirect(Yii::app()->createUrl('/account'));
+		}
 
 		$aPaymentData = Yii::app()->adminKreddyApi->getCurrentClientProduct();
 

@@ -86,8 +86,9 @@ class AccountMenuWidget extends CWidget
 					'url'   => array('/account/default/getDocumentList')
 				),
 				array(
-					'label' => 'График платежей',
-					'url'   => array('/account/default/paymentSchedule')
+					'label'   => 'График платежей',
+					'url'     => array('/account/default/paymentSchedule'),
+					'visible' => Yii::app()->adminKreddyApi->isSubscriptionActive(),
 				),
 			),
 		);
