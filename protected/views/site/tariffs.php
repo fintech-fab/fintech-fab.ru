@@ -365,7 +365,7 @@
 				</div>
 				<div id="c1a" class="accordion-body collapse">
 					<div class="accordion-inner">
-						<p>От 146 779 926 691 840 % до 611 168 843 442 894 000 000 %</p>
+						<p>От 10 800 % до 40 800 %</p>
 					</div>
 				</div>
 			</div>
@@ -559,7 +559,7 @@
 				</div>
 				<div id="c2a" class="accordion-body collapse">
 					<div class="accordion-inner">
-						<p>От 539,32 % до 407 237,98 %</p>
+						<p>От 190,080 % до 950,400 %</p>
 					</div>
 				</div>
 			</div>
@@ -755,7 +755,7 @@
 				</div>
 				<div id="c3a" class="accordion-body collapse">
 					<div class="accordion-inner">
-						<p>От 585,56 % до 30 341,06 %</p>
+						<p>От 205,714 % до 720,000 %</p>
 					</div>
 				</div>
 			</div>

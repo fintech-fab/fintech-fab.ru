@@ -116,6 +116,8 @@ class SiteController extends Controller
 
 	public function actionTariffs()
 	{
+		$this->pageTitle = Yii::app()->name . ' - Тарифы';
+
 		$this->render('tariffs');
 	}
 
