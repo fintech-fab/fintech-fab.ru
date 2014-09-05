@@ -101,86 +101,87 @@
 
 </style>
 
-<div class="container">
-	<h1>Наши тарифы</h1>
-	<hr>
-	<table id="rates" class="table rates" style="margin-left: -118px;">
-		<tbody>
-		<tr>
-			<td style="border-top: none;"></td>
-			<td><strong>МИНИМУМ</strong></td>
-			<td><strong>ВСЕ ВКЛЮЧЕНО<br>Предоплата</strong></td>
-			<td><strong>ВСЕ ВКЛЮЧЕНО<br>Постоплата</strong></td>
-		</tr>
-		<tr>
-			<td>Функционал сервиса</td>
-			<td>Ограниченный</td>
-			<td>Полный</td>
-			<td>Полный</td>
-		</tr>
-		<tr>
-			<td>Способ получения денег</td>
-			<td>Мобильный телефон</td>
-			<td>Банковская карта, Мобильный телефон</td>
-			<td>Банковская карта, Мобильный телефон</td>
-		</tr>
-		<tr>
-			<td>Оплата абонентки</td>
-			<td>-</td>
-			<td>Сразу</td>
-			<td>В день первого возврата денег</td>
-		</tr>
-		<tr>
-			<td>Оплата %</td>
-			<td>100% предоплата всех процентов</td>
-			<td>В день возврата денег</td>
-			<td>В день возврата денег</td>
-		</tr>
-		<tr>
-			<td>% годовых</td>
-			<td>До 1181,9%</td>
-			<td>До 146%</td>
-			<td>До 273,75%</td>
-		</tr>
-		<tr>
-			<td>Стоимость</td>
-			<td>До 6800 р.</td>
-			<td>До 990 р.
-				<span data-toggle="popover" data-html="true" data-content="<p style='text-align: center;'>Абонентка (750 р.)</p><p style='text-align: center;'>+</p><p style='text-align: center;'>Проценты за использование денег (до 240 р.)</p>" data-trigger="hover" data-placement="top"><i class="fa fa-question-circle"></i></span>
-			</td>
-			<td>До 1200 р.
-				<span data-toggle="popover" data-html="true" data-content="<p style='text-align: center;'>Абонентка (750 р.)</p><p style='text-align: center;'>+</p><p style='text-align: center;'>Проценты за использование денег (до 450 р.)</p>" data-trigger="hover" data-placement="top"><i class="fa fa-question-circle"></i></span>
-			</td>
-		</tr>
-		<tr>
-			<td style="border-bottom: none;"></td>
-			<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
-			<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
-			<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
-		</tr>
-		<tr>
-			<td style="border-bottom: none; border-top: none;"></td>
-			<td class="ignoreSelected"><a href="#" class="btn btn-link infoBlockBtn" onclick="selectInfoBlock(0)">Подробнее</a>
-			</td>
-			<td class="ignoreSelected"><a href="#" class="btn btn-link infoBlockBtn" onclick="selectInfoBlock(1)">Подробнее</a>
-			</td>
-			<td class="ignoreSelected"><a href="#" class="btn btn-link infoBlockBtn" onclick="selectInfoBlock(2)">Подробнее</a>
-			</td>
-		</tr>
-		<tr style="display: none;">
-			<td style="border-top: none; border-bottom: none"></td>
-			<td colspan="3" id="rates-info" style="border-top: none;">
-				<div id="info-rate-minimum" class="info-block"></div>
-			</td>
-		</tr>
-		</tbody>
-	</table>
-	<div class="info-summary" style="text-align: center; margin-bottom: 40px;">
-		<!-- <h2>Тариф &laquo;МИНИМУМ&raquo;</h2> -->
-		<h5>Бери деньги на 30 дней.</h5>
-		<h5>Получай деньги на мобильный, когда они тебе нужны.</h5>
-		<h5>Возвращай задолженность и бери деньги повторно.</h5>
-	</div>
+<h1>Наши тарифы</h1>
+<hr>
+<table id="rates" class="table rates" style="margin-left: -118px;">
+	<tbody>
+	<tr>
+		<td style="border-top: none;"></td>
+		<td><strong>МИНИМУМ</strong></td>
+		<td><strong>ВСЕ ВКЛЮЧЕНО<br>Предоплата</strong></td>
+		<td><strong>ВСЕ ВКЛЮЧЕНО<br>Постоплата</strong></td>
+	</tr>
+	<tr>
+		<td>Функционал сервиса</td>
+		<td>Ограниченный</td>
+		<td>Полный</td>
+		<td>Полный</td>
+	</tr>
+	<tr>
+		<td>Способ получения денег</td>
+		<td>Мобильный телефон</td>
+		<td>Банковская карта, Мобильный телефон</td>
+		<td>Банковская карта, Мобильный телефон</td>
+	</tr>
+	<tr>
+		<td>Оплата абонентки</td>
+		<td>-</td>
+		<td>Сразу</td>
+		<td>В день первого возврата денег</td>
+	</tr>
+	<tr>
+		<td>Оплата %</td>
+		<td>100% предоплата всех процентов</td>
+		<td>В день возврата денег</td>
+		<td>В день возврата денег</td>
+	</tr>
+	<tr>
+		<td>% годовых</td>
+		<td>До 1181,9%</td>
+		<td>До 146%</td>
+		<td>До 273,75%</td>
+	</tr>
+	<tr>
+		<td>Стоимость</td>
+		<td>До 6800 р.</td>
+		<td>До 990 р.
+			<span data-toggle="popover" data-html="true" data-content="<p style='text-align: center;'>Абонентка (750 р.)</p><p style='text-align: center;'>+</p><p style='text-align: center;'>Проценты за использование денег (до 240 р.)</p>" data-trigger="hover" data-placement="top"><i class="fa fa-question-circle"></i></span>
+		</td>
+		<td>До 1200 р.
+			<span data-toggle="popover" data-html="true" data-content="<p style='text-align: center;'>Абонентка (750 р.)</p><p style='text-align: center;'>+</p><p style='text-align: center;'>Проценты за использование денег (до 450 р.)</p>" data-trigger="hover" data-placement="top"><i class="fa fa-question-circle"></i></span>
+		</td>
+	</tr>
+	<tr>
+		<td style="border-bottom: none;"></td>
+		<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
+		<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
+		<td><a href="/form" class="btn btn-primary">Подключиться</a></td>
+	</tr>
+	<tr>
+		<td style="border-bottom: none; border-top: none;"></td>
+		<td class="ignoreSelected">
+			<a href="#" class="btn btn-link infoBlockBtn" onclick="selectInfoBlock(0)">Подробнее</a>
+		</td>
+		<td class="ignoreSelected">
+			<a href="#" class="btn btn-link infoBlockBtn" onclick="selectInfoBlock(1)">Подробнее</a>
+		</td>
+		<td class="ignoreSelected">
+			<a href="#" class="btn btn-link infoBlockBtn" onclick="selectInfoBlock(2)">Подробнее</a>
+		</td>
+	</tr>
+	<tr style="display: none;">
+		<td style="border-top: none; border-bottom: none"></td>
+		<td colspan="3" id="rates-info" style="border-top: none;">
+			<div id="info-rate-minimum" class="info-block"></div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+<div class="info-summary" style="text-align: center; margin-bottom: 40px;">
+	<!-- <h2>Тариф &laquo;МИНИМУМ&raquo;</h2> -->
+	<h5>Бери деньги на 30 дней.</h5>
+	<h5>Получай деньги на мобильный, когда они тебе нужны.</h5>
+	<h5>Возвращай задолженность и бери деньги повторно.</h5>
 </div>
 
 <script>
