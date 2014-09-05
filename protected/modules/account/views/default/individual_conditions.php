@@ -67,5 +67,5 @@ if (isset($aConditions['archive']) && count($aConditions['archive'])) {
 
 <h4 style="margin-top: 20px;">Общие условия</h4>
 <div>
-	<?= CHtml::link('Общие условия', array('/static/docs/general_conditions.pdf')); ?>
+	<?= CHtml::link('Общие условия', ['/static/docs/general_conditions.pdf'], ['target' => '_blank']); ?>
 </div>
