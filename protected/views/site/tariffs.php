@@ -324,7 +324,7 @@
 			<div class="accordion-group">
 				<div class="accordion-heading">
 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-minimum" href="#c18">
-						<span class="dashed">Как продлить срок с текущим тарифом?</span> </a>
+						<span class="dashed">Как повторно подключить сервис?</span> </a>
 				</div>
 				<div id="c18" class="accordion-body collapse">
 					<div class="accordion-inner">
@@ -511,7 +511,7 @@
 			<div class="accordion-group">
 				<div class="accordion-heading">
 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-prepaid" href="#c28">
-						<span class="dashed">Как продлить срок с текущим тарифом?</span> </a>
+						<span class="dashed">Как повторно подключить сервис?</span> </a>
 				</div>
 				<div id="c28" class="accordion-body collapse">
 					<div class="accordion-inner">
@@ -708,7 +708,7 @@
 			<div class="accordion-group">
 				<div class="accordion-heading">
 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-rate-postpaid" href="#c38">
-						<span class="dashed">Как продлить срок с текущим тарифом?</span> </a>
+						<span class="dashed">Как повторно подключить сервис?</span> </a>
 				</div>
 				<div id="c38" class="accordion-body collapse">
 					<div class="accordion-inner">
