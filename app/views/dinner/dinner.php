@@ -9,6 +9,7 @@ if(!$end_dinner):
 	// Если $end_dinner === false отрисовываем табличку для заказа обеда?>
 
 	<table class="table table-hover">
+
 		<thead>
 			<td>Название блюда</td>
 			<td>Описание Блюда</td>
@@ -17,12 +18,19 @@ if(!$end_dinner):
 		</thead>
 
 	<?php foreach($menu as $food):?>
+
 		<tr id="this-food-id-<?=$food->id?>">
 			<td><?=$food->title?></td>
 			<td><?=$food->description?></td>
 			<td><?=$food->price?></td>
-			<td><input type="text"/></td>
+			<td>
+				<span class="less glyphicon glyphicon-plus-sign"></span>
+				<span class="quntity"> 0 </span>
+				<span class="more glyphicon glyphicon-minus-sign"></span>
+
+			</td>
 		</tr>
+
 	<?php endforeach;?>
 
 	</table>

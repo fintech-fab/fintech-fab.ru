@@ -10,6 +10,8 @@ if (empty($content)) {
 <html>
 <head>
     <?= View::make('layouts.inc.head.head') ?>
+	<link rel="stylesheet" href="css/dinner.css"/>
+	<script src="js/dinner.js"></script>
 
 </head>
 <body>

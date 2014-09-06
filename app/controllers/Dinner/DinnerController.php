@@ -14,7 +14,7 @@ class DinnerController extends BaseController
     {
 
 	    // Получаем текущие время
-	    $hour = (int) date('h');
+	    $hour = 10;//(int) date('H');
 
 		// Заказ обеда возможен с 8 до 16 ,
 	    // Если $hour не подпадает в этот интервал говорим что заказ невозможен
