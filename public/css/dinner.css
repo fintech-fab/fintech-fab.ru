@@ -1,0 +1,28 @@
+.table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+	vertical-align: middle;
+	min-width: 100px;
+}
+
+.table{
+	margin-top:20px;
+}
+
+.table .first{
+	min-width: 200px;
+}
+
+.table .glyphicon{
+	opacity:0.5;
+	cursor: pointer;
+	padding:3px;
+}
+
+.table .glyphicon:hover{
+	opacity:0.8;
+}
+
+#end-dinner{
+	margin:15px 0;
+	font-size: 16px;
+	line-height: 1.7;
+}
