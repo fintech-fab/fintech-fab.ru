@@ -18,7 +18,7 @@ class CreateDinnerMenuUsersTable extends Migration
 			$table->integer('user_id')->unsigned()->default(0);
 			$table->integer('dinner_menu_item_id')->unsigned()->default(0);
 			$table->integer('count')->unsigned()->default(1);
-			$table->boolean('deleted')->default(false);
+			$table->softDeletes();
 			$table->timestamps();
 		});
 	}

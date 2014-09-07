@@ -16,11 +16,11 @@ class CreateDinnerMenuItemsTable extends Migration
 
 		Schema::create('dinner_menu_items', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('title')->default(''); //название блюда
-			$table->text('description')->nullable(); //описание блюда
-			$table->decimal('price', 7, 2)->unsigned()->default(0); //цена блюда
+			$table->text('title')->default(''); //название блюда
+			$table->text('description')->default(''); //описание блюда
+			$table->decimal('price')->unsigned()->default(0); //цена блюда
 			$table->date('date')->default('0000-00-00'); //дата, когда блюдо доступно для заказа
-			$table->boolean('deleted')->default(false); //вместо удаления нужно сделать это поле true
+			$table->softDeletes();
 			$table->timestamps();
 		});
 
