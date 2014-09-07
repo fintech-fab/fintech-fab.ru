@@ -14,10 +14,11 @@ use Eloquent;
  * @property string  $description
  * @property float  $price
  * @property string $date
+ * @property string  $deleted_at
  * @property string  $updated_at
  * @property string  $created_at
  */
-class DinnerMenuItems extends Eloquent
+class DinnerMenuItem extends Eloquent
 {
 	protected $fillable = array('title', 'description', 'price', 'date');
 

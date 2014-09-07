@@ -13,10 +13,11 @@ use Eloquent;
  * @property integer $user_id
  * @property integer $dinner_menu_item_id
  * @property integer $count
+ * @property string  $deleted_at
  * @property string  $updated_at
  * @property string  $created_at
  */
-class DinnerMenuUsers extends Eloquent
+class DinnerMenuUser extends Eloquent
 {
 	protected $fillable = array('user_id', 'dinner_menu_item_id', 'count');
 
