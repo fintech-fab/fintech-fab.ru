@@ -333,8 +333,8 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'have_credit':
 				case 'have_past_credit':
 				case 'have_dependents':
-				$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери значение из списка', 'range' => array_keys(Dictionaries::$aYesNo));
-				break;
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери значение из списка', 'range' => array_keys(Dictionaries::$aYesNo));
+					break;
 
 				case 'status':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери статус из списка', 'range' => array_keys(Dictionaries::$aStatuses));
@@ -345,13 +345,13 @@ class ClientCreateFormAbstract extends CFormModel
 				case    'job_company':
 					$aRules[] = array(
 						$sFieldName, 'checkValidJobCompany', 'statusField' => 'status',
-						                                     'message' => 'Заполни поле',
+						                                     'message'     => 'Заполни поле',
 					);
 					break;
 				case 'job_position':
 					$aRules[] = array(
 						$sFieldName, 'checkValidJobPosition', 'statusField' => 'status',
-						                                      'message' => 'Заполни поле',
+						                                      'message'     => 'Заполни поле',
 					);
 					break;
 				case 'job_phone':
@@ -383,13 +383,13 @@ class ClientCreateFormAbstract extends CFormModel
 				case 'income_source':
 					$aRules[] = array(
 						$sFieldName, 'checkValidIncomeSource', 'statusField' => 'status',
-						                                       'message' => 'Заполни поле',
+						                                       'message'     => 'Заполни поле',
 					);
 					break;
 				case 'educational_institution_name':
 					$aRules[] = array(
 						$sFieldName, 'checkValidEducationalInstitutionName', 'statusField' => 'status',
-						                                                     'message' => 'Заполни поле',
+						                                                     'message'     => 'Заполни поле',
 					);
 					break;
 				case 'educational_institution_phone':
@@ -402,8 +402,8 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'job_salary_date':
 				case 'job_prepay_date':
-				$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение дней начисления', 'range' => array_keys(Dictionaries::$aMoneyDays));
-				break;
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение дней начисления', 'range' => array_keys(Dictionaries::$aMoneyDays));
+					break;
 
 				case 'secret_question':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Выбери значение поля из списка', 'range' => array_keys(Dictionaries::$aSecretQuestions));
@@ -419,8 +419,8 @@ class ClientCreateFormAbstract extends CFormModel
 
 				case 'job_monthly_income':
 				case 'job_monthly_outcome':
-				$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение для ежемесячного дохода.', 'range' => array_keys(Dictionaries::$aMonthlyMoney));
-				break;
+					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение для ежемесячного дохода.', 'range' => array_keys(Dictionaries::$aMonthlyMoney));
+					break;
 
 				case 'liabilities':
 					$aRules[] = array($sFieldName, 'in', 'message' => 'Укажи корректное значение для ежемесячного дополнительного расхода.', 'range' => array_keys(Dictionaries::$aLiabilities));
@@ -737,7 +737,7 @@ class ClientCreateFormAbstract extends CFormModel
 
 			'sex'                    => 'Пол',
 			'birthday'               => 'Дата рождения',
-			'numeric_code' => 'Цифровой код (для подтверждения повторных переводов)',
+			'numeric_code'           => 'Цифровой код (для подтверждения повторных переводов)',
 			'email'                  => 'E-mail',
 			'marital_status'         => 'Семейное положение',
 
@@ -845,7 +845,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'passport_code'                 => 'Пожалуйста, введи код подразделения, выдавшего твой паспорт – указан на второй странице паспорта.',
 			'passport_issued'               => 'Пожалуйста, укажи государственный орган, выдавший паспорт.',
 			'document'                      => 'Пожалуйста, выбери из списка название своего второго документа.',
-			'document_number' => (isset($aPopovers[$this->document])) ? $aPopovers[$this->document] : $aPopovers[0],
+			'document_number'               => (isset($aPopovers[$this->document])) ? $aPopovers[$this->document] : $aPopovers[0],
 
 			'birthplace'                    => 'Пожалуйста, введи место рождения по паспорту.',
 
