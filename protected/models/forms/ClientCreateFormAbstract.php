@@ -829,8 +829,10 @@ class ClientCreateFormAbstract extends CFormModel
 	/**
 	 * @return array
 	 */
-	public static function getHints()
+	public function getHints()
 	{
+		$aPopovers = Dictionaries::$aDocumentsPopovers;
+
 		$aHintsFormFields = array(
 			'last_name'                     => 'Пожалуйста, введи свою фамилию. Все документы будут оформлены на указанное здесь имя и фамилию.',
 			'first_name'                    => 'Пожалуйста, введи свое имя.',
@@ -843,7 +845,7 @@ class ClientCreateFormAbstract extends CFormModel
 			'passport_code'                 => 'Пожалуйста, введи код подразделения, выдавшего твой паспорт – указан на второй странице паспорта.',
 			'passport_issued'               => 'Пожалуйста, укажи государственный орган, выдавший паспорт.',
 			'document'                      => 'Пожалуйста, выбери из списка название своего второго документа.',
-			'document_number'               => 'Пожалуйста, выбери из списка название своего второго документа.',
+			'document_number' => (isset($aPopovers[$this->document])) ? $aPopovers[$this->document] : $aPopovers[0],
 
 			'birthplace'                    => 'Пожалуйста, введи место рождения по паспорту.',
 
