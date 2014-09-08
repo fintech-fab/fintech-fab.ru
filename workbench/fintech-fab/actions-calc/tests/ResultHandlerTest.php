@@ -36,7 +36,7 @@ class ResultHandlerTest extends TestSetUp
 		/**
 		 * @var \Illuminate\Http\JsonResponse $jsonResponse
 		 */
-		$jsonResponse = $this->call('POST', '/actions-calc/getRequest', $this->_args);
+		$jsonResponse = $this->call('POST', '/actions-calc', $this->_args);
 		$this->assertContains(json_encode(['status' => 'success', 'fittedRulesCount' => 1]), $jsonResponse->getContent());
 	}
 

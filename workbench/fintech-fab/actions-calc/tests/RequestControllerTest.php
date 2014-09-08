@@ -10,7 +10,7 @@ class RequestControllerTest extends TestSetUp
 
 	public function testRequestDataIn()
 	{
-		$this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
+		$this->call('POST', '/actions-calc', $this->aRequestData);
 		$this->assertNotEmpty($this->aRequestData['auth_sign']);
 		$this->assertNotEmpty($this->aRequestData['event_sid']);
 		$this->assertResponseOk();
@@ -32,7 +32,7 @@ class RequestControllerTest extends TestSetUp
 		/**
 		 * @var \Illuminate\Http\JsonResponse $response
 		 */
-		$response = $this->call('POST', '/actions-calc/getRequest', $this->aRequestData);
+		$response = $this->call('POST', '/actions-calc', $this->aRequestData);
 		$this->assertContains('{"status":"error","message":"401 Wrong signature. Unauthorized."}', json_encode($response->getData()));
 	}
 

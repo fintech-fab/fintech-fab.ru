@@ -23,7 +23,9 @@ class Terminal extends Eloquent
 {
 	protected $connection = 'ff-actions-calc';
 	protected $table = 'terminals';
-	protected $fillable = ['id', 'name', 'url', 'foreign_queue', 'foreign_job', 'key', 'password'];
+
+	protected $fillable = ['id', 'name', 'url', 'foreign_queue', 'foreign_job', 'key'];
+	protected $guarded = ['password'];
 
 	/**
 	 * Accessor for paginating events on manage page.

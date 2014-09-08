@@ -62,7 +62,7 @@ class AuthController extends BaseController
 	 *
 	 * @return $this|array|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
 	 */
-	public function profile()
+	public function profile() // TODO: Too fat. To several methods.
 	{
 		$iTerminalId = Config::get('ff-actions-calc::terminal_id');
 		$aRequestData = Input::all();
@@ -102,10 +102,14 @@ class AuthController extends BaseController
 
 				return Redirect::to(route('auth.profile'))->withInput($aRequestData)->withErrors($oErrors);
 			}
+
+			// valid and saving
+			$aRequestData['password'] = Hash::make(trim($aRequestData['password']));
+			$oTerminal->password = $aRequestData['password'];
+		} else {
+			unset($aRequestData['password']);
 		}
 
-		// valid and saving
-		$aRequestData['password'] = Hash::make(trim($aRequestData['password']));
 		$oTerminal->fill($aRequestData);
 
 		if ($oTerminal->save()) {

@@ -65,9 +65,6 @@
 	<?php echo View::make('ff-actions-calc::calculator._events_table', ['events' => $events]); ?>
 </div><!-- /events table -->
 
-<!-- temp storage -->
-<div id="events-table-container-search" class="hide search-mode"></div><!-- /temp storage -->
-
 <!-- event rules template -->
 <div id="event-rules-template" style="display: none;">
 	<div class="event-rule">
