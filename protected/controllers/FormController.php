@@ -342,6 +342,8 @@ class FormController extends Controller
 	 */
 	public function actionCheckCodes()
 	{
+		$this->layout = '//layouts/main_new';
+
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneAndEmailForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneAndEmailForm');
 		$iClientId = Yii::app()->clientForm->getClientId();
