@@ -40,8 +40,12 @@ class DinnerImportMenu extends Command
 	{
 		$url = $this->argument('url');
 
-		if (DinnerController::importMenu($url)) $this->info('Меню успешно импортировано');
-		else $this->error('При импорте меню произошла ошибка');
+		if (DinnerController::importMenu($url)) {
+			DinnerController::sendReminders();
+			$this->info('Меню успешно импортировано');
+		} else {
+			$this->error('При импорте меню произошла ошибка');
+		}
 	}
 
 	/**
