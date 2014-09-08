@@ -34,7 +34,7 @@ class KreddyLineLoanWidget extends LoanWidget
 				<strong>Стоимость пользования деньгами:</strong>&nbsp;<?= $iPercentDaily ?>&nbsp;р. в день
 			</li>
 			<li>
-				<strong>Количество переводов в течение действия сервиса:</strong>&nbsp;не ограничено
+				<strong>Количество переводов в течение действия сервиса:</strong>&nbsp;не чаще 1 раза в сутки, не более 5 переводов в месяц
 			</li>
 			<li>
 				<strong>Срок возврата денег:</strong>&nbsp;в течение
