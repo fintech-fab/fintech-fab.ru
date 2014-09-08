@@ -4,6 +4,8 @@ namespace App\Controllers\Dinner;
 
 use App\Controllers\BaseController;
 use FintechFab\Models\DinnerMenuItem;
+use FintechFab\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DinnerController extends BaseController
@@ -34,12 +36,13 @@ class DinnerController extends BaseController
 			Excel::load($file_name, function ($reader) {
 				$reader->noHeading();
 				$reader->ignoreEmpty();
+
+				$arr_reader = $reader->toArray();
+
 				$dates = array();
 
-				$reader->each(function ($sheet) {
-					global $dates; //печаль-беда, но foreach по $reader возвращает объект PHPExcel вместо Maatwebsite\Excel\Collections\RowCollection
-
-					$date_row = $sheet->get(0); //берем первую строку листа, чтобы извлечь дату
+				foreach ($arr_reader as $sheet) {
+					$date_row = $sheet[0]; //берем первую строку листа, чтобы извлечь дату
 
 					//Если первая строка листа содержит дату, то делаем все блюда листа доступными в этот день
 					//иначе - блюда с листа доступны во все даты, собранные с предыдущих листов
@@ -55,7 +58,7 @@ class DinnerController extends BaseController
 							self::importSheet($sheet, $date); //импортируем лист в БД
 						}
 					}
-				});
+				}
 			});
 
 			unlink($file_name);
@@ -75,7 +78,7 @@ class DinnerController extends BaseController
 	private static function downloadFile($url)
 	{
 		if ($file_content = file_get_contents($url)) {
-			$file_name = tempnam(sys_get_temp_dir(), 'dinner');
+			$file_name = sys_get_temp_dir() . '/fintechfab_dinner_menu.xls';
 			if (file_put_contents($file_name, $file_content)) {
 				return $file_name;
 			}
@@ -114,16 +117,32 @@ class DinnerController extends BaseController
 	/**
 	 * Импортирует лист из excel-файла в БД
 	 *
-	 * @param Maatwebsite\Excel\Collections\RowCollection $sheet Лист
+	 * @param array $sheet Лист
 	 * @param string $date Дата, когда блюдо будет доступно для заказа
 	 */
 	private static function importSheet($sheet, $date)
 	{
 		foreach ($sheet as $row) {
-			$row_items = $row->all(); //получаем ячейки текущей строки
-
-			if ($fields = self::getMenuItemFields($row_items, $date)) //формируем массив полей для модели
+			if ($fields = self::getMenuItemFields($row, $date)) //формируем массив полей для модели
 				DinnerMenuItem::create($fields); //добавляем блюдо в БД
+		}
+	}
+
+	/**
+	 * Отправка писем - напоминаний
+	 */
+	public static function sendReminders()
+	{
+		//Получаем пользователей с ролью employee
+		$users = User::with(array('roles' => function ($query) {
+				$query->where('role', 'like', 'employee');
+			}))->get();
+
+		//Рассылаем напоминания всем найденным пользователям
+		foreach ($users as $user) {
+			Mail::send('emails.dinner', array(), function ($message) use ($user) {
+				$message->to($user->email, $user->first_name . ' ' . $user->last_name)->subject('Вы можете заказать обед');
+			});
 		}
 	}
 
