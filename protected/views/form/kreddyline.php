@@ -119,7 +119,7 @@
 					<li>
 						<a href="<?= Yii::app()->createUrl('pages/view/yandexmoney'); ?>">
 							<img src="static/kreddyline/images/info_payment_icon3.png" width="45" height="52"><br />
-							Яндекс-деньги </a>
+							Яндекс.Деньги </a>
 					</li>
 					<li>
 						<a href="<?= Yii::app()->createUrl('pages/view/qiwi'); ?>">
