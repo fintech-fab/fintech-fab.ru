@@ -43,7 +43,7 @@ if (!$this->bUpdate):
 		function confirmCity() {
 			var cityName = '<?= $this->sCityName ?>';
 			var cityAndRegion = '<?= $this->sCityAndRegion ?>';
-			$.ajax({
+			jQuery.ajax({
 				url: "<?= Yii::app()->createUrl('/site/setCityToCookie') ?>",
 				type: "POST",
 				cache: false,
