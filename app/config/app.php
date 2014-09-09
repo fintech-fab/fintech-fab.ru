@@ -140,7 +140,7 @@ return array(
 	| the aliases are "lazy" loaded so they don't hinder performance.
 	|
 	*/
-
+	// ой беда-беда. автоформат выключен или настройки автоформата не загружены в IDE
 	'aliases' => array(
 
 		'App' => 'Illuminate\Support\Facades\App',
