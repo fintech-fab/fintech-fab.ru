@@ -16,6 +16,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class RequestController extends BaseController
 {
 	/**
+	 * Actions calculator main entry point
+	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function getRequest()

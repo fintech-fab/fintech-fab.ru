@@ -58,7 +58,7 @@ class Terminal extends Eloquent
 	 */
 	public function signals()
 	{
-		return $this->hasMany(Signal::class, 'terminal_id', 'id');
+		return $this->hasMany(Signal::class, 'terminal_id', 'id')->orderBy('created_at', 'desc');
 	}
 }
 

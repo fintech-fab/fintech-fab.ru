@@ -12,6 +12,7 @@ $(document).ready(function () {
 
 	// datatable
 	var $signalsTable = $('#manage-signals').DataTable({
+		aaSorting: [],
 		language: {
 			"sProcessing": "Подождите...",
 			"sLengthMenu": "Показать _MENU_ записей",
@@ -814,16 +815,6 @@ RulesFactory = function () {
 
 	var $template = $('#event-rules-template');
 
-	this.operators = [
-		{'bool': 'OP_BOOL'},
-		{'>': 'OP_GREATER'},
-		{'>=': 'OP_GREATER_OR_EQUAL'},
-		{'<': 'OP_LESS'},
-		{'<=': 'OP_LESS_OR_EQUAL'},
-		{'=': 'OP_EQUAL'},
-		{'!=': 'OP_NOT_EQUAL'}
-	];
-
 	// forming event rules[] to editable inputs
 	// placing inside form
 	this.formFromJson = function ($sRule, selector) {
@@ -847,7 +838,6 @@ RulesFactory = function () {
 
 			var $resultHtml = $('<div>', {'class': 'row'}).append($conditionsHtml);
 			$resultHtml.appendTo(selector.closest('.event-rules-translate'));
-//			$resultHtml.appendTo('#event-rules-translate');
 		});
 	};
 
