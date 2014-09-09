@@ -10,6 +10,7 @@ var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var livereload = require('gulp-livereload');
 var eol = require('gulp-eol');
+var shell = require('gulp-shell');
 
 // paths
 var vendorPath = './vendor/';
@@ -167,13 +168,21 @@ gulp.task('toastr', function () {
 		.pipe(gulp.dest(destPath + 'toastr'));
 });
 
-
-// buid all
-gulp.task('build-all', [
+// tasks
+var aTasks = [
 	'app.js',
 	'app.css',
 	'cf.js',
 	'select2',
 	'datatables',
 	'toastr'
-]);
+];
+
+// build and publish assets
+// works from workbench
+gulp.task('build-publish', aTasks, shell.task([
+	'cd ../../.. && php artisan asset:publish --bench=fintech-fab/actions-calc'
+]));
+
+// buid all
+gulp.task('build-all', aTasks);
