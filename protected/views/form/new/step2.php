@@ -32,8 +32,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 			echo $form->checkBox($oClientCreateForm, 'agree');
 			//echo $form->label($oClientCreateForm, 'agree', array('class' => 'slider_check', 'style' => 'width: 320px;'));
 			?>
-			<span class="slidr_checkbox">Я подтверждаю достоверность введенных данных и даю согласие на обработку(<a href="#">подробная
-					информация</a>)
+			<span class="slidr_checkbox">Я подтверждаю достоверность введенных данных и даю согласие на обработку(<a href="#" onclick="return doOpenModalFrame('/pages/viewPartial/usloviya', 'Условия обслуживания и передачи информации')">подробная информация</a>)
 				</span>
 		</div>
 		<div class="clearfix"></div>
