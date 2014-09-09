@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * @var array $menu
+ */
+
 // Если $end_dinner не определена по умолчанию false;
 $end_dinner = empty($end_dinner) ? false : $end_dinner;
+
 // Пока у нас один юзер
 $user_id = 5;
 
@@ -14,10 +19,12 @@ if(!$end_dinner):
 	<table class="table table-hover">
 
 		<thead>
-			<td class="first">Название блюда</td>
-			<td>Описание Блюда</td>
-			<td>Цена</td>
-			<td>Заказ</td>
+			<tr>
+				<td class="first" >Название блюда</td>
+				<td>Описание Блюда</td>
+				<td>Цена</td>
+				<td>Заказ</td>
+			</tr>
 		</thead>
 
 	<?php foreach($menu as $food):?>

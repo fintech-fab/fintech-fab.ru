@@ -31,7 +31,7 @@ function createTime(){
 
 	return (function(){
 
-		return time = {
+		var time = {
 
 			// Формируем часы
 			showTime : function(){
@@ -62,7 +62,10 @@ function createTime(){
 				timerId = setInterval('time.showTime()' , 1000);
 			}
 
-		}
+		};
+
+		return time;
+
 	}());
 }
 
@@ -86,7 +89,7 @@ function createOrder(){
 		var quantity = 0 , summa = 0;
 
 		// Если блока с заказаом нет то создаем
-		if(!$('#floatingBlock').length){
+		if( !$('#floatingBlock').length ){
 
 			// Создаем блок с информацией по заказу
 			$('body').append(
