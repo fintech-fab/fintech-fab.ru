@@ -10,6 +10,7 @@ $end_dinner = empty($end_dinner) ? false : $end_dinner;
 // Пока у нас один юзер
 $user_id = 5;
 
+// лучше двумя шаблонами (см. комментарий в контроллере)
 if(!$end_dinner):
 
 	// Если $end_dinner === false отрисовываем табличку для заказа обеда?>

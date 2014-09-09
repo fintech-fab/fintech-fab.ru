@@ -6,6 +6,8 @@
  * Time: 15:58
  */
 
+
+// модели у нас - в app/FintechFab/Models/
 class MenuItem extends Eloquent{
 
 	protected $table = 'dinner_menu_items';

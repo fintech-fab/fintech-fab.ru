@@ -3,7 +3,9 @@ Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainContr
 Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
 Route::post('vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
 
-
+// поизучать роутинг. раздел должен быть доступен только для авторизованных пользователей
+// у которых есть роль 'employee'
+// это можно сделать фильтрами, см. http://laravel.com/docs/routing
 Route::get('dinner' , 'App\Controllers\Dinner\DinnerController@getDinner');
 
 Route::get('notices', array(
