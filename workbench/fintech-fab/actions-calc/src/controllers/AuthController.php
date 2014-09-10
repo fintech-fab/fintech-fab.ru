@@ -20,10 +20,15 @@ use View;
  */
 class AuthController extends BaseController
 {
+	/**
+	 * @var string
+	 */
 	protected $layout = 'main';
 
 	/**
-	 * Registering new client
+	 * Registering new client terminal.
+	 *
+	 * @return \Illuminate\Http\RedirectResponse|View
 	 */
 	public function registration()
 	{

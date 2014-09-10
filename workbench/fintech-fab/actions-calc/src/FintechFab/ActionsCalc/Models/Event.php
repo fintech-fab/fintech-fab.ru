@@ -22,15 +22,30 @@ use Eloquent;
  */
 class Event extends Eloquent
 {
+	/**
+	 * @var string
+	 */
 	protected $table = 'events';
+	/**
+	 * @var string
+	 */
 	protected $connection = 'ff-actions-calc';
+	/**
+	 * @var array
+	 */
 	protected $fillable = ['id', 'name', 'event_sid', 'terminal_id'];
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function terminal()
 	{
 		return $this->belongsTo(Terminal::class, 'terminal_id');
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function rules() {
 	    return $this->hasMany(Rule::class, 'event_id', 'id');
 	}

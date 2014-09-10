@@ -52,7 +52,8 @@ class Registrator
 	 *
 	 * @return void
 	 */
-	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueue = false, $sResultHash = null)
+	public static function registerSignal($aSignalAttributes, $setFlagUrl = false, $setFlagQueue = false,
+	                                      $sResultHash = null)
 	{
 		$aSignalAttributes['signal_id'] = $aSignalAttributes['id'];
 

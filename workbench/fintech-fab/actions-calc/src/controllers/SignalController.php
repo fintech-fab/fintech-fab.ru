@@ -10,6 +10,11 @@ use Input;
 use View;
 use App;
 
+/**
+ * Class SignalController
+ *
+ * @package FintechFab\ActionsCalc\Controllers
+ */
 class SignalController extends BaseController
 {
 	/**

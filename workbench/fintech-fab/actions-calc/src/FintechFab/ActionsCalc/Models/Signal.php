@@ -23,12 +23,24 @@ use Eloquent;
  */
 class Signal extends Eloquent
 {
+	/**
+	 * @var string
+	 */
 	protected $connection = 'ff-actions-calc';
+	/**
+	 * @var string
+	 */
 	protected $table = 'signals';
+	/**
+	 * @var array
+	 */
 	protected $fillable = ['id', 'name', 'terminal_id', 'signal_sid'];
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function terminal() // TODO: events for certain terminal.
 	{
-		$this->belongsTo('Terminal', 'terminal_id');
+		return $this->belongsTo('Terminal', 'terminal_id');
 	}
 }

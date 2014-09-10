@@ -10,14 +10,20 @@ use FintechFab\ActionsCalc\Queue\ToForeign;
 /**
  * Class ResultHandler
  *
+ * Heart of the package.
+ *
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
 class ResultHandler
 {
+	/**
+	 * @var string
+	 */
 	private $_sResultHash;
 
 	function __construct()
 	{
+		// generating hash for each calculated result
 		$this->_sResultHash = $this->generateResultHash();
 	}
 
@@ -36,7 +42,6 @@ class ResultHandler
 			'iSignalId'   => $iSignalId,
 			'sResultHash' => $this->_sResultHash,
 		]);
-
 	}
 
 	/**

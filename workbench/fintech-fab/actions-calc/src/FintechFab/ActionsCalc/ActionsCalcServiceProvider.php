@@ -3,6 +3,11 @@
 use App;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class ActionsCalcServiceProvider
+ *
+ * @package FintechFab\ActionsCalc
+ */
 class ActionsCalcServiceProvider extends ServiceProvider
 {
 

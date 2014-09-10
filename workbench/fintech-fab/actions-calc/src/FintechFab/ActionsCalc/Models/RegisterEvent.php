@@ -19,11 +19,23 @@ use Eloquent;
  */
 class RegisterEvent extends Eloquent
 {
+	/**
+	 * @var string
+	 */
 	protected $connection = 'ff-actions-calc';
+	/**
+	 * @var string
+	 */
 	protected $table = 'register_events';
+	/**
+	 * @var array
+	 */
 	protected $fillable = ['id', 'name', 'event_id', 'event_sid', 'terminal_id', 'data'];
 
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function terminal()
 	{
 		return $this->belongsTo(Terminal::class, 'terminal_id');

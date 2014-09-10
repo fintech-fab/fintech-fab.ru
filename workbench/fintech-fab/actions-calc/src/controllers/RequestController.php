@@ -13,6 +13,11 @@ use FintechFab\ActionsCalc\Components\RequestHandler;
 use Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class RequestController
+ *
+ * @package FintechFab\ActionsCalc\Controllers
+ */
 class RequestController extends BaseController
 {
 	/**

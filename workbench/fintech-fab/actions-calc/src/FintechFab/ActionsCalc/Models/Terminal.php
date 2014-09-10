@@ -21,10 +21,22 @@ use Eloquent;
  */
 class Terminal extends Eloquent
 {
+	/**
+	 * @var string
+	 */
 	protected $connection = 'ff-actions-calc';
+	/**
+	 * @var string
+	 */
 	protected $table = 'terminals';
 
+	/**
+	 * @var array
+	 */
 	protected $fillable = ['id', 'name', 'url', 'foreign_queue', 'foreign_job', 'key'];
+	/**
+	 * @var array
+	 */
 	protected $guarded = ['password'];
 
 	/**
@@ -34,6 +46,7 @@ class Terminal extends Eloquent
 	 */
 	public function getEventsAttribute()
 	{
+		/** @noinspection PhpUndefinedMethodInspection */
 		return $this->events()->paginate(10);
 	}
 
@@ -50,6 +63,7 @@ class Terminal extends Eloquent
 	 */
 	public function events()
 	{
+		/** @noinspection PhpUndefinedMethodInspection */
 		return $this->hasMany(Event::class, 'terminal_id', 'id')->orderBy('created_at', 'desc');
 	}
 
@@ -58,6 +72,7 @@ class Terminal extends Eloquent
 	 */
 	public function signals()
 	{
+		/** @noinspection PhpUndefinedMethodInspection */
 		return $this->hasMany(Signal::class, 'terminal_id', 'id')->orderBy('created_at', 'desc');
 	}
 }

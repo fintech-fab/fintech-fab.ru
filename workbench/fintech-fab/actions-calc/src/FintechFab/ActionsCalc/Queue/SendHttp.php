@@ -60,6 +60,8 @@ class SendHttp
 	}
 
 	/**
+	 * Send request, ordered by queue.
+	 *
 	 * @param $sUrl
 	 * @param $sSignalSid
 	 *

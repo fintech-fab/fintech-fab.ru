@@ -11,6 +11,11 @@ use View;
 use Request;
 use App;
 
+/**
+ * Class RuleController
+ *
+ * @package FintechFab\ActionsCalc\Controllers
+ */
 class RuleController extends BaseController
 {
 

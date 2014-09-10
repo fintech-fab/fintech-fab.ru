@@ -8,10 +8,15 @@ use View;
 use Request;
 use Config;
 
+/**
+ * Class BaseController
+ *
+ * @package FintechFab\ActionsCalc\Controllers
+ */
 class BaseController extends Controller
 {
 	/**
-	 * @var mixed
+	 * @var int
 	 */
 	protected $iTerminalId;
 	/**
@@ -24,7 +29,7 @@ class BaseController extends Controller
 	 */
 	public function __construct()
 	{
-		$this->iTerminalId = Config::get('ff-actions-calc::terminal_id');
+		$this->iTerminalId = (int)Config::get('ff-actions-calc::terminal_id');
 	}
 
 	/**

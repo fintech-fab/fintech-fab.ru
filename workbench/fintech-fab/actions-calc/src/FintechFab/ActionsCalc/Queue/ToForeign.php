@@ -15,6 +15,9 @@ class ToForeign
 {
 
 	/**
+	 * Here, a result going to be pushed to queue.
+	 * Connection and class that handles the job, are configured in client terminal.
+	 *
 	 * @param Job   $job
 	 * @param array $aData
 	 */

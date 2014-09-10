@@ -20,6 +20,8 @@ class ManageController extends BaseController
 
 	/**
 	 * Render manaage calculator.
+	 *
+	 * @return void
 	 */
 	public function manage()
 	{

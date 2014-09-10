@@ -7,7 +7,6 @@ namespace FintechFab\ActionsCalc\Components;
  *
  * @author Ulashev Roman <truetamtam@gmail.com>
  */
-
 class Validators
 {
 	/**

@@ -28,6 +28,8 @@ class CalcHandler
 	private $_aoFittedRules = [];
 
 	/**
+	 * Main calculating method
+	 *
 	 * @param $aRequestData
 	 */
 	public function calculate($aRequestData) // TODO: data and new object to static method, and set data.
@@ -58,6 +60,8 @@ class CalcHandler
 	}
 
 	/**
+	 * Get fitted rules count.
+	 *
 	 * @return int
 	 */
 	public function getFittedRulesCount()
@@ -66,8 +70,8 @@ class CalcHandler
 	}
 
 	/**
-	 * In one rule grabbing rules
-	 * Having term of the rule in data, comparing with data using term operator
+	 * In one rule, grabbing terms.
+	 * Having term of the rule in data, comparing with data using term operator.
 	 *
 	 * @param $oRule
 	 *
@@ -91,6 +95,8 @@ class CalcHandler
 	}
 
 	/**
+	 * Checing rule term, against request data.
+	 *
 	 * @param $oRuleTerm
 	 *
 	 * @return bool

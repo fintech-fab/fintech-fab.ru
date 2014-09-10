@@ -10,9 +10,17 @@ use Input;
 use View;
 use Request;
 
+/**
+ * Class EventController
+ *
+ * @package FintechFab\ActionsCalc\Controllers
+ */
 class EventController extends BaseController
 {
 
+	/**
+	 * @var bool
+	 */
 	public $restful = true;
 
 	/**
