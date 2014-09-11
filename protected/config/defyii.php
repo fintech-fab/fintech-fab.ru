@@ -12,7 +12,7 @@
  * @property CStatePersister            $statePersister
  * @property CUrlManager                $urlManager
  * @property CHttpRequest               $request
- * @property SiteParams                 $site
+ * @property SiteParams                 $siteParams
  *
  *
  * @property CHttpSession               $session
@@ -33,7 +33,6 @@
  * @property CDummyCache                $cache
  * @property CLogRouter                 $log
  * @property User                       $user
- * @property SiteParams                 $siteParams
  *
  */
 class IdpApplication extends CWebApplication
