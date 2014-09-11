@@ -3,21 +3,16 @@
 namespace App\Controllers\Dinner;
 
 use App\Controllers\BaseController;
+use Excel;
 use FintechFab\Models\DinnerMenuItem;
+use FintechFab\Models\Role;
 use FintechFab\Models\User;
-use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
-
-// устраняем все ошибки IDE. Сейчас она ругается на то, что
-// Maatwebsite\Excel\Facades - такого неймспейса нет
-// на самом деле все может отлично работать
-// но обязательно нужно заставить IDE понять, что тут ошибки нет
-// здесь проблема вероятно, в том, что ide-helper не знает про эту библиотеку и не подсказывает
+use Mail;
 
 class DinnerController extends BaseController
 {
 
-    public $layout = 'dinner';
+	public $layout = 'dinner';
 
 	/**
 	 * Показывает страницу /dinner
@@ -27,7 +22,7 @@ class DinnerController extends BaseController
 	public function dinner()
 	{
 		return $this->make('dinner');
-    }
+	}
 
 	/**
 	 * Импортирует файл меню в базу данных
@@ -38,100 +33,50 @@ class DinnerController extends BaseController
 	 */
 	public static function importMenu($url)
 	{
-		// начинаем менять сознание :-)
-		/*
+		$file_name = self::downloadFile($url);
 
-		не надо так:
+		if (!$file_name) {
+			return false;
+		}
 
-		if(){
-			if(){
-				if(){
+		$reader = Excel::load($file_name);
 
+		if (!$reader) {
+			return false;
+		}
+
+		$reader->noHeading();
+		$reader->ignoreEmpty();
+
+		$arr_reader = $reader->toArray();
+
+		$dates = array();
+
+		foreach ($arr_reader as $sheet) {
+
+			//берем первую строку листа, чтобы извлечь дату
+			$date_row = $sheet[0];
+
+			//Если первая строка листа содержит дату, то проставляем ее блюдам с этого листа
+			//иначе - блюдам с листа ставим все даты, собранные с предыдущих листов
+			if (preg_match('/\d+\.\d+/', $date_row[1], $matches) > 0) {
+				//год берем текущий
+				$current_date = date("Y-m-d", strtotime($matches[0] . '.' . date("Y")));
+				//добавляем текущую дату в массив дат
+				$dates[] = $current_date;
+				//импортируем лист в БД
+				self::importSheet($sheet, $current_date);
+			} //блюда с последнего листа - доступны во все дни из файла
+			else {
+				//блюда с листа сохраняем со всеми датами, которые были на предыдущих листах
+				foreach ($dates as $date) {
+					//импортируем лист в БД
+					self::importSheet($sheet, $date);
 				}
 			}
 		}
 
-		надо так:
-
-		if(что-то не так и дальше работать не выйдет){
-			выходим
-		}
-
-		тут что-то кодим
-
-		if(что-то еще не так и дальше тоже не можем){
-			выходим
-		}
-
-		тут что-то кодим
-
-		*/
-
-		// здесь "плохой тон"
-		// сначала $file_name = self::downloadFile($url)
-		// потом if($file_name)
-		// нельзя внутри if совершать операции присваивания и вычисления
-		// сначала в отдельные переменные,
-		// потом внутри if использовать переменные
-
-		if ($file_name = self::downloadFile($url)) {
-			// без нужды closure не надо использовать
-			// в данном случае нужды нет.
-			// потому что при таком подходе невозможно разделить
-			// на отдельные методы (если захочется)
-			// код внутри этой функции
-			// и придется делать use если захочется передать какую-нибудь
-			// переменную в область видимость функци...
-			// короче осторожно с этим
-			Excel::load($file_name, function ($reader) {
-				$reader->noHeading();
-				$reader->ignoreEmpty();
-
-				$arr_reader = $reader->toArray();
-
-				$dates = array();
-
-				foreach ($arr_reader as $sheet) {
-
-					// пишем коменты над кодом, а не справа
-					// код, код, код // неправильный комент
-
-					// правильный комент
-					// код, код, код
-
-					$date_row = $sheet[0]; //берем первую строку листа, чтобы извлечь дату
-
-					// хвалю за комментарий! их надо писать обязательно, особенно в сложных кусках кода
-					//Если первая строка листа содержит дату, то делаем все блюда листа доступными в этот день
-					//иначе - блюда с листа доступны во все даты, собранные с предыдущих листов
-					// здесь у меня есть сомнение, что вообще надо думать о доступности блюд в датах.
-					// главное чтобы соответствующее меню было импортировано на правильный день.
-					// а доступность блюд для выбора пользователем - это уже будет решать логика на сайте (а не в импорте!)
-					// короче, импорт не должен думать, он должен просто сохранить (или обновить) данные в базе
-					// даже если скачан сильно старый файл с меню, ну и что? загрузили по датам и все.
-					if (preg_match('/\d+\.\d+/', $date_row[1], $matches) > 0) {
-
-						// можно пока не делать, но учесть переход на другой год стоило бы.
-						// хотя, с учетом январского беспредела, может и не нужно учитывать.
-						$current_date = date("Y-m-d", strtotime($matches[0] . '.' . date("Y"))); //год берем текущий
-						$dates[] = $current_date; //добавляем текущую дату в массив дат
-
-						self::importSheet($sheet, $current_date); //импортируем лист в БД
-					} else //блюда с последнего листа - доступны в любой день
-					{
-						foreach ($dates as $date) //блюдо будет доступно во все даты, которые были в предыдущих листах
-						{
-							self::importSheet($sheet, $date); //импортируем лист в БД
-						}
-					}
-				}
-			});
-
-			unlink($file_name);
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	/**
@@ -146,62 +91,69 @@ class DinnerController extends BaseController
 		// file_get_contents может не работать на каких-то системах,
 		// т.к. не считается безопасной загрузкой контента.
 		// взамен можно написать небольшую (свою) функцию по получению контента файла через curl
-		if ($file_content = file_get_contents($url)) {
-			// так просто на будущее.
-			// если бы это был не парсинг обедов, а что нибудь посерьезнее
-			// например загрузка каталога товаров в интернет-магазин
-			// лучше бы куда нибудь сохранять загруженный файл, для истории,
-			// чтобы потом можно было бы разобраться, что загрузили.
-			$file_name = sys_get_temp_dir() . '/fintechfab_dinner_menu.xls';
-			if (file_put_contents($file_name, $file_content)) {
-				return $file_name;
-			}
-			unlink($file_name);
+		$file_content = file_get_contents($url);
+
+		if (!$file_content) {
+			return false;
 		}
 
-		return false;
+		$file_name = sys_get_temp_dir() . '/fintechfab_dinner_menu_' . time() . '.xls';
+
+		$is_file_saved = file_put_contents($file_name, $file_content);
+
+		if (!$is_file_saved) {
+			return false;
+		}
+
+		return $file_name;
+
 	}
 
 	/**
 	 * Формирует массив полей для передачи в модель DinnerMenuItem
 	 *
 	 * @param $row_items array Ячейки строки из excel-файла
-	 * @param $date string Дата, когда блюдо будет доступно для заказа
+	 * @param $date      string Дата, когда блюдо будет доступно для заказа
 	 *
 	 * @return array|bool Массив полей, в случае неудачи - false
 	 */
 	private static function getMenuItemFields($row_items, $date)
 	{
-		if (!empty($row_items[1]) && !empty($row_items[2])) //Если первые две ячейки в строке не пусты - значит в этой строке блюдо
-		{
-			$fields = [
-				'title' => $row_items[1],
-				'price' => $row_items[2],
-				'date' => $date,
-			];
-
-			if (!empty($row_items[3])) $fields['description'] = $row_items[3]; //Описания может не быть
-
-			return $fields;
+		//Если какая-то из первых двух ячееек в строке пуста - значит в этой строке не блюдо
+		if (empty($row_items[1]) || empty($row_items[2])) {
+			return false;
 		}
 
-		return false;
+		$fields = [
+			'title' => $row_items[1],
+			'price' => $row_items[2],
+			'date'  => $date,
+		];
+
+		//Описания может не быть
+		if (!empty($row_items[3])) {
+			$fields['description'] = $row_items[3];
+		}
+
+		return $fields;
 	}
 
 	/**
 	 * Импортирует лист из excel-файла в БД
 	 *
-	 * @param array $sheet Лист
-	 * @param string $date Дата, когда блюдо будет доступно для заказа
+	 * @param array  $sheet Лист
+	 * @param string $date  Дата, когда блюдо будет доступно для заказа
 	 */
 	private static function importSheet($sheet, $date)
 	{
 		foreach ($sheet as $row) {
-			// ааааа! фигурные скобки пропущены! страшное преступление!
-			// карается отрывом рук на расстояние 1 метр от тела :-)
-			// скобки всегда использовать, всегда-всегда.
-			if ($fields = self::getMenuItemFields($row, $date)) //формируем массив полей для модели
-				DinnerMenuItem::create($fields); //добавляем блюдо в БД
+			//формируем массив полей для модели
+			$fields = self::getMenuItemFields($row, $date);
+
+			if ($fields) {
+				//добавляем блюдо в БД
+				DinnerMenuItem::create($fields);
+			}
 		}
 	}
 
@@ -215,19 +167,14 @@ class DinnerController extends BaseController
 	 */
 	public static function sendReminders()
 	{
-		//Получаем пользователей с ролью employee
-		// круто было бы так сделать:
-		// $role = тут объект роли employee
-		// $users = $role->users();
-		// т.е. не "было бы круто", а "надо".
-		$users = User::with(array('roles' => function ($query) {
-				$query->where('role', 'like', 'employee');
-			}))->get();
+		$role = Role::where('role', 'like', 'employee')->first();
+		$users = $role->users;
 
 		//Рассылаем напоминания всем найденным пользователям
 		foreach ($users as $user) {
 			Mail::send('emails.dinner', array(), function ($message) use ($user) {
-				$message->to($user->email, $user->first_name . ' ' . $user->last_name)->subject('Вы можете заказать обед');
+				$message->to($user->email, $user->first_name . ' ' . $user->last_name)
+					->subject('Вы можете заказать обед');
 			});
 		}
 	}
