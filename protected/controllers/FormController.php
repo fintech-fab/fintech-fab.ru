@@ -74,18 +74,6 @@ class FormController extends Controller
 	}
 
 	/**
-	 * @return array
-	 */
-	public function filters()
-	{
-		return array(
-			array(
-				'ext.pixels.PixelFilter',
-			),
-		);
-	}
-
-	/**
 	 * TODO этот экшен и его не-ajax аналог переделать, вынести смену шага в отдельный метод, его вызывать тут
 	 *
 	 * @param $step

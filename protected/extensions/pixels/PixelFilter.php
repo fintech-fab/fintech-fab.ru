@@ -27,6 +27,11 @@ class PixelFilter extends CFilter
 		self::C_TRADETRACKER => array(),
 	);
 
+	/**
+	 * @param CFilterChain $aFilterChain
+	 *
+	 * @return bool
+	 */
 	public function preFilter($aFilterChain)
 	{
 		$this->detectLink();
@@ -40,7 +45,7 @@ class PixelFilter extends CFilter
 	 */
 	private function detectLink()
 	{
-		$sUid = strtolower(Yii::app()->request->getQuery('pk_campaign'));
+		$sUid = strtolower(Yii::app()->request->getQuery('TrackingId'));
 
 		// Если не пусто или нет в нашем списке лидогенераторов
 		if (!$sUid || !array_key_exists($sUid, self::$aAdditionalFields)) {
@@ -74,9 +79,23 @@ class PixelFilter extends CFilter
 		$oCookie = Yii::app()->request->cookies['lead_generator'];
 
 		if ($oCookie) {
-			$iParentOrderId = isset($oCookie->value['iOrderId']) ? $oCookie->value['iOrderId'] : 0;
-			$iFirstOrderId = isset($oCookie->value['iFirstOrderId']) ? $oCookie->value['iFirstOrderId'] : 0;
+			$iParentOrderId = isset($oCookie->value['iOrderId']) ? (int)$oCookie->value['iOrderId'] : 0;
 			Yii::app()->request->cookies->remove('lead_generator');
+
+			$oLead = LeadsHistory::model()->findByPk($iParentOrderId);
+
+			if ($oLead) {
+
+				$iFirstOrderId = $oLead->first_id ? : $oLead->id;
+				$oLead->flag_reimplemented = 1;
+				$oLead->save();
+
+			} else {
+
+				Yii::log('Не найден предыдущий номер для лидогенератора');
+				$iFirstOrderId = $iParentOrderId;
+
+			}
 		}
 
 		// Сохраняем в историю
@@ -87,17 +106,12 @@ class PixelFilter extends CFilter
 		$oLeadsHistory->save();
 
 		// Сохраняем куки
-		$aParams['iParentOrderId'] = $iParentOrderId;
-		$aParams['iFirstOrderId'] = ($iFirstOrderId != 0) ? $iFirstOrderId : $oLeadsHistory->id;
 		$aParams['iOrderId'] = $oLeadsHistory->id;
 
 		$oCookie = new CHttpCookie('lead_generator', $aParams);
-
-		$oCookie->expire = SiteParams::getTime() + SiteParams::CTIME_MONTH;
+		$oCookie->expire = SiteParams::getTime() + SiteParams::CTIME_YEAR;
 		$oCookie->httpOnly = true;
 
 		Yii::app()->request->cookies->add('lead_generator', $oCookie);
 	}
-
-
 }

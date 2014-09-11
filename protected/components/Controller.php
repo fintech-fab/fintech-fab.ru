@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
@@ -64,6 +65,18 @@ class Controller extends CController
 		parent::afterAction($aAction);
 
 		ob_end_flush();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function filters()
+	{
+		return array(
+			array(
+				'ext.pixels.PixelFilter',
+			),
+		);
 	}
 
 	/**

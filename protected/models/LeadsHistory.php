@@ -10,6 +10,7 @@
  * @property string  $parent_id
  * @property string  $first_id
  * @property integer $flag_showed
+ * @property integer $flag_reimplemented
  * @property string  $dt_add
  * @property string  $dt_show
  *
