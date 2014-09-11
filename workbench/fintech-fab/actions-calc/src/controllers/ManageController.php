@@ -19,7 +19,7 @@ class ManageController extends BaseController
 	protected $layout = 'main';
 
 	/**
-	 * Render manaage calculator.
+	 * Render manage calculator.
 	 *
 	 * @return void
 	 */
