@@ -49,6 +49,8 @@ class PixelFilter extends CFilter
 
 		// Если не пусто или нет в нашем списке лидогенераторов
 		if (!$sUid || !array_key_exists($sUid, self::$aAdditionalFields)) {
+			Yii::log('Не найден лидогенератор: ' . $sUid, CLogger::LEVEL_INFO);
+
 			return;
 		}
 
