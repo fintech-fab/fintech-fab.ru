@@ -604,6 +604,11 @@ class FormController extends Controller
 	{
 		$oClientLandingForm = new ClientLandingForm();
 
+		if (Yii::app()->request->isAjaxRequest) {
+			echo IkTbActiveForm::validate($oClientLandingForm);
+			Yii::app()->end();
+		}
+
 		if (Yii::app()->request->isPostRequest) {
 
 			/**
@@ -638,11 +643,6 @@ class FormController extends Controller
 
 				Yii::app()->end();
 			}
-		}
-
-		if (Yii::app()->request->isAjaxRequest) {
-			echo IkTbActiveForm::validate($oClientLandingForm);
-			Yii::app()->end();
 		}
 
 		$this->layout = '//layouts/landing';
