@@ -99,7 +99,7 @@ $a = array(
 			'showScriptName' => false,
 			'rules'          => array(
 				//''                                                  => 'form/index',
-				'welcome'                                           => 'form/landing',
+				'landing'                                           => 'form/landing',
 				'contact'                                           => 'site/contact',
 				'contactUs'                                         => 'site/contactUs',
 
