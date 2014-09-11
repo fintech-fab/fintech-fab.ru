@@ -278,7 +278,7 @@ class AdminKreddyApiComponent
 	private $testPassword = 'Aa123456';
 	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';
 
-	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Идентификация пройдена, но форма подтверждения документов не заполнена. Для прожолжения {passport_url_start}заполни, пожалуйста, форму{passport_url_end}.";
+	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Идентификация пройдена, но форма подтверждения документов не заполнена. Для продолжения {passport_url_start}заполни, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента

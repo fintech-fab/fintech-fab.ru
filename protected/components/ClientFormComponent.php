@@ -14,6 +14,7 @@ class ClientFormComponent
 {
 	const SITE1 = 'main';
 	const SITE2 = 'ivanovo';
+	const SITE3 = 'landing';
 	const FAST_REG = 'fast';
 	const CONTINUE_REG = 'continue'; //продолжение регистрации
 
@@ -42,6 +43,9 @@ class ClientFormComponent
 			'view'  => 'main',
 			'model' => 'ClientRegStep2Form',
 		),
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
+		),
 	);
 
 	public static $aSelectChannelSettings = array(
@@ -52,6 +56,9 @@ class ClientFormComponent
 		self::SITE1        => array(
 			'view'  => 'main',
 			'model' => 'ClientRegStep2Form',
+		),
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
 		),
 	);
 
@@ -64,6 +71,9 @@ class ClientFormComponent
 			'view'  => 'main',
 			'model' => 'ClientRegStep2Form',
 		),
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
+		),
 	);
 
 	public static $aPhoneFormSettings = array(
@@ -73,10 +83,14 @@ class ClientFormComponent
 		self::SITE1        => array(
 			'model' => 'ClientRegStep2Form',
 		),
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
+		),
 	);
 
 	public static $aSuccessYmGoal = array(
 		self::SITE1        => 'fr_register_complete',
+		self::SITE3        => 'fr_register_complete',
 		self::CONTINUE_REG => 'fr_continue_complete',
 	);
 
@@ -85,6 +99,7 @@ class ClientFormComponent
 	private static $aPhoneForms = array(
 		'ClientPersonalDataForm',
 		'ClientRegStep2Form',
+		'ClientLandingForm',
 	);
 
 
@@ -99,6 +114,11 @@ class ClientFormComponent
 	public static $aSteps = array(
 		self::SITE1        => array(
 			'max'     => 2,
+			'min'     => 0,
+			'default' => 0,
+		),
+		self::SITE3        => array(
+			'max'     => 1,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -209,6 +229,34 @@ class ClientFormComponent
 				'topPageWidget'    => true,
 			),
 			2 => array(
+
+				'layout'           => '//layouts/main_new',
+				'view'             => 'new/check_codes',
+				'sub_view'         => array(
+					'condition' => 'getFlagCodesSent',
+					true        => 'confirm_phone/check_sms_code_fast_reg',
+					false       => 'confirm_phone/send_sms_code',
+				),
+				'model'            => 'ClientConfirmPhoneAndEmailForm',
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => array(
+					'condition' => 'getFlagCodesSent',
+					true        => 'fr_sms_code_check',
+					false       => 'fr_sms_code_send',
+				),
+				'topPageWidget'    => true,
+			),
+		),
+		self::SITE3        => array(
+			0 => array(
+				'layout'           => '//layouts/landing',
+				'view'             => 'landing',
+				'model'            => 'ClientRegStep1Form',
+				'breadcrumbs_step' => 1,
+				'metrika_goal'     => 'fz_landing',
+				'topPageWidget'    => true,
+			),
+			1 => array(
 
 				'layout'           => '//layouts/main_new',
 				'view'             => 'new/check_codes',
@@ -1384,6 +1432,9 @@ class ClientFormComponent
 				Yii::app()->session[$aStep['model']] = null;
 			}
 		}
+
+		// сбросим конфиг сайта на "по умолчанию"
+		$this->setSiteConfigName(self::SITE1);
 	}
 
 	/**

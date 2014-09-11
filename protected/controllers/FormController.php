@@ -591,4 +591,53 @@ class FormController extends Controller
 		);
 	}
 	*/
+
+	public function actionLanding()
+	{
+		$oClientLandingForm = new ClientLandingForm();
+
+		if (Yii::app()->request->isPostRequest) {
+
+			/**
+			 * собираем все данные формы (она не на основе модели создана, делали криворукие верстальщики,
+			 * потому собираем вручную, во избежание проблем с переделкой формы, стилей, JS и прочего на нее навешанного)
+			 */
+			$aBirthday[] = Yii::app()->request->getPost('day');
+			$aBirthday[] = Yii::app()->request->getPost('month');
+			$aBirthday[] = Yii::app()->request->getPost('year');
+
+			$oClientLandingForm->birthday = implode('.', $aBirthday);
+
+			$oClientLandingForm->email = Yii::app()->request->getPost('email');
+			$oClientLandingForm->first_name = Yii::app()->request->getPost('name');
+			$oClientLandingForm->last_name = Yii::app()->request->getPost('lname');
+			$oClientLandingForm->third_name = Yii::app()->request->getPost('sname');
+			$oClientLandingForm->phone = implode('', Yii::app()->request->getPost('phone'));
+			$oClientLandingForm->agree = (Yii::app()->request->getPost('rule') === 'on');
+			$oClientLandingForm->sex = Yii::app()->request->getPost('sex');
+
+			if ($oClientLandingForm->validate()) {
+				Yii::app()->clientForm->formDataProcess($oClientLandingForm);
+
+				Yii::app()->clientForm->setCurrentStep(0);
+				Yii::app()->clientForm->setDoneSteps(0);
+
+				Yii::app()->clientForm->setSiteConfigName(ClientFormComponent::SITE3);
+
+				Yii::app()->clientForm->nextStep();
+
+				Yii::app()->request->redirect(Yii::app()->createUrl('/form'));
+
+				Yii::app()->end();
+			}
+		}
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo IkTbActiveForm::validate($oClientLandingForm);
+			Yii::app()->end();
+		}
+
+		$this->layout = '//layouts/landing';
+		$this->render('landing');
+	}
 }
