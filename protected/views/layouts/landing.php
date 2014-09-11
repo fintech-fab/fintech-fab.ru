@@ -15,7 +15,7 @@ Yii::app()->bootstrap->registerBootstrapCss();
 	<script src="/static/landing/js/form.js" type="text/javascript"></script>
 	<script src="/static/landing/js/select.js" type="text/javascript"></script>
 	<script src="/static/landing/js/jquery.selectbox.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=5"></script>
+	<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=6"></script>
 </head>
 <body>
 <div id="main">
