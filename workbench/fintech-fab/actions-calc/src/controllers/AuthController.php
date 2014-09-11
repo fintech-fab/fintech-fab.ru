@@ -3,6 +3,7 @@
 namespace FintechFab\ActionsCalc\Controllers;
 
 use Config;
+use FintechFab\ActionsCalc\Components\AuthHandler;
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Terminal;
 use Hash;
@@ -32,6 +33,10 @@ class AuthController extends BaseController
 	 */
 	public function registration()
 	{
+		if (AuthHandler::isClientRegistered()) {
+			return Redirect::route('calc.manage');
+		}
+
 		$iTerminalId = Config::get('ff-actions-calc::terminal_id');
 
 		// view form on GET
