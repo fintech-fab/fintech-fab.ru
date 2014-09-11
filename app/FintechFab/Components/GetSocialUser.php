@@ -17,14 +17,16 @@ class GetSocialUser
 			'redirect_uri'  => Config::get('social.vk.redirect_url')
 		);
 
-		$token = json_decode(file_get_contents('https://oauth.vk.com/access_token' . '?'
-			. urldecode(http_build_query($params))), true);
+		$paramsQuery = http_build_query($params);
+		$url = 'https://oauth.vk.com/access_token' . '?' . $paramsQuery;
+		$content = file_get_contents($url);
+		$json = json_decode($content);
 
-		if (isset($token['access_token'])) {
+		if (isset($json['access_token'])) {
 			$params = array(
-				'uids'         => $token['user_id'],
+				'uids'         => $json['user_id'],
 				'fields'       => 'uid,first_name,last_name,bdate,screen_name,photo_big',
-				'access_token' => $token['access_token']
+				'access_token' => $json['access_token']
 			);
 
 			$userInfo = json_decode(file_get_contents('https://api.vk.com/method/users.get' . '?'
