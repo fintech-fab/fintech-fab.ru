@@ -33,6 +33,7 @@
  * @property CDummyCache                $cache
  * @property CLogRouter                 $log
  * @property User                       $user
+ * @property SiteParams                 $siteParams
  *
  */
 class IdpApplication extends CWebApplication

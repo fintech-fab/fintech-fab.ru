@@ -696,7 +696,7 @@ class AdminKreddyApiComponent
 			'loan_purpose'        => null,
 			'birthplace'          => null,
 
-			'order_id' => null,
+			'order_id'            => null,
 		);
 
 		//получаем массив, соджержащий только заданные поля
@@ -2196,7 +2196,7 @@ class AdminKreddyApiComponent
 			'sms_code'    => $sSmsCode,
 			'product_id'  => $iProduct,
 			'channel_id'  => $iChannelId,
-			'tracking_id' => Yii::app()->request->cookies['TrackingID'],
+			'tracking_id' => Yii::app()->siteParams->getTrackingId(),
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, $aRequestData);

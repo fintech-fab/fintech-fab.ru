@@ -45,7 +45,7 @@ class PixelFilter extends CFilter
 	 */
 	private function detectLink()
 	{
-		$sUid = strtolower(Yii::app()->request->getQuery('TrackingId'));
+		$sUid = strtolower(Yii::app()->request->getQuery('TrackingID'));
 
 		// Если не пусто или нет в нашем списке лидогенераторов
 		if (!$sUid || !array_key_exists($sUid, self::$aAdditionalFields)) {

@@ -36,22 +36,6 @@ class Controller extends CController
 	{
 		ob_start();
 
-		if ($sTrackingID = Yii::app()->request->getParam('TrackingID')) {
-			//очистка данных из GET-запроса
-			$oPurifier = new CHtmlPurifier;
-			$oPurifier->options = array(
-				'HTML.Allowed' => '',
-			);
-			$sTrackingID = $oPurifier->purify($sTrackingID);
-			$sTrackingID = preg_replace('/[^a-z\d]/i', '', $sTrackingID);
-
-			if (Yii::app()->request->cookies['TrackingID'] != $sTrackingID) {
-				$cookie = new CHttpCookie('TrackingID', $sTrackingID);
-				$cookie->expire = time() + SiteParams::CTIME_YEAR * 5; //поставим срок жизни куки на 5 лет, чтоб наверняка
-				Yii::app()->request->cookies['TrackingID'] = $cookie;
-			}
-		}
-
 		if (Yii::app()->antiBot->checkIsBanned()) {
 			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 			Yii::app()->end();
