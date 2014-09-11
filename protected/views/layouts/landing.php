@@ -11,7 +11,6 @@ Yii::app()->bootstrap->registerBootstrapCss();
 	<meta charset="UTF-8">
 	<link href="/static/landing/css/style.css" rel="stylesheet" />
 	<link href="/static/landing/css/selectbox.css" rel="stylesheet" />
-<!--	<script src="/static/landing/js/jquery-1.11.1.min.js" type="text/javascript"></script>-->
 	<script src="/static/landing/js/form.js" type="text/javascript"></script>
 	<script src="/static/landing/js/select.js" type="text/javascript"></script>
 	<script src="/static/landing/js/jquery.selectbox.min.js" type="text/javascript"></script>
