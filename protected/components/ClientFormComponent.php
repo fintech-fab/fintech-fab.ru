@@ -385,7 +385,7 @@ class ClientFormComponent
 
 				$aClientDataForSave = $aValidFormData;
 
-				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aClientDataForSave['tracking_id'] = Yii::app()->siteParams->getTrackingId();
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 
@@ -504,12 +504,10 @@ class ClientFormComponent
 					$aClientDataForSave = CMap::mergeArray($aSessionClientData, $aClientDataForSave);
 				}
 
-				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aClientDataForSave['tracking_id'] = Yii::app()->siteParams->getTrackingId();
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
 
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
-
-
 			}
 
 			/**

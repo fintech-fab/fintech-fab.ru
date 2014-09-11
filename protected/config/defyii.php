@@ -12,7 +12,7 @@
  * @property CStatePersister            $statePersister
  * @property CUrlManager                $urlManager
  * @property CHttpRequest               $request
- * @property SiteParams                 $site
+ * @property SiteParams                 $siteParams
  *
  *
  * @property CHttpSession               $session

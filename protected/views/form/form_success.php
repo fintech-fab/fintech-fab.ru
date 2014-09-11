@@ -17,7 +17,7 @@ $this->pageTitle = Yii::app()->name;
 Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
-<img src="https://cosmoleads.oneffect.us/affiliate/track/123/<?= time() ?>/" height="1" width="1" /> 
+<? $this->widget('ext.pixels.PixelWidget') ?>
 
 <div class="row">
 

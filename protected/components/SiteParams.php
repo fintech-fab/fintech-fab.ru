@@ -761,6 +761,22 @@ class SiteParams
 
 		return ($sUrl) ? $sUrl : self::DEFAULT_URL; //если вдруг параметр не передан, возвращаем значение по-умолчанию
 	}
+
+	public function getTrackingId()
+	{
+		$oCookie = Yii::app()->request->cookies['lead_generator'];
+
+		if ($oCookie) {
+			return $oCookie->value['sUid'];
+		}
+
+		$oCookie = Yii::app()->request->cookies['TrackingID'];
+		if ($oCookie) {
+			return (string)$oCookie;
+		}
+
+		return null;
+	}
 }
 
 /**

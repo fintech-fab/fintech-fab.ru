@@ -73,21 +73,6 @@ class FormController extends Controller
 	}
 
 	/**
-	 * @return array
-	 */
-	public function filters()
-	{
-		return array(
-			array(
-				'ext.linkprofit.LinkprofitFilter',
-			),
-			array(
-				'ext.banki_ru.BankiRuFilter',
-			),
-		);
-	}
-
-	/**
 	 * TODO этот экшен и его не-ajax аналог переделать, вынести смену шага в отдельный метод, его вызывать тут
 	 *
 	 * @param $step
@@ -452,6 +437,13 @@ class FormController extends Controller
 
 		//берем данные из БД
 		$aClientData = ClientData::getClientDataById($iClientId);
+
+		// Информация по order_id, который будет отправлен в лиды
+		$aClientData['order_id'] = null;
+		$oCookie = Yii::app()->request->cookies['lead_generator'];
+		if ($oCookie && isset($oCookie->value['iOrderId'])) {
+			$aClientData['order_id'] = $oCookie->value['iOrderId'];
+		}
 
 		//отправляем в API данные клиента
 		$bRegisterSuccess = Yii::app()->clientForm->updateFastRegClient($aClientData);
