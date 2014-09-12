@@ -38,6 +38,8 @@ $this->pageTitle = 'Кредди - Сервис в твоем формате';
 	<link rel="stylesheet" href="/static/newmain/css/general_style.css?v=2" type="text/css" media="screen">
 	<script type="text/javascript" src="/static/newmain/js/main.js"></script>
 
+	<link rel="shortcut icon" href="<?= Yii::app()->request->baseUrl; ?>/static/img/favicon.ico" />
+
 	<!--[if lt IE 9]>
 		<!--<script type="text/javascript" src="js/html5.js"></script>-->    <![endif]-->
 </head>
