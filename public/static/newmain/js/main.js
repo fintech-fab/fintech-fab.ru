@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
 	
 	//$('#fancyClock').tzineClock();
 	
-	$('.carousel').carousel({pause: false, interval: 3500});	/*подключение бутстраповской карусели*/
+	$('.carousel').carousel({pause: false, interval: 10000});	/*подключение бутстраповской карусели*/
 	
 	$('.askbu_left').click(function(){
 		TweenMax.to(".ask_upbuttons", 0, {background: "url(images/askbl_lact.png) 50% 0% no-repeat"});
