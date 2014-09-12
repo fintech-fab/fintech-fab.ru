@@ -101,14 +101,10 @@ class PixelFilter extends CFilter
 		}
 
 		// Сохраняем в историю
-		$oLeadsHistory = new LeadsHistory();
-		$oLeadsHistory->lead_name = $aParams['sUid'];
-		$oLeadsHistory->first_id = $iFirstOrderId;
-		$oLeadsHistory->parent_id = $iParentOrderId;
-		$oLeadsHistory->save();
+		$oLead = LeadsHistory::generate($aParams['sUid'], $iFirstOrderId, $iParentOrderId);
 
 		// Сохраняем куки
-		$aParams['iOrderId'] = $oLeadsHistory->id;
+		$aParams['iOrderId'] = $oLead->id;
 
 		$oCookie = new CHttpCookie('lead_generator', $aParams);
 		$oCookie->expire = SiteParams::getTime() + SiteParams::CTIME_YEAR;

@@ -19,6 +19,44 @@
 class LeadsHistory extends CActiveRecord
 {
 	/**
+	 * @param $sUid
+	 * @param $iFirstOrderId
+	 * @param $iParentOrderId
+	 *
+	 * @return LeadsHistory
+	 */
+	public static function generate($sUid, $iFirstOrderId, $iParentOrderId)
+	{
+		$oLead = new self();
+		$oLead->lead_name = $sUid;
+		$oLead->first_id = $iFirstOrderId;
+		$oLead->parent_id = $iParentOrderId;
+		$oLead->save();
+
+		// Генерация случайного идентификатора
+		$iAttempts = 10;
+		while (true) {
+			try {
+				$oLead->id = floor(SiteParams::getTime() / 3600) * 3600 + mt_rand(0, 3600);
+				$oLead->save();
+				break;
+			} catch (Exception $e) {
+				// Не удоволетверено условие по уникальности
+				$iAttempts--;
+
+				if ($iAttempts <= 0) {
+					unset($oLead->id);
+
+					$oLead->save();
+					break;
+				}
+			}
+		}
+
+		return $oLead;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function tableName()
