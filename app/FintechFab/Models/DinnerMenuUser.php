@@ -5,7 +5,7 @@ namespace FintechFab\Models;
 use Eloquent;
 
 /**
- * Class DinnerMenuUsers
+ * Class DinnerMenuUser
  *
  * @package FintechFab\Models
  *

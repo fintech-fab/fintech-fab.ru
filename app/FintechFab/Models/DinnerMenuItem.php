@@ -5,7 +5,7 @@ namespace FintechFab\Models;
 use Eloquent;
 
 /**
- * Class DinnerMenuItems
+ * Class DinnerMenuItem
  *
  * @package FintechFab\Models
  *
@@ -14,13 +14,19 @@ use Eloquent;
  * @property string  $description
  * @property float  $price
  * @property string $date
+ * @property integer $section_id
  * @property string  $deleted_at
  * @property string  $updated_at
  * @property string  $created_at
  */
 class DinnerMenuItem extends Eloquent
 {
-	protected $fillable = array('title', 'description', 'price', 'date');
+	protected $fillable = array('title', 'description', 'price', 'date', 'section_id');
 
 	protected $table = 'dinner_menu_items';
+
+	public function section()
+	{
+		return $this->belongsTo('FintechFab\Models\DinnerMenuSection', 'section_id', 'id');
+	}
 }
