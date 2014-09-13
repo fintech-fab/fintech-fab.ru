@@ -18,7 +18,14 @@ class SoapController extends Controller
 
 	public function index()
 	{
-		$oServer = new SoapServer(null, array('uri' => "http://fintech-fab.dev"));
+		$oServer = new SoapServer (
+			null,
+			array(
+				'uri'    => "http://fintech-fab.dev",
+				'asd'    => 123213,
+				'asdasd' => 'asdasdsa'
+			)
+		);
 		$oServer->setClass(VanguardOrder::class);
 	}
 
