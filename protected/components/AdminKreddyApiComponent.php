@@ -613,6 +613,7 @@ class AdminKreddyApiComponent
 			'email'       => null,
 			'phone'       => null,
 			'birthday'    => null,
+			'sex'         => null,
 			'tracking_id' => null,
 			'ip'          => null,
 			'site_region' => null,

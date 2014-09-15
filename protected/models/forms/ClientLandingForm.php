@@ -14,6 +14,7 @@ class ClientLandingForm extends ClientFullForm
 			'first_name',
 			'last_name',
 			'third_name',
+			'birthday',
 			'email',
 			'agree',
 			'phone',
@@ -24,6 +25,7 @@ class ClientLandingForm extends ClientFullForm
 			'first_name',
 			'last_name',
 			'third_name',
+			'birthday',
 			'email',
 			'phone',
 			'agree',
@@ -51,7 +53,20 @@ class ClientLandingForm extends ClientFullForm
 			'email',
 			'agree',
 			'phone',
+			'birthday',
 			'sex'
 		);
 	}
+
+	/**
+	 * @param $aBirthday
+	 */
+	public function setBirthdayFromParts($aBirthday)
+	{
+
+		if (isset($aBirthday['day']) && isset($aBirthday['month']) && isset($aBirthday['year'])) {
+			$this->birthday = sprintf('%02s.%02s.%s', $aBirthday['day'], $aBirthday['month'], $aBirthday['year']);
+		}
+	}
+
 }

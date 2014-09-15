@@ -279,6 +279,8 @@ class FormController extends Controller
 	 */
 	public function actionSendCodes()
 	{
+		$this->layout = Yii::app()->clientForm->getLayout();
+
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
 			//TODO тут сделать проверку, что клиент реально на нужном шаге!!!!!
@@ -327,7 +329,7 @@ class FormController extends Controller
 	 */
 	public function actionCheckCodes()
 	{
-		$this->layout = '//layouts/main_new';
+		$this->layout = Yii::app()->clientForm->getLayout();
 
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneAndEmailForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneAndEmailForm');
@@ -607,11 +609,11 @@ class FormController extends Controller
 			 * собираем все данные формы (она не на основе модели создана, делали криворукие верстальщики,
 			 * потому собираем вручную, во избежание проблем с переделкой формы, стилей, JS и прочего на нее навешанного)
 			 */
-			$aBirthday[] = Yii::app()->request->getPost('day');
-			$aBirthday[] = Yii::app()->request->getPost('month');
-			$aBirthday[] = Yii::app()->request->getPost('year');
+			$aBirthday['day'] = Yii::app()->request->getPost('day');
+			$aBirthday['month'] = Yii::app()->request->getPost('month');
+			$aBirthday['year'] = Yii::app()->request->getPost('year');
 
-			$oClientLandingForm->birthday = implode('.', $aBirthday);
+			$oClientLandingForm->setBirthdayFromParts($aBirthday);
 
 			$oClientLandingForm->email = Yii::app()->request->getPost('email');
 			$oClientLandingForm->first_name = Yii::app()->request->getPost('name');

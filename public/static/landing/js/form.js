@@ -88,7 +88,7 @@ $(document).ready(function () {
 			$(".error-rule").show();
 			error = 1;
 		}
-		reg = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+		reg = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/i;
 		if (!reg.test($("#email").val())) {
 			$("#email").addClass("error");
 			error = 1;
