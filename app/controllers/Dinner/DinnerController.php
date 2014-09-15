@@ -4,6 +4,7 @@ namespace App\Controllers\Dinner;
 
 use App\Controllers\BaseController;
 use Excel;
+use File;
 use FintechFab\Models\DinnerMenuItem;
 use FintechFab\Models\Role;
 use FintechFab\Models\User;
@@ -88,16 +89,30 @@ class DinnerController extends BaseController
 	 */
 	private static function downloadFile($url)
 	{
-		// file_get_contents может не работать на каких-то системах,
-		// т.к. не считается безопасной загрузкой контента.
-		// взамен можно написать небольшую (свою) функцию по получению контента файла через curl
-		$file_content = file_get_contents($url);
+		$curl_session = curl_init($url);
+
+		if (!$curl_session) {
+			return false;
+		}
+
+		curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl_session, CURLOPT_BINARYTRANSFER, true);
+
+		$file_content = curl_exec($curl_session);
+
+		curl_close($curl_session);
 
 		if (!$file_content) {
 			return false;
 		}
 
-		$file_name = sys_get_temp_dir() . '/fintechfab_dinner_menu_' . time() . '.xls';
+		$path = storage_path() . '/dinner';
+
+		if (!File::exists($path)) {
+			File::makeDirectory($path);
+		}
+
+		$file_name = $path . '/menu_' . date('Y-m-d-U') . '.xls';
 
 		$is_file_saved = file_put_contents($file_name, $file_content);
 
