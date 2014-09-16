@@ -1,6 +1,7 @@
 <?php namespace FintechFab\ActionsCalc;
 
 use App;
+use Config;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -25,6 +26,7 @@ class ActionsCalcServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
+		Config::set('database.default', 'ff-actions-calc');
 		$this->package('fintech-fab/actions-calc', 'ff-actions-calc');
 		include __DIR__ . '/../../routes.php';
 		include __DIR__ . '/../../filters.php';
