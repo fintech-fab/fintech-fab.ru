@@ -38,7 +38,7 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="center tariffs">
-			<a href="<?= Yii::app()->createUrl('/site/tariffs') ?>">Подробнее о тарифах</a>
+			<a href="<?= Yii::app()->createUrl('/site/tariffs') ?>" target="_blank">Подробнее о тарифах</a>
 		</div>
 	</div>
 
@@ -66,7 +66,7 @@
 		</div>
 		<div class="clearfix"></div>
 		<div class="center tariffs">
-			<a href="<?= Yii::app()->createUrl('/site/tariffs') ?>">Подробнее о тарифах</a>
+			<a href="<?= Yii::app()->createUrl('/site/tariffs') ?>" target="_blank">Подробнее о тарифах</a>
 		</div>
 	</div>
 	<div class="clearfix"></div>
