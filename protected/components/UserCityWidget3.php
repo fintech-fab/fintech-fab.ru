@@ -3,117 +3,16 @@
 /**
  * Class UserCityWidget
  */
-class UserCityWidget3 extends CWidget
+class UserCityWidget3 extends UserCityWidget
 {
-	public $sCityName;
-	public $bCitySelected = false; //город выбран
-	public $sCityAndRegion;
-	public $sCsrfTokenName;
-	public $sCsrfToken;
-	public $bUpdate = false;
+	public $sView = 'user_city_widget3';
 
 	/**
-	 * TODO причесать тут весь код, плюс код представления
-	 * TODO сделать чистку и валидацию того, что шлет юзер
+	 * @return mixed
 	 */
-
-	public function run()
+	protected function getModalBody()
 	{
-		$this->sCsrfTokenName = Yii::app()->request->csrfTokenName;
-		$this->sCsrfToken = Yii::app()->request->csrfToken;
-
-		$oCityNameCookie = Yii::app()->request->cookies['cityName'];
-		$oCityAndRegionCookie = Yii::app()->request->cookies['cityAndRegion'];
-		$oCitySelectedCookie = Yii::app()->request->cookies['citySelected'];
-
-		if (!empty($oCitySelectedCookie->value) && !empty($oCityAndRegionCookie) && !empty($oCityNameCookie)) {
-			$this->bCitySelected = true;
-		}
-
-		$sCity = ids_ipGeoBase::getCityByIP();
-		if ($oCityNameCookie && $oCityAndRegionCookie) { // если в куках есть город и регион, выводим его
-			$this->sCityName = $oCityNameCookie->value;
-			$this->sCityAndRegion = $oCityAndRegionCookie->value;
-		} elseif ($sCity) { // если удалось определить город по ip
-			$this->sCityName = $sCity;
-			$sRegion = ids_ipGeoBase::getRegionByIP();
-			$this->sCityAndRegion = $sCity;
-			$this->sCityAndRegion .= ($sCity != $sRegion) ? (', ' . $sRegion) : '';
-			if (!$oCityAndRegionCookie) {
-				Yii::app()->request->cookies['cityAndRegion'] = new CHttpCookie('cityAndRegion', $this->sCityAndRegion);
-			}
-		} else {
-			$this->sCityName = false;
-		}
-
-		//TODO возможно, вынести в отдельные представления
-		if (!$oCityNameCookie && $this->sCityName) {
-			$sDataContent = 'Мы автоматически определили ваш город: ';
-			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong>';
-			$sDataContent .= '<br/> Правильно? <br/>';
-			$sDataContent .= $this->widget(
-				'bootstrap.widgets.TbButton',
-				array(
-					'label'       => 'Да, правильно',
-					'type'        => 'primary',
-					'size'        => 'small',
-					'htmlOptions' => array(
-						'data-toggle' => 'modal',
-
-						'onclick'     => 'js: confirmCity()'
-					),
-				),
-				true
-			);
-			$sDataContent .= '&nbsp;' . $this->widget(
-					'bootstrap.widgets.TbButton',
-					array(
-						'label'       => 'Нет, изменить город',
-						'type'        => 'primary',
-						'size'        => 'small',
-						'htmlOptions' => array(
-							'data-toggle' => 'modal',
-							'data-target' => '#locationModal',
-						),
-					),
-					true
-				);
-		} elseif ($this->sCityName) {
-			$sDataContent = 'Ваш город: ';
-			$sDataContent .= '<strong>' . $this->sCityAndRegion . '</strong><br/>';
-			$sDataContent .= '&nbsp;' . $this->widget(
-					'bootstrap.widgets.TbButton',
-					array(
-						'label'       => 'Изменить город',
-						'type'        => 'primary',
-						'size'        => 'small',
-						'htmlOptions' => array(
-							'data-toggle' => 'modal',
-							'data-target' => '#locationModal',
-						),
-					),
-					true
-				);
-		} else {
-			$this->sCityName = "город не определён";
-			$sDataContent = 'Ваш город не удалось определить. Укажите город самостоятельно. ';
-			$sDataContent .= '&nbsp;' . $this->widget(
-					'bootstrap.widgets.TbButton',
-					array(
-						'label'       => 'Указать город',
-						'type'        => 'primary',
-						'size'        => 'small',
-						'htmlOptions' => array(
-							'data-toggle' => 'modal',
-							'data-target' => '#locationModal',
-						),
-					),
-					true
-				);
-		}
-
-
-		$sModalBody = $this->widget(
+		return $this->widget(
 			'bootstrap.widgets.TbSelect2',
 			array(
 				'name'           => 'cityName',
@@ -155,7 +54,7 @@ class UserCityWidget3 extends CWidget
 										jQuery("#locationModal").modal("hide");
 										jQuery("#userLocation").popover("hide");
 										//шлем инфу на сервер и обновляем виджет через ajax
-										$.ajax({
+										jQuery.ajax({
 											url: \'' . Yii::app()->createUrl("/site/setCityToCookie") . '\',
 											type: "POST",
 											cache: false,
@@ -163,7 +62,8 @@ class UserCityWidget3 extends CWidget
 											data: ({
                                                 cityName: object.cityName,
                                                 cityAndRegion: object.cityAndRegion,
-                                                ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '"
+                                                ' . $this->sCsrfTokenName . ': "' . $this->sCsrfToken . '",
+                                                bootstrap3: 1
                                             }),
 											success: function(html){
 												jQuery("#userCityWidget").html(html);
@@ -174,7 +74,5 @@ class UserCityWidget3 extends CWidget
 				)
 			), true
 		);
-
-		$this->render('user_city_widget3', array('sDataContent' => $sDataContent, 'sModalBody' => $sModalBody));
 	}
 }

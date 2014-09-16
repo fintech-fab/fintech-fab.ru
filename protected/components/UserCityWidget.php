@@ -11,6 +11,7 @@ class UserCityWidget extends CWidget
 	public $sCsrfTokenName;
 	public $sCsrfToken;
 	public $bUpdate = false;
+	public $sView = 'user_city_widget';
 
 	/**
 	 * TODO причесать тут весь код, плюс код представления
@@ -113,7 +114,16 @@ class UserCityWidget extends CWidget
 		}
 
 
-		$sModalBody = $this->widget(
+		$sModalBody = $this->getModalBody();
+		$this->render($this->sView, array('sDataContent' => $sDataContent, 'sModalBody' => $sModalBody));
+	}
+
+	/**
+	 * @return mixed
+	 */
+	protected function getModalBody()
+	{
+		return $this->widget(
 			'bootstrap.widgets.TbSelect2',
 			array(
 				'name'           => 'cityName',
@@ -175,6 +185,5 @@ class UserCityWidget extends CWidget
 			), true
 		);
 
-		$this->render('user_city_widget', array('sDataContent' => $sDataContent, 'sModalBody' => $sModalBody));
 	}
 }

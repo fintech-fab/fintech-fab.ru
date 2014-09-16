@@ -34,8 +34,6 @@ $this->endContent();
 <?= $content; ?>
 <!-- main content end--><br />
 
-<div class="page-divider1"></div>
-
 <div class="container">
 	<div class="row">
 		<h2 class="learn-more">Узнай больше о нас!</h2>

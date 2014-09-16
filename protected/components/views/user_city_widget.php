@@ -21,7 +21,7 @@ if (!$this->bUpdate):
 		'bootstrap.widgets.TbButton',
 		array(
 			'id'          => 'userLocation',
-			'label'       => $this->sCityName . '<i class="caret-white"></i>',
+			'label'       => $this->sCityName,
 			'type'        => 'link',
 			'encodeLabel' => false,
 			'htmlOptions' => array(
