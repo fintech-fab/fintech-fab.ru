@@ -36,6 +36,10 @@
 			));
 			?>
 		</div>
+		<div class="clearfix"></div>
+		<div class="center tariffs">
+			<a href="<?= Yii::app()->createUrl('/site/tariffs') ?>">Подробнее о тарифах</a>
+		</div>
 	</div>
 
 
@@ -59,6 +63,10 @@
 				'id'    => 'all_inclusive_products_but'
 			));
 			?>
+		</div>
+		<div class="clearfix"></div>
+		<div class="center tariffs">
+			<a href="<?= Yii::app()->createUrl('/site/tariffs') ?>">Подробнее о тарифах</a>
 		</div>
 	</div>
 	<div class="clearfix"></div>
