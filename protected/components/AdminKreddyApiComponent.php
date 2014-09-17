@@ -613,15 +613,19 @@ class AdminKreddyApiComponent
 			'email'       => null,
 			'phone'       => null,
 			'birthday'    => null,
-			'sex'         => null,
 			'tracking_id' => null,
 			'ip'          => null,
 			'site_region' => null,
 		);
 
 
+		if (!empty($aClientData['sex'])) {
+			$aRequiredFields['sex'] = null;
+		}
+
 		//получаем массив, соджержащий только заданные поля
 		$aClientData = array_intersect_key($aClientData, $aRequiredFields);
+
 
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_FAST_REG_CLIENT, $aRequest);
