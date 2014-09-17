@@ -58,6 +58,9 @@ $a = array(
 		'document'         => array(
 			'class' => 'application.components.DocumentComponent',
 		),
+		'smsCode'          => array(
+			'class' => 'application.components.SmsCodeComponent',
+		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
 		),

@@ -12,7 +12,6 @@ class LoanWidget extends BaseLoanSubscriptionWidget
 	protected $sInfoTitle = 'Информация';
 	protected $sSelectChannelMessage = 'Выбери канал';
 	protected $sNeedSmsMessage = 'Для оформления запроса на перевод требуется подтверждение одноразовым SMS-кодом';
-	protected $sSendSmsButtonLabel = 'Отправить SMS с кодом подтверждения на номер +7';
 
 	protected $sWidgetViewsPath = 'LoanWidget';
 

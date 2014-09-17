@@ -4,31 +4,22 @@
  * @var SMSCodeForm    $oModel
  * @var IkTbActiveForm $form
  */
-?>
-<h4>Индивидуальные условия договора потребительского займа</h4>
 
+?>
+	<h4>Индивидуальные условия договора потребительского займа</h4>
 <?php
 echo $this->getIndividualConditionInfo();
-
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'     => 'loan-form',
-	'action' => Yii::app()->createUrl('/account/doLoanConfirm'),
-));
-
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => $this->getInfoTitle(),
 	'content' => $this->getFullInfo(),
 ));
-$oModel->sendSmsCode = 1;
-echo $form->hiddenField($oModel, 'sendSmsCode');
 ?>
-<div class="alert in alert-block alert-warning">
-	Чтобы принять условия, требуется подтверждение одноразовым SMS-кодом
-</div>
-<? $this->renderSendSmsButton(); ?>
 <?php
-
-$this->endWidget();
+$this->widget('SmsCodeWidget', array(
+	'oModel'        => $oModel,
+	'sType'         => SmsCodeComponent::C_TYPE_LOAN,
+	'oSmsComponent' => Yii::app()->smsCode,
+));
 ?>
 <div class="center">
 	<?=
