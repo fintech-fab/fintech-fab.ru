@@ -1,3 +1,4 @@
+{{-- тот самый случай, когда шаблонизатор - фтопку или по другому уметь готовить :-) --}}
 <div class="row">
 	<div class="large-6 large-centered columns">
 	<h4>Регистрация клиента</h4>
@@ -56,7 +57,6 @@
 	{{ Form::input('text', 'foreign_queue') }}
 @endif
 
-
 {{-- foreign job --}}
 @if ($errors->has('foreign_job'))
 	{{ Form::label('foreign_job', 'Класс обработки внешней очереди', [
@@ -80,14 +80,26 @@
 @endif
 
 {{-- key --}}
-{{ Form::label('key', 'Ключ', [
-                  'data-tooltip' => '',
-                  'class' => 'has-tip tip-top',
-                  'aria-haspopup' => 'true',
-                  'title' => 'Ключ(токен) для идентификации терминала клиента.
-                                Будет создан случайный, если оставить поле пустым.'
-                  ]) }}
-{{ Form::input('text', 'key') }}
+@if ($errors->has('key'))
+	{{ Form::label('key', 'Ключ', [
+          'data-tooltip' => '',
+          'class' => 'has-tip tip-top error',
+          'aria-haspopup' => 'true',
+          'title' => 'Ключ(токен) для идентификации терминала клиента.
+                        Будет создан случайный, если оставить поле пустым.'
+          ]) }}
+	{{ Form::input('text', 'key', null, ['class' => 'error']) }}
+	{{ $errors->first('key', '<small class="error">:message</small>') }}
+@else
+	{{ Form::label('key', 'Ключ', [
+          'data-tooltip' => '',
+          'class' => 'has-tip tip-top',
+          'aria-haspopup' => 'true',
+          'title' => 'Ключ(токен) для идентификации терминала клиента.
+                        Будет создан случайный, если оставить поле пустым.'
+          ]) }}
+	{{ Form::input('text', 'key') }}
+@endif
 
 {{-- password --}}
 @if ($errors->has('password'))

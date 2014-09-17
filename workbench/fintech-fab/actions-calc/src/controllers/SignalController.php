@@ -2,13 +2,13 @@
 
 namespace FintechFab\ActionsCalc\Controllers;
 
+use App;
 use FintechFab\ActionsCalc\Components\Validators;
 use FintechFab\ActionsCalc\Models\Rule;
 use FintechFab\ActionsCalc\Models\Signal;
-use Validator;
 use Input;
+use Validator;
 use View;
-use App;
 
 /**
  * Class SignalController
@@ -36,6 +36,8 @@ class SignalController extends BaseController
 		$aReturnData = [];
 
 		if (!$oSignal->push()) {
+			// аааааа! в BaseController $this->error($message) или $this->jsonError($message)
+			// каждый раз весь массив... я бы умер от перенагрузки :-)
 			return ['status' => 'error', 'message' => 'Не удалось создать сигнал'];
 		}
 
@@ -58,6 +60,8 @@ class SignalController extends BaseController
 	{
 		$signal = Signal::find($id);
 
+		// ну мне бы надоело везде префикс писать...
+		// я бы: return $this->view('signal.edit', compact('signal'));
 		return View::make('ff-actions-calc::signal.edit', compact('signal'));
 	}
 
@@ -113,6 +117,7 @@ class SignalController extends BaseController
 		$oSignal = Signal::find($id);
 
 		$oRules = Rule::where('signal_id', '=', $id)->first();
+		// Rule::whereSignalId($id)->first();
 
 		if (!is_null($oRules)) {
 			return ['status' => 'error', 'message' => 'Сигнал используется.'];

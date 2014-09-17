@@ -22,6 +22,8 @@
 		<tr data-id="<?php echo $event->id; ?>">
 			<td>
 				<ul class="button-group">
+					<!--		удаление первой кнопкой слева - это сильно :-)			-->
+					<!--		кнопки управления привычнее справа          			-->
 					<li>
 						<button class="button alert tiny delete-rule"><i class="fi-x"></i></button>
 					</li>
@@ -35,6 +37,7 @@
 			<td>
 				<ul class="event-buttons button-group right">
 					<li>
+						<!-- в интерфейсе, если нет правил, на кнопку нажимаешь - ничего не происходит. неприятно :) лучше вообще ее не показывать или дизаблить	-->
 						<button data-rules-count="<?php echo $event->rules->count(); ?>" class="tiny button see-rules">
 							<span><?php echo $event->rules->count(); ?></span>&nbsp;<i class="fi-eye"></i></button>
 						<button class="tiny button close-rules" style="display: none;">закрыть</button>

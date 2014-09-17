@@ -31,6 +31,7 @@ class Registrator
 		$aEventAttributes['event_id'] = $aEventAttributes['id'];
 		$aEventAttributes['data'] = $aRequestData['data'];
 
+		// как то некрасиво. но предложений нет
 		unset($aEventAttributes['id']);
 		unset($aEventAttributes['created_at']);
 		unset($aEventAttributes['updated_at']);
@@ -75,7 +76,7 @@ class Registrator
 		$oRegisterSignal->setRawAttributes($aSignalAttributes);
 
 		if ($oRegisterSignal->save()) {
-			$sWhichFlag = $setFlagUrl ? 'CURL' : 'Result to Queue to Queue XD';
+			$sWhichFlag = $setFlagUrl ? 'CURL' : 'Result to Queue to Queue XD'; // да уж, оборжаться. ))
 			Log::info("Register signal($sWhichFlag)", $aSignalAttributes);
 		}
 	}

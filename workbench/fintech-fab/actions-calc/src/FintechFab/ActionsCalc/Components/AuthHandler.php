@@ -2,8 +2,8 @@
 
 namespace FintechFab\ActionsCalc\Components;
 
-use FintechFab\ActionsCalc\Models\Terminal;
 use Config;
+use FintechFab\ActionsCalc\Models\Terminal;
 
 /**
  * Class AuthHandler
@@ -23,6 +23,7 @@ class AuthHandler
 	public static function checkSign($aRequestData)
 	{
 		/** *@var Terminal $terminal */
+		// выбирать только нужные данные - хорошая практика
 		$terminal = Terminal::find($aRequestData['terminal_id'], ['id', 'key']);
 
 		if (is_null($terminal)) {
@@ -41,11 +42,8 @@ class AuthHandler
 	 */
 	public static function isClientRegistered()
 	{
+		// проще можно. и еще terminal_id не похоже на $iClientId
 		$iClientId = Config::get('ff-actions-calc::terminal_id');
-		$iClientId = (int)$iClientId;
-
-		$terminal = Terminal::find($iClientId, ['id']);
-
-		return !(is_null($terminal));
+		return Terminal::find($iClientId, ['id']);
 	}
 }

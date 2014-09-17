@@ -9,9 +9,9 @@ use FintechFab\ActionsCalc\Models\Terminal;
 use Hash;
 use Input;
 use Redirect;
+use Request;
 use Session;
 use Validator;
-use Request;
 use View;
 
 /**
@@ -51,13 +51,15 @@ class AuthController extends BaseController
 		$validator = Validator::make($aRequestData, Validators::getTerminalValidators());
 
 		if ($validator->fails()) {
+			// копипаст (выше уже есть)
 			$iTerminalId = Config::get('ff-actions-calc::terminal_id');
-			$aRequestData['id'] = $iTerminalId;
-
+			$aRequestData['id'] = $iTerminalId; // зачем?
 			return Redirect::to(route('auth.registration'))->withInput($aRequestData)->withErrors($validator);
 		}
 
 		// data valid
+		// это не задача контроллера, т.к. относится чисто к созданию терминала
+		// хорошо убирать либо в модель терминала, либо в компонент (если он есть)
 		$aRequestData['password'] = Hash::make($aRequestData['password']);
 		$aRequestData['key'] = (strlen($aRequestData['key']) < 1) ?
 			sha1($aRequestData['name'] . microtime(true) . rand(10000, 90000)) : $aRequestData['key'];
@@ -80,6 +82,7 @@ class AuthController extends BaseController
 		$oTerminal = Terminal::find($iTerminalId);
 
 		// on GET only opening, and fill in
+		// ай-яй-яй. GET/POST это делать роутингом! и больше никак.
 		if (Request::isMethod('GET')) {
 			return View::make('ff-actions-calc::auth.profile', ['terminal' => $oTerminal]);
 		}
@@ -88,18 +91,23 @@ class AuthController extends BaseController
 
 		// validation fails
 		if ($validator->fails()) {
+			// было бы лучше
+			// $this->error('auth.profile', $aRequestData, $validator)
+			// т.к. оч. часто повтоярется
 			$oErrors = $validator->errors();
 
 			return Redirect::to(route('auth.profile'))->withInput($aRequestData)->withErrors($oErrors);
 		}
 
+		// а смену пароля вообще лучше всегда делать отдельным разделом "изменить пароль"
+		// а не смешивать вместе с редактированием профиля
 		// password change
 		if (isset($aRequestData['change_password']) && $aRequestData['change_password'] == 1) {
 
 			$validator = Validator::make($aRequestData, Validators::getProfileChangePassValidators());
 
 			if ($validator->fails()) {
-
+				// мелкий, но копипаст
 				$oErrors = $validator->errors();
 
 				return Redirect::to(route('auth.profile'))->withInput($aRequestData)->withErrors($oErrors);
@@ -107,6 +115,7 @@ class AuthController extends BaseController
 
 			// current password check
 			if (Hash::check($aRequestData['current_password'], $oTerminal->password) === false) {
+				// мелкий, но копипаст
 				$oErrors = $validator->errors();
 				$oErrors->add('current_password', 'Текущий пароль и введённый, не совпадают.');
 
@@ -128,6 +137,7 @@ class AuthController extends BaseController
 			return Redirect::to(route('auth.profile'))->withInput($aRequestData);
 		}
 
+		// чуть выше такая же строка
 		return Redirect::to(route('auth.profile'))->withInput($aRequestData);
 	}
 

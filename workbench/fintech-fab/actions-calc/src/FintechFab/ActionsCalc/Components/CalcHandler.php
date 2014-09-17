@@ -2,10 +2,10 @@
 
 namespace FintechFab\ActionsCalc\Components;
 
-use Log;
 use App;
 use FintechFab\ActionsCalc\Models\Event;
 use FintechFab\ActionsCalc\Models\Rule;
+use Log;
 
 /**
  * Class CalcHandler
@@ -120,6 +120,9 @@ class CalcHandler
 	 * @param $dataValue
 	 *
 	 * @return bool
+	 *
+	 * нравится: операции разбиты по методам
+	 *
 	 */
 	private function bool($ruleValue, $dataValue)
 	{

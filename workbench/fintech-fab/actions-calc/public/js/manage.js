@@ -70,6 +70,11 @@ $(document).ready(function () {
 		return false;
 	});
 
+	// не могу прям придраться сильно, но я бы по другому делал.
+	// событие лучше вешать на submit формы, а не на кнопку
+	// т.к. submit может произойти и по кнопке, и без кнопки
+	// зачем body непонятно, т.к.: $('#button-event-create').on('click', function(){ .... });
+
 	// events:
 	// modal event create
 	$body.on('click', '#button-event-create', function (e) {
@@ -79,16 +84,23 @@ $(document).ready(function () {
 		var $button = $(this);
 		var $form = $button.closest('form');
 
-		buttonSleep($button);
+		buttonSleep($button); // глобальные функции в js также не хорошо, как и глобалы в других языках
 
 		$.post('/actions-calc/event/create',
 			$form.serialize(),
 			function (oData) {
+				// здесь желательно код тоже оптимизировать, как минимум так:
+				// if(revealFormErrors(oData)){
+				//     return false;
+				// }
+				// // код без ошибок
+				// еще круче ошибку с сервера возвращать другим кодом HTTP (не 200 ОК)
+				// и тогда ошибки здесь можно ловить одним обработчиком единообразно на все формы
 				if (oData.status == 'success') {
-					toastr.success(oData.message);
+					toastr.success(oData.message); // это лучше делать глобальным обработчиком, чтобы не писать в каждом вызове
 					$('#modal-event-create').foundation('reveal', 'close');
 					updateEventsTable();
-					clearFormErrors($form);
+					clearFormErrors($form); // это лучше перед сабмитом выше
 				} else if (oData.status == 'error') {
 					revealFormErrors($form, oData.errors);
 				}
@@ -518,7 +530,7 @@ $(document).ready(function () {
 			'json'
 		).always(function () {
 				buttonWakeUp($th);
-			}).fail(function (xhr) {
+			}).fail(function (xhr) { // в глобальный обработчик!
 				alert(xhr.responseText);
 			});
 
@@ -648,6 +660,7 @@ $(document).ready(function () {
 		buttonSleep($button);
 
 		$.ajax({
+			// DELETE - гуууд
 			method: 'DELETE',
 			url: '/signal/' + iSignalId,
 			success: function (oData) {
@@ -677,7 +690,14 @@ $(document).ready(function () {
 
 		buttonSleep($button);
 
+		// вообще правильно делать, если все формы строятся примерно одинаково,
+		// свое небольшое расширение jquery для форм, специально чтобы и кнопки в нем включались-выключались,
+		// и контент форм обновлялся, и ошибки показывались и так далее.
+		// это спасло бы от копипаста и глобальных функций типа buttonSleep
+		// ну а в этом коде "плохо" - только копипаст.
+
 		$.ajax({
+			// PUT - гуууд
 			method: 'PUT',
 			url: '/signal/' + iSignalId,
 			data: $form.serialize(),
@@ -804,6 +824,24 @@ $(document).ready(function () {
 	});
 
 });
+
+// скажу так:
+// мне все это не нравится, т.к. код совсем непонятен.
+// и в случае проблем придется сильно напрягать мозг.
+// вижу кашу из селекторов и onClick-ов и цепочек parent().prev() и прочих closest()
+// все это весьма хрупкая система - верстальщику не отдать, все сломает сразу.
+//
+// но при этом, задача конечная и подобное решение не так плохо в этом разрезе
+// и т.к. оно работает, и соответствует условию задачи, вряд ли придется это сильно поддерживать
+//
+// и еще:
+// такие задачи чисто на jquery красиво сделать можно только через выделенную библиотеку
+// решающую вполне конкретную задачу, не связанную с контекстом этой задачи (как любое расширение jquery).
+//
+// итог: у меня нет рекомендаций "что доработать".
+// и это решается либо так, как есть, либо надо фреймворк посерьезнее jquery
+//
+// но в деталях - код можно подчистить точно также, как и в любом другом ЯП
 
 // Rules factory class
 // needs template
