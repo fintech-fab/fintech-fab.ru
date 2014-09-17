@@ -11,7 +11,7 @@ class PixelFilter extends CFilter
 	const C_EPROMO = 'epromo';
 	const C_LEADS24 = 'leads24';
 	const C_MASTERTARGET = 'mastertarget';
-	const C_TOPADW = 'topadw';
+	const C_TOPADW = 'topadv';
 	const C_ADMITAD = 'cpamit';
 	const C_TRADETRACKER = 'tradetracker';
 
