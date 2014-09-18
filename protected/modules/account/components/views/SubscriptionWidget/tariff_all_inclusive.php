@@ -37,24 +37,27 @@ if ($oModel->product) {
 
 <div id="product_type_choose_div">
 	<div class="well product_choose_div">
-	<h4 style="display: inline">Когда оплатишь абонентку?</h4>
-	<a href="#" id="loan_amount_tip" onclick="return false;"></a> <br /><br />
-	<?=
-	$oForm->radioButtonList($oModel, 'product_type', $oModel::$aProductTypes, array(
-		'class'        => 'product_type_choose',
-		'template'     => '<label class="{labelCssClass} product_type_choose" data-tooltip-id="{data_value}">{input}{label}</label>',
-		'labelOptions' => array(
-			'style' => 'display: inline;'
-		)
-	)) ?>
+		<h4 style="display: inline">Когда оплатишь абонентку?</h4>
+		<a href="#" id="loan_amount_tip" onclick="return false;"></a> <br /><br />
+		<?=
+		$oForm->radioButtonList($oModel, 'product_type', $oModel::$aProductTypes, array(
+			'class'        => 'product_type_choose',
+			'template'     => '<label class="{labelCssClass} product_type_choose" data-tooltip-id="{data_value}">{input}{label}</label>',
+			'labelOptions' => array(
+				'style' => 'display: inline;'
+			)
+		)) ?>
 	</div>
 	<div id="product_type_<?= $oModel::C_PRE_PAID ?>_tip_text" class="alert alert-warning product_type_tooltip">
-		750 руб. абонентки за подключение сервиса на месяц. За пользование деньгами - дополнительно 8 руб. в день.<br /><br />
-		Максимальная стоимость сервиса в месяц - 990 руб. </div>
+		Сразу оплачиваешь абонентку - 750 руб. за подключение сервиса на месяц. За пользование деньгами - дополнительно
+		8 руб. в день.<br /><br /> Максимальная стоимость сервиса в месяц - 990 руб.
+	</div>
 
 	<div id="product_type_<?= $oModel::C_POST_PAID ?>_tip_text" class="alert alert-warning product_type_tooltip">
-		Подключаешь сервис на месяц, берешь деньги, а абонентку платишь при первом возврате денег.<br /><br /> За
-		пользование деньгами - дополнительно 15 руб. в день. Максимальная стоимость сервиса в месяц - 1200 руб. </div>
+		Подключаешь сервис на месяц, берешь деньги, а абонентку - 750 руб., платишь при первом возврате денег. За
+		пользование деньгами - дополнительно 15 руб. в день. <br /><br /> Максимальная стоимость сервиса в месяц - 1200
+		руб.
+	</div>
 </div>
 <div class="clearfix"></div>
 <div id="agree_div">
