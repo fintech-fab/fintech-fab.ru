@@ -785,5 +785,38 @@ class Dictionaries
 		return $sUrl;
 	}
 
+	/**
+	 * Функиця в зависимости от числа возвращает слово с правельным окончанием
+	 *
+	 * Пример $aEndings = array('минута', 'минуты', 'минут')
+	 *
+	 * @param       $iNum
+	 * @param array $aEndings
+	 *
+	 * @return mixed
+	 */
+	public static function getNumEnding($iNum, array $aEndings)
+	{
+		$iNum = $iNum % 100;
+		if ($iNum >= 11 && $iNum <= 19) {
+			$sEnding = $aEndings[2];
+		} else {
+			$i = $iNum % 10;
+			switch ($i) {
+				case 1:
+					$sEnding = $aEndings[0];
+					break;
+				case 2:
+				case 3:
+				case 4:
+					$sEnding = $aEndings[1];
+					break;
+				default:
+					$sEnding = $aEndings[2];
+			}
+		}
+
+		return $sEnding;
+	}
 
 }

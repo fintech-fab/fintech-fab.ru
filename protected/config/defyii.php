@@ -28,6 +28,7 @@
  * @property AntiBotComponent           $antiBot
  * @property TornadoApiComponent        $tornadoApi
  * @property DocumentComponent          $document
+ * @property SmsCodeComponent           $smsCode
  *
  * @property CDbAuthManager             $authManager
  * @property CDummyCache                $cache

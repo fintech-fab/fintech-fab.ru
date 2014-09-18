@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class SMSCodeForm
  */
@@ -9,6 +10,8 @@ class SMSCodeForm extends CFormModel
 	 */
 	public $smsCode;
 	public $sendSmsCode;
+
+	public $smsResend;
 
 	/**
 	 * @return array
@@ -21,7 +24,9 @@ class SMSCodeForm extends CFormModel
 		$aRules[] = array('smsCode', 'safe', 'on' => 'sendRequired');
 
 		$aRules[] = array('sendSmsCode', 'required', 'requiredValue' => 1, 'on' => 'sendRequired');
-		$aRules[] = array('sendSmsCode', 'safe', 'on' => 'codeRequired');
+		$aRules[] = array('sendSmsCode, smsResend', 'safe', 'on' => 'codeRequired');
+
+		$aRules[] = array('smsResend', 'safe');
 
 		return $aRules;
 
@@ -33,5 +38,14 @@ class SMSCodeForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array('smsCode' => 'Код из SMS');
+	}
+
+	public function setAttributes($values, $safeOnly = true)
+	{
+		parent::setAttributes($values, $safeOnly);
+
+		if ($this->sendSmsCode == 0) {
+			$this->scenario = 'codeRequired';
+		}
 	}
 }

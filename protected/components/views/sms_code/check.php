@@ -1,29 +1,22 @@
 <?php
 /**
- * @var AccountResetPasswordForm $model
- * @var DefaultController        $this
- * @var IkTbActiveForm           $form
+ * @var IkTbActiveForm $form
+ * @var SMSCodeForm    $oModel
+ * @var string         $sType
+ * @var string         $sAction
  */
-
-/*
- * Ввести пароль из SMS
- */
-
-$this->pageTitle = Yii::app()->name . " - Восстановление пароля";
 ?>
-<h2 class='pay_legend' style="margin-left: 20px;">Восстановить пароль</h2>
-
 
 <div id="alertSmsSent" class="alert in alert-success"><?= Dictionaries::C_SMS_SUCCESS; ?></div>
 <div class="clearfix"></div>
 <div class="well well-small span4">
-	Твой номер телефон: +7<?= Yii::app()->adminKreddyApi->getResetPassPhone(); ?>
+	Твой номер телефон: +7<?= Yii::app()->user->getMaskedId(); ?>
 </div>
 <div class="clearfix"></div>
 <div class="form" id="activeForm">
 	<?php
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'                     => 'ajaxResendSms',
+		'id'                     => get_class($oModel),
 		'enableClientValidation' => true,
 		'clientOptions'          => array(
 			'validateOnChange' => true,
@@ -33,33 +26,35 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 			'class'        => "span4",
 			'autocomplete' => 'off',
 		),
-		'action'                 => Yii::app()
-				->createUrl('/account/resetPasswordResendSmsCode'),
+		'action'                 => Yii::app()->createUrl($sAction),
 	));
+
+	echo $form->hiddenField($oModel, 'sendSmsCode', array('value' => 1));
+	echo $form->hiddenField($oModel, 'smsResend', array('value' => 1));
+
 	?>
-
-
-
+	<span>
 	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'id'         => 'btnResend',
 		'buttonType' => 'submit',
 		'icon'       => 'icon-refresh',
 		'size'       => 'small',
-		'label'      => 'Выслать код на телефон повторно',
+		'label'      => 'Выслать код еще раз',
 		'disabled'   => true,
 	));
 	?>
-	<div id="textUntilResend" class="span5 hide" style="margin-left: 0px;">Повторно запросить SMS с паролем можно через:
-		<span id="untilResend"></span></div>
+	</span>
+	<span id="textUntilResend">возможно через:
+		<span id="untilResend"></span>
+	</span>
 	<?php
 	$this->endWidget();
 	?>
 	<div class="clearfix"></div>
 	<?php
-
 	$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-		'id'                     => "checkSmsPass",
+		'id'                     => get_class($oModel),
 		'enableClientValidation' => true,
 		'htmlOptions'            => array(
 			'class' => "span4",
@@ -68,13 +63,13 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 			'validateOnChange' => true,
 			'validateOnSubmit' => true,
 		),
-		'action'                 => Yii::app()->createUrl('/account/resetPassSendPass'),
+		'action'                 => Yii::app()->createUrl($sAction),
 	));
 	?>
 
 	<label>Введи код из SMS:</label>
-	<?= $form->textField($model, 'sms_code', array('class' => 'span4')); ?>
-	<?= $form->error($model, 'sms_code'); ?>
+	<?= $form->textField($oModel, 'smsCode', array('class' => 'span4')); ?>
+	<?= $form->error($oModel, 'smsCode'); ?>
 
 	<div class="clearfix"></div>
 
@@ -82,18 +77,13 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType' => 'submit',
 		'type'       => 'primary',
-		'size'       => 'small',
-		'label'      => 'Получить пароль',
+		'label'      => 'Подтвердить',
 	));
 	/**
 	 * конец формы проверки пароля
 	 */
 	$this->endWidget();
-	?>
 
-
-
-	<?php
 	//подключаем JS с таймером для кнопки
 	$sPath = Yii::app()->assetManager->publish(Yii::getPathOfAlias('ext.myExt.assets') . '/') . '/js/sms_countdown.js';
 	Yii::app()->clientScript->registerScriptFile($sPath, CClientScript::POS_HEAD);
@@ -105,3 +95,4 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 		, CClientScript::POS_LOAD);
 	?>
 </div>
+<div class="clearfix"></div>

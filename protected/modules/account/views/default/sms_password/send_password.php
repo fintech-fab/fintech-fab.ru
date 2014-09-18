@@ -1,6 +1,6 @@
 <?php
 /**
- * @var SMSPasswordForm   $model
+ * @var SMSCodeForm       $model
  * @var DefaultController $this
  * @var IkTbActiveForm    $form
  */
@@ -18,35 +18,12 @@ $this->pageTitle = Yii::app()->name;
 	Для получения подробной информации и совершения иных действий требуется авторизоваться по одноразовому SMS-паролю
 </div>
 <?php
-$form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'          => 'smsPassAuth',
-	'htmlOptions' => array(
-		'class' => "span7",
-	),
-	'action'      => Yii::app()->createUrl('/account/sendSmsPass'),
+$this->widget('SmsCodeWidget', array(
+	'oModel'        => $model,
+	'sType'         => SmsCodeComponent::C_TYPE_SITE_AUTH,
+	'oSmsComponent' => Yii::app()->smsCode,
 ));
 ?>
-<div class="center">
-	<?php
-
-	$model->sendSmsPassword = 1;
-	echo $form->hiddenField($model, 'sendSmsPassword');
-
-	$this->widget('bootstrap.widgets.TbButton', array(
-		'id'         => 'sendSms',
-		'type'       => 'primary',
-		'size'       => 'small',
-		'buttonType' => 'submit',
-		'label'      => 'Отправить на +7' . Yii::app()->user->getMaskedId() . ' SMS с паролем',
-	));
-	?>
-</div>
-
 <div class="row hide">
 	<div class="help-block error" id="actionAnswer"></div>
 </div>
-
-<?php
-// конец формы
-$this->endWidget();
-?>
