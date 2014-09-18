@@ -6,7 +6,9 @@
 $this->pageTitle = Yii::app()->name . " - Изменение пароля";
 ?>
 	<h4>Изменение пароля</h4>
-
+<div class="alert in alert-block alert-warning">
+	Для изменения пароля требуется подтверждение одноразовым SMS-кодом
+</div>
 <?php
 $this->widget('SmsCodeWidget', array(
 	'oModel'        => $oSmsCodeForm,

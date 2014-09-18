@@ -1486,6 +1486,7 @@ class DefaultController extends Controller
 
 					if ($bSubscribe) {
 						//сбрасываем счетчик попыток ввода кода
+						Yii::app()->smsCode->setResetSmsCodeSentAndTime();
 						Yii::app()->smsCode->resetSmsCodeTries();
 
 						return SmsCodeComponent::C_STATE_NEED_CHECK_OK;

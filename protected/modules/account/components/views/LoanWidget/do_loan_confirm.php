@@ -14,6 +14,9 @@ $this->widget('bootstrap.widgets.TbBox', array(
 	'content' => $this->getFullInfo(),
 ));
 ?>
+<div class="alert in alert-block alert-warning">
+	Чтобы принять условия, требуется подтверждение одноразовым SMS-кодом
+</div>
 <?php
 $this->widget('SmsCodeWidget', array(
 	'oModel'        => $oModel,

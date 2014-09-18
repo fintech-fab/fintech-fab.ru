@@ -6,7 +6,9 @@
 $this->pageTitle = Yii::app()->name . " - Изменение секретного вопроса";
 ?>
 	<h4>Изменение секретного вопроса</h4>
-
+<div class="alert in alert-block alert-warning">
+	Для изменения секретного вопроса требуется подтверждение одноразовым SMS-кодом
+</div>
 <?php
 $this->widget('SmsCodeWidget', array(
 	'oModel'        => $oSmsCodeForm,

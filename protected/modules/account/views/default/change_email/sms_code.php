@@ -6,7 +6,9 @@
 $this->pageTitle = Yii::app()->name . " - Изменение адреса электронной почты";
 ?>
 	<h4>Изменение адреса электронной почты</h4>
-
+	<div class="alert in alert-block alert-warning">
+		Для изменения адреса электронной почты требуется подтверждение одноразовым SMS-кодом
+	</div>
 <?php
 $this->widget('SmsCodeWidget', array(
 	'oModel'        => $oSmsCodeForm,
