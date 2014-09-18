@@ -159,7 +159,7 @@ class SmsCodeComponent extends CComponent
 		$this->increaseSmsCodeTries();
 
 		//проверяем, не кончились ли попытки
-		return (Yii::app()->session['iSmsCodeTries'] > 5000);
+		return (Yii::app()->session['iSmsCodeTries'] > self::C_MAX_SMS_CODE_TRIES);
 	}
 
 	public function resetSmsCodeTries()
