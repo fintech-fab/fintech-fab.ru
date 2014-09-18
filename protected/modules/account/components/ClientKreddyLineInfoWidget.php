@@ -61,7 +61,7 @@ class ClientKreddyLineInfoWidget extends ClientInfoWidget
 	{
 		if (Yii::app()->adminKreddyApi->getSubscriptionActivity()) {
 			?>
-			<strong>Серивс активен до:</strong>
+			<strong>Сервис активен до:</strong>
 			<?= Yii::app()->adminKreddyApi->getSubscriptionActivity() ?>
 			<br />
 		<?php
