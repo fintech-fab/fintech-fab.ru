@@ -32,18 +32,22 @@
 	echo $form->hiddenField($oModel, 'sendSmsCode', array('value' => 1));
 	echo $form->hiddenField($oModel, 'smsResend', array('value' => 1));
 
+	?>
+	<span>
+	<?php
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'id'         => 'btnResend',
 		'buttonType' => 'submit',
 		'icon'       => 'icon-refresh',
 		'size'       => 'small',
-		'label'      => 'Выслать код на телефон повторно',
+		'label'      => 'Выслать код еще раз',
 		'disabled'   => true,
 	));
 	?>
-	<div id="textUntilResend" class="span5 hide" style="margin-left: 0;">Повторно запросить SMS с паролем можно через:
+	</span>
+	<span id="textUntilResend">возможно через:
 		<span id="untilResend"></span>
-	</div>
+	</span>
 	<?php
 	$this->endWidget();
 	?>
@@ -73,8 +77,7 @@
 	$this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType' => 'submit',
 		'type'       => 'primary',
-		'size'       => 'small',
-		'label'      => 'Получить пароль',
+		'label'      => 'Подтвердить',
 	));
 	/**
 	 * конец формы проверки пароля

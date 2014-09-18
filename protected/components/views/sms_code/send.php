@@ -11,7 +11,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'          => get_class($oModel),
 	'type'        => 'horizontal',
 	'htmlOptions' => array(
-		'class'        => "span10",
+		'class' => 'form-actions',
 		'autocomplete' => 'off',
 	),
 	'action'      => Yii::app()->createUrl($sAction),
@@ -19,19 +19,15 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 
 echo $form->hiddenField($oModel, 'sendSmsCode');
 ?>
-<div class="row">
-	<div class="span5">
-		<div class="form-actions">
-			<?php
-			$this->widget('bootstrap.widgets.TbButton', array(
-				'type'       => 'primary',
-				'size'       => 'small',
-				'buttonType' => 'submit',
-				'label'      => 'Отправить SMS с кодом',
-			));
-			?>
-		</div>
-	</div>
+<div class="center">
+	<?php
+	$this->widget('bootstrap.widgets.TbButton', array(
+		'type'       => 'primary',
+		'size'       => 'small',
+		'buttonType' => 'submit',
+		'label'      => 'Отправить SMS c кодом на номер +7'.Yii::app()->user->getMaskedId(),
+	));
+	?>
 </div>
 <?php
 

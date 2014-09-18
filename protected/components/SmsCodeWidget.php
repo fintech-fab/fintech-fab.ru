@@ -29,7 +29,6 @@ class SmsCodeWidget extends CWidget
 			$this->render('sms_code/check', array(
 				'oModel'  => $this->oModel,
 				'sAction' => $this->oSmsComponent->getActionByType($this->sType),
-				'sType'   => $this->sType,
 			));
 		}
 	}
