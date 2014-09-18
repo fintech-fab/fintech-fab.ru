@@ -100,7 +100,7 @@ $this->pageTitle = Yii::app()->name . " - Восстановление паро�
 	//передаем данные для JS-таймера
 	Yii::app()->clientScript->registerScript('showUntilResend2', '
 	leftTime = new Date();
-	leftTime.setTime(leftTime.getTime() + ' . Yii::app()->adminKreddyApi->getResetSmsCodeLeftTime() . '*1000);
+	leftTime.setTime(leftTime.getTime() + ' . Yii::app()->smsCode->getResetSmsCodeLeftTime() . '*1000);
 	showUntilResend();'
 		, CClientScript::POS_LOAD);
 	?>
