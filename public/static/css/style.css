@@ -1,3 +1,11 @@
+@font-face {
+	font-family: 'MyriadWebPro';
+	src: url('/static/newmain/fonts/MyriadWebPro.ttf');
+	src: url('/static/newmain/fonts/MyriadWebPro.eot?#iefix') format('embedded-opentype'), url('/static/newmain/fonts/MyriadWebPro.woff') format('woff'), url('/static/newmain/fonts/MyriadWebPro.ttf') format('truetype'), url('/static/newmain/fonts/MyriadWebPro.svg#MyriadWebPro') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 .home {
 	padding-top: 0px;
 }

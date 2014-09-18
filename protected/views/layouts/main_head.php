@@ -19,15 +19,6 @@
 	<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/payment.css?v=1" />
 	<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/glyphicons.css?v=1" />
 	<link rel="stylesheet" type="text/css" href="<?= Yii::app()->request->baseUrl; ?>/static/css/carousel.css?v=1" />
-	<style>
-		@font-face {
-			font-family: 'MyriadWebPro';
-			src: url('/static/newmain/fonts/MyriadWebPro.ttf');
-			src: url('/static/newmain/fonts/MyriadWebPro.eot?#iefix') format('embedded-opentype'), url('/static/newmain/fonts/MyriadWebPro.woff') format('woff'), url('/static/newmain/fonts/MyriadWebPro.ttf') format('truetype'), url('/static/newmain/fonts/MyriadWebPro.svg#MyriadWebPro') format('svg');
-			font-weight: normal;
-			font-style: normal;
-		}
-	</style>
 	<script type="text/javascript" src="<?= Yii::app()->request->baseUrl; ?>/static/js/main.js?v=6"></script>
 <?php
 Yii::app()->clientScript->registerCoreScript('jquery');
