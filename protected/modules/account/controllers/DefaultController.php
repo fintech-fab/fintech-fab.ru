@@ -1033,7 +1033,7 @@ class DefaultController extends Controller
 				$this->render('sms_password/send_password', array('model' => $oForm));
 				break;
 			case SmsCodeComponent::C_STATE_NEED_CHECK_OK:
-				Yii::app()->smsCode->setSmsAuthDone(true);
+				Yii::app()->adminKreddyApi->setSmsAuthDone(true);
 				$this->redirect(Yii::app()->user->getReturnUrl());
 				break;
 
@@ -1070,6 +1070,7 @@ class DefaultController extends Controller
 				) {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
 				} else {
+					Yii::app()->smsCode->setResetSmsCodeSentAndTime();
 					Yii::app()->adminKreddyApi->setResetPassData($oForm->getAttributes());
 					$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
 				}
@@ -1098,6 +1099,7 @@ class DefaultController extends Controller
 			if ($oForm->validate()) {
 				//делаем запрос на повторную отправку смс
 				if (Yii::app()->adminKreddyApi->resetPasswordSendSms($oForm->getAttributes(), true)) {
+					Yii::app()->smsCode->setResetSmsCodeSentAndTime();
 					$this->redirect(Yii::app()->createUrl("/account/resetPassSendPass"));
 				} else {
 					$oForm->addError('phone', Yii::app()->adminKreddyApi->getLastSmsMessage());
@@ -1202,7 +1204,8 @@ class DefaultController extends Controller
 	 */
 	public function actionLogout()
 	{
-		Yii::app()->adminKreddyApi->logout();
+		Yii::app()->smsCode->clearResetSmsCodeState();
+		Yii::app()->adminKreddyApi->clearSmsAuthState();
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
@@ -1466,6 +1469,7 @@ class DefaultController extends Controller
 
 			// Отправляем (переотправляем) СМС
 			if ($oForm->sendSmsCode == 1 && Yii::app()->adminKreddyApi->doSendSms($sAction, $aData, $oForm->smsResend)) {
+				Yii::app()->smsCode->setResetSmsCodeSentAndTime();
 				//создаем новую форму с новым сценарием валидации - codeRequired
 				return SmsCodeComponent::C_STATE_NEED_CHECK;
 			}

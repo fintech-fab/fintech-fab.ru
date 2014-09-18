@@ -130,15 +130,6 @@ class SmsCodeComponent extends CComponent
 	}
 
 	/**
-	 * очищаем сессии, связанные с отправкой SMS
-	 */
-	public function clearSmsState()
-	{
-		$this->clearSmsAuthState();
-		$this->clearResetSmsCodeState();
-	}
-
-	/**
 	 * очищаем сессии, связанные с отправкой SMS (форма Восстановления пароля)
 	 */
 	public function clearResetSmsCodeState()
@@ -148,23 +139,6 @@ class SmsCodeComponent extends CComponent
 		Yii::app()->session['resetSmsCodeLeftTime'] = null;
 		Yii::app()->session['resetPasswordData'] = null;
 	}
-
-	/**
-	 * очищаем сессии, связанные с отправкой SMS (форма SMS пароль)
-	 */
-	public function clearSmsAuthState()
-	{
-		Yii::app()->session['smsAuthDone'] = null;
-	}
-
-	/**
-	 * @param $bSmsAuthDone
-	 */
-	public function setSmsAuthDone($bSmsAuthDone)
-	{
-		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
-	}
-
 
 	/**
 	 *

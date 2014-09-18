@@ -416,9 +416,9 @@ class AdminKreddyApiComponent
 
 			// Если смс-авторизация не требутеся
 			if (!$this->getIsNeedSmsAuth()) {
-				Yii::app()->smsCode->setSmsAuthDone(true);
+				$this->setSmsAuthDone(true);
 			} else {
-				Yii::app()->smsCode->setSmsAuthDone(false);
+				$this->setSmsAuthDone(false);
 			}
 
 			if ($this->checkIsNeedPassportData()) {
@@ -586,7 +586,7 @@ class AdminKreddyApiComponent
 		if (!self::getIsError() && !self::getIsClientExistsError()) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
-			Yii::app()->smsCode->setSmsAuthDone(true);
+			$this->setSmsAuthDone(true);
 
 			return true;
 		}
@@ -624,7 +624,7 @@ class AdminKreddyApiComponent
 		if (!self::getIsError() && !self::getIsClientExistsError()) {
 			$this->setSessionToken($aTokenData['token']);
 			$this->token = $aTokenData['token'];
-			Yii::app()->smsCode->setSmsAuthDone(true);
+			$this->setSmsAuthDone(true);
 
 			return true;
 		}
@@ -2150,7 +2150,6 @@ class AdminKreddyApiComponent
 		$aResult = $this->requestAdminKreddyApi($sAction, $aData);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			Yii::app()->smsCode->setResetSmsCodeSentAndTime();
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -2278,7 +2277,7 @@ class AdminKreddyApiComponent
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
 			//ставим флаг успешной СМС-авторизации
-			Yii::app()->smsCode->setSmsAuthDone(true);
+			$this->setSmsAuthDone(true);
 		}
 
 		return $bResult;
@@ -2712,14 +2711,19 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Логаут, чистит данные в сессии и удаляет токен
+	 * очищаем сессии, связанные с отправкой SMS (форма SMS пароль)
 	 */
-	public function logout()
+	public function clearSmsAuthState()
 	{
-		// очищаем сессии, связанные с отправкой SMS
-		Yii::app()->smsCode->clearSmsState();
+		Yii::app()->session['smsAuthDone'] = null;
+	}
 
-		//$this->setSessionToken(null);
+	/**
+	 * @param $bSmsAuthDone
+	 */
+	public function setSmsAuthDone($bSmsAuthDone)
+	{
+		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
 	}
 
 	/**
@@ -2817,7 +2821,7 @@ class AdminKreddyApiComponent
 	public function checkSmsAuthStatus($aResult)
 	{
 		if ($aResult['sms_status'] === self::SMS_AUTH_OK) {
-			Yii::app()->smsCode->setSmsAuthDone(true);
+			$this->setSmsAuthDone(true);
 
 			return true;
 		}
