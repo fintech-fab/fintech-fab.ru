@@ -1001,3 +1001,18 @@ div.cost {
 .navbar.navbar-top #header_wrap * {
 	box-sizing: border-box;
 }
+
+.product_type_tooltip {
+	display: none;
+	float: right;
+	width: 288px;
+	height: 117px;
+	padding: 8px;
+}
+
+.product_choose_div{
+	margin-left: 0;
+	width: 250px;
+	height: 95px;
+	float: left;
+}

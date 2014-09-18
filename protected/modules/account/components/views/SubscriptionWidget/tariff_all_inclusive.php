@@ -35,25 +35,28 @@ if ($oModel->product) {
 		меньшая сумма. </p>
 </div>
 
-<div class="well" id="product_type_choose_div">
+<div id="product_type_choose_div">
+	<div class="well product_choose_div">
 	<h4 style="display: inline">Когда оплатишь абонентку?</h4>
 	<a href="#" id="loan_amount_tip" onclick="return false;"></a> <br /><br />
 	<?=
 	$oForm->radioButtonList($oModel, 'product_type', $oModel::$aProductTypes, array(
 		'class'        => 'product_type_choose',
-		'template'     => '<label class="{labelCssClass}">{input}{label} <a href="#" id="product_type_{data_value}" onclick="return false;">[?]</a></label>',
+		'template'     => '<label class="{labelCssClass} product_type_choose" data-tooltip-id="{data_value}">{input}{label}</label>',
 		'labelOptions' => array(
 			'style' => 'display: inline;'
 		)
 	)) ?>
-	<p id="product_type_<?= $oModel::C_PRE_PAID ?>_tip_text" style="display: none;">
+	</div>
+	<div id="product_type_<?= $oModel::C_PRE_PAID ?>_tip_text" class="alert alert-warning product_type_tooltip">
 		750 руб. абонентки за подключение сервиса на месяц. За пользование деньгами - дополнительно 8 руб. в день.<br /><br />
-		Максимальная стоимость сервиса в месяц - 990 руб. </p>
+		Максимальная стоимость сервиса в месяц - 990 руб. </div>
 
-	<p id="product_type_<?= $oModel::C_POST_PAID ?>_tip_text" style="display: none;">
+	<div id="product_type_<?= $oModel::C_POST_PAID ?>_tip_text" class="alert alert-warning product_type_tooltip">
 		Подключаешь сервис на месяц, берешь деньги, а абонентку платишь при первом возврате денег.<br /><br /> За
-		пользование деньгами - дополнительно 15 руб. в день. Максимальная стоимость сервиса в месяц - 1200 руб. </p>
+		пользование деньгами - дополнительно 15 руб. в день. Максимальная стоимость сервиса в месяц - 1200 руб. </div>
 </div>
+<div class="clearfix"></div>
 <div id="agree_div">
 	<div class="well">
 		<h4>Последний этап:</h4>
@@ -107,11 +110,14 @@ Yii::app()->clientScript->registerScript('all_inclusive_product',
 		visibility();
 	});
 
+	$(".product_type_choose").click(function() {
+		var product_type = $(this).attr("data-tooltip-id");
+		$(".product_type_tooltip").hide();
+		$("#product_type_"+product_type+"_tip_text").show();
+	});
 
 	var tips = [
 		[$("#loan_amount_tip"), $("#loan_amount_tip_text").html()],
-		[$("#product_type_' . $oModel::C_PRE_PAID . '"), $("#product_type_' . $oModel::C_PRE_PAID . '_tip_text").html()],
-		[$("#product_type_' . $oModel::C_POST_PAID . '"), $("#product_type_' . $oModel::C_POST_PAID . '_tip_text").html()]
 	];
 
 	$.each(tips, function(link, tip) {
