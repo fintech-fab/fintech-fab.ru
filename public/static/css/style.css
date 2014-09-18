@@ -25,7 +25,6 @@ nav .hotline {
 	margin-top: 10px;
 	margin-right: 10px;
 	font-size: 18pt;
-	font-weight: 400;
 	display: inline-block;
 	width: 240px;
 	text-align: center;
@@ -253,17 +252,17 @@ nav .account .btn {
 	text-decoration: none;
 	border-bottom: 1px dashed;
 	cursor: pointer;
-	color: #ffffff;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
+	text-shadow: none;
 }
 
 .btn-link.location:hover,
 .btn-link.location:focus {
-	color: #ffffff;
 	text-decoration: none;
 	background-color: transparent;
+	color: #2a6496;
 }
 
 .btn-link .location[disabled]:hover,
@@ -735,4 +734,270 @@ div.cost {
 .product_selection {
 	float: left;
 	width: 50%;
+}
+
+.tariffs {
+	margin-top: 10px;
+}
+
+.navbar.navbar-top #header_wrap {
+	font-family: "MyriadWebPro" !important;
+}
+
+.headr_rightblock {
+	text-align: right;
+}
+
+.headrbl {
+	display: inline-block;
+	margin-top: 23px;
+	text-align: center;
+}
+
+#header_wrap {
+	width: 100%;
+	background: #d1d3d4;
+	min-height: 133px;
+}
+
+#header {
+	padding-bottom: 10px;
+}
+
+.header_leftblock {
+}
+
+.headlb_left {
+}
+
+.headlb_right {
+	text-align: right;
+}
+
+.up_logo {
+	display: block;
+	margin-top: 43px;
+}
+
+.up_logo img {
+}
+
+.up_phone {
+	color: #201f50;
+	font-size: 27px;
+	margin-bottom: 0;
+	line-height: 1.3;
+}
+
+.up_phonetext {
+	font-size: 11px;
+	color: #201f50;
+	margin-bottom: 4px;
+}
+
+.up_line {
+	height: 1px;
+	background: #2e2c5b;
+}
+
+.up_socico {
+	margin-top: 5px;
+}
+
+.up_si {
+	display: inline-block;
+	width: 31px;
+}
+
+.up_si img {
+	display: block;
+	width: 100%;
+}
+
+.usi_vk {
+}
+
+.usi_f {
+}
+
+.usi_o {
+}
+
+.usi_i {
+}
+
+.page_separator {
+	width: 100%;
+	height: 7px;
+	background: url(/static/newmain/images/page_separator.jpg) center center repeat-x;
+	float: none;
+	clear: both;
+}
+
+#main-footer {
+	background: #d4ddea;
+	padding: 10px 0 40px 0;
+
+}
+
+.footer_hrefs {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.footer_hrefs a {
+	color: #818385;
+	font-size: 14px;
+	text-decoration: underline;
+	padding: 0 5px;
+	font-family: 'MyriadWebPro';
+	white-space: nowrap;
+	line-height: 20px;
+}
+
+.footer_hrefs a:hover {
+	text-decoration: none;
+}
+
+.footer_text {
+	color: #818385;
+	font-size: 14px;
+	font-family: 'MyriadWebPro';
+	line-height: 20px;
+}
+
+.login_block {
+	display: inline-block;
+	width: 98px;
+	height: 32px;
+	margin-top: 50px;
+	margin-right: 0px;
+}
+
+.login_block a {
+	color: #fff;
+}
+
+.btn-link.location {
+	border-bottom: 1px dashed;
+	border-color: transparent transparent -moz-use-text-color;
+	border-radius: 0;
+	cursor: pointer;
+	font-size: 12pt;
+	padding: 0;
+	text-decoration: none;
+	color: #428bca;
+}
+
+@media screen and (max-width: 991px) {
+
+	.headlb_left {
+		text-align: center;
+	}
+
+	.headlb_right {
+		text-align: center;
+	}
+
+	.header_leftblock {
+		padding: 0;
+		/* margin: 0 -20px; */
+	}
+
+	.up_phone {
+		font-size: 27px;
+	}
+
+	.up_phonetext {
+		/* font-size: 6px; */
+	}
+
+	.up_logo {
+		margin-top: 10px;
+	}
+
+	.up_logo img {
+		width: 239px;
+	}
+
+	.headr_rightblock {
+		text-align: center;
+	}
+
+	.headrbl {
+		margin-top: 5px;
+	}
+
+	.login_block {
+		margin-top: 13px;
+		/* font-size: 10px; */
+		/* width: 65px; */
+		/* height: 23px; */
+		/* padding: 5px 28px; */
+		/* background: #201f50 url(../images/siluet.png) 6px 4px no-repeat; */
+		/* background-size: 15px; */
+	}
+
+	.city_select {
+		margin-right: 1px;
+		margin-top: 12px;
+		/* width: 60px; */
+	}
+
+	.city_select select {
+		font-size: 16px;
+		margin-right: 40px;
+	}
+
+	.city_select option {
+	}
+
+	.login_block {
+		vertical-align: middle;
+	}
+
+	.up_si {
+		/* width: 24px; */
+	}
+
+	#header_wrap {
+		width: 100%;
+		background: #d1d3d4;
+		min-height: 87px;
+	}
+
+	#header {
+		padding-bottom: 10px;
+	}
+}
+
+#userCityWidget {
+	margin-top: 50px;
+}
+
+#userCityWidget div.popover {
+	z-index: 1049;
+}
+
+#userCityWidget .btn {
+	white-space: nowrap;
+	font-size: 12pt;
+}
+
+.navbar.navbar-top #header_wrap .row {
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+.navbar.navbar-top #header_wrap .container {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.navbar.navbar-top #header_wrap *:before, *:after {
+	box-sizing: border-box;
+}
+
+.navbar.navbar-top #header_wrap * {
+	box-sizing: border-box;
 }

@@ -82,6 +82,11 @@ class SiteController extends Controller
 			Yii::app()->request->cookies['citySelected'] = new CHttpCookie("citySelected", true, $aCookieOptions);
 		}
 		//обновляем виджет, свойство bUpdate указывает отдавать виджет для обновления, без лишних элементов
+		if(Yii::app()->request->getParam('bootstrap3')){
+			$this->widget('UserCityWidget3', array('bUpdate' => true));
+			Yii::app()->end();
+		}
+
 		$this->widget('UserCityWidget', array('bUpdate' => true));
 		Yii::app()->end();
 	}

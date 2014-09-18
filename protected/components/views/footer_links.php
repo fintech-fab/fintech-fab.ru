@@ -9,7 +9,7 @@
 			if ($l->link_url == '') { // поле "ссылка" пусто - значит, модальное окно
 				?>
 
-				<a href="#" class="dotted" onclick="return doOpenModalFrame('<?=
+				<a href="#" onclick="return doOpenModalFrame('<?=
 				Yii::app()
 					->createAbsoluteUrl("footerLinks/view/$l->link_name"); ?>', '<?= $l->link_title ?>');"><?= $l->link_title ?></a>
 

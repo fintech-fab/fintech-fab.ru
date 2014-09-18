@@ -13,15 +13,11 @@ class TopPageWidget extends CWidget
 		$aItems = array(
 			array(
 				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-02.jpg'),
-				'label' => 'КРЕДДИтная линия',
+				'label' => 'КРЕДДИ',
 			),
 			array(
 				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-05.jpg'),
-				'label' => 'КРЕДДИтная линия',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-06.jpg'),
-				'label' => 'КРЕДДИтная линия',
+				'label' => 'КРЕДДИ',
 			),
 		);
 
@@ -53,7 +49,6 @@ class TopPageWidget extends CWidget
 
 				</div>
 			</div>
-			<div class="page-divider"></div>
 		<?php
 		}
 	}

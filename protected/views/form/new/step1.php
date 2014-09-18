@@ -22,11 +22,12 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 ?>
 <div class="col-lg-6 col-md-7">
 
+	<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('class' => 'slider_input')); ?>
+
 	<?= $form->textFieldRow($oClientCreateForm, 'first_name', array('class' => 'slider_input')); ?>
 
 	<?= $form->textFieldRow($oClientCreateForm, 'third_name', array('class' => 'slider_input')); ?>
 
-	<?= $form->textFieldRow($oClientCreateForm, 'last_name', array('class' => 'slider_input')); ?>
 	<div class="clearfix"></div>
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'  => 'submit',

@@ -204,8 +204,6 @@
 	});
 </script>
 
-<div class="page-divider"></div>
-
 <div class="modal hide fade tariffs-modal">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
