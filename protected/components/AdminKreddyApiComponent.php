@@ -2190,7 +2190,7 @@ class AdminKreddyApiComponent
 
 		$aResult = $this->requestAdminKreddyApi($sAction, $aData);
 
-		if(isset($aResult['token'])) {
+		if (isset($aResult['token'])) {
 			$this->setSessionToken($aResult['token']);
 			$this->token = $aResult['token'];
 		}

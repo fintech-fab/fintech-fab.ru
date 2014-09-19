@@ -1285,6 +1285,8 @@ class DefaultController extends Controller
 			$aPaymentData['balance'] = 0;
 		}
 
+		$aPaymentData['loan_amount'] = Yii::app()->adminKreddyApi->getSubscriptionLoanAmount();
+
 		$aPaymentData = array_map(function ($mValue) {
 			if (is_int($mValue)) {
 				$mValue = abs($mValue);
@@ -1425,6 +1427,13 @@ class DefaultController extends Controller
 		}
 	}
 
+	/**
+	 * @param SMSCodeForm $oForm
+	 * @param             $sType
+	 * @param array       $aData
+	 *
+	 * @return string
+	 */
 	protected function doProcessSmsCode(SMSCodeForm &$oForm, $sType, $aData = array())
 	{
 
@@ -1470,6 +1479,7 @@ class DefaultController extends Controller
 			// Отправляем (переотправляем) СМС
 			if ($oForm->sendSmsCode == 1 && Yii::app()->adminKreddyApi->doSendSms($sAction, $aData, $oForm->smsResend)) {
 				Yii::app()->smsCode->setResetSmsCodeSentAndTime();
+
 				//создаем новую форму с новым сценарием валидации - codeRequired
 				return SmsCodeComponent::C_STATE_NEED_CHECK;
 			}
