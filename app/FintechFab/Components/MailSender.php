@@ -4,6 +4,7 @@ namespace FintechFab\Components;
 
 use Config;
 use Exception;
+use FintechFab\Models\Role;
 use Illuminate\Mail\Message;
 use Mail;
 
@@ -12,6 +13,20 @@ class MailSender
 	private $to;
 	private $name;
 	private $subject;
+
+	public static function sendDinnerReminders()
+	{
+		$role = Role::whereRole('employee')->first();
+		$users = $role->users;
+
+		//Рассылаем напоминания всем найденным пользователям
+		foreach ($users as $user) {
+			Mail::send('emails.dinner', array(), function ($message) use ($user) {
+				$message->to($user->email, $user->first_name . ' ' . $user->last_name)
+					->subject('Вы можете заказать обед');
+			});
+		}
+	}
 
 	/**
 	 *
@@ -31,47 +46,6 @@ class MailSender
 
 		return (0 == $cntFails);
 	}
-
-	/**
-	 *
-	 * @param array $data
-	 *
-	 * @return bool
-	 */
-	public function doVanguardOrderAuthor(array $data)
-	{
-		$this->initTo($data);
-
-		Mail::send('emails.replyToNewImprover', $data, function (Message $message) {
-			$message->to($this->to, $this->name)->subject('Принята заявка');
-		});
-
-		$cntFails = count(Mail::failures());
-
-		return (0 == $cntFails);
-	}
-
-	/**
-	 * @param array $data
-	 * $data['baseMessage']
-	 * $data['themeName']
-	 * $data['comment']
-	 *
-	 * @return bool
-	 */
-	public function doNoticeTheme(array $data)
-	{
-		$this->initTo($data);
-
-		Mail::send('emails.noticeThemes', $data, function (Message $message) {
-			$message->to($this->to, $this->name)->subject($this->subject);
-		});
-
-		$cntFails = count(Mail::failures());
-
-		return (0 == $cntFails);
-	}
-
 
 	/**
 	 *
@@ -114,5 +88,49 @@ class MailSender
 		$list = explode('@', $this->to);
 
 		return $list[0];
+	}
+
+	/**
+	 *
+	 * @param array $data
+	 *
+	 * @return bool
+	 */
+	public function doVanguardOrderAuthor(array $data)
+	{
+		$this->initTo($data);
+
+		Mail::send('emails.replyToNewImprover', $data, function (Message $message) {
+			$message->to($this->to, $this->name)->subject('Принята заявка');
+		});
+
+		$cntFails = count(Mail::failures());
+
+		return (0 == $cntFails);
+	}
+
+	/*
+	 * Отправка напоминаний о возможности заказать обед
+	 */
+
+	/**
+	 * @param array $data
+	 * $data['baseMessage']
+	 * $data['themeName']
+	 * $data['comment']
+	 *
+	 * @return bool
+	 */
+	public function doNoticeTheme(array $data)
+	{
+		$this->initTo($data);
+
+		Mail::send('emails.noticeThemes', $data, function (Message $message) {
+			$message->to($this->to, $this->name)->subject($this->subject);
+		});
+
+		$cntFails = count(Mail::failures());
+
+		return (0 == $cntFails);
 	}
 }

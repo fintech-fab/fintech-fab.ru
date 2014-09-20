@@ -1,6 +1,7 @@
 <?php
 
-use App\Controllers\Dinner\DinnerController;
+use FintechFab\Components\DinnerImportMenu as DinnerImportMenuComponent;
+use FintechFab\Components\MailSender;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -48,14 +49,8 @@ class DinnerImportMenu extends Command
 		// но при этом оставить возможность задать файл вручную.
 		$url = $this->argument('url');
 
-		// ай-яй-яй. так нельзя
-		// не то чтобы это совсем мерзко :-)
-		// но контроллер должен быть контроллером и должен обслуживать только входящие запросы из браузера
-		// и не может вызываться откуда либо еще,
-		// т.к. это создает большую неразбериху и зависимость консольной команды от http-контроллера (ужас, ужас).
-		// см. в проекте есть директория Components - все туда. DinnerComponent например.
-		if (DinnerController::importMenu($url)) {
-			DinnerController::sendReminders();
+		if (DinnerImportMenuComponent::importMenu($url)) {
+			MailSender::sendDinnerReminders();
 			$this->info('Меню успешно импортировано');
 		} else {
 			$this->error('При импорте меню произошла ошибка');
