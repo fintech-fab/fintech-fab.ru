@@ -9,13 +9,13 @@
 /* @var $bIsNeedNewClientAlert */
 ?>
 
-	<h5 class="pay_legend">Выберите сумму займа</h5>
+	<h5 class="pay_legend">Выбери сумму перевода</h5>
 
 <?= $form->dropDownListRow($model, 'amount', $aAmountValues, array('class' => 'hide', 'label' => false)); ?>
 
 
 	<br />    <br />    <br />
-	<h5 class="pay_legend">Выберите срок предоставления займа</h5>
+	<h5 class="pay_legend">Выбери срок предоставления денег</h5>
 
 <?= $form->dropDownListRow($model, 'time', $aTimeValues, array('class' => 'hide', 'label' => false)); ?>
 

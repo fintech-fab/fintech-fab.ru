@@ -116,7 +116,7 @@ class SiteParams
 	const C_PHONE_LENGTH = 10;
 
 	const C_NUMERIC_CODE_MIN_LENGTH = 4;
-	const C_NUMERIC_CODE_MAX_LENGTH = 10;
+	const C_NUMERIC_CODE_MAX_LENGTH = 4;
 
 	/**
 	 * максимальное число попыток ввода кода из SMS
@@ -308,6 +308,34 @@ class SiteParams
 	}
 
 	/**
+	 * Форматируем дату в вид 01.01.2013 00:00
+	 *
+	 * @param      $sDate
+	 * @param bool $bWithTime выводить ли время
+	 *
+	 * @return bool|string
+	 */
+	public static function formatRusDate($sDate, $bWithTime = true)
+	{
+		if (!is_numeric($sDate)) {
+			$sDate = strtotime($sDate);
+		}
+
+		if ($sDate) {
+			if ($bWithTime) {
+				$sDate = date('d.m.Y H:i', $sDate);
+
+				$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
+				$sDate .= CHtml::closeTag('i');
+			} else {
+				$sDate = date('d.m.Y', $sDate);
+			}
+		}
+
+		return $sDate;
+	}
+
+	/**
 	 * @param null $sLocalLink
 	 *
 	 * @return string
@@ -428,7 +456,7 @@ class SiteParams
 	/**
 	 * @return bool
 	 */
-	public function isLocalServer()
+	public static function isLocalServer()
 	{
 
 		return (
@@ -732,6 +760,22 @@ class SiteParams
 		$sUrl = preg_replace('|([^:])//|', '\1/', $sUrl);
 
 		return ($sUrl) ? $sUrl : self::DEFAULT_URL; //если вдруг параметр не передан, возвращаем значение по-умолчанию
+	}
+
+	public function getTrackingId()
+	{
+		$oCookie = Yii::app()->request->cookies['lead_generator'];
+
+		if ($oCookie) {
+			return $oCookie->value['sUid'];
+		}
+
+		$oCookie = Yii::app()->request->cookies['TrackingID'];
+		if ($oCookie) {
+			return (string)$oCookie;
+		}
+
+		return null;
 	}
 }
 

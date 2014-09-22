@@ -131,13 +131,13 @@ class ClientFullForm extends ClientCreateFormAbstract
 		return array_merge(
 			parent::attributeLabels(),
 			array(
-				'relatives_one_fio'             => 'ФИО',
+				'relatives_one_fio' => 'Имя и отчество',
 				'relatives_one_phone'           => 'Телефон',
 
 				'friends_fio'                   => 'ФИО',
 				'friends_phone'                 => 'Телефон',
 
-				'agree' => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'/pages/viewPartial/usloviya\', \'Согласие на обработку персональных данных. Условия обслуживания и передачи информации.\')"  href="#">подробная информация</a>)',
+				'agree'                         => 'Я подтверждаю достоверность введенных данных и даю согласие на их обработку (<a onclick="return doOpenModalFrame(\'/pages/viewPartial/usloviya\', \'Согласие на обработку персональных данных. Условия обслуживания и передачи информации.\')"  href="#">подробная информация</a>)',
 
 				'passport_number'               => 'Серия/номер',
 				'passport_series'               => 'Серия/номер',
@@ -145,7 +145,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'secret_question'               => 'Секретный вопрос',
 				'secret_answer'                 => 'Ответ на секретный вопрос',
 
-				'product'                       => 'Сумма займа',
+				'product'                       => 'Продукт',
 				'address_reg_as_res'            => 'фактический адрес совпадает с пропиской',
 
 				'status'                        => 'Статус',
@@ -158,7 +158,7 @@ class ClientFullForm extends ClientCreateFormAbstract
 				'password'                      => 'Пароль для входа в личный кабинет',
 				'password_repeat'               => 'Подтверждение пароля',
 
-				'loan_purpose'                  => 'Цель займа',
+				'loan_purpose'                  => 'Цель получения денег',
 				'have_past_credit'              => 'Наличие кредитов и займов в прошлом',
 
 			)

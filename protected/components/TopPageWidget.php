@@ -13,46 +13,12 @@ class TopPageWidget extends CWidget
 		$aItems = array(
 			array(
 				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-02.jpg'),
-				'label' => 'КРЕДДИтная линия',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-03.jpg'),
-				'label' => 'КРЕДДИтная линия',
+				'label' => 'КРЕДДИ',
 			),
 			array(
 				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-05.jpg'),
-				'label' => 'КРЕДДИтная линия',
+				'label' => 'КРЕДДИ',
 			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-06.jpg'),
-				'label' => 'КРЕДДИтная линия',
-			),
-
-			/*array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-02.jpg'),
-				'label' => 'Без лишних свидетелей',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-03.jpg'),
-				'label' => 'Всегда при деньгах',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-04.jpg'),
-				'label' => 'Позволь себе больше!',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-05.jpg'),
-				'label' => 'Без суеты и волокиты',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-06.jpg'),
-				'label' => 'Сколько занял - столько и вернул',
-			),
-			array(
-				'image' => CHtml::encode('/static/img/kreddy-carousel/kreddy2014-01.jpg'),
-				'label' => 'В любом месте, в любое время',
-				'url'   => '/pages/view/smsinfo',
-			),*/
 		);
 
 		if ($this->show) {
@@ -83,7 +49,6 @@ class TopPageWidget extends CWidget
 
 				</div>
 			</div>
-			<div class="page-divider"></div>
 		<?php
 		}
 	}

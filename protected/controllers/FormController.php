@@ -10,7 +10,6 @@ class FormController extends Controller
 {
 	public $showTopPageWidget = false;
 
-
 	public function actionResendSms()
 	{
 		$iResendTime = $this->getResendTime('sms');
@@ -74,21 +73,6 @@ class FormController extends Controller
 	}
 
 	/**
-	 * @return array
-	 */
-	public function filters()
-	{
-		return array(
-			array(
-				'ext.linkprofit.LinkprofitFilter',
-			),
-			array(
-				'ext.banki_ru.BankiRuFilter',
-			),
-		);
-	}
-
-	/**
 	 * TODO этот экшен и его не-ajax аналог переделать, вынести смену шага в отдельный метод, его вызывать тут
 	 *
 	 * @param $step
@@ -130,12 +114,6 @@ class FormController extends Controller
 		if (Yii::app()->clientForm->tryGoNextStep()) {
 			$this->redirect(Yii::app()->createUrl("/form"));
 		}
-
-		//проверяем, что для текущего сайта выбран продукт
-		Yii::app()->clientForm->checkSiteSelectedProduct();
-
-		//запустим проверку типа регистрации, она переключит "режим" анкеты, если потребуется
-		Yii::app()->clientForm->checkRegistrationType();
 
 		/**
 		 * @var ClientCreateFormAbstract $oClientForm
@@ -301,6 +279,8 @@ class FormController extends Controller
 	 */
 	public function actionSendCodes()
 	{
+		$this->layout = Yii::app()->clientForm->getLayout();
+
 		// если в сессии телефона нет либо если полная форма не заполнена - редирект на form
 		if (!Yii::app()->clientForm->getSessionPhone()) {
 			//TODO тут сделать проверку, что клиент реально на нужном шаге!!!!!
@@ -349,6 +329,8 @@ class FormController extends Controller
 	 */
 	public function actionCheckCodes()
 	{
+		$this->layout = Yii::app()->clientForm->getLayout();
+
 		// забираем данные из POST и заносим в форму ClientConfirmPhoneAndEmailForm
 		$aPostData = Yii::app()->request->getParam('ClientConfirmPhoneAndEmailForm');
 		$iClientId = Yii::app()->clientForm->getClientId();
@@ -421,8 +403,9 @@ class FormController extends Controller
 
 
 			} elseif (Yii::app()->adminKreddyApi->getIsClientExistsError()) {
-
+				Yii::app()->clientForm->clearClientSession();
 				// Клиент существует по email-у или телефону
+				$this->layout = '//layouts/main_new';
 				$this->render('client_exists');
 
 				return;
@@ -430,7 +413,7 @@ class FormController extends Controller
 			} else {
 
 				//если не удалось создать нового клиента, то выводим ошибку
-				Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе Кредди. Обратитесь в контактный центр';
+				Yii::app()->session['error'] = 'По указанным данным невозможно подключить личный кабинет. Возможно, ты уже зарегистрирован в системе Кредди. Обратись в контактный центр';
 				Yii::app()->clientForm->setFlagCodesSent(false); //сбрасываем флаг отправленного СМС
 				Yii::app()->clientForm->clearClientSession(); //чистим сессию
 				$this->render('error');
@@ -457,6 +440,13 @@ class FormController extends Controller
 		//берем данные из БД
 		$aClientData = ClientData::getClientDataById($iClientId);
 
+		// Информация по order_id, который будет отправлен в лиды
+		$aClientData['order_id'] = null;
+		$oCookie = Yii::app()->request->cookies['lead_generator'];
+		if ($oCookie && isset($oCookie->value['iOrderId'])) {
+			$aClientData['order_id'] = $oCookie->value['iOrderId'];
+		}
+
 		//отправляем в API данные клиента
 		$bRegisterSuccess = Yii::app()->clientForm->updateFastRegClient($aClientData);
 
@@ -482,7 +472,7 @@ class FormController extends Controller
 
 			//если не удалось создать нового клиента, то выводим ошибку
 			// Например паспортные данные уже существуют или сетевые проблемы
-			Yii::app()->session['error'] = 'По указанным Вами данным невозможно подключить личный кабинет. Возможно, вы уже зарегистрированы в системе КРЕДДИ. Обратитесь в контактный центр.';
+			Yii::app()->session['error'] = 'По указанным данным невозможно подключить личный кабинет. Возможно, ты уже зарегистрирован в системе Кредди. Обратись в контактный центр';
 			Yii::app()->clientForm->clearClientSession(); //чистим сессию
 			$this->render('error');
 
@@ -503,6 +493,7 @@ class FormController extends Controller
 	 */
 	public function actionFastSuccess()
 	{
+		$this->layout = '//layouts/main_new';
 		$sRedirectUrl = Yii::app()->createUrl('account/doSubscribe');
 		$this->success('form_sent', $sRedirectUrl);
 	}
@@ -602,4 +593,53 @@ class FormController extends Controller
 		);
 	}
 	*/
+
+	public function actionLanding()
+	{
+		$oClientLandingForm = new ClientLandingForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo IkTbActiveForm::validate($oClientLandingForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->isPostRequest) {
+
+			/**
+			 * собираем все данные формы (она не на основе модели создана, делали криворукие верстальщики,
+			 * потому собираем вручную, во избежание проблем с переделкой формы, стилей, JS и прочего на нее навешанного)
+			 */
+			$aBirthday['day'] = Yii::app()->request->getPost('day');
+			$aBirthday['month'] = Yii::app()->request->getPost('month');
+			$aBirthday['year'] = Yii::app()->request->getPost('year');
+
+			$oClientLandingForm->setBirthdayFromParts($aBirthday);
+
+			$oClientLandingForm->email = Yii::app()->request->getPost('email');
+			$oClientLandingForm->first_name = Yii::app()->request->getPost('name');
+			$oClientLandingForm->last_name = Yii::app()->request->getPost('lname');
+			$oClientLandingForm->third_name = Yii::app()->request->getPost('sname');
+			$oClientLandingForm->phone = implode('', Yii::app()->request->getPost('phone'));
+			$oClientLandingForm->agree = (Yii::app()->request->getPost('rule') === 'on');
+			$oClientLandingForm->sex = Yii::app()->request->getPost('sex');
+
+			if ($oClientLandingForm->validate()) {
+				Yii::app()->clientForm->formDataProcess($oClientLandingForm);
+
+				Yii::app()->clientForm->setCurrentStep(0);
+				Yii::app()->clientForm->setDoneSteps(0);
+
+				Yii::app()->clientForm->setSiteConfigName(ClientFormComponent::SITE3);
+
+				Yii::app()->clientForm->nextStep();
+
+				Yii::app()->request->redirect(Yii::app()->createUrl('/form'));
+
+				Yii::app()->end();
+			}
+		}
+
+		$this->layout = '//layouts/landing';
+		$this->render('landing');
+	}
 }

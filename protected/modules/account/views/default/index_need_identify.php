@@ -7,7 +7,7 @@
 
 <br /><br />
 <div class="alert in alert-block alert-warning">
-	<h4>Вам необходимо пройти идентификацию!</h4>
+	<h4>Необходимо пройти идентификацию!</h4>
 </div>
 <div class="clearfix"></div>
 <div class="center">

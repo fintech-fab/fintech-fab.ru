@@ -3,6 +3,7 @@
 /* @var $model FooterLinks */
 
 $this->pageTitle = Yii::app()->name . " - " . CHtml::encode($model->link_title);
+Yii::app()->bootstrap->registerBootstrapCss();
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -17,12 +17,12 @@ $this->pageTitle = Yii::app()->name;
 Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refresh');
 ?>
 
-<img src="https://cosmoleads.oneffect.us/affiliate/track/123/<?= time() ?>/" height="1" width="1" /> 
+<? $this->widget('ext.pixels.PixelWidget') ?>
 
 <div class="row">
 
 	<div class="span12">
-		<div class="alert in alert-block fade alert-success"><strong>Вы успешно зарегистрировались в системе. </strong>
+		<div class="alert in alert-block fade alert-success"><strong>Регистрация в системе прошла успешно!</strong>
 		</div>
 
 		<?php $this->widget(
@@ -30,7 +30,7 @@ Yii::app()->clientScript->registerMetaTag("3;url={$sRedirectUri}", null, 'refres
 			array(
 				'label' => 'Перейти в личный кабинет »',
 				'type'  => 'primary',
-				'url' => Yii::app()->createUrl('/account/doSubscribe'),
+				'url'   => Yii::app()->createUrl('/account/doSubscribe'),
 			)
 		); ?>
 	</div>

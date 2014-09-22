@@ -21,7 +21,7 @@ if (!$this->bUpdate):
 		'bootstrap.widgets.TbButton',
 		array(
 			'id'          => 'userLocation',
-			'label'       => $this->sCityName . '<i class="caret-white"></i>',
+			'label'       => $this->sCityName,
 			'type'        => 'link',
 			'encodeLabel' => false,
 			'htmlOptions' => array(
@@ -80,7 +80,7 @@ $this->beginWidget(
 	</div>
 
 	<div class="modal-body" style="height: 100px;">
-		Начните вводить название города, а затем выберите свой город из списка:
+		Начни вводить название города, а затем выбери свой город из списка:
 		<?= $sModalBody ?>
 	</div>
 <?php $this->endWidget(); ?>

@@ -13,9 +13,9 @@
 
 <h4>Подтверждение контактных данных</h4>
 
-Для завершения регистрации Вам необходимо подтвердить свой номер телефона и адрес электронной почты. <br />
-<br />Ваш номер телефона:<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong> <br />Ваш адрес электронной почты:
-<strong><?= Yii::app()->clientForm->getSessionEmail() ?></strong> <br /><br />
+Для завершения регистрации тебе необходимо подтвердить свой номер телефона и адрес электронной почты. <br />
+<br />Твой номер телефона:<strong>+7<?= Yii::app()->clientForm->getSessionPhone() ?></strong>
+<br />Твой адрес электронной почты:<strong><?= Yii::app()->clientForm->getSessionEmail() ?></strong> <br /><br />
 
 <div class="clearfix"></div>
 <div class="span12">
@@ -27,21 +27,22 @@
 	));
 	?>
 
-	<div class="form-actions row">
-		<div class="span2">
+	<div class="form-group row">
+		<div class="col-xs-1 col-xs-offset-1">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'         => 'backButton',
 				'buttonType' => 'link',
+				'type'       => 'primary',
 				'url'        => Yii::app()
 						->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
 				'label'      => SiteParams::C_BUTTON_LABEL_BACK,
 			)); ?>
 		</div>
-		<div class="span6">
+		<div class="col-xs-6 col-xs-offset-3">
 			<?php
 			$this->widget('bootstrap.widgets.TbButton', array(
 				'id'         => 'sendSms',
-				'type'       => 'primary',
+				'type'       => 'success',
 				'size'       => 'small',
 				'buttonType' => 'submit',
 

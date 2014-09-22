@@ -15,7 +15,7 @@
 <?php
 
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
-	'id'     => "checkCodes",
+	'id'                     => "checkCodes",
 	'enableClientValidation' => true,
 	'htmlOptions'            => array(
 		'class' => "span10",
@@ -24,7 +24,7 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 		'validateOnChange' => true,
 		'validateOnSubmit' => true,
 	),
-	'action' => Yii::app()->createUrl('/form/checkCodes'),
+	'action'                 => Yii::app()->createUrl('/form/checkCodes'),
 ));
 ?>
 <?php $this->widget('YaMetrikaGoalsWidget'); ?>
@@ -33,10 +33,10 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	&nbsp;+7<?= Yii::app()->clientForm->getSmsSentPhone(); ?></div>
 
 
-<div class="clearfix"></div>    <label>Введите код из SMS:</label>
+<div class="clearfix"></div>    <label>Введи код из SMS:</label>
 <?= $form->textField($oClientCreateForm, 'sms_code', array('class' => 'span4')); ?>
 <?= $form->error($oClientCreateForm, 'sms_code'); ?>
-<div class="clearfix"></div>    <label>Введите код из электронного письма:</label>
+<div class="clearfix"></div>    <label>Введи код из электронного письма:</label>
 <?= $form->textField($oClientCreateForm, 'email_code', array('class' => 'span4')); ?>
 <?= $form->error($oClientCreateForm, 'email_code'); ?>
 
@@ -44,17 +44,18 @@ $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 <div class="clearfix"></div>
 <div class="span12">
 
-	<div class="form-actions row">
-		<div class="span2 offset1">
+	<div class="form-group row">
+		<div class="col-xs-1 col-xs-offset-1">
 			<?php $this->widget('bootstrap.widgets.TbButton', array(
 				'id'         => 'backButton',
 				'buttonType' => 'link',
+				'type'       => 'primary',
 				'url'        => Yii::app()
 						->createUrl('/form/' . Yii::app()->clientForm->getCurrentStep()),
 				'label'      => SiteParams::C_BUTTON_LABEL_BACK,
 			)); ?>
 		</div>
-		<div class="span2 offset2">
+		<div class="col-xs-1 col-xs-offset-3">
 
 			<?php
 			$this->widget('bootstrap.widgets.TbButton', array(

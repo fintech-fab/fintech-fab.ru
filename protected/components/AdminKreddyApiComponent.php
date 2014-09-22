@@ -37,29 +37,30 @@ class AdminKreddyApiComponent
 	const C_LOAN_ACTIVE = 'loan_active';
 	const C_LOAN_DEBT = 'loan_debt';
 	const C_LOAN_PAID = 'loan_paid';
+	const C_LOAN_REQUEST = 'loan_request';
+	const C_LOAN_CONFIRMED = 'loan_confirmed';
 
 	const C_STATUS_ERROR = 'Ошибка!';
 
-	const C_SUBSCRIPTION_NOT_AVAILABLE = "Извините, подключение Пакета недоступно. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
+	const C_SUBSCRIPTION_NOT_AVAILABLE = "Упс… Извини, перевод недоступен. {account_url_start}Посмотреть информацию о подключении{account_url_end}";
 	const C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о статусе займа{account_url_end}";
-	const C_LOAN_NOT_AVAILABLE = "Извините, оформление займа недоступно. Попробуйте повторить запрос на перевод через 1 минуту. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}";
-
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Ваша заявка одобрена. Для получения займа необходимо оплатить подключение в размере {do_sub_pay_sum} рублей любым удобным способом. {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
-	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Заявка одобрена. Для получения денег {do_loan_url_start}отправьте запрос на перевод.{do_loan_url_end} {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
-	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Ваша заявка отклонена';
-	const C_DO_SUBSCRIBE_MSG = 'Ваша заявка принята. Ожидайте решения.';
-	const C_DO_LOAN_MSG = 'Ваша заявка оформлена. Займ поступит {channel_name} {loan_transfer_time}';
-
-	const C_SESSION_EXPIRED = 'Время Вашей сессии истекло. Просим Вас снова зайти в личный кабинет.';
+	const C_LOAN_NOT_AVAILABLE = "Перевод недоступен. Попробуй повторить запрос на перевод через 1 минуту. {account_url_start}Посмотреть информацию о подключении{account_url_end}";
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Поздравляем! Заявка на {loan_amount} р. одобрена! Оплати абонентку {do_sub_pay_sum} р. любым удобным способом для подключения сервиса на месяц {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Заявка одобрена. Для получения денег {do_loan_url_start}отправьте запрос на перевод.{do_loan_url_end}';
+	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Sorry…Твоя заявка отклонена';
+	const C_DO_SUBSCRIBE_MSG = 'Ура! Запрос на подключение сервиса принят. Мы отправим СМСку с решением на твой мобильный.';
+	const C_DO_LOAN_MSG = 'Деньги успешно отправлены';
+	const C_SESSION_EXPIRED = 'Время сессии истекло. Необходимо снова зайти в личный кабинет.';
 	const C_SESSION_TIME_UNTIL_EXPIRED = 'Время сессии: ';
-
-	const C_CARD_NOT_AVAILABLE = 'Вы выбрали получение денег на не доступный Вам канал получения.
-			 Пройдите, пожалуйста, процедеру привязки банковской карты, для получения займа на неё,
-			  и затем вернитесь к получению займа.';
+	const C_CARD_NOT_AVAILABLE = 'Перевод на карту недоступен. Для получения денег, необходимо пройти процедуру привязки банковской карты в личном кабинете.';
 
 	private $aSubscriptionActiveStates = array(
 		self::C_SUBSCRIPTION_ACTIVE,
+		self::C_SUBSCRIPTION_PAID,
 		self::C_LOAN_AVAILABLE,
+		self::C_LOAN_ACTIVE,
+		self::C_LOAN_REQUEST,
+		self::C_LOAN_CONFIRMED,
 		self::C_LOAN_CREATED,
 		self::C_LOAN_TRANSFER,
 		self::C_LOAN_DEBT,
@@ -69,32 +70,34 @@ class AdminKreddyApiComponent
 
 	private $aAvailableStatuses = array(
 
-		self::C_CLIENT_MORATORIUM_LOAN             => 'Временно недоступно получение новых займов',
+		self::C_CLIENT_MORATORIUM_LOAN             => 'Перевод денег временно недоступен',
 		self::C_CLIENT_MORATORIUM_SCORING          => 'Заявка отклонена',
-		self::C_CLIENT_MORATORIUM_SUBSCRIPTION     => 'Временно недоступно подключение новых Пакетов',
+		self::C_CLIENT_MORATORIUM_SUBSCRIPTION     => 'Подключение сервиса временно недоступно',
 
-		self::C_SUBSCRIPTION_ACTIVE                => 'Подключен к Пакету',
-		self::C_SUBSCRIPTION_AVAILABLE             => 'Доступно подключение к Пакету',
-		self::C_SUBSCRIPTION_CANCEL                => 'Срок оплаты подключения истек',
-		self::C_SUBSCRIPTION_PAID                  => 'Займ доступен',
-		self::C_SUBSCRIPTION_PAYMENT               => 'Оплатите подключение в размере {sub_pay_sum} рублей любым удобным способом. {payments_url_start}Подробнее{payments_url_end}',
+		self::C_SUBSCRIPTION_ACTIVE                => 'Сервис подключен',
+		self::C_SUBSCRIPTION_AVAILABLE             => 'Подключение к сервису доступно',
+		self::C_SUBSCRIPTION_CANCEL                => 'Срок внесения абонентки истек',
+		self::C_SUBSCRIPTION_PAID                  => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
 
-		self::C_SCORING_PROGRESS                   => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SUBSCRIPTION_PAYMENT               => 'Поздравляем! Заявка на {loan_amount} р. одобрена. Оплати абонентку в размере {sub_pay_sum} рублей для подключения сервиса на месяц. {payments_url_start}Подробнее{payments_url_end}',
+		self::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Поздравляем! Заявка на {loan_amount} р. одобрена. Теперь ты можешь подключить сервис КРЕДДИ',
+
+		self::C_SCORING_PROGRESS                   => 'Твоя заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 		self::C_SCORING_AWAITING_REIDENTIFY        => 'Необходимо пройти повторную идентификацию',
-		self::C_SCORING_ACCEPT                     => 'Ваша заявка одобрена, ожидайте выдачи займа',
+		self::C_SCORING_ACCEPT                     => 'Твоя заявка одобрена. Деньги успешно отправлены.',
 		self::C_SCORING_CANCEL                     => 'Заявка отклонена',
 
-		self::C_SUBSCRIPTION_AWAITING_CONFIRMATION => 'Ожидание подтверждения запроса на займ',
+		self::C_LOAN_DEBT                          => 'Непогашенная задолженность',
+		self::C_LOAN_ACTIVE                        => 'Деньги отправлены', //+
+		self::C_LOAN_TRANSFER                      => 'Деньги отправлены', //+
+		self::C_LOAN_AVAILABLE                     => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
+		self::C_LOAN_CREATED                       => 'Деньги отправлены', //+
+		self::C_LOAN_PAID                          => 'Спасибо! Мы все получили. Задолженность полностью погашена.',
+		self::C_LOAN_REQUEST                       => 'Необходимо подтвердить условия',
+		self::C_LOAN_CONFIRMED                     => 'Индивидуальные условия приняты',
 
-		self::C_LOAN_DEBT                          => 'Задолженность по займу',
-		self::C_LOAN_ACTIVE                        => 'Займ перечислен', //+
-		self::C_LOAN_TRANSFER                      => 'Займ перечислен', //+
-		self::C_LOAN_AVAILABLE                     => 'Займ доступен',
-		self::C_LOAN_CREATED                       => 'Займ перечислен', //+
-		self::C_LOAN_PAID                          => 'Займ оплачен',
-
-		self::C_CLIENT_ACTIVE                      => 'Доступно подключение Пакета', //+
-		self::C_CLIENT_NEW                         => 'Выберите Пакет займов',
+		self::C_CLIENT_ACTIVE                      => 'Подключение сервиса доступно', //+
+		self::C_CLIENT_NEW                         => 'Подключи сервис',
 		self::C_CLIENT_FAST_REG                    => 'Требуется заполнить анкету',
 	);
 
@@ -107,21 +110,21 @@ class AdminKreddyApiComponent
 		self::C_SUBSCRIPTION_ACTIVE            => 'Займ оформлен',
 		self::C_SUBSCRIPTION_AVAILABLE         => 'Доступно оформление займа',
 		self::C_SUBSCRIPTION_CANCEL            => '', //для Иваново не должно использоваться
-		self::C_SUBSCRIPTION_PAID              => 'Займ доступен',
+		self::C_SUBSCRIPTION_PAID              => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
 
 		self::C_SUBSCRIPTION_PAYMENT           => '', //для Иваново не должно использоваться
 
-		self::C_SCORING_PROGRESS               => 'Заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
+		self::C_SCORING_PROGRESS               => 'Твоя заявка в обработке. {account_url_start}Обновить статус{account_url_end}', //+
 
 		self::C_SCORING_ACCEPT                 => 'Ваша заявка одобрена, ожидайте выдачи займа',
 		self::C_SCORING_CANCEL                 => 'Заявка отклонена',
 
 		self::C_LOAN_DEBT                      => 'Задолженность по займу',
-		self::C_LOAN_ACTIVE                    => 'Займ перечислен',
-		self::C_LOAN_TRANSFER                  => 'Займ перечислен',
-		self::C_LOAN_AVAILABLE                 => 'Займ доступен',
-		self::C_LOAN_CREATED                   => 'Займ перечислен',
-		self::C_LOAN_PAID                      => 'Займ оплачен',
+		self::C_LOAN_ACTIVE                    => 'Деньги отправлены',
+		self::C_LOAN_TRANSFER                  => 'Деньги отправлены',
+		self::C_LOAN_AVAILABLE                 => 'Сервис подключен, теперь ты можешь пользоваться деньгами',
+		self::C_LOAN_CREATED                   => 'Деньги отправлены',
+		self::C_LOAN_PAID                      => 'Деньги отправлены',
 
 		self::C_CLIENT_ACTIVE                  => 'Доступно оформление займа',
 		self::C_CLIENT_NEW                     => 'Выберите займ',
@@ -134,9 +137,16 @@ class AdminKreddyApiComponent
 	const PRODUCT_TYPE_IVANOVO = 2;
 	const PRODUCT_TYPE_KREDDYLINE = 3;
 	const PRODUCT_TYPE_KREDDY_LINE_POSTPAID = 4;
+	const PRODUCT_TYPE_KREDDY_PERCENT_PREPAID = 5;
+	const PRODUCT_TYPE_KREDDY_PERCENT_POSTPAID = 6;
 
-	const C_KREDDY_LINE_POSTPAID_PAY_RULES = 'до окончания действия КРЕДДИтной линии';
-	const C_KREDDY_LINE_PAY_RULES = 'перед началом использования КРЕДДИтной линии';
+	public static $aPostPaidProducts = array(
+		self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID,
+		self::PRODUCT_TYPE_KREDDY_PERCENT_POSTPAID
+	);
+
+	const C_KREDDY_LINE_POSTPAID_PAY_RULES = 'до окончания действия сервиса';
+	const C_KREDDY_LINE_PAY_RULES = 'перед началом использования сервиса';
 
 	private static $aChannels = array(
 		self::C_MOBILE,
@@ -191,9 +201,6 @@ class AdminKreddyApiComponent
 	const SMS_BLOCKED = 3; //отправка СМС заблокирована
 	const SMS_CODE_TRIES_EXCEED = 4; //попытки ввода СМС-кода исчерпаны
 
-	const C_MAX_SMS_CODE_TRIES = 3;
-	const C_MAX_PASS_SMS_CODE_TRIES = 5;
-
 	const TOKEN_MINUTES_LIVE = 10; // токен живёт 10 минут
 
 	const API_ACTION_CHECK_IDENTIFY = 'video/heldIdentification';
@@ -202,8 +209,11 @@ class AdminKreddyApiComponent
 	const API_ACTION_CREATE_FAST_REG_CLIENT = 'siteClient/signupFast';
 	const API_ACTION_UPDATE_FAST_REG_CLIENT = 'siteClient/updateFastReg';
 	const API_ACTION_CHECK_SUBSCRIBE = 'siteClient/checkSubscribe';
+	const API_ACTION_DO_CONFIRM_SUBSCRIPTION = 'siteClient/doConfirmSubscription';
 	const API_ACTION_SUBSCRIBE = 'siteClient/doSubscribe';
 	const API_ACTION_CHECK_LOAN = 'siteClient/checkLoan';
+	const API_ACTION_CHECK_CONFIRM_LOAN = 'siteClient/checkConfirmLoan';
+	const API_ACTION_LOAN_CONFIRM = 'siteClient/doConfirmLoan';
 	const API_ACTION_LOAN = 'siteClient/doLoan';
 	const API_ACTION_TOKEN_UPDATE = 'siteToken/update';
 	const API_ACTION_TOKEN_CREATE = 'siteToken/create';
@@ -222,9 +232,11 @@ class AdminKreddyApiComponent
 	const API_ACTION_UPLOAD_DOCUMENT = 'siteClient/uploadDocument';
 	const API_ACTION_SET_IDENTIFICATION_FINISHED = 'siteClient/setFinishedVideoId';
 	const API_ACTION_CANCEL_REQUEST = 'siteClient/doCancelRequest';
+	const API_ACTION_CANCEL_LOAN_REQUEST = 'siteClient/doCancelLoanRequest';
 	const API_ACTION_CHANGE_EMAIL = 'siteClient/doChangeEmail';
+	const API_ACTION_GET_INDIVIDUAL_CONDITION_INFO = 'siteClient/getIndividualConditionInfo';
+	const API_ACTION_GET_INDIVIDUAL_CONDITION_LIST = 'siteClient/getIndividualConditionList';
 
-	const API_ACTION_REQ_SMS_CODE = 'siteClient/authBySms';
 	const API_ACTION_CHECK_SMS_CODE = 'siteClient/authBySms';
 
 	const API_ACTION_ADD_CARD = 'siteClientCard/addClientCard';
@@ -237,30 +249,33 @@ class AdminKreddyApiComponent
 	const API_ACTION_SEND_EMAIL_CODE = 'siteClient/sendEmailCode';
 
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
-	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления займа отсутствуют.";
+	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления денег отсутствуют.";
 
-	const C_CARD_MSG_REQUIREMENTS = 'Убедитесь, что банковская карта зарегистрирована на Ваше имя, не является предоплаченной, активна (не заблокирована) и доступна для перечисления денег.';
-	const C_CARD_WARNING_NO_CARD = 'ВНИМАНИЕ! У Вас нет привязанной банковской карты. Для получения займов на банковскую карту пройдите процедуру привязки карты.';
+	const C_CARD_MSG_REQUIREMENTS = 'Убедись, что банковская карта зарегистрирована на твое имя, не является предоплаченной, активна (не заблокирована) и доступна для перечисления денег.';
+	const C_CARD_WARNING_NO_CARD = 'ВНИМАНИЕ! У тебя нет привязанной банковской карты. Для получения денег на банковскую карту пройди процедуру привязки карты.';
 	const C_CARD_WARNING_EXPIRED = 'ВНИМАНИЕ! У ранее привязанной банковской карты вышел срок действия привязки и необходимо привязать ту же самую или новую карту.';
 	const C_CARD_SUCCESSFULLY_VERIFIED = "Карта успешно привязана!";
-	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуйте позже.";
-	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введите данные карты.";
-	const C_CARD_VERIFY_ERROR_3DS = "При авторизации карты произошла ошибка. Возможно, неверно введены данные карты или код авторизации. Попробуйте повторить процедуру привязки карты.";
-	const C_CARD_AGREEMENT = "Срок зачисления средств зависит от банка-эмитента Вашей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем Ваше внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата займа, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
+	const C_CARD_ADD_TRIES_EXCEED = "Сервис временно недоступен. Попробуй позже.";
+	const C_CARD_VERIFY_EXPIRED = "Время проверки карты истекло. Для повторения процедуры привязки введи данные карты.";
+	const C_CARD_VERIFY_ERROR_3DS = "При авторизации карты произошла ошибка. Возможно, неверно введены данные карты или код авторизации. Попробуй повторить процедуру привязки карты.";
+	const C_CARD_AGREEMENT = "Время зачисления денег зависит от банка-эмитента твоей карты. В некоторых случаях срок зачисления может составлять несколько дней. Обращаем твое внимание, МФО ООО «Финансовые Решения» оставляет за собой право увеличить срок возврата денег, указанный в Приложение №1 к Договору (Оферте), не более, чем на 3 дня.";
 
-	const C_REQUEST_CANCEL_SUCCESS = 'Ваше подключение успешно отменено. Будем ждать новой заявки!';
+	const C_REQUEST_CANCEL_SUCCESS = 'Твоя заявка на подключение успешно отменена. Будем ждать новой заявки!';
 	const C_REQUEST_CANCEL_ERROR = 'Ошибка! Не удалось отменить подключение.';
+
+	const C_LOAN_REQUEST_CANCEL_SUCCESS = 'Индивидуальные условия успешно отклонены. Ты всегда можешь отправить запрос на перевод денег повторно.';
+	const C_LOAN_REQUEST_CANCEL_ERROR = 'Ошибка! Не удалось отказаться от индивидуальных условий.';
+
 
 	/**
 	 * Переменные для тестирования API идентификации, требуются для выполнения тестов.
 	 * логин и пароль должны соответствовать заданным в IdentifyModuleTest
-	 *
 	 */
 	private $testLogin = '9631321654';
 	private $testPassword = 'Aa123456';
 	private $testToken = 'abcdsdg*98ughjg23t8742yusdjf';
 
-	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Вы прошли идентификацию, но не заполнили форму подтверждения документов. Для продолжения {passport_url_start}заполните, пожалуйста, форму{passport_url_end}.";
+	const C_NEED_PASSPORT_DATA = "ВНИМАНИЕ! Идентификация пройдена, но форма подтверждения документов не заполнена. Для продолжения {passport_url_start}заполни, пожалуйста, форму{passport_url_end}.";
 
 	private $token;
 	private $aClientInfo; //массив с данными клиента
@@ -299,6 +314,8 @@ class AdminKreddyApiComponent
 			'{sub_pay_sum}'        => $this->getSubscriptionCost(), // стоимость подключения текущего пакета
 
 			'{do_sub_pay_sum}'     => $this->getSubscribeProductCost(), //стоимость оформляемого в данный момент пакета
+
+			'{loan_amount}'        => $this->getSubscriptionLoanAmount(), // сумма займа
 
 			'{channel_name}'       => SiteParams::mb_lcfirst($this->getChannelNameForSubscriptionLoan($this->getLoanSelectedChannel())), // название канала
 
@@ -599,8 +616,13 @@ class AdminKreddyApiComponent
 		);
 
 
+		if (!empty($aClientData['sex'])) {
+			$aRequiredFields['sex'] = null;
+		}
+
 		//получаем массив, соджержащий только заданные поля
 		$aClientData = array_intersect_key($aClientData, $aRequiredFields);
+
 
 		$aRequest = array('clientData' => CJSON::encode($aClientData));
 		$aTokenData = $this->requestAdminKreddyApi(self::API_ACTION_CREATE_FAST_REG_CLIENT, $aRequest);
@@ -696,6 +718,8 @@ class AdminKreddyApiComponent
 
 			'loan_purpose'        => null,
 			'birthplace'          => null,
+
+			'order_id'            => null,
 		);
 
 		//получаем массив, соджержащий только заданные поля
@@ -772,66 +796,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Получаем СМС-авторизацию по СМС-паролю для доступа к закрытым данным
-	 *
-	 * @param $sSmsPassword
-	 *
-	 * @return bool
-	 */
-	public function getSmsAuth($sSmsPassword)
-	{
-		$aRequest = array('sms_code' => $sSmsPassword);
-
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHECK_SMS_CODE, $aRequest);
-
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setSessionToken($aResult['token']);
-			$this->token = $aResult['token'];
-			$this->setSmsAuthDone(true);
-
-			return true;
-		} else {
-			//проверяем, получили ли мы sms_message
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Запрос от API СМС-пароля для СМС-авторизации
-	 *
-	 * @param bool $bResend
-	 *
-	 * @return bool
-	 */
-	public function sendSmsPassword($bResend = false)
-	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_REQ_SMS_CODE, array('sms_resend' => (int)$bResend));
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			//устанавливаем флаг "СМС отправлено" и время отправки
-			Yii::app()->adminKreddyApi->setSmsPassSentAndTime();
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			//проверяем, получили ли мы sms_message
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Запрос от API СМС-кода для подтверждения восстановления пароля
 	 *
 	 * @param array $aData
@@ -841,26 +805,7 @@ class AdminKreddyApiComponent
 	 */
 	public function resetPasswordSendSms(array $aData, $bResend = false)
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, $aData + array('sms_resend' => (int)$bResend));
-		//если результат успешный
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			//ставим флаг "смс отправлено" и сохраняем время отправки в сесссию
-			Yii::app()->adminKreddyApi->setResetPassSmsCodeSentAndTime();
-			//сохраняем телефон в сессию
-			Yii::app()->adminKreddyApi->setResetPassData($aData);
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			//проверяем, получили ли мы sms_message
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-		}
-
-		return false;
+		return $this->doSendSms(self::API_ACTION_RESET_PASSWORD, $aData, $bResend);
 	}
 
 	/**
@@ -872,21 +817,9 @@ class AdminKreddyApiComponent
 	 */
 	public function resetPasswordCheckSms(array $aData)
 	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_RESET_PASSWORD, $aData);
+		$sSmsCode = $aData['sms_code'];
 
-		if (isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
+		return $this->doCheckSms(self::API_ACTION_RESET_PASSWORD, $sSmsCode, $aData);
 	}
 
 	/**
@@ -905,8 +838,8 @@ class AdminKreddyApiComponent
 
 		//TODO сравнить с текущей выдачей API и дополнить пустые массивы новыми ключами
 		$aData = array(
-			'code'                 => self::ERROR_AUTH,
-			'client_data'          => array(
+			'code'                   => self::ERROR_AUTH,
+			'client_data'            => array(
 				'is_debt'               => false,
 				'fullname'              => '',
 				'client_new'            => false,
@@ -914,26 +847,32 @@ class AdminKreddyApiComponent
 				'auto_debiting_enabled' => false,
 				'is_possible_take_loan' => false,
 			),
-			'status'               => array(
+			'status'                 => array(
 				'name' => false,
 			),
-			'loan_request'         => false,
-			'first_identification' => false,
-			'active_loan'          => array(
-				'channel_id'               => false,
-				'balance'                  => 0,
-				'loan_balance'             => 0,
-				'subscription_balance'     => 0,
-				'fine_and_penalty_balance' => 0,
-				'expired'                  => false,
-				'expired_to'               => false
+			'loan_request'           => false,
+			'first_identification'   => false,
+			'current_client_product' => array(
+				'channel_id'              => false,
+				'subscription_expired'    => false,
+				'subscription_expired_to' => false,
+				'loan_expired'            => false,
+				'loan_expired_to'         => false,
+				'balance'                 => 0,
+				'loan_balance'            => 0,
+				'subscription_balance'    => 0,
+				'fine_balance'            => 0,
+				'penalty_balance'         => 0,
+				'percent_balance'         => 0,
+				'percent_daily'           => 0,
+				'loan_days_usage'         => 0,
 			),
-			'subscription_request' => array(
+			'subscription_request'   => array(
 				'name'       => false,
 				'can_cancel' => false,
 				'type'       => 0
 			),
-			'subscription'         => array(
+			'subscription'           => array(
 				'product'         => false,
 				'product_id'      => false,
 				'activity_to'     => false,
@@ -947,16 +886,16 @@ class AdminKreddyApiComponent
 					'type'          => false,
 				),
 			),
-			'moratoriums'          => array(
+			'moratoriums'            => array(
 				'loan'         => false,
 				'subscription' => false,
 				'scoring'      => false,
 			),
-			'channels'             => array(),
-			'slow_channels'        => array(),
-			'bank_card_exists'     => false,
-			'bank_card_expired'    => false,
-			'bank_card_pan'        => false,
+			'channels'               => array(),
+			'slow_channels'          => array(),
+			'bank_card_exists'       => false,
+			'bank_card_expired'      => false,
+			'bank_card_pan'          => false,
 		);
 		$this->token = $this->getSessionToken();
 		if (!empty($this->token)) {
@@ -1121,7 +1060,7 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отдает имя канала для статуса, в случае если статусное сообщение - "Займ перечислен"
+	 * Отдает имя канала для статуса, в случае если статусное сообщение - "Деньги отправлены"
 	 *
 	 * @return bool|string
 	 */
@@ -1135,7 +1074,7 @@ class AdminKreddyApiComponent
 		);
 		//проверяем, что текущий статус находится в списке статусов, для которых нужно выдать имя канала
 		if (in_array($sStatusName, $aStatuses)) {
-			$iActiveLoanChannelId = Yii::app()->adminKreddyApi->getSubscriptionActiveLoanChannelId();
+			$iActiveLoanChannelId = Yii::app()->adminKreddyApi->getSubscriptionChannelId();
 			$sChannelName = Yii::app()->productsChannels->formatChannelNameForStatus(Yii::app()->adminKreddyApi->getChannelNameById($iActiveLoanChannelId));
 
 		} else {
@@ -1198,7 +1137,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['active_loan']['balance'];
+		return $aClientInfo['current_client_product']['balance'];
 	}
 
 	/**
@@ -1210,7 +1149,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['balance']);
+		return abs($aClientInfo['current_client_product']['balance']);
 	}
 
 	/**
@@ -1220,7 +1159,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['loan_balance']);
+		return abs($aClientInfo['current_client_product']['loan_balance']);
 	}
 
 	/**
@@ -1230,17 +1169,37 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['subscription_balance']);
+		return abs($aClientInfo['current_client_product']['subscription_balance']);
 	}
 
 	/**
 	 * @return number
 	 */
-	public function getAbsFineAndPenalty()
+	public function getAbsFine()
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return abs($aClientInfo['active_loan']['fine_and_penalty_balance']);
+		return abs($aClientInfo['current_client_product']['fine_balance']);
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getAbsPenalty()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['current_client_product']['penalty_balance']);
+	}
+
+	/**
+	 * @return number
+	 */
+	public function getAbsPercent()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return abs($aClientInfo['current_client_product']['percent_balance']);
 	}
 
 	/**
@@ -1283,11 +1242,11 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	public function getSubscriptionActiveLoanChannelId()
+	public function getSubscriptionChannelId()
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['active_loan']['channel_id'];
+		return $aClientInfo['current_client_product']['channel_id'];
 	}
 
 	/**
@@ -1384,7 +1343,15 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 
-		return $aClientInfo['subscription']['product_info']['loan_lifetime'] / 3600 / 24;
+		$oCurrTime = new DateTime();
+		$oCurrTime->setTimestamp(SiteParams::getTime());
+
+		$oExpiredTime = new DateTime();
+		$oExpiredTime->setTimestamp(SiteParams::strtotime($aClientInfo['subscription']['activity_to']));
+
+		$oDateInterval = $oCurrTime->diff($oExpiredTime);
+
+		return $oDateInterval->days;
 	}
 
 	/**
@@ -1408,7 +1375,7 @@ class AdminKreddyApiComponent
 
 		$aClientInfo = $this->getClientInfo();
 		$sActivityTo = $aClientInfo['subscription']['activity_to'];
-		$sActivityTo = $this->formatRusDate($sActivityTo, false);
+		$sActivityTo = SiteParams::formatRusDate($sActivityTo);
 
 		return $sActivityTo;
 	}
@@ -1421,7 +1388,7 @@ class AdminKreddyApiComponent
 		$aClientInfo = $this->getClientInfo();
 		if ($aClientInfo['subscription']['activity_to']) {
 			$sActivityTo = $aClientInfo['subscription']['activity_to'];
-			$sActivityTo = $this->formatRusDate($sActivityTo, true);
+			$sActivityTo = SiteParams::formatRusDate($sActivityTo, true);
 
 			return $sActivityTo;
 		}
@@ -1463,7 +1430,7 @@ class AdminKreddyApiComponent
 	{
 		$aClientInfo = $this->getClientInfo();
 		$sMoratoriumTo = $aClientInfo['moratoriums']['loan'];
-		$sMoratoriumTo = $this->formatRusDate($sMoratoriumTo, false);
+		$sMoratoriumTo = SiteParams::formatRusDate($sMoratoriumTo, false);
 
 		return $sMoratoriumTo;
 	}
@@ -1483,7 +1450,7 @@ class AdminKreddyApiComponent
 
 		$iMaxDate = ($iDate1 > $iDate2) ? $iDate1 : $iDate2;
 
-		return $this->formatRusDate($iMaxDate, false);
+		return SiteParams::formatRusDate($iMaxDate, false);
 	}
 
 	/**
@@ -1532,13 +1499,13 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool
 	 */
-	public function getActiveLoanExpired()
+	public function getCurrentProductExpired()
 	{
 		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
 			return false;
 		}
 		$aClientInfo = $this->getClientInfo();
-		$bExpired = $aClientInfo['active_loan']['expired'];
+		$bExpired = $aClientInfo['current_client_product']['loan_expired'] || $aClientInfo['current_client_product']['subscription_expired'];
 
 		return $bExpired;
 	}
@@ -1546,7 +1513,7 @@ class AdminKreddyApiComponent
 	/**
 	 * @return bool|string
 	 */
-	public function getActiveLoanExpiredTo()
+	public function getCurrentProductLoanExpiredTo()
 	{
 		if ($this->isSubscriptionAwaitingConfirmationStatus()) {
 			return false;
@@ -1554,15 +1521,22 @@ class AdminKreddyApiComponent
 
 		$aClientInfo = $this->getClientInfo();
 
-		$sExpiredTo = $aClientInfo['active_loan']['expired_to'];
+		$sExpiredTo = $aClientInfo['current_client_product']['loan_expired_to'];
 
 		if ($sExpiredTo == SiteParams::EMPTY_DATETIME) {
 			return false;
 		}
 
-		$sExpiredTo = $this->formatRusDate($sExpiredTo, false);
+		$sExpiredTo = SiteParams::formatRusDate($sExpiredTo);
 
 		return $sExpiredTo;
+	}
+
+	public function getCurrentClientProduct()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return $aClientInfo['current_client_product'];
 	}
 
 	/**
@@ -1716,11 +1690,11 @@ class AdminKreddyApiComponent
 			//перебираем все продукты
 			foreach ($aProducts as $aProduct) {
 				//Если тип продукта - постоплата и нам не нужны пост-оплатные продукты - пропускаем
-				if ($aProduct['type'] == self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID && !$bPostPaid) {
+				if (in_array($aProduct['type'], self::$aPostPaidProducts) && !$bPostPaid) {
 					continue;
 				}
 				//Если тип продукта - не постоплата (предоплата) и нам не нужны предоплатные продукты - пропускаем
-				if ($aProduct['type'] != self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID && !$bPrePaid) {
+				if (!in_array($aProduct['type'], self::$aPostPaidProducts) && !$bPrePaid) {
 					continue;
 				}
 
@@ -1735,7 +1709,7 @@ class AdminKreddyApiComponent
 					if (isset($aChannels[$iKey])
 						&& in_array($iKey, $aClientChannels)
 					) {
-						$aAvailableProducts[$aProduct['id']] = $aProduct['name'];
+						$aAvailableProducts[$aProduct['id']] = $aProduct['loan_amount'];
 					}
 				}
 			}
@@ -1937,7 +1911,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool|string
 	 */
-	public function getProductCostById($iProductId, $iChannelId)
+	public function getProductCostById($iProductId, $iChannelId = null)
 	{
 		$aProducts = $this->getProducts();
 
@@ -1946,7 +1920,7 @@ class AdminKreddyApiComponent
 		if (isset($aProducts[$iProductId]['subscription_cost'])) {
 			$iSubscriptionCost += $aProducts[$iProductId]['subscription_cost'];
 		}
-		if (isset($aProducts[$iProductId]['channels'][$iChannelId]['additional_cost'])) {
+		if ($iChannelId && isset($aProducts[$iProductId]['channels'][$iChannelId]['additional_cost'])) {
 			$iSubscriptionCost += $aProducts[$iProductId]['channels'][$iChannelId]['additional_cost'];
 		}
 
@@ -2037,6 +2011,22 @@ class AdminKreddyApiComponent
 	}
 
 	/**
+	 * Проверка возможности подтвердить займ (индивидуальные условия)
+	 *
+	 * @return bool
+	 */
+	public function checkConfirmLoan()
+	{
+		$this->requestAdminKreddyApi(self::API_ACTION_CHECK_CONFIRM_LOAN);
+
+		return (!$this->getIsNotAllowed()
+			&& !$this->getIsNeedSmsAuth()
+			&& !$this->getIsError()
+		);
+
+	}
+
+	/**
 	 * Получение канала, выбранного клиентом по умолчанию
 	 *
 	 * @return int
@@ -2049,46 +2039,18 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС с кодом подтверждения займа
-	 *
-	 * @return bool
-	 */
-	public function sendSmsLoan()
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
-	}
-
-	/**
 	 * Взять заём, подписанный СМС-кодом
-	 *
-	 * @param string $sSmsCode
 	 *
 	 * @param        $iChannelId
 	 *
-	 *
 	 * @return bool
 	 */
-	public function doLoan($sSmsCode, $iChannelId)
+	public function doLoan($iChannelId)
 	{
 
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('sms_code' => $sSmsCode, 'channel_id' => $iChannelId));
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_LOAN, array('channel_id' => $iChannelId));
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+		if ($aResult['code'] === self::ERROR_NONE) {
 			$this->setLastSmsMessage($aResult['sms_message']);
 
 			return true;
@@ -2111,6 +2073,29 @@ class AdminKreddyApiComponent
 	public function doCancelRequest()
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CANCEL_REQUEST);
+
+		if ($aResult['code'] === self::ERROR_NONE) {
+
+			return true;
+		} else {
+			if (isset($aResult['message'])) {
+				$this->setLastMessage($aResult['message']);
+			} else {
+				$this->setLastMessage(self::ERROR_MESSAGE_UNKNOWN);
+			}
+
+			return false;
+		}
+	}
+
+	/**
+	 * Отмена запроса на займ (индивидуальных условий)
+	 *
+	 * @return bool
+	 */
+	public function doCancelLoanRequest()
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CANCEL_LOAN_REQUEST);
 
 		if ($aResult['code'] === self::ERROR_NONE) {
 
@@ -2156,14 +2141,20 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Отправка СМС с кодом подтверждения подписки
+	 * Отправка СМС с кодом подтверждения для действия
+	 *
+	 * @param       $sAction
+	 * @param array $aData
+	 * @param bool  $bResend
 	 *
 	 * @return bool
 	 */
-	public function sendSmsSubscribe()
+	public function doSendSms($sAction, $aData = array(), $bResend = false)
 	{
+		$aData['sms_resend'] = (int)$bResend;
+
 		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE);
+		$aResult = $this->requestAdminKreddyApi($sAction, $aData);
 
 		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
 			$this->setLastSmsMessage($aResult['sms_message']);
@@ -2181,27 +2172,51 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Подписка, подписанная СМС-кодом
+	 * Проверка, правильный ли код СМС
 	 *
-	 * @param string $sSmsCode
+	 * @param       $sSmsCode
+	 * @param       $sAction
+	 * @param array $aData
+	 *
+	 * @internal param $sType
+	 * @return bool
+	 */
+	public function doCheckSms($sAction, $sSmsCode, $aData = array())
+	{
+		// если смена пароля - нужен другой экшн, там другой процесс
+		if ($sAction == self::API_ACTION_CHANGE_PASSWORD) {
+			return $this->changePassword($sSmsCode, $aData);
+		}
+
+		$aData['sms_code'] = $sSmsCode;
+
+		$aResult = $this->requestAdminKreddyApi($sAction, $aData);
+
+		if (isset($aResult['token'])) {
+			$this->setSessionToken($aResult['token']);
+			$this->token = $aResult['token'];
+		}
+
+		return $this->checkChangeResultMessage($aResult);
+	}
+
+	/**
+	 * Подписка на сервис
 	 *
 	 * @param        $iProduct
-	 * @param        $iChannelId
 	 *
 	 * @return bool
 	 */
-	public function doSubscribe($sSmsCode, $iProduct, $iChannelId)
+	public function doSubscribe($iProduct)
 	{
 		$aRequestData = array(
-			'sms_code'    => $sSmsCode,
 			'product_id'  => $iProduct,
-			'channel_id'  => $iChannelId,
-			'tracking_id' => Yii::app()->request->cookies['TrackingID'],
+			'tracking_id' => Yii::app()->siteParams->getTrackingId(),
 		);
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_SUBSCRIBE, $aRequestData);
 
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
+		if ($aResult['code'] === self::ERROR_NONE) {
 			if (isset($aResult['scoring_result'])) {
 				$this->setScoringResult($aResult['scoring_result']);
 			}
@@ -2253,84 +2268,6 @@ class AdminKreddyApiComponent
 
 			return false;
 		}
-	}
-
-	/**
-	 * Заявка на смену паспортных данных, подписанная СМС-кодом
-	 *
-	 * @param string $sSmsCode
-	 *
-	 * @param array  $aPassportData
-	 *
-	 * @return array
-	 */
-	public function changePassport($sSmsCode, $aPassportData)
-	{
-		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSPORT,
-			array('sms_code' => $sSmsCode, 'ChangePassportForm' => $aPassportData));
-
-		if (isset($aResult['sms_message'])) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-		} else {
-			$this->setLastSmsMessage($aResult['message']);
-		}
-
-		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Отправка СМС для действия смены клиентских данных
-	 *
-	 * @param       $cApiAction
-	 *
-	 * @param array $aData
-	 *
-	 * @return bool
-	 */
-	public function sendSmsChangeClientData($cApiAction, $aData = array())
-	{
-		//отправляем СМС с кодом
-		$aResult = $this->requestAdminKreddyApi($cApiAction, $aData);
-
-		if ($aResult['code'] === self::ERROR_NEED_SMS_CODE && isset($aResult['sms_status']) && $aResult['sms_status'] === self::SMS_SEND_OK) {
-			$this->setLastSmsMessage($aResult['sms_message']);
-
-			return true;
-		} else {
-			if (isset($aResult['sms_message'])) {
-				$this->setLastSmsMessage($aResult['sms_message']);
-			} else {
-				$this->setLastSmsMessage(self::ERROR_MESSAGE_UNKNOWN);
-			}
-
-			return false;
-		}
-	}
-
-	/**
-	 * @param        $cApiAction
-	 * @param        $sSmsCode
-	 * @param        $aData
-	 *
-	 * @param string $sFormName
-	 *
-	 * @return bool
-	 */
-	public function changeClientData($cApiAction, $sSmsCode, $aData, $sFormName)
-	{
-		// если смена пароля - нужен другой экшн, там другой процесс
-		if ($cApiAction == self::API_ACTION_CHANGE_PASSWORD) {
-			return $this->changePassword($sSmsCode, $aData);
-		}
-
-		$aResult = $this->requestAdminKreddyApi($cApiAction,
-			array('sms_code' => $sSmsCode, $sFormName => $aData));
-
-		return $this->checkChangeResultMessage($aResult);
 	}
 
 	/**
@@ -2798,14 +2735,19 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * Логаут, чистит данные в сессии и удаляет токен
+	 * очищаем сессии, связанные с отправкой SMS (форма SMS пароль)
 	 */
-	public function logout()
+	public function clearSmsAuthState()
 	{
-		// очищаем сессии, связанные с отправкой SMS
-		$this->clearSmsState();
+		Yii::app()->session['smsAuthDone'] = null;
+	}
 
-		//$this->setSessionToken(null);
+	/**
+	 * @param $bSmsAuthDone
+	 */
+	public function setSmsAuthDone($bSmsAuthDone)
+	{
+		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
 	}
 
 	/**
@@ -2860,77 +2802,6 @@ class AdminKreddyApiComponent
 	public function getIsNeedSmsCode()
 	{
 		return ($this->getLastCode() === self::ERROR_NEED_SMS_CODE);
-	}
-
-	/**
-	 * очищаем сессии, связанные с отправкой SMS
-	 */
-	private function clearSmsState()
-	{
-		$this->clearSmsPassState();
-		$this->clearResetPassSmsCodeState();
-	}
-
-	/**
-	 * очищаем сессии, связанные с отправкой SMS (форма Восстановления пароля)
-	 */
-	public function clearResetPassSmsCodeState()
-	{
-		Yii::app()->session['resetPassSmsCodeSent'] = null;
-		Yii::app()->session['resetPassSmsCodeSentTime'] = null;
-		Yii::app()->session['resetPassSmsCodeLeftTime'] = null;
-		Yii::app()->session['resetPasswordData'] = null;
-	}
-
-	/**
-	 * очищаем сессии, связанные с отправкой SMS (форма SMS пароль)
-	 */
-	public function clearSmsPassState()
-	{
-		Yii::app()->session['smsPassSent'] = null;
-		Yii::app()->session['smsPassSentTime'] = null;
-		Yii::app()->session['smsPassLeftTime'] = null;
-		Yii::app()->session['smsAuthDone'] = null;
-	}
-
-	/**
-	 * Проверяем, отправлено ли СМС с паролем аутентификации
-	 *
-	 * @return bool
-	 */
-	public function checkSmsPassSent()
-	{
-		return (!empty(Yii::app()->session['smsPassSent']));
-	}
-
-	/**
-	 * Возвращаем время отправки СМС-пароля
-	 *
-	 * @return int|''
-	 */
-	public function getSmsPassSentTime()
-	{
-		return (!empty(Yii::app()->session['smsPassSentTime'])) ? Yii::app()->session['smsPassSentTime'] : '';
-	}
-
-	/**
-	 * Проверяем, отправлено ли СМС с кодом подтверждения восстановления пароля
-	 *
-	 * @return bool
-	 */
-	public function checkResetPassSmsCodeSent()
-	{
-		return (!empty(Yii::app()->session['resetPassSmsCodeSent']));
-	}
-
-	/**
-	 * Возвращаем время отправки СМС с кодом подтверждения восстановления пароля
-	 *
-	 * @return int|''
-	 */
-	public function getResetPassSmsCodeSentTime()
-	{
-		return (!empty(Yii::app()->session['resetPassSmsCodeSentTime'])) ? Yii::app()->session['resetPassSmsCodeSentTime'] : '';
 	}
 
 	/**
@@ -2990,88 +2861,6 @@ class AdminKreddyApiComponent
 	public function getIsSmsAuth()
 	{
 		return (!empty(Yii::app()->session['smsAuthDone']));
-	}
-
-	/**
-	 * Возвращаем время (в секундах), оставшееся до момента, когда можно запросить СМС-пароль повторно
-	 *
-	 * @return integer
-	 */
-	public function getSmsPassLeftTime()
-	{
-		$curTime = time();
-		$leftTime = (!empty(Yii::app()->session['smsPassSentTime']))
-			? Yii::app()->session['smsPassSentTime']
-			: $curTime;
-		$leftTime = $curTime - $leftTime;
-		$leftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $leftTime;
-
-		return $leftTime;
-	}
-
-	/**
-	 * Сохраняем время отправки СМС-пароля и ставим флаг "СМС отправлено"
-	 */
-	public function setSmsPassSentAndTime()
-	{
-		Yii::app()->session['smsPassSent'] = true;
-		Yii::app()->session['smsPassSentTime'] = time();
-		Yii::app()->session['smsPassLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
-	}
-
-	/**
-	 * Получаем время, оставшееся до возможности повторной отправки SMS (форма Восстановление пароля)
-	 *
-	 * @return integer
-	 */
-	public function getResetPassSmsCodeLeftTime()
-	{
-		$iCurTime = time();
-		$iLeftTime = (!empty(Yii::app()->session['resetPassSmsCodeSentTime']))
-			? Yii::app()->session['resetPassSmsCodeSentTime']
-			: $iCurTime;
-		$iLeftTime = $iCurTime - $iLeftTime;
-		$iLeftTime = SiteParams::API_MINUTES_UNTIL_RESEND * 60 - $iLeftTime;
-
-		return $iLeftTime;
-	}
-
-	/**
-	 * Сохраняем время отправки СМС-кода для восстановления пароля и ставим флаг "СМС отправлено"
-	 */
-	public function setResetPassSmsCodeSentAndTime()
-	{
-		Yii::app()->session['resetPassSmsCodeSent'] = true;
-		Yii::app()->session['resetPassSmsCodeSentTime'] = time();
-		Yii::app()->session['resetPassSmsCodeLeftTime'] = SiteParams::API_MINUTES_UNTIL_RESEND * 60;
-	}
-
-	/**
-	 * Форматируем дату в вид 01.01.2013 00:00
-	 *
-	 * @param      $sDate
-	 * @param bool $bWithTime выводить ли время
-	 *
-	 * @return bool|string
-	 */
-	public function formatRusDate($sDate, $bWithTime = true)
-	{
-		if (!is_numeric($sDate)) {
-			$sDate = strtotime($sDate);
-		}
-
-		if ($sDate) {
-			if ($bWithTime) {
-				$sDate = date('d.m.Y H:i', $sDate);
-
-				$sDate .= " " . CHtml::openTag('i', array("class" => "icon-question-sign", "rel" => "tooltip", "title" => Dictionaries::C_INFO_MOSCOWTIME));
-				$sDate .= CHtml::closeTag('i');
-			} else {
-				$sDate = date('d.m.Y', $sDate);
-			}
-		}
-
-		return $sDate;
 	}
 
 	/**
@@ -3279,14 +3068,6 @@ class AdminKreddyApiComponent
 	}
 
 	/**
-	 * @param $bSmsAuthDone
-	 */
-	public function setSmsAuthDone($bSmsAuthDone)
-	{
-		Yii::app()->session['smsAuthDone'] = $bSmsAuthDone;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getSubscriptionNotAvailableMessage()
@@ -3310,60 +3091,6 @@ class AdminKreddyApiComponent
 		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $this->formatStatusMessage());
 
 		return $sMessage;
-	}
-
-	/**
-	 *
-	 */
-	public function increaseSmsPassTries()
-	{
-		Yii::app()->session['iSmsPassTries'] = (Yii::app()->session['iSmsPassTries'])
-			? (Yii::app()->session['iSmsPassTries'] + 1)
-			: 1;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getIsSmsPassTriesExceed()
-	{
-		//увеличиваем счетчик попыток
-		$this->increaseSmsPassTries();
-
-		//проверяем, не кончились ли попытки
-		return (Yii::app()->session['iSmsPassTries'] > self::C_MAX_PASS_SMS_CODE_TRIES);
-	}
-
-	public function resetSmsPassTries()
-	{
-		Yii::app()->session['iSmsPassTries'] = 0;
-	}
-
-	/**
-	 *
-	 */
-	protected function increaseSmsCodeTries()
-	{
-		Yii::app()->session['iSmsCodeTries'] = (Yii::app()->session['iSmsCodeTries'])
-			? (Yii::app()->session['iSmsCodeTries'] + 1)
-			: 1;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function getIsSmsCodeTriesExceed()
-	{
-		//увеличиваем счетчик попыток
-		$this->increaseSmsCodeTries();
-
-		//проверяем, не кончились ли попытки
-		return (Yii::app()->session['iSmsCodeTries'] > self::C_MAX_SMS_CODE_TRIES);
-	}
-
-	public function resetSmsCodeTries()
-	{
-		Yii::app()->session['iSmsCodeTries'] = 0;
 	}
 
 	/**
@@ -3696,10 +3423,10 @@ class AdminKreddyApiComponent
 		if ($bFormat) {
 
 			$iFlexTimeTo = time() + ($iFlexTime * 60 * 60 * 24);
-			$this->formatRusDate($iFlexTimeTo, false);
+			SiteParams::formatRusDate($iFlexTimeTo, false);
 
 
-			return ($iFlexTime) ? $this->formatRusDate($iFlexTimeTo, false) : false;
+			return ($iFlexTime) ? SiteParams::formatRusDate($iFlexTimeTo, false) : false;
 		}
 
 		return $iFlexTime;
@@ -3929,7 +3656,7 @@ class AdminKreddyApiComponent
 
 		$iProductType = $aProducts[$iProductId]['type'];
 
-		if ($iProductType == self::PRODUCT_TYPE_KREDDY_LINE_POSTPAID) {
+		if (in_array($iProductType, self::$aPostPaidProducts)) {
 			return self::C_KREDDY_LINE_POSTPAID_PAY_RULES;
 		}
 
@@ -3944,5 +3671,41 @@ class AdminKreddyApiComponent
 		$cClientStatus = $this->getClientStatus();
 
 		return in_array($cClientStatus, $this->aSubscriptionActiveStates);
+	}
+
+	/**
+	 * Получить информацию по индивидуальным условиям
+	 *
+	 * @param $hash
+	 *
+	 * @return array
+	 */
+	public function getIndividualConditionInfo($hash)
+	{
+		$aRequest = ['hash' => $hash];
+
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_INDIVIDUAL_CONDITION_INFO, $aRequest);
+
+		if (!empty($aResult['condition'])) {
+			return $aResult['condition'];
+		}
+
+		return array();
+	}
+
+	/**
+	 * Получить список индивидуальных условий
+	 *
+	 * @return array
+	 */
+	public function getIndividualConditionList()
+	{
+		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_INDIVIDUAL_CONDITION_LIST);
+
+		if (!empty($aResult['conditions'])) {
+			return $aResult['conditions'];
+		}
+
+		return array();
 	}
 }

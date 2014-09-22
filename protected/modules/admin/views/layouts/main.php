@@ -1,4 +1,6 @@
-<?php /* @var $this Controller */ ?>
+<?php /* @var $this Controller */
+Yii::app()->bootstrap->registerBootstrapCss();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

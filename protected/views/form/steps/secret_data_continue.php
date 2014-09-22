@@ -36,7 +36,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 <div class="row">
 	<div class="span6">
 		<div class="row">
-			<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'numeric_code')); ?>
+			<?= $form->textFieldRow($oClientCreateForm, 'numeric_code', SiteParams::getHintHtmlOptions($oClientCreateForm, 'numeric_code') + array('maxlength' => 4)); ?>
 			<?= $form->dropDownListRow2($oClientCreateForm, 'secret_question', Dictionaries::$aSecretQuestions, SiteParams::getHintHtmlOptions($oClientCreateForm, 'secret_question')); ?>
 			<?= $form->textFieldRow($oClientCreateForm, 'secret_answer', SiteParams::getHintHtmlOptions($oClientCreateForm, 'secret_answer')); ?>
 		</div>
@@ -57,7 +57,7 @@ $this->widget('FormProgressBarWidget', array('aSteps' => Yii::app()->clientForm-
 				'ajaxOptions' => array(
 					'complete' => 'checkBlankResponse',
 					'type'     => 'POST',
-					'update' => '#formBody',
+					'update'   => '#formBody',
 				),
 				'url'         => Yii::app()
 						->createUrl('/form/ajaxForm/' . Yii::app()->clientForm->getCurrentStep()),

@@ -11,20 +11,26 @@
 <?php
 $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'     => 'loan-form',
-	'action' => Yii::app()->createUrl('/account/doLoanSmsConfirm'),
+	'action' => Yii::app()->createUrl('/account/doLoan'),
 ));
 
 $this->widget('bootstrap.widgets.TbBox', array(
 	'title'   => $this->getInfoTitle(),
 	'content' => $this->getFullInfo(),
 ));
-$oModel->sendSmsCode = 1;
-echo $form->hiddenField($oModel, 'sendSmsCode');
 ?>
-	<div class="alert in alert-block alert-warning">
-		<?= $this->getNeedSmsMessage(); ?>
+	<div class="center">
+		<?php
+		$this->widget('bootstrap.widgets.TbButton', array(
+			'label'       => 'Получить условия',
+			'type'        => 'primary',
+			'buttonType'  => 'submit',
+			'htmlOptions' => array(
+				'name'  => 'loan_accept',
+				'value' => '1'
+			),
+		));
+		?>
 	</div>
-<? $this->renderSendSmsButton(); ?>
 <?php
-
 $this->endWidget();

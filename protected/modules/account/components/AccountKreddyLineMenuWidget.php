@@ -5,6 +5,6 @@
  */
 class AccountKreddyLineMenuWidget extends AccountMenuWidget
 {
-	protected $sIndexLabel = 'Ваша КРЕДДИтная линия';
-	protected $sSubscribeLabel = 'Подключить КРЕДДИтную линию';
+	protected $sIndexLabel = 'Твой КРЕДДИ';
+	protected $sSubscribeLabel = 'Подключить КРЕДДИ';
 }

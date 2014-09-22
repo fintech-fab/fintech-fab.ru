@@ -34,7 +34,7 @@ class AddCardForm extends CFormModel
 		$aRules = array(
 			array('sCardPan, sCardValidThru, sCardHolderName, sCardCvc', 'required'),
 			array('sEmail, sAddress, sCity, sZipCode, sCountry', 'required', 'on' => 'additionalFields'),
-			array('iCardType', 'required', 'message' => 'Используйте только карты Mastercard, Maestro или Visa'),
+			array('iCardType', 'required', 'message' => 'Используй только карты Mastercard, Maestro или Visa'),
 
 			array(
 				'bConfirm',
@@ -55,7 +55,7 @@ class AddCardForm extends CFormModel
 			array(
 				'sCardPan', 'checkValidCardPan',
 				'iCardType' => 'iCardType',
-				'message'   => 'Номер карты неправильный. Проверьте тип выбранной карты и ее номер.',
+				'message'   => 'Номер карты неправильный. Проверь тип выбранной карты и ее номер.',
 			),
 			array(
 				'sCardHolderName', 'match', 'message' => 'Имя держателя не должно содержать цифр и русских букв',
@@ -63,9 +63,9 @@ class AddCardForm extends CFormModel
 			),
 			array(
 				'sCardValidThru', 'checkValidCardValidThru',
-				'messageInvalidMonth' => 'Проверьте срок действия карты (некорректно указан месяц)',
-				'messageInvalidYear'  => 'Проверьте срок действия карты (некорректно указан год)',
-				'messageInvalid' => 'Ошибка, проверьте введенные данные',
+				'messageInvalidMonth' => 'Проверь срок действия карты (некорректно указан месяц)',
+				'messageInvalidYear'  => 'Проверь срок действия карты (некорректно указан год)',
+				'messageInvalid'      => 'Ошибка, проверь введенные данные',
 			),
 			array(
 				'sCardCvc', 'match', 'message' => 'CVC карты должен состоять из 3 цифр',
@@ -74,11 +74,11 @@ class AddCardForm extends CFormModel
 			array(
 				'iCardType',
 				'in', 'range'   => array_keys(Dictionaries::$aCardTypes),
-				      'message' => 'Используйте только карты Mastercard, Maestro или Visa'
+				      'message' => 'Используй только карты Mastercard, Maestro или Visa'
 			),
 
 			array('sEmail', 'length', 'max' => '50', 'message' => 'Слишком длинный e-mail'),
-			array('sEmail', 'email', 'message' => 'Введите email в правильном формате'),
+			array('sEmail', 'email', 'message' => 'Введи email в правильном формате'),
 			array('sAddress', 'length', 'max' => '50', 'message' => 'Слишком длинный адрес'),
 			array('sCity', 'length', 'max' => '50', 'message' => 'Слишком длинное название города'),
 			array('sZipCode', 'length', 'max' => '10', 'message' => 'Слишком длинный индекс'),
@@ -96,19 +96,19 @@ class AddCardForm extends CFormModel
 	{
 		$aLabels = array(
 			'sCardPan'        => 'Номер карты',
-			'sCardValidThru' => 'Срок действия карты',
-			'sCardMonth'     => 'Месяц',
+			'sCardValidThru'  => 'Срок действия карты',
+			'sCardMonth'      => 'Месяц',
 			'sCardYear'       => 'Год',
 			'sCardCvc'        => 'Код CVC',
 			'sCardHolderName' => 'Имя держателя',
-			'bConfirm'       => 'Я подтверждаю согласие на заморозку случайной суммы на указанной банковской карте.',
+			'bConfirm'        => 'Я подтверждаю согласие на заморозку случайной суммы на указанной банковской карте.',
 			'iCardType'       => 'Тип банковской карты',
-			'bAgree'         => 'Я согласен с условиями зачисления средств на банковскую карту.',
-			'sEmail'         => 'Ваш E-mail',
-			'sAddress'       => 'Ваш адрес',
-			'sCity'          => 'Ваш город',
-			'sZipCode'       => 'Почтовый индекс',
-			'sCountry'       => 'Код страны',
+			'bAgree'          => 'Я согласен с условиями зачисления средств на банковскую карту.',
+			'sEmail'          => 'Твой E-mail',
+			'sAddress'        => 'Твой адрес',
+			'sCity'           => 'Твой город',
+			'sZipCode'        => 'Почтовый индекс',
+			'sCountry'        => 'Код страны',
 		);
 
 		if (!Yii::app()->adminKreddyApi->checkCardVerifyExists()) {

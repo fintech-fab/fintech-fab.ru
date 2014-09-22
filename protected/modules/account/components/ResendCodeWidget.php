@@ -18,7 +18,7 @@ class ResendCodeWidget extends CWidget
 			<?php // отрисовываем скрипт
 			$this->renderScript();
 			$this->renderButton(); ?>
-			<div id="textUntilResend<?= $this->sId ?>" class="hide">
+			<div id="textUntilResend<?= $this->sId ?>">
 				<?= $this->sResendText; ?>
 				<span id="untilResend<?= $this->sId ?>"></span>
 			</div>
@@ -26,9 +26,7 @@ class ResendCodeWidget extends CWidget
 
 		<script lang="javascript">
 			leftTime<?= $this->sId ?> = new Date();
-			leftTime<?= $this->sId ?>.setTime(leftTime<?= $this->sId ?>.getTime() + <?= $this->getTime() ?> * 1000
-			)
-			;
+			leftTime<?= $this->sId ?>.setTime(leftTime<?= $this->sId ?>.getTime() + <?= $this->getTime() ?> * 1000);
 			showUntilResend<?= $this->sId ?>();
 		</script>
 	<?php

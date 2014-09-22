@@ -21,8 +21,8 @@ class ContactForm extends CFormModel
 	{
 		return array(
 			// name, email, subject and body are required
-			array('name, phone, email, subject, body, verifyCode', 'required'),
-			array('subject', 'in', 'range' => array_keys(Dictionaries::$aSubjectsQuestions), 'message' => 'Укажите тему вопроса'),
+			array('name, phone, email, subject, body', 'required'),
+			//array('subject', 'in', 'range' => array_keys(Dictionaries::$aSubjectsQuestions), 'message' => 'Укажи тему вопроса'),
 			// email has to be a valid email address
 			array('email', 'email'),
 			// verifyCode needs to be entered correctly
@@ -43,7 +43,7 @@ class ContactForm extends CFormModel
 			'subject'    => 'Тема вопроса',
 			'body'       => 'Вопрос',
 			'phone'      => 'Телефон',
-			'verifyCode' => 'Введите текст с картинки',
+			'verifyCode' => 'Введи текст с картинки',
 		);
 	}
 }

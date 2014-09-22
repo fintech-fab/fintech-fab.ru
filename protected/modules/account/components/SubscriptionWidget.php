@@ -12,11 +12,11 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 	protected $sSubscribeButtonLabel = 'Подключить Пакет';
 	protected $sInfoTitle = 'Информация о подключении';
 	protected $sNeedSmsMessage = 'Для подключения Пакета требуется подтверждение одноразовым SMS-кодом';
-	protected $sNeedBankCardMessage = 'У Вас нет доступных каналов для получения займа! Требуется привязать к аккаунту банковскую карту.';
+	protected $sNeedBankCardMessage = 'У тебя нет доступных каналов для получения денег! Требуется привязать к аккаунту банковскую карту.';
 	protected $sAddBankCardButtonLabel = 'Привязать банковскую карту';
 	protected $sNeedIdentifyHeader = 'Требуется идентификация';
-	protected $sNeedIdentifyMessage = 'Для подключения пакета займов, необходимо пройти идентификацию.';
-	protected $sSelectChannelHeader = 'Выберите канал получения займа';
+	protected $sNeedIdentifyMessage = 'Для подключения сервиса необходимо пройти идентификацию.';
+	protected $sSelectChannelHeader = 'Выбери канал получения денег';
 
 
 	protected $sWidgetViewsPath = 'SubscriptionWidget';
@@ -35,20 +35,6 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 	protected function getSelectChannelHeader()
 	{
 		return $this->sSelectChannelHeader;
-	}
-
-	/**
-	 * @return string
-	 */
-	protected function getProductInfo()
-	{
-		$iProductId = Yii::app()->adminKreddyApi->getSubscribeSelectedProduct();
-
-		return 'Ваш пакет займов - &quot;'
-		. Yii::app()->adminKreddyApi->getProductNameById($iProductId)
-		. '&quot;<br /> Размер первого займа - '
-		. Yii::app()->adminKreddyApi->getProductLoanAmountById($iProductId) .
-		'&nbsp;руб.';
 	}
 
 	/**
@@ -77,10 +63,6 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 			<li>
 				<strong>Размер пакета:</strong>&nbsp;<?= $iPacketSize; ?>&nbsp;рублей
 			</li>
-			<li><strong>Срок
-					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLoanLifetimeById($iProductId) ?>
-				&nbsp;дней
-			</li>
 			<li>
 				<strong>Способ получения
 					займа:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getChannelNameById($iChannelId) ?>
@@ -90,7 +72,7 @@ class SubscriptionWidget extends BaseLoanSubscriptionWidget
 				&nbsp;рублей
 			</li>
 			<li><strong>Срок действия
-					подключения:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
+					сервиса:</strong>&nbsp;<?= Yii::app()->adminKreddyApi->getProductLifetimeById($iProductId) ?>
 				&nbsp;дней
 			</li>
 			<li><strong>Время перечисления

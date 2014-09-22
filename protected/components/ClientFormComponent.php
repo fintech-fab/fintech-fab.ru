@@ -14,6 +14,7 @@ class ClientFormComponent
 {
 	const SITE1 = 'main';
 	const SITE2 = 'ivanovo';
+	const SITE3 = 'landing';
 	const FAST_REG = 'fast';
 	const CONTINUE_REG = 'continue'; //продолжение регистрации
 
@@ -34,81 +35,62 @@ class ClientFormComponent
 	 * @var array
 	 */
 	public static $aSelectProductSettings = array(
-		self::FAST_REG     => array(
-			'view'  => 'main',
-			'model' => 'ClientKreddyLineSelectProductForm',
-		),
 		self::CONTINUE_REG => array(
 			'view'  => 'main',
 			'model' => 'ClientSelectProductForm',
 		),
 		self::SITE1        => array(
 			'view'  => 'main',
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientRegStep2Form',
 		),
-		self::SITE2        => array(
-			'view'  => 'flexible',
-			'model' => 'ClientFlexibleProductForm',
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
 		),
 	);
 
 	public static $aSelectChannelSettings = array(
-		self::FAST_REG     => array(
-			'view'  => 'main',
-			'model' => 'ClientKreddyLineSelectChannelForm',
-		),
 		self::CONTINUE_REG => array(
 			'view'  => 'main',
 			'model' => 'ClientSelectProductForm',
 		),
 		self::SITE1        => array(
 			'view'  => 'main',
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientRegStep2Form',
 		),
-		self::SITE2        => array(
-			'view'  => 'flexible',
-			'model' => 'ClientFlexibleProductForm',
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
 		),
 	);
 
 	public static $aSelectPayTypeSettings = array(
-		self::FAST_REG     => array(
-			'view'  => 'main',
-			'model' => 'ClientKreddyLineSelectPayTypeForm',
-		),
 		self::CONTINUE_REG => array(
 			'view'  => 'main',
 			'model' => 'ClientSelectProductForm',
 		),
 		self::SITE1        => array(
 			'view'  => 'main',
-			'model' => 'ClientFastRegForm',
+			'model' => 'ClientRegStep2Form',
 		),
-		self::SITE2        => array(
-			'view'  => 'flexible',
-			'model' => 'ClientFlexibleProductForm',
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
 		),
 	);
 
 	public static $aPhoneFormSettings = array(
-		self::FAST_REG     => array(
-			'model' => 'ClientKreddyLineRegForm',
-		),
 		self::CONTINUE_REG => array(
 			'model' => 'ClientPersonalDataContinueForm',
 		),
 		self::SITE1        => array(
-			'model' => 'ClientPersonalDataForm',
+			'model' => 'ClientRegStep2Form',
 		),
-		self::SITE2        => array(
-			'model' => 'ClientPersonalDataForm',
+		self::SITE3        => array(
+			'model' => 'ClientLandingForm',
 		),
 	);
 
 	public static $aSuccessYmGoal = array(
-		self::SITE1        => 'register_complete',
-		self::SITE2        => 'register_complete',
-		self::FAST_REG     => 'fr_register_complete',
+		self::SITE1        => 'fr_register_complete',
+		self::SITE3        => 'fr_register_complete',
 		self::CONTINUE_REG => 'fr_continue_complete',
 	);
 
@@ -116,8 +98,8 @@ class ClientFormComponent
 	//имя моделей, в которох сохраняется телефон клиента
 	private static $aPhoneForms = array(
 		'ClientPersonalDataForm',
-		'ClientFastRegForm',
-		'ClientKreddyLineRegForm',
+		'ClientRegStep2Form',
+		'ClientLandingForm',
 	);
 
 
@@ -130,8 +112,13 @@ class ClientFormComponent
 	 */
 
 	public static $aSteps = array(
-		self::FAST_REG     => array(
-			'max'     => 4,
+		self::SITE1        => array(
+			'max'     => 2,
+			'min'     => 0,
+			'default' => 0,
+		),
+		self::SITE3        => array(
+			'max'     => 1,
 			'min'     => 0,
 			'default' => 0,
 		),
@@ -140,45 +127,29 @@ class ClientFormComponent
 			'min'     => 0,
 			'default' => 0,
 		),
-		self::SITE1        => array(
-			'max'     => 7,
-			'min'     => 0,
-			'default' => 0,
-		),
-		self::SITE2        => array(
-			'max'     => 6,
-			'min'     => 0,
-			'default' => 0,
-		),
-
 	);
 
 	public static $aFormWidgetSteps = array(
 		self::SITE1        => array(
-			2 => array(
+			0 => array(
 				'form_step' => 1,
 				'label'     => 'Личные данные',
 				'url'       => '/form/ajaxForm/3'
 			),
-			3 => array(
+			1 => array(
 				'form_step' => 2,
-				'label'     => 'Паспортные данные',
+				'label'     => 'Личные данные',
 				'url'       => '/form/ajaxForm/4'
 			),
-			4 => array(
+			2 => array(
 				'form_step' => 3,
-				'label'     => 'Постоянная регистрация',
+				'label'     => 'Отправка СМС',
 				'url'       => '/form/ajaxForm/5'
 			),
-			5 => array(
+			3 => array(
 				'form_step' => 4,
-				'label'     => 'Дополнительно',
+				'label'     => 'Ввод кода из СМС',
 				'url'       => '/form/ajaxForm/6'
-			),
-			6 => array(
-				'form_step' => 5,
-				'label'     => 'Отправка заявки',
-				'url'       => '/form/ajaxForm/7'
 			),
 		),
 		self::CONTINUE_REG => array(
@@ -208,33 +179,6 @@ class ClientFormComponent
 				'url'       => '/form/ajaxForm/6'
 			),
 		),
-		self::SITE2        => array(
-			1 => array(
-				'form_step' => 1,
-				'label'     => 'Личные данные',
-				'url'       => '/form/ajaxForm/2'
-			),
-			2 => array(
-				'form_step' => 2,
-				'label'     => 'Паспортные данные',
-				'url'       => '/form/ajaxForm/3'
-			),
-			3 => array(
-				'form_step' => 3,
-				'label'     => 'Постоянная регистрация',
-				'url'       => '/form/ajaxForm/4'
-			),
-			4 => array(
-				'form_step' => 4,
-				'label'     => 'Дополнительно',
-				'url'       => '/form/ajaxForm/5'
-			),
-			5 => array(
-				'form_step' => 5,
-				'label'     => 'Отправка заявки',
-				'url'       => '/form/ajaxForm/6'
-			),
-		)
 	);
 
 	/**
@@ -265,45 +209,57 @@ class ClientFormComponent
 	 */
 
 	private static $aStepsInfo = array(
-		self::FAST_REG     => array(
+		self::SITE1        => array(
 			0 => array(
-				'layout'           => '//layouts/main_kreddyline',
-				'view'             => 'kreddyline',
-				'sub_view'         => 'kreddyline/sum',
-				'model'            => 'ClientKreddyLineSelectProductForm',
+				'layout'           => '//layouts/main_new',
+				'view'             => 'new/form',
+				'sub_view'         => 'new/step1',
+				'model'            => 'ClientRegStep1Form',
 				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'select_product',
+				'metrika_goal'     => 'fz_reg_step1',
 				'topPageWidget'    => true,
 			),
 			1 => array(
-				'layout'           => '//layouts/main_kreddyline',
-				'view'             => 'kreddyline',
-				'sub_view'         => 'kreddyline/pay',
-				'model'            => 'ClientKreddyLineSelectPayTypeForm',
+				'layout'           => '//layouts/main_new',
+				'view'             => 'new/form',
+				'sub_view'         => 'new/step2',
+				'model'            => 'ClientRegStep2Form',
 				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'select_product',
+				'metrika_goal'     => 'fz_reg_step2',
 				'topPageWidget'    => true,
 			),
 			2 => array(
-				'layout'           => '//layouts/main_kreddyline',
-				'view'             => 'kreddyline',
-				'sub_view'         => 'kreddyline/channel',
-				'model'            => 'ClientKreddyLineSelectChannelForm',
-				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'select_product',
+
+				'layout'           => '//layouts/main_new',
+				'view'             => 'new/check_codes',
+				'sub_view'         => array(
+					'condition' => 'getFlagCodesSent',
+					true        => 'confirm_phone/check_sms_code_fast_reg',
+					false       => 'confirm_phone/send_sms_code',
+				),
+				'model'            => 'ClientConfirmPhoneAndEmailForm',
+				'breadcrumbs_step' => 2,
+				'metrika_goal'     => array(
+					'condition' => 'getFlagCodesSent',
+					true        => 'fr_sms_code_check',
+					false       => 'fr_sms_code_send',
+				),
 				'topPageWidget'    => true,
 			),
-			3 => array(
-				'layout'           => '//layouts/main_kreddyline',
-				'view'             => 'kreddyline',
-				'sub_view'         => 'kreddyline/submit',
-				'model'            => 'ClientKreddyLineRegForm',
+		),
+		self::SITE3        => array(
+			0 => array(
+				'layout'           => '//layouts/landing',
+				'view'             => 'landing',
+				'model'            => 'ClientRegStep1Form',
 				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'select_product',
+				'metrika_goal'     => 'fz_landing',
 				'topPageWidget'    => true,
 			),
-			4 => array(
-				'view'             => 'client_fast_form',
+			1 => array(
+
+				'layout'           => '//layouts/main_new',
+				'view'             => 'new/check_codes',
 				'sub_view'         => array(
 					'condition' => 'getFlagCodesSent',
 					true        => 'confirm_phone/check_sms_code_fast_reg',
@@ -370,149 +326,6 @@ class ClientFormComponent
 			),
 			5 => array(
 				'controllerMethod' => 'continueRegSuccess', //на этом шаге требуется вызвать метод, и больше ничего не нужно делать
-			),
-		),
-		self::SITE1        => array(
-			0 => array(
-				'layout'           => '//layouts/main_kreddyline',
-				'view'             => 'kreddyline',
-				'sub_view'         => 'kreddyline/sum',
-				'model'            => 'ClientKreddyLineSelectProductForm',
-				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'select_product',
-				'topPageWidget'    => true,
-			),
-			1 => array(
-				'view'             => 'infographic',
-				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'infographic',
-				'go_next_step'     => true,
-			),
-			2 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/personal_data',
-				'model'            => 'ClientPersonalDataForm',
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'personal_data',
-			),
-			3 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/passport_data',
-				'model'            => 'ClientPassportDataForm',
-				'modelDbRelations' => array(
-					'birthday'
-				),
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'passport_data',
-			),
-			4 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/address_data',
-				'model'            => 'ClientAddressDataForm',
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'address_data',
-			),
-			5 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/job_data',
-				'model'            => 'ClientJobDataForm',
-				'modelDbRelations' => array(
-					'phone'
-				),
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'job_data',
-			),
-			6 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/secret_data',
-				'model'            => 'ClientSecretDataForm',
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'secret_data',
-			),
-			7 => array(
-				'view'             => 'client_form',
-				'sub_view'         => array(
-					'condition' => 'getFlagCodesSent',
-					true        => 'confirm_phone/check_sms_code',
-					false       => 'confirm_phone/send_sms_code',
-				),
-				'model'            => 'ClientConfirmPhoneAndEmailForm',
-				'breadcrumbs_step' => 3,
-				'metrika_goal'     => array(
-					'condition' => 'getFlagCodesSent',
-					true        => 'sms_code_check',
-					false       => 'sms_code_send',
-				)
-			),
-		),
-		self::SITE2        => array(
-			0 => array(
-				'view'             => 'client_flexible_product',
-				'model'            => 'ClientFlexibleProductForm',
-				'breadcrumbs_step' => 1,
-				'metrika_goal'     => 'select_product',
-				'topPageWidget'    => true,
-			),
-			1 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/personal_data',
-				'model'            => 'ClientPersonalDataForm',
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'personal_data',
-			),
-			2 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/passport_data',
-				'model'            => 'ClientPassportDataForm',
-				'modelDbRelations' => array(
-					'birthday'
-				),
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'passport_data',
-			),
-			3 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/address_data',
-				'model'            => 'ClientAddressDataForm',
-				'modelDbRelations' => array(
-					'phone'
-				),
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'address_data',
-			),
-			4 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/job_data',
-				'model'            => 'ClientJobDataForm',
-				'modelDbRelations' => array(
-					'friends_phone',
-					'relatives_one_phone',
-					'phone'
-				),
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'job_data',
-			),
-			5 => array(
-				'view'             => 'client_form',
-				'sub_view'         => 'steps/secret_data',
-				'model'            => 'ClientSecretDataForm',
-				'breadcrumbs_step' => 2,
-				'metrika_goal'     => 'secret_data',
-			),
-			6 => array(
-				'view'             => 'client_form',
-				'sub_view'         => array(
-					'condition' => 'getFlagCodesSent',
-					true        => 'confirm_phone/check_sms_code',
-					false       => 'confirm_phone/send_sms_code',
-				),
-				'model'            => 'ClientConfirmPhoneAndEmailForm',
-				'breadcrumbs_step' => 3,
-				'metrika_goal'     => array(
-					'condition' => 'getFlagCodesSent',
-					true        => 'sms_code_check',
-					false       => 'sms_code_send',
-				)
 			),
 		),
 	);
@@ -620,7 +433,7 @@ class ClientFormComponent
 
 				$aClientDataForSave = $aValidFormData;
 
-				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				$aClientDataForSave['tracking_id'] = Yii::app()->siteParams->getTrackingId();
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
 
@@ -723,33 +536,26 @@ class ClientFormComponent
 			if ($this->iClientId) {
 				$aClientFormData = $oClientForm->getAttributes();
 
-				if (empty($aClientFormData['product'])) {
-					$aClientFormData['product'] = $this->getSessionProduct();
-				}
-				if (empty($aClientFormData['channel_id'])) {
-					$aClientFormData['channel_id'] = $this->getSessionChannel();
-				}
-				if (empty($aClientFormData['pay_type'])) {
-					$aClientFormData['pay_type'] = $this->getSessionPayType();
-				}
-				if (empty($aClientFormData['flex_amount'])) {
-					$aClientFormData['flex_amount'] = $this->getSessionFlexibleProductAmount();
-				}
-				if (empty($aClientFormData['flex_time'])) {
-					$aClientFormData['flex_time'] = $this->getSessionFlexibleProductTime();
-				}
-				if (SiteParams::getIsIvanovoSite()) {
-					$aClientFormData['entry_point'] = 8;
-				}
-
 				$aClientDataForSave = $aClientFormData;
 
-				$aClientDataForSave['tracking_id'] = Yii::app()->request->cookies['TrackingID'];
+				if (empty($aClientFormData['first_name'])
+					|| empty($aClientFormData['last_name'])
+					|| empty($aClientFormData['third_name'])
+				) {
+
+					//получим информацию о модели предыдущего шага
+					$oFormModel = $this->getFormModelByStep($this->iCurrentStep - 1);
+
+					//получим данные с предыдущего шага
+					$aSessionClientData = Yii::app()->clientForm->getSessionFormData($oFormModel);
+
+					$aClientDataForSave = CMap::mergeArray($aSessionClientData, $aClientDataForSave);
+				}
+
+				$aClientDataForSave['tracking_id'] = Yii::app()->siteParams->getTrackingId();
 				$aClientDataForSave['ip'] = Yii::app()->request->getUserHostAddress();
 
 				ClientData::saveClientDataById($aClientDataForSave, $this->iClientId);
-
-
 			}
 
 			/**
@@ -838,7 +644,7 @@ class ClientFormComponent
 				$sSmsCode = $this->generateCode(SiteParams::C_SMS_CODE_LENGTH);
 			}
 			//отправляем СМС
-			$sMessage = "Ваш код подтверждения: " . $sSmsCode;
+			$sMessage = "Твой код подтверждения: " . $sSmsCode;
 			//отправляем СМС через API
 			$bSmsSentOk = Yii::app()->adminKreddyApi->sendSms($sPhone, $sMessage);
 			$aClientForm['sms_code'] = $sSmsCode;
@@ -995,17 +801,10 @@ class ClientFormComponent
 		//создаем клиента в admin.kreddy.ru через API
 		//получаем от API авторизацию (сообщение что токен получен)
 		//и логиним юзера
-		$sSite = $this->getSiteConfigName();
 
 		$aClientData['site_region'] = $this->getSiteRegionId();
 
-		//если клиент прошел быструю регистрацию, то отправляем его другим методом
-		if ($sSite == self::FAST_REG) {
-
-			return Yii::app()->adminKreddyApi->createFastRegClient($aClientData);
-		}
-
-		return Yii::app()->adminKreddyApi->createClient($aClientData);
+		return Yii::app()->adminKreddyApi->createFastRegClient($aClientData);
 	}
 
 	/**
@@ -1148,12 +947,24 @@ class ClientFormComponent
 	}
 
 	/**
-	 * Возвращает модель текущей формы.
+	 *  Возвращает модель формы текущего шага.
+	 *
+	 * @return ClientCreateFormAbstract
+	 */
+	public function getFormModel()
+	{
+		return $this->getFormModelByStep($this->iCurrentStep);
+	}
+
+	/**
+	 * Возвращает модель формы по номеру шага
+	 *
+	 * @param $iStep
 	 *
 	 * @return ClientCreateFormAbstract
 	 */
 
-	public function getFormModel()
+	public function getFormModelByStep($iStep)
 	{
 		/**
 		 * * @var ClientCreateFormAbstract $oModel
@@ -1161,8 +972,8 @@ class ClientFormComponent
 
 		$sSite = self::getSiteConfigName();
 
-		$sModel = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['model'])
-			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['model']
+		$sModel = isset(self::$aStepsInfo[$sSite][$iStep]['model'])
+			? self::$aStepsInfo[$sSite][$iStep]['model']
 			: null;
 
 		//создаем модель
@@ -1175,8 +986,8 @@ class ClientFormComponent
 		//если есть связи с полями в БД, то нужно сделать запрос в БД с указанием этих полей и получить их данные
 		//это требуется для валидации данных в формах, в которых правила валидации связаны с данными из БД
 		//соответствующее поле добавляется в модель формы, и тут заполняется данными
-		if (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['modelDbRelations'])) {
-			$aRelations = self::$aStepsInfo[$sSite][$this->iCurrentStep]['modelDbRelations'];
+		if (isset(self::$aStepsInfo[$sSite][$iStep]['modelDbRelations'])) {
+			$aRelations = self::$aStepsInfo[$sSite][$iStep]['modelDbRelations'];
 			$iClientId = $this->getClientId();
 			$oClientData = ClientData::model()->findByPk($iClientId);
 			//если данные клиента найдены
@@ -1308,9 +1119,7 @@ class ClientFormComponent
 			return $sSite;
 		}
 
-		return (SiteParams::getIsIvanovoSite())
-			? self::SITE2
-			: self::SITE1;
+		return self::SITE1;
 	}
 
 	/**
@@ -1605,6 +1414,9 @@ class ClientFormComponent
 
 	public function clearClientSession()
 	{
+		//удаляем данные из куки
+		Cookie::removeCookie('client');
+
 		//сбрасываем шаги заполнения анкеты
 		$this->resetSteps();
 
@@ -1621,9 +1433,8 @@ class ClientFormComponent
 			}
 		}
 
-		//удаляем данные из куки
-		$aCookieData = array('client_id' => null, 'phone' => null);
-		Cookie::saveDataToCookie('client', $aCookieData);
+		// сбросим конфиг сайта на "по умолчанию"
+		$this->setSiteConfigName(self::SITE1);
 	}
 
 	/**

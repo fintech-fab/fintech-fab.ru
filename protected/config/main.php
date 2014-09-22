@@ -25,6 +25,7 @@ $a = array(
 		'application.extensions.behaviors.*',
 		'application.extensions.image.*',
 		'application.extensions.sms.*',
+		'application.vendor.mpdf.*',
 	),
 
 	'modules'        => array(
@@ -44,7 +45,8 @@ $a = array(
 	),
 
 	'params'         => array(
-		'bShowAlert' => true,
+		'bShowAlert'     => true,
+		'sDocumentsPath' => '/tmp/',
 	),
 
 	'theme'          => 'classic',
@@ -52,6 +54,12 @@ $a = array(
 	'components'     => array(
 		'cache'            => array(
 			'class' => 'CMemCache',
+		),
+		'document'         => array(
+			'class' => 'application.components.DocumentComponent',
+		),
+		'smsCode'          => array(
+			'class' => 'application.components.SmsCodeComponent',
 		),
 		'clientForm'       => array(
 			'class' => 'application.components.ClientFormComponent',
@@ -77,6 +85,7 @@ $a = array(
 			'class'           => 'ext.bootstrap.components.Bootstrap',
 			'tooltipSelector' => '[rel=tooltip]',
 			'responsiveCss'   => false,
+			'bootstrapCss'    => false,
 		),
 		'image'            => array(
 			'class'  => 'application.extensions.image.CImageComponent',
@@ -93,7 +102,7 @@ $a = array(
 			'showScriptName' => false,
 			'rules'          => array(
 				//''                                                  => 'form/index',
-
+				'landing'                                           => 'form/landing',
 				'contact'                                           => 'site/contact',
 				'contactUs'                                         => 'site/contactUs',
 

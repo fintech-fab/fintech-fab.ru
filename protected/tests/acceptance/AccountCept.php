@@ -7,7 +7,7 @@
 $I = new WebGuy($scenario);
 $I->wantTo('Test account login');
 $I->amOnPage('/form');
-$I->see('Выберите Пакет займов');
+$I->see('Выбери Пакет займов');
 //$I->seeElement('input[name="product"]');
 //$val = $I->grabValueFrom('input[name="ClientSelectProductForm[product]"]');
 //$I->selectOption('input[name="ClientSelectProductForm[product]"]','Покупки');
@@ -20,7 +20,7 @@ $I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => ar
 /*$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(
 	'ClientSelectProductForm[product]' => '999',
 )));*/
-$I->see('Выберите Пакет займов');
+$I->see('Выбери Пакет займов');
 
 
 /*$I->submitForm('#ClientSelectProductForm', array('ClientSelectProductForm' => array(

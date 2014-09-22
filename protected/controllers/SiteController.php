@@ -82,6 +82,11 @@ class SiteController extends Controller
 			Yii::app()->request->cookies['citySelected'] = new CHttpCookie("citySelected", true, $aCookieOptions);
 		}
 		//обновляем виджет, свойство bUpdate указывает отдавать виджет для обновления, без лишних элементов
+		if(Yii::app()->request->getParam('bootstrap3')){
+			$this->widget('UserCityWidget3', array('bUpdate' => true));
+			Yii::app()->end();
+		}
+
 		$this->widget('UserCityWidget', array('bUpdate' => true));
 		Yii::app()->end();
 	}
@@ -114,6 +119,13 @@ class SiteController extends Controller
 		$this->render('contact');
 	}
 
+	public function actionTariffs()
+	{
+		$this->pageTitle = Yii::app()->name . ' - Тарифы';
+
+		$this->render('tariffs');
+	}
+
 	public function actionFaq()
 	{
 		// номер активной вкладки, по умолчанию - первая
@@ -121,6 +133,12 @@ class SiteController extends Controller
 
 		$oModel = new ContactForm;
 		$aPost = Yii::app()->request->getPost('ContactForm');
+
+		//ajax-валидация
+		if (Yii::app()->request->isAjaxRequest) {
+			echo IkTbActiveForm::validate($oModel);
+			Yii::app()->end();
+		}
 
 		$iSite = 1;
 		if (SiteParams::getIsIvanovoSite()) {
@@ -138,7 +156,7 @@ class SiteController extends Controller
 			$oModel->setAttributes($aPost);
 			if ($oModel->validate()) {
 				$sEmail = SiteParams::getContactEmail();
-				$sSubject = Dictionaries::C_FAQ_SUBJECT_SENT . ". " . Dictionaries::$aSubjectsQuestions[$oModel->subject];
+				$sSubject = 'Вопрос с сайта';
 				$sMessage =
 					"Имя: " . $oModel->name . "\r\n" .
 					"Телефон: " . $oModel->phone . "\r\n" .
