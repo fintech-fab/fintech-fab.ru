@@ -13,9 +13,6 @@
 			<!-- Wrapper for slides -->
 			<div class="carousel-inner">
 				<div class="item active">
-					<span class="car_inner car_img1"></span>
-				</div>
-				<div class="item">
 					<span class="car_inner car_img2"></span>
 				</div>
 				<div class="item">
@@ -29,6 +26,9 @@
 				</div>
 				<div class="item">
 					<span class="car_inner car_img6"></span>
+				</div>
+				<div class="item">
+					<span class="car_inner car_img1"></span>
 				</div>
 			</div>
 		</div>
