@@ -36,17 +36,17 @@ class DefaultController extends Controller
 			array(
 				'allow',
 				'actions' => array(
-					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
-					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
-					'doSubscribeConfirm', 'loan', 'doLoan', 'doLoanConfirm', 'doLoanCheckSmsCode', 'cancelLoan',
+					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'smsPassAuth',
+					'subscribe', 'doSubscribe',	'doSubscribeConfirm',
+					'loan', 'doLoan', 'doLoanConfirm', 'cancelLoan',
 					'addCard', 'verifyCard', 'successCard', 'refresh',
-					'changePassport', 'changePassportSendSmsCode', 'changePassportCheckSmsCode',
-					'changeEmail', 'changeEmailSendSmsCode', 'changeEmailCheckSmsCode',
-					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
-					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
-					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
-					'changeAutoDebitingSetting', 'changeAutoDebitingSettingSendSmsCode', 'changeAutoDebitingSettingCheckSmsCode',
-					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
+					'changePassport', 'changePassportSendSmsCode',
+					'changeEmail', 'changeEmailSendSmsCode',
+					'changeNumericCode', 'changeNumericCodeSendSmsCode',
+					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode',
+					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode',
+					'changeAutoDebitingSetting', 'changeAutoDebitingSettingSendSmsCode',
+					'changePassword', 'changePasswordSendSmsCode',
 					'cancelRequest',
 					'returnFrom3DSecurity',
 					'continueForm', 'loanComplete',
@@ -671,19 +671,11 @@ class DefaultController extends Controller
 	 */
 	public function actionChangeAutoDebitingSettingSendSmsCode()
 	{
-		$this->changeClientDataSendSmsCode(AdminKreddyApiComponent::API_ACTION_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting');
-	}
 
-	/**
-	 * Проверка СМС-кода для смены настройки двухфакторной аутентификации
-	 */
-	public function actionChangeAutoDebitingSettingCheckSmsCode()
-	{
+		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeAutoDebitingSettingForm);
 
-		$oChangeSmsAuthSettingForm = new ChangeAutoDebitingSettingForm();
-
-
-		$this->changeClientDataCheckSmsCode($oChangeSmsAuthSettingForm, AdminKreddyApiComponent::API_ACTION_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting');
+		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting', $aData, get_class($oChangeAutoDebitingSettingForm));
 
 	}
 
