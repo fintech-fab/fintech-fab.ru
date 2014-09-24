@@ -318,10 +318,10 @@
 			<div class="row">
 				<div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3 cards_block">
 					<a target="_blank" href="https://kreddy.ru/static/docs/pcidss.pdf" class="pcard_block">
-						<img src="/static/newmain/images/4.png" /> </a> <a href="#" class="pcard_block">
-						<img src="/static/newmain/images/5.png" /> </a> <a href="#" class="pcard_block">
-						<img src="/static/newmain/images/6.png" /> </a> <a href="#" class="pcard_block">
-						<img src="/static/newmain/images/7.png" /> </a>
+						<img src="/static/newmain/images/4.png" /> </a>
+						<img src="/static/newmain/images/5.png" />
+						<img src="/static/newmain/images/6.png" />
+						<img src="/static/newmain/images/7.png" />
 				</div>
 			</div>
 		</div>
