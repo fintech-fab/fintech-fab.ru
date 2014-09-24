@@ -1012,7 +1012,9 @@ class ClientFormComponent
 	{
 		$sSite = self::getSiteConfigName();
 
-		$mView = self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'];
+		$mView = isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['view'])
+			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['view']
+			: null;
 		$mSubView = (isset(self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']))
 			? self::$aStepsInfo[$sSite][$this->iCurrentStep]['sub_view']
 			: null;

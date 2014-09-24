@@ -205,6 +205,11 @@ class FormController extends Controller
 		$sView = $aView['view'];
 		$sSubView = $aView['sub_view'];
 
+		// если почему-либо нет вьюхи, редиректим
+		if (empty($sView)) {
+			$this->redirect(Yii::app()->createUrl("/form"));
+		}
+
 		$this->showTopPageWidget = Yii::app()->clientForm->isTopPageWidgetVisible();
 
 		if (!$ajaxForm) {
