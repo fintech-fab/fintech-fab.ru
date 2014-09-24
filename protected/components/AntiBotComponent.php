@@ -1,9 +1,9 @@
 <?php
+
 /**
  * Компонент AntiBot занимается сохранением информации о запросах пользователя
  * и принятием решений о блокировке операций
  */
-
 class AntiBotComponent
 {
 
@@ -243,7 +243,11 @@ class AntiBotComponent
 	 */
 	private static function ipInExceptions()
 	{
-		$aIpExceptions = array('149.126.98.202', '192.168.10.136', '192.168.10.160', '127.0.0.1', '192.168.10.44');
+		if (SiteParams::isLocalServer()) {
+			return true;
+		}
+
+		$aIpExceptions = array('149.126.98.202');
 		if (in_array(self::getUserIP(), $aIpExceptions)) {
 			return true;
 		}
