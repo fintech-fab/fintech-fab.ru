@@ -46,28 +46,28 @@
 							<div class="mb1_images">
 								<img src="/static/newmain/images/mb1_img1.png" />
 
-								<p>Деньги взаймы мгновенно</p>
+								<p><strong>Деньги взаймы мгновенно</strong></p>
 							</div>
 						</div>
 						<div class="col-sm-3 col-xs-6">
 							<div class="mb1_images">
 								<img src="/static/newmain/images/mb1_img2.png" />
 
-								<p>В любом месте, где тебе удобно</p>
+								<p><strong>В любом месте, где тебе удобно</strong></p>
 							</div>
 						</div>
 						<div class="col-sm-3 col-xs-6">
 							<div class="mb1_images">
 								<img src="/static/newmain/images/mb1_img3.png" />
 
-								<p>На карту или мобильный</p>
+								<p><strong>На карту или мобильный</strong></p>
 							</div>
 						</div>
 						<div class="col-sm-3 col-xs-6">
 							<div class="mb1_images">
 								<img src="/static/newmain/images/mb1_img4.png" />
 
-								<p>Круглосуточно 7 дней в неделю</p>
+								<p><strong>Круглосуточно 7 дней в неделю</strong></p>
 							</div>
 						</div>
 					</div>
