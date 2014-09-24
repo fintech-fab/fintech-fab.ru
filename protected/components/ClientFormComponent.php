@@ -1139,13 +1139,13 @@ class ClientFormComponent
 	 */
 	public function nextStep($iSteps = 1)
 	{
-		$sNextStep = $this->iCurrentStep + $iSteps;
+		$iNextStep = $this->iCurrentStep + $iSteps;
 
 		$sSite = $this->getSiteConfigName();
 
 		// если следующий шаг есть, то перейдем на него, иначе ничего не делаем
-		if (isset(self::$aSteps[$sSite]['max']) && self::$aSteps[$sSite]['max'] >= $sNextStep) {
-			$this->iCurrentStep = $sNextStep;
+		if (isset(self::$aSteps[$sSite]['max']) && self::$aSteps[$sSite]['max'] >= $iNextStep) {
+			$this->iCurrentStep = $iNextStep;
 
 			if ($this->iDoneSteps < $this->iCurrentStep) {
 				$this->iDoneSteps = $this->iCurrentStep;
