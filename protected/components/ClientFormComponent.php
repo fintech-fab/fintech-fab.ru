@@ -1137,14 +1137,20 @@ class ClientFormComponent
 	 */
 	public function nextStep($iSteps = 1)
 	{
-		//TODO делать проверку max step
-		$this->iCurrentStep += $iSteps;
+		$sNextStep = $this->iCurrentStep + $iSteps;
 
-		if ($this->iDoneSteps < $this->iCurrentStep) {
-			$this->iDoneSteps = $this->iCurrentStep;
-			Yii::app()->session['done_steps'] = $this->iDoneSteps;
+		$sSite = $this->getSiteConfigName();
+
+		// если следующий шаг есть, то перейдем на него, иначе ничего не делаем
+		if (isset(self::$aSteps[$sSite]['max']) && self::$aSteps[$sSite]['max'] >= $sNextStep) {
+			$this->iCurrentStep = $sNextStep;
+
+			if ($this->iDoneSteps < $this->iCurrentStep) {
+				$this->iDoneSteps = $this->iCurrentStep;
+				Yii::app()->session['done_steps'] = $this->iDoneSteps;
+			}
+			Yii::app()->session['current_step'] = $this->iCurrentStep;
 		}
-		Yii::app()->session['current_step'] = $this->iCurrentStep;
 	}
 
 	/**
