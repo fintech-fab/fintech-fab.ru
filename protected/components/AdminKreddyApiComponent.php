@@ -704,6 +704,8 @@ class AdminKreddyApiComponent
 			'address_reg_city'    => null,
 			'address_reg_address' => null,
 
+			'address_reg_as_res' => null,
+
 			'address_res_region'  => null,
 			'address_res_city'    => null,
 			'address_res_address' => null,
@@ -719,6 +721,8 @@ class AdminKreddyApiComponent
 			'birthplace'          => null,
 
 			'order_id'            => null,
+
+			'have_past_credit'    => null,
 		);
 
 		//получаем массив, соджержащий только заданные поля
