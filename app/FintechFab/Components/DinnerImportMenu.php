@@ -5,6 +5,7 @@ namespace FintechFab\Components;
 use Excel;
 use File;
 use FintechFab\Models\DinnerMenuItem;
+use FintechFab\Models\DinnerMenuSection;
 
 class DinnerImportMenu
 {
@@ -115,13 +116,19 @@ class DinnerImportMenu
 	 */
 	private static function importSheet($sheet, $date)
 	{
+		$section_id = 0;
 		foreach ($sheet as $row) {
-			//формируем массив полей для модели
-			$fields = self::getMenuItemFields($row, $date);
+			//если вторая ячейка строки пуста, а первая не содержит дату, то это категория блюда
+			if (empty($row[2]) && !preg_match('/\d+\.\d+/', $row[1], $matches)) {
+				$section_id = DinnerMenuSection::create(['title' => $row[1]])->id;
+			} else {
+				//формируем массив полей для модели блюда
+				$fields = self::getMenuItemFields($row, $date, $section_id);
 
-			if ($fields) {
-				//добавляем блюдо в БД
-				DinnerMenuItem::create($fields);
+				if ($fields) {
+					//добавляем блюдо в БД
+					DinnerMenuItem::create($fields);
+				}
 			}
 		}
 	}
@@ -134,7 +141,7 @@ class DinnerImportMenu
 	 *
 	 * @return array|bool Массив полей, в случае неудачи - false
 	 */
-	private static function getMenuItemFields($row_items, $date)
+	private static function getMenuItemFields($row_items, $date, $section_id)
 	{
 		//Если какая-то из первых двух ячееек в строке пуста - значит в этой строке не блюдо
 		if (empty($row_items[1]) || empty($row_items[2])) {
@@ -145,6 +152,7 @@ class DinnerImportMenu
 			'title' => $row_items[1],
 			'price' => $row_items[2],
 			'date'  => $date,
+			'section_id' => $section_id,
 		];
 
 		//Описания может не быть
