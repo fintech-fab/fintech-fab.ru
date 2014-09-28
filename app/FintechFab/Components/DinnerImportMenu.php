@@ -14,20 +14,26 @@ class DinnerImportMenu
 	 *
 	 * @param $url string URL файла меню
 	 *
-	 * @return bool Если меню успешно импортировано - true, иначе - false
+	 * @return string|bool Если меню успешно импортировано - true, иначе - текст ошибки
 	 */
 	public static function importMenu($url)
 	{
-		$file_name = self::downloadFile($url);
+		$file_name = storage_path() . '/dinner/' . urldecode(basename($url));
 
-		if (!$file_name) {
-			return false;
+		if (File::exists($file_name)) {
+			return "Этот файл был загружен ранее";
+		}
+
+		$download_status = self::downloadFile($url);
+
+		if ($download_status !== true) {
+			return $download_status;
 		}
 
 		$reader = Excel::load($file_name);
 
 		if (!$reader) {
-			return false;
+			return "Не удалось прочитать файл Excel";
 		}
 
 		$reader->noHeading();
@@ -69,14 +75,14 @@ class DinnerImportMenu
 	 *
 	 * @param $url string URL файла
 	 *
-	 * @return string|bool Если файл успешно загружен - имя файла, иначе - false
+	 * @return string|bool Если файл успешно загружен - true, иначе - текст ошибки
 	 */
 	private static function downloadFile($url)
 	{
 		$curl_session = curl_init($url);
 
 		if (!$curl_session) {
-			return false;
+			return "Не удалось открыть сессию curl";
 		}
 
 		curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true);
@@ -87,7 +93,7 @@ class DinnerImportMenu
 		curl_close($curl_session);
 
 		if (!$file_content) {
-			return false;
+			return "Не удалось скачать файл";
 		}
 
 		$path = storage_path() . '/dinner';
@@ -96,15 +102,15 @@ class DinnerImportMenu
 			File::makeDirectory($path);
 		}
 
-		$file_name = $path . '/menu_' . date('Y-m-d-U') . '.xls';
+		$file_name = $path . '/' . urldecode(basename($url));
 
 		$is_file_saved = file_put_contents($file_name, $file_content);
 
 		if (!$is_file_saved) {
-			return false;
+			return "Не удалось сохранить файл";
 		}
 
-		return $file_name;
+		return true;
 
 	}
 
