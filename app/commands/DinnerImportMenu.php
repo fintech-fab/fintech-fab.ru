@@ -48,13 +48,13 @@ class DinnerImportMenu extends Command
 			return;
 		}
 
-		$import_status = DinnerImportMenuComponent::importMenu($url);
+		$import = DinnerImportMenuComponent::importMenu($url);
 
-		if ($import_status === true) {
+		if ($import['status'] == 'ok') {
 			MailSender::sendDinnerReminders();
-			$this->info('Меню успешно импортировано');
+			$this->info($import['message']);
 		} else {
-			$this->error($import_status);
+			$this->error($import['message']);
 			//$this->error('При импорте меню произошла ошибка');
 		}
 	}

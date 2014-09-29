@@ -14,26 +14,28 @@ class DinnerImportMenu
 	 *
 	 * @param $url string URL файла меню
 	 *
-	 * @return string|bool Если меню успешно импортировано - true, иначе - текст ошибки
+	 * @return array Статус импорта и сообщение статуса
 	 */
 	public static function importMenu($url)
 	{
-		$file_name = storage_path() . '/dinner/' . urldecode(basename($url));
+		$file_name = urldecode(basename($url));
 
-		if (File::exists($file_name)) {
-			return "Этот файл был загружен ранее";
+		$file_path = storage_path() . '/dinner/' . $file_name;
+
+		if (File::exists($file_path)) {
+			return ['status' => 'ok', 'message' => 'Файл ' . $file_name . ' был загружен ранее'];
 		}
 
 		$download_status = self::downloadFile($url);
 
 		if ($download_status !== true) {
-			return $download_status;
+			return ['status' => 'error', 'message' => $download_status];
 		}
 
-		$reader = Excel::load($file_name);
+		$reader = Excel::load($file_path);
 
 		if (!$reader) {
-			return "Не удалось прочитать файл Excel";
+			return ['status' => 'error', 'message' => 'Не удалось прочитать файл ' . $file_name];
 		}
 
 		$reader->noHeading();
@@ -67,7 +69,7 @@ class DinnerImportMenu
 			}
 		}
 
-		return true;
+		return ['status' => 'ok', 'message' => 'Файл ' . $file_name . ' успешно импортирован'];
 	}
 
 	/**
