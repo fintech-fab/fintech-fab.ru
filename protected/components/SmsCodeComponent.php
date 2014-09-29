@@ -26,7 +26,7 @@ class SmsCodeComponent extends CComponent
 	 */
 	const C_TYPE_LOAN = 4;
 
-		/**
+	/**
 	 * Изменение персональных данных
 	 */
 	const C_TYPE_CHANGE_EMAIL = 5;
@@ -39,7 +39,7 @@ class SmsCodeComponent extends CComponent
 	 * Изменение настроек смс-аутентификации
 	 */
 	const C_TYPE_CHANGE_SMS_AUTH_SETTING = 10;
-	
+
 	/**
 	 * Изменение настроек автосписания
 	 */
@@ -50,7 +50,7 @@ class SmsCodeComponent extends CComponent
 	 * Оплата по банковской карте
 	 */
 	const C_TYPE_PAY = 12;
-	
+
 	/**
 	 * Состояния
 	 */
@@ -60,30 +60,30 @@ class SmsCodeComponent extends CComponent
 	const C_STATE_ERROR = 'error';
 
 	public static $aApiActions = array(
-		self::C_TYPE_SITE_AUTH               => AdminKreddyApiComponent::API_ACTION_CHECK_SMS_CODE,
-		self::C_TYPE_SUBSCRIBE               => AdminKreddyApiComponent::API_ACTION_DO_CONFIRM_SUBSCRIPTION,
-		self::C_TYPE_LOAN                    => AdminKreddyApiComponent::API_ACTION_LOAN_CONFIRM,
-		self::C_TYPE_CHANGE_EMAIL            => AdminKreddyApiComponent::API_ACTION_CHANGE_EMAIL,
-		self::C_TYPE_CHANGE_NUMERIC_CODE     => AdminKreddyApiComponent::API_ACTION_CHANGE_NUMERIC_CODE,
-		self::C_TYPE_CHANGE_PASSPORT         => AdminKreddyApiComponent::API_ACTION_CHANGE_PASSPORT,
-		self::C_TYPE_CHANGE_PASSWORD         => AdminKreddyApiComponent::API_ACTION_CHANGE_PASSWORD,
-		self::C_TYPE_CHANGE_SECRET_QUESTION  => AdminKreddyApiComponent::API_ACTION_CHANGE_SECRET_QUESTION,
-		self::C_TYPE_CHANGE_SMS_AUTH_SETTING => AdminKreddyApiComponent::API_ACTION_CHANGE_SMS_AUTH_SETTING,
-		self::C_TYPE_PAY                     => AdminKreddyApiComponent::API_ACTION_DO_PAY,
+		self::C_TYPE_SITE_AUTH                    => AdminKreddyApiComponent::API_ACTION_CHECK_SMS_CODE,
+		self::C_TYPE_SUBSCRIBE                    => AdminKreddyApiComponent::API_ACTION_DO_CONFIRM_SUBSCRIPTION,
+		self::C_TYPE_LOAN                         => AdminKreddyApiComponent::API_ACTION_LOAN_CONFIRM,
+		self::C_TYPE_CHANGE_EMAIL                 => AdminKreddyApiComponent::API_ACTION_CHANGE_EMAIL,
+		self::C_TYPE_CHANGE_NUMERIC_CODE          => AdminKreddyApiComponent::API_ACTION_CHANGE_NUMERIC_CODE,
+		self::C_TYPE_CHANGE_PASSPORT              => AdminKreddyApiComponent::API_ACTION_CHANGE_PASSPORT,
+		self::C_TYPE_CHANGE_PASSWORD              => AdminKreddyApiComponent::API_ACTION_CHANGE_PASSWORD,
+		self::C_TYPE_CHANGE_SECRET_QUESTION       => AdminKreddyApiComponent::API_ACTION_CHANGE_SECRET_QUESTION,
+		self::C_TYPE_CHANGE_SMS_AUTH_SETTING      => AdminKreddyApiComponent::API_ACTION_CHANGE_SMS_AUTH_SETTING,
+		self::C_TYPE_PAY                          => AdminKreddyApiComponent::API_ACTION_DO_PAY,
 		self::C_TYPE_CHANGE_AUTO_DEBITING_SETTING => AdminKreddyApiComponent::API_ACTION_CHANGE_AUTO_DEBITING_SETTING,
 	);
 
 	public static $aSiteActions = array(
-		self::C_TYPE_SITE_AUTH               => '/account/smsPassAuth',
-		self::C_TYPE_SUBSCRIBE               => '/account/doSubscribeConfirm',
-		self::C_TYPE_LOAN                    => '/account/doLoanConfirm',
-		self::C_TYPE_CHANGE_EMAIL            => '/account/changeEmailSendSmsCode',
-		self::C_TYPE_CHANGE_NUMERIC_CODE     => '/account/changeNumericCodeSendSmsCode',
-		self::C_TYPE_CHANGE_PASSPORT         => '/account/changePassportSendSmsCode',
-		self::C_TYPE_CHANGE_PASSWORD         => '/account/changePasswordSendSmsCode',
-		self::C_TYPE_CHANGE_SECRET_QUESTION  => '/account/changeSecretQuestionSendSmsCode',
-		self::C_TYPE_CHANGE_SMS_AUTH_SETTING => '/account/changeSmsAuthSettingSendSmsCode',
-		self::C_TYPE_PAY                     => '/account/paySmsCode',
+		self::C_TYPE_SITE_AUTH                    => '/account/smsPassAuth',
+		self::C_TYPE_SUBSCRIBE                    => '/account/doSubscribeConfirm',
+		self::C_TYPE_LOAN                         => '/account/doLoanConfirm',
+		self::C_TYPE_CHANGE_EMAIL                 => '/account/changeEmailSendSmsCode',
+		self::C_TYPE_CHANGE_NUMERIC_CODE          => '/account/changeNumericCodeSendSmsCode',
+		self::C_TYPE_CHANGE_PASSPORT              => '/account/changePassportSendSmsCode',
+		self::C_TYPE_CHANGE_PASSWORD              => '/account/changePasswordSendSmsCode',
+		self::C_TYPE_CHANGE_SECRET_QUESTION       => '/account/changeSecretQuestionSendSmsCode',
+		self::C_TYPE_CHANGE_SMS_AUTH_SETTING      => '/account/changeSmsAuthSettingSendSmsCode',
+		self::C_TYPE_PAY                          => '/account/paySmsCode',
 		self::C_TYPE_CHANGE_AUTO_DEBITING_SETTING => '/account/changeAutoDebitingSettingSendSmsCode',
 	);
 

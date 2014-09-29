@@ -210,9 +210,8 @@ class AdminKreddyApiComponent
 	const ERROR_DO_PAY_ISSUER = 404; //Отказ со стороны банка-эмитента
 	const ERROR_DO_PAY_SYSTEM = 405; //Ошибка на стороне банка, через который осуществляется перевод
 	const ERROR_DO_PAY_NO_INSUFFICIENT_FUNDS = 406; //Ошибка со стороны пользователя: нет денег на карте
-	const ERROR_DO_PAY_AMOUNT_TOO_HIGHT = 407; //Ошибка со стороны пользователя: сумма слишком велика
+	const ERROR_DO_PAY_AMOUNT_TOO_HIGH = 407; //Ошибка со стороны пользователя: сумма слишком велика
 	const ERROR_DO_PAY_AMOUNT_TOO_LOW = 408; //Ошибка со стороны пользователя: сумма слишком мала
-
 
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
@@ -322,7 +321,7 @@ class AdminKreddyApiComponent
 		self::ERROR_DO_PAY_ISSUER                => 'Банк, выдавший карту, отказал в проведении операции',
 		self::ERROR_DO_PAY_SYSTEM                => 'Банк, выдавший карту, отказал в проведении операции',
 		self::ERROR_DO_PAY_NO_INSUFFICIENT_FUNDS => 'Недостаточно средств на банковской карте',
-		self::ERROR_DO_PAY_AMOUNT_TOO_HIGHT      => 'Введенная сумма превышает задолженность, введи сумму еще раз',
+		self::ERROR_DO_PAY_AMOUNT_TOO_HIGH      => 'Введенная сумма превышает задолженность, введи сумму еще раз',
 		self::ERROR_DO_PAY_AMOUNT_TOO_LOW        => 'Сумма должна быть не менее 10 рублей',
 
 	);
