@@ -27,6 +27,11 @@ class SmsCodeComponent extends CComponent
 	const C_TYPE_LOAN = 4;
 
 	/**
+	 * Оплата по банковской карте
+	 */
+	const C_TYPE_PAY = 5;
+
+	/**
 	 * Изменение персональных данных
 	 */
 	const C_TYPE_CHANGE_EMAIL = 5;
@@ -58,6 +63,7 @@ class SmsCodeComponent extends CComponent
 		self::C_TYPE_CHANGE_PASSWORD         => AdminKreddyApiComponent::API_ACTION_CHANGE_PASSWORD,
 		self::C_TYPE_CHANGE_SECRET_QUESTION  => AdminKreddyApiComponent::API_ACTION_CHANGE_SECRET_QUESTION,
 		self::C_TYPE_CHANGE_SMS_AUTH_SETTING => AdminKreddyApiComponent::API_ACTION_CHANGE_SMS_AUTH_SETTING,
+		self::C_TYPE_PAY                     => AdminKreddyApiComponent::API_ACTION_DO_PAY,
 	);
 
 	public static $aSiteActions = array(
@@ -70,6 +76,7 @@ class SmsCodeComponent extends CComponent
 		self::C_TYPE_CHANGE_PASSWORD         => '/account/changePasswordSendSmsCode',
 		self::C_TYPE_CHANGE_SECRET_QUESTION  => '/account/changeSecretQuestionSendSmsCode',
 		self::C_TYPE_CHANGE_SMS_AUTH_SETTING => '/account/changeSmsAuthSettingSendSmsCode',
+		self::C_TYPE_PAY                     => '/account/paySmsCode',
 	);
 
 	public function init()
