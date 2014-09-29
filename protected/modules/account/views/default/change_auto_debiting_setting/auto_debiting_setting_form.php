@@ -14,8 +14,7 @@ $this->pageTitle = Yii::app()->name . " - Настройка профиля";
 
 	<p>
 		Ты можешь <?= ($oChangeAutoDebitingSettingForm->flag_enable_auto_debiting) ? 'выключить' : 'включить'; ?>
-		автоматическое списание задолженности с привязанной банковской карты в конце срока действия КРЕДДИтной
-		линии </p>
+		автоматическое списание задолженности с привязанной банковской карты в последний день действия сервиса </p>
 
 <?php $form = $this->beginWidget('application.components.utils.IkTbActiveForm', array(
 	'id'                   => 'sms-auth-setting-form',

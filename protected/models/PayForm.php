@@ -14,15 +14,30 @@ class PayForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('sum', 'numerical', 'min' => 10, 'max'=>Yii::app()->adminKreddyApi->getAbsBalance() ,'allowEmpty' => true, 'tooSmall' => 'Сумма должна быть не менее 10 рублей', 'tooBig' => 'Введенная сумма превышает задолженность, введи сумму еще раз'),
+			array('sum', 'numerical', 'min' => 10, 'max' => Yii::app()->adminKreddyApi->getAbsBalance(), 'allowEmpty' => true, 'tooSmall' => 'Сумма должна быть не менее 10 рублей', 'tooBig' => 'Введенная сумма превышает задолженность, введи сумму еще раз'),
 			array('full_pay', 'in', 'range' => [0, 1]),
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function attributeLabels()
 	{
 		return array(
 			'sum' => 'Сумма',
 		);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function beforeValidate()
+	{
+		if ($this->full_pay = 1) {
+			$this->sum = null;
+		}
+
+		return parent::beforeValidate();
 	}
 }

@@ -25,7 +25,9 @@ $this->pageTitle = Yii::app()->name . " - Оплата с банковской �
 				Для оплаты будет использована текущая привязанная банковская
 				карта <?= Yii::app()->adminKreddyApi->getBankCardPan(); ?>
 			</div>
-			<?php $oPayForm->full_pay = 1; ?>
+			<?php if (!isset($oPayForm->full_pay)) {
+				$oPayForm->full_pay = 1;
+			} ?>
 			<?= $form->radioButtonListRow($oPayForm, 'full_pay', [1 => 'оплатить полностью', 0 => 'оплатить частично'], ['label' => false]) ?>
 			<div id="sum" style="display: none;">
 				<?= $form->textFieldRow($oPayForm, 'sum'); ?>
@@ -58,18 +60,18 @@ $sFormName = get_class($oPayForm);
 
 Yii::app()->clientScript->registerScript('payForm', '
 	function onChange(){
-		if(jQuery("#'.$sFormName.'_full_pay input[value=1]:checked").length){
+		if(jQuery("#' . $sFormName . '_full_pay input[value=1]:checked").length){
             jQuery("#sum").hide();
 		}
 
-		if(jQuery("#'.$sFormName.'_full_pay input[value=0]:checked").length){
+		if(jQuery("#' . $sFormName . '_full_pay input[value=0]:checked").length){
             jQuery("#sum").show();
 		}
 	}
 
 	onChange();
 
-	jQuery("#'.$sFormName.'_full_pay input").on("change",function(){
+	jQuery("#' . $sFormName . '_full_pay input").on("change",function(){
 		onChange();
 	});
 	', CClientScript::POS_READY);

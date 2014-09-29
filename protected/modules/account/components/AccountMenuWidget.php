@@ -139,7 +139,7 @@ class AccountMenuWidget extends CWidget
 		);
 
 		$this->aMenu[] = array(
-			'label' => 'Настройки профиля',
+			'label' => 'Настройки автосписания',
 			'url'   => array('/account/default/changeAutoDebitingSetting')
 		);
 
