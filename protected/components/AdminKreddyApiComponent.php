@@ -2269,29 +2269,6 @@ class AdminKreddyApiComponent
 		}
 	}
 
-//	/**
-//	 * @param $oPayForm
-//	 *
-//	 * @return bool
-//	 */
-//	public function doPay($oPayForm)
-//	{
-//		$aRequestData = [
-//			'pay' => [
-//				'sum'      => $oPayForm->sum,
-//				'full_pay' => $oPayForm->full_pay,
-//			],
-//		];
-//
-//		$aResponse = $this->requestAdminKreddyApi(self::API_ACTION_DO_PAY, $aRequestData);
-//		if ($aResponse['code'] === self::ERROR_NONE) {
-//
-//			return true;
-//		}
-//
-//		return false;
-//	}
-
 	/**
 	 * @param $sSmsCode
 	 * @param $iProduct
