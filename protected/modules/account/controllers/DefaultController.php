@@ -674,7 +674,7 @@ class DefaultController extends Controller
 	{
 
 		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeAutoDebitingSettingForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeAutoDebitingSettingForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting', $aData, get_class($oChangeAutoDebitingSettingForm));
 
