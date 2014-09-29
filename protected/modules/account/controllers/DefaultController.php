@@ -36,16 +36,17 @@ class DefaultController extends Controller
 			array(
 				'allow',
 				'actions' => array(
-					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
-					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
-					'doSubscribeConfirm', 'loan', 'doLoan', 'doLoanConfirm', 'doLoanCheckSmsCode', 'cancelLoan',
+					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'smsPassAuth',
+					'subscribe', 'doSubscribe',	'doSubscribeConfirm',
+					'loan', 'doLoan', 'doLoanConfirm', 'cancelLoan',
 					'addCard', 'verifyCard', 'successCard', 'refresh',
-					'changePassport', 'changePassportSendSmsCode', 'changePassportCheckSmsCode',
-					'changeEmail', 'changeEmailSendSmsCode', 'changeEmailCheckSmsCode',
-					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
-					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
-					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
-					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
+					'changePassport', 'changePassportSendSmsCode',
+					'changeEmail', 'changeEmailSendSmsCode',
+					'changeNumericCode', 'changeNumericCodeSendSmsCode',
+					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode',
+					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode',
+					'changeAutoDebitingSetting', 'changeAutoDebitingSettingSendSmsCode',
+					'changePassword', 'changePasswordSendSmsCode',
 					'cancelRequest',
 					'returnFrom3DSecurity',
 					'continueForm', 'loanComplete',
@@ -411,8 +412,12 @@ class DefaultController extends Controller
 
 		//если есть статус "верификация карты успешно выполнена" то рендерим соответствующее представление
 		if (Yii::app()->user->getState('verifyCardSuccess')) {
+			$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = Yii::app()->adminKreddyApi->isAutoDebitingEnabled();
+
 			$this->render('card/success', array(
 				'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
+				'oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm,
 			));
 			Yii::app()->user->setState('verifyCardSuccess', null);
 			Yii::app()->end();
@@ -642,6 +647,37 @@ class DefaultController extends Controller
 		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeSmsAuthSettingForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_SMS_AUTH_SETTING, 'change_sms_auth_setting', $aData, get_class($oChangeSmsAuthSettingForm));
+	}
+
+	/**
+	 * Смена настройки двухфакторной аутентификации, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeAutoDebitingSetting()
+	{
+		//проверяем, авторизован ли клиент по СМС-паролю
+		$this->checkNeedSmsAuth('/account/changeAutoDebitingSetting', 'change_auto_debiting_setting');
+
+		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+
+		$this->changeClientData($oChangeAutoDebitingSettingForm, 'change_auto_debiting_setting');
+
+		if ($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = Yii::app()->adminKreddyApi->isAutoDebitingEnabled();
+		}
+		$this->render('change_auto_debiting_setting/auto_debiting_setting_form', array('oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeAutoDebitingSettingSendSmsCode()
+	{
+
+		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeAutoDebitingSettingForm);
+
+		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting', $aData, get_class($oChangeAutoDebitingSettingForm));
+
 	}
 
 	/**

@@ -244,6 +244,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_PASSPORT = 'siteClient/doChangePassport';
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_SMS_AUTH_SETTING = 'siteClient/doChangeSmsAuthSetting';
+	const API_ACTION_CHANGE_AUTO_DEBITING_SETTING = 'siteClient/doChangeAutoDebitingSetting';
 	const API_ACTION_GET_LOAN = 'siteClient/getLoan';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
@@ -877,6 +878,7 @@ class AdminKreddyApiComponent
 				'fullname'              => '',
 				'client_new'            => false,
 				'sms_auth_enabled'      => false,
+				'auto_debiting_enabled' => false,
 				'is_possible_take_loan' => false,
 			),
 			'status'                 => array(
@@ -2486,6 +2488,18 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->oCardVerifyStatus->bCardVerifyExists;
+	}
+
+	/**
+	 * Включено ли автосписание
+	 *
+	 * @return bool
+	 */
+	public function isAutoDebitingEnabled()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (bool)$aClientInfo['client_data']['auto_debiting_enabled'];
 	}
 
 	/**
