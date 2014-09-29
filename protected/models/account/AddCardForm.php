@@ -167,7 +167,8 @@ class AddCardForm extends CFormModel
 	 */
 	public function afterValidate()
 	{
-		if (!empty($this->sCardValidThru)) {
+		// если после валидации нет ошибок в этом поле
+		if (!$this->getError('sCardValidThru')) {
 			list($sMonth, $sYear) = explode("/", $this->sCardValidThru);
 
 			$this->sCardMonth = trim($sMonth);
