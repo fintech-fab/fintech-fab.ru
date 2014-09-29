@@ -70,7 +70,20 @@ class AccountMenuWidget extends CWidget
 		) {
 			$this->aMenu[] = array(
 				'label' => 'Оплатить задолженность',
-				'url'   => Yii::app()->params['payUrl'],
+				'items' => array(
+					array(
+						'label' => 'Использовать привязанную карту',
+						'url'   => Yii::app()->createUrl('/account/pay'),
+					),
+					array(
+						'label' => 'Использовать другую банковскую карту',
+						'url'   => Yii::app()->params['payUrl'],
+					),
+					array(
+						'label' => 'Другие способы оплаты',
+						'url'   => Yii::app()->createUrl('/pages/view/payment'),
+					),
+				),
 			);
 		}
 		$this->aMenu[] = array(
