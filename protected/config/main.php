@@ -162,8 +162,12 @@ $a = array(
 		'log'              => array(),
 
 		'session'          => array(
-			'timeout'     => 60 * 60 * 2,
-			'sessionName' => 'st',
+			'timeout'      => 60 * 60 * 2,
+			'sessionName'  => 'st',
+			'cookieParams' => array(
+				'httpOnly' => true,
+				'secure'   => true,
+			)
 		),
 
 		'request'          => array(
@@ -171,6 +175,10 @@ $a = array(
 			'enableCsrfValidation'        => true,
 			'enableCookieValidation'      => true,
 			'csrfTokenName'               => 'stcs',
+			'csrfCookie'                  => array(
+				'httpOnly' => true,
+				'secure'   => true,
+			),
 			'aIgnoreCsrfValidationRoutes' => array(
 				'identify/default/index',
 				'account/default/returnFrom3DSecurity',
