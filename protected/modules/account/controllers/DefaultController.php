@@ -36,16 +36,17 @@ class DefaultController extends Controller
 			array(
 				'allow',
 				'actions' => array(
-					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'checkSmsPass', 'smsPassAuth',
-					'sendSmsPass', 'smsPassResend', 'subscribe', 'doSubscribe', 'doSubscribeCheckSmsCode',
-					'doSubscribeConfirm', 'loan', 'doLoan', 'doLoanConfirm', 'doLoanCheckSmsCode', 'cancelLoan',
+					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'smsPassAuth',
+					'subscribe', 'doSubscribe',	'doSubscribeConfirm',
+					'loan', 'doLoan', 'doLoanConfirm', 'cancelLoan',
 					'addCard', 'verifyCard', 'successCard', 'refresh',
-					'changePassport', 'changePassportSendSmsCode', 'changePassportCheckSmsCode',
-					'changeEmail', 'changeEmailSendSmsCode', 'changeEmailCheckSmsCode',
-					'changeNumericCode', 'changeNumericCodeSendSmsCode', 'changeNumericCodeCheckSmsCode',
-					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode', 'changeSecretQuestionCheckSmsCode',
-					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode', 'changeSmsAuthSettingCheckSmsCode',
-					'changePassword', 'changePasswordSendSmsCode', 'changePasswordCheckSmsCode',
+					'changePassport', 'changePassportSendSmsCode',
+					'changeEmail', 'changeEmailSendSmsCode',
+					'changeNumericCode', 'changeNumericCodeSendSmsCode',
+					'changeSecretQuestion', 'changeSecretQuestionSendSmsCode',
+					'changeSmsAuthSetting', 'changeSmsAuthSettingSendSmsCode',
+					'changeAutoDebitingSetting', 'changeAutoDebitingSettingSendSmsCode',
+					'changePassword', 'changePasswordSendSmsCode',
 					'cancelRequest',
 					'returnFrom3DSecurity',
 					'continueForm', 'loanComplete',
@@ -53,6 +54,7 @@ class DefaultController extends Controller
 					'takeLoan', 'takeLoanCheckSmsCode',
 					'getDocument', 'getDocumentList',
 					'PaymentSchedule',
+					'pay', 'paySmsCode'
 				),
 				'users'   => array('@'),
 			),
@@ -410,8 +412,12 @@ class DefaultController extends Controller
 
 		//если есть статус "верификация карты успешно выполнена" то рендерим соответствующее представление
 		if (Yii::app()->user->getState('verifyCardSuccess')) {
+			$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = Yii::app()->adminKreddyApi->isAutoDebitingEnabled();
+
 			$this->render('card/success', array(
 				'sMessage' => AdminKreddyApiComponent::C_CARD_SUCCESSFULLY_VERIFIED,
+				'oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm,
 			));
 			Yii::app()->user->setState('verifyCardSuccess', null);
 			Yii::app()->end();
@@ -530,7 +536,7 @@ class DefaultController extends Controller
 		Yii::app()->user->getFlash('warning'); //удаляем warning
 
 		$oChangePassportForm = new ChangePassportForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangePassportForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangePassportForm);
 		$oChangePassportForm->setAttributes($aData);
 
 		$oForm = new SMSCodeForm('sendRequired');
@@ -581,7 +587,7 @@ class DefaultController extends Controller
 	public function actionChangeNumericCodeSendSmsCode()
 	{
 		$oChangeNumericCodeForm = new ChangeNumericCodeForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeNumericCodeForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeNumericCodeForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_NUMERIC_CODE, 'change_numeric_code', $aData, get_class($oChangeNumericCodeForm));
 	}
@@ -608,7 +614,7 @@ class DefaultController extends Controller
 	public function actionChangeSecretQuestionSendSmsCode()
 	{
 		$oChangeSecretQuestionForm = new ChangeSecretQuestionForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeSecretQuestionForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeSecretQuestionForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_SECRET_QUESTION, 'change_secret_question', $aData, get_class($oChangeSecretQuestionForm));
 	}
@@ -638,9 +644,40 @@ class DefaultController extends Controller
 	public function actionChangeSmsAuthSettingSendSmsCode()
 	{
 		$oChangeSmsAuthSettingForm = new ChangeSmsAuthSettingForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeSmsAuthSettingForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeSmsAuthSettingForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_SMS_AUTH_SETTING, 'change_sms_auth_setting', $aData, get_class($oChangeSmsAuthSettingForm));
+	}
+
+	/**
+	 * Смена настройки двухфакторной аутентификации, выводим форму и проверяем введенные данные если есть POST-запрос
+	 */
+	public function actionChangeAutoDebitingSetting()
+	{
+		//проверяем, авторизован ли клиент по СМС-паролю
+		$this->checkNeedSmsAuth('/account/changeAutoDebitingSetting', 'change_auto_debiting_setting');
+
+		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+
+		$this->changeClientData($oChangeAutoDebitingSettingForm, 'change_auto_debiting_setting');
+
+		if ($aClientInfo = Yii::app()->adminKreddyApi->getClientInfo()) {
+			$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting = Yii::app()->adminKreddyApi->isAutoDebitingEnabled();
+		}
+		$this->render('change_auto_debiting_setting/auto_debiting_setting_form', array('oChangeAutoDebitingSettingForm' => $oChangeAutoDebitingSettingForm));
+	}
+
+	/**
+	 * Отправка СМС-кода подтверждения
+	 */
+	public function actionChangeAutoDebitingSettingSendSmsCode()
+	{
+
+		$oChangeAutoDebitingSettingForm = new ChangeAutoDebitingSettingForm();
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeAutoDebitingSettingForm);
+
+		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_AUTO_DEBITING_SETTING, 'change_auto_debiting_setting', $aData, get_class($oChangeAutoDebitingSettingForm));
+
 	}
 
 	/**
@@ -664,7 +701,7 @@ class DefaultController extends Controller
 	public function actionChangePasswordSendSmsCode()
 	{
 		$oChangePasswordForm = new ChangePasswordForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangePasswordForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangePasswordForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_PASSWORD, 'change_password', $aData);
 	}
@@ -690,7 +727,7 @@ class DefaultController extends Controller
 	public function actionChangeEmailSendSmsCode()
 	{
 		$oChangeEmailForm = new ChangeEmailForm();
-		$aData = Yii::app()->adminKreddyApi->getClientChangeData($oChangeEmailForm);
+		$aData = Yii::app()->adminKreddyApi->getClientData($oChangeEmailForm);
 
 		$this->changeClientDataSmsCode(SmsCodeComponent::C_TYPE_CHANGE_EMAIL, 'change_email', $aData, get_class($oChangeEmailForm));
 	}
@@ -1012,6 +1049,95 @@ class DefaultController extends Controller
 
 		$this->render('cancel_request');
 	}
+
+	public function actionPay()
+	{
+		//XXX убрать после тестирования
+		if(Yii::app()->getUser()->getId() !== '9262027558'){
+			$this->redirect(array('/account'));
+		}
+		//XXX конец
+
+
+		$this->checkNeedSmsAuth('/account/pay', 'pay');
+
+		$oPayForm = new PayForm();
+
+		if (Yii::app()->request->isAjaxRequest) {
+			echo CActiveForm::validate($oPayForm);
+			Yii::app()->end();
+		}
+
+		if (Yii::app()->request->getIsPostRequest()) {
+			$aPost = Yii::app()->request->getParam(get_class($oPayForm));
+			$oPayForm->setAttributes($aPost);
+			if ($oPayForm->validate()) {
+				Yii::app()->adminKreddyApi->setClientData($oPayForm, $aPost);
+				$oSmsCodeForm = new SMSCodeForm('sendRequired');
+				$this->render('pay/sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
+				Yii::app()->end();
+			}
+		} else {
+			//обнуляем все данные, если не было пост-запроса
+			Yii::app()->smsCode->setResetSmsCodeSentAndTime();
+			Yii::app()->smsCode->resetSmsCodeTries();
+			Yii::app()->smsCode->setState(SmsCodeComponent::C_STATE_NEED_SEND, SmsCodeComponent::C_TYPE_PAY);
+			Yii::app()->adminKreddyApi->setClientData($oPayForm, []);
+		}
+
+		$this->render('pay/pay_form', array('oPayForm' => $oPayForm));
+	}
+
+	public function actionPaySmsCode()
+	{
+		Yii::app()->user->getFlash('warning'); //удаляем warning
+
+		$oPayForm = new PayForm();
+		$aData = Yii::app()->adminKreddyApi->getClientData($oPayForm);
+
+		if (empty($aData)) {
+			$this->redirect(Yii::app()->createUrl('/account/pay'));
+		}
+
+		$oPayForm->setAttributes($aData);
+
+		$oForm = new SMSCodeForm('sendRequired');
+		$sSmsState = $this->doProcessSmsCode($oForm, SmsCodeComponent::C_TYPE_PAY, array('pay' => $aData));
+
+		switch ($sSmsState) {
+			case SmsCodeComponent::C_STATE_NEED_CHECK:
+			case SmsCodeComponent::C_STATE_NEED_SEND:
+				$this->render('pay/sms_code', array('oSmsCodeForm' => $oForm));
+				break;
+			case SmsCodeComponent::C_STATE_ERROR:
+				if (!Yii::app()->adminKreddyApi->isSuccessfulLastSmsCode()) {
+					//ошибка в СМС-коде
+					$this->render('pay/sms_code', array('oSmsCodeForm' => $oForm));
+				} else {
+					//СМС-код верен, но что-то пошло не так
+					$sError = Yii::app()->adminKreddyApi->getBankCardPaymentErrorMessage();
+					if (!empty($sError)) {
+						Yii::app()->user->setFlash('error', $sError);
+					}
+
+					$this->redirect(Yii::app()->createUrl('/account/pay'));
+				}
+				break;
+			case SmsCodeComponent::C_STATE_NEED_CHECK_OK:
+				Yii::app()->adminKreddyApi->setClientData($oPayForm, []);
+				$this->render('pay/success');
+				break;
+
+			default:
+				Yii::app()->smsCode->setResetSmsCodeSentAndTime();
+				Yii::app()->smsCode->resetSmsCodeTries();
+				Yii::app()->smsCode->setState(SmsCodeComponent::C_STATE_NEED_SEND, SmsCodeComponent::C_TYPE_PAY);
+				//Yii::app()->adminKreddyApi->setClientData($oPayForm, []);
+				$this->redirect(Yii::app()->createUrl('/account/pay'));
+		}
+
+	}
+
 
 	/**
 	 * Авторизация по СМС-паролю
@@ -1389,7 +1515,7 @@ class DefaultController extends Controller
 			$aPost = Yii::app()->request->getParam(get_class($oChangeForm));
 			$oChangeForm->setAttributes($aPost);
 			if ($oChangeForm->validate()) {
-				Yii::app()->adminKreddyApi->setClientChangeData($oChangeForm, $aPost);
+				Yii::app()->adminKreddyApi->setClientData($oChangeForm, $aPost);
 				$oSmsCodeForm = new SMSCodeForm('sendRequired');
 				$this->render($sViewsPath . '/sms_code', array('oSmsCodeForm' => $oSmsCodeForm));
 				Yii::app()->end();
@@ -1489,17 +1615,27 @@ class DefaultController extends Controller
 				//проверяем, не кончились ли попытки
 				$bTriesExceed = Yii::app()->smsCode->getIsSmsCodeTriesExceed();
 
-				//если попытки не кончились, пробуем оформить подписку
+				//если попытки не кончились, пробуем подтвердить действие
 				if (!$bTriesExceed) {
 					//проверяем точку входа, делаем подписку согласно точке входа
-					$bSubscribe = Yii::app()->adminKreddyApi->doCheckSms($sAction, $oForm->smsCode, $aData);
+					$bResult = Yii::app()->adminKreddyApi->doCheckSms($sAction, $oForm->smsCode, $aData);
 
-					if ($bSubscribe) {
+					if ($bResult) {
 						//сбрасываем счетчик попыток ввода кода
 						Yii::app()->smsCode->setResetSmsCodeSentAndTime();
 						Yii::app()->smsCode->resetSmsCodeTries();
+						Yii::app()->smsCode->setState(SmsCodeComponent::C_STATE_NEED_SEND, $sType);
 
 						return SmsCodeComponent::C_STATE_NEED_CHECK_OK;
+					} else {
+						$bSmsCodeOk = Yii::app()->adminKreddyApi->isSuccessfulLastSmsCode();
+						// если проверка СМС-кода успешно, но при этом пришла ошибка
+						if ($bSmsCodeOk) {
+							//сбрасываем все данные об отправке СМС
+							Yii::app()->smsCode->setResetSmsCodeSentAndTime();
+							Yii::app()->smsCode->resetSmsCodeTries();
+							Yii::app()->smsCode->setState(SmsCodeComponent::C_STATE_NEED_SEND, $sType);
+						}
 					}
 				} else {
 					//устанвливаем сообщение об ошибке

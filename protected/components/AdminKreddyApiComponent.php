@@ -195,6 +195,24 @@ class AdminKreddyApiComponent
 	 */
 	const ERROR_VERIFY_3DS = 205;
 
+	/**
+	 * Ошибка в email коде
+	 */
+	const ERROR_EMAIL_CODE_DATA = 300;
+
+	/**
+	 * Ошибка при попытке оплаты с банковской карты
+	 */
+	const ERROR_DO_PAY = 400; //неизвестная ошибка при оплате по банковской карте
+	const ERROR_DO_PAY_PRODUCT_NOT_FOUND = 401; //нет продукта
+	const ERROR_DO_PAY_BANK_CARD_NOT_FOUND = 402; //не привязана карта
+	const ERROR_DO_PAY_INVOICE_NOT_FOUND = 403; //не привязана карта
+	const ERROR_DO_PAY_ISSUER = 404; //Отказ со стороны банка-эмитента
+	const ERROR_DO_PAY_SYSTEM = 405; //Ошибка на стороне банка, через который осуществляется перевод
+	const ERROR_DO_PAY_NO_INSUFFICIENT_FUNDS = 406; //Ошибка со стороны пользователя: нет денег на карте
+	const ERROR_DO_PAY_AMOUNT_TOO_HIGH = 407; //Ошибка со стороны пользователя: сумма слишком велика
+	const ERROR_DO_PAY_AMOUNT_TOO_LOW = 408; //Ошибка со стороны пользователя: сумма слишком мала
+
 	const SMS_AUTH_OK = 0; //СМС-авторизация успешна (СМС-код верный)
 	const SMS_SEND_OK = 1; //СМС с кодом/паролем отправлена
 	const SMS_CODE_ERROR = 2; //неверный СМС-код
@@ -225,6 +243,7 @@ class AdminKreddyApiComponent
 	const API_ACTION_CHANGE_PASSPORT = 'siteClient/doChangePassport';
 	const API_ACTION_CHANGE_SECRET_QUESTION = 'siteClient/doChangeSecretQuestion';
 	const API_ACTION_CHANGE_SMS_AUTH_SETTING = 'siteClient/doChangeSmsAuthSetting';
+	const API_ACTION_CHANGE_AUTO_DEBITING_SETTING = 'siteClient/doChangeAutoDebitingSetting';
 	const API_ACTION_GET_LOAN = 'siteClient/getLoan';
 	const API_ACTION_CHANGE_NUMERIC_CODE = 'siteClient/doChangeNumericCode';
 	const API_ACTION_CHANGE_PASSWORD = 'siteClient/doChangePassword';
@@ -246,6 +265,8 @@ class AdminKreddyApiComponent
 
 	const API_ACTION_SEND_SMS = 'siteClient/sendSms';
 	const API_ACTION_SEND_EMAIL_CODE = 'siteClient/sendEmailCode';
+
+	const API_ACTION_DO_PAY = 'siteClient/doPay';
 
 	const ERROR_MESSAGE_UNKNOWN = 'Произошла неизвестная ошибка. Проверьте правильность заполнения данных.';
 	const C_NO_AVAILABLE_PRODUCTS = "Доступные способы перечисления денег отсутствуют.";
@@ -291,6 +312,19 @@ class AdminKreddyApiComponent
 	public $sTestApiUrl = '';
 	private $iSmsCode;
 	private $oCardVerifyStatus;
+
+	public $PayErrorMessages = array(
+		self::ERROR_DO_PAY                       => 'Неизвестная ошибка при оплате по банковской карте',
+		self::ERROR_DO_PAY_PRODUCT_NOT_FOUND     => 'Сервис не подключен',
+		self::ERROR_DO_PAY_BANK_CARD_NOT_FOUND   => 'Не привязана банковская карта',
+		self::ERROR_DO_PAY_INVOICE_NOT_FOUND     => 'Не найден счет для оплаты: попробуйте позднее',
+		self::ERROR_DO_PAY_ISSUER                => 'Банк, выдавший карту, отказал в проведении операции',
+		self::ERROR_DO_PAY_SYSTEM                => 'Банк, выдавший карту, отказал в проведении операции',
+		self::ERROR_DO_PAY_NO_INSUFFICIENT_FUNDS => 'Недостаточно средств на банковской карте',
+		self::ERROR_DO_PAY_AMOUNT_TOO_HIGH      => 'Введенная сумма превышает задолженность, введи сумму еще раз',
+		self::ERROR_DO_PAY_AMOUNT_TOO_LOW        => 'Сумма должна быть не менее 10 рублей',
+
+	);
 
 	/**
 	 * Заменяет в сообщениях Клиенту шаблоны на вычисляемые значения
@@ -847,6 +881,7 @@ class AdminKreddyApiComponent
 				'fullname'              => '',
 				'client_new'            => false,
 				'sms_auth_enabled'      => false,
+				'auto_debiting_enabled' => false,
 				'is_possible_take_loan' => false,
 			),
 			'status'                 => array(
@@ -2199,7 +2234,7 @@ class AdminKreddyApiComponent
 			$this->token = $aResult['token'];
 		}
 
-		return $this->checkChangeResultMessage($aResult);
+		return $this->checkSmsResultMessage($aResult);
 	}
 
 	/**
@@ -2284,7 +2319,7 @@ class AdminKreddyApiComponent
 	{
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_CHANGE_PASSWORD, $aData + array('sms_code' => $sSmsCode));
 
-		$bResult = $this->checkChangeResultMessage($aResult);
+		$bResult = $this->checkSmsResultMessage($aResult);
 
 		if ($bResult) {
 			//обновляем токен сессии в связи со сменой пароля (иначе разлогинит, т.к. пароль в старом токене другой)
@@ -2433,6 +2468,18 @@ class AdminKreddyApiComponent
 		}
 
 		return $this->oCardVerifyStatus->bCardVerifyExists;
+	}
+
+	/**
+	 * Включено ли автосписание
+	 *
+	 * @return bool
+	 */
+	public function isAutoDebitingEnabled()
+	{
+		$aClientInfo = $this->getClientInfo();
+
+		return (bool)$aClientInfo['client_data']['auto_debiting_enabled'];
 	}
 
 	/**
@@ -3182,20 +3229,20 @@ class AdminKreddyApiComponent
 	 * @param       $oChangeForm
 	 * @param array $aData
 	 */
-	public function setClientChangeData($oChangeForm, array $aData)
+	public function setClientData($oChangeForm, array $aData)
 	{
 		$sSessionName = get_class($oChangeForm);
 		Yii::app()->session[$sSessionName] = $aData;
 	}
 
 	/**
-	 * @param $oChangeForm
+	 * @param $oForm
 	 *
 	 * @return mixed
 	 */
-	public function getClientChangeData($oChangeForm)
+	public function getClientData($oForm)
 	{
-		$sSessionName = get_class($oChangeForm);
+		$sSessionName = get_class($oForm);
 
 		return Yii::app()->session[$sSessionName];
 	}
@@ -3209,7 +3256,7 @@ class AdminKreddyApiComponent
 	{
 		$oChangePassportForm = new ChangePassportForm();
 
-		$aData = $this->getClientChangeData($oChangePassportForm);
+		$aData = $this->getClientData($oChangePassportForm);
 		if ($sField === 'passport_change_reason' && !$aData[$sField]) {
 			return (!empty(Dictionaries::$aChangePassportReasons[$aData[$sField]]))
 				? Dictionaries::$aChangePassportReasons[$aData[$sField]]
@@ -3539,7 +3586,7 @@ class AdminKreddyApiComponent
 	 *
 	 * @return bool
 	 */
-	private function checkChangeResultMessage($aResult)
+	private function checkSmsResultMessage($aResult)
 	{
 		// Ошибок нет
 		if ($aResult['code'] === self::ERROR_NONE && $aResult['sms_status'] === self::SMS_AUTH_OK) {
@@ -3697,5 +3744,19 @@ class AdminKreddyApiComponent
 		}
 
 		return array();
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	public function getBankCardPaymentErrorMessage()
+	{
+		$iError = $this->getLastCode();
+
+		if (isset($this->PayErrorMessages[$iError])) {
+			return $this->PayErrorMessages[$iError];
+		}
+
+		return null;
 	}
 }

@@ -16,7 +16,7 @@
 			setTimeout(function () {
 				jQuery("#sessionLeftTimeText").html('<?= $this->sExpiredMessage; ?>'); // задержка 10 сек
 			}, 10000);
-			window.location.reload(true); // релоад
+			window.location.href = '<?= Yii::app()->createAbsoluteUrl('/account/login'); ?>'; // редирект на страницу логина
 			return;
 		}
 		iMinutesLeft = Math.floor(iSecondsLeft / 60);

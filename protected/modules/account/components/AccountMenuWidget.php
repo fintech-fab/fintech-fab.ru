@@ -65,13 +65,47 @@ class AccountMenuWidget extends CWidget
 			);
 		}
 		if (
-			Yii::app()->adminKreddyApi->getBalance() < 0 &&
-			!Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+			Yii::app()->adminKreddyApi->getBalance() < 0
+			&& !Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+			//XXX убрать после тестирования
+			&& Yii::app()->getUser()->getId() == '9262027558'
+			//XXX конец
 		) {
 			$this->aMenu[] = array(
 				'label' => 'Оплатить задолженность',
-				'url'   => Yii::app()->params['payUrl'],
+				'items' => array(
+					array(
+						'label' => 'Использовать привязанную карту',
+						'url'   => Yii::app()->createUrl('/account/pay'),
+					),
+					array(
+						'label' => 'Использовать другую банковскую карту',
+						'url'   => Yii::app()->params['payUrl'],
+					),
+					array(
+						'label' => 'Другие способы оплаты',
+						'url'   => Yii::app()->createUrl('/pages/view/payment'),
+					),
+				),
 			);
+			//XXX убрать после тестирования
+		} elseif (Yii::app()->adminKreddyApi->getBalance() < 0
+			&& !Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+		) {
+			$this->aMenu[] = array(
+				'label' => 'Оплатить задолженность',
+				'items' => array(
+					array(
+						'label' => 'Использовать банковскую карту',
+						'url'   => Yii::app()->params['payUrl'],
+					),
+					array(
+						'label' => 'Другие способы оплаты',
+						'url'   => Yii::app()->createUrl('/pages/view/payment'),
+					),
+				),
+			);
+			//XXX конец
 		}
 		$this->aMenu[] = array(
 			'label' => 'Привязка банковской карты',
@@ -123,6 +157,11 @@ class AccountMenuWidget extends CWidget
 		$this->aMenu[] = array(
 			'label' => 'Настройки безопасности',
 			'url'   => array('/account/default/changeSmsAuthSetting')
+		);
+
+		$this->aMenu[] = array(
+			'label' => 'Настройки автосписания',
+			'url'   => array('/account/default/changeAutoDebitingSetting')
 		);
 
 		$this->aMenu[] = '';
