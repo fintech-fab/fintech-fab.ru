@@ -165,7 +165,7 @@ $a = array(
 			'timeout'      => 60 * 60 * 2,
 			'sessionName'  => 'st',
 			'cookieParams' => array(
-				'httpOnly' => true,
+				'httponly' => true,
 				'secure'   => true,
 			)
 		),
