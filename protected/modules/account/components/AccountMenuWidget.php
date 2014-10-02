@@ -65,8 +65,11 @@ class AccountMenuWidget extends CWidget
 			);
 		}
 		if (
-			Yii::app()->adminKreddyApi->getBalance() < 0 &&
-			!Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+			Yii::app()->adminKreddyApi->getBalance() < 0
+			&& !Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+			//XXX убрать после тестирования
+			&& Yii::app()->getUser()->getId() == '9262027558'
+			//XXX конец
 		) {
 			$this->aMenu[] = array(
 				'label' => 'Оплатить задолженность',
@@ -85,6 +88,24 @@ class AccountMenuWidget extends CWidget
 					),
 				),
 			);
+			//XXX убрать после тестирования
+		} elseif (Yii::app()->adminKreddyApi->getBalance() < 0
+			&& !Yii::app()->adminKreddyApi->isSubscriptionAwaitingConfirmationStatus()
+		) {
+			$this->aMenu[] = array(
+				'label' => 'Оплатить задолженность',
+				'items' => array(
+					array(
+						'label' => 'Использовать банковскую карту',
+						'url'   => Yii::app()->params['payUrl'],
+					),
+					array(
+						'label' => 'Другие способы оплаты',
+						'url'   => Yii::app()->createUrl('/pages/view/payment'),
+					),
+				),
+			);
+			//XXX конец
 		}
 		$this->aMenu[] = array(
 			'label' => 'Привязка банковской карты',

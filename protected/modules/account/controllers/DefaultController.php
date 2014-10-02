@@ -1052,6 +1052,13 @@ class DefaultController extends Controller
 
 	public function actionPay()
 	{
+		//XXX убрать после тестирования
+		if(Yii::app()->getUser()->getId() !== '9262027558'){
+			$this->redirect(array('/account'));
+		}
+		//XXX конец
+
+
 		$this->checkNeedSmsAuth('/account/pay', 'pay');
 
 		$oPayForm = new PayForm();
