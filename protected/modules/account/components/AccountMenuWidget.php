@@ -84,7 +84,7 @@ class AccountMenuWidget extends CWidget
 					),
 					array(
 						'label' => 'Другие способы оплаты',
-						'url'   => Yii::app()->createUrl('/pages/view/payment'),
+						'url'   => Yii::app()->createUrl('/pages/view/payments'),
 					),
 				),
 			);
