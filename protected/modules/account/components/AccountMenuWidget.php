@@ -158,12 +158,15 @@ class AccountMenuWidget extends CWidget
 			'label' => 'Настройки безопасности',
 			'url'   => array('/account/default/changeSmsAuthSetting')
 		);
+		//XXX убрать после тестирования условие, пункт меню оставить
+		if (Yii::app()->getUser()->getId() == '9262027558') {
 
-		$this->aMenu[] = array(
-			'label' => 'Настройки автосписания',
-			'url'   => array('/account/default/changeAutoDebitingSetting')
-		);
-
+			$this->aMenu[] = array(
+				'label' => 'Настройки автосписания',
+				'url'   => array('/account/default/changeAutoDebitingSetting')
+			);
+		}
+		//XXX конец
 		$this->aMenu[] = '';
 		$this->aMenu[] = array(
 			'label' => 'Идентификация',

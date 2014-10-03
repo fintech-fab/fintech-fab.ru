@@ -654,6 +654,12 @@ class DefaultController extends Controller
 	 */
 	public function actionChangeAutoDebitingSetting()
 	{
+		//XXX убрать после тестирования
+		if(Yii::app()->getUser()->getId() !== '9262027558'){
+			$this->redirect(array('/account'));
+		}
+		//XXX конец
+
 		//проверяем, авторизован ли клиент по СМС-паролю
 		$this->checkNeedSmsAuth('/account/changeAutoDebitingSetting', 'change_auto_debiting_setting');
 

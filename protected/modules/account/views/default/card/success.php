@@ -12,7 +12,7 @@ $this->pageTitle = Yii::app()->name . " - Привязка банковской 
 
 	<div class="alert alert-success in block"><?= $sMessage ?></div>
 
-<?php if (!$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting) { ?>
+<?php if (false) { //XXX вернуть после тестирования (!$oChangeAutoDebitingSettingForm->flag_enable_auto_debiting) { ?>
 	<p>Для твоего удобства мы предлагаем включить АВТОСПИСАНИЕ задолженности с твоей банковской карты.</p>
 	<p>В день окончания действия сервиса мы автоматически спишем с твоей банковской карты сумму задолженности.</p>
 	<p>Тебе лишь нужно позаботиться о том, чтобы на карте имелась необходимая сумма.</p>
