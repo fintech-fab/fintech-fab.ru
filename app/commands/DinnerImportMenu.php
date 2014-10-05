@@ -41,21 +41,44 @@ class DinnerImportMenu extends Command
 	{
 		$url = $this->argument('url');
 
-		if (!$url) {
-			// TODO[kmarenov] Автоматическое формирование имен файлов на текущую и следующие недели
-			$this->info('url не задан');
+		//Если в параметрах команды задан url, то импортируем файл из него
+		if ($url) {
+			$import = $this->importMenu($url);
+		} //Если url не указан, автоматически генерируем имена файлов на текущую и следующую недели
+		else {
+			$import1 = $this->importMenu(DinnerImportMenuComponent::getFileUrlByWeek());
+			$import2 = $this->importMenu(DinnerImportMenuComponent::getFileUrlByWeek(1));
 
-			return;
+			//Загружены ли оба файла успешно
+			$import = $import1 && $import2;
 		}
 
+		//Если импорт прошел удачно, отправляем напоминание на почту
+		if ($import) {
+			MailSender::sendDinnerReminders();
+		}
+	}
+
+	/**
+	 * Импортирует файл меню с помощью метода importMenu компонента DinnerImportMenu
+	 * если файл импортирован успешно, выводит сообщение об этом, иначе - сообщение об ошибке
+	 *
+	 * @param $url url файла
+	 *
+	 * @return bool Если файл импортирован успешно - true, иначе - false
+	 */
+	private function importMenu($url)
+	{
 		$import = DinnerImportMenuComponent::importMenu($url);
 
 		if ($import['status'] == 'ok') {
-			MailSender::sendDinnerReminders();
 			$this->info($import['message']);
+
+			return true;
 		} else {
 			$this->error($import['message']);
-			//$this->error('При импорте меню произошла ошибка');
+
+			return false;
 		}
 	}
 
