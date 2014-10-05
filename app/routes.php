@@ -68,8 +68,21 @@ Route::group(array('before' => 'auth'), function () {
 	));
 });
 
-Route::get('dinner', array(
-    'before' => 'auth|testRole:employee',
-    'as' => 'dinner',
-    'uses' => 'App\Controllers\Dinner\DinnerController@dinner'
-));
+Route::group(array('before' => 'auth|testRole:employee'), function () {
+	Route::get('dinner', array(
+		'as'   => 'dinner',
+		'uses' => 'App\Controllers\Dinner\DinnerController@dinner'
+	));
+
+	Route::get('dinner/menuitems/{date}', array(
+		'as'   => 'dinner/menuitems',
+		'uses' => 'App\Controllers\Dinner\DinnerController@getMenuItemsByDate'
+	));
+
+	Route::get('dinner/menusections', array(
+		'as'   => 'dinner/menusections',
+		'uses' => 'App\Controllers\Dinner\DinnerController@getMenuSections'
+	));
+});
+
+
