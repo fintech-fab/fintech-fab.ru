@@ -36,14 +36,12 @@ class Controller extends CController
 	{
 		ob_start();
 
-		if (Yii::app()->antiBot->checkIsBanned()) {
-			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-			Yii::app()->end();
-		}
-
 		return parent::beforeAction($aAction);
 	}
 
+	/**
+	 * @param CAction $aAction
+	 */
 	protected function afterAction($aAction)
 	{
 		parent::afterAction($aAction);

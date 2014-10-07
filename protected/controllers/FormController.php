@@ -647,4 +647,19 @@ class FormController extends Controller
 		$this->layout = '//layouts/landing';
 		$this->render('landing');
 	}
+
+	/**
+	 * @param CAction $action
+	 *
+	 * @return bool
+	 */
+	public function beforeAction($action){
+
+		if (Yii::app()->antiBot->checkIsBanned()) {
+			header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+			Yii::app()->end();
+		}
+
+		return parent::beforeAction($action);
+	}
 }

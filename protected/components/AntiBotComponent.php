@@ -203,14 +203,28 @@ class AntiBotComponent
 		$iTimeShort = SiteParams::ANTIBOT_FORM_TIME_SHORT;
 		$iFormsInShort = SiteParams::ANTIBOT_FORM_IN_SHORT;
 
-		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
-		if ($iActionCount > 0) {
+
+
+		if(Yii::app()->cache->get($sIP . '_' . $iTypeBlock)){
 			return true;
 		}
 
+		if(Yii::app()->cache->get($sIP . '_' . $iTypeForm)){
+			return true;
+		}
+
+		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeBlock, $iTimeBlock);
+		if ($iActionCount > 0) {
+			Yii::app()->cache->set($sIP . '_' . $iTypeBlock, 1, $iTimeBlock);
+
+			return true;
+		}
 
 		$iActionCount = UserActionsLog::countRecordsByIpTypeTime($sIP, $iTypeForm, $iTimeShort);
 		if ($iActionCount >= $iFormsInShort) {
+
+			Yii::app()->cache->set($sIP . '_' . $iTypeBlock, 1, $iTimeShort);
+
 			return true;
 		}
 

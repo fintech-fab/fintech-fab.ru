@@ -6,7 +6,7 @@
 				<div class="col-sm-8 col-xs-12">
 					<div class="row header_leftblock">
 						<div class="col-md-6 col-xs-12 headlb_left">
-							<a href="<?= Yii::app()->request->getBaseUrl(); ?>" class="up_logo">
+							<a href="<?= Yii::app()->createAbsoluteUrl('/form'); ?>" class="up_logo">
 								<img src="/static/newmain/images/index_logo.png" /> </a>
 						</div>
 						<div class="col-md-4 col-xs-12 headlb_right">
