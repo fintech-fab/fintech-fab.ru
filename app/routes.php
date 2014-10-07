@@ -68,12 +68,16 @@ Route::group(array('before' => 'auth'), function () {
 	));
 });
 
+// testRole - как будто что то тестовое и не всерьез
+// и еще лучше в группе будет prefix => dinner
 Route::group(array('before' => 'auth|testRole:employee'), function () {
 	Route::get('dinner', array(
 		'as'   => 'dinner',
 		'uses' => 'App\Controllers\Dinner\DinnerController@dinner'
 	));
 
+	// лучше не menuitems а menu/items
+	// это не важно, но зато симпатичнее :-)
 	Route::get('dinner/menuitems/{date}', array(
 		'as'   => 'dinner/menuitems',
 		'uses' => 'App\Controllers\Dinner\DinnerController@getMenuItemsByDate'

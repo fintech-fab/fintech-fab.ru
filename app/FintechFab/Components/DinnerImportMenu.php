@@ -15,6 +15,17 @@ class DinnerImportMenu
 	 * @param $url string URL файла меню
 	 *
 	 * @return array Статус импорта и сообщение статуса
+	 *
+	 * лучше возвращать просто булево true|false
+	 * а если возвращаешь false, тогда должна быть возможность
+	 * получить текст ошибки отдельно
+	 *
+	 * if(!$object->action()){
+	 *     $object->getErrorMessage();
+	 * }
+	 *
+	 * альтернативный вариант (обычно лучший, если правильно пользоваться) - это бросание исключений
+	 *
 	 */
 	public static function importMenu($url)
 	{
@@ -23,13 +34,30 @@ class DinnerImportMenu
 		$file_path = storage_path() . '/dinner/' . $file_name;
 
 		if (File::exists($file_path)) {
-			return ['status' => 'ok', 'message' => 'Файл ' . $file_name . ' был загружен ранее'];
+			return [
+				'status'  => 'ok',
+				'message' => 'Файл ' . $file_name . ' был загружен ранее'
+			];
 		}
 
+		// $download_status одновременно булево и строка - так нельзя
+		// см. коммент внутри метода downloadFile
+		// хорошо делать например так:
+		// $isDownload = self::downloadFile($url);
+		// if(!$isDownload){
+		//    return [
+		//         'status'  => 'error',
+		//         'message' => self::getLastError()
+		//    ];
+		// }
 		$download_status = self::downloadFile($url);
 
 		if ($download_status !== true) {
-			return ['status' => 'error', 'message' => $download_status];
+			// массивы форматируй столбиком
+			return [
+				'status'  => 'error',
+				'message' => $download_status
+			];
 		}
 
 		$reader = Excel::load($file_path);
@@ -69,7 +97,11 @@ class DinnerImportMenu
 			}
 		}
 
-		return ['status' => 'ok', 'message' => 'Файл ' . $file_name . ' успешно импортирован'];
+		// столбиком, столбиком :-)
+		return [
+			'status'  => 'ok',
+			'message' => 'Файл ' . $file_name . ' успешно импортирован'
+		];
 	}
 
 	/**
@@ -109,6 +141,9 @@ class DinnerImportMenu
 		$is_file_saved = file_put_contents($file_name, $file_content);
 
 		if (!$is_file_saved) {
+			// так нельзя. метод должен возвращать что-то одно
+			// либо булево true|false, либо строку|null, либо объект|null и т.п.
+			// но не строку или булево
 			return "Не удалось сохранить файл";
 		}
 

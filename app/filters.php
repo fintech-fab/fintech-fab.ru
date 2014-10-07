@@ -13,6 +13,7 @@
 
 
 use FintechFab\Models\RoleUser;
+use FintechFab\Models\User;
 
 App::before(function ($request) {
 	//
@@ -104,7 +105,19 @@ Route::filter('roleAdmin', function ()
 });
 
 Route::filter('testRole', function ($route, $request, $value = '') {
-	if(! Auth::user()->isCompetent($value)) {
+	if (!user()->isCompetent($value)) {
 		return Redirect::to('profile');
 	}
 });
+
+// ide не понимает что Auth::user() возвращает нашу модель пользователя
+// вот как можно ее обмануть и вообще сделать проще обращение к юзеру
+// иногда ловкое и наглое применение функции лучше ООП :-)
+
+/**
+ * @return null|User
+ */
+function user()
+{
+	return Auth::user();
+}

@@ -27,6 +27,7 @@ class DinnerMenuItem extends Eloquent
 
 	public function section()
 	{
-		return $this->belongsTo('FintechFab\Models\DinnerMenuSection', 'section_id', 'id');
+		// а можно так:
+		return $this->belongsTo(DinnerMenuSection::class, 'section_id', 'id');
 	}
 }

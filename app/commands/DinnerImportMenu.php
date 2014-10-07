@@ -25,7 +25,7 @@ class DinnerImportMenu extends Command
 	/**
 	 * Create a new command instance.
 	 *
-	 * @return void
+	 * @return \DinnerImportMenu
 	 */
 	public function __construct()
 	{
@@ -63,12 +63,18 @@ class DinnerImportMenu extends Command
 	 * Импортирует файл меню с помощью метода importMenu компонента DinnerImportMenu
 	 * если файл импортирован успешно, выводит сообщение об этом, иначе - сообщение об ошибке
 	 *
-	 * @param $url url файла
+	 * @param string $url url файла
 	 *
 	 * @return bool Если файл импортирован успешно - true, иначе - false
 	 */
 	private function importMenu($url)
 	{
+		// не хватает прогресса выполнения в консоли
+		// запускаешь команду - и ничего неивестно, пока не закончилось.
+		// не критично, но обычно если выводить в консоль что происходит,
+		// например "начинаю скачивание по урлу такому то", "файл скачан, запускаю обработку....", "обработано 123 из 4321"
+		// то этим намного комфортнее пользоваться
+		// и видно на каком шаге работает (а вдруг зависло где то и не знаю, прервать или ждать)
 		$import = DinnerImportMenuComponent::importMenu($url);
 
 		if ($import['status'] == 'ok') {

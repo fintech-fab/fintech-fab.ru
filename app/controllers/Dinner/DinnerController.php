@@ -5,6 +5,7 @@ namespace App\Controllers\Dinner;
 use App\Controllers\BaseController;
 use FintechFab\Models\DinnerMenuItem;
 use FintechFab\Models\DinnerMenuSection;
+use Response;
 
 class DinnerController extends BaseController
 {
@@ -24,13 +25,17 @@ class DinnerController extends BaseController
 	/**
 	 * Возвращает блюда на заданную дату
 	 *
-	 * @param $date Дата, на которую нужно вернуть блюда
+	 * @param string $date Дата, на которую нужно вернуть блюда
 	 *
 	 * @return string Блюда в формате JSON
 	 */
 	public function getMenuItemsByDate($date)
 	{
-		return DinnerMenuItem::where('date', '=', $date)->get()->toJson();
+		// так будет отправлен специальный заголовок content-type
+		// и браузер поймет что это json
+		return Response::json(
+			DinnerMenuItem::where('date', '=', $date)->get()->all()
+		);
 	}
 
 	/**
@@ -40,6 +45,8 @@ class DinnerController extends BaseController
 	 */
 	public function getMenuSections()
 	{
-		return DinnerMenuSection::all()->toJson();
+		return Response::json(
+			DinnerMenuSection::all()
+		);
 	}
 }

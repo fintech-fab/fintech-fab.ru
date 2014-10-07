@@ -136,8 +136,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	{
 		$role = Role::whereRole($strRole)->first();
 		$roleAdmin = Role::whereRole('admin')->first();
-		$res = RoleUser::
-			whereUserId($this->id)->whereIn('role_id', array($roleAdmin->id, $role->id))->count();
+		// так поприятнее
+		$roles = [$role->id, $roleAdmin->id];
+		$res = RoleUser::whereUserId($this->id)->whereIn('role_id', $roles)->count();
 
 		return ($res > 0);
 	}

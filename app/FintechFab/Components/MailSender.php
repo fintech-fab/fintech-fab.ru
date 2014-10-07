@@ -21,7 +21,7 @@ class MailSender
 
 		//Рассылаем напоминания всем найденным пользователям
 		foreach ($users as $user) {
-			Mail::send('emails.dinner', array(), function ($message) use ($user) {
+			Mail::send('emails.dinner', array(), function (Message $message) use ($user) {
 				$message->to($user->email, $user->first_name . ' ' . $user->last_name)
 					->subject('Вы можете заказать обед');
 			});
