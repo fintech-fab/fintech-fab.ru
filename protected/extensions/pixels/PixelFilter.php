@@ -46,6 +46,7 @@ class PixelFilter extends CFilter
 	private function detectLink()
 	{
 		$sUid = strtolower(Yii::app()->request->getQuery('TrackingID'));
+		$mSubId = Yii::app()->request->getQuery('sub_id');
 
 		// Если не пусто или нет в нашем списке лидогенераторов
 		if (!$sUid || !array_key_exists($sUid, self::$aAdditionalFields)) {
@@ -67,6 +68,7 @@ class PixelFilter extends CFilter
 		}
 
 		$aParams['sUid'] = $sUid;
+		$aParams['mSubId'] = $mSubId;
 
 		$this->createCookie($aParams);
 
@@ -101,7 +103,7 @@ class PixelFilter extends CFilter
 		}
 
 		// Сохраняем в историю
-		$oLead = LeadsHistory::generate($aParams['sUid'], $iFirstOrderId, $iParentOrderId);
+		$oLead = LeadsHistory::generate($aParams['sUid'], $aParams['mSubId'], $iFirstOrderId, $iParentOrderId);
 
 		// Сохраняем куки
 		$aParams['iOrderId'] = $oLead->id;
