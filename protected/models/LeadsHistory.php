@@ -13,6 +13,7 @@
  * @property integer $flag_reimplemented
  * @property string  $dt_add
  * @property string  $dt_show
+ * @property string  $webmaster_id
  *
  * @method LeadsHistory findByPk($pk, $condition = '', $params = array())
  */
@@ -20,15 +21,17 @@ class LeadsHistory extends CActiveRecord
 {
 	/**
 	 * @param $sUid
+	 * @param $mSubId
 	 * @param $iFirstOrderId
 	 * @param $iParentOrderId
 	 *
 	 * @return LeadsHistory
 	 */
-	public static function generate($sUid, $iFirstOrderId, $iParentOrderId)
+	public static function generate($sUid, $mSubId, $iFirstOrderId, $iParentOrderId)
 	{
 		$oLead = new self();
 		$oLead->lead_name = $sUid;
+		$oLead->webmaster_id = $mSubId;
 		$oLead->first_id = $iFirstOrderId;
 		$oLead->parent_id = $iParentOrderId;
 		$oLead->save();
@@ -72,9 +75,9 @@ class LeadsHistory extends CActiveRecord
 		return array(
 			array('lead_name', 'required'),
 			array('flag_showed', 'numerical', 'integerOnly' => true),
-			array('lead_name', 'length', 'max' => 255),
+			array('lead_name, webmaster_id', 'length', 'max' => 255),
 			array('parent_id, first_id', 'length', 'max' => 10),
-			array('id, lead_name, parent_id, first_id, flag_showed, dt_add, dt_show', 'safe', 'on' => 'search'),
+			array('id, lead_name, webmaster_id, parent_id, first_id, flag_showed, dt_add, dt_show', 'safe', 'on' => 'search'),
 		);
 	}
 
@@ -94,6 +97,7 @@ class LeadsHistory extends CActiveRecord
 		return array(
 			'id'          => 'ID',
 			'lead_name'   => 'Lead Name',
+			'webmaster_id'=> 'Webmaster',
 			'parent_id'   => 'Parent',
 			'first_id'    => 'First',
 			'flag_showed' => 'Flag Showed',
@@ -111,6 +115,7 @@ class LeadsHistory extends CActiveRecord
 
 		$criteria->compare('id', $this->id, true);
 		$criteria->compare('lead_name', $this->lead_name, true);
+		$criteria->compare('webmaster_id', $this->webmaster_id, true);
 		$criteria->compare('parent_id', $this->parent_id, true);
 		$criteria->compare('first_id', $this->first_id, true);
 		$criteria->compare('flag_showed', $this->flag_showed);
