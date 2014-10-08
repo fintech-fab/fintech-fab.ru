@@ -1419,6 +1419,12 @@ class DefaultController extends Controller
 
 		$aPaymentData['loan_amount'] = Yii::app()->adminKreddyApi->getSubscriptionLoanAmount();
 
+		$cClientStatus = Yii::app()->adminKreddyApi->getClientStatus();
+
+		if ($cClientStatus == AdminKreddyApiComponent::C_LOAN_CREATED) {
+			$aPaymentData['loan_amount'] = 0;
+		}
+
 		$aPaymentData = array_map(function ($mValue) {
 			if (is_int($mValue)) {
 				$mValue = abs($mValue);
