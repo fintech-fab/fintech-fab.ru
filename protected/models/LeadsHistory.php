@@ -16,6 +16,7 @@
  * @property string  $webmaster_id
  *
  * @method LeadsHistory findByPk($pk, $condition = '', $params = array())
+ * @method LeadsHistory[] findAll($condition='',$params=array())
  */
 class LeadsHistory extends CActiveRecord
 {
@@ -149,5 +150,31 @@ class LeadsHistory extends CActiveRecord
 	public static function model($className = __CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	/**
+	 * Промежуток
+	 *
+	 * @param $sFrom
+	 * @param $sTo
+	 *
+	 * @return LeadsHistory
+	 */
+	public function scopeDateBetween($sFrom, $sTo)
+	{
+		$this->getDbCriteria()
+			->addBetweenCondition('dt_add', $sFrom, $sTo);
+
+		return $this;
+	}
+
+	/**
+	 * @return LeadsHistory
+	 */
+	public function scopeDateAsc()
+	{
+		$this->getDbCriteria()->order = 'dt_add ASC';
+
+		return $this;
 	}
 }

@@ -123,6 +123,14 @@ class MenuWidget extends CWidget
 				),
 			),
 			),
+			array(
+				'name' => 'report', 'label' => 'Отчеты', 'content' => array(
+					array(
+						'label' => 'Лиды',
+						'url'   => array('/admin/report/leadshistory'),
+					),
+				),
+			),
 		);
 
 		foreach ($this->aMenu as &$aTab) {
