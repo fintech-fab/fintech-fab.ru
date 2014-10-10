@@ -16,7 +16,7 @@ $this->pageTitle = Yii::app()->name . " - Лиды";
 ?>
 
 	<label>с: <input type="date" name="dateFrom" value="" class="input-medium" /></label>
-	<label>по: <input type="date" name="dateTo" value="" class="input-medium" /></label>
+	<label>до: <input type="date" name="dateTo" value="" class="input-medium" /></label>
 	<br />
 	<button class="btn btn-primary">Загрузить</button>
 
