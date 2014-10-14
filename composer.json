@@ -7,6 +7,10 @@
 		{
 			"url": "https://github.com/fintech-fab/github-widget.git",
 			"type": "git"
+		},
+		{
+			"url": "https://github.com/fintech-fab/catalog.git",
+			"type": "git"
 		}
 	],
 	"require": {
@@ -23,7 +27,9 @@
 		"fintech-fab/qiwi-gate": "dev-master",
 		"fintech-fab/qiwi-sdk": "dev-master",
 
-		"fintech-fab/github-widget": "dev-master"
+		"fintech-fab/github-widget": "dev-master",
+		"fintech-fab/catalog": "dev-master",
+		"graham-campbell/markdown": "*"
 
 	},
 	"require-examples": {
@@ -65,11 +71,8 @@
 			"php artisan key:generate"
 		]
 	},
-    "config": {
-        "preferred-install": "dist",
-        "github-oauth": {
-            "github.com": "57b13bc22c26e533040d24b50ef8d910f44bcafa"
-        }
-    },
+	"config": {
+		"preferred-install": "dist"
+	},
 	"minimum-stability": "stable"
 }

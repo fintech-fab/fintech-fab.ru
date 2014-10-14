@@ -5,23 +5,27 @@ Route::post('vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Contr
 
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'notices',
-		'uses' => 'App\Controllers\Site\NoticesController@notices')
+		'as'   => 'notices',
+		'uses' => 'App\Controllers\Site\NoticesController@notices'
+	)
 );
 Route::post('notices/send', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'notices.send',
-		'uses' => 'App\Controllers\Site\NoticesController@sendNotice')
+		'as'   => 'notices.send',
+		'uses' => 'App\Controllers\Site\NoticesController@sendNotice'
+	)
 );
 Route::post('notices/theme/add', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'notices.theme.add',
-		'uses' => 'App\Controllers\Site\NoticesController@addNewTheme')
+		'as'   => 'notices.theme.add',
+		'uses' => 'App\Controllers\Site\NoticesController@addNewTheme'
+	)
 );
 Route::post('notices/theme/getMessage', array(
 		'before' => 'auth|testRole:messageSender',
-		'as' => 'notices.theme.getMessage',
-		'uses' => 'App\Controllers\Site\NoticesController@getMessageOfTheme')
+		'as'   => 'notices.theme.getMessage',
+		'uses' => 'App\Controllers\Site\NoticesController@getMessageOfTheme'
+	)
 );
 
 Route::post('auth', array('as' => 'auth', 'uses' => 'App\Controllers\Site\AuthController@postAuth'));
@@ -66,4 +70,12 @@ Route::group(array('before' => 'auth'), function () {
 		'as'   => 'widgets/getPhoto',
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
+});
+
+
+Route::group(array('prefix' => 'catalog', 'namespace' => '\App\Controllers\Catalog'), function () {
+	Route::get('/', 'IndexController@index');
+	Route::get('/tags/{path?}', 'IndexController@tags');
+	Route::get('/types/{path?}', 'IndexController@types');
+	Route::get('/margins/{id?}', 'IndexController@margins');
 });
