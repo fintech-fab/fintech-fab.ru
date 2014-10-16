@@ -2047,11 +2047,7 @@ class AdminKreddyApiComponent
 			);
 		}
 
-		if ($this->getLastCode() == self::ERROR_SUBSCRIPTION_LAST_DAY) {
-			$this->bIsLastDay = true;
-		} else {
-			$this->bIsLastDay = false;
-		}
+		$this->bIsLastDay = ($this->getLastCode() == self::ERROR_SUBSCRIPTION_LAST_DAY);
 
 		return $this->bIsCanGetLoan;
 	}
