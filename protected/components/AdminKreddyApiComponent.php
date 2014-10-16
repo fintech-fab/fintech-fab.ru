@@ -45,6 +45,7 @@ class AdminKreddyApiComponent
 	const C_SUBSCRIPTION_NOT_AVAILABLE = "Упс… Извини, перевод недоступен. {account_url_start}Посмотреть информацию о подключении{account_url_end}";
 	const C_SUBSCRIPTION_NOT_AVAILABLE_IVANOVO = "Извините, оформление займа недоступно. {account_url_start}Посмотреть информацию о статусе займа{account_url_end}";
 	const C_LOAN_NOT_AVAILABLE = "Перевод недоступен. Попробуй повторить запрос на перевод через 1 минуту. {account_url_start}Посмотреть информацию о подключении{account_url_end}";
+	const C_LOAN_NOT_AVAILABLE_SUBSCRIPTION_LAST_DAY = "К сожалению, перевод денег не может быть оформлен, потому что подключение сервиса заканчивается менее, чем через 1 день, и доступный срок пользования деньгами составляет менее суток.<br><br>Ты всегда можешь подключить сервис повторно - мы рады видеть тебя снова!";
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED = 'Поздравляем! Заявка на {loan_amount} р. одобрена! Оплати абонентку {do_sub_pay_sum} р. любым удобным способом для подключения сервиса на месяц {account_url_start}Посмотреть информацию о КРЕДДИтной линии{account_url_end}';
 	const C_DO_SUBSCRIBE_MSG_SCORING_ACCEPTED_POSTPAID = 'Заявка одобрена. Для получения денег {do_loan_url_start}отправьте запрос на перевод.{do_loan_url_end}';
 	const C_DO_SUBSCRIBE_MSG_SCORING_CANCELED = 'Sorry…Твоя заявка отклонена';
@@ -174,6 +175,7 @@ class AdminKreddyApiComponent
 	const ERROR_NEED_SMS_CODE = 10; //требуется подтверждение СМС-кодом
 	const ERROR_NOT_ALLOWED = 11; //действие недоступно
 	const ERROR_VALIDATION = 24; //ошибка валидации
+	const ERROR_SUBSCRIPTION_LAST_DAY = 25; //последний день подписки
 	const ERROR_CLIENT_EXISTS = 15; //ошибка номера телефона или email (такой номер или email уже есть)
 	const ERROR_NEED_IDENTIFY = 16; //требуется идентификация
 	const ERROR_NEED_PASSPORT_DATA = 17; //требуется ввести паспортные данные
@@ -304,6 +306,7 @@ class AdminKreddyApiComponent
 	private $sLastSmsMessage = ''; //sms_message из последнего выполненного запроса
 	private $bIsCanSubscribe = null; //клиент может оформить подписку
 	private $bIsCanGetLoan = null; //клиент может взять заём
+	private $bIsLastDay = null; //последний день сервиса
 	private $iScoringResult = null;
 	private $aCheckIdentify;
 	private $bIsNeedCard;
@@ -321,7 +324,7 @@ class AdminKreddyApiComponent
 		self::ERROR_DO_PAY_ISSUER                => 'Банк, выдавший карту, отказал в проведении операции',
 		self::ERROR_DO_PAY_SYSTEM                => 'Банк, выдавший карту, отказал в проведении операции',
 		self::ERROR_DO_PAY_NO_INSUFFICIENT_FUNDS => 'Недостаточно средств на банковской карте',
-		self::ERROR_DO_PAY_AMOUNT_TOO_HIGH      => 'Введенная сумма превышает задолженность, введи сумму еще раз',
+		self::ERROR_DO_PAY_AMOUNT_TOO_HIGH => 'Введенная сумма превышает задолженность, введи сумму еще раз',
 		self::ERROR_DO_PAY_AMOUNT_TOO_LOW        => 'Сумма должна быть не менее 10 рублей',
 
 	);
@@ -2044,6 +2047,12 @@ class AdminKreddyApiComponent
 			);
 		}
 
+		if ($this->getLastCode() == self::ERROR_SUBSCRIPTION_LAST_DAY) {
+			$this->bIsLastDay = true;
+		} else {
+			$this->bIsLastDay = false;
+		}
+
 		return $this->bIsCanGetLoan;
 	}
 
@@ -3013,6 +3022,7 @@ class AdminKreddyApiComponent
 			&& $this->getLastCode() !== self::ERROR_NEED_REDIRECT
 			&& $this->getLastCode() !== self::ERROR_NEED_WAIT
 			&& $this->getLastCode() !== self::ERROR_NEED_3DS_PROCESS
+			&& $this->getLastCode() !== self::ERROR_SUBSCRIPTION_LAST_DAY
 		);
 	}
 
@@ -3126,6 +3136,10 @@ class AdminKreddyApiComponent
 	public function getLoanNotAvailableMessage()
 	{
 		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $this->formatStatusMessage());
+
+		if ($this->getLastCode() == self::ERROR_SUBSCRIPTION_LAST_DAY) {
+			$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE_SUBSCRIPTION_LAST_DAY, $this->formatStatusMessage());
+		}
 
 		return $sMessage;
 	}
@@ -3758,5 +3772,17 @@ class AdminKreddyApiComponent
 		}
 
 		return null;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function isLastDay()
+	{
+		if (is_null($this->bIsLastDay)) {
+			$this->checkLoan();
+		}
+
+		return $this->bIsLastDay;
 	}
 }

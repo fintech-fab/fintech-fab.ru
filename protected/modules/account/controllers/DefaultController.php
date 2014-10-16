@@ -925,6 +925,11 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
+		if (Yii::app()->adminKreddyApi->isLastDay()) {
+			$this->render('loan/index', array('sView' => 'last_day', 'oModel' => null));
+			Yii::app()->end();
+		}
+
 		//выбираем представление в зависимости от статуса СМС-авторизации
 		if (Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$sView = 'loan';
