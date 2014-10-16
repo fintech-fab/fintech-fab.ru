@@ -762,6 +762,13 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 
+		//TODO выпилить этот костыль после задачи на отмену #3304
+		if (Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_CLIENT_ACTIVE) {
+			$this->render('subscription/index', array('sView' => 'no_new_for_active_clients', 'oModel' => null));
+			Yii::app()->end();
+		}
+		// конец костыля
+
 		//проверяем, не нужно ли привязать карту
 		if (Yii::app()->adminKreddyApi->checkSubscribeNeedCard()) {
 			$this->render('subscription/index', array('sView' => 'need_card', 'oModel' => null));

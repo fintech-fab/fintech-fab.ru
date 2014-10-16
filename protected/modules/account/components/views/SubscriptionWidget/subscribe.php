@@ -8,7 +8,7 @@
 ?>
 	<h4><?= $this->getHeader(); ?></h4>
 
-	<div class="alert in alert-block alert-info">Проверка анкеты, заполненной на сайте <a href="/">www.kreddy.ru</a> ,
+	<div class="alert in alert-block alert-info">Проверка анкеты, заполненной на сайте <a href="/">www.kreddy.ru</a>,
 		осуществляется по будням с 09:00 до 18:00 по московскому времени. Принятие решения занимает, как правило, 20
 		минут.
 	</div>
