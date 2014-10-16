@@ -3133,9 +3133,15 @@ class AdminKreddyApiComponent
 	{
 		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE, $this->formatStatusMessage());
 
-		if ($this->getLastCode() == self::ERROR_SUBSCRIPTION_LAST_DAY) {
-			$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE_SUBSCRIPTION_LAST_DAY, $this->formatStatusMessage());
-		}
+		return $sMessage;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLoanNotAvailableLastDayMessage()
+	{
+		$sMessage = strtr(self::C_LOAN_NOT_AVAILABLE_SUBSCRIPTION_LAST_DAY, $this->formatStatusMessage());
 
 		return $sMessage;
 	}
