@@ -28,7 +28,7 @@
 		"fintech-fab/qiwi-sdk": "dev-master",
 
 		"fintech-fab/github-widget": "dev-master",
-		"fintech-fab/catalog": "dev-master",
+		"fintech-fab/catalog": "dev-catalog-dev",
 		"graham-campbell/markdown": "*"
 
 	},
@@ -42,7 +42,8 @@
 		"phpunit/phpunit-mock-objects": "2.3.*@dev",
 		"phpunit/phpunit": "4.3.*@dev",
 		"zizaco/factory-muff": "dev-master",
-		"mockery/mockery": "0.9.*"
+		"mockery/mockery": "0.9.*",
+		"sleeping-owl/apist": "1.*"
 	},
 	"autoload": {
 		"classmap": [
