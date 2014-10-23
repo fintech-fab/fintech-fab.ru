@@ -3735,6 +3735,21 @@ class AdminKreddyApiComponent
 	 */
 	public function getIndividualConditionInfo($hash)
 	{
+//		$aData['condition'] = array(
+//			'short_fio'             => null,
+//			'xirr'                  => null,
+//			'loan_amount'           => null,
+//			'loan_lifetime'         => null,
+//			'percent_year'          => null,
+//			'pay_amount'            => null,
+//			'subscription_amount'   => null,
+//			'subscription_lifetime' => null,
+//			'fine_percent'          => null,
+//			'contract_number'       => null,
+//			'dt_contract'           => null,
+//			'transfer_channel'      => null,
+//		);
+
 		$aRequest = ['hash' => $hash];
 
 		$aResult = $this->requestAdminKreddyApi(self::API_ACTION_GET_INDIVIDUAL_CONDITION_INFO, $aRequest);
