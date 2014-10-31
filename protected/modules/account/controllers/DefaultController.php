@@ -37,7 +37,7 @@ class DefaultController extends Controller
 				'allow',
 				'actions' => array(
 					'logout', 'index', 'history', 'identify', 'identifySite', 'identifyPhoto', 'identifyApp', 'smsPassAuth',
-					'subscribe', 'doSubscribe',	'doSubscribeConfirm',
+					'subscribe', 'doSubscribe', 'doSubscribeConfirm',
 					'loan', 'doLoan', 'doLoanConfirm', 'cancelLoan',
 					'addCard', 'verifyCard', 'successCard', 'refresh',
 					'changePassport', 'changePassportSendSmsCode',
@@ -655,7 +655,7 @@ class DefaultController extends Controller
 	public function actionChangeAutoDebitingSetting()
 	{
 		//XXX убрать после тестирования
-		if(Yii::app()->getUser()->getId() !== '9262027558'){
+		if (Yii::app()->getUser()->getId() !== '9262027558') {
 			$this->redirect(array('/account'));
 		}
 		//XXX конец
@@ -1071,7 +1071,7 @@ class DefaultController extends Controller
 	public function actionPay()
 	{
 		//XXX убрать после тестирования
-		if(Yii::app()->getUser()->getId() !== '9262027558'){
+		if (Yii::app()->getUser()->getId() !== '9262027558') {
 			$this->redirect(array('/account'));
 		}
 		//XXX конец
@@ -1475,8 +1475,18 @@ class DefaultController extends Controller
 				throw new CHttpException('404');
 			}
 
+			// дата деплоя новых ИУ, после нее используем новый шаблон ИУ
+			$iNewConditionsTime = SiteParams::strtotime('2014-10-31 12:00:00');
+
+			// выбираем шаблон по дате индивидуальных условий
+			if (SiteParams::strtotime($aConditionInfo['dt_contract']) < $iNewConditionsTime) {
+				$sView = 'old_individual_condition_pdf';
+			} else {
+				$sView = 'individual_condition_pdf';
+			}
+
 			//Генерируем документ
-			Yii::app()->document->generatePDF('individual_condition_pdf', array('aConditionInfo' => $aConditionInfo));
+			Yii::app()->document->generatePDF($sView, array('aConditionInfo' => $aConditionInfo));
 
 			//Сохраняем документ в файл
 			Yii::app()->document->savePDFToFile($sFileName);
@@ -1496,7 +1506,8 @@ class DefaultController extends Controller
 	/**
 	 * Получить список документов
 	 */
-	public function actionGetDocumentList()
+	public
+	function actionGetDocumentList()
 	{
 		$aConditions = Yii::app()->adminKreddyApi->getIndividualConditionList();
 
@@ -1510,7 +1521,8 @@ class DefaultController extends Controller
 	 * @param $sViewsPath
 	 *
 	 */
-	protected function checkNeedSmsAuth($sRedirectUrl, $sViewsPath)
+	protected
+	function checkNeedSmsAuth($sRedirectUrl, $sViewsPath)
 	{
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$oSmsPassForm = new SMSCodeForm();
@@ -1528,7 +1540,8 @@ class DefaultController extends Controller
 	 * @param $oChangeForm
 	 * @param $sViewsPath
 	 */
-	protected function changeClientData(ClientFullForm $oChangeForm, $sViewsPath)
+	protected
+	function changeClientData(ClientFullForm $oChangeForm, $sViewsPath)
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			echo CActiveForm::validate($oChangeForm);
@@ -1553,7 +1566,8 @@ class DefaultController extends Controller
 	 * @param array $aData
 	 * @param null  $sFormName
 	 */
-	protected function changeClientDataSmsCode($sType, $sViewsPath, $aData = array(), $sFormName = null)
+	protected
+	function changeClientDataSmsCode($sType, $sViewsPath, $aData = array(), $sFormName = null)
 	{
 		if ($sFormName) {
 			$aData = array($sFormName => $aData);
@@ -1584,7 +1598,8 @@ class DefaultController extends Controller
 	 *
 	 * @return string
 	 */
-	protected function doProcessSmsCode(SMSCodeForm &$oForm, $sType, $aData = array())
+	protected
+	function doProcessSmsCode(SMSCodeForm &$oForm, $sType, $aData = array())
 	{
 
 		$sResult = $this->getSmsCodeResult($oForm, $sType, $aData);
@@ -1603,7 +1618,8 @@ class DefaultController extends Controller
 	 *
 	 * @return string
 	 */
-	protected function getSmsCodeResult(SMSCodeForm &$oForm, $sType, $aData = array())
+	protected
+	function getSmsCodeResult(SMSCodeForm &$oForm, $sType, $aData = array())
 	{
 		$aPost = Yii::app()->request->getParam(get_class($oForm), array());
 

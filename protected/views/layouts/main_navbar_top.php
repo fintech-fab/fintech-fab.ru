@@ -26,7 +26,7 @@
 					<div class="headrbl">
 						<p class="up_phone">8 800 555-75-78</p>
 
-						<p class="up_phonetext">24/7, бесплатный звонок по России</p>
+						<p class="up_phonetext">По будням с 9:00 до 18:00 по мск</p>
 
 						<div class="up_line"></div>
 						<div class="up_socico">
