@@ -1506,8 +1506,7 @@ class DefaultController extends Controller
 	/**
 	 * Получить список документов
 	 */
-	public
-	function actionGetDocumentList()
+	public function actionGetDocumentList()
 	{
 		$aConditions = Yii::app()->adminKreddyApi->getIndividualConditionList();
 
@@ -1521,8 +1520,7 @@ class DefaultController extends Controller
 	 * @param $sViewsPath
 	 *
 	 */
-	protected
-	function checkNeedSmsAuth($sRedirectUrl, $sViewsPath)
+	protected function checkNeedSmsAuth($sRedirectUrl, $sViewsPath)
 	{
 		if (!Yii::app()->adminKreddyApi->getIsSmsAuth()) {
 			$oSmsPassForm = new SMSCodeForm();
@@ -1540,8 +1538,7 @@ class DefaultController extends Controller
 	 * @param $oChangeForm
 	 * @param $sViewsPath
 	 */
-	protected
-	function changeClientData(ClientFullForm $oChangeForm, $sViewsPath)
+	protected function changeClientData(ClientFullForm $oChangeForm, $sViewsPath)
 	{
 		if (Yii::app()->request->isAjaxRequest) {
 			echo CActiveForm::validate($oChangeForm);
@@ -1566,8 +1563,7 @@ class DefaultController extends Controller
 	 * @param array $aData
 	 * @param null  $sFormName
 	 */
-	protected
-	function changeClientDataSmsCode($sType, $sViewsPath, $aData = array(), $sFormName = null)
+	protected function changeClientDataSmsCode($sType, $sViewsPath, $aData = array(), $sFormName = null)
 	{
 		if ($sFormName) {
 			$aData = array($sFormName => $aData);
@@ -1598,8 +1594,7 @@ class DefaultController extends Controller
 	 *
 	 * @return string
 	 */
-	protected
-	function doProcessSmsCode(SMSCodeForm &$oForm, $sType, $aData = array())
+	protected function doProcessSmsCode(SMSCodeForm &$oForm, $sType, $aData = array())
 	{
 
 		$sResult = $this->getSmsCodeResult($oForm, $sType, $aData);
@@ -1618,8 +1613,7 @@ class DefaultController extends Controller
 	 *
 	 * @return string
 	 */
-	protected
-	function getSmsCodeResult(SMSCodeForm &$oForm, $sType, $aData = array())
+	protected function getSmsCodeResult(SMSCodeForm &$oForm, $sType, $aData = array())
 	{
 		$aPost = Yii::app()->request->getParam(get_class($oForm), array());
 
