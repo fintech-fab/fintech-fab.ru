@@ -1476,7 +1476,7 @@ class DefaultController extends Controller
 			}
 
 			// дата деплоя новых ИУ, после нее используем новый шаблон ИУ
-			$iNewConditionsTime = SiteParams::strtotime('2014-10-31 12:00:00');
+			$iNewConditionsTime = SiteParams::strtotime('2014-11-06 17:50:00');
 
 			// выбираем шаблон по дате индивидуальных условий
 			if (SiteParams::strtotime($aConditionInfo['dt_contract']) < $iNewConditionsTime) {
