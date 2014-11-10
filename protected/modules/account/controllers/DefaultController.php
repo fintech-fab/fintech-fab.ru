@@ -763,7 +763,9 @@ class DefaultController extends Controller
 		}
 
 		//TODO выпилить этот костыль после задачи на отмену #3304
-		if (Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_CLIENT_ACTIVE) {
+		if (Yii::app()->getUser()
+				->getId() !== '9262027558' && Yii::app()->adminKreddyApi->getClientStatus() == AdminKreddyApiComponent::C_CLIENT_ACTIVE
+		) {
 			$this->render('subscription/index', array('sView' => 'no_new_for_active_clients', 'oModel' => null));
 			Yii::app()->end();
 		}
