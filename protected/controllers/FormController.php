@@ -153,6 +153,7 @@ class FormController extends Controller
 		$aPost = Yii::app()->clientForm->getPostData();
 		if ($aPost) //проверяем, был ли POST запрос
 		{
+			$this->redirect(Yii::app()->createUrl("/form"));
 			$oClientForm->setAttributes($aPost); //передаем запрос в форму
 			if ($oClientForm->validate()) {
 				Yii::app()->clientForm->formDataProcess($oClientForm);
