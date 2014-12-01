@@ -50,6 +50,7 @@ return array(
 		'javascripts' => array('.js', '.js.coffee', '.coffee', '.html', '.min.js'),
 		'stylesheets' => array('.css', '.css.less', '.css.scss', '.less', '.scss', '.min.css'),
 		'files'       => array('.pdf'),
+		'images'       => array('.jpg','.jpeg','.png','.gif','.svg'),
 	),
 
 	/*

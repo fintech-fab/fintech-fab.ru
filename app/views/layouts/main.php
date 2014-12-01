@@ -1,79 +1,139 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<script src="//api-maps.yandex.ru/2.0/?load=package.standard,package.geoObjects&lang=ru-RU" type="text/javascript"></script>
-	<script src="/js/map.js" type="text/javascript"></script>
-	<?= View::make('layouts.inc.head.head') ?>
-</head>
-<body>
-<div class="container">
-	<div><img src="/assets/main/logo.png" border="0" width="370" height="175" class="img" /></div>
-	<div class="row text-center">
-		<h2>
-			[cайт на стадии разработки] <a href="/vanguard">[программа стажировки]</a>
-			<?php if (Route::has('qiwiGate_about')) { ?>
-				<a href="<?= URL::route('qiwiGate_about') ?>">[эмулятор qiwi]</a>
-			<?php } ?>
-		</h2>
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>FINTECH_FAB</title>
+		<!-- FontAwesome -->
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+		<!-- Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Exo+2:400,700italic,700,200,200italic' rel='stylesheet'
+		      type='text/css'>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<!-- The Styles -->
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<?= View::make('layouts.inc.head.head') ?>
+	</head>
+	<body id="top">
+
+	<a href="#top" id="up" data-spy="affix" data-offset="100"><span class="fa fa-caret-up"></span></a>
+
+	<nav class="navbar" role="navigation">
+
+		<div class="navbar-header">
+			<strong></strong>
+		</div>
+
+		<ul class="nav">
+			<li><a href="index.html">Главная</a></li>
+			<li><a href="features.html">Кто мы?</a></li>
+			<li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Наши проекты <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="portfolio-2-col.html">КРЕДДИ</a></li>
+					<li><a href="portfolio.html">М2С</a></li>
+					<li><a href="portfolio-4-col.html">WLP Online</a></li>
+					<li><a href="portfolio-5-col.html">Arbiter</a></li>
+					<li><a href="portfolio-single.html">Monemobo</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Программа стажировки <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="blog.html">О программе</a></li>
+					<li><a href="single.html">Как записаться?</a></li>
+				</ul>
+			</li>
+			<li><a href="contact.html">Контакты</a></li>
+		</ul>
+
+		<form class="menu-search" action="search-results.html"><input type="search" class="search-input"
+		                                                              placeholder="Search">
+			<button class="search"><span class="fa fa-search"></span></button>
+		</form>
+
+	</nav>
+
+	<div class="container-fluid nav-head" data-spy="affix" data-offset="1">
+		<div class="row">
+			<div class="col-md-4 col-xs-2">
+				<div id="menu-trigger" class="fa fa-bars fa-2x"></div>
+			</div>
+			<div class="col-md-4 col-xs-8 text-center">
+				<img src="/assets/sm_logo_FTF.png" class="logo" />
+			</div>
+		</div>
 	</div>
 
-	<div class="row mt20">
+	<div class="jumbotron full-bg animated-bg" data-bg="/assets/fintech_style_present_cover.jpg">
+		<div class="col-md-6 col-md-offset-3 centered text-center">
+			<h1>FINTECH_FAB</h1>
 
-		<div class="col-xs-6">
-			<p><b>FINTECH_FAB</b> &mdash; высокотехнологичная компания на рынке финансовых технологий.</p>
-
-			<p class="pheader">Мы создаем</p>
-
-			<ul>
-				<li>Новые b2c сервисы мобильной коммерции</li>
-				<li>ИТ-платформы мобильных платежей</li>
-				<li>Новые бизнес-модели в области мобильных и финансовых сервисов</li>
-			</ul>
-
-			<p>Отличные профессионалы в области платежных систем и массовых мобильных сервисов.</p>
-
-			<p>Система instant learning, действующая в компании, позволяет непрерывно развивать сотрудников как через
-				конференции и семинары, так и через обмен опытом и знаниями внутри команды. </p>
-		</div>
-		<div class="col-xs-6">
-
-			<div class="pdf_block">
-				<a class="how_to_find" href="/assets/fintechfab.roadmap.pdf" target="_blank"><img src="/assets/main/pdf.jpg" width="70" height="70" /><br />
-					Как найти<br />наш офис?</a>
-			</div>
-
-			<p class="pheader">Контакты</p>
+			<p>making future not maybes</p>
 
 			<p>
-				Дербеневская наб., 11, БЦ "Полларс", офис Б504<br /> E-mail: <a href="mailto: info@fintech-fab.ru">info@fintech-fab.ru</a><br />
-				Для резюме: <a href="mailto: cv@fintech-fab.ru">cv@fintech-fab.ru</a><br /> Тел. +7 (495) 668 3020<br />
-				м.&nbsp;Павелецкая&nbsp;/ м.&nbsp;Пролетарская<br>
+				<a class="btn btn-primary btn-lg" href="#services" role="button"><span class="fa-caret-down fa"></span>
+					Подробнее</a>
 			</p>
-
-			<div id="map"></div>
 		</div>
 	</div>
 
-	<div class="row mt20">
-		<div class="col-xs-2">
-			<p style="font-size:18pt;">Наши<br>проекты:</p>
-		</div>
-		<div class="col-xs-2">
-			<a href="http://kreddy.ru" target="_blank">
-				<img src="/assets/main/kreddy.png" width="230" height="49" style="vertical-align:middle;" /> </a>
-		</div>
-		<div class="col-xs-3 pull-right text-right">
-			<a class="fintech_lab_projects" href="http://fintech-lab.com/projects" target="_blank">
-				<p class="projects">ПРОЕКТЫ</p>
+	<?= $content ?>
 
-				<p class="fintech_lab">FINTECH_LAB</p>
-			</a>
+	<footer>
+		<div class="container-fluid center-text-mobile">
+			<div class="row">
+				<div class="col-xs-12">
+					<h4>О <span class="logo">FINTECH_FAB</span></h4>
+
+					<p>Высокотехнологичная, динамичная и молодая компания, которая объединяет топ-менеджеров крупных IT- компаний и экспертов в маркетинге, финансовой сфере.</p>
+				</div>
+
+			</div>
+		</div>
+	</footer>
+	<div class="container-fluid copyright">
+		<div class="row">
+			<div class="col-md-3">
+				<span class="info">&copy; 2014 FINTECH_FAB <a href="#"></a></span>
+			</div>
+			<div class="col-md-7">
+				<span class="info"><span class="fa fa-location-arrow"></span> Россия, 115114, Москва, Дербеневская наб., 11</span>
+				<span class="info"><span class="fa fa-phone"></span> +7(495) 668 3020</span>
+			</div>
+			<div class="col-md-2">
+				<span class="info"><a class="habralogo" href="http://habrahabr.ru/company/fintech_fab/"></a></span>
+			</div>
 		</div>
 	</div>
-	<div class='clear'>&nbsp;</div>
 
-	<div class="row" style="height: 20px;">&nbsp;</div>
-	<div class='clear'>&nbsp;</div>
-</div>
-</body>
-</html>
+	<!-- Functions -->
+	<script src="/assets/functions.js"></script>
+
+	<script>
+		(function (i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'http://www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-47423084-3', 'themanoid.com');
+		ga('send', 'pageview');
+	</script>
+
+	</body>
+	</html>

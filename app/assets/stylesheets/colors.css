@@ -1,0 +1,53 @@
+/*  
+Med
+666
+Light
+ccc
+Dark
+222
+*/
+
+.primary-color, a {
+	color: #222;
+}
+
+.btn-primary {
+	background: #222;
+	color: #ccc;
+	border: 0;
+}
+
+.btn-primary:hover {
+	background: #666;
+}
+
+footer h4 {
+	color: #ccc;
+}
+
+.copyright a, .month {
+	color: #666;
+}
+
+a:hover {
+	color: #26b9d3;
+	text-decoration: none;
+}
+
+.breadcrumb a {
+	color: #222;
+}
+
+.breadcrumb>li+li:before, .breadcrumb .active {
+	color: #ccc;
+}
+
+/* Accents */
+
+.btn .fa, .read-more .fa, .read-more, .service .fa, .icon.fa {
+	color: #26b9d3
+}
+
+.first-foot {
+	background: #eee;
+}

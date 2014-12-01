@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	'local'      => array('fintech-fab', '*local', 'homestead'),
+	'local'      => array('fintech-fab', '*local', 'homestead','sandbox*'),
 	'production' => array('LXC01'),
 
 ));
