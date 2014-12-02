@@ -5,21 +5,27 @@ $forms = FormHelper::getInformation();
 $placeholders = $forms['placeholder'];
 $labels = $forms['label'];
 ?>
-<!--suppress HtmlUnknownTarget -->
+<div class="container-fluid breadcrumb-container">
+	<div class="row">
+		<!--		<div class="col-md-12">--><!--			<ol class="breadcrumb">-->
+		<!--				<li><a href="index.html">Home</a></li>--><!--				<li class="active">Contact</li>-->
+		<!--			</ol>--><!--		</div>-->
+		<div class="col-md-12">
+			<h1>Программа стажировки</h1>
+		</div>
+	</div>
+</div>
 <div class="jumbotron">
-	<h3>Здесь про то, что:</h3>
 
-	<p>мы сделали стажировку для любых заинтересованных лиц. Приходите, будете делать разные веб-штуки, общаться на тему
-		веб-технологий и программировать все, что захочется.</p>
-
-	<p>А мы с удовольствием поучаствуем :-)</p>
+	<p><strong>Мы открыты для молодых специалистов</strong> с хорошими идеями и позитивным жизненным настроем, способных
+		выходить за рамки шаблонов</p>
 </div>
 
 <div class="col-md-12">
 
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab1" data-toggle="tab">Для кого</a>
+		<a href="#tab1" data-toggle="tab">Для кого предназначена?</a>
 	</li>
 	<li><a href="#tab2" data-toggle="tab">Что внутри</a></li>
 	<li><a href="#tab3" data-toggle="tab">В чём польза</a></li>
@@ -119,7 +125,7 @@ $labels = $forms['label'];
 
 			<ul>
 				<li>
-					Еженедельные семинары:
+					Как все происходит:
 					<ul>
 						<li>Раз в неделю, как договоримся, мы собираемся у нас в офисе и обсуждаем вопросы, которые вы
 							сами хотите обсудить;
@@ -170,14 +176,9 @@ $labels = $forms['label'];
 
 			<ul>
 				<li>
-					Для людей &laquo;с опытом&raquo;... сами решайте :-)
-				</li>
-			</ul>
-
-			<ul>
-				<li>
-					В любом случае, вы получаете не только технологический, но и командный опыт:
+					Для людей &laquo;с опытом&raquo;:
 					<ul>
+						<li>Вы получаете не только технологический, но и командный опыт;</li>
 						<li>Вы будете понимать, что значит трудиться в команде;</li>
 						<li>Какие сложности и радости ждут вас на пути веб-разработчика;</li>
 						<li>Какие правила нужно соблюдать, а какие нарушать;</li>
@@ -185,8 +186,10 @@ $labels = $forms['label'];
 							<a href="http://govnokod.ru/" target="_blank" rel="nofollow">на подобных сайтах</a> :-)
 						</li>
 					</ul>
+
 				</li>
 			</ul>
+
 
 		</div>
 	</div>
@@ -293,3 +296,26 @@ $labels = $forms['label'];
 			<a href="/">здесь</a>"<?= " ?>" ?></small></pre>
 
 </div>
+<?php
+/**
+ * Скрипт для обработки валидатора HTML5, обеспечивающий скролл до нужного поля с учетом навбара наверху
+ */
+?>
+<script type="text/javascript">
+	function scrollToInvalid() {
+		// Height of your nav bar plus a bottom margin
+		var navHeight = 80;
+		// Offset of the first input element minus your nav height
+		var invalid_el = $('input:invalid').first().offset().top - navHeight;
+
+		// If the invalid element is already within the window view, return true. If you return false, the validation will stop.
+		if ( invalid_el > (window.pageYOffset - navHeight) && invalid_el < (window.pageYOffset + window.innerHeight - navHeight) ) {
+			return true;
+		} else {
+			// If the first invalid input is not within the current view, scroll to it.
+			$('html, body').scrollTop(invalid_el);
+		}
+	}
+
+	$('input').on('invalid', scrollToInvalid);
+</script>

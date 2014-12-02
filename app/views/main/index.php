@@ -1,7 +1,20 @@
+<div class="jumbotron full-bg animated-bg" data-bg="/assets/fintech_style_present_cover.jpg">
+	<div class="col-md-6 col-md-offset-3 centered text-center">
+		<h1>FINTECH_FAB</h1>
+
+		<p>making future not maybes</p>
+
+		<p>
+			<a class="btn btn-primary btn-lg" href="#services" role="button"><span class="fa-caret-down fa"></span>
+				Подробнее</a>
+		</p>
+	</div>
+</div>
+
 <div id="services" class="container-fluid separator">
 	<div class="row">
 		<div class="col-md-4 service">
-			<div class="fa fa-2x fa-certificate primary-color col-md-2 col-xs-2"></div>
+			<div class="fa fa-2x fa-lightbulb-o primary-color col-md-2 col-xs-2"></div>
 			<div class="col-md-9 col-xs-10">
 				<h4>Инновации</h4>
 				<p>
@@ -10,7 +23,7 @@
 			</div>
 		</div>
 		<div class="col-md-4 service">
-			<div class="fa fa-2x fa-spinner primary-color col-md-2 col-xs-2"></div>
+			<div class="fa fa-2x fa-rub primary-color col-md-2 col-xs-2"></div>
 			<div class="col-md-9 col-xs-10">
 				<h4>Финансовые сервисы</h4>
 				<p>
@@ -19,7 +32,7 @@
 			</div>
 		</div>
 		<div class="col-md-4 service">
-			<div class="fa fa-2x fa-location-arrow primary-color col-md-2 col-xs-2"></div>
+			<div class="fa fa-2x fa-cloud primary-color col-md-2 col-xs-2"></div>
 			<div class="col-md-9 col-xs-10">
 				<h4>Облачные решения</h4>
 				<p>
@@ -47,7 +60,7 @@
 			</div>
 		</div>
 		<div class="col-md-4 service">
-			<div class="fa fa-2x fa-eye primary-color col-md-2 col-xs-2"></div>
+			<div class="fa fa-2x fa-medkit primary-color col-md-2 col-xs-2"></div>
 			<div class="col-md-9 col-xs-10">
 				<h4>Телемедицина</h4>
 				<p>
@@ -67,7 +80,7 @@
 
 			<p>Наши проекты реализованы в России, Европе, странах СНГ, Африке и Латинской Америке.</p>
 
-			<p><a href="portfolio.html" class="btn btn-primary" role="button"><span
+			<p><a href="<?= URL::route('projects') ?>" class="btn btn-primary" role="button"><span
 						class="fa-arrow-circle-right fa"></span> Все проекты</a></p>
 		</div>
 		<div class="col-sm-6 col-md-4">
@@ -128,24 +141,25 @@
 		</div>
 		<div class="col-md-3">
 			<div href="#" class="team-member">
-				<img src="/assets/MN.png" alt="">
+				<img src="/assets/SY.png" alt="">
 
 				<div class="title">
-					<h4>Михаил Новиков</h4>
-					<h5>Руководитель разработки</h5>
+					<h4>Ядченко Сергей</h4>
+					<h5>Операционный директор</h5>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-3">
 			<div href="#" class="team-member">
-				<img src="/assets/MN.png" alt="">
+				<img src="/assets/AB.png" alt="">
 
 				<div class="title">
-					<h4>Михаил Новиков</h4>
-					<h5>Руководитель разработки</h5>
+					<h4>Балашова Анна</h4>
+					<h5>Административный директор</h5>
 				</div>
 			</div>
 		</div>
+
 	</div>
 </div>
 
@@ -156,9 +170,9 @@
 </div>
 <div id="brands" class="container-fluid">
 	<ul class="row brand-list">
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="http://placehold.it/350x100"></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="http://placehold.it/350x100"></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="http://placehold.it/350x100"></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="http://placehold.it/350x100"></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/bm.png"></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/Beeline.png"></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/master.png"></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/SRC.png"></li>
 	</ul>
 </div>

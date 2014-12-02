@@ -258,6 +258,10 @@ a.icon {
   border-bottom: 1px solid #eee;
 }
 
+.margin-top {
+	margin-top: 20px;
+}
+
 .logo {
   font-family: 'Exo 2', sans-serif;
   font-weight: 400;
@@ -1209,4 +1213,10 @@ ul.archive {
 	display: block;
 	height: 48px;
 	width: 48px;
+}
+
+#map {
+	width: auto;
+	height: 240px;
+	margin-top: 16pt;
 }

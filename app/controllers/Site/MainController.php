@@ -14,4 +14,21 @@ class MainController extends BaseController
 		return $this->make('index');
 	}
 
+	public function contact()
+	{
+		return $this->make('contact');
+	}
+
+	public function about()
+	{
+		return $this->make('about');
+	}
+
+	public function projects()
+	{
+		return $this->make('projects');
+	}
+
+
+
 }
