@@ -25,7 +25,7 @@
 		<div class="col-md-12">
 			<div id="Container" class="grid col-2">
 
-				<a href="portfolio-single.html" class="mix cat1">
+				<a class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/M2C_700x450.png" alt="">
 					</div>
@@ -35,7 +35,7 @@
 					</div>
 				</a>
 
-				<a href="portfolio-single.html" class="mix cat1">
+				<a href="https://kreddy.ru" class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/KREDDY_700x450.png" alt="">
 					</div>
@@ -45,7 +45,7 @@
 					</div>
 				</a>
 
-				<a href="portfolio-single.html" class="mix cat1">
+				<a class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/MONEMOBO_700x450.png" alt="">
 					</div>
@@ -55,7 +55,7 @@
 					</div>
 				</a>
 
-				<a href="portfolio-single.html" class="mix cat1">
+				<a class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/WLP_Online_700x450.png" alt="">
 					</div>
@@ -66,7 +66,7 @@
 					</div>
 				</a>
 
-				<a href="portfolio-single.html" class="mix cat1">
+				<a class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/Arbiter_700x450.png" alt="">
 					</div>
