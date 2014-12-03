@@ -17,8 +17,10 @@
 		$('#menu-trigger').toggleClass('fa-bars').toggleClass('fa-long-arrow-left');
 	});
 
-	//Anchor and Fade links
-	$('a:not([data-gallery])').click(function(e){
+	// Anchor and Fade links
+	// Обработка локальных ссылок
+	// Селектор a:not([data-gallery]):not([target]) не позволяет брать ссылки на галерею и ссылки с target
+	$('a:not([data-gallery]):not([target])').click(function(e){
 		if (this.getAttribute("href").charAt(0) !== "#") {
 			e.preventDefault();
 			var link = $(this).attr('href');
