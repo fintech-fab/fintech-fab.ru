@@ -103,7 +103,7 @@
 				<div class="caption">
 					<h4>Mobile2Care</h4>
 
-					<p>комплексная медицинская услуга для дистанционного мониторинга здоровья. </p>
+					<p>Комплексная медицинская услуга для дистанционного мониторинга здоровья. </p>
 					<a href="<?= URL::route('mobile2care') ?>" class="btn btn-primary" role="button"><span
 							class="fa-arrow-circle-right fa"></span> Подробнее</a>
 				</div>
