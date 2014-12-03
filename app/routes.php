@@ -6,6 +6,8 @@ Route::post('vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Contr
 Route::get('contact', array('as' => 'contact', 'uses' => 'App\Controllers\Site\MainController@contact'));
 Route::get('about', array('as' => 'about', 'uses' => 'App\Controllers\Site\MainController@about'));
 Route::get('projects', array('as' => 'projects', 'uses' => 'App\Controllers\Site\MainController@projects'));
+Route::get('mobile2care', array('as' => 'mobile2care', 'uses' => 'App\Controllers\Site\MainController@mobile2care'));
+Route::get('wlp', array('as' => 'wlp', 'uses' => 'App\Controllers\Site\MainController@wlp'));
 
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',

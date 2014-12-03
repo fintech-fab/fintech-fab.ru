@@ -4,13 +4,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FINTECH_FAB</title>
 
-<link type="text/css" href="//code.jquery.com/ui/1.10.4/themes/redmond/jquery-ui.css" rel="stylesheet" />
-<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.min.js "></script>
-<script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.min.js "></script>
-
-<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js "></script>
+<!-- Stylesheets -->
+<link type="text/css" href="//code.jquery.com/ui/1.10.4/themes/redmond/jquery-ui.css" rel="stylesheet" id="theme"/>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+<link rel="stylesheet" href="/assets/bootstrap-image-gallery.css">
 
 <!-- FontAwesome -->
 <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -18,7 +17,12 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Exo+2:400,700italic,700,200,200italic' rel='stylesheet' type='text/css'>
-<!-- The Styles -->
+
+<!-- Scripts -->
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js "></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.min.js "></script>
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js "></script>
+
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>

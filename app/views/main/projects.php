@@ -25,7 +25,7 @@
 		<div class="col-md-12">
 			<div id="Container" class="grid col-2">
 
-				<a class="mix cat1">
+				<a href="<?= URL::route('mobile2care') ?>" class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/M2C_700x450.png" alt="">
 					</div>
@@ -55,7 +55,7 @@
 					</div>
 				</a>
 
-				<a class="mix cat1">
+				<a href="<?= URL::route('wlp') ?>" class="mix cat1">
 					<div class="image">
 						<img src="/assets/projects/WLP_Online_700x450.png" alt="">
 					</div>

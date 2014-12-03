@@ -5,6 +5,7 @@ $forms = FormHelper::getInformation();
 $placeholders = $forms['placeholder'];
 $labels = $forms['label'];
 ?>
+
 <div class="container-fluid breadcrumb-container">
 	<div class="row">
 		<!--		<div class="col-md-12">--><!--			<ol class="breadcrumb">-->
@@ -15,6 +16,7 @@ $labels = $forms['label'];
 		</div>
 	</div>
 </div>
+<div class="container">
 <div class="jumbotron">
 
 	<p><strong>Мы открыты для молодых специалистов</strong> с хорошими идеями и позитивным жизненным настроем, способных
@@ -291,10 +293,7 @@ $labels = $forms['label'];
 	<?= Form::close(); ?>
 </div>
 </div>
-
-	<pre class="pull-right"><small><?= "&lt;?php echo " ?>"для ленивых - главный пейдж
-			<a href="/">здесь</a>"<?= " ?>" ?></small></pre>
-
+<div class="row"></div>
 </div>
 <?php
 /**
@@ -309,7 +308,7 @@ $labels = $forms['label'];
 		var invalid_el = $('input:invalid').first().offset().top - navHeight;
 
 		// If the invalid element is already within the window view, return true. If you return false, the validation will stop.
-		if ( invalid_el > (window.pageYOffset - navHeight) && invalid_el < (window.pageYOffset + window.innerHeight - navHeight) ) {
+		if (invalid_el > (window.pageYOffset - navHeight) && invalid_el < (window.pageYOffset + window.innerHeight - navHeight)) {
 			return true;
 		} else {
 			// If the first invalid input is not within the current view, scroll to it.
@@ -319,3 +318,4 @@ $labels = $forms['label'];
 
 	$('input').on('invalid', scrollToInvalid);
 </script>
+</div>

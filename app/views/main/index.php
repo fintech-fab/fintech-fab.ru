@@ -91,7 +91,7 @@
 					<h4>КРЕДДИ</h4>
 
 					<p>Сервис онлайн кредитования для мгновенного получения денег на счет мобильного телефона или банковской карты в режиме 24 х 7.</p>
-					<a href="http://kreddy.ru" class="btn btn-primary" role="button"><span
+					<a href="http://kreddy.ru" target="_blank" class="btn btn-primary" role="button"><span
 							class="fa-arrow-circle-right fa"></span> Подробнее</a>
 				</div>
 			</div>
@@ -104,7 +104,7 @@
 					<h4>Mobile2Care</h4>
 
 					<p>комплексная медицинская услуга для дистанционного мониторинга здоровья. </p>
-					<a href="portfolio-single.html" class="btn btn-primary" role="button"><span
+					<a href="<?= URL::route('mobile2care') ?>" class="btn btn-primary" role="button"><span
 							class="fa-arrow-circle-right fa"></span> Подробнее</a>
 				</div>
 			</div>
@@ -170,9 +170,9 @@
 </div>
 <div id="brands" class="container-fluid">
 	<ul class="row brand-list">
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/bm.png"></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/Beeline.png"></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/master.png"></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><img src="/assets/SRC.png"></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.bm.ru/" target="_blank"><img src="/assets/bm.png"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://moskva.beeline.ru/" target="_blank"><img src="/assets/Beeline.png"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.mastercard.com/index.html" target="_blank"><img src="/assets/master.png"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.src-gmbh.de/" target="_blank"><img src="/assets/SRC.png"></a></li>
 	</ul>
 </div>

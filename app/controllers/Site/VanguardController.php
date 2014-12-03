@@ -13,7 +13,7 @@ use Redirect;
 class VanguardController extends BaseController
 {
 
-	public $layout = 'vanguard';
+	public $layout = 'main';
 
 	public function vanguard()
 	{

@@ -29,6 +29,15 @@ class MainController extends BaseController
 		return $this->make('projects');
 	}
 
+	public function mobile2care()
+	{
+		return $this->make('m2c');
+	}
+
+	public function wlp()
+	{
+		return $this->make('wlp');
+	}
 
 
 }

@@ -18,7 +18,7 @@
 	});
 
 	//Anchor and Fade links
-	$('a').click(function(e){
+	$('a:not([data-gallery])').click(function(e){
 		if (this.getAttribute("href").charAt(0) !== "#") {
 			e.preventDefault();
 			var link = $(this).attr('href');
@@ -26,7 +26,7 @@
 			setTimeout(function() {
 			    goToLink(link);
 			}, 500);
-		} 
+		}
 		if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
 			var target = $(this.hash);
 			target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
