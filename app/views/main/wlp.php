@@ -68,10 +68,10 @@
 				<div class="modal-body next"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default pull-left prev">
-						<i class="glyphicon glyphicon-chevron-left"></i> Дальше
+						<i class="glyphicon glyphicon-chevron-left"></i> Назад
 					</button>
 					<button type="button" class="btn btn-primary next">
-						Назад <i class="glyphicon glyphicon-chevron-right"></i>
+						Дальше <i class="glyphicon glyphicon-chevron-right"></i>
 					</button>
 				</div>
 			</div>
