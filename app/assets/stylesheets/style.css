@@ -52,12 +52,28 @@ body {
 ******************/
 
 p {
-  color: #777777;
+  color: black;
   margin: 20px 0;
   line-height: 1.55em; }
 
 .text {
   color: #777777; }
+
+div.contact {
+	margin-bottom: 10px;
+}
+
+p.howtofind {
+	font-size: 15px;
+}
+
+div.margin-bottom-20 {
+	margin-bottom: 20px;
+}
+
+div.margin-bottom-40 {
+	margin-bottom: 40px;
+}
 
 h1, h2 {
   font-family: "Montserrat", sans-serif; }

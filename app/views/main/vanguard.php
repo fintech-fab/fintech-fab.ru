@@ -19,7 +19,7 @@ $labels = $forms['label'];
 <div class="container">
 <div class="jumbotron">
 
-	<p><strong>Мы открыты для молодых специалистов</strong> с хорошими идеями и позитивным жизненным настроем, способных
+	<p class="text"><strong>Мы открыты для молодых специалистов</strong> с хорошими идеями и позитивным жизненным настроем, способных
 		выходить за рамки шаблонов</p>
 </div>
 
@@ -35,7 +35,7 @@ $labels = $forms['label'];
 </ul>
 
 
-<div class="tab-content">
+<div class="tab-content margin-bottom-40">
 <div class="tab-pane active" id="tab1">
 
 	<div class="row">
@@ -293,7 +293,6 @@ $labels = $forms['label'];
 	<?= Form::close(); ?>
 </div>
 </div>
-<div class="row"></div>
 </div>
 <?php
 /**

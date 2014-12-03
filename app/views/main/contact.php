@@ -28,7 +28,7 @@
 						<div class="col-md-2">
 							<span class="fa fa-phone"></span>
 						</div>
-						<div class="col-md-10 text">
+						<div class="col-md-10 text contact">
 							+7 (495) 668 3020
 						</div>
 					</div>
@@ -36,7 +36,7 @@
 						<div class="col-md-2">
 							<span class="fa fa-location-arrow"></span>
 						</div>
-						<div class="col-md-10 text">
+						<div class="col-md-10 text contact">
 							м. Павелецкая/м.Пролетарская<br> Дербеневская наб., 11<br>115114, Москва, Россия
 						</div>
 					</div>
@@ -44,7 +44,7 @@
 						<div class="col-md-2">
 							<span class="fa fa-envelope"></span>
 						</div>
-						<div class="col-md-10 text">
+						<div class="col-md-10 text contact">
 							info@fintech-fab.ru <br> cv@fintech-fab.ru (для резюме)
 						</div>
 					</div>
@@ -52,7 +52,7 @@
 				<div class="col-md-6">
 					<h3><span class="fa fa-map-marker"> </span> Как найти наш офис?</h3>
 
-					<p>От м. Павелецкая (радиальная). Необходимо пройти 130 м до остановки "Кожевническая улица". Нужен
+					<p class="grey howtofind">От м. Павелецкая (радиальная). Необходимо пройти 130 м до остановки "Кожевническая улица". Нужен
 						один из автобусов - 632, 158, 106, 13 или маршрутка 13м. Далее едете 5 остановок и выходите на
 						остановке "Детский сад". Придется пройти назад около 200 м и Вы на месте. Заходите в высокое
 						голубое здание с вывеской БЦ "ПОЛЛАРС". Путь от м. Павелецкая на общественном транспорте займет

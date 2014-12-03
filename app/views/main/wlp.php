@@ -11,33 +11,35 @@
 <div class="container-fluid separator">
 	<div class="row">
 		<div class="col-md-12">
-			<p><strong>WLP Online - готовое решение для МФО по онлайн кредитованию клиентов. Позволяет начать работу по
-					всей территории России (85 регионов, более 1000 городов) в кратчайшие сроки.</strong></p>
+			<p class="text"><strong>WLP Online</strong> - готовое решение для МФО по онлайн кредитованию клиентов. Позволяет начать
+				работу по всей территории России (85 регионов, более 1000 городов) в кратчайшие сроки.</p>
 		</div>
-		<div class="col-md-12">
-			<h4>Параметры для измерения</h4>
-			<ul>
-				<li>Клиентам больше не нужно посещать офис для получения займа.</li>
-				<li>Платформа WLP online позволяет принимать и обрабатывать заявки, проводить идентификацию, перечислять займы дистанционно.</li>
-				<li>Повторный займ может быть перечислен на карту клиента в течение нескольких минут в режиме 24/7.</li>
-				<li>Платформа WLP Online соответствует требованию Федеральных законов РФ - 151, 152, 115, 218, 353.</li>
-			</ul>
+		<div class="col-md-12 margin-bottom-40">
+			<h4>Преимущества платформы</h4>
 
-			<a href="/assets/WLP.pdf" class="btn btn-primary"><span
-					class="fa-download fa"></span> Скачать презентацию</a>
-			<div class="row"> </div>
+			<p>
+				Клиентам больше не нужно посещать офис для получения займа.</p>
+
+			<p>Платформа WLP online позволяет принимать и обрабатывать заявки, проводить идентификацию, перечислять
+				займы дистанционно.</p>
+
+			<p>Повторный займ может быть перечислен на карту клиента в течение нескольких минут в режиме 24/7.</p>
+
+			<p>Платформа WLP Online соответствует требованию Федеральных законов РФ - 151, 152, 115, 218, 353.</p>
+
+			<div class="margin-bottom-20"></div>
+
+			<a href="/assets/WLP.pdf" class="btn btn-primary"><span class="fa-download fa"></span> Скачать
+				презентацию</a>
 		</div>
 		<div class="col-md-12">
 			<div id="links">
 				<a href="/assets/projects/WLP_1.png" title="WLP Online" data-gallery="">
-					<img src="/assets/projects/WLP_1.png" alt="WLP Online">
-				</a>
+					<img src="/assets/projects/WLP_1.png" alt="WLP Online"> </a>
 				<a href="/assets/projects/WLP_2.png" title="WLP Online" data-gallery="">
-					<img src="/assets/projects/WLP_2.png" alt="WLP Online">
-				</a>
+					<img src="/assets/projects/WLP_2.png" alt="WLP Online"> </a>
 				<a href="/assets/projects/WLP_3.png" title="WLP Online" data-gallery="">
-					<img src="/assets/projects/WLP_3.png" alt="WLP Online">
-				</a>
+					<img src="/assets/projects/WLP_3.png" alt="WLP Online"> </a>
 			</div>
 		</div>
 	</div>
@@ -49,10 +51,7 @@
 	<div class="slides"></div>
 	<!-- Controls for the borderless lightbox -->
 	<h3 class="title"></h3>
-	<a class="prev">‹</a>
-	<a class="next">›</a>
-	<a class="close">×</a>
-	<a class="play-pause"></a>
+	<a class="prev">‹</a> <a class="next">›</a> <a class="close">×</a> <a class="play-pause"></a>
 	<ol class="indicator"></ol>
 	<!-- The modal dialog, which will be used to wrap the lightbox content -->
 	<div class="modal fade">
@@ -65,12 +64,10 @@
 				<div class="modal-body next"></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default pull-left prev">
-						<i class="glyphicon glyphicon-chevron-left"></i>
-						Дальше
+						<i class="glyphicon glyphicon-chevron-left"></i> Дальше
 					</button>
 					<button type="button" class="btn btn-primary next">
-						Назад
-						<i class="glyphicon glyphicon-chevron-right"></i>
+						Назад <i class="glyphicon glyphicon-chevron-right"></i>
 					</button>
 				</div>
 			</div>
