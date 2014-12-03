@@ -34,12 +34,16 @@
 		</div>
 		<div class="col-md-12">
 			<div id="links">
-				<a href="/assets/projects/WLP_1.png" title="WLP Online" data-gallery="">
-					<img src="/assets/projects/WLP_1.png" alt="WLP Online"> </a>
-				<a href="/assets/projects/WLP_2.png" title="WLP Online" data-gallery="">
-					<img src="/assets/projects/WLP_2.png" alt="WLP Online"> </a>
-				<a href="/assets/projects/WLP_3.png" title="WLP Online" data-gallery="">
-					<img src="/assets/projects/WLP_3.png" alt="WLP Online"> </a>
+				<a href="/assets/projects/wlp/anketa.png" title="Анкета" data-gallery="">
+					<img src="/assets/projects/wlp/thumbs/anketa.png" alt="Анкета"> </a>
+				<a href="/assets/projects/wlp/card.png" title="Карточка" data-gallery="">
+					<img src="/assets/projects/wlp/thumbs/card.png" alt="Карточка"> </a>
+				<a href="/assets/projects/wlp/report.png" title="Отчет" data-gallery="">
+					<img src="/assets/projects/wlp/thumbs/report.png" alt="Отчет"> </a>
+				<a href="/assets/projects/wlp/filter.png" title="Кросс-фильтр" data-gallery="">
+					<img src="/assets/projects/wlp/thumbs/filter.png" alt="Кросс-фильтр"> </a>
+				<a href="/assets/projects/wlp/add-card.png" title="Привязка карты" data-gallery="">
+					<img src="/assets/projects/wlp/thumbs/add-card.png" alt="Привязка карты"> </a>
 			</div>
 		</div>
 	</div>
