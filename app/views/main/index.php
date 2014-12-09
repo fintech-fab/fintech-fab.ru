@@ -171,7 +171,7 @@
 <div id="brands" class="container-fluid">
 	<ul class="row brand-list">
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.bm.ru/" target="_blank"><img src="/assets/bm.png"></a></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://moskva.beeline.ru/" target="_blank"><img src="/assets/Beeline.png"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="https://ipsp.com/" target="_blank"><img src="/assets/IPSP.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.mastercard.com/index.html" target="_blank"><img src="/assets/master.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.src-gmbh.de/" target="_blank"><img src="/assets/SRC.png"></a></li>
 	</ul>
