@@ -28,7 +28,7 @@
 				</div>
 				<div class="col-sm-4 col-xs-12 headr_rightblock">
 					<div class="headrbl">
-						<p class="up_phone">8 800 555-75-78</p>
+						<p class="up_phone">8 499 704-31-72</p>
 
 						<p class="up_phonetext">24/7, бесплатный звонок по России</p>
 

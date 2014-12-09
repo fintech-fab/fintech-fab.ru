@@ -24,7 +24,7 @@
 				</div>
 				<div class="col-sm-4 col-xs-12 headr_rightblock">
 					<div class="headrbl">
-						<p class="up_phone">8 800 555-75-78</p>
+						<p class="up_phone">8(499)704-31-72</p>
 
 						<p class="up_phonetext">По будням с 9:00 до 18:00 по мск</p>
 
