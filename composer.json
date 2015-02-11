@@ -31,7 +31,7 @@
 		"money-transfer-emulator-sdk": "dev-master"
 	},
 	"require-dev": {
-		"barryvdh/laravel-ide-helper": "dev-master",
+		"barryvdh/laravel-ide-helper": "~1.11",
 		"phpunit/php-code-coverage": "~2.0",
 		"phpunit/phpunit-mock-objects": "2.3.*@dev",
 		"phpunit/phpunit": "4.3.*@dev",
