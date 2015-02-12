@@ -75,7 +75,7 @@ class ClientSubscribeForm extends ClientCreateFormAbstract
 				'product'             => 'Выбери канал',
 				'loan_amount'         => 'сумму',
 				'product_type'        => 'тип продукта',
-				'registry_agree'      => 'Я ознакомлен со сведениями в внесении ООО "Финансовые решения" в
+				'registry_agree' => 'Я ознакомлен со сведениями в внесении ООО "Арбитр-Факторинг" в
 				                          государтвенный реестр МФО <a data-toggle="modal" href="#registry_view">[посмотреть]</a>
 				                          ',
 				'not_public_agree'    => 'Я не являюсь публичным лицом или лицом, указанным в перечне <a data-toggle="modal" href="#not_public_view">[посмотреть]</a>',
