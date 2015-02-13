@@ -61,8 +61,8 @@ Yii::app()->bootstrap->registerBootstrapCss();
 	<div class="row">
 		<div class="span12 footer">
 			<div class="footer">
-				<p>&copy; <?= SiteParams::copyrightYear() ?> ООО "Арбитр-Факторинг", 115172, г. Москва, Гончарная наб.,
-					1, стр.4, ОГРН 1117746371270</p>
+				<p>&copy; <?= SiteParams::copyrightYear() ?> ООО "Арбитр-Факторинг", 127566, г. Москва, ул.
+					Римского-Корсакова, д.14</p>
 			</div>
 		</div>
 	</div>
