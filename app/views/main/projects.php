@@ -75,10 +75,30 @@
 						<p>Инновационное решение для оценки кредитоспособности заемщика. Метод многофакторного анализа данных кредитных бюро, профилей социальных сетей, поведения в сети Интернет, активности на сайте позволяет получать качественный прогноз вероятности наступления дефолта клиента. Платформа имеет встроенную технологию дистанционной идентификации клиента и модуль верификации предоставляемых персональных данных.</p>
 					</div>
 				</a>
+
+
+				<a href="<?= URL::route('anyany') ?>" class="mix cat1">
+					<div class="image">
+						<img src="/assets/projects/a2a.png" alt="Any2Any Platform">
+					</div>
+					<div class="caption">
+						<h4>ANY2ANY</h4>
+						<p>
+							Сервис P2P денежных переводов.<br>
+							Основан на интерактивной многоканальной платформе, поддерживающей как внутренние, так и трансграничные денежные транзакции.
+						</p>
+					</div>
+				</a>
+
+				<div class="clear clearfix"></div>
 			</div>
+			<div class="clear clearfix"></div>
 		</div>
+		<div class="clear clearfix"></div>
 	</div>
+	<div class="clear clearfix"></div>
 </div>
+<div class="clear clearfix"></div>
 <script>
 	$('#Container').mixItUp({
 		animation: {

@@ -39,5 +39,10 @@ class MainController extends BaseController
 		return $this->make('wlp');
 	}
 
+	public function anyany()
+	{
+		return $this->make('anyany');
+	}
+
 
 }

@@ -119,7 +119,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<div href="#" class="team-member">
 				<img src="/assets/OV.png" alt="">
 
@@ -129,7 +129,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<div href="#" class="team-member">
 				<img src="/assets/DT.png" alt="">
 
@@ -139,23 +139,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<div href="#" class="team-member">
 				<img src="/assets/SY.png" alt="">
 
 				<div class="title">
 					<h4>Ядченко Сергей</h4>
 					<h5>Операционный директор</h5>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div href="#" class="team-member">
-				<img src="/assets/AB.png" alt="">
-
-				<div class="title">
-					<h4>Балашова Анна</h4>
-					<h5>Административный директор</h5>
 				</div>
 			</div>
 		</div>
