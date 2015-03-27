@@ -10,6 +10,7 @@
 		<li><a href="<?= URL::route('projects') ?>">Наши проекты</a></li>
 		<li><a href="<?= URL::route('vanguard') ?>">Программа стажировки</a></li>
 		<li><a href="<?= URL::route('contact') ?>">Контакты</a></li>
+		<li><a href="<?= URL::route('replies') ?>">Отзывы наших клиентов</a></li>
 	</ul>
 </nav>
 <div class="container-fluid nav-head" data-spy="affix" data-offset="1">
