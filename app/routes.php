@@ -9,6 +9,7 @@ Route::get('projects', array('as' => 'projects', 'uses' => 'App\Controllers\Site
 Route::get('mobile2care', array('as' => 'mobile2care', 'uses' => 'App\Controllers\Site\MainController@mobile2care'));
 Route::get('wlp', array('as' => 'wlp', 'uses' => 'App\Controllers\Site\MainController@wlp'));
 Route::get('anyany', array('as' => 'anyany', 'uses' => 'App\Controllers\Site\MainController@anyany'));
+Route::get('replies', array('as' => 'replies', 'uses' => 'App\Controllers\Site\MainController@replies'));
 
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',

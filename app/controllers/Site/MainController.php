@@ -44,5 +44,10 @@ class MainController extends BaseController
 		return $this->make('anyany');
 	}
 
+	public function replies()
+	{
+		return $this->make('replies');
+	}
+
 
 }
