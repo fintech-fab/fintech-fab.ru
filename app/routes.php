@@ -1,14 +1,18 @@
 <?php
-Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainController@index'));
-Route::get('vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
-Route::post('vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
+use App\Controllers\Site\MainController;
 
-Route::get('contact', array('as' => 'contact', 'uses' => 'App\Controllers\Site\MainController@contact'));
-Route::get('about', array('as' => 'about', 'uses' => 'App\Controllers\Site\MainController@about'));
-Route::get('projects', array('as' => 'projects', 'uses' => 'App\Controllers\Site\MainController@projects'));
-Route::get('mobile2care', array('as' => 'mobile2care', 'uses' => 'App\Controllers\Site\MainController@mobile2care'));
-Route::get('wlp', array('as' => 'wlp', 'uses' => 'App\Controllers\Site\MainController@wlp'));
-Route::get('anyany', array('as' => 'anyany', 'uses' => 'App\Controllers\Site\MainController@anyany'));
+Route::get('/', array('as' => 'index', 'uses' => 'App\Controllers\Site\MainController@index'));
+Route::get('/en', array('as' => 'en', 'uses' => 'App\Controllers\Site\MainController@en'));
+
+Route::get('/vanguard', array('as' => 'vanguard', 'uses' => 'App\Controllers\Site\VanguardController@vanguard'));
+Route::post('/vanguard', array('as' => 'vanguard.postOrder', 'uses' => 'App\Controllers\Site\VanguardController@postOrder'));
+
+Route::get('/contact', array('as' => 'contact', 'uses' => MainController::class . '@contact'));
+Route::get('/about', array('as' => 'about', 'uses' => 'App\Controllers\Site\MainController@about'));
+Route::get('/projects', array('as' => 'projects', 'uses' => 'App\Controllers\Site\MainController@projects'));
+Route::get('/mobile2care', array('as' => 'mobile2care', 'uses' => 'App\Controllers\Site\MainController@mobile2care'));
+Route::get('/wlp', array('as' => 'wlp', 'uses' => 'App\Controllers\Site\MainController@wlp'));
+Route::get('/anyany', array('as' => 'anyany', 'uses' => 'App\Controllers\Site\MainController@anyany'));
 
 Route::get('notices', array(
 		'before' => 'auth|testRole:messageSender',
@@ -73,4 +77,9 @@ Route::group(array('before' => 'auth'), function () {
 		'as'   => 'widgets/getPhoto',
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
+});
+
+App::missing(function($exception)
+{
+	return Response::view('index', array(), 404);
 });

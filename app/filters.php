@@ -108,3 +108,7 @@ Route::filter('testRole', function ($route, $request, $value = '') {
 		return Redirect::to('profile');
 	}
 });
+
+Route::filter('lang', function(){
+	App::setLocale('ru');
+});

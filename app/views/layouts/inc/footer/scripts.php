@@ -1,5 +1,5 @@
 <!-- Functions -->
-<script type="text/javascript" src="/assets/functions.js"></script>
+<script type="text/javascript" src="/assets/javascripts/functions.js"></script>
 <script type="text/javascript">
 	(function (i, s, o, g, r, a, m) {
 		i['GoogleAnalyticsObject'] = r;

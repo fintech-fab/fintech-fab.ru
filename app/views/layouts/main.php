@@ -16,13 +16,11 @@ if (empty($content)) {
 
 <a href="#top" id="up" data-spy="affix" data-offset="100"><span class="fa fa-caret-up"></span></a>
 
-<?= View::make('layouts.inc.navbar.menu') ?>
 
 <?= View::make('layouts.inc.head.flash_message') ?>
 
 <?= $content ?>
 
-<?= View::make('layouts.inc.footer.footer') ?>
 <?= View::make('layouts.inc.footer.scripts') ?>
 
 </body>

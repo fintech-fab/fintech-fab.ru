@@ -18,7 +18,7 @@
 			<div id="menu-trigger" class="fa fa-bars fa-2x"></div>
 		</div>
 		<div class="col-md-4 col-xs-8 text-center">
-			<a href="<?= URL::route('index') ?>"><img src="/assets/sm_logo_FTF.png" class="logo" /></a>
+			<a href="<?= URL::route('index') ?>"><img src="/assets/images/sm_logo_FTF.png" class="logo" /></a>
 		</div>
 	</div>
 </div>

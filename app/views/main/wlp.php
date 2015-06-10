@@ -4,7 +4,7 @@
 		<!--				<li><a href="index.html">Home</a></li>--><!--				<li class="active">Contact</li>-->
 		<!--			</ol>--><!--		</div>-->
 		<div class="col-md-12">
-			<h1>WLP Online</h1>
+			<h1 class="h1-title">WLP ONLINE</h1>
 		</div>
 	</div>
 </div>
@@ -15,7 +15,7 @@
 				работу по всей территории России (85 регионов, более 1000 городов) в кратчайшие сроки.</p>
 		</div>
 		<div class="col-md-12 margin-bottom-40">
-			<h4>Преимущества платформы</h4>
+			<h2>ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</h2>
 
 			<p>
 				Клиентам больше не нужно посещать офис для получения займа.</p>
@@ -79,5 +79,24 @@
 	</div>
 </div>
 
+<footer>
+	<div class="container-fluid copyright">
+		<div class="row">
+			<div class="col-md-3 col-xs-8">
+				<span class="info">&copy; 2015 FINTECH_FAB <a href="#"></a></span>
+			</div>
+			<div class="col-md-6 col-xs-8">
+				<span class="info"><span class="fa fa-location-arrow text-center"></span> Россия, 115114, Москва, Дербеневская наб., 11</span>
+			</div>
+			<div class="col-md-3 col-xs-8">
+				<div class="info"><span class="fa fa-phone"></span> +7(495) 668 3020</div>
+				<div class="info"><span class="fa fa-envelope-o"></span> info@fintech-fab.ru</div><br>
+				<div class="info"><span class="fa fa-briefcase"></span> cv@fintech-fab.ru</div>
+				<div style="margin-left: 25px">(для резюме)</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
 <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-<script src="/assets/bootstrap-image-gallery.min.js"></script>
+<script src="/assets/javascripts/bootstrap-image-gallery.min.js"></script>

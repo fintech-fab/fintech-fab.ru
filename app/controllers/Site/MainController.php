@@ -14,24 +14,29 @@ class MainController extends BaseController
 		return $this->make('index');
 	}
 
+	public function en()
+	{
+		return $this->make('en');
+	}
+
 	public function contact()
 	{
-		return $this->make('contact');
+		return $this->make('index');
 	}
 
 	public function about()
 	{
-		return $this->make('about');
+		return $this->make('index');
 	}
 
 	public function projects()
 	{
-		return $this->make('projects');
+		return $this->make('index');
 	}
 
 	public function mobile2care()
 	{
-		return $this->make('m2c');
+		return $this->make('index');
 	}
 
 	public function wlp()

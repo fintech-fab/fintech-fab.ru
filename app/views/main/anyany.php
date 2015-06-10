@@ -48,4 +48,4 @@
 </div>
 
 <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-<script src="/assets/bootstrap-image-gallery.min.js"></script>
+<script src="/assets/javascripts/bootstrap-image-gallery.min.js"></script>
