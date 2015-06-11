@@ -1,0 +1,45 @@
+
+.tab-content {
+	background: #eee;
+	padding: 10px;
+}
+
+.tab-content {
+	margin-bottom: 15px;
+	border-radius: 4px;
+}
+
+.navbar {
+	margin-bottom: 0;
+}
+
+.content {
+	padding-top: 15px;
+}
+
+.inner {
+	padding-bottom: 15px;
+}
+
+.error {
+	color: #ff0000;
+}
+
+#loginModal .modal-sm {
+	width: 500px;
+}
+
+/* ----------Стили для окна Терминала QIWI-------------*/
+
+#buy, #check-bill, #pay-bill {
+	width: 200px;
+}
+
+.buttonWithMargin {
+	margin: 15px;
+}
+
+#buy_window {
+	display: none;
+}
+

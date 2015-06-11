@@ -1,2 +1,16 @@
+/bootstrap/compiled.php
+/vendor
+composer.phar
+composer.lock
+.env.local.php
+.env.php
+.DS_Store
+Thumbs.db
 .idea
 tmp
+_ide_*
+public/.htaccess
+public/*.html
+public/files
+public/google
+/*.sh

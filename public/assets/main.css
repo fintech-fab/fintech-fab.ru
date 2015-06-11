@@ -1,0 +1,125 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	position: relative;
+}
+
+
+@font-face {
+	font-family: pf_din_text_comp_proregular;
+	src: url('../css/fonts/din-regular.eot');
+	src: url('../css/fonts/din-regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: pf_din_text_comp_prolight;
+	src: url('../css/fonts/din-light.eot');
+	src: url('../css/fonts/din-light.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+h1, #logo {
+	font-family: pf_din_text_comp_proregular;
+	color: rgb(66,24,72);
+}
+
+h2, .slogan {
+	font-family: pf_din_text_comp_prolight;
+	color: rgb(224,87,17);
+}
+
+#more {
+	border-radius: 50px;
+	font-family: pf_din_text_comp_prolight;
+	font-size: 1.2em;
+
+}
+
+#more-block {
+	margin-top: -25%;
+
+}
+
+h3 {
+	font-family: pf_din_text_comp_prolight;
+	color: rgb(224,87,17);
+}
+
+.service p {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.service h2 {
+	font-family: pf_din_text_comp_proregular;
+}
+
+#about_company_text {
+	font-family: pf_din_text_comp_prolight;
+	color: rgb(66,24,72);
+	font-size: 1.7em;
+}
+
+#ToggleLayout {
+	display: none;
+
+}
+
+.icon {
+	margin-top: 25px;
+}
+
+.team {
+	font-family: pf_din_text_comp_prolight;
+}
+
+.h1-title {
+	font-family: pf_din_text_comp_proregular;
+	color: rgb(66,24,72);
+}
+
+.projectsText {
+	padding: 0 0;
+}
+
+.projectsText h2 {
+	padding-top: 0;
+}
+
+.projectsInfo,
+.hover-too,
+#brands {
+	opacity: 0.6;
+	transition: 2s;
+	margin: 0 0;
+	padding-bottom: 50px;
+}
+
+.projectsInfo:hover,
+#brands:hover,
+.hover-too:hover {
+	opacity: 1;
+	transition: 0.5s;
+}
+
+.projects_blocks {
+	padding-top: 0;
+}
+
+ul {
+	list-style-type: none;
+}
+
+#lang a{
+	background-color: black;
+	border-radius: 100%;
+	color: white;
+}
+
+#my-lang {
+	position: relative;
+	text-align: center;
+	margin-left: 80%;
+	margin-top: 1%;
+}

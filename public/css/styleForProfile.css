@@ -1,0 +1,80 @@
+.photo {
+	width: 200px;
+	position: relative;
+}
+
+.photo img {
+	width: 100%;
+}
+
+.photo a {
+	background-color: rgba(0, 0, 0, 0.6);
+	display: block;
+	color: #ffffff;
+	text-decoration: none;
+	line-height: 3;
+
+}
+
+.photo .wrap {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 40px;
+	padding-top: 40px;
+	overflow: hidden;
+
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
+}
+
+.photo:hover .wrap {
+	opacity: 1;
+	padding-top: 0;
+}
+
+.photo_upload {
+	display: none;
+}
+
+.photo_upload .btn {
+	margin: 10px;
+}
+
+.photo_upload .for_input_file {
+	width: 100%;
+}
+
+.photo_upload .for_input_file #file-input {
+	width: 100%;
+}
+
+#profile p {
+	font-size: 20px;
+}
+
+.highlighted {
+	background-image: none;
+	background-color: #99ff99 !important;
+}
+
+/*Отображерние таблицы пользователей и кнопки*/
+#tableRoles {
+	display: none;
+}
+
+#btnRoles, #btnBills {
+	width: 200px;
+}
+
+/*Кнопки постраничной навигации для таблицы пользователей*/
+#UserPages   {
+	list-style: none;
+}
+#UserPages  li {
+	display: inline-block;
+	margin-left: 4px;
+}

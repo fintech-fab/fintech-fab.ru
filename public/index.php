@@ -1,16 +1,49 @@
 <?php
+/**
+ * Laravel - A PHP Framework For Web Artisans
+ *
+ * @package  Laravel
+ * @author   Taylor Otwell <taylorotwell@gmail.com>
+ */
 
-date_default_timezone_set('Europe/Moscow');
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader
+| for our application. We just need to utilize it! We'll require it
+| into the script here so that we do not have to worry about the
+| loading of any our classes "manually". Feels great to relax.
+|
+*/
 
-// change the following paths if necessary
-$yii = dirname(__FILE__) . '/../yii/framework/yii.php';
-$config = dirname(__FILE__) . '/../protected/config/main.php';
-$debug = require_once(dirname(__FILE__) . '/../protected/config/custom/debug.php');
+require __DIR__ . '/../bootstrap/autoload.php';
 
-// remove the following lines when in production mode
-defined('YII_DEBUG') or define('YII_DEBUG', $debug['isDebug']);
-// specify how many levels of call stack should be shown in each log message
-defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL', $debug['debugLevel']);
+/*
+|--------------------------------------------------------------------------
+| Turn On The Lights
+|--------------------------------------------------------------------------
+|
+| We need to illuminate PHP development, so let's turn on the lights.
+| This bootstraps the framework and gets it ready for use, then it
+| will load up this application so that we can run it and send
+| the responses back to the browser and delight these users.
+|
+*/
 
-require_once($yii);
-Yii::createWebApplication($config)->run();
+$app = require_once __DIR__ . '/../bootstrap/start.php';
+
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can simply call the run method,
+| which will execute the request and send the response back to
+| the client's browser allowing them to enjoy the creative
+| and wonderful application we have whipped up for them.
+|
+*/
+
+$app->run();
