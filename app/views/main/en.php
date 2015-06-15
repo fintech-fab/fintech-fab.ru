@@ -1,6 +1,28 @@
-<div id="my-lang"><a href="<?= URL::route('index') ?>"><img src="assets/images/landing/ru.png"></a></div>
-<div class="jumbotron full-bg animated-bg" data-bg="assets/fintech_style_present_cover.jpg">
-	<div class="col-md-6 col-md-offset-3 centered text-center" style="margin-bottom: 37%;">
+<nav class="container-fluid nav-head" data-spy="affix" data-offset="100">
+	<div class="row">
+		<div class="col-md-2 col-xs-3 text-center">
+			<a href="#top-scroll"><img src="assets/images/sm_logo_FTF.png" class="logo" /></a>
+		</div>
+		<div class="col-md-2 col-xs-3 text-center">
+			<a href="#about">ABOUT US</a>
+		</div>
+		<div class="col-md-2 col-xs-3 text-center">
+			<a href="#service">PROJECTS</a>
+		</div>
+		<div class="col-md-2 col-xs-3 text-center">
+			<a href="#team">TEAM</a>
+		</div>
+		<div class="col-md-2 col-xs-3 text-center">
+			<a href="#contact">CONTACTS</a>
+		</div>
+		<div class="col-md-2 col-xs-3 text-center">
+			<a href="<?= URL::route('index') ?>">РУССКИЙ</a>
+		</div>
+	</div>
+</nav>
+
+<div id="top-scroll" class="jumbotron full-bg animated-bg" data-bg="assets/fintech_style_present_cover.jpg">
+	<div class="col-md-6 col-md-offset-3 centered text-center top-slim">
 		<h1 id="logo">FINTECH_FAB</h1>
 
 		<h2 class="slogan">MAKING FUTURE NOT MAYBES</h2>
@@ -9,9 +31,6 @@
 
 <div id="more-block" class="container-fluid">
 	<div  class="col-md-6 col-md-offset-3 text-center">
-		<div class="text-center">
-			<a href="<?= URL::route('index') ?>"><img src="assets/images/sm_logo_FTF.png" class="logo" /></a>
-		</div>
 		<p>
 			<a id="more" class="btn btn-primary btn-lg" href="#about" role="button"><span class="fa-caret-down fa"></span>
 				MORE</a>
@@ -71,7 +90,6 @@
 				<p>
 					We apply cloud technologies for worldwide
 					access by any device.
-
 				</p>
 			</div>
 		</div>
@@ -85,7 +103,6 @@
 				<p>
 					We develop easy and convenient systems for remote
 					interaction between companies and clients.
-
 				</p>
 			</div>
 		</div>
@@ -101,7 +118,6 @@
 				<p>
 					We push company's business processes
 					due to online data transmission technology.
-
 				</p>
 			</div>
 		</div>
@@ -114,15 +130,13 @@
 				<p>
 					We develop telemedicine solutions to improve
 					living standards of millions of people.
-
 				</p>
 			</div>
 		</div>
 	</div>
 </div>
 
-
-<div class="separator">
+<div id="service" class="separator">
 	<div class="row">
 		<div class="col-md-12">
 			<h1  class="h1-title">FINANCIAL SERVICES</h1>
@@ -134,8 +148,6 @@
 			</div>
 		</div>
 	</div>
-
-
 	<div class="row">
 		<a href="http://any2any.world" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -153,9 +165,6 @@
 			</div>
 		</a>
 	</div>
-
-
-
 	<div class="row">
 		<a>
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -173,23 +182,17 @@
 			</div>
 		</a>
 	</div>
-
 </div>
 
-
 <div class="separator">
-
 	<div class="row" >
 		<div class="col-md-12">
-			<h1></h1>
 			<div class="col-md-12">
 				<h2  class="team">E-COM</h2>
 				Internet acquiring.
 			</div>
 		</div>
 	</div>
-
-
 	<div class="row">
 		<a href="https://ipsp.com" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -207,19 +210,15 @@
 	</div>
 </div>
 
-
 <div class="separator">
 	<div class="row">
 		<div class="col-md-12">
-			<h1></h1>
 			<div class="col-md-12">
 				<h2 class="team">MICROFINANCE PROJECTS</h2>
 				Platforms, credit systems and credit scoring.
 			</div>
 		</div>
 	</div>
-
-
 	<div class="row">
 		<a href="http://kreddy.ru" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -236,9 +235,6 @@
 			</div>
 		</a>
 	</div>
-
-
-
 	<div class="row">
 		<a href="#" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -257,9 +253,6 @@
 			</div>
 		</a>
 	</div>
-
-
-
 	<div class="row">
 		<a href="http://fintech-fab.ru/wlp">
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -267,50 +260,39 @@
 					<img src="/assets/images/landing/project_wlp_online.png" alt="icon">
 				</div>
 				<div  class="col-md-7 col-xs-7 col-md-offset-4 col-xs-offset-4 projectsText">
-					<h4>WLP Online™</h4>
+					<h4>WLP online™</h4>
 					<p>
 						Off-the-shelf online financing solution for microfinance organisations.
 						The solution allows to start operating throughout Russia
-						(85 regions, more than 1000 cities) in the shortest time.
+						(85 regions, more than 1 000 cities) in the shortest time.
 					</p>
 				</div>
 			</div>
 		</a>
 	</div>
+</div>
 
+<div class="separator">
 	<div class="row">
 		<div class="col-md-12">
-			<h1></h1>
+			<h1  class="h1-title">M2M SOLUTIONS FOR INDUSTRIAL REMOTE-MEASURING SYSTEMS</h1>
 			<div class="col-md-12">
-				<h2 class="team">M2M SOLUTIONS FOR INDUSTRIAL REMOTE-MEASURING SYSTEMS</h2>
-				<div class="hover-too">
-					<ul style="list-style-type: circle">
-						<li>Systems and software of SCADA</li>
-						<li>Wireless systems for monitoring payment terminals</li>
-					</ul>
-				</div>
+				<h2  class="team">SYSTEMS AND SOFTWARE OF SCADA</h2>
+				<h2  class="team">WIRELESS SYSTEMS FOR MONITORING PAYMENT TERMINALS</h2>
 			</div>
 		</div>
 	</div>
-
 </div>
 
-
 <div class="separator">
-
 	<div class="row">
 		<div class="col-md-12">
 			<h1  class="h1-title">E-HEALTH</h1>
 			<div class="col-md-12">
 				<h2 class="team">REMOTE HEALTH MONITORING AND CONTROL PROJECTS</h2>
-				<p>
-
-				</p>
 			</div>
 		</div>
 	</div>
-
-
 	<div class="row">
 		<a href="http://mobile2care.com" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -328,13 +310,11 @@
 			</div>
 		</a>
 	</div>
-
-
 	<div class="row">
 		<a href="https://post.kreddy.ru/service/home/~/?auth=co&loc=ru_RU&id=607&part=2" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
 				<div class="col-md-1 col-xs-1">
-					<img src="/assets/images/landing/project_bio.png" alt="icon">
+					<img src="/assets/images/landing/project_bio_en.png" alt="icon">
 				</div>
 				<div  class="col-md-7 col-xs-7 col-md-offset-4 col-xs-offset-4 projectsText">
 					<h4>Biocontrol system </h4>
@@ -348,8 +328,6 @@
 			</div>
 		</a>
 	</div>
-
-
 	<div class="row">
 		<a>
 			<div class="col-md-12 col-xs-12 projectsInfo">
@@ -404,17 +382,16 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div href="#" class="team-member">
-				<img src="/assets/images/landing/ov.png" alt="">
+				<img src="/assets/images/landing/ov.png" alt="photo">
 
 				<div class="title">
 					<h4>Olga Valaeva</h4>
-
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4">
 			<div href="#" class="team-member">
-				<img src="/assets/images/landing/dt.png" alt="">
+				<img src="/assets/images/landing/dt.png" alt="photo">
 
 				<div class="title">
 					<h4>Dmitry Teplitskiy</h4>
@@ -423,7 +400,7 @@
 		</div>
 		<div class="col-md-4">
 			<div href="#" class="team-member">
-				<img src="/assets/images/landing/sy.png" alt="">
+				<img src="/assets/images/landing/sy.png" alt="photo">
 
 				<div class="title">
 					<h4>Sergey Yadchenko</h4>
@@ -441,11 +418,11 @@
 </div>
 <div id="brands" class="container-fluid">
 	<ul class="row brand-list">
-		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.bm.ru/" target="_blank"><img src="/assets/images/landing/logo_bm.png"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.bm.ru/" target="_blank"><img src="/assets/images/landing/logo_bm_en.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="https://ipsp.com/" target="_blank"><img src="/assets/images/landing/logo_ipsp.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.mastercard.com/index.html" target="_blank"><img src="/assets/images/landing/logo_master.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.src-gmbh.de/" target="_blank"><img src="/assets/images/landing/logo_src.png"></a></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><a href="https://money.yandex.ru/" target="_blank"><img src="/assets/images/landing/logo_yandex_money.jpg"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="https://money.yandex.ru/" target="_blank"><img src="/assets/images/landing/logo_yandex_money_en.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.creditpilot.ru/" target="_blank"><img src="/assets/images/landing/logo_credit_pilot.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.inmsu.ru/" target="_blank"><img src="/assets/images/landing/logo_mgu.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="https://bestmt.ru/" target="_blank"><img src="/assets/images/landing/logo_best.png"></a></li>
@@ -455,7 +432,7 @@
 	</ul>
 </div>
 
-<footer>
+<footer id="contact">
 	<div class="container-fluid copyright">
 		<div class="row">
 			<div class="col-md-3 col-xs-8">
@@ -468,7 +445,7 @@
 				<div class="info"><span class="fa fa-phone"></span> +7(495) 668 3020</div>
 				<div class="info"><span class="fa fa-envelope-o"></span> info@fintech-fab.ru</div><br>
 				<div class="info"><span class="fa fa-briefcase"></span> cv@fintech-fab.ru</div>
-				<div style="margin-left: 25px">(for cv)</div>
+				<div class="for-cv-en">(for cv)</div>
 			</div>
 		</div>
 	</div>

@@ -35,7 +35,7 @@
 		"phpunit/php-code-coverage": "~2.0",
 		"phpunit/phpunit-mock-objects": "2.3.*@dev",
 		"phpunit/phpunit": "4.3.*@dev",
-	    "league/factory-muffin": "~2.1",
+	    "league/factory-muffin": "~2.0",
 		"mockery/mockery": "0.9.*"
 	},
 	"autoload": {

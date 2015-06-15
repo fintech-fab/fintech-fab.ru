@@ -78,8 +78,3 @@ Route::group(array('before' => 'auth'), function () {
 		'uses' => 'App\Controllers\User\UserProfileController@getPhoto',
 	));
 });
-
-App::missing(function($exception)
-{
-	return Response::view('index', array(), 404);
-});

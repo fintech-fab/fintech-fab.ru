@@ -20,6 +20,12 @@ body {
 	font-style: normal;
 }
 
+nav {
+	font-family: pf_din_text_comp_prolight;
+	font-size: 1.2em;
+}
+
+
 h1, #logo {
 	font-family: pf_din_text_comp_proregular;
 	color: rgb(66,24,72);
@@ -35,6 +41,10 @@ h2, .slogan {
 	font-family: pf_din_text_comp_prolight;
 	font-size: 1.2em;
 
+}
+
+.top-slim{
+	margin-bottom: 37%;
 }
 
 #more-block {
@@ -122,4 +132,12 @@ ul {
 	text-align: center;
 	margin-left: 80%;
 	margin-top: 1%;
+}
+
+.for-cv{
+	margin-left: 10%;
+}
+
+.for-cv-en{
+	margin-left: 20%;
 }
