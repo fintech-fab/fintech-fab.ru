@@ -428,7 +428,7 @@
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="https://bestmt.ru/" target="_blank"><img src="/assets/images/landing/logo_best.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://matrixmobile.ru/" target="_blank"><img src="/assets/images/landing/logo_matrix.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.mtxc.eu/ru/" target="_blank"><img src="/assets/images/landing/logo_mtx.png"></a></li>
-		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.rzd.ru/" target="_blank"><img src="/assets/images/landing/logo_rzd.png"></a></li>
+		<li class="col-md-3 col-sm-6 col-xs-6"><a href="http://www.rzd.ru/" target="_blank"><img src="/assets/images/landing/logo_rzd_en.png"></a></li>
 	</ul>
 </div>
 

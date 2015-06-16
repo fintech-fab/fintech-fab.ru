@@ -99,7 +99,7 @@ h3 {
 
 .projectsInfo,
 .hover-too,
-#brands {
+#brands li {
 	opacity: 0.6;
 	transition: 2s;
 	margin: 0 0;
@@ -107,7 +107,7 @@ h3 {
 }
 
 .projectsInfo:hover,
-#brands:hover,
+#brands li:hover,
 .hover-too:hover {
 	opacity: 1;
 	transition: 0.5s;

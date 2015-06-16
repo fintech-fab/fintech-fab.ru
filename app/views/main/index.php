@@ -434,7 +434,7 @@
 		<li class="col-md-3 col-sm-6 col-xs-6">
 			<a href="http://www.src-gmbh.de/" target="_blank"><img src="/assets/images/landing/logo_src.png"></a></li>
 		<li class="col-md-3 col-sm-6 col-xs-6">
-			<a href="https://money.yandex.ru/" target="_blank"><img src="/assets/images/landing/logo_yandex_money.jpg"></a>
+			<a href="https://money.yandex.ru/" target="_blank"><img src="/assets/images/landing/logo_yandex_money.png"></a>
 		</li>
 		<li class="col-md-3 col-sm-6 col-xs-6">
 			<a href="http://www.creditpilot.ru/" target="_blank"><img src="/assets/images/landing/logo_credit_pilot.png"></a>
