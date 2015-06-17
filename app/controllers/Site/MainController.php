@@ -44,6 +44,11 @@ class MainController extends BaseController
 		return $this->make('wlp');
 	}
 
+	public function wlpen()
+	{
+		return $this->make('wlpen');
+	}
+
 	public function anyany()
 	{
 		return $this->make('anyany');

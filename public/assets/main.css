@@ -44,7 +44,7 @@ h2, .slogan {
 }
 
 .top-slim{
-	margin-bottom: 37%;
+	margin-bottom: 44%;
 }
 
 #more-block {
@@ -134,10 +134,60 @@ ul {
 	margin-top: 1%;
 }
 
-.for-cv{
-	margin-left: 10%;
+@media (max-width: 1025px) {
+
+	#more-block {
+		margin-top: -10%;
+	}
+
 }
 
-.for-cv-en{
-	margin-left: 20%;
+@media (max-width: 801px) {
+
+	#more-block {
+		margin-top: -15%;
+	}
+
+}
+
+@media (max-width: 768px) {
+
+	.service img {
+		width: 70px;
+	}
+
+	.media-projects img {
+		width: 135px;
+		margin-top: 10px;
+	}
+
+	#brands img {
+		width: 115px;
+	}
+
+	#more-block {
+		margin-top: -25%;
+	}
+
+}
+
+@media (max-width: 321px) {
+
+	.service img {
+		width: 50px;
+	}
+
+	.media-projects img {
+		width: 100px;
+		margin-top: 12px;
+	}
+
+	#brands img {
+		width: 100px;
+	}
+
+	#more-block {
+		margin-top: -25%;
+	}
+
 }

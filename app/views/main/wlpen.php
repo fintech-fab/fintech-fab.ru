@@ -1,10 +1,10 @@
 <nav class="container-fluid nav-head" data-spy="affix" data-offset="100">
 	<div class="row">
 		<div class="col-md-2 col-xs-3 text-center">
-			<a href="<?= URL::route('index') ?>"><img src="assets/images/sm_logo_FTF.png" class="logo" /></a>
+			<a href="<?= URL::route('en') ?>"><img src="assets/images/sm_logo_FTF.png" class="logo" /></a>
 		</div>
 		<div class="col-md-2 col-xs-3 text-center col-md-offset-8 col-xs-offset-10">
-			<a href="<?= URL::route('en') ?>">ENGLISH</a>
+			<a href="<?= URL::route('index') ?>">РУССКИЙ</a>
 		</div>
 	</div>
 </nav>
@@ -23,26 +23,34 @@
 <div class="container-fluid separator">
 	<div class="row">
 		<div class="col-md-12">
-			<p class="text"><strong>WLP online</strong> – готовое решение для МФО по онлайн кредитованию клиентов. Позволяет начать
-				работу по всей территории России (85 регионов, более 1 000 городов) в кратчайшие сроки.</p>
+			<p class="text">Off-the-shelf online financing solution for
+				microfinance organisations. The solution allows to start operating throughout Russia
+				(85 regions, more <br> than 1 000 cities) in the shortest time.
+			</p>
 		</div>
 		<div class="col-md-12 margin-bottom-40">
-			<h2>ПРЕИМУЩЕСТВА ПЛАТФОРМЫ</h2>
+			<h2>BENEFITS</h2>
 
 			<p>
-				Клиентам больше не нужно посещать офис для получения займа.</p>
-
-			<p>Платформа WLP online позволяет принимать и обрабатывать заявки, проводить идентификацию, перечислять
-				займы дистанционно.</p>
-
-			<p>Повторный займ может быть перечислен на карту клиента в течение нескольких минут в режиме 24х7.</p>
-
-			<p>Решения соответствует требованиям Федеральных законов РФ – 151, 152, 115, 218, 353.</p>
+				There is no need  to visit the office to receive a loan.
+			</p>
+			<p>
+				White Label Platform processes loan applications, identifies clients and
+				transfers loans remotely.
+			</p>
+			<p>
+				Reloan can be transferred to a bank card in a few minutes 24/7.
+			</p>
+			<p>
+				Platform conforms to the requirements of the Federal Laws
+				of the Russian Federation - 151, 152, 115, 218, 353.
+			</p>
 
 			<div class="margin-bottom-20"></div>
 
-			<a href="/assets/files/WLP.pdf" class="btn btn-primary"><span class="fa-download fa"></span> Скачать
-				презентацию</a>
+			<a href="/assets/files/WLP.pdf" class="btn btn-primary"><span class="fa-download fa"></span>
+				Download presentation
+			</a>
 		</div>
 		<div class="col-md-12">
 			<div id="links">
@@ -91,14 +99,14 @@
 	</div>
 </div>
 
-<footer>
+<footer id="contact">
 	<div class="container-fluid copyright">
 		<div class="row">
 			<div class="col-md-3 col-xs-8">
 				<span class="info">&copy; 2015 FINTECH_FAB <a href="#"></a></span>
 			</div>
 			<div class="col-md-6 col-xs-8">
-				<span class="info"><span class="fa fa-location-arrow text-center"></span> Россия, 115114, Москва, Дербеневская наб., 11</span>
+				<span class="info"><span class="fa fa-location-arrow text-center"></span> 11, Derbenevskaya nab., Moscow, 115114, Russia</span>
 			</div>
 			<div class="col-md-3 col-xs-8">
 				<div class="info"><span class="fa fa-phone"></span> +7(495) 668 3020</div>

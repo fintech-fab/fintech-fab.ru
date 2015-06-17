@@ -918,9 +918,6 @@ ul.archive {
       -moz-transform: scale(1, 1);
       transform: scale(1, 1); }
 
-  #team .team-member:hover .title {
-    bottom: -5px; }
-
 /*****************
   Animations
 ******************/

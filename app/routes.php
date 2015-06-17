@@ -12,6 +12,7 @@ Route::get('/about', array('as' => 'about', 'uses' => 'App\Controllers\Site\Main
 Route::get('/projects', array('as' => 'projects', 'uses' => 'App\Controllers\Site\MainController@projects'));
 Route::get('/mobile2care', array('as' => 'mobile2care', 'uses' => 'App\Controllers\Site\MainController@mobile2care'));
 Route::get('/wlp', array('as' => 'wlp', 'uses' => 'App\Controllers\Site\MainController@wlp'));
+Route::get('/wlpen', array('as' => 'wlpen', 'uses' => 'App\Controllers\Site\MainController@wlpen'));
 Route::get('/anyany', array('as' => 'anyany', 'uses' => 'App\Controllers\Site\MainController@anyany'));
 
 Route::get('notices', array(

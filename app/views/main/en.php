@@ -136,7 +136,7 @@
 	</div>
 </div>
 
-<div id="service" class="separator">
+<div id="service" class="separator media-projects">
 	<div class="row">
 		<div class="col-md-12">
 			<h1  class="h1-title">FINANCIAL SERVICES</h1>
@@ -184,7 +184,7 @@
 	</div>
 </div>
 
-<div class="separator">
+<div class="separator media-projects">
 	<div class="row" >
 		<div class="col-md-12">
 			<div class="col-md-12">
@@ -210,7 +210,7 @@
 	</div>
 </div>
 
-<div class="separator">
+<div class="separator media-projects">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="col-md-12">
@@ -253,8 +253,9 @@
 			</div>
 		</a>
 	</div>
+
 	<div class="row">
-		<a href="http://fintech-fab.ru/wlp">
+		<a href="<?= URL::route('wlpen') ?>">
 			<div class="col-md-12 col-xs-12 projectsInfo">
 				<div class="col-md-1 col-xs-1">
 					<img src="/assets/images/landing/project_wlp_online.png" alt="icon">
@@ -272,7 +273,7 @@
 	</div>
 </div>
 
-<div class="separator">
+<div class="separator media-projects">
 	<div class="row">
 		<div class="col-md-12">
 			<h1  class="h1-title">M2M SOLUTIONS FOR INDUSTRIAL REMOTE-MEASURING SYSTEMS</h1>
@@ -284,7 +285,7 @@
 	</div>
 </div>
 
-<div class="separator">
+<div class="separator media-projects">
 	<div class="row">
 		<div class="col-md-12">
 			<h1  class="h1-title">E-HEALTH</h1>
@@ -294,7 +295,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<a href="http://mobile2care.com" target="_blank">
+		<a href="http://mobile2care.com/en" target="_blank">
 			<div class="col-md-12 col-xs-12 projectsInfo">
 				<div class="col-md-1 col-xs-1">
 					<img src="/assets/images/landing/project_m2c.png" alt="icon">
@@ -375,7 +376,7 @@
 			<h1 class="h1-title">TEAM</h1>
 			<h2 class="team">
 				THE KEY PERSONS OF THE COMPANY HAVE MANY YEARS EXPERIENCE IN DEVELOPING IT-SOLUTIONS.<br>
-				IN AUTUMN 2014 THEY JOINED THEIR EXPERTISE AND CREATED FINTECH_FAB COMPANY.
+				IN AUTUMN 2013 THEY JOINED THEIR EXPERTISE AND CREATED FINTECH_FAB COMPANY.
 			</h2>
 		</div>
 	</div>
@@ -445,7 +446,6 @@
 				<div class="info"><span class="fa fa-phone"></span> +7(495) 668 3020</div>
 				<div class="info"><span class="fa fa-envelope-o"></span> info@fintech-fab.ru</div><br>
 				<div class="info"><span class="fa fa-briefcase"></span> cv@fintech-fab.ru</div>
-				<div class="for-cv-en">(for cv)</div>
 			</div>
 		</div>
 	</div>
